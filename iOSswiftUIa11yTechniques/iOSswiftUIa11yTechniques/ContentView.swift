@@ -26,17 +26,26 @@ struct ContentView: View {
                     Text("Headings")
                 }
                 NavigationLink(destination: ImagesView()) {
-                    Text("Images")
+                    VStack {
+                        Text("Images").frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Informative, Decorative, or Functional").frame(maxWidth: .infinity, alignment: .leading).font(.footnote)
+                    }
                 }
                 NavigationLink(destination: UIControlsView()) {
-                    Text("UI Controls")
+                    VStack {
+                        Text("UI Controls").frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Accordions, Buttons, Pickers, TextFields, Toggles, etc. ").frame(maxWidth: .infinity, alignment: .leading).font(.footnote)
+                    }
                 }
                 NavigationLink(destination: PageTitlesView()) {
                     Text("Page Titles")
                 }
                 NavigationLink(destination: AnnouncementsView()) {
-                    Text("Announcements")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                    VStack {
+                        Text("Announcements").frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Accessibility Announcements, Error Validation").frame(maxWidth: .infinity, alignment: .leading).font(.footnote)
+                    }
+                }
                 NavigationLink(destination: DetailView()) {
                     Text("Reading Order") // Sort Priority
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
@@ -60,6 +69,9 @@ struct ContentView: View {
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 NavigationLink(destination: DetailView()) {
                     Text("Data Tables")
+                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                NavigationLink(destination: DetailView()) {
+                    Text("Lists")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 NavigationLink(destination: DetailView()) {
                     Text("Touch Target Size")

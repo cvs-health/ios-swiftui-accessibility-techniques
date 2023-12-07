@@ -15,7 +15,6 @@
 		AA59CDCE2ABA209D0004908F /* MessagesTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59CDCD2ABA209D0004908F /* MessagesTabView.swift */; };
 		AA636C8A2ADD7FD900014BAF /* ProgressIndicatorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA636C892ADD7FD900014BAF /* ProgressIndicatorsView.swift */; };
 		AA65F7932AC2889100E143B4 /* SlidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA65F7922AC2889100E143B4 /* SlidersView.swift */; };
-		AA7367482AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7367472AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests.swift */; };
 		AA73674A2AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7367492AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift */; };
 		AA74DD542AFD8D0000348078 /* TextFieldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA74DD532AFD8D0000348078 /* TextFieldsView.swift */; };
 		AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA74DD552AFD8DA800348078 /* SegmentedControlsView.swift */; };
@@ -40,6 +39,8 @@
 		AABD27D42A9FF12400F718F7 /* DecorativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D32A9FF12400F718F7 /* DecorativeView.swift */; };
 		AABD27D62A9FF12A00F718F7 /* InformativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D52A9FF12A00F718F7 /* InformativeView.swift */; };
 		AABD27D82A9FF13E00F718F7 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D72A9FF13E00F718F7 /* DetailView.swift */; };
+		AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */; };
+		AAF127BA2B2194F600D5313D /* iOSswiftUIa11yTechniquesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127B92B2194F600D5313D /* iOSswiftUIa11yTechniquesUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,7 +72,6 @@
 		AA636C892ADD7FD900014BAF /* ProgressIndicatorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressIndicatorsView.swift; sourceTree = "<group>"; };
 		AA65F7922AC2889100E143B4 /* SlidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlidersView.swift; sourceTree = "<group>"; };
 		AA7367452AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSswiftUIa11yTechniquesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA7367472AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSswiftUIa11yTechniquesUITests.swift; sourceTree = "<group>"; };
 		AA7367492AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSswiftUIa11yTechniquesUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		AA74DD532AFD8D0000348078 /* TextFieldsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldsView.swift; sourceTree = "<group>"; };
 		AA74DD552AFD8DA800348078 /* SegmentedControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlsView.swift; sourceTree = "<group>"; };
@@ -105,6 +105,9 @@
 		AABD27D32A9FF12400F718F7 /* DecorativeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorativeView.swift; sourceTree = "<group>"; };
 		AABD27D52A9FF12A00F718F7 /* InformativeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformativeView.swift; sourceTree = "<group>"; };
 		AABD27D72A9FF13E00F718F7 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		AAF127B62B2194E200D5313D /* ErrorValidation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ErrorValidation.md; sourceTree = "<group>"; };
+		AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorValidationView.swift; sourceTree = "<group>"; };
+		AAF127B92B2194F600D5313D /* iOSswiftUIa11yTechniquesUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = iOSswiftUIa11yTechniquesUITests.swift; path = ../../../../../Desktop/iOSswiftUIa11yTechniquesUITests.swift; sourceTree = "<group>"; };
 		AAF6D09A2ABA29EE00188DE0 /* Tabs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Tabs.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,7 +132,7 @@
 		AA7367462AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests */ = {
 			isa = PBXGroup;
 			children = (
-				AA7367472AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests.swift */,
+				AAF127B92B2194F600D5313D /* iOSswiftUIa11yTechniquesUITests.swift */,
 				AA7367492AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift */,
 			);
 			path = iOSswiftUIa11yTechniquesUITests;
@@ -143,6 +146,7 @@
 				AABB44082AE06297003480B3 /* ProgressIndicators.md */,
 				AA9B134E2AAA3867009A3D84 /* DecorativeImages.md */,
 				AA9B134F2AAA4781009A3D84 /* FunctionalImages.md */,
+				AAF127B62B2194E200D5313D /* ErrorValidation.md */,
 				AA7786352AEFFE6000AA39DA /* DynamicType.md */,
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
@@ -189,6 +193,7 @@
 				AABD27BF2A9FE69500F718F7 /* Preview Content */,
 				AABD27C72A9FF0D800F718F7 /* HeadingsView.swift */,
 				AABD27C92A9FF0E700F718F7 /* ImagesView.swift */,
+				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
@@ -325,7 +330,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA7367482AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests.swift in Sources */,
+				AAF127BA2B2194F600D5313D /* iOSswiftUIa11yTechniquesUITests.swift in Sources */,
 				AA73674A2AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,6 +347,7 @@
 				AA636C8A2ADD7FD900014BAF /* ProgressIndicatorsView.swift in Sources */,
 				AABD27D02A9FF11400F718F7 /* AnnouncementsView.swift in Sources */,
 				AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */,
+				AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */,
 				AA74DD5E2AFDCCFA00348078 /* PageTitleBad.swift in Sources */,
 				AABD27D42A9FF12400F718F7 /* DecorativeView.swift in Sources */,
 				AA7ADED02AF2BAFE0019D210 /* PickersView.swift in Sources */,

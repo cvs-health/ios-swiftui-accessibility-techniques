@@ -28,13 +28,13 @@ struct ContentView: View {
                 NavigationLink(destination: ImagesView()) {
                     VStack {
                         Text("Images").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Informative, Decorative, or Functional").frame(maxWidth: .infinity, alignment: .leading).font(.footnote)
+                        Text("Informative, Decorative, or Functional").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.6))
                     }
                 }
                 NavigationLink(destination: UIControlsView()) {
                     VStack {
                         Text("UI Controls").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Accordions, Buttons, Pickers, TextFields, Toggles, etc. ").frame(maxWidth: .infinity, alignment: .leading).font(.footnote)
+                        Text("Accordions, Buttons, Pickers, TextFields, Toggles, etc. ").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.6))
                     }
                 }
                 NavigationLink(destination: PageTitlesView()) {
@@ -43,7 +43,7 @@ struct ContentView: View {
                 NavigationLink(destination: AnnouncementsView()) {
                     VStack {
                         Text("Announcements").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Accessibility Announcements, Error Validation").frame(maxWidth: .infinity, alignment: .leading).font(.footnote)
+                        Text("Accessibility Announcements, Error Validation").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.6))
                     }
                 }
                 NavigationLink(destination: DetailView()) {

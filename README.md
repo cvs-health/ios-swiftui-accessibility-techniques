@@ -19,7 +19,7 @@ Documentation files for each technique are listed below.
 - [x] [Page Titles](iOSswiftUIa11yTechniques/Documentation/PageTitles.md)
 - [ ] Announcements
     - [ ] Accessibility Announcements
-    - [ ] Error Validation
+    - [x] [Error Validation](iOSswiftUIa11yTechniques/Documentation/ErrorValidation.md)
 - [ ] Reading Order
 - [ ] Focus Management
 - [ ] Accessibility UX Enhancements
@@ -53,6 +53,7 @@ Documentation files for each technique are listed below.
     - [x] [Pickers](iOSswiftUIa11yTechniques/Documentation/Pickers.md)
 - [ ] Navigation
 - [ ] Data Tables
+- [ ] Lists
 - [ ] Touch Target Size
 - [ ] Responding to User Accessibility Preferences
     - [ ] Dark Mode

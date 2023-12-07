@@ -2,7 +2,7 @@
 
 Error validation is used to convey error messages for missing or incorrectly entered data. VoiceOver users must hear an error message spoken when submitting a form with invalid data and when focused on invalid inputs.
 
-* Use `AccessibilityFocusState` to move VoiceOver focus to the first invalid input or error text when submitting a form with invalid data. 
+* Use [`AccessibilityFocusState`](https://developer.apple.com/documentation/swiftui/accessibilityfocusstate) to move VoiceOver focus to the first invalid input or error text when submitting a form with invalid data. 
 * Use an `.accessibilityHint` matching the visible error message text for each invalid input.
 * Visually indicate required fields e.g. with an \* and explain the meaning of the \*.
 

@@ -20,10 +20,10 @@ struct AnnouncementsView: View {
 
     var body: some View {
         List {
-            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
-            NavigationLink(destination: InformativeView()) {
+            Text("Messages can be spoken to VoiceOver users either by setting their focus to an element or using `AccessibilityNotification.Announcement` to speak a messsage without moving focus. The Error Validation example uses `AccessibilityFocusState` to move VoiceOver focus.")
+            NavigationLink(destination: AccessibilityAnnouncementsView()) {
                 Text("Accessibility Announcements")
-            }.disabled(true)
+            }
             NavigationLink(destination: ErrorValidationView()) {
                 Text("Error Validation")
             }

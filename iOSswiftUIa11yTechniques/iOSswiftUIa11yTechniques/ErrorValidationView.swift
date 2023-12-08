@@ -251,7 +251,7 @@ struct ErrorValidationView: View {
                     }
                     if lnameBad.isEmpty {
                         lastNameErrorVisibleBad = true
-                    }
+                    }   
                     if fnameBad.isEmpty {
                         firstNameErrorVisibleBad = true
                     }

@@ -23,4 +23,8 @@ struct iOSswiftUIa11yTechniquesApp: App {
             ContentView()
         }
     }
+    //stop navigation page title from truncating
+    init() {
+            UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+        }
 }

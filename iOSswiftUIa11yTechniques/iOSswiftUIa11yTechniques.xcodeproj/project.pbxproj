@@ -39,7 +39,7 @@
 		AABD27D62A9FF12A00F718F7 /* InformativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D52A9FF12A00F718F7 /* InformativeView.swift */; };
 		AABD27D82A9FF13E00F718F7 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D72A9FF13E00F718F7 /* DetailView.swift */; };
 		AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */; };
-		AAF127BE2B23ED8600D5313D /* AccessibilityAnnouncements.md in Resources */ = {isa = PBXBuildFile; fileRef = AAF127BD2B23ED8600D5313D /* AccessibilityAnnouncements.md */; };
+		AAF127BE2B23ED8600D5313D /* AccessibilityNotifications in Resources */ = {isa = PBXBuildFile; fileRef = AAF127BD2B23ED8600D5313D /* AccessibilityNotifications */; };
 		AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */; };
 		AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C32B23EDCB00D5313D /* ContentView.swift */; };
 		AAF127C62B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C52B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift */; };
@@ -108,7 +108,7 @@
 		AABD27D72A9FF13E00F718F7 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		AAF127B62B2194E200D5313D /* ErrorValidation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ErrorValidation.md; sourceTree = "<group>"; };
 		AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorValidationView.swift; sourceTree = "<group>"; };
-		AAF127BD2B23ED8600D5313D /* AccessibilityAnnouncements.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityAnnouncements.md; sourceTree = "<group>"; };
+		AAF127BD2B23ED8600D5313D /* AccessibilityNotifications */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AccessibilityNotifications; sourceTree = "<group>"; };
 		AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityNotificationsView.swift; sourceTree = "<group>"; };
 		AAF127C32B23EDCB00D5313D /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AAF127C52B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = iOSswiftUIa11yTechniquesUITests.swift; path = ../../../../../Desktop/iOSswiftUIa11yTechniquesUITests.swift; sourceTree = "<group>"; };
@@ -153,7 +153,7 @@
 				AAF127B62B2194E200D5313D /* ErrorValidation.md */,
 				AA7786352AEFFE6000AA39DA /* DynamicType.md */,
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
-				AAF127BD2B23ED8600D5313D /* AccessibilityAnnouncements.md */,
+				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
 				AA1303162AFED27C001AE0BF /* TextFields.md */,
 				AA1303172AFEE5FD001AE0BF /* SegmentedControls.md */,
@@ -324,7 +324,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AAF127BE2B23ED8600D5313D /* AccessibilityAnnouncements.md in Resources */,
+				AAF127BE2B23ED8600D5313D /* AccessibilityNotifications in Resources */,
 				AABD27C12A9FE69500F718F7 /* Preview Assets.xcassets in Resources */,
 				AABD27BE2A9FE69500F718F7 /* Assets.xcassets in Resources */,
 			);

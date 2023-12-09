@@ -17,8 +17,8 @@ Documentation files for each technique are listed below.
     - [x] [Functional](iOSswiftUIa11yTechniques/Documentation/FunctionalImages.md)
 - [x] [Headings](iOSswiftUIa11yTechniques/Documentation/Headings.md)
 - [x] [Page Titles](iOSswiftUIa11yTechniques/Documentation/PageTitles.md)
-- [ ] Announcements
-    - [ ] Accessibility Announcements
+- [x] Announcements
+    - [x] [Accessibility Announcements] (iOSswiftUIa11yTechniques/Documentation/AccessibilityAnnouncements.md)
     - [x] [Error Validation](iOSswiftUIa11yTechniques/Documentation/ErrorValidation.md)
 - [ ] Reading Order
 - [ ] Focus Management

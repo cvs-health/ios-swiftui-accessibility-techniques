@@ -557,6 +557,23 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testAccessibilityNotifications() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.collectionViews.buttons["Announcements"].tap()
+        app.collectionViews.buttons["Accessibility Notifications"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()//false positive text clipped for the previous screen
+            //buggy and often tests the previous screen rather than the intended screen when using the simulator 
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
     
     

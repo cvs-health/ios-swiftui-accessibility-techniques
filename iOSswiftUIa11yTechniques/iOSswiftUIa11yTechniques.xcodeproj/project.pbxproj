@@ -38,11 +38,11 @@
 		AABD27D42A9FF12400F718F7 /* DecorativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D32A9FF12400F718F7 /* DecorativeView.swift */; };
 		AABD27D62A9FF12A00F718F7 /* InformativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D52A9FF12A00F718F7 /* InformativeView.swift */; };
 		AABD27D82A9FF13E00F718F7 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D72A9FF13E00F718F7 /* DetailView.swift */; };
+		AADEFB472B23F3DA003534A9 /* iOSswiftUIa11yTechniquesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADEFB462B23F3DA003534A9 /* iOSswiftUIa11yTechniquesUITests.swift */; };
 		AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */; };
 		AAF127BE2B23ED8600D5313D /* AccessibilityNotifications.md in Resources */ = {isa = PBXBuildFile; fileRef = AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */; };
 		AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */; };
 		AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C32B23EDCB00D5313D /* ContentView.swift */; };
-		AAF127C62B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C52B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,12 +106,12 @@
 		AABD27D32A9FF12400F718F7 /* DecorativeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorativeView.swift; sourceTree = "<group>"; };
 		AABD27D52A9FF12A00F718F7 /* InformativeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformativeView.swift; sourceTree = "<group>"; };
 		AABD27D72A9FF13E00F718F7 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		AADEFB462B23F3DA003534A9 /* iOSswiftUIa11yTechniquesUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSswiftUIa11yTechniquesUITests.swift; sourceTree = "<group>"; };
 		AAF127B62B2194E200D5313D /* ErrorValidation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ErrorValidation.md; sourceTree = "<group>"; };
 		AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorValidationView.swift; sourceTree = "<group>"; };
 		AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityNotifications.md; sourceTree = "<group>"; };
 		AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityNotificationsView.swift; sourceTree = "<group>"; };
 		AAF127C32B23EDCB00D5313D /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		AAF127C52B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = iOSswiftUIa11yTechniquesUITests.swift; path = ../../../../../Desktop/iOSswiftUIa11yTechniquesUITests.swift; sourceTree = "<group>"; };
 		AAF6D09A2ABA29EE00188DE0 /* Tabs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Tabs.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,7 +136,7 @@
 		AA7367462AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests */ = {
 			isa = PBXGroup;
 			children = (
-				AAF127C52B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift */,
+				AADEFB462B23F3DA003534A9 /* iOSswiftUIa11yTechniquesUITests.swift */,
 				AA7367492AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift */,
 			);
 			path = iOSswiftUIa11yTechniquesUITests;
@@ -337,7 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AAF127C62B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift in Sources */,
+				AADEFB472B23F3DA003534A9 /* iOSswiftUIa11yTechniquesUITests.swift in Sources */,
 				AA73674A2AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

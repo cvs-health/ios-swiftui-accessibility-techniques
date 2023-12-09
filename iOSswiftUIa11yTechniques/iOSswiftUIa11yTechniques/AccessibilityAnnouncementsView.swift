@@ -28,7 +28,7 @@ struct AccessibilityAnnouncementsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Accessibility Announcements are used speak announcements to VoiceOver users without moving their focus. Post an `AccessibilityNotification.Announcement` when you need to make an announcement to VoiceOver.")
+                Text("Accessibility Announcements are used to speak announcements to VoiceOver users without moving their focus. Post an `AccessibilityNotification.Announcement` when you need to make an announcement to VoiceOver.")
                     .padding([.bottom])
                 Text("Good Example")
                     .font(.subheadline)

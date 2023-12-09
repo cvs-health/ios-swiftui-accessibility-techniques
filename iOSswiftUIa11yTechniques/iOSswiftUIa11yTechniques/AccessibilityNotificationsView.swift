@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct AccessibilityAnnouncementsView: View {
+struct AccessibilityNotificationsView: View {
 
     @State private var cartMessageGoodVisible = false
     @State private var cartMessageBadVisible = false
@@ -28,7 +28,7 @@ struct AccessibilityAnnouncementsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Accessibility Announcements are used to speak announcements to VoiceOver users without moving their focus. Post an `AccessibilityNotification.Announcement` when you need to make an announcement to VoiceOver.")
+                Text("Accessibility Notifications are used to speak announcements to VoiceOver users without moving their focus. Post an `AccessibilityNotification.Announcement` when you need to make an announcement to VoiceOver.")
                     .padding([.bottom])
                 Text("Good Example")
                     .font(.subheadline)
@@ -57,7 +57,7 @@ struct AccessibilityAnnouncementsView: View {
                     }.padding().frame(maxWidth: .infinity, alignment: .leading).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 }
                 DisclosureGroup("Details") {
-                    Text("The good accessibility announcements example posts an `AccessibilityNotification.Announcement` that speaks the \"1 Item added to cart.\" status message to VoiceOver when activating the Add to Cart button. The announcement is posted with a 0.1 second delay to make it speak correctly to VoiceOver.")
+                    Text("The good Accessibility Notifications example posts an `AccessibilityNotification.Announcement` that speaks the \"1 Item added to cart.\" status message to VoiceOver when activating the Add to Cart button. The announcement is posted with a 0.1 second delay to make it speak correctly to VoiceOver.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Example")
                     .font(.subheadline)
@@ -83,19 +83,19 @@ struct AccessibilityAnnouncementsView: View {
                     }.padding().frame(maxWidth: .infinity, alignment: .leading).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad accessibility announcements example does not speak an accessibility announcement notification to VoiceOver when the \"1 Item added to cart.\" status message displays.")
+                    Text("The bad Accessibility Notifications example does not speak an accessibility announcement notification to VoiceOver when the \"1 Item added to cart.\" status message displays.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Accessibility Announcements")
+            .navigationBarTitle("Accessibility Notifications")
 
         }
  
     }
 }
  
-struct AccessibilityAnnouncementsView_Previews: PreviewProvider {
+struct AccessibilityNotificationsView_Previews: PreviewProvider {
     static var previews: some View {
-        AccessibilityAnnouncementsView()
+        AccessibilityNotificationsView()
     }
 }

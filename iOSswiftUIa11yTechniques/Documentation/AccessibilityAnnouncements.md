@@ -1,5 +1,5 @@
-# Accessibility Announcements
-Accessibility Announcements are used to speak announcements to VoiceOver users without moving their focus. VoiceOver users must hear dynamic status messages spoken when they appear on the page.
+# Accessibility Notifications
+Accessibility Notifications are used to speak announcements to VoiceOver users without moving their focus. VoiceOver users must hear dynamic status messages spoken when they appear on the page.
 
 Post an `AccessibilityNotification.Announcement` when you need to make an announcement to VoiceOver.
 

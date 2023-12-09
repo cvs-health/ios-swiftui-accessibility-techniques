@@ -21,8 +21,8 @@ struct AnnouncementsView: View {
     var body: some View {
         List {
             Text("Messages can be spoken to VoiceOver users either by setting their focus to an element or using `AccessibilityNotification.Announcement` to speak a messsage without moving focus. The Error Validation example uses `AccessibilityFocusState` to move VoiceOver focus.")
-            NavigationLink(destination: AccessibilityAnnouncementsView()) {
-                Text("Accessibility Announcements")
+            NavigationLink(destination: AccessibilityNotificationsView()) {
+                Text("Accessibility Notifications")
             }
             NavigationLink(destination: ErrorValidationView()) {
                 Text("Error Validation")

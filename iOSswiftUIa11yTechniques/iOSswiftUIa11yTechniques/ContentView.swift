@@ -43,7 +43,7 @@ struct ContentView: View {
                 NavigationLink(destination: AnnouncementsView()) {
                     VStack {
                         Text("Announcements").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Accessibility Announcements, Error Validation").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
+                        Text("Accessibility Notifications, Error Validation").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
                     }
                 }.accessibilityIdentifier("Announcements")
                 NavigationLink(destination: DetailView()) {

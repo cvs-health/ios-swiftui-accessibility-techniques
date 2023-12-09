@@ -40,7 +40,7 @@
 		AABD27D82A9FF13E00F718F7 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D72A9FF13E00F718F7 /* DetailView.swift */; };
 		AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */; };
 		AAF127BE2B23ED8600D5313D /* AccessibilityAnnouncements.md in Resources */ = {isa = PBXBuildFile; fileRef = AAF127BD2B23ED8600D5313D /* AccessibilityAnnouncements.md */; };
-		AAF127C22B23EDB500D5313D /* AccessibilityAnnouncementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C12B23EDB500D5313D /* AccessibilityAnnouncementsView.swift */; };
+		AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */; };
 		AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C32B23EDCB00D5313D /* ContentView.swift */; };
 		AAF127C62B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C52B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift */; };
 /* End PBXBuildFile section */
@@ -109,7 +109,7 @@
 		AAF127B62B2194E200D5313D /* ErrorValidation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ErrorValidation.md; sourceTree = "<group>"; };
 		AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorValidationView.swift; sourceTree = "<group>"; };
 		AAF127BD2B23ED8600D5313D /* AccessibilityAnnouncements.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityAnnouncements.md; sourceTree = "<group>"; };
-		AAF127C12B23EDB500D5313D /* AccessibilityAnnouncementsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityAnnouncementsView.swift; sourceTree = "<group>"; };
+		AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityNotificationsView.swift; sourceTree = "<group>"; };
 		AAF127C32B23EDCB00D5313D /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AAF127C52B23EE0800D5313D /* iOSswiftUIa11yTechniquesUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = iOSswiftUIa11yTechniquesUITests.swift; path = ../../../../../Desktop/iOSswiftUIa11yTechniquesUITests.swift; sourceTree = "<group>"; };
 		AAF6D09A2ABA29EE00188DE0 /* Tabs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Tabs.md; sourceTree = "<group>"; };
@@ -197,7 +197,7 @@
 				AABD27BD2A9FE69500F718F7 /* Assets.xcassets */,
 				AABD27BF2A9FE69500F718F7 /* Preview Content */,
 				AABD27C72A9FF0D800F718F7 /* HeadingsView.swift */,
-				AAF127C12B23EDB500D5313D /* AccessibilityAnnouncementsView.swift */,
+				AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */,
 				AABD27C92A9FF0E700F718F7 /* ImagesView.swift */,
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
@@ -375,7 +375,7 @@
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
 				AA59CDCE2ABA209D0004908F /* MessagesTabView.swift in Sources */,
 				AA1AC60C2ABD2C3800AC02DA /* TogglesView.swift in Sources */,
-				AAF127C22B23EDB500D5313D /* AccessibilityAnnouncementsView.swift in Sources */,
+				AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */,
 				AABD27D62A9FF12A00F718F7 /* InformativeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

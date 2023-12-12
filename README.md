@@ -5,6 +5,8 @@ Demonstrates accessibility techniques for iOS SwiftUI apps using a collection of
 
 Using the app with VoiceOver will demonstrate the right and wrong ways of applying accessibility to a SwiftUI app. 
 
+[Download iOS app from the AppStore.](https://apps.apple.com/us/app/swiftui-accessibility-techs/id6474141089)
+
 Review the project source code to see how to apply the accessibility techniques in working SwiftUI code examples.
 
 Documentation files for each technique are listed below.

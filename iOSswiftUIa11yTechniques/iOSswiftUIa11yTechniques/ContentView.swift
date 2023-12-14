@@ -70,9 +70,9 @@ struct ContentView: View {
                 NavigationLink(destination: DetailView()) {
                     Text("Data Tables")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: ListsView()) {
                     Text("Lists")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: DetailView()) {
                     Text("Touch Target Size")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

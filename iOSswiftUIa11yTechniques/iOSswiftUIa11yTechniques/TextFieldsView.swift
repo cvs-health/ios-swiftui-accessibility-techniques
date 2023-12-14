@@ -49,6 +49,14 @@ struct TextFieldsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+//                LabeledContent("First Name") {
+//                      TextField("", text:$fname)
+//                        .textFieldStyle(.roundedBorder)
+//                        .border(.secondary)
+//                        .autocorrectionDisabled(true)
+//                        .textContentType(.givenName)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }.labeledContentStyle(.vertical) // this plus the struct and extension at the bottom enable vertical stacking of the label and textfield
                 Text("First Name")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 TextField("", text: $fname, axis: .vertical)
@@ -193,4 +201,18 @@ struct TextFieldsView_Previews: PreviewProvider {
     static var previews: some View {
         TextFieldsView()
     }
+}
+
+
+struct VerticalLabeledContentStyle: LabeledContentStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        VStack(alignment: .leading) {
+            configuration.label
+            configuration.content
+        }
+    }
+}
+
+extension LabeledContentStyle where Self == VerticalLabeledContentStyle {
+    static var vertical: VerticalLabeledContentStyle { .init() }
 }

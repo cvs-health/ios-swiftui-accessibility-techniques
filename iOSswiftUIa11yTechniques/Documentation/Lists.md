@@ -1,7 +1,7 @@
 # Lists
 Lists need to have list items that are individually focusable with VoiceOver. Use a separate `Text()` element for each list item.
 
-The entire list must not be focused as one single paragraph. Don't use list items that are visually separated using the `\\n` new line character.
+The entire list must not be focused as one single paragraph. Don't use list items that are visually separated using the `\n` new line character.
 
 Notes:
 

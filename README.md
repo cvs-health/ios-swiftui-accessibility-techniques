@@ -56,6 +56,7 @@ Documentation files for each technique are listed below.
 - [ ] Navigation
 - [ ] Data Tables
 - [x] [Lists](iOSswiftUIa11yTechniques/Documentation/Lists.md)
+- [x] [Cards](iOSswiftUIa11yTechniques/Documentation/Cards.md)
 - [ ] Touch Target Size
 - [ ] Responding to User Accessibility Preferences
     - [ ] Dark Mode

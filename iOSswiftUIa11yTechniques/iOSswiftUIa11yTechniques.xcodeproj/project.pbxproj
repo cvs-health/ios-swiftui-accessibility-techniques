@@ -44,6 +44,7 @@
 		AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */; };
 		AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C32B23EDCB00D5313D /* ContentView.swift */; };
 		BC8C92092B2A94B2006DAC20 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92082B2A94B2006DAC20 /* ListsView.swift */; };
+		BC8C920D2B2BAE41006DAC20 /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920C2B2BAE41006DAC20 /* CardsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +118,7 @@
 		BC8C92082B2A94B2006DAC20 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
 		BC8C920A2B2A9DB8006DAC20 /* Lists.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Lists.md; sourceTree = "<group>"; };
 		BC8C920B2B2AA0C9006DAC20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BC8C920C2B2BAE41006DAC20 /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +210,7 @@
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
+				BC8C920C2B2BAE41006DAC20 /* CardsView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
 				AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */,
@@ -353,6 +356,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC8C920D2B2BAE41006DAC20 /* CardsView.swift in Sources */,
 				AABD27CC2A9FF0F000F718F7 /* UIControlsView.swift in Sources */,
 				AA65F7932AC2889100E143B4 /* SlidersView.swift in Sources */,
 				AA74DD582AFDACA100348078 /* SteppersView.swift in Sources */,

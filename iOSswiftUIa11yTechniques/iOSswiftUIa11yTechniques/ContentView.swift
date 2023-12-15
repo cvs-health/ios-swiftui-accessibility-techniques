@@ -73,6 +73,9 @@ struct ContentView: View {
                 NavigationLink(destination: ListsView()) {
                     Text("Lists")
                 }
+                NavigationLink(destination: CardsView()) {
+                    Text("Cards")
+                }
                 NavigationLink(destination: DetailView()) {
                     Text("Touch Target Size")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

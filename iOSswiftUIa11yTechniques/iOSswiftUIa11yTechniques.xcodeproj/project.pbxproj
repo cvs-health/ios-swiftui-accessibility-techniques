@@ -122,6 +122,7 @@
 		BC8C920C2B2BAE41006DAC20 /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
 		BC8C920E2B2C0FDE006DAC20 /* Cards.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Cards.md; sourceTree = "<group>"; };
 		BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupingControlsView.swift; sourceTree = "<group>"; };
+		BC8C92112B315816006DAC20 /* GroupingControls.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = GroupingControls.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +169,7 @@
 				AA1303162AFED27C001AE0BF /* TextFields.md */,
 				BC8C920A2B2A9DB8006DAC20 /* Lists.md */,
 				AA1303172AFEE5FD001AE0BF /* SegmentedControls.md */,
+				BC8C92112B315816006DAC20 /* GroupingControls.md */,
 				AA1303192B027685001AE0BF /* Steppers.md */,
 				AA636C882AC3B48C00014BAF /* Sliders.md */,
 				AA2B1D452ABDDC76007B2383 /* Toggles.md */,

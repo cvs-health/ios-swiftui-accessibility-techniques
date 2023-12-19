@@ -17,7 +17,6 @@
 import SwiftUI
  
 struct GroupingControlsView: View {
-    @State private var favoriteColor = "Red"
     @State private var getEmail = ""
     @State private var getText = ""
     @State private var getEmailBad = ""

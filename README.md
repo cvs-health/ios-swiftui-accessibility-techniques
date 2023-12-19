@@ -46,7 +46,7 @@ Documentation files for each technique are listed below.
     - [x] [Steppers](iOSswiftUIa11yTechniques/Documentation/Steppers.md)
     - [x] [Text Fields](iOSswiftUIa11yTechniques/Documentation/TextFields.md)
     - [ ] Input Instructions
-    - [ ] Grouping Controls
+    - [x] [Grouping Controls](iOSswiftUIa11yTechniques/Documentation/GroupingControls.md)
     - [ ] Checkboxes
     - [ ] Radio Buttons
     - [ ] Dialogs

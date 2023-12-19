@@ -33,9 +33,9 @@ struct UIControlsView: View {
             NavigationLink(destination: DetailView()) {
                 Text("Dialogs")
             }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-            NavigationLink(destination: DetailView()) {
+            NavigationLink(destination: GroupingControlsView()) {
                 Text("Grouping Controls")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
             NavigationLink(destination: DetailView()) {
                 Text("Input Instructions")
             }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

@@ -45,6 +45,7 @@
 		AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C32B23EDCB00D5313D /* ContentView.swift */; };
 		BC8C92092B2A94B2006DAC20 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92082B2A94B2006DAC20 /* ListsView.swift */; };
 		BC8C920D2B2BAE41006DAC20 /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920C2B2BAE41006DAC20 /* CardsView.swift */; };
+		BC8C92102B3144BA006DAC20 /* GroupingControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +121,7 @@
 		BC8C920B2B2AA0C9006DAC20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BC8C920C2B2BAE41006DAC20 /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
 		BC8C920E2B2C0FDE006DAC20 /* Cards.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Cards.md; sourceTree = "<group>"; };
+		BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupingControlsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +216,7 @@
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
 				BC8C920C2B2BAE41006DAC20 /* CardsView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
+				BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
 				AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */,
 				AA636C892ADD7FD900014BAF /* ProgressIndicatorsView.swift */,
@@ -383,6 +386,7 @@
 				AA9FCA2E2AB4D50400DF93A5 /* AccordionsView.swift in Sources */,
 				AA59CDCC2ABA20920004908F /* HomeTabView.swift in Sources */,
 				AA59CDCA2ABA1F4E0004908F /* TabsGoodView.swift in Sources */,
+				BC8C92102B3144BA006DAC20 /* GroupingControlsView.swift in Sources */,
 				AABD27D22A9FF11F00F718F7 /* FunctionalView.swift in Sources */,
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,
@@ -588,7 +592,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -621,7 +625,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -4,7 +4,7 @@
 <dict>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
-	<key>ITSEncryptionExportComplianceCode</key>
+	<key>ITSAppUsesNonExemptEncryption</key>
     <false/>
 </dict>
 </plist>

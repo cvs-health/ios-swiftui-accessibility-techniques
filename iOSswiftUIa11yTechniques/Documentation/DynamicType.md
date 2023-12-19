@@ -5,7 +5,7 @@ Use a `.font()` style like `.largeTitle`, `.caption`, `.headline`, `.subheadline
 
 Avoid using `.lineLimit()` which will cause text truncation.
 
-Avoid using fized sized text which does not scale.
+Avoid using fixed sized text which does not scale.
 
 Avoid using `HStack` with multiple links at large text sizes. 
 

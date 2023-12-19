@@ -3,9 +3,9 @@ Use an `.accessibilityLabel` to provide text alternatives for images to VoiceOve
 
 Informative and Functional images need accessibility labels. Decorative images need to be hidden from VoiceOver focus.
 
-- [Informative](Informative.md)
-- [Decorative](Decorative.md)
-- [Functional](Functional.md)
+- [Informative](InformativeImages.md)
+- [Decorative](DecorativeImages.md)
+- [Functional](FunctionalImages.md)
 
 Notes:
 

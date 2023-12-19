@@ -46,9 +46,9 @@ struct ContentView: View {
                         Text("Accessibility Notifications, Error Validation").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
                     }
                 }.accessibilityIdentifier("Announcements")
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: ReadingOrderView()) {
                     Text("Reading Order") // Sort Priority
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: DetailView()) {
                     Text("Focus Management")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

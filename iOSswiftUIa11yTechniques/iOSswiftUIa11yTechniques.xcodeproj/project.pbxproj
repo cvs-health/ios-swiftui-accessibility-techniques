@@ -46,6 +46,7 @@
 		BC8C92092B2A94B2006DAC20 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92082B2A94B2006DAC20 /* ListsView.swift */; };
 		BC8C920D2B2BAE41006DAC20 /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920C2B2BAE41006DAC20 /* CardsView.swift */; };
 		BC8C92102B3144BA006DAC20 /* GroupingControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */; };
+		BC8C92132B324859006DAC20 /* ReadingOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92122B324859006DAC20 /* ReadingOrderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +124,7 @@
 		BC8C920E2B2C0FDE006DAC20 /* Cards.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Cards.md; sourceTree = "<group>"; };
 		BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupingControlsView.swift; sourceTree = "<group>"; };
 		BC8C92112B315816006DAC20 /* GroupingControls.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = GroupingControls.md; sourceTree = "<group>"; };
+		BC8C92122B324859006DAC20 /* ReadingOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingOrderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +219,7 @@
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
 				BC8C920C2B2BAE41006DAC20 /* CardsView.swift */,
+				BC8C92122B324859006DAC20 /* ReadingOrderView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
 				BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
@@ -395,6 +398,7 @@
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
 				AA59CDCE2ABA209D0004908F /* MessagesTabView.swift in Sources */,
 				AA1AC60C2ABD2C3800AC02DA /* TogglesView.swift in Sources */,
+				BC8C92132B324859006DAC20 /* ReadingOrderView.swift in Sources */,
 				AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */,
 				AABD27D62A9FF12A00F718F7 /* InformativeView.swift in Sources */,
 			);

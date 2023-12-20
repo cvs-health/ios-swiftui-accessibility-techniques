@@ -620,6 +620,21 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testReadingOrder() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.collectionViews.buttons["Reading Order"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()//fails with text clipped false positive
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
     
     

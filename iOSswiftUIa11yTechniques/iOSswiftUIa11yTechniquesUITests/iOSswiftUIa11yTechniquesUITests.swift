@@ -635,6 +635,22 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testAdjustableAction() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.collectionViews.buttons["Accessibility UX Enhancements"].tap()
+        app.collectionViews.buttons["Adjustable Action"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()//fails with text clipped false positive on the wrong (previous) page
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
     
     

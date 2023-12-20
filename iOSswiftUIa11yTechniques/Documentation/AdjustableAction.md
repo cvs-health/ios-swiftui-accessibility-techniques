@@ -1,12 +1,13 @@
 # Adjustable Action
 
-Use `.accessibilityAdjustableAction` to allow VoiceOver users to adjust an incrementable control like a custom star rating widget. 
+Use `.accessibilityAdjustableAction` to enable VoiceOver users to adjust an incrementable control like a custom star rating widget. 
 
 With `.accessibilityAdjustableAction` VoiceOver users can swipe up or down to increment and decrement the adjustable control's value.
 
 Notes:
 
 - `.accessibilityElement()`, `.accessibilityLabel`, and `.accessibilityValue` are also needed to make a custom control accessible.
+- Native SwiftUI controls like `Slider` have their Adjustable Action included by default for VoiceOver users and don't need extra code.
 
 ## Applicable WCAG Success Criteria
 - [4.1.2 Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value)

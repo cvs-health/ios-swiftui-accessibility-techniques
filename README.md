@@ -22,7 +22,7 @@ Documentation files for each technique are listed below.
 - [x] Announcements
     - [x] [Accessibility Notifications](iOSswiftUIa11yTechniques/Documentation/AccessibilityNotifications.md)
     - [x] [Error Validation](iOSswiftUIa11yTechniques/Documentation/ErrorValidation.md)
-- [ ] Reading Order
+- [x] [Reading Order](iOSswiftUIa11yTechniques/Documentation/ReadingOrder.md)
 - [ ] Focus Management
 - [ ] Accessibility UX Enhancements
     - [ ] Magic Tap

@@ -1,5 +1,7 @@
 # Text Fields
-Text fields require visible label text next to the field which must be set as the `.accessibilityLabel` of the `TextField`. VoiceOver users must hear the label text spoken when focused on the text field.
+Text fields require visible label text next to the field which must be set as the `.accessibilityLabel` of the `TextField`. Or provide visible labels using `LabeledContent` and then an `.accessibilityLabel` is not required. 
+
+VoiceOver users must hear the label text spoken when focused on the text field.
 
 Don't use placeholder text which has insufficient contrast and disappears after the user enters a value. 
 

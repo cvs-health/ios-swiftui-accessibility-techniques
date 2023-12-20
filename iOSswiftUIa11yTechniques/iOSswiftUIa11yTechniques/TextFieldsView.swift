@@ -37,9 +37,9 @@ struct TextFieldsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Text fields require visible label text next to the field and the label text must be set as the `.accessibilityLabel` of the `TextField`. Don't use placeholder text which has insufficient contrast and disappears. Use `.textFieldStyle(.roundedBorder)` to make the `TextField` visually identifiable. Use `.border(.secondary)` to give the border a 3:1 contrast ratio in light and dark mode. Use `.keyboardType` to specify the keyboard displayed on input. Use `.textContentType` to enable form AutoFill for each `TextField`.")
+                Text("Text fields require visible label text next to the field and the label text must be set as the `.accessibilityLabel` of the `TextField`. Or provide visible labels using `LabeledContent` and then an `.accessibilityLabel` is not required. Don't use placeholder text which has insufficient contrast and disappears. Use `.textFieldStyle(.roundedBorder)` to make the `TextField` visually identifiable. Use `.border(.secondary)` to give the border a 3:1 contrast ratio in light and dark mode. Use `.keyboardType` to specify the keyboard displayed on input. Use `.textContentType` to enable form AutoFill for each `TextField`.")
                     .padding(.bottom)
-                Text("Good Example")
+                Text("Good Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -49,14 +49,11 @@ struct TextFieldsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-//                LabeledContent("First Name") {
-//                      TextField("", text:$fname)
-//                        .textFieldStyle(.roundedBorder)
-//                        .border(.secondary)
-//                        .autocorrectionDisabled(true)
-//                        .textContentType(.givenName)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                }.labeledContentStyle(.vertical) // this plus the struct and extension at the bottom enable vertical stacking of the label and textfield
+                Text("Good Example Using `.accessibilityLabel`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 Text("First Name")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 TextField("", text: $fname, axis: .vertical)
@@ -151,7 +148,31 @@ struct TextFieldsView: View {
                     .keyboardType(.URL)
                     .accessibilityIdentifier("websiteGood")
                 DisclosureGroup("Details") {
-                    Text("The good Text fields example uses visible label text that is set as the `.accessibilityLabel` for each `TextField`. `.border(.secondary)` is used to give the border a 3:1 contrast ratio. `.keyboardType` is used to provide the most usable keyboard for each type of input. `.textContentType` is used to enable AutoFill for each `TextField` and automatic password management.")
+                    Text("The first good Text Fields example uses visible label text that is set as the `.accessibilityLabel` for each `TextField`. `.border(.secondary)` is used to give the border a 3:1 contrast ratio. `.keyboardType` is used to provide the most usable keyboard for each type of input. `.textContentType` is used to enable AutoFill for each `TextField` and automatic password management.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Good Example Using `LabeledContent`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                LabeledContent("First Name") {
+                      TextField("", text:$fname)
+                        .textFieldStyle(.roundedBorder)
+                        .border(.secondary)
+                        .autocorrectionDisabled(true)
+                        .textContentType(.givenName)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }.labeledContentStyle(.vertical) // this plus the struct and extension at the bottom enable vertical stacking of the label and textfield
+                LabeledContent("Last Name") {
+                      TextField("", text:$lname)
+                        .textFieldStyle(.roundedBorder)
+                        .border(.secondary)
+                        .autocorrectionDisabled(true)
+                        .textContentType(.familyName)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }.labeledContentStyle(.vertical)
+                DisclosureGroup("Details") {
+                    Text("The second good Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Example")
                     .font(.subheadline)
@@ -186,7 +207,7 @@ struct TextFieldsView: View {
                 TextField("Website", text: $website)
                     .textFieldStyle(.roundedBorder)
                 DisclosureGroup("Details") {
-                    Text("The bad Text fields example uses placeholder text which disappears and has insufficient contrast rather than visible label text. There is no `.accessibilityLabel` for each `TextField`. The default border style has an insufficient contrast ratio. Keyboard types are not specified. AutoFill and password management are not enabled.")
+                    Text("The bad Text Fields example uses placeholder text which disappears and has insufficient contrast rather than visible label text. There is no `.accessibilityLabel` for each `TextField`. The default border style has an insufficient contrast ratio. Keyboard types are not specified. AutoFill and password management are not enabled.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .navigationBarTitle("Text Fields")

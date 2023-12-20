@@ -125,6 +125,7 @@
 		BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupingControlsView.swift; sourceTree = "<group>"; };
 		BC8C92112B315816006DAC20 /* GroupingControls.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = GroupingControls.md; sourceTree = "<group>"; };
 		BC8C92122B324859006DAC20 /* ReadingOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingOrderView.swift; sourceTree = "<group>"; };
+		BC8C92142B3256D0006DAC20 /* ReadingOrder.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReadingOrder.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +166,7 @@
 				AAF127B62B2194E200D5313D /* ErrorValidation.md */,
 				AA7786352AEFFE6000AA39DA /* DynamicType.md */,
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
+				BC8C92142B3256D0006DAC20 /* ReadingOrder.md */,
 				BC8C920E2B2C0FDE006DAC20 /* Cards.md */,
 				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,

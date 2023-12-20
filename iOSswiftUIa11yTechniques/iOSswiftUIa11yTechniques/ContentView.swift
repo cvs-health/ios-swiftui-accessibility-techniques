@@ -47,14 +47,14 @@ struct ContentView: View {
                     }
                 }.accessibilityIdentifier("Announcements")
                 NavigationLink(destination: ReadingOrderView()) {
-                    Text("Reading Order") // Sort Priority
+                    Text("Reading Order")
                 }
                 NavigationLink(destination: DetailView()) {
                     Text("Focus Management")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 NavigationLink(destination: A11yEnhancementsView()) {
                     Text("Accessibility UX Enhancements")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: DetailView()) {
                     Text("Motion Animations") //Reduce motion
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

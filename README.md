@@ -27,7 +27,7 @@ Documentation files for each technique are listed below.
 - [ ] Accessibility UX Enhancements
     - [ ] Magic Tap
     - [ ] Escape
-    - [ ] Custom Actions
+    - [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
     - [ ] User Input Labels
     - [ ] Large Content Viewer
     - [ ] Attributed Strings

@@ -20,25 +20,25 @@ struct A11yEnhancementsView: View {
 
     var body: some View {
         List {
-            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+            Text("Accessibility User Experience enhancements can provide a more usable experience for VoiceOver, Voice Control, and Large Text users.")
             NavigationLink(destination: DetailView()) {
                 Text("Magic Tap")
-            }
+            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             NavigationLink(destination: DetailView()) {
                 Text("Escape")
-            }
-            NavigationLink(destination: DetailView()) {
-                Text("Custom Actions")
+            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            NavigationLink(destination: AdjustableActionView()) {
+                Text("Adjustable Action")
             }
             NavigationLink(destination: DetailView()) {
                 Text("User Input Labels")
-            }
+            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             NavigationLink(destination: DetailView()) {
                 Text("Large Content Viewer") // link https://nilcoalescing.com/blog/LargeContentViewerInSwiftUI/
-            }
+            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             NavigationLink(destination: DetailView()) {
                 Text("Attributed Strings and VoiceOver Proununciation")
-            }
+            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
         }
         .navigationBarTitle("Accessibility UX Enhancements")
     }

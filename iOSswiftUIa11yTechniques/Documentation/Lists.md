@@ -5,7 +5,8 @@ The entire list must not be focused as one single paragraph. Don't use list item
 
 Notes:
 
-* iOS has no native list semantics like `<ul>`, `<ol>`, and `<li>` elements in HTML.
+- iOS has no native list semantics like `<ul>`, `<ol>`, and `<li>` elements in HTML.
+- List items can be coded inside a native SwiftUI `List{}` but VoiceOver will not speak a "List" trait or "1 of 6" number of items list semantics.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)

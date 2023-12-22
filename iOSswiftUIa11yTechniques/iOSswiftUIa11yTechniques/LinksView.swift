@@ -115,6 +115,15 @@ struct LinksView: View {
                 DisclosureGroup("Details") {
                     Text("The second bad link example is incorrectly coded as a `Button` element which speaks a \"Button\" trait to VoiceOver rather than a \"Link\" trait. The default link contrast is below the WCAG minimum. ")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Bad Example 3")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("To get started [Login](https://www.example.com/login) or [Create Account](https://www.example.com/create-account)")
+                DisclosureGroup("Details") {
+                    Text("The third bad link example uses Markdown inline links which have insufficient contrast and are not underlined.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .navigationBarTitle("Links")
             .padding()

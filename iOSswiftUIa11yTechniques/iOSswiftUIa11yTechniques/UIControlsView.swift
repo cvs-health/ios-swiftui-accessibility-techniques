@@ -57,6 +57,9 @@ struct UIControlsView: View {
             NavigationLink(destination: SegmentedControlsView()) {
                 Text("Segmented Controls")
             }
+            NavigationLink(destination: SheetsView()) {
+                Text("Sheets")
+            }
             NavigationLink(destination: SlidersView()) {
                 Text("Sliders")
             }

@@ -43,6 +43,7 @@
 		AAF127BE2B23ED8600D5313D /* AccessibilityNotifications.md in Resources */ = {isa = PBXBuildFile; fileRef = AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */; };
 		AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */; };
 		AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C32B23EDCB00D5313D /* ContentView.swift */; };
+		BC0030362B363B560063EAD5 /* SheetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0030352B363B560063EAD5 /* SheetsView.swift */; };
 		BC8C92092B2A94B2006DAC20 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92082B2A94B2006DAC20 /* ListsView.swift */; };
 		BC8C920D2B2BAE41006DAC20 /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920C2B2BAE41006DAC20 /* CardsView.swift */; };
 		BC8C92102B3144BA006DAC20 /* GroupingControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */; };
@@ -119,6 +120,7 @@
 		AAF127C32B23EDCB00D5313D /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AAF6D09A2ABA29EE00188DE0 /* Tabs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Tabs.md; sourceTree = "<group>"; };
 		BC00300A2B332C020063EAD5 /* AdjustableAction.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdjustableAction.md; sourceTree = "<group>"; };
+		BC0030352B363B560063EAD5 /* SheetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetsView.swift; sourceTree = "<group>"; };
 		BC8C92082B2A94B2006DAC20 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
 		BC8C920A2B2A9DB8006DAC20 /* Lists.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Lists.md; sourceTree = "<group>"; };
 		BC8C920B2B2AA0C9006DAC20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				BC8C92122B324859006DAC20 /* ReadingOrderView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
 				BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */,
+				BC0030352B363B560063EAD5 /* SheetsView.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
 				AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */,
 				AA636C892ADD7FD900014BAF /* ProgressIndicatorsView.swift */,
@@ -391,6 +394,7 @@
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
 				AA0F3EF42AB26D930062E7BC /* LinksView.swift in Sources */,
 				AA74DD5A2AFDCC8E00348078 /* PageTitlesView.swift in Sources */,
+				BC0030362B363B560063EAD5 /* SheetsView.swift in Sources */,
 				AA9B13512AABADD5009A3D84 /* ButtonsView.swift in Sources */,
 				AA59CDC82ABA1F3B0004908F /* TabsView.swift in Sources */,
 				AA74DD542AFD8D0000348078 /* TextFieldsView.swift in Sources */,

@@ -1,4 +1,4 @@
-# Accordions
+# Sheets
 VoiceOver focus must move to the sheet when displayed. Sheet title text must be coded as a Heading for VoiceOver users. 
 
 Use `.sheet()` to code a native SwiftUI sheet that manages VoiceOver focus.

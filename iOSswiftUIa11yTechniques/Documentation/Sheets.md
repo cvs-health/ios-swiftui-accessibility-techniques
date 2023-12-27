@@ -1,7 +1,7 @@
 # Sheets
 VoiceOver focus must move to the sheet when displayed. Sheet title text must be coded as a Heading for VoiceOver users. 
 
-Use `.sheet()` to code a native SwiftUI sheet that manages VoiceOver focus.
+Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when displayed.
                 
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)

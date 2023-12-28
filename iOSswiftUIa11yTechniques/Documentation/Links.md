@@ -6,7 +6,7 @@ Links must be underlined (or have other visual distinction) when placed inline w
 Notes:
 
 * The default color contrast ratio of links is not sufficient for WCAG. Modify the link text color to have at least a 4.5:1 contrast ratio, e.g., using `.tint(Color(red: 0.0, green: 0.0, blue: 1.0))` to make the links dark blue with sufficient contrast.
-* By default links in SwiftUI include a Button trait which must be removing using `.accessibilityRemoveTraits(.isButton)` or else VoiceOver will speak \"Button, Link\".
+* By default links in SwiftUI include a Button trait which must be removed using `.accessibilityRemoveTraits(.isButton)` or else VoiceOver will speak \"Button, Link\".
 
 ## Applicable WCAG Success Criteria
 - [1.4.1: Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color)

@@ -694,7 +694,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//tests the wrong (previous) page
+            try app.performAccessibilityAudit()//fails for text clipped on first item.name in the data table
         } else {
             // Fallback on earlier versions
         }

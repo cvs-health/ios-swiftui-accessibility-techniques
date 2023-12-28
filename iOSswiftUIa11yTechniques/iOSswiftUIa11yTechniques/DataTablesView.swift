@@ -152,7 +152,7 @@ struct DataTablesView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad data table example has no `.accessibilityHint` for each price cell that includes its row and column header text. VoiceOver users only hear the price cell text and don't hear the row or column header text. There is no heading for the table and no group label spoken to VoiceOver users when they first focus on a cell in the table.")
+                    Text("The bad data table example has no `.accessibilityHint` or `.accessibilityLabel` for each price cell that includes its row and column header text. VoiceOver users only hear the price cell text and don't hear the row or column header text. There is no heading for the table and no group label spoken to VoiceOver users when they first focus on a cell in the table.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .navigationBarTitle("Data Tables")

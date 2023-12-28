@@ -668,6 +668,22 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testDialogs() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.collectionViews.buttons["UI Controls"].tap()
+        app.collectionViews.buttons["Confirmation Dialogs"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()//tests the wrong (previous) page
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
     
     

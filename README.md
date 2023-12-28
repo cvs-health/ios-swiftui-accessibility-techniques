@@ -50,7 +50,7 @@ Documentation files for each technique are listed below.
     - [x] [Grouping Controls](iOSswiftUIa11yTechniques/Documentation/GroupingControls.md)
     - [ ] Checkboxes
     - [ ] Radio Buttons
-    - [ ] Dialogs
+    - [x] [Confirmation Dialogs](iOSswiftUIa11yTechniques/Documentation/ConfirmationDialogs.md)
     - [ ] Popovers
     - [ ] Menus
     - [x] [Pickers](iOSswiftUIa11yTechniques/Documentation/Pickers.md)

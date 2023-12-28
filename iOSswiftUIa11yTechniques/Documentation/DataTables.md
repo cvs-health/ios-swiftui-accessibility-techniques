@@ -3,7 +3,7 @@ Data table cells need to have their row and column header text spoken to VoiceOv
 
 The data table should also have a heading set as the `.accessibilityLabel` for the group. 
 
-Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Table Name\")` to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.
+Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("Table Name")` to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.
 
 Notes:
 

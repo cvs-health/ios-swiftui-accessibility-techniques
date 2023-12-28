@@ -24,9 +24,9 @@ struct DataTablesView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Data table cells need to have their row and column header text spoken to VoiceOver users. Set the `.accessibilityHint` for each cell to include its row and column header text. The data table should also have a heading set as the `.accessibilityLabel` for the group. Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Table Name\")` to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.")
+                Text("Data table cells need to have their row and column header text spoken to VoiceOver users. Set the `.accessibilityHint` or `.accessibilityLabel` for each cell to include its row and column header text. The data table should also have a heading set as the `.accessibilityLabel` for the group. Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Table Name\")` to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.")
                     .padding(.bottom)
-                Text("Good Example")
+                Text("Good Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -36,6 +36,11 @@ struct DataTablesView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                Text("Good Example using `.accessibilityHint`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 Text("Generic Price List").font(.headline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
                 VStack {
                     GeometryReader { geometry in
@@ -68,8 +73,48 @@ struct DataTablesView: View {
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Generic Price List")
                 DisclosureGroup("Details") {
-                    Text("The good data table example uses an `.accessibilityHint` for each price cell that includes its row and column header text. VoiceOver speaks the price and then speaks the column and row header text as the hint. Additionally `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Generic Price List\")` are used to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.")
+                    Text("The first good data table example uses an `.accessibilityHint` for each price cell that includes its row and column header text. VoiceOver speaks the price and then speaks the column and row header text as the hint. Additionally `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Generic Price List\")` are used to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Good Example using `.accessibilityLabel`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Generic Price List").font(.headline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                VStack {
+                    GeometryReader { geometry in
+                        HStack {
+                            Text("Name")
+                                .frame(width: geometry.size.width / 2)
+                            Text("30 Day")
+                                .frame(width: geometry.size.width / 4)
+                            Text("90 Day")
+                                .frame(width: geometry.size.width / 4)
+                        }.fontWeight(.bold).font(.footnote)
+                    }
+                    ForEach(items) { item in
+                        VStack(alignment: .leading) {
+                            GeometryReader { geometry in
+                                HStack {
+                                    Text(item.name)
+                                        .frame(width: geometry.size.width / 2)
+                                    Text("$\(item.oneMonth)")
+                                        .frame(width: geometry.size.width / 4)
+                                        .accessibilityLabel("30 Day, \(item.name), $\(item.oneMonth)")
+                                    Text("$\(item.threeMonth)")
+                                        .frame(width: geometry.size.width / 4)
+                                        .accessibilityLabel("90 Day, \(item.name), $\(item.threeMonth)")
+                                }.font(.footnote)
+                            }
+                        }.frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Generic Price List")
+                DisclosureGroup("Details") {
+                    Text("The second good data table example uses an `.accessibilityLabel` for each price cell that includes its row and column header text. VoiceOver speaks the column and row header text then speaks the price. Additionally `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Generic Price List\")` are used to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)

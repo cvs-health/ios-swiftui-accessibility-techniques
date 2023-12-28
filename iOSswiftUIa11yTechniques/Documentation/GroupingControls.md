@@ -2,7 +2,7 @@
 
 VoiceOver users need to hear the group label text spoken when they first focus on a control in a group of related controls. 
 
-Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the group container.
+Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("Group Label")` on the group container.
 
 Warning:
 

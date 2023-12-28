@@ -1,7 +1,7 @@
 # Segmented Controls
 VoiceOver users need to hear the group label text spoken when they first focus on a segment in the segmented control. 
 
-Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the `Picker{}` to specify a segmented control group accessibility label for VoiceOver.
+Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("Group Label")` on the `Picker{}` to specify a segmented control group accessibility label for VoiceOver.
 
 Limitations:
 

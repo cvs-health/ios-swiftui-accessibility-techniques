@@ -55,7 +55,7 @@ Documentation files for each technique are listed below.
     - [ ] Menus
     - [x] [Pickers](iOSswiftUIa11yTechniques/Documentation/Pickers.md)
 - [ ] Navigation
-- [ ] Data Tables
+- [x] [Data Tables](iOSswiftUIa11yTechniques/Documentation/DataTables.md)
 - [x] [Lists](iOSswiftUIa11yTechniques/Documentation/Lists.md)
 - [x] [Cards](iOSswiftUIa11yTechniques/Documentation/Cards.md)
 - [ ] Touch Target Size

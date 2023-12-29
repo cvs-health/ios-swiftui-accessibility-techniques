@@ -143,6 +143,7 @@
 		BC8C92122B324859006DAC20 /* ReadingOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingOrderView.swift; sourceTree = "<group>"; };
 		BC8C92142B3256D0006DAC20 /* ReadingOrder.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReadingOrder.md; sourceTree = "<group>"; };
 		BC8C92152B327D93006DAC20 /* AdjustableActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustableActionView.swift; sourceTree = "<group>"; };
+		BCC4F1822B3F8757004AAB65 /* InputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputLabels.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +181,7 @@
 				AABB44082AE06297003480B3 /* ProgressIndicators.md */,
 				AA9B134E2AAA3867009A3D84 /* DecorativeImages.md */,
 				BC00300A2B332C020063EAD5 /* AdjustableAction.md */,
+				BCC4F1822B3F8757004AAB65 /* InputLabels.md */,
 				AA9B134F2AAA4781009A3D84 /* FunctionalImages.md */,
 				AAF127B62B2194E200D5313D /* ErrorValidation.md */,
 				AA7786352AEFFE6000AA39DA /* DynamicType.md */,

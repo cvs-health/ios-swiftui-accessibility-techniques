@@ -61,9 +61,9 @@ struct ContentView: View {
                 NavigationLink(destination: DynamicTypeView()) {
                     Text("Dynamic Type")
                 }
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: LanguageView()) {
                     Text("Language")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: DetailView()) {
                     Text("Navigation")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

@@ -30,9 +30,9 @@ struct A11yEnhancementsView: View {
             NavigationLink(destination: AdjustableActionView()) {
                 Text("Adjustable Action")
             }
-            NavigationLink(destination: DetailView()) {
-                Text("User Input Labels")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            NavigationLink(destination: InputLabelsView()) {
+                Text("Input Labels")
+            }
             NavigationLink(destination: DetailView()) {
                 Text("Large Content Viewer") // link https://nilcoalescing.com/blog/LargeContentViewerInSwiftUI/
             }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

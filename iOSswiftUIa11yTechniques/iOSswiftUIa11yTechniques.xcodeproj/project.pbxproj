@@ -130,6 +130,7 @@
 		BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTablesView.swift; sourceTree = "<group>"; };
 		BC8129072B3E042000CB19D2 /* DataTables.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DataTables.md; sourceTree = "<group>"; };
 		BC8129082B3F5FAB00CB19D2 /* LanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageView.swift; sourceTree = "<group>"; };
+		BC81290A2B3F6C5A00CB19D2 /* Language.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Language.md; sourceTree = "<group>"; };
 		BC8C92082B2A94B2006DAC20 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
 		BC8C920A2B2A9DB8006DAC20 /* Lists.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Lists.md; sourceTree = "<group>"; };
 		BC8C920B2B2AA0C9006DAC20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -185,6 +186,7 @@
 				BC8129072B3E042000CB19D2 /* DataTables.md */,
 				BC8C920E2B2C0FDE006DAC20 /* Cards.md */,
 				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */,
+				BC81290A2B3F6C5A00CB19D2 /* Language.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
 				BC8129012B3CCF4F00CB19D2 /* Sheets.md */,
 				AA1303162AFED27C001AE0BF /* TextFields.md */,

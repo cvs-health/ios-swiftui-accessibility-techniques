@@ -34,7 +34,7 @@ Documentation files for each technique are listed below.
     - [ ] VoiceOver Pronunciation
 - [ ] Motion Animations
 - [x] [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)
-- [ ] Language
+- [x] [Language](iOSswiftUIa11yTechniques/Documentation/Language.md)
 - [ ] UI Controls
     - [x] [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
     - [x] [Links](iOSswiftUIa11yTechniques/Documentation/Links.md)

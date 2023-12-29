@@ -28,7 +28,7 @@ Documentation files for each technique are listed below.
     - [ ] Magic Tap
     - [ ] Escape
     - [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
-    - [ ] User Input Labels
+    - [x] [Input Labels]
     - [ ] Large Content Viewer
     - [ ] Attributed Strings
     - [ ] VoiceOver Pronunciation

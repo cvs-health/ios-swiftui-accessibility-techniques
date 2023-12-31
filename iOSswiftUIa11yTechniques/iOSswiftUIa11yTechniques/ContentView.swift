@@ -49,9 +49,9 @@ struct ContentView: View {
                 NavigationLink(destination: ReadingOrderView()) {
                     Text("Reading Order")
                 }
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: FocusManagementView()) {
                     Text("Focus Management")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: A11yEnhancementsView()) {
                     Text("Accessibility UX Enhancements")
                 }

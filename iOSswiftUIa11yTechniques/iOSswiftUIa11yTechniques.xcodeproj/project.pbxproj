@@ -53,6 +53,7 @@
 		BC8C92102B3144BA006DAC20 /* GroupingControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */; };
 		BC8C92132B324859006DAC20 /* ReadingOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92122B324859006DAC20 /* ReadingOrderView.swift */; };
 		BC8C92162B327D93006DAC20 /* AdjustableActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92152B327D93006DAC20 /* AdjustableActionView.swift */; };
+		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +145,7 @@
 		BC8C92142B3256D0006DAC20 /* ReadingOrder.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReadingOrder.md; sourceTree = "<group>"; };
 		BC8C92152B327D93006DAC20 /* AdjustableActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustableActionView.swift; sourceTree = "<group>"; };
 		BCC4F1822B3F8757004AAB65 /* InputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputLabels.md; sourceTree = "<group>"; };
+		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +242,7 @@
 				AABD27BF2A9FE69500F718F7 /* Preview Content */,
 				AABD27C72A9FF0D800F718F7 /* HeadingsView.swift */,
 				AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */,
+				BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */,
 				AABD27C92A9FF0E700F718F7 /* ImagesView.swift */,
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
@@ -430,6 +433,7 @@
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
+				BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */,
 				BC8C92162B327D93006DAC20 /* AdjustableActionView.swift in Sources */,
 				AA59CDCE2ABA209D0004908F /* MessagesTabView.swift in Sources */,
 				AA1AC60C2ABD2C3800AC02DA /* TogglesView.swift in Sources */,

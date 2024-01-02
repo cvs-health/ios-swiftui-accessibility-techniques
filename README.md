@@ -36,24 +36,25 @@ Documentation files for each technique are listed below.
 - [x] [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)
 - [x] [Language](iOSswiftUIa11yTechniques/Documentation/Language.md)
 - [ ] UI Controls
-    - [x] [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
-    - [x] [Links](iOSswiftUIa11yTechniques/Documentation/Links.md)
     - [x] [Accordions](iOSswiftUIa11yTechniques/Documentation/Accordions.md)
-    - [x] [Toggles](iOSswiftUIa11yTechniques/Documentation/Toggles.md)
-    - [x] [Tabs](iOSswiftUIa11yTechniques/Documentation/Tabs.md)
+    - [x] [Alerts](iOSswiftUIa11yTechniques/Documentation/Alerts.md)
+    - [x] [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
+    - [x] [Confirmation Dialogs](iOSswiftUIa11yTechniques/Documentation/ConfirmationDialogs.md)
+    - [x] [Grouping Controls](iOSswiftUIa11yTechniques/Documentation/GroupingControls.md)
+    - [x] [Links](iOSswiftUIa11yTechniques/Documentation/Links.md)
+    - [x] [Pickers](iOSswiftUIa11yTechniques/Documentation/Pickers.md)
     - [x] [Segmented Controls](iOSswiftUIa11yTechniques/Documentation/SegmentedControls.md)
     - [x] [Sheets](iOSswiftUIa11yTechniques/Documentation/Sheets.md)
     - [x] [Sliders](iOSswiftUIa11yTechniques/Documentation/Sliders.md)
     - [x] [Steppers](iOSswiftUIa11yTechniques/Documentation/Steppers.md)
+    - [x] [Tabs](iOSswiftUIa11yTechniques/Documentation/Tabs.md)
     - [x] [Text Fields](iOSswiftUIa11yTechniques/Documentation/TextFields.md)
+    - [x] [Toggles](iOSswiftUIa11yTechniques/Documentation/Toggles.md)
     - [ ] Input Instructions
-    - [x] [Grouping Controls](iOSswiftUIa11yTechniques/Documentation/GroupingControls.md)
     - [ ] Checkboxes
     - [ ] Radio Buttons
-    - [x] [Confirmation Dialogs](iOSswiftUIa11yTechniques/Documentation/ConfirmationDialogs.md)
     - [ ] Popovers
     - [ ] Menus
-    - [x] [Pickers](iOSswiftUIa11yTechniques/Documentation/Pickers.md)
 - [ ] Navigation
 - [x] [Data Tables](iOSswiftUIa11yTechniques/Documentation/DataTables.md)
 - [x] [Lists](iOSswiftUIa11yTechniques/Documentation/Lists.md)

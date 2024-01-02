@@ -68,7 +68,7 @@ struct SheetsView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The good sheet example uses `.sheet()` to create a native SwiftUI sheet that receives VoiceOver focus when displayed.")
+                    Text("The good sheet example uses `.sheet()` to create a native SwiftUI sheet that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the sheet when the sheet is closed.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Example")
                     .font(.subheadline)
@@ -99,7 +99,7 @@ struct SheetsView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad sheet example uses a custom view which does not receive VoiceOver focus when displayed.")
+                    Text("The bad sheet example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .navigationBarTitle("Sheets")

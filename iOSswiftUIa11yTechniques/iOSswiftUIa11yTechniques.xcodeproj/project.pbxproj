@@ -129,6 +129,7 @@
 		BC0030352B363B560063EAD5 /* SheetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetsView.swift; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
 		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
+		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
 		BC8129012B3CCF4F00CB19D2 /* Sheets.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Sheets.md; sourceTree = "<group>"; };
 		BC8129022B3CDA4F00CB19D2 /* DialogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogsView.swift; sourceTree = "<group>"; };
 		BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConfirmationDialogs.md; sourceTree = "<group>"; };
@@ -207,6 +208,7 @@
 				BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */,
 				AA2B1D452ABDDC76007B2383 /* Toggles.md */,
 				BC715B642B44C81A00C77B57 /* Alerts.md */,
+				BC715B652B44D01200C77B57 /* FocusManagement.md */,
 				AA13031A2B0278FA001AE0BF /* PageTitles.md */,
 				AAF6D09A2ABA29EE00188DE0 /* Tabs.md */,
 				AA1303182B02735F001AE0BF /* Pickers.md */,

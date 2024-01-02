@@ -24,6 +24,9 @@ struct UIControlsView: View {
             NavigationLink(destination: AccordionsView()) {
                 Text("Accordions")
             }
+            NavigationLink(destination: AlertsView()) {
+                Text("Alerts")
+            }
             NavigationLink(destination: ButtonsView()) {
                 Text("Buttons")
             }

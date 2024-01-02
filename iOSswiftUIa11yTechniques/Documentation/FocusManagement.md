@@ -7,7 +7,7 @@ Use `AccessibilityFocusState` to send focus back to the trigger button that open
 
 Notes:
 
-- Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a modal dialog.
+- Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog.
     
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)

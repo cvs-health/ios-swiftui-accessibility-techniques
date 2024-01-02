@@ -29,7 +29,7 @@ struct FocusManagementView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Focus Management is required when displaying custom dialogs or views. Use `.accessibilityFocused` to move VoiceOver focus when opening and closing custom dialogs or views. Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a modal dialog.")
+                Text("Focus Management is required when displaying custom dialogs or views. Use `.accessibilityFocused` to move VoiceOver focus when opening and closing custom dialogs or views. Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

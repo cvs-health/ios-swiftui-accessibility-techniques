@@ -9,7 +9,7 @@ Use `AccessibilityFocusState` to send focus back to the trigger button that open
 
 Notes:
 
--Sheets will not automatically send focus back to the trigger button and this could be considered a defect in Apple's native `.sheet()` component in which case bugs should be filed with Apple.
+-Sheets will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `.sheet()` component in which case bugs should be filed with Apple.
     
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)

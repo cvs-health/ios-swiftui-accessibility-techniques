@@ -1,5 +1,5 @@
 # Focus Management
-VoiceOver focus must move to the custom dialogs or views when displayed and back to the trigger button when the custom dialog or view is closed.
+VoiceOver focus must move to custom dialogs or views when displayed and back to the trigger button when the custom dialog or view is closed.
 
 Focus Management is required when displaying custom dialogs or views. Use `.accessibilityFocused` to move VoiceOver focus when opening and closing custom dialogs or views. 
 

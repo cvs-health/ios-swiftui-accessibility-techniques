@@ -1,8 +1,16 @@
 # Sheets
-VoiceOver focus must move to the sheet when displayed. Sheet title text must be coded as a Heading for VoiceOver users. 
+VoiceOver focus must move to the sheet when displayed and back to the trigger button when the sheet is closed. 
 
-Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when displayed.
-                
+Sheet title text must be coded as a Heading for VoiceOver users. 
+
+Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. 
+
+Use `AccessibilityFocusState` to send focus back to the trigger button that opened the sheet when the sheet is closed.            
+
+Notes:
+
+-Sheets will not automatically send focus back to the trigger button and this could be considered a defect in Apple's native `.sheet()` component in which case bugs should be filed with Apple.
+    
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
 

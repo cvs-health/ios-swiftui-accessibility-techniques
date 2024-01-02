@@ -19,6 +19,7 @@ import SwiftUI
 struct SheetsView: View {
     @State private var isShowingSheet = false
     @State private var isShowingBadSheet = false
+    @AccessibilityFocusState private var isTriggerFocused: Bool
 
     
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
@@ -28,7 +29,7 @@ struct SheetsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("VoiceOver focus must move to the sheet when displayed. Sheet title text must be coded as a Heading for VoiceOver users. Use `.sheet()` to code a native SwiftUI sheet that manages VoiceOver focus.")
+                Text("VoiceOver focus must move to the sheet when displayed and back to the trigger button when the sheet is closed. Sheet title text must be coded as a Heading for VoiceOver users. Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. Use `AccessibilityFocusState` to send focus back to the trigger button that opened the sheet when the sheet is closed.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -45,6 +46,7 @@ struct SheetsView: View {
                 }) {
                     Text("Show License Agreement")
                 }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    .accessibilityFocused($isTriggerFocused)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 .sheet(isPresented: $isShowingSheet,
                        onDismiss: didDismiss) {
@@ -57,7 +59,10 @@ struct SheetsView: View {
                             """)
                             .padding(20)
                         Button("Dismiss",
-                               action: { isShowingSheet.toggle() })
+                               action: { 
+                                    isShowingSheet.toggle()
+                                    isTriggerFocused = true
+                                })
                         .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                         
                     }

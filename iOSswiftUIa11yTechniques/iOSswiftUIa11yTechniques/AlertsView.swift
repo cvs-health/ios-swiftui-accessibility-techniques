@@ -56,7 +56,7 @@ struct AlertsView: View {
                     Text("You cannot undo deleting all messages!")
                 }
                 DisclosureGroup("Details") {
-                    Text("The good alert example uses `.alert()` to create a native SwiftUI Alert that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the sheet when the sheet is closed.")
+                    Text("The good alert example uses `.alert()` to create a native SwiftUI alert that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the alert when the alert is closed.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Example")
                     .font(.subheadline)

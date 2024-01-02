@@ -128,6 +128,7 @@
 		BC00300A2B332C020063EAD5 /* AdjustableAction.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdjustableAction.md; sourceTree = "<group>"; };
 		BC0030352B363B560063EAD5 /* SheetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetsView.swift; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
+		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
 		BC8129012B3CCF4F00CB19D2 /* Sheets.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Sheets.md; sourceTree = "<group>"; };
 		BC8129022B3CDA4F00CB19D2 /* DialogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogsView.swift; sourceTree = "<group>"; };
 		BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConfirmationDialogs.md; sourceTree = "<group>"; };
@@ -205,6 +206,7 @@
 				AA636C882AC3B48C00014BAF /* Sliders.md */,
 				BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */,
 				AA2B1D452ABDDC76007B2383 /* Toggles.md */,
+				BC715B642B44C81A00C77B57 /* Alerts.md */,
 				AA13031A2B0278FA001AE0BF /* PageTitles.md */,
 				AAF6D09A2ABA29EE00188DE0 /* Tabs.md */,
 				AA1303182B02735F001AE0BF /* Pickers.md */,
@@ -644,7 +646,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16;
+				MARKETING_VERSION = 1.17;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -677,7 +679,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16;
+				MARKETING_VERSION = 1.17;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

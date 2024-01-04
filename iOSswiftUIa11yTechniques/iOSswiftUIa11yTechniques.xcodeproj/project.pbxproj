@@ -45,6 +45,7 @@
 		AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C32B23EDCB00D5313D /* ContentView.swift */; };
 		BC0030362B363B560063EAD5 /* SheetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0030352B363B560063EAD5 /* SheetsView.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
+		BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B662B465B9F00C77B57 /* CheckboxesView.swift */; };
 		BC8129032B3CDA4F00CB19D2 /* DialogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129022B3CDA4F00CB19D2 /* DialogsView.swift */; };
 		BC8129062B3D36CF00CB19D2 /* DataTablesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */; };
 		BC8129092B3F5FAB00CB19D2 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129082B3F5FAB00CB19D2 /* LanguageView.swift */; };
@@ -130,6 +131,7 @@
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
 		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
 		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
+		BC715B662B465B9F00C77B57 /* CheckboxesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxesView.swift; sourceTree = "<group>"; };
 		BC8129012B3CCF4F00CB19D2 /* Sheets.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Sheets.md; sourceTree = "<group>"; };
 		BC8129022B3CDA4F00CB19D2 /* DialogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogsView.swift; sourceTree = "<group>"; };
 		BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConfirmationDialogs.md; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				AABD27C92A9FF0E700F718F7 /* ImagesView.swift */,
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
+				BC715B662B465B9F00C77B57 /* CheckboxesView.swift */,
 				BC715B622B449F0500C77B57 /* AlertsView.swift */,
 				BC8129082B3F5FAB00CB19D2 /* LanguageView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
@@ -441,6 +444,7 @@
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
+				BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */,
 				BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */,
 				BC8C92162B327D93006DAC20 /* AdjustableActionView.swift in Sources */,
 				AA59CDCE2ABA209D0004908F /* MessagesTabView.swift in Sources */,

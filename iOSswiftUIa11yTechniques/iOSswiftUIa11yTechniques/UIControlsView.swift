@@ -30,9 +30,9 @@ struct UIControlsView: View {
             NavigationLink(destination: ButtonsView()) {
                 Text("Buttons")
             }
-            NavigationLink(destination: DetailView()) {
+            NavigationLink(destination: CheckboxesView()) {
                 Text("Checkboxes")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
             NavigationLink(destination: DialogsView()) {
                 Text("Confirmation Dialogs")
             }

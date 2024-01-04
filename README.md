@@ -39,6 +39,7 @@ Documentation files for each technique are listed below.
     - [x] [Accordions](iOSswiftUIa11yTechniques/Documentation/Accordions.md)
     - [x] [Alerts](iOSswiftUIa11yTechniques/Documentation/Alerts.md)
     - [x] [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
+    - [x] [Checkboxes](iOSswiftUIa11yTechniques/Documentation/Checkboxes.md)
     - [x] [Confirmation Dialogs](iOSswiftUIa11yTechniques/Documentation/ConfirmationDialogs.md)
     - [x] [Grouping Controls](iOSswiftUIa11yTechniques/Documentation/GroupingControls.md)
     - [x] [Links](iOSswiftUIa11yTechniques/Documentation/Links.md)
@@ -51,7 +52,6 @@ Documentation files for each technique are listed below.
     - [x] [Text Fields](iOSswiftUIa11yTechniques/Documentation/TextFields.md)
     - [x] [Toggles](iOSswiftUIa11yTechniques/Documentation/Toggles.md)
     - [ ] Input Instructions
-    - [ ] Checkboxes
     - [ ] Radio Buttons
     - [ ] Popovers
     - [ ] Menus

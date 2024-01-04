@@ -1,5 +1,5 @@
 # Data Tables
-Data table cells need to have their row and column header text spoken to VoiceOver users. Set the `.accessibilityHint` or `.accessibilityLabel` for each cell to include its row and column header text. 
+Data table cells need to have their row and column header text spoken to VoiceOver users. Set the `.accessibilityHint`, `.accessibilityValue`, or `.accessibilityLabel` for each cell to include its row and column header text. 
 
 The data table should also have a heading set as the `.accessibilityLabel` for the group. 
 

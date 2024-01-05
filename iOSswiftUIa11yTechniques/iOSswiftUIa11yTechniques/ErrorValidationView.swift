@@ -38,6 +38,26 @@ struct ErrorValidationView: View {
     @AccessibilityFocusState private var isEmailA11yFocused: Bool
     @FocusState private var isEmailFocused: Bool
 
+    @State private var fname2 = ""
+    @State private var lname2 = ""
+    @State private var phone2 = ""
+    @State private var email2 = ""
+    @State private var firstNameErrorVisible2 = false
+    @AccessibilityFocusState private var isFirstNameA11yFocused2: Bool
+    @FocusState private var isFirstNameFocused2: Bool
+    @State private var fnameLabel2 = "First Name *"
+    @State private var fnameError2 = "⚠ First Name is required. Please enter your first name."
+    @State private var lnameLabel2 = "Last Name *"
+    @State private var lnameError2 = "⚠ Last Name is required. Please enter your last name."
+    @State private var lastNameErrorVisible2 = false
+    @AccessibilityFocusState private var isLastNameA11yFocused2: Bool
+    @FocusState private var isLastNameFocused2: Bool
+    @State private var emailLabel2 = "Email *"
+    @State private var emailError2 = "⚠ Email is required. Please enter your email address."
+    @State private var emailErrorVisible2 = false
+    @AccessibilityFocusState private var isEmailA11yFocused2: Bool
+    @FocusState private var isEmailFocused2: Bool
+
     
     @State private var fnameBad = ""
     @State private var lnameBad = ""
@@ -62,9 +82,9 @@ struct ErrorValidationView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Error validation is used to convey error messages for missing or incorrectly entered data. Use `AccessibilityFocusState` to move VoiceOver focus to the first invalid input or error text when submitting a form with invalid data. Use an `.accessibilityHint` matching the visible error message text for each invalid input. Visually indicate required fields e.g. with an *.")
+                Text("Error validation is used to convey error messages for missing or incorrectly entered data. Use `AccessibilityFocusState` to move VoiceOver focus to the first invalid input or error text when submitting a form with invalid data. Use an `.accessibilityHint` or `.accessibilityValue` matching the visible error message text for each invalid input. Visually indicate required fields e.g. with an *.")
                     .padding([.bottom])
-                Text("Good Example")
+                Text("Good Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -74,6 +94,11 @@ struct ErrorValidationView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                Text("Good Example Using .accessibilityHint")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 Text("* indicates required fields")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .italic()
@@ -177,7 +202,117 @@ struct ErrorValidationView: View {
                         .opacity(0.8)
                 }.padding()
                 DisclosureGroup("Details") {
-                    Text("The good error validation example uses `AccessibilityFocusState` to move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input has an `.accessibilityHint` matching the visible error message text so that VoiceOver users hear the error message when focused on the invalid inputs. Error messages are meaningful and specific. Required fields are indicated with a * and the meaning of the * is defined at the top of the form.")
+                    Text("The first good error validation example uses `AccessibilityFocusState` to move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input has an `.accessibilityHint` matching the visible error message text so that VoiceOver users hear the error message when focused on the invalid inputs. Error messages are meaningful and specific. Required fields are indicated with a * and the meaning of the * is defined at the top of the form.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Good Example Using .accessibilityValue")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("* indicates required fields")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .italic()
+                    .font(.caption)
+                Text(fnameLabel2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("", text: $fname2, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(firstNameErrorVisible2 ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+                    .accessibilityLabel(fnameLabel2)
+                    .accessibilityValue(firstNameErrorVisible2 ? fnameError2 : "")
+                    .autocorrectionDisabled(true)
+                    .textContentType(.givenName)
+                    .accessibilityIdentifier("fNameGood2")
+                    .accessibilityFocused($isFirstNameA11yFocused2)
+                    .focused($isFirstNameFocused2)
+                if firstNameErrorVisible2 {
+                    Text(fnameError2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
+                Text(lnameLabel2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("", text: $lname2, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(.secondary)
+                    .border(lastNameErrorVisible2 ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+                    .accessibilityLabel(lnameLabel2)
+                    .accessibilityValue(lastNameErrorVisible2 ? lnameError2 : "")
+                    .autocorrectionDisabled(true)
+                    .textContentType(.familyName)
+                    .accessibilityIdentifier("lNameGood2")
+                    .accessibilityFocused($isLastNameA11yFocused2)
+                    .focused($isLastNameFocused2)
+                if lastNameErrorVisible2 {
+                    Text(lnameError2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
+                Text("Phone Number")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("", text: $phone2, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(.secondary)
+                    .accessibilityLabel("Phone Number")
+                    .keyboardType(.phonePad)
+                    .accessibilityIdentifier("phoneGood2")
+                Text(emailLabel2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("", text: $email2, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(.secondary)
+                    .border(emailErrorVisible2 ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+                    .accessibilityLabel(emailLabel2)
+                    .accessibilityValue(emailErrorVisible2 ? emailError2 : "")
+                    .keyboardType(.emailAddress)
+                    .textContentType(.emailAddress)
+                    .accessibilityIdentifier("emailGood2")
+                    .accessibilityFocused($isEmailA11yFocused2)
+                    .focused($isEmailFocused2)
+                if emailErrorVisible2 {
+                    Text(emailError2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
+                Button(action: {
+                    // Handle button action
+                    firstNameErrorVisible2 = false
+                    isFirstNameFocused2 = false
+                    isFirstNameA11yFocused2 = false
+                    lastNameErrorVisible2 = false
+                    isLastNameFocused2 = false
+                    isLastNameA11yFocused2 = false
+                    emailErrorVisible2 = false
+                    isEmailFocused2 = false
+                    isEmailA11yFocused2 = false
+                    if email2.isEmpty {
+                        emailErrorVisible2 = true
+                        isEmailFocused2 = true
+                        isEmailA11yFocused2 = true
+                    }
+                    if lname2.isEmpty {
+                        lastNameErrorVisible2 = true
+                        isLastNameFocused2 = true
+                        isLastNameA11yFocused2 = true
+                    }
+                    if fname2.isEmpty {
+                        firstNameErrorVisible2 = true
+                        isFirstNameFocused2 = true
+                        isFirstNameA11yFocused = true
+                    }
+                }) {
+                    Text("Join Newsletter")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.black)
+                        .cornerRadius(10)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .opacity(0.8)
+                }.padding()
+                DisclosureGroup("Details") {
+                    Text("The second good error validation example uses `AccessibilityFocusState` to move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input has an `.accessibilityValue` matching the visible error message text so that VoiceOver users hear the error message when focused on the invalid inputs. Error messages are meaningful and specific. Required fields are indicated with a * and the meaning of the * is defined at the top of the form.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Example")
                     .font(.subheadline)

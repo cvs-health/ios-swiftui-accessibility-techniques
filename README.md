@@ -67,7 +67,7 @@ Documentation files for each technique are listed below.
 - [ ] Custom Controls using .accessibilityRepresentation
 - [ ] Meaningful Accessible Names
 - [ ] Combining Focus
-- [ ] Device Orientation
+- [x] [Device Orientation](iOSswiftUIa11yTechniques/Documentation/DeviceOrientation.md)
 - [ ] Siri Shortcuts
 
 ## Contributor Guide

@@ -1,12 +1,12 @@
 # Toggles
-Toggles are used to switch between two options (also called switch controls). VoiceOver users must hear the \"On\" and \"Off\" state of toggles.
+Toggles are used to switch between two options (also called switch controls). VoiceOver users must hear the "On" and "Off" state of toggles.
 
-Use `Toggle` to create native toggle controls with an \"On\" and \"Off\" state. 
+Use `Toggle` to create native toggle controls with an "On" and "Off" state. 
 
-Use `Toggle(\"Label Text\")` to give the toggle a visible label and accessibility label. 
+Use `Toggle("Label Text")` to give the toggle a visible label and accessibility label. 
 
 Notes:
-- If there is no unique `Toggle(\"Label Text\")` then the toggle must have a unique and specific `.accessibilityLabel`. 
+- If there is no unique `Toggle("Label Text")` then the toggle must have a unique and specific `.accessibilityLabel`. 
 - Set the correct `.accessibilityValue` if the toggle has visible value text other than On and Off.
 - In XCUITesting use `.switches` to select a `Toggle` as `.toggles` does not work.
 

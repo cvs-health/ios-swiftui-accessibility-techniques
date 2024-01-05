@@ -1,16 +1,17 @@
 # Checkboxes
 Code checkboxes as `Toggle` elements with a custom `.toggleStyle`. 
 
-Use `Toggle(\"Label Text\")` to create label text. 
+Use `Toggle("Label Text")` to create label text. 
 
-Use `.accessibilityValue(isChecked ? \"Checked\" : \"Unchecked\")` to create custom value text for VoiceOver. 
+Use `.accessibilityValue(isChecked ? "Checked" : "Unchecked")` to create custom value text for VoiceOver. 
 
 Checkbox groups need an accessibility label for the group which matches the visible group label text. 
 
-Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the checkbox group container so that VoiceOver users hear the group label spoken when first moving focus to a checkbox in the group.
+Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("Group Label")` on the checkbox group container so that VoiceOver users hear the group label spoken when first moving focus to a checkbox in the group.
 
 Notes:
 - SwiftUI has no native checkbox control or accessibility trait for VoiceOver. 
+- In XCUITesting use `.switches` to select a `Toggle` as `.toggles` does not work.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)

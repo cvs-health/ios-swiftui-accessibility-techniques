@@ -56,6 +56,9 @@
 		BC8C92132B324859006DAC20 /* ReadingOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92122B324859006DAC20 /* ReadingOrderView.swift */; };
 		BC8C92162B327D93006DAC20 /* AdjustableActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92152B327D93006DAC20 /* AdjustableActionView.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
+		BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */; };
+		BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */; };
+		BCEDB8F42B4872CA00B4D85D /* DeviceOrientationGood.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +156,10 @@
 		BCC4F1822B3F8757004AAB65 /* InputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
 		BCEDB8EE2B4760D800B4D85D /* Checkboxes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Checkboxes.md; sourceTree = "<group>"; };
+		BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationView.swift; sourceTree = "<group>"; };
+		BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationBad.swift; sourceTree = "<group>"; };
+		BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationGood.swift; sourceTree = "<group>"; };
+		BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DeviceOrientation.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +220,7 @@
 				AA2B1D452ABDDC76007B2383 /* Toggles.md */,
 				BC715B642B44C81A00C77B57 /* Alerts.md */,
 				BC715B652B44D01200C77B57 /* FocusManagement.md */,
+				BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */,
 				AA13031A2B0278FA001AE0BF /* PageTitles.md */,
 				AAF6D09A2ABA29EE00188DE0 /* Tabs.md */,
 				AA1303182B02735F001AE0BF /* Pickers.md */,
@@ -253,6 +261,7 @@
 				AABD27C72A9FF0D800F718F7 /* HeadingsView.swift */,
 				AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */,
 				BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */,
+				BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */,
 				AABD27C92A9FF0E700F718F7 /* ImagesView.swift */,
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
@@ -260,6 +269,8 @@
 				BC715B622B449F0500C77B57 /* AlertsView.swift */,
 				BC8129082B3F5FAB00CB19D2 /* LanguageView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
+				BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */,
+				BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */,
 				BC81290B2B3F7BBE00CB19D2 /* InputLabelsView.swift */,
 				BC8C92152B327D93006DAC20 /* AdjustableActionView.swift */,
 				BC8C920C2B2BAE41006DAC20 /* CardsView.swift */,
@@ -423,6 +434,7 @@
 				AABD27C82A9FF0D800F718F7 /* HeadingsView.swift in Sources */,
 				AA636C8A2ADD7FD900014BAF /* ProgressIndicatorsView.swift in Sources */,
 				AABD27D02A9FF11400F718F7 /* AnnouncementsView.swift in Sources */,
+				BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */,
 				AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */,
 				AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */,
 				AA74DD5E2AFDCCFA00348078 /* PageTitleBad.swift in Sources */,
@@ -446,8 +458,10 @@
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
+				BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */,
 				BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */,
 				BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */,
+				BCEDB8F42B4872CA00B4D85D /* DeviceOrientationGood.swift in Sources */,
 				BC8C92162B327D93006DAC20 /* AdjustableActionView.swift in Sources */,
 				AA59CDCE2ABA209D0004908F /* MessagesTabView.swift in Sources */,
 				AA1AC60C2ABD2C3800AC02DA /* TogglesView.swift in Sources */,
@@ -654,7 +668,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -687,7 +701,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

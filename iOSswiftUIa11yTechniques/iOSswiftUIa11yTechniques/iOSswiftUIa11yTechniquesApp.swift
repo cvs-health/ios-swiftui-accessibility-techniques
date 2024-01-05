@@ -18,6 +18,7 @@ import SwiftUI
 
 @main
 struct iOSswiftUIa11yTechniquesApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -27,4 +28,5 @@ struct iOSswiftUIa11yTechniquesApp: App {
     init() {
             UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
         }
+
 }

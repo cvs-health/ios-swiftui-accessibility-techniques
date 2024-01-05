@@ -94,9 +94,9 @@ struct ContentView: View {
                 NavigationLink(destination: DetailView()) {
                     Text("Combining Focus")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: DeviceOrientationView()) {
                     Text("Device Orientation")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: DetailView()) {
                     Text("Siri Shortcuts")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

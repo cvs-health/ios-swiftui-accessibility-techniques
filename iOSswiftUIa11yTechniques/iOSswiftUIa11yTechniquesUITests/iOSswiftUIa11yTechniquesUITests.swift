@@ -761,6 +761,32 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testCheckboxes() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.collectionViews.buttons["UI Controls"].tap()
+        app.collectionViews.buttons["Checkboxes"].tap()
+        //assert elements with a11y identifiers exist
+        XCTAssertTrue(app.switches["checkboxGood"].exists)
+        XCTAssertTrue(app.switches["Phone"].exists)
+        XCTAssertTrue(app.switches["Email"].exists)
+        XCTAssertTrue(app.switches["Text"].exists)
+        XCTAssertTrue(app.buttons["checkboxBad"].exists)
+        //assert that elements have accessibility labels
+        XCTAssertFalse(app.switches["checkboxGood"].label.isEmpty)
+        XCTAssertFalse(app.buttons["checkboxBad"].label.isEmpty)
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            app.swipeUp()
+            app.swipeUp()
+            try app.performAccessibilityAudit()
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
     
     

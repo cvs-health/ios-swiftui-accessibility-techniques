@@ -263,7 +263,7 @@ struct ErrorValidationView: View {
                     .border(.secondary)
                     .border(emailErrorVisible2 ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(emailLabel2)
-                    .accessibilityValue(emailErrorVisible2 ? phone2+emailError2 : phone2)
+                    .accessibilityValue(emailErrorVisible2 ? email2+emailError2 : email2)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
                     .accessibilityIdentifier("emailGood2")

@@ -91,9 +91,9 @@ struct ContentView: View {
                 NavigationLink(destination: DetailView()) {
                     Text("Meaningful Accessible Names")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: CombiningFocusView()) {
                     Text("Combining Focus")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: DeviceOrientationView()) {
                     Text("Device Orientation")
                 }

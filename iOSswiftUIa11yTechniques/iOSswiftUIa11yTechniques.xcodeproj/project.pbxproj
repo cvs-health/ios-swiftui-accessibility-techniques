@@ -59,6 +59,7 @@
 		BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */; };
 		BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */; };
 		BCEDB8F42B4872CA00B4D85D /* DeviceOrientationGood.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */; };
+		BCEDB9112B49C74B00B4D85D /* CombiningFocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,6 +161,7 @@
 		BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationBad.swift; sourceTree = "<group>"; };
 		BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationGood.swift; sourceTree = "<group>"; };
 		BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DeviceOrientation.md; sourceTree = "<group>"; };
+		BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombiningFocusView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +257,7 @@
 				BC8C920B2B2AA0C9006DAC20 /* Info.plist */,
 				AABD27B92A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift */,
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
+				BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */,
 				AABB44092AE6C0FB003480B3 /* DynamicTypeView.swift */,
 				AABD27BD2A9FE69500F718F7 /* Assets.xcassets */,
 				AABD27BF2A9FE69500F718F7 /* Preview Content */,
@@ -460,6 +463,7 @@
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
 				BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */,
 				BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */,
+				BCEDB9112B49C74B00B4D85D /* CombiningFocusView.swift in Sources */,
 				BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */,
 				BCEDB8F42B4872CA00B4D85D /* DeviceOrientationGood.swift in Sources */,
 				BC8C92162B327D93006DAC20 /* AdjustableActionView.swift in Sources */,

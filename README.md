@@ -66,7 +66,7 @@ Documentation files for each technique are listed below.
 - [x] [Progress Indicators](iOSswiftUIa11yTechniques/Documentation/ProgressIndicators.md)
 - [ ] Custom Controls using .accessibilityRepresentation
 - [ ] Meaningful Accessible Names
-- [ ] Combining Focus
+- [x] [Combining Focus](iOSswiftUIa11yTechniques/Documentation/CombiningFocus.md)
 - [x] [Device Orientation](iOSswiftUIa11yTechniques/Documentation/DeviceOrientation.md)
 - [ ] Siri Shortcuts
 

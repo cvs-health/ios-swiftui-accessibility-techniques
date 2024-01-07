@@ -162,6 +162,7 @@
 		BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationGood.swift; sourceTree = "<group>"; };
 		BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DeviceOrientation.md; sourceTree = "<group>"; };
 		BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombiningFocusView.swift; sourceTree = "<group>"; };
+		BCEDB9122B4A526800B4D85D /* CombiningFocus.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CombiningFocus.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +218,7 @@
 				AA1303172AFEE5FD001AE0BF /* SegmentedControls.md */,
 				BC8C92112B315816006DAC20 /* GroupingControls.md */,
 				AA1303192B027685001AE0BF /* Steppers.md */,
+				BCEDB9122B4A526800B4D85D /* CombiningFocus.md */,
 				AA636C882AC3B48C00014BAF /* Sliders.md */,
 				BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */,
 				AA2B1D452ABDDC76007B2383 /* Toggles.md */,

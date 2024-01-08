@@ -8,6 +8,7 @@ Use `AccessibilityFocusState` to send focus back to the trigger button that open
 Notes:
 
 - Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog.
+- Use `.accessibilityAction(.escape)` to close a custom dialog or view and return focus when the VoiceOver escape gesture (2 finger Z) is activated.
     
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)

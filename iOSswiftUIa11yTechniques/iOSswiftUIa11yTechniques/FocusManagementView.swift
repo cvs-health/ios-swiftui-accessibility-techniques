@@ -29,7 +29,7 @@ struct FocusManagementView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Focus Management is required when displaying custom dialogs or views. Use `.accessibilityFocused` to move VoiceOver focus when opening and closing custom dialogs or views. Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog.")
+                Text("Focus Management is required when displaying custom dialogs or views. Use `.accessibilityFocused` to move VoiceOver focus when opening and closing custom dialogs or views. Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog. Use `.accessibilityAction(.escape)` to close a custom dialog or view and return focus when the VoiceOver escape gesture (2 finger Z) is activated.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -70,9 +70,13 @@ struct FocusManagementView: View {
                         .padding(.bottom)
                     }.background(colorScheme == .dark ? Color(.black) : Color(.white))
                         .accessibilityAddTraits(.isModal)
+                        .accessibilityAction(.escape) {
+                            showModal.toggle()
+                            isTriggerFocused = true
+                        }
                 }
                 DisclosureGroup("Details") {
-                    Text("The good focus management example uses `.accessibilityFocused` to set VoiceOver focus to the dialog heading when it's opened and back to the dialog trigger button when it's closed. `.accessibilityAddTraits(.isModal)` is used to trap VoiceOver focus inside the modal dialog and prevent focus of the grayed out content under the modal.")
+                    Text("The good focus management example uses `.accessibilityFocused` to set VoiceOver focus to the dialog heading when it's opened and back to the dialog trigger button when it's closed. `.accessibilityAddTraits(.isModal)` is used to trap VoiceOver focus inside the modal dialog and prevent focus of the grayed out content under the modal. `.accessibilityAction(.escape)` is used to close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Example")
                     .font(.subheadline)
@@ -107,7 +111,7 @@ struct FocusManagementView: View {
                     }.background(colorScheme == .dark ? Color(.black) : Color(.white))
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad focus management example does not use `.accessibilityFocused` to set VoiceOver focus to the dialog heading when it's opened or back to the dialog trigger button when it's closed. `.accessibilityAddTraits(.isModal)` is not used to trap VoiceOver focus inside the modal dialog and prevent focus of the grayed out content under the modal.")
+                    Text("The bad focus management example does not use `.accessibilityFocused` to set VoiceOver focus to the dialog heading when it's opened or back to the dialog trigger button when it's closed. `.accessibilityAddTraits(.isModal)` is not used to trap VoiceOver focus inside the modal dialog and prevent focus of the grayed out content under the modal. `.accessibilityAction(.escape)` is not used to close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .background(showModal || showModalBad == true ? colorScheme == .dark ? Color(.gray).opacity(0.5) : Color.black.opacity(0.5) : colorScheme == .dark ? Color(.black) : Color(.white))

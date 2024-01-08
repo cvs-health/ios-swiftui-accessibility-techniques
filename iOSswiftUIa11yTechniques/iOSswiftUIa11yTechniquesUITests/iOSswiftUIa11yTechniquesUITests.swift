@@ -787,6 +787,23 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testCombiningFocus() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.swipeUp()
+        app.swipeUp()
+        app.collectionViews.buttons["Combining Focus"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()//fails false positive for text clipped on page title
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
     
     

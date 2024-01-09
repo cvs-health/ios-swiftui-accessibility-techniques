@@ -1,7 +1,8 @@
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
-
+fastlane/
+Gemfile
 **/.DS_Store
 
 ## User settings

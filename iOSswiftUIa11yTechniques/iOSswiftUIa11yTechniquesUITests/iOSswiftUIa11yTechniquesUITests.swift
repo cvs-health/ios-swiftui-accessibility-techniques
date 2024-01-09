@@ -804,6 +804,24 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testNavigation() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.swipeUp()
+        app.collectionViews.buttons["Navigation"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()//passes
+            app.swipeUp()
+            try app.performAccessibilityAudit()//passes
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
     
     

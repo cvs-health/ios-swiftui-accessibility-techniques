@@ -55,7 +55,7 @@ Documentation files for each technique are listed below.
     - [ ] Radio Buttons
     - [ ] Popovers
     - [ ] Menus
-- [ ] Navigation
+- [x] [Navigation](iOSswiftUIa11yTechniques/Documentation/Navigation.md)
 - [x] [Data Tables](iOSswiftUIa11yTechniques/Documentation/DataTables.md)
 - [x] [Lists](iOSswiftUIa11yTechniques/Documentation/Lists.md)
 - [x] [Cards](iOSswiftUIa11yTechniques/Documentation/Cards.md)

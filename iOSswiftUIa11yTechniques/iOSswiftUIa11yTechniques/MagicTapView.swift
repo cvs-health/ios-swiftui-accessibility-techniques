@@ -26,7 +26,7 @@ struct MagicTapView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use Magic Tap to .")
+                Text("Magic Tap allows VoiceOver users to toggle the most important state or feature in an app. Use `.accessibilityAction(.magicTap)` on the pages you want to enable the Magic Tap gesture.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -38,21 +38,9 @@ struct MagicTapView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                Text("Turn on VoiceOver and double tap with 2 fingers to activate Magic Tap.")
                 DisclosureGroup("Details") {
-                    Text("The good list example uses lists with a separate `Text()` element for each list item.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
-                Text("Bad Example")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                Divider()
-                    .frame(height: 2.0, alignment:.leading)
-                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                    .padding(.bottom)
-                DisclosureGroup("Details") {
-                    Text("The bad list example uses lists with a single `Text()` element for the entire list and each list item visually separated using the `\\n` new line character.")
+                    Text("The good Magic Tap example uses `.accessibilityAction(.magicTap)` to display an alert dialog when VoiceOver users double tap with 2 fingers anywhere on this page.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .navigationBarTitle("Magic Tap")

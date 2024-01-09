@@ -17,8 +17,6 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var showingAlert = false
-
     var body: some View {
         NavigationView {
             List {
@@ -105,12 +103,6 @@ struct ContentView: View {
             Text("👩‍🦯🦼🧏‍♂️♿️🦮👨‍🦽🦻 \n \nWelcome to the iOS SwiftUI Accessibility Techniques Demo App! \n \nActivate the navigation menu button to view the iOS SwiftUI Accessibility Techniques. \n \nUse VoiceOver to set focus to the good and bad examples. Expand the details for an explanation of each example.")
                 .font(.largeTitle)
                 .padding()
-            .alert(isPresented: $showingAlert) {
-                Alert(title: Text("Magic Tap Activated"), message: Text("You activated Magic Tap by double-tapping with 2 fingers!"), dismissButton: .default(Text("OK")))
-            }
-            .accessibilityAction(.magicTap) {
-                showingAlert = true
-            }
         }
     }
 }

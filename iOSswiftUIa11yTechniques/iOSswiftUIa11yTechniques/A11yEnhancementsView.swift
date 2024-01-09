@@ -21,9 +21,9 @@ struct A11yEnhancementsView: View {
     var body: some View {
         List {
             Text("Accessibility User Experience enhancements can provide a more usable experience for VoiceOver, Voice Control, and Large Text users.")
-            NavigationLink(destination: DetailView()) {
+            NavigationLink(destination: MagicTapView()) {
                 Text("Magic Tap")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
             NavigationLink(destination: DetailView()) {
                 Text("Escape")
             }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

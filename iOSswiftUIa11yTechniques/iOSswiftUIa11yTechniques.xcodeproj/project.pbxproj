@@ -60,6 +60,7 @@
 		BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */; };
 		BCEDB8F42B4872CA00B4D85D /* DeviceOrientationGood.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */; };
 		BCEDB9112B49C74B00B4D85D /* CombiningFocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */; };
+		BCEDB9142B4C812C00B4D85D /* NavigationLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +155,7 @@
 		BC8C92122B324859006DAC20 /* ReadingOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingOrderView.swift; sourceTree = "<group>"; };
 		BC8C92142B3256D0006DAC20 /* ReadingOrder.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReadingOrder.md; sourceTree = "<group>"; };
 		BC8C92152B327D93006DAC20 /* AdjustableActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustableActionView.swift; sourceTree = "<group>"; };
+		BC8CD0E32B4CFC9400B9A28A /* Navigation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Navigation.md; sourceTree = "<group>"; };
 		BCC4F1822B3F8757004AAB65 /* InputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
 		BCEDB8EE2B4760D800B4D85D /* Checkboxes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Checkboxes.md; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 		BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DeviceOrientation.md; sourceTree = "<group>"; };
 		BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombiningFocusView.swift; sourceTree = "<group>"; };
 		BCEDB9122B4A526800B4D85D /* CombiningFocus.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CombiningFocus.md; sourceTree = "<group>"; };
+		BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLinkView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +210,7 @@
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
 				BC8C92142B3256D0006DAC20 /* ReadingOrder.md */,
 				BCEDB8EE2B4760D800B4D85D /* Checkboxes.md */,
+				BC8CD0E32B4CFC9400B9A28A /* Navigation.md */,
 				BC8129072B3E042000CB19D2 /* DataTables.md */,
 				BC8C920E2B2C0FDE006DAC20 /* Cards.md */,
 				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */,
@@ -274,6 +278,7 @@
 				BC715B622B449F0500C77B57 /* AlertsView.swift */,
 				BC8129082B3F5FAB00CB19D2 /* LanguageView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
+				BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */,
 				BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */,
 				BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */,
 				BC81290B2B3F7BBE00CB19D2 /* InputLabelsView.swift */,
@@ -436,6 +441,7 @@
 				AA74DD582AFDACA100348078 /* SteppersView.swift in Sources */,
 				BC8129092B3F5FAB00CB19D2 /* LanguageView.swift in Sources */,
 				AABD27CA2A9FF0E700F718F7 /* ImagesView.swift in Sources */,
+				BCEDB9142B4C812C00B4D85D /* NavigationLinkView.swift in Sources */,
 				AABD27C82A9FF0D800F718F7 /* HeadingsView.swift in Sources */,
 				AA636C8A2ADD7FD900014BAF /* ProgressIndicatorsView.swift in Sources */,
 				AABD27D02A9FF11400F718F7 /* AnnouncementsView.swift in Sources */,

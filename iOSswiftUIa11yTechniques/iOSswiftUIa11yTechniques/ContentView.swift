@@ -64,9 +64,9 @@ struct ContentView: View {
                 NavigationLink(destination: LanguageView()) {
                     Text("Language")
                 }
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: NavigationLinkView()) {
                     Text("Navigation")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: DataTablesView()) {
                     Text("Data Tables")
                 }

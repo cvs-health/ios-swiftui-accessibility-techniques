@@ -45,9 +45,9 @@ struct UIControlsView: View {
             NavigationLink(destination: LinksView()) {
                 Text("Links")
             }
-            NavigationLink(destination: DetailView()) {
+            NavigationLink(destination: MenusView()) {
                 Text("Menus")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
             NavigationLink(destination: PickersView()) {
                 Text("Pickers")
             }

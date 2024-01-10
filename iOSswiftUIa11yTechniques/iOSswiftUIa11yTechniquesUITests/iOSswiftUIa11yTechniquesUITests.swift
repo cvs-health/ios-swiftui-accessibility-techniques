@@ -822,6 +822,33 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    override func setUp() {
+       super.setUp()
+       let app = XCUIApplication()
+        Task { @MainActor in
+           setupSnapshot(app)
+        }
+       app.launch()
+    }
+
+    func testScreenshots() {
+       let app = XCUIApplication()
+        XCUIDevice.shared.orientation = .portrait
+        
+        Task { @MainActor in
+            snapshot("0-Home")
+        }
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.collectionViews.buttons["UI Controls"].tap()
+        app.collectionViews.buttons["Checkboxes"].tap()
+        Task { @MainActor in
+            snapshot("0-Checkboxes")
+        }
+
+    }
 
     
     

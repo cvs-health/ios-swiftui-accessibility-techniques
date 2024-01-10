@@ -58,6 +58,7 @@ struct PopoversView: View {
                         .padding()
                     Button("Dismiss",
                            action: { isShowingPopover.toggle() })
+                    .padding()
                 }
                 DisclosureGroup("Details") {
                     Text("The good alert example uses `.popover()` to create a native SwiftUI popover that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the popover when the popover is closed.")

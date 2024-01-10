@@ -39,9 +39,9 @@ struct UIControlsView: View {
             NavigationLink(destination: GroupingControlsView()) {
                 Text("Grouping Controls")
             }
-            NavigationLink(destination: DetailView()) {
+            NavigationLink(destination: InputInstructionsView()) {
                 Text("Input Instructions")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
             NavigationLink(destination: LinksView()) {
                 Text("Links")
             }

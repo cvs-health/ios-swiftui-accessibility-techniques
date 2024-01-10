@@ -58,6 +58,7 @@
 		BC8CD0E52B4D06FD00B9A28A /* MagicTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8CD0E42B4D06FC00B9A28A /* MagicTapView.swift */; };
 		BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */; };
 		BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC782B4E1E6F00196E32 /* PopoversView.swift */; };
+		BC95CC7B2B4E4A8D00196E32 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
 		BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */; };
 		BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */; };
@@ -163,6 +164,7 @@
 		BC95CC752B4DF94600196E32 /* MagicTap.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MagicTap.md; sourceTree = "<group>"; };
 		BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputInstructionsView.swift; sourceTree = "<group>"; };
 		BC95CC782B4E1E6F00196E32 /* PopoversView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoversView.swift; sourceTree = "<group>"; };
+		BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		BCC4F1822B3F8757004AAB65 /* InputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
 		BCEDB8EE2B4760D800B4D85D /* Checkboxes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Checkboxes.md; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 			children = (
 				AADEFB462B23F3DA003534A9 /* iOSswiftUIa11yTechniquesUITests.swift */,
 				AA7367492AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift */,
+				BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */,
 			);
 			path = iOSswiftUIa11yTechniquesUITests;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 			files = (
 				AADEFB472B23F3DA003534A9 /* iOSswiftUIa11yTechniquesUITests.swift in Sources */,
 				AA73674A2AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift in Sources */,
+				BC95CC7B2B4E4A8D00196E32 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,7 +520,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -539,7 +543,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;

@@ -51,9 +51,9 @@ struct UIControlsView: View {
             NavigationLink(destination: PickersView()) {
                 Text("Pickers")
             }
-            NavigationLink(destination: DetailView()) {
+            NavigationLink(destination: PopoversView()) {
                 Text("Popovers")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
             NavigationLink(destination: DetailView()) {
                 Text("Radio Buttons")
             }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

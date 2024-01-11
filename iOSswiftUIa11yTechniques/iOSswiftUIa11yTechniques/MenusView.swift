@@ -28,7 +28,7 @@ struct MenusView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("VoiceOver focus must move to the popover when displayed and back to the trigger button when the popover is closed. Popover title text must be coded as a Heading for VoiceOver users. Use `.popover()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. Use `AccessibilityFocusState` to send focus back to the trigger button that opened the popover when the popover is closed.")
+                Text("VoiceOver focus must move to the menu when opened. Use `Menu` to code a native SwiftUI menu that receives VoiceOver focus when opened. SwiftUI native `Menu` does not return focus back to the trigger button when closed. It is not possible to return focus using `AccessibilityFocusState` as you can with a `.sheet()` or `.popover()`. This can be considered a defect in the native `Menu` component and bugs should be filed with Apple.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -44,42 +44,11 @@ struct MenusView: View {
                     Button("Duplicate", action: duplicate)
                     Button("Rename", action: rename)
                     Button("Delete…", action: delete)
-                    Menu("Copy") {
-                        Button("Copy", action: copy)
-                        Button("Copy Formatted", action: copyFormatted)
-                        Button("Copy Library Path", action: copyPath)
-                    }
                 }
                 .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 .frame(maxWidth: .infinity, alignment: .leading)
-                Menu {
-                    Button("Open in Preview", action: openInPreview)
-                    Button("Save as PDF", action: saveAsPDF)
-                } label: {
-                    Label("PDF", systemImage: "doc.fill")
-                }
-                Menu {
-                    Button(action: addCurrentTabToReadingList) {
-                        Label("Add to Reading List", systemImage: "eyeglasses")
-                    }
-                    Button(action: bookmarkAll) {
-                        Label("Add Bookmarks for All Tabs", systemImage: "book")
-                    }
-                    Button(action: show) {
-                        Label("Show All Bookmarks", systemImage: "books.vertical")
-                    }
-                } label: {
-                    Label("Add Bookmark", systemImage: "book")
-                } primaryAction: {
-                    addBookmark()
-                }
-                Menu("Editing") {
-                    Button("Set In Point", action: setInPoint)
-                    Button("Set Out Point", action: setOutPoint)
-                }
-                .menuStyle(ButtonMenuStyle())
                 DisclosureGroup("Details") {
-                    Text("The good alert example uses `.popover()` to create a native SwiftUI popover that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the popover when the popover is closed.")
+                    Text("The good menu example uses `Menu` to create a native SwiftUI menu that receives VoiceOver focus when opened. It is not possible to send focus back to the trigger button after closing a `Menu`. VoiceOver reads \"Actions, Button, Pop up button, Double tap to activate the picker\"")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Example")
                     .font(.subheadline)
@@ -94,23 +63,21 @@ struct MenusView: View {
                 Button(action: {
                     isShowingPopoverBad.toggle()
                 }) {
-                    Text("Show License Agreement")
+                    Text("Actions")
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading).padding(.bottom)
                 if (isShowingPopoverBad){
                     VStack {
-                        Text("License Agreement")
-                            .font(.title)
-                        Text("""
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            """)
-                            .padding(20)
-                        Button("Dismiss",
-                               action: { isShowingPopoverBad.toggle() })
-                    }
+                        Button("Duplicate",
+                               action: { isShowingPopoverBad.toggle() }).padding(.leading).frame(maxWidth: .infinity, alignment: .leading)
+                        Button("Rename",
+                               action: { isShowingPopoverBad.toggle() }).padding([.leading]).frame(maxWidth: .infinity, alignment: .leading)
+                        Button("Delete",
+                               action: { isShowingPopoverBad.toggle() }).padding(.leading).frame(maxWidth: .infinity, alignment: .leading)
+                    }.frame(maxWidth: .infinity, alignment: .leading)
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad popover example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
+                    Text("The bad menu example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed. VoiceOver reads \"Actions, Button\" and does not read that it is a popup button that activates a picker.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .navigationBarTitle("Menus")
@@ -119,36 +86,7 @@ struct MenusView: View {
         }
  
     }
-    func setInPoint() {
-      // Code for setting in point
-    }
 
-    func setOutPoint() {
-      // Code for setting out point
-    }
-
-    func addCurrentTabToReadingList() {
-       // Code for adding current tab to reading list
-    }
-
-    func bookmarkAll() {
-       // Code for bookmarking all tabs
-    }
-
-    func show() {
-       // Code for showing all bookmarks
-    }
-
-    func addBookmark() {
-       // Code for adding bookmark
-    }
-
-    func openInPreview() {
-        
-    }
-    func saveAsPDF() {
-        
-    }
     func duplicate() {
         // Implement duplicate action here
     }
@@ -159,18 +97,6 @@ struct MenusView: View {
 
     func delete() {
         // Implement delete action here
-    }
-
-    func copy() {
-        // Implement copy action here
-    }
-
-    func copyFormatted() {
-        // Implement copy formatted action here
-    }
-
-    func copyPath() {
-        // Implement copy path action here
     }
 
 }

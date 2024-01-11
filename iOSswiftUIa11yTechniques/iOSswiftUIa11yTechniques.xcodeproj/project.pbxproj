@@ -140,6 +140,7 @@
 		BC0030352B363B560063EAD5 /* SheetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetsView.swift; sourceTree = "<group>"; };
 		BC1B59C22B4E664700E8F782 /* MenusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenusView.swift; sourceTree = "<group>"; };
 		BC1B59C42B4F102100E8F782 /* InputInstructions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputInstructions.md; sourceTree = "<group>"; };
+		BC1B59C52B4F964200E8F782 /* Popovers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Popovers.md; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
 		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
 		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
@@ -229,6 +230,7 @@
 				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */,
 				BC81290A2B3F6C5A00CB19D2 /* Language.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
+				BC1B59C52B4F964200E8F782 /* Popovers.md */,
 				BC8129012B3CCF4F00CB19D2 /* Sheets.md */,
 				AA1303162AFED27C001AE0BF /* TextFields.md */,
 				BC1B59C42B4F102100E8F782 /* InputInstructions.md */,

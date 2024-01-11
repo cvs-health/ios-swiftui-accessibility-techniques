@@ -1,15 +1,16 @@
-# Sheets
-VoiceOver focus must move to the sheet when displayed and back to the trigger button when the sheet is closed. 
+# Popovers
 
-Sheet title text must be coded as a Heading for VoiceOver users. 
+VoiceOver focus must move to the popover when displayed and back to the trigger button when the popover is closed. 
 
-Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. 
+Popover title text must be coded as a Heading for VoiceOver users. 
 
-Use `AccessibilityFocusState` to send focus back to the trigger button that opened the sheet when the sheet is closed.            
+Use `.popover()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. 
+
+Use `AccessibilityFocusState` to send focus back to the trigger button that opened the popover when the popover is closed.
 
 Notes:
 
-- Sheets will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `.sheet()` component in which case bugs should be filed with Apple.
+- Popovers will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `.popover()` component in which case bugs should be filed with Apple.
     
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)

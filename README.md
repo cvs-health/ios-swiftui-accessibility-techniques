@@ -45,6 +45,7 @@ Documentation files for each technique are listed below.
     - [x] [Input Instructions](iOSswiftUIa11yTechniques/Documentation/InputInstructions.md)
     - [x] [Links](iOSswiftUIa11yTechniques/Documentation/Links.md)
     - [x] [Pickers](iOSswiftUIa11yTechniques/Documentation/Pickers.md)
+    - [x] [Popovers](iOSswiftUIa11yTechniques/Documentation/Popovers.md)
     - [x] [Segmented Controls](iOSswiftUIa11yTechniques/Documentation/SegmentedControls.md)
     - [x] [Sheets](iOSswiftUIa11yTechniques/Documentation/Sheets.md)
     - [x] [Sliders](iOSswiftUIa11yTechniques/Documentation/Sliders.md)
@@ -53,7 +54,6 @@ Documentation files for each technique are listed below.
     - [x] [Text Fields](iOSswiftUIa11yTechniques/Documentation/TextFields.md)
     - [x] [Toggles](iOSswiftUIa11yTechniques/Documentation/Toggles.md)
     - [ ] Radio Buttons
-    - [ ] Popovers
     - [ ] Menus
 - [x] [Navigation](iOSswiftUIa11yTechniques/Documentation/Navigation.md)
 - [x] [Data Tables](iOSswiftUIa11yTechniques/Documentation/DataTables.md)

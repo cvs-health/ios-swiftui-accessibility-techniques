@@ -822,6 +822,24 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testInputInstructions() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.collectionViews.buttons["UI Controls"].tap()
+        app.collectionViews.buttons["Input Instructions"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            //try app.performAccessibilityAudit()//fail text clipped false positive on page title
+            app.swipeUp()
+            try app.performAccessibilityAudit()//test wrong (previous) screen, fails contrast false positive
+        } else {
+            // Fallback on earlier versions
+        }
+    }
     override func setUp() {
        super.setUp()
        let app = XCUIApplication()

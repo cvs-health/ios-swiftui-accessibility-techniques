@@ -74,9 +74,9 @@ struct ContentView: View {
                 NavigationLink(destination: CardsView()) {
                     Text("Cards")
                 }
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: TouchTargetSize()) {
                     Text("Touch Target Size")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: DetailView()) {
                     Text("Responding to User Accessibility Preferences") // dark mode, smart invert, bold text, differientate without colors, reduce transparancy, motion, ignore invert colors, increase contrast
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

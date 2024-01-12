@@ -871,7 +871,25 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         if #available(iOS 17.0, *) {
             try app.performAccessibilityAudit()//test wrong (previous) screen
             app.swipeUp()
-            try app.performAccessibilityAudit()//test wrong (previous) screen
+            try app.performAccessibilityAudit()//test wrong (previous) screen and contrast false positive
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    func testTouchTargetSize() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.swipeUp()
+        app.collectionViews.buttons["Touch Target Size"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()//fails hit area is too small on the last icon button
+            app.swipeUp()
+            try app.performAccessibilityAudit()//test wrong (previous) screen and contrast false positive
         } else {
             // Fallback on earlier versions
         }

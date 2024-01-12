@@ -21,6 +21,9 @@ struct A11yEnhancementsView: View {
     var body: some View {
         List {
             Text("Accessibility User Experience enhancements can provide a more usable experience for VoiceOver, Voice Control, and Large Text users.")
+            NavigationLink(destination: ATdetectionView()) {
+                Text("Assistive Technology Detection")
+            }
             NavigationLink(destination: MagicTapView()) {
                 Text("Magic Tap")
             }

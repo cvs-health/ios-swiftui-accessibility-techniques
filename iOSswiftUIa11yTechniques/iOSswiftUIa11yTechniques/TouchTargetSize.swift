@@ -41,22 +41,22 @@ struct TouchTargetSize: View {
                        print("First button tapped")
                    }) {
                        Image(systemName: "pencil").frame(minWidth: 24, minHeight: 24)
-                   }
+                   }.accessibilityLabel("Edit")
                    Button(action: {
                        print("Second button tapped")
                    }) {
                        Image(systemName: "trash").frame(minWidth: 24, minHeight: 24)
-                   }
+                   }.accessibilityLabel("Delete")
                    Button(action: {
                        print("Third button tapped")
                    }) {
                        Image(systemName: "plus").frame(minWidth: 24, minHeight: 24)
-                   }
+                   }.accessibilityLabel("Add")
                    Button(action: {
                        print("Fourth button tapped")
                    }) {
                        Image(systemName: "minus").frame(minWidth: 24, minHeight: 24)
-                   }
+                   }.accessibilityLabel("Remove")
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good touch target size example uses `.frame(minWidth: 24, minHeight: 24)` on each icon button `Image`.")

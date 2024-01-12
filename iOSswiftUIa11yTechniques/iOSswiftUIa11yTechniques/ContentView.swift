@@ -98,6 +98,9 @@ struct ContentView: View {
                 NavigationLink(destination: DetailView()) {
                     Text("Siri Shortcuts")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                NavigationLink(destination: ContactFormView()) {
+                    Text("Contact Form")
+                }
             }
             .navigationBarTitle("iOS SwiftUI Accessibility")
             Text("👩‍🦯🦼🧏‍♂️♿️🦮👨‍🦽🦻 \n \nWelcome to the iOS SwiftUI Accessibility Techniques Demo App! \n \nActivate the navigation menu button to view the iOS SwiftUI Accessibility Techniques. \n \nUse VoiceOver to set focus to the good and bad examples. Expand the details for an explanation of each example.")

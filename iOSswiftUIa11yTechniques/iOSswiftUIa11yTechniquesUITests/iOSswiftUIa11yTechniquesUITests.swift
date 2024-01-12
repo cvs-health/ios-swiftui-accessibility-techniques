@@ -887,7 +887,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//fails hit area is too small on the last icon button
+            try app.performAccessibilityAudit()//fails hit area is too small on the first bad example icon button
             app.swipeUp()
             try app.performAccessibilityAudit()//test wrong (previous) screen and contrast false positive
         } else {

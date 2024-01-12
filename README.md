@@ -59,7 +59,7 @@ Documentation files for each technique are listed below.
 - [x] [Data Tables](iOSswiftUIa11yTechniques/Documentation/DataTables.md)
 - [x] [Lists](iOSswiftUIa11yTechniques/Documentation/Lists.md)
 - [x] [Cards](iOSswiftUIa11yTechniques/Documentation/Cards.md)
-- [ ] Touch Target Size
+- [x] [Touch Target Size](iOSswiftUIa11yTechniques/Documentation/TouchTargetSize.md)
 - [ ] Responding to User Accessibility Preferences
     - [ ] Dark Mode
     - [ ] Smart Invert

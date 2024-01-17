@@ -66,6 +66,7 @@
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
 		BCD1CF952B574C8800A26ED3 /* VoiceOverPronunciationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */; };
 		BCD1CF982B57670D00A26ED3 /* EscapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF972B57670D00A26ED3 /* EscapeView.swift */; };
+		BCD1CF9C2B577C5A00A26ED3 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */; };
 		BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */; };
 		BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */; };
 		BCEDB8F42B4872CA00B4D85D /* DeviceOrientationGood.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */; };
@@ -185,6 +186,8 @@
 		BCD1CF962B5760E200A26ED3 /* VoiceOverPronunciation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = VoiceOverPronunciation.md; sourceTree = "<group>"; };
 		BCD1CF972B57670D00A26ED3 /* EscapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EscapeView.swift; sourceTree = "<group>"; };
 		BCD1CF992B57671700A26ED3 /* Escape.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Escape.md; sourceTree = "<group>"; };
+		BCD1CF9A2B577C5300A26ED3 /* Actions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Actions.md; sourceTree = "<group>"; };
+		BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsView.swift; sourceTree = "<group>"; };
 		BCEDB8EE2B4760D800B4D85D /* Checkboxes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Checkboxes.md; sourceTree = "<group>"; };
 		BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationView.swift; sourceTree = "<group>"; };
 		BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationBad.swift; sourceTree = "<group>"; };
@@ -248,6 +251,7 @@
 				BC81290A2B3F6C5A00CB19D2 /* Language.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
 				BC1B59C52B4F964200E8F782 /* Popovers.md */,
+				BCD1CF9A2B577C5300A26ED3 /* Actions.md */,
 				BC8129012B3CCF4F00CB19D2 /* Sheets.md */,
 				AA1303162AFED27C001AE0BF /* TextFields.md */,
 				BC1B59C42B4F102100E8F782 /* InputInstructions.md */,
@@ -305,6 +309,7 @@
 				AABD27C72A9FF0D800F718F7 /* HeadingsView.swift */,
 				AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */,
 				BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */,
+				BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */,
 				BCD1CF972B57670D00A26ED3 /* EscapeView.swift */,
 				BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */,
 				AABD27C92A9FF0E700F718F7 /* ImagesView.swift */,
@@ -531,6 +536,7 @@
 				AA59CDCE2ABA209D0004908F /* MessagesTabView.swift in Sources */,
 				AA1AC60C2ABD2C3800AC02DA /* TogglesView.swift in Sources */,
 				BC81290C2B3F7BBE00CB19D2 /* InputLabelsView.swift in Sources */,
+				BCD1CF9C2B577C5A00A26ED3 /* ActionsView.swift in Sources */,
 				BC8C92132B324859006DAC20 /* ReadingOrderView.swift in Sources */,
 				AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */,
 				BC8129062B3D36CF00CB19D2 /* DataTablesView.swift in Sources */,
@@ -556,7 +562,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -579,7 +585,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -716,7 +722,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -734,7 +740,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -749,7 +755,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -767,7 +773,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

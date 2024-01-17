@@ -21,17 +21,20 @@ struct A11yEnhancementsView: View {
     var body: some View {
         List {
             Text("Accessibility User Experience enhancements can provide a more usable experience for VoiceOver, Voice Control, and Large Text users.")
-            NavigationLink(destination: ATdetectionView()) {
-                Text("Assistive Technology Detection")
-            }
-            NavigationLink(destination: MagicTapView()) {
-                Text("Magic Tap")
-            }
-            NavigationLink(destination: EscapeView()) {
-                Text("Escape")
+            NavigationLink(destination: ActionsView()) {
+                Text("Actions")
             }
             NavigationLink(destination: AdjustableActionView()) {
                 Text("Adjustable Action")
+            }
+            NavigationLink(destination: ATdetectionView()) {
+                Text("Assistive Technology Detection")
+            }
+            NavigationLink(destination: DetailView()) {
+                Text("Attributed Strings")
+            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            NavigationLink(destination: EscapeView()) {
+                Text("Escape")
             }
             NavigationLink(destination: InputLabelsView()) {
                 Text("Input Labels")
@@ -39,9 +42,9 @@ struct A11yEnhancementsView: View {
             NavigationLink(destination: DetailView()) {
                 Text("Large Content Viewer") // link https://nilcoalescing.com/blog/LargeContentViewerInSwiftUI/
             }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-            NavigationLink(destination: DetailView()) {
-                Text("Attributed Strings")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            NavigationLink(destination: MagicTapView()) {
+                Text("Magic Tap")
+            }
             NavigationLink(destination: VoiceOverPronunciationView()) {
                 Text("VoiceOver Proununciation")
             }

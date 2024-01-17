@@ -1,5 +1,7 @@
 # Assistive Technology Detection
-Detecting assistive technology running on a user's device is not recommended because it may lead to creating unequal experiences between all users. However, sometimes it may be necessary to detect if an assistive technology is running, for example, if you need to provide a specific message to VoiceOver users only.
+Detecting assistive technology running on a user's device is not recommended because it may lead to creating unequal experiences between all users. 
+
+However, sometimes it may be necessary to detect if an assistive technology is running, for example, if you need to provide a specific message to VoiceOver users only.
                 
 For example you could use `UIAccessibility.isVoiceOverRunning` to check if VoiceOver is running when the page loads and then show an alert reminding the VoiceOver user not to disable VoiceOver Hints.
 

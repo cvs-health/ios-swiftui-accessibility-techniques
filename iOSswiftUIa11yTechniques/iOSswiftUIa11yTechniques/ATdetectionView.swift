@@ -43,7 +43,7 @@ struct ATdetectionView: View {
                     .padding(.bottom)
                 Text("If VoiceOver was running when you loaded this page then an alert would have displayed.").padding(.bottom)
                 if (UIAccessibility.isVoiceOverRunning){
-                    Text("VoiceOver was turned on when the page loaded.").font(.title)
+                    Text("VoiceOver was turned on when this page loaded.").font(.title)
                 }
                 if (!UIAccessibility.isVoiceOverRunning){
                     Text("VoiceOver was turned off when this page loaded.").font(.title)

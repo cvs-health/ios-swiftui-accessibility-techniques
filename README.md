@@ -25,12 +25,13 @@ Documentation files for each technique are listed below.
 - [x] [Reading Order](iOSswiftUIa11yTechniques/Documentation/ReadingOrder.md)
 - [x] [Focus Management](iOSswiftUIa11yTechniques/Documentation/FocusManagement.md)
 - [ ] Accessibility UX Enhancements
-    - [x] [Magic Tap](iOSswiftUIa11yTechniques/Documentation/MagicTap.md)
-    - [x] [Escape](iOSswiftUIa11yTechniques/Documentation/Escape.md)
+    - [x] [Actions](iOSswiftUIa11yTechniques/Documentation/Actions.md)
     - [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
+    - [ ] Attributed Strings
+    - [x] [Escape](iOSswiftUIa11yTechniques/Documentation/Escape.md)
     - [x] [Input Labels](iOSswiftUIa11yTechniques/Documentation/InputLabels.md)
     - [ ] Large Content Viewer
-    - [ ] Attributed Strings
+    - [x] [Magic Tap](iOSswiftUIa11yTechniques/Documentation/MagicTap.md)
     - [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
 - [ ] Motion Animations
 - [x] [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)

@@ -41,14 +41,15 @@ struct ATdetectionView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                Text("If VoiceOver was running when you loaded this page then an alert would have displayed.").padding(.bottom)
                 if (UIAccessibility.isVoiceOverRunning){
-                    Text("VoiceOver was turned on when the page loaded.")
+                    Text("VoiceOver was turned on when the page loaded.").font(.title)
                 }
                 if (!UIAccessibility.isVoiceOverRunning){
-                    Text("VoiceOver was turned off when this page loaded.")
+                    Text("VoiceOver was turned off when this page loaded.").font(.title)
                 }
                 DisclosureGroup("Details") {
-                    Text("The good alert example uses `.alert()` to create a native SwiftUI alert that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the alert when the alert is closed.")
+                    Text("The good assistive technology detection example uses `UIAccessibility.isVoiceOverRunning` check if VoiceOver is running when the page loads and then shows an alert reminding the VoiceOver user not to disable VoiceOver Hints.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }.onAppear {
                 if UIAccessibility.isVoiceOverRunning {

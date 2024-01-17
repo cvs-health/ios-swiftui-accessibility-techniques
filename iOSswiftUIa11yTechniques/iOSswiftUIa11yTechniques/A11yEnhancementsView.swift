@@ -27,9 +27,9 @@ struct A11yEnhancementsView: View {
             NavigationLink(destination: MagicTapView()) {
                 Text("Magic Tap")
             }
-            NavigationLink(destination: DetailView()) {
+            NavigationLink(destination: EscapeView()) {
                 Text("Escape")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
             NavigationLink(destination: AdjustableActionView()) {
                 Text("Adjustable Action")
             }

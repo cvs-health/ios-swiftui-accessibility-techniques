@@ -3,7 +3,10 @@ Detecting assistive technology running on a user's device is not recommended bec
 
 However, sometimes it may be necessary to detect if an assistive technology is running, for example, if you need to provide a specific message to VoiceOver users only.
                 
-For example you could use `UIAccessibility.isVoiceOverRunning` to check if VoiceOver is running when the page loads and then show an alert reminding the VoiceOver user not to disable VoiceOver Hints.
+For example you could use `UIAccessibility.isVoiceOverRunning` to check if VoiceOver is running when the page loads and then show an alert reminding the VoiceOver user not to disable VoiceOver Hints. 
+
+Notes:
+- All of the iOS assistive technologies can be detected, i.e., using `UIAccessibility.is{AsstiveTechnology}Running` and replacing `{AsstiveTechnology}` with the name of the assistive technology you're detecting.
 
 ## Applicable WCAG Success Criteria
 - N/A

@@ -26,7 +26,7 @@ Documentation files for each technique are listed below.
 - [x] [Focus Management](iOSswiftUIa11yTechniques/Documentation/FocusManagement.md)
 - [ ] Accessibility UX Enhancements
     - [x] [Magic Tap](iOSswiftUIa11yTechniques/Documentation/MagicTap.md)
-    - [ ] Escape
+    - [x] [Escape](iOSswiftUIa11yTechniques/Documentation/Escape.md)
     - [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
     - [x] [Input Labels](iOSswiftUIa11yTechniques/Documentation/InputLabels.md)
     - [ ] Large Content Viewer

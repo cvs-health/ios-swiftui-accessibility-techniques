@@ -298,7 +298,7 @@ struct ErrorValidationView: View {
                     if fname2.isEmpty {
                         firstNameErrorVisible2 = true
                         isFirstNameFocused2 = true
-                        isFirstNameA11yFocused = true
+                        isFirstNameA11yFocused2 = true
                     }
                 }) {
                     Text("Join Newsletter")

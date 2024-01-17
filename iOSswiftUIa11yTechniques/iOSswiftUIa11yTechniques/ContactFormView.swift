@@ -17,28 +17,27 @@
 import SwiftUI
 
 struct ContactFormView: View {
-    @State private var text = ""
-    @State private var fname = ""
-    @State private var lname = ""
+    @State private var showingAlert = false
+    @AccessibilityFocusState private var isTriggerFocused: Bool
+
+
+    @State private var name = ""
     @State private var phone = ""
     @State private var email = ""
     @State private var message = ""
-    @State private var firstNameErrorVisible = false
-    @AccessibilityFocusState private var isFirstNameA11yFocused: Bool
-    @FocusState private var isFirstNameFocused: Bool
-    @State private var fnameLabel = "First Name *"
-    @State private var fnameError = "⚠ First Name is required. Please enter your first name."
-    @State private var lnameLabel = "Last Name *"
-    @State private var lnameError = "⚠ Last Name is required. Please enter your last name."
-    @State private var lastNameErrorVisible = false
-    @AccessibilityFocusState private var isLastNameA11yFocused: Bool
-    @FocusState private var isLastNameFocused: Bool
+    @State private var nameErrorVisible = false
+    @AccessibilityFocusState private var isNameA11yFocused: Bool
+    @FocusState private var isNameFocused: Bool
+    @State private var nameLabel = "Full Name *"
+    @State private var nameInstructions = "First Middle Last"
+    @State private var nameError = "⚠ First Name is required. Please enter your first name."
     @State private var emailLabel = "Email *"
     @State private var emailError = "⚠ Email is required. Please enter your email address."
     @State private var emailErrorVisible = false
     @AccessibilityFocusState private var isEmailA11yFocused: Bool
     @FocusState private var isEmailFocused: Bool
     @State private var messageLabel = "Message *"
+    @State private var messageInstructions = "Questions, Comments, or Feedback"
     @State private var messageError = "⚠ Message is required. Please enter your question, comment, or feedback in the message field."
     @State private var messageErrorVisible = false
     @AccessibilityFocusState private var isMessageA11yFocused: Bool
@@ -76,7 +75,7 @@ struct ContactFormView: View {
             VStack {
                 Text("Use the contact form below to send us a question or comment.")
                     .padding([.bottom])
-                Text("Contact Form Using .accessibilityHint")
+                Text("Contact Form Using .accessibilityLabel and .accessibilityHint")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -85,51 +84,39 @@ struct ContactFormView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .italic()
                     .font(.caption)
-                Text(fnameLabel)
+                    .padding(.top)
+                Text(nameLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                TextField("", text: $fname, axis: .vertical)
+                    .padding(.top)
+                TextField("", text: $name, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
-                    .border(firstNameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
-                    .accessibilityLabel(fnameLabel)
-                    .accessibilityHint(firstNameErrorVisible ? fnameError : "")
+                    .border(nameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+                    .accessibilityLabel(nameLabel)
+                    .accessibilityHint(nameErrorVisible ? nameError+nameInstructions : nameInstructions)
                     .autocorrectionDisabled(true)
                     .textContentType(.givenName)
-                    .accessibilityIdentifier("fNameGood")
-                    .accessibilityFocused($isFirstNameA11yFocused)
-                    .focused($isFirstNameFocused)
-                if firstNameErrorVisible {
-                    Text(fnameError)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                }
-                Text(lnameLabel)
+                    .accessibilityFocused($isNameA11yFocused)
+                    .focused($isNameFocused)
+                Text(nameInstructions)
+                    .italic()
+                    .font(.caption)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                TextField("", text: $lname, axis: .vertical)
-                    .textFieldStyle(.roundedBorder)
-                    .border(.secondary)
-                    .border(lastNameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
-                    .accessibilityLabel(lnameLabel)
-                    .accessibilityHint(lastNameErrorVisible ? lnameError : "")
-                    .autocorrectionDisabled(true)
-                    .textContentType(.familyName)
-                    .accessibilityIdentifier("lNameGood")
-                    .accessibilityFocused($isLastNameA11yFocused)
-                    .focused($isLastNameFocused)
-                if lastNameErrorVisible {
-                    Text(lnameError)
+                if nameErrorVisible {
+                    Text(nameError)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 }
                 Text("Phone Number")
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top)
                 TextField("", text: $phone, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
                     .accessibilityLabel("Phone Number")
                     .keyboardType(.phonePad)
-                    .accessibilityIdentifier("phoneGood")
                 Text(emailLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top)
                 TextField("", text: $email, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
@@ -138,7 +125,6 @@ struct ContactFormView: View {
                     .accessibilityHint(emailErrorVisible ? emailError : "")
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
-                    .accessibilityIdentifier("emailGood")
                     .accessibilityFocused($isEmailA11yFocused)
                     .focused($isEmailFocused)
                 if emailErrorVisible {
@@ -148,18 +134,20 @@ struct ContactFormView: View {
                 }
                 Text(messageLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                ZStack {
-                  TextEditor(text: $message)
+                    .padding(.top)
+                TextEditor(text: $message)
                     .textFieldStyle(.roundedBorder)
                     .border(messageErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(messageLabel)
-                    .accessibilityHint(messageErrorVisible ? emailError : "")
-                    .accessibilityIdentifier("messageGood")
+                    .accessibilityHint(messageErrorVisible ? messageError+messageInstructions : messageInstructions)
                     .accessibilityFocused($isMessageA11yFocused)
                     .focused($isMessageFocused)
-                    .frame(minHeight:35, maxHeight: .infinity)
+                    .frame(minHeight:100, maxHeight: .infinity)
                     .padding(.horizontal, 1)
-                  }
+                Text(messageInstructions)
+                    .italic()
+                    .font(.caption)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 if messageErrorVisible {
                     Text(messageError)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -167,29 +155,150 @@ struct ContactFormView: View {
                 }
                 Button(action: {
                     // Handle button action
-                    firstNameErrorVisible = false
-                    isFirstNameFocused = false
-                    isFirstNameA11yFocused = false
-                    lastNameErrorVisible = false
-                    isLastNameFocused = false
-                    isLastNameA11yFocused = false
+                    nameErrorVisible = false
+                    isNameFocused = false
+                    isNameA11yFocused = false
                     emailErrorVisible = false
                     isEmailFocused = false
                     isEmailA11yFocused = false
+                    messageErrorVisible = false
+                    isMessageFocused = false
+                    isMessageA11yFocused = false
                     if email.isEmpty {
                         emailErrorVisible = true
                         isEmailFocused = true
                         isEmailA11yFocused = true
                     }
-                    if lname.isEmpty {
-                        lastNameErrorVisible = true
-                        isLastNameFocused = true
-                        isLastNameA11yFocused = true
+                    if name.isEmpty {
+                        nameErrorVisible = true
+                        isNameFocused = true
+                        isNameA11yFocused = true
                     }
-                    if fname.isEmpty {
-                        firstNameErrorVisible = true
-                        isFirstNameFocused = true
-                        isFirstNameA11yFocused = true
+                    if message.isEmpty {
+                        messageErrorVisible = true
+                        isMessageFocused = true
+                        isMessageA11yFocused = true
+                    }
+                    if !message.isEmpty && !name.isEmpty && !email.isEmpty {
+                        showingAlert = true
+                    }
+                }) {
+                    Text("Send Message")
+                        .padding(10)
+                        .background(Color.blue)
+                        .foregroundColor(.black)
+                        .cornerRadius(10)
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .opacity(0.8)
+                }
+                .accessibilityFocused($isTriggerFocused)
+                .padding(.top).frame(maxWidth: .infinity, alignment: .leading)
+                .alert("Thanks for sending us a message!", isPresented: $showingAlert) {
+                    Button("OK", role: .cancel) {
+                        isTriggerFocused = true
+                    }
+                } message: {
+                    Text("We will read your message and reply ASAP.")
+                }
+                DisclosureGroup("Details") {
+                    Text("The first good error validation example uses `AccessibilityFocusState` to move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input has an `.accessibilityHint` matching the visible error message text so that VoiceOver users hear the error message when focused on the invalid inputs. Error messages are meaningful and specific. Required fields are indicated with a * and the meaning of the * is defined at the top of the form.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Good Example Using `LabeledContent` and `.accessibilityHint`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("* indicates required fields")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .italic()
+                    .font(.caption)
+                    .padding(.top)
+                LabeledContent(nameLabel) {
+                      TextField("", text:$name)
+                        .textFieldStyle(.roundedBorder)
+                        .border(nameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+                        .accessibilityHint(nameErrorVisible ? nameError+nameInstructions : nameInstructions)
+                        .autocorrectionDisabled(true)
+                        .textContentType(.givenName)
+                        .accessibilityFocused($isNameA11yFocused)
+                        .focused($isNameFocused)
+                }.labeledContentStyle(.vertical).padding(.top)
+                Text(nameInstructions)
+                    .italic()
+                    .font(.caption)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if nameErrorVisible {
+                    Text(nameError)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
+                LabeledContent("Phone Number") {
+                      TextField("", text:$phone)
+                        .textFieldStyle(.roundedBorder)
+                        .border(.secondary)
+                        .keyboardType(.phonePad)
+                }.labeledContentStyle(.vertical).padding(.top)
+                LabeledContent(emailLabel) {
+                      TextField("", text:$email)
+                        .textFieldStyle(.roundedBorder)
+                        .border(.secondary)
+                        .border(emailErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+                        .accessibilityHint(emailErrorVisible ? emailError : "")
+                        .keyboardType(.emailAddress)
+                        .textContentType(.emailAddress)
+                        .accessibilityFocused($isEmailA11yFocused)
+                        .focused($isEmailFocused)
+                }.labeledContentStyle(.vertical).padding(.top)
+                if emailErrorVisible {
+                    Text(emailError)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
+                LabeledContent(messageLabel) {
+                      TextEditor(text: $message)
+                        .textFieldStyle(.roundedBorder)
+                        .border(messageErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+                        .accessibilityHint(messageErrorVisible ? messageError+messageInstructions : messageInstructions)
+                        .accessibilityFocused($isMessageA11yFocused)
+                        .focused($isMessageFocused)
+                        .frame(minHeight:100, maxHeight: .infinity)
+                        .padding(.horizontal, 1)
+                }.labeledContentStyle(.vertical).padding(.top)
+                Text(messageInstructions)
+                    .italic()
+                    .font(.caption)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if messageErrorVisible {
+                    Text(messageError)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
+                Button(action: {
+                    // Handle button action
+                    nameErrorVisible = false
+                    isNameFocused = false
+                    isNameA11yFocused = false
+                    emailErrorVisible = false
+                    isEmailFocused = false
+                    isEmailA11yFocused = false
+                    messageErrorVisible = false
+                    isMessageFocused = false
+                    isMessageA11yFocused = false
+                    if email.isEmpty {
+                        emailErrorVisible = true
+                        isEmailFocused = true
+                        isEmailA11yFocused = true
+                    }
+                    if name.isEmpty {
+                        nameErrorVisible = true
+                        isNameFocused = true
+                        isNameA11yFocused = true
+                    }
+                    if message.isEmpty {
+                        messageErrorVisible = true
+                        isMessageFocused = true
+                        isMessageA11yFocused = true
                     }
                 }) {
                     Text("Send Message")
@@ -202,7 +311,7 @@ struct ContactFormView: View {
                         .opacity(0.8)
                 }.padding(.top).frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The first good error validation example uses `AccessibilityFocusState` to move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input has an `.accessibilityHint` matching the visible error message text so that VoiceOver users hear the error message when focused on the invalid inputs. Error messages are meaningful and specific. Required fields are indicated with a * and the meaning of the * is defined at the top of the form.")
+                    Text("The second good Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Good Example Using .accessibilityValue")
                     .font(.subheadline)
@@ -298,7 +407,7 @@ struct ContactFormView: View {
                     if fname2.isEmpty {
                         firstNameErrorVisible2 = true
                         isFirstNameFocused2 = true
-                        isFirstNameA11yFocused = true
+                        isFirstNameA11yFocused2 = true
                     }
                 }) {
                     Text("Send Message")

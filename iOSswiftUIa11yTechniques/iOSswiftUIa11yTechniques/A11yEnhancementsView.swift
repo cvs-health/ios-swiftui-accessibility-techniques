@@ -40,8 +40,11 @@ struct A11yEnhancementsView: View {
                 Text("Large Content Viewer") // link https://nilcoalescing.com/blog/LargeContentViewerInSwiftUI/
             }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             NavigationLink(destination: DetailView()) {
-                Text("Attributed Strings and VoiceOver Proununciation")
+                Text("Attributed Strings")
             }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            NavigationLink(destination: VoiceOverPronunciationView()) {
+                Text("VoiceOver Proununciation")
+            }
         }
         .navigationBarTitle("Accessibility UX Enhancements")
     }

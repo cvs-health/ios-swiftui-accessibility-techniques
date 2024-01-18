@@ -25,13 +25,14 @@ struct HeadingsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Headings are used to title sections of content. The header trait must be applied to heading text to enable VoiceOver users to quickly navigate to headings. Use `.accessibilityAddTraits(.isHeader)` to set text as a heading for VoiceOver users.")
+                Text("Headings are used to title sections of content. The header trait must be applied to heading text to enable VoiceOver users to quickly navigate to headings. Use `.accessibilityAddTraits(.isHeader)` to set text as a heading for VoiceOver users. Additionally if you want to provide a level for the heading use `.accessibilityHeading(.h1)` or `(.h2-h6)` with the `.accessibilityAddTraits(.isHeader)`. When using heading levels make sure the headings do not skip a level, e.g., don't skip from a Heading Level 1 to a Heading Level 3.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
+                    .accessibilityHeading(.h2)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
                     .frame(height: 2.0, alignment:.leading)
@@ -42,7 +43,7 @@ struct HeadingsView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                    //.accessibilityHeading(/*@START_MENU_TOKEN@*/.h1/*@END_MENU_TOKEN@*/)//.accessibilityHeading does not work with VoiceOver
+                    //.accessibilityHeading(/*@START_MENU_TOKEN@*/.h1/*@END_MENU_TOKEN@*/)//.accessibilityHeading only works with VoiceOver if the .isHeader trait is also applied!
                     .accessibilityIdentifier("goodHeading")
                 DisclosureGroup("I received a promotion, but I cannot log in to the website.") {
                     Text("In order to access your promotions online, we invite you to create an account. Just go to the Sign In page in the app and tap the banner at the bottom of the screen.")

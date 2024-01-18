@@ -1,10 +1,17 @@
 # Headings
 Heading and subheading text must be given the header trait using `.accessibilityAddTraits(.isHeader)` which allows VoiceOver users to quickly navigate between headings using the Rotor.
 
+Additionally if you want to provide a level for the heading use `.accessibilityHeading(.h1)` or `(.h2-h6)` with the `.accessibilityAddTraits(.isHeader)`. 
+
+When using heading levels make sure the headings do not skip a level, e.g., don't skip from a Heading Level 1 to a Heading Level 3.
+
 Notes:
 
 * Never use `.accessibilityLabel` to append an accessibility property like "Heading" to make a fake heading. It may sound almost correct in VoiceOver, but it will not work to navigate to the heading with the Rotor.
-* Native iOS apps do not have working heading levels yet. Apple has added new SwiftUI code to specify a heading level using `.accessibilityHeading(.h1)`, `.accessibilityHeading(.h2)`, etc. and there is a `.unspecified` value for a heading without a level, however, this new `.accessibilityHeading` property has no effect on VoiceOver and the heading levels are not spoken. Currently only `.accessibilityAddTraits(.isHeader)` works to create a heading with no level for VoiceOver users.
+* Adding a heading level using `.accessibilityHeading(.h1)`, `.accessibilityHeading(.h2)`, etc. will not work unless `.accessibilityAddTraits(.isHeader)` is also added then the level will be spoken to VoiceOver.
+
+Known Issues:
+* You can't make the Page Title heading have a heading level. For example using `.navigationBarTitle("Headings").accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/).accessibilityHeading(.h1)` will not make the page title a Heading Level 1.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)

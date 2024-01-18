@@ -104,7 +104,7 @@ struct HeadingsView: View {
                 }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Headings")
+            .navigationTitle("Headings").accessibilityAddTraits(.isHeader).accessibilityHeading(.h1)
         }
     }
 }

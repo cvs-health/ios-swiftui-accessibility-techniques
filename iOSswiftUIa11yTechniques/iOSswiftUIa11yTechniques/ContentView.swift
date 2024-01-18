@@ -77,9 +77,9 @@ struct ContentView: View {
                 NavigationLink(destination: TouchTargetSize()) {
                     Text("Touch Target Size")
                 }
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: UserPreferencesView()) {
                     Text("Responding to User Accessibility Preferences") // dark mode, smart invert, bold text, differientate without colors, reduce transparancy, motion, ignore invert colors, increase contrast
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: ProgressIndicatorsView()) {
                     Text("Progress Indicators")
                 }

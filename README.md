@@ -33,6 +33,7 @@ Documentation files for each technique are listed below.
     - [x] [Input Labels](iOSswiftUIa11yTechniques/Documentation/InputLabels.md)
     - [ ] Large Content Viewer
     - [x] [Magic Tap](iOSswiftUIa11yTechniques/Documentation/MagicTap.md)
+    - [x] [Rotor](iOSswiftUIa11yTechniques/Documentation/Rotor.md)
     - [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
 - [ ] Motion Animations
 - [x] [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)

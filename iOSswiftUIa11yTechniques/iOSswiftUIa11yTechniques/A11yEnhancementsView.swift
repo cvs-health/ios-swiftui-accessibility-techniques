@@ -45,6 +45,9 @@ struct A11yEnhancementsView: View {
             NavigationLink(destination: MagicTapView()) {
                 Text("Magic Tap")
             }
+            NavigationLink(destination: RotorView()) {
+                Text("Rotor")
+            }
             NavigationLink(destination: VoiceOverPronunciationView()) {
                 Text("VoiceOver Proununciation")
             }

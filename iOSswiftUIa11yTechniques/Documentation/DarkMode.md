@@ -9,7 +9,7 @@ Notes:
 - Use `.tint(Color(colorScheme == .dark ? .systemBlue : .blue))` to give blue button text sufficient contrast in light and dark mode.
 
 ## Applicable WCAG Success Criteria
-- N/A
+- [1.4.3 Contrast (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum)
 
 ----
 

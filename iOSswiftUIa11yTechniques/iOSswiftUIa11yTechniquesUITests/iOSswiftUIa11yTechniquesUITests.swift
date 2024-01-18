@@ -894,6 +894,24 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testDarkMode() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.swipeUp()
+        app.collectionViews.buttons["Responding to User Accessibility Preferences"].tap()
+        app.collectionViews.buttons["Dark Mode"].tap()
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()//tests the wrong screen 🤦🏻‍♂️
+            app.swipeUp()
+            try app.performAccessibilityAudit()//
+        } else {
+            // Fallback on earlier versions
+        }
+    }
     override func setUp() {
        super.setUp()
        let app = XCUIApplication()

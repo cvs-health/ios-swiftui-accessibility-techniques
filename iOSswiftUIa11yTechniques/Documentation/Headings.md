@@ -11,7 +11,7 @@ Notes:
 * Adding a heading level using `.accessibilityHeading(.h1)`, `.accessibilityHeading(.h2)`, etc. will not work unless `.accessibilityAddTraits(.isHeader)` is also added then the level will be spoken to VoiceOver.
 
 Known Issues:
-* You can't make the Page Title heading have a heading level. For example using `.navigationBarTitle("Headings").accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/).accessibilityHeading(.h1)` will not make the page title a Heading Level 1.
+* You can't make the Page Title heading have a heading level. For example using `.navigationBarTitle("Headings").accessibilityAddTraits(.isHeader).accessibilityHeading(.h1)` will not make the page title a Heading Level 1.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)

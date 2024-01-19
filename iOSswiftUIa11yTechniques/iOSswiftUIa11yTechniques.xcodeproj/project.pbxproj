@@ -70,6 +70,10 @@
 		BCE205232B58D0BE000DF400 /* DarkModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205222B58D0BE000DF400 /* DarkModeView.swift */; };
 		BCE205252B58D50D000DF400 /* UserPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205242B58D50D000DF400 /* UserPreferencesView.swift */; };
 		BCE205282B597199000DF400 /* RotorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205272B597199000DF400 /* RotorView.swift */; };
+		BCE2052C2B5A1C38000DF400 /* ContactAustin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE2052B2B5A1C38000DF400 /* ContactAustin.swift */; };
+		BCE2052E2B5A1C50000DF400 /* ContactSeattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE2052D2B5A1C50000DF400 /* ContactSeattle.swift */; };
+		BCE205302B5A1C5F000DF400 /* ContactAtlanta.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE2052F2B5A1C5F000DF400 /* ContactAtlanta.swift */; };
+		BCE205322B5A1C6C000DF400 /* ContactReno.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205312B5A1C6C000DF400 /* ContactReno.swift */; };
 		BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */; };
 		BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */; };
 		BCEDB8F42B4872CA00B4D85D /* DeviceOrientationGood.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */; };
@@ -198,6 +202,10 @@
 		BCE205272B597199000DF400 /* RotorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotorView.swift; sourceTree = "<group>"; };
 		BCE205292B5971A8000DF400 /* Rotor.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Rotor.md; sourceTree = "<group>"; };
 		BCE2052A2B5991B7000DF400 /* Sources.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Sources.md; sourceTree = "<group>"; };
+		BCE2052B2B5A1C38000DF400 /* ContactAustin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAustin.swift; sourceTree = "<group>"; };
+		BCE2052D2B5A1C50000DF400 /* ContactSeattle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSeattle.swift; sourceTree = "<group>"; };
+		BCE2052F2B5A1C5F000DF400 /* ContactAtlanta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAtlanta.swift; sourceTree = "<group>"; };
+		BCE205312B5A1C6C000DF400 /* ContactReno.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactReno.swift; sourceTree = "<group>"; };
 		BCEDB8EE2B4760D800B4D85D /* Checkboxes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Checkboxes.md; sourceTree = "<group>"; };
 		BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationView.swift; sourceTree = "<group>"; };
 		BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationBad.swift; sourceTree = "<group>"; };
@@ -353,6 +361,10 @@
 				BC8129022B3CDA4F00CB19D2 /* DialogsView.swift */,
 				BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */,
 				BC0030352B363B560063EAD5 /* SheetsView.swift */,
+				BCE2052B2B5A1C38000DF400 /* ContactAustin.swift */,
+				BCE2052D2B5A1C50000DF400 /* ContactSeattle.swift */,
+				BCE2052F2B5A1C5F000DF400 /* ContactAtlanta.swift */,
+				BCE205312B5A1C6C000DF400 /* ContactReno.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
 				AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */,
 				AA636C892ADD7FD900014BAF /* ProgressIndicatorsView.swift */,
@@ -514,12 +526,14 @@
 				BCEDB9142B4C812C00B4D85D /* NavigationLinkView.swift in Sources */,
 				BCE205282B597199000DF400 /* RotorView.swift in Sources */,
 				AABD27C82A9FF0D800F718F7 /* HeadingsView.swift in Sources */,
+				BCE2052E2B5A1C50000DF400 /* ContactSeattle.swift in Sources */,
 				BCE205232B58D0BE000DF400 /* DarkModeView.swift in Sources */,
 				AA636C8A2ADD7FD900014BAF /* ProgressIndicatorsView.swift in Sources */,
 				AABD27D02A9FF11400F718F7 /* AnnouncementsView.swift in Sources */,
 				BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */,
 				AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */,
 				AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */,
+				BCE205322B5A1C6C000DF400 /* ContactReno.swift in Sources */,
 				BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */,
 				AA74DD5E2AFDCCFA00348078 /* PageTitleBad.swift in Sources */,
 				AABD27D42A9FF12400F718F7 /* DecorativeView.swift in Sources */,
@@ -541,6 +555,7 @@
 				AA59CDCA2ABA1F4E0004908F /* TabsGoodView.swift in Sources */,
 				BC8C92102B3144BA006DAC20 /* GroupingControlsView.swift in Sources */,
 				BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */,
+				BCE2052C2B5A1C38000DF400 /* ContactAustin.swift in Sources */,
 				AABD27D22A9FF11F00F718F7 /* FunctionalView.swift in Sources */,
 				BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */,
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
@@ -552,6 +567,7 @@
 				BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */,
 				BCEDB8F42B4872CA00B4D85D /* DeviceOrientationGood.swift in Sources */,
 				BC1B59CB2B508BDD00E8F782 /* ATdetectionView.swift in Sources */,
+				BCE205302B5A1C5F000DF400 /* ContactAtlanta.swift in Sources */,
 				BC8C92162B327D93006DAC20 /* AdjustableActionView.swift in Sources */,
 				AA59CDCE2ABA209D0004908F /* MessagesTabView.swift in Sources */,
 				AA1AC60C2ABD2C3800AC02DA /* TogglesView.swift in Sources */,
@@ -582,7 +598,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -605,7 +621,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -760,7 +776,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.6;
+				MARKETING_VERSION = 3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -793,7 +809,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.6;
+				MARKETING_VERSION = 3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

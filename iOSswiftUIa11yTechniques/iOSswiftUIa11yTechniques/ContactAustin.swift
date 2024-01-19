@@ -67,9 +67,9 @@ struct ContactAustin: View {
                     .textFieldStyle(.roundedBorder)
                     .border(nameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(nameLabel)
-                    .accessibilityHint(nameErrorVisible ? nameError+nameInstructions : nameInstructions)
+                    .accessibilityHint(nameErrorVisible ? nameError+", "+nameInstructions : nameInstructions)
                     .autocorrectionDisabled(true)
-                    .textContentType(.givenName)
+                    .textContentType(.name)
                     .accessibilityFocused($isNameA11yFocused)
                     .focused($isNameFocused)
                 Text(nameInstructions)
@@ -94,7 +94,6 @@ struct ContactAustin: View {
                     .padding(.top)
                 TextField("", text: $email, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
-                    .border(.secondary)
                     .border(emailErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(emailLabel)
                     .accessibilityHint(emailErrorVisible ? emailError : "")
@@ -114,7 +113,7 @@ struct ContactAustin: View {
                     .textFieldStyle(.roundedBorder)
                     .border(messageErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(messageLabel)
-                    .accessibilityHint(messageErrorVisible ? messageError+messageInstructions : messageInstructions)
+                    .accessibilityHint(messageErrorVisible ? messageError+", "+messageInstructions : messageInstructions)
                     .accessibilityFocused($isMessageA11yFocused)
                     .focused($isMessageFocused)
                     .frame(minHeight:100, maxHeight: .infinity)
@@ -169,15 +168,15 @@ struct ContactAustin: View {
                 }
                 .accessibilityFocused($isTriggerFocused)
                 .padding(.top).frame(maxWidth: .infinity, alignment: .leading)
-                .alert("Thanks for sending the Austin office a message!", isPresented: $showingAlert) {
+                .alert("Thanks for contacting Austin office!", isPresented: $showingAlert) {
                     Button("OK", role: .cancel) {
                         isTriggerFocused = true
                     }
                 } message: {
-                    Text("We will read your message and reply ASAP.")
+                    Text("We'll reply as soon as possible.")
                 }
                 Spacer(minLength: 100)
-                Text(".aL .aH").frame(maxWidth: .infinity, alignment: .trailing).font(.caption2).foregroundStyle(.gray)
+                Text(".aL .aH").frame(maxWidth: .infinity, alignment: .trailing).font(.caption2).foregroundStyle(.gray).accessibilityHidden(true)
             }
             .padding()
             .navigationTitle("Contact Austin Office")

@@ -67,9 +67,9 @@ struct ContactAtlanta: View {
                     .textFieldStyle(.roundedBorder)
                     .border(nameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(nameLabel)
-                    .accessibilityValue(nameErrorVisible ? name+nameError+nameInstructions : name+nameInstructions)
+                    .accessibilityValue(nameErrorVisible ? name+", "+nameError+", "+nameInstructions : name+", "+nameInstructions)
                     .autocorrectionDisabled(true)
-                    .textContentType(.givenName)
+                    .textContentType(.name)
                     .accessibilityFocused($isNameA11yFocused)
                     .focused($isNameFocused)
                 Text(nameInstructions)
@@ -94,10 +94,9 @@ struct ContactAtlanta: View {
                     .padding(.top)
                 TextField("", text: $email, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
-                    .border(.secondary)
                     .border(emailErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(emailLabel)
-                    .accessibilityValue(emailErrorVisible ? email+emailError : email)
+                    .accessibilityValue(emailErrorVisible ? email+", "+emailError : email)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
                     .accessibilityFocused($isEmailA11yFocused)
@@ -114,7 +113,7 @@ struct ContactAtlanta: View {
                     .textFieldStyle(.roundedBorder)
                     .border(messageErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(messageLabel)
-                    .accessibilityValue(messageErrorVisible ? message+messageError+messageInstructions : message+messageInstructions)
+                    .accessibilityValue(messageErrorVisible ? message+", "+messageError+", "+messageInstructions : message+", "+messageInstructions)
                     .accessibilityFocused($isMessageA11yFocused)
                     .focused($isMessageFocused)
                     .frame(minHeight:100, maxHeight: .infinity)
@@ -169,15 +168,15 @@ struct ContactAtlanta: View {
                 }
                 .accessibilityFocused($isTriggerFocused)
                 .padding(.top).frame(maxWidth: .infinity, alignment: .leading)
-                .alert("Thanks for sending the Atlanta office a message!", isPresented: $showingAlert) {
+                .alert("Thanks for contacting Atlanta office!", isPresented: $showingAlert) {
                     Button("OK", role: .cancel) {
                         isTriggerFocused = true
                     }
                 } message: {
-                    Text("We will read your message and reply ASAP.")
+                    Text("We'll reply as soon as possible.")
                 }
                 Spacer(minLength: 100)
-                Text(".aL .aV").frame(maxWidth: .infinity, alignment: .trailing).font(.caption2).foregroundStyle(.gray)
+                Text(".aL .aV").frame(maxWidth: .infinity, alignment: .trailing).font(.caption2).foregroundStyle(.gray).accessibilityHidden(true)
 
             }
             .padding()

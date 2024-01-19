@@ -66,9 +66,9 @@ struct ContactSeattle: View {
                       TextField("", text:$name)
                         .textFieldStyle(.roundedBorder)
                         .border(nameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
-                        .accessibilityHint(nameErrorVisible ? nameError+nameInstructions : nameInstructions)
+                        .accessibilityHint(nameErrorVisible ? nameError+", "+nameInstructions : nameInstructions)
                         .autocorrectionDisabled(true)
-                        .textContentType(.givenName)
+                        .textContentType(.name)
                         .accessibilityFocused($isNameA11yFocused)
                         .focused($isNameFocused)
                 }.labeledContentStyle(.vertical).padding(.top)
@@ -90,7 +90,6 @@ struct ContactSeattle: View {
                 LabeledContent(emailLabel) {
                       TextField("", text:$email)
                         .textFieldStyle(.roundedBorder)
-                        .border(.secondary)
                         .border(emailErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                         .accessibilityHint(emailErrorVisible ? emailError : "")
                         .keyboardType(.emailAddress)
@@ -107,7 +106,7 @@ struct ContactSeattle: View {
                       TextEditor(text: $message)
                         .textFieldStyle(.roundedBorder)
                         .border(messageErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
-                        .accessibilityHint(messageErrorVisible ? messageError+messageInstructions : messageInstructions)
+                        .accessibilityHint(messageErrorVisible ? messageError+", "+messageInstructions : messageInstructions)
                         .accessibilityFocused($isMessageA11yFocused)
                         .focused($isMessageFocused)
                         .frame(minHeight:100, maxHeight: .infinity)
@@ -148,6 +147,9 @@ struct ContactSeattle: View {
                         isNameFocused = true
                         isNameA11yFocused = true
                     }
+                    if !message.isEmpty && !name.isEmpty && !email.isEmpty {
+                        showingAlert = true
+                    }
                 }) {
                     Text("Send Message")
                         .padding(10)
@@ -158,15 +160,15 @@ struct ContactSeattle: View {
                         .fontWeight(.bold)
                         .opacity(0.8)
                 }.padding(.top).frame(maxWidth: .infinity, alignment: .leading)
-                    .alert("Thanks for sending the Seattle office a message!", isPresented: $showingAlert) {
+                    .alert("Thanks for contacting Seattle office!", isPresented: $showingAlert) {
                         Button("OK", role: .cancel) {
                             isTriggerFocused = true
                         }
                     } message: {
-                        Text("We will read your message and reply ASAP.")
+                        Text("We'll reply as soon as possible.")
                     }
                 Spacer(minLength: 100)
-                Text("LC .aH").frame(maxWidth: .infinity, alignment: .trailing).font(.caption2).foregroundStyle(.gray)
+                Text("LC .aH").frame(maxWidth: .infinity, alignment: .trailing).font(.caption2).foregroundStyle(.gray).accessibilityHidden(true)
 
             }
             .padding()

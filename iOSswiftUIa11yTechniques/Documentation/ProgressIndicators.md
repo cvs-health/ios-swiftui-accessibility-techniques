@@ -4,7 +4,7 @@ Progress indicators are used to show page loading status or the progress of a ta
 - The correct progress indicator value must be spoken to VoiceOver. 
 - When a progress spinner is displayed its label text must be spoken to VoiceOver.
 
-Create progress indicators with visible `ProgressView(\"Label\")` label text which then becomes the accessibility label for VoiceOver. 
+Create progress indicators with visible `ProgressView("Label")` label text which then becomes the accessibility label for VoiceOver. 
  
 Notes:
 

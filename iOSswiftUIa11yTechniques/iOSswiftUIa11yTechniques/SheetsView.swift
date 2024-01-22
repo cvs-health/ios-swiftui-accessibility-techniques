@@ -61,7 +61,6 @@ struct SheetsView: View {
                         Button("Dismiss",
                                action: { 
                                     isShowingSheet.toggle()
-                                    isTriggerFocused = true
                                 })
                         .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                         
@@ -109,6 +108,7 @@ struct SheetsView: View {
     }
     func didDismiss() {
         // Handle the dismissing action.
+        isTriggerFocused = true
     }
 
 }

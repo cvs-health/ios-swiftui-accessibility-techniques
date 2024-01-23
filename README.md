@@ -31,7 +31,7 @@ Documentation files for each technique are listed below.
     - [x] [Assistive Technology Detection](iOSswiftUIa11yTechniques/Documentation/AssistiveTechnologyDetection.md)
     - [x] [Escape](iOSswiftUIa11yTechniques/Documentation/Escape.md)
     - [x] [Input Labels](iOSswiftUIa11yTechniques/Documentation/InputLabels.md)
-    - [ ] Large Content Viewer
+    - [x] [Large Content Viewer](iOSswiftUIa11yTechniques/Documentation/LargeContentViewer.md)
     - [x] [Magic Tap](iOSswiftUIa11yTechniques/Documentation/MagicTap.md)
     - [x] [Rotor](iOSswiftUIa11yTechniques/Documentation/Rotor.md)
     - [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)

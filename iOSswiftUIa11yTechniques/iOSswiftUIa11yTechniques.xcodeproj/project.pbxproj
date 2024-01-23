@@ -63,6 +63,7 @@
 		BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */; };
 		BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC782B4E1E6F00196E32 /* PopoversView.swift */; };
 		BC95CC7B2B4E4A8D00196E32 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */; };
+		BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
 		BCD1CF952B574C8800A26ED3 /* VoiceOverPronunciationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */; };
 		BCD1CF982B57670D00A26ED3 /* EscapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF972B57670D00A26ED3 /* EscapeView.swift */; };
@@ -151,6 +152,7 @@
 		AAF6D09A2ABA29EE00188DE0 /* Tabs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Tabs.md; sourceTree = "<group>"; };
 		BC00300A2B332C020063EAD5 /* AdjustableAction.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdjustableAction.md; sourceTree = "<group>"; };
 		BC0030352B363B560063EAD5 /* SheetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetsView.swift; sourceTree = "<group>"; };
+		BC1A5FA02B5F6B340008513C /* LargeContentViewer.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LargeContentViewer.md; sourceTree = "<group>"; };
 		BC1B59C22B4E664700E8F782 /* MenusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenusView.swift; sourceTree = "<group>"; };
 		BC1B59C42B4F102100E8F782 /* InputInstructions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputInstructions.md; sourceTree = "<group>"; };
 		BC1B59C52B4F964200E8F782 /* Popovers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Popovers.md; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 		BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputInstructionsView.swift; sourceTree = "<group>"; };
 		BC95CC782B4E1E6F00196E32 /* PopoversView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoversView.swift; sourceTree = "<group>"; };
 		BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
+		BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeContentViewerView.swift; sourceTree = "<group>"; };
 		BCC4F1822B3F8757004AAB65 /* InputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
 		BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceOverPronunciationView.swift; sourceTree = "<group>"; };
@@ -259,6 +262,7 @@
 				BCE2052A2B5991B7000DF400 /* Sources.md */,
 				AAF127B62B2194E200D5313D /* ErrorValidation.md */,
 				AA7786352AEFFE6000AA39DA /* DynamicType.md */,
+				BC1A5FA02B5F6B340008513C /* LargeContentViewer.md */,
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
 				BCE205262B58E529000DF400 /* DarkMode.md */,
 				BC1B59C92B507B3000E8F782 /* TouchTargetSize.md */,
@@ -337,6 +341,7 @@
 				BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */,
 				AABD27C92A9FF0E700F718F7 /* ImagesView.swift */,
 				BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */,
+				BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */,
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */,
 				BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */,
@@ -532,6 +537,7 @@
 				AABD27D02A9FF11400F718F7 /* AnnouncementsView.swift in Sources */,
 				BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */,
 				AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */,
+				BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */,
 				AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */,
 				BCE205322B5A1C6C000DF400 /* ContactReno.swift in Sources */,
 				BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */,
@@ -598,7 +604,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -621,7 +627,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -760,7 +766,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -778,7 +784,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.8;
+				MARKETING_VERSION = 3.9;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -793,7 +799,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -811,7 +817,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.8;
+				MARKETING_VERSION = 3.9;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -407,7 +407,7 @@ struct ErrorValidationView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Error Validation")
+            .navigationTitle("Error Validation")
         }
  
     }

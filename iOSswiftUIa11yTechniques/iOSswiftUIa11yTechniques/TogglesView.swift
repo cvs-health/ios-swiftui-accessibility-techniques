@@ -213,7 +213,7 @@ struct TogglesView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Toggles")
+            .navigationTitle("Toggles")
 
         }
  

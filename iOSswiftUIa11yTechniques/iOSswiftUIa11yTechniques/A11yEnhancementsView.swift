@@ -39,9 +39,9 @@ struct A11yEnhancementsView: View {
             NavigationLink(destination: InputLabelsView()) {
                 Text("Input Labels")
             }
-            NavigationLink(destination: DetailView()) {
-                Text("Large Content Viewer") // link https://nilcoalescing.com/blog/LargeContentViewerInSwiftUI/
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            NavigationLink(destination: LargeContentViewerView()) {
+                Text("Large Content Viewer")
+            }
             NavigationLink(destination: MagicTapView()) {
                 Text("Magic Tap")
             }
@@ -52,7 +52,7 @@ struct A11yEnhancementsView: View {
                 Text("VoiceOver Proununciation")
             }
         }
-        .navigationBarTitle("Accessibility UX Enhancements")
+        .navigationTitle("Accessibility UX Enhancements")
     }
 }
 

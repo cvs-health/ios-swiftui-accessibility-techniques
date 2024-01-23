@@ -125,7 +125,7 @@ struct LinksView: View {
                     Text("The third bad link example uses Markdown inline links which have insufficient contrast and are not underlined.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Links")
+            .navigationTitle("Links")
             .padding()
         }
  

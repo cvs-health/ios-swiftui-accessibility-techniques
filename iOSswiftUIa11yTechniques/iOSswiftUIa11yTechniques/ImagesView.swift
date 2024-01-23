@@ -31,7 +31,7 @@ struct ImagesView: View {
                 Text("Functional Images")
             }
         }
-        .navigationBarTitle("Images")
+        .navigationTitle("Images")
     }
 }
 

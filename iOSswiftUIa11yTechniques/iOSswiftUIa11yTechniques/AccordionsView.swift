@@ -119,7 +119,7 @@ struct AccordionsView: View {
                     Text("The bad accordion example is coded as a `Button` that hides and shows text. VoiceOver does not speak an expanded or collapsed state or hint. The `.foregroundColor(.blue)` also has an insufficient contrast ratio.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Accordions")
+            .navigationTitle("Accordions")
             .padding()
         }
  

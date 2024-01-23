@@ -79,7 +79,7 @@ struct UIControlsView: View {
                 Text("Toggles")
             }
         }
-        .navigationBarTitle("UI Controls")
+        .navigationTitle("UI Controls")
     }
 }
 

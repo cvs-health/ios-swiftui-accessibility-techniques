@@ -108,7 +108,7 @@ struct FunctionalView: View {
                     Text("The second bad functional image example is incorrectly coded as an `Image` element with a `TapGesture` rather than as a `Button` which prevents VoiceOver users from hearing the \"Button\" trait spoken and they won't know the image is an actionable control.")
                 }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Functional Images")
+            .navigationTitle("Functional Images")
             .padding()
         }
     }

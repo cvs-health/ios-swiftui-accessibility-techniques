@@ -183,7 +183,7 @@ struct DynamicTypeView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Dynamic Type")
+            .navigationTitle("Dynamic Type")
 
         }
  

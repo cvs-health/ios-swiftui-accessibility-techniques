@@ -19,7 +19,7 @@ import SwiftUI
 struct DetailView: View {
     var body: some View {
         Text("Detail View")
-            .navigationBarTitle("Detail View")
+            .navigationTitle("Detail View")
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)

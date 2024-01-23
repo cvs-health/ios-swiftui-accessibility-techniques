@@ -81,7 +81,7 @@ struct DialogsView: View {
                     Text("The bad confirmation dialog example uses a custom view which does not receive VoiceOver focus when displayed.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Confirmation Dialogs")
+            .navigationTitle("Confirmation Dialogs")
             .padding()
         }
  

@@ -125,7 +125,7 @@ struct SlidersView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Sliders")
+            .navigationTitle("Sliders")
 
         }
  

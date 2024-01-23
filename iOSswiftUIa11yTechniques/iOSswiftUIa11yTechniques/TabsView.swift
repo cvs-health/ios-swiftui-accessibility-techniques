@@ -135,7 +135,7 @@ struct TabsView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Tabs")
+            .navigationTitle("Tabs")
 
         }
  

@@ -78,7 +78,7 @@ struct RotorView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Rotor")
+            .navigationTitle("Rotor")
 
         }
  

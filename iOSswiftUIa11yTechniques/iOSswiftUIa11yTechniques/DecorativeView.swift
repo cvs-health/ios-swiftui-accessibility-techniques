@@ -113,7 +113,7 @@ struct DecorativeView: View {
                     Text("The bad decorative icon image example does not use `.accessibilityHidden(true)` which allows VoiceOver to focus on the image and read \"globe\" as its accessibility label.")
                 }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Decorative Images")
+            .navigationTitle("Decorative Images")
             .padding()
         }
     }

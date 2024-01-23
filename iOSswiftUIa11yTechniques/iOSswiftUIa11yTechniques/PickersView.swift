@@ -164,7 +164,7 @@ struct PickersView: View {
                     Text("The second bad Pickers example uses no visible `DatePicker(\"\")` text for each picker so nothing is spoken to VoiceOver as the accessibility label.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Pickers")
+            .navigationTitle("Pickers")
             .padding()
         }
  

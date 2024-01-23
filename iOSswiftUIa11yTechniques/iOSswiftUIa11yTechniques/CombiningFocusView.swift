@@ -107,7 +107,7 @@ struct CombiningFocusView: View {
                     Text("The bad combining focus example does not use `.accessibilityElement(children: .combine)` to combine child views into a parent view focused by VoiceOver as a single element. VoiceOver focuses on each individual child element and they are not spoken in a unique and meaningful way.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Combining Focus")
+            .navigationTitle("Combining Focus")
             .padding()
         }
  

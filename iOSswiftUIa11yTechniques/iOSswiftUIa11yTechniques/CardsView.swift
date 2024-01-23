@@ -121,7 +121,7 @@ struct CardsView: View {
                     Text("The bad card example uses a heading element that is not at the top of the card and a generic call to action button.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Cards")
+            .navigationTitle("Cards")
             .padding()
         }
  

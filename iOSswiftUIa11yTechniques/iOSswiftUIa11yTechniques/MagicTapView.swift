@@ -43,7 +43,7 @@ struct MagicTapView: View {
                     Text("The good Magic Tap example uses `.accessibilityAction(.magicTap)` to display an alert dialog when VoiceOver users double tap with 2 fingers anywhere on this page.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Magic Tap")
+            .navigationTitle("Magic Tap")
             .padding()
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text("Magic Tap Activated"), message: Text("You activated Magic Tap by double-tapping with 2 fingers!"), dismissButton: .default(Text("OK")))

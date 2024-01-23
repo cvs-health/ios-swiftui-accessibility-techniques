@@ -28,7 +28,7 @@ struct UserPreferencesView: View {
                 Text("Smart Invert")
             }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
         }
-        .navigationBarTitle("User Accessibility Preferences")
+        .navigationTitle("User Accessibility Preferences")
     }
 }
 

@@ -97,7 +97,7 @@ struct TouchTargetSize: View {
                     Text("The bad touch target size example uses `.frame(width:18, height:18)` on each icon button `Image`.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Touch Target Size")
+            .navigationTitle("Touch Target Size")
             .padding()
         }
  

@@ -65,7 +65,7 @@ struct ATdetectionView: View {
             } message: {
                 Text("This application uses VoiceOver Accessibility Hints to improve the accessibility of controls so if a control does not appear to be fully accessible to VoiceOver please make sure you have not disabled VoiceOver Hints.")
             }
-            .navigationBarTitle("Assistive Technology Detection")
+            .navigationTitle("Assistive Technology Detection")
             .padding()
 
         }

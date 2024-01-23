@@ -126,7 +126,7 @@ struct GroupingControlsView: View {
                     Text("The bad grouping controls example does not use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the `HStack{}` which prevents VoiceOver users from hearing the group label spoken when first moving focus to a control in the group.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Grouping Controls")
+            .navigationTitle("Grouping Controls")
             .padding()
         }
  

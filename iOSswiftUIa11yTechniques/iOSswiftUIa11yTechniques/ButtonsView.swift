@@ -175,7 +175,7 @@ struct ButtonsView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Buttons")
+            .navigationTitle("Buttons")
 
         }
  

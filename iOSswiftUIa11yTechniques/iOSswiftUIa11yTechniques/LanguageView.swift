@@ -42,7 +42,7 @@ struct LanguageView: View {
                     Text("The bad language example uses Spanish text on parts of the page with English text but SwiftUI has no accessibility language property to set the correct locale or country code for the Spanish text so VoiceOver speaks it incorrectly with an English acccent.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Language")
+            .navigationTitle("Language")
             .padding()
         }
  

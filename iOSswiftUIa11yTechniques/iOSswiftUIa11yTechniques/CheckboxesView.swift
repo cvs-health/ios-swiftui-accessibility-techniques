@@ -169,7 +169,7 @@ struct CheckboxesView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Checkboxes")
+            .navigationTitle("Checkboxes")
 
         }
  

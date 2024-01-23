@@ -73,7 +73,7 @@ struct SegmentedControlsView: View {
                     Text("The bad Segmented controls example does not use `.accessibilityLabel` for each `tag()` segment button causing VoiceOver users to only hear the segment label and not the group label spoken together.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Segmented Controls")
+            .navigationTitle("Segmented Controls")
             .padding()
         }
  

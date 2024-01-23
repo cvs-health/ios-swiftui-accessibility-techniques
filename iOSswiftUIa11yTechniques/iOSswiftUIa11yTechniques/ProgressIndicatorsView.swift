@@ -123,7 +123,7 @@ struct ProgressIndicatorsView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Progress Indicators")
+            .navigationTitle("Progress Indicators")
 
         }
  

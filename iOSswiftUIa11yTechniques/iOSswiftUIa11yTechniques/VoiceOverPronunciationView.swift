@@ -66,7 +66,7 @@ struct VoiceOverPronunciationView: View {
                     Text("The bad VoiceOver Pronunciation example does not use `.speechAlwaysIncludesPunctuation()` which causes VoiceOver to ignore all punctuation characters in the SwiftUI code snippet. `.speechSpellsOutCharacters()` is not used causing VoiceOver to speak the GOOG stock symbol as “GOOG” rather than “G-O-O-G” and 2525 is spoken as “two-thousand-five-hundred-twenty-five” rather than “two-five-two-five”.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("VoiceOver Pronunciation")
+            .navigationTitle("VoiceOver Pronunciation")
             .padding()
         }
  

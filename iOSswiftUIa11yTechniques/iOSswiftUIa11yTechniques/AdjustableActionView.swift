@@ -106,7 +106,7 @@ struct AdjustableActionView: View {
                     Text("The bad adjustable example does not use `.accessibilityAdjustableAction` to increment and decrement the star rating when VoiceOver users swipe up and down. Instead VoiceOver users must focus on each individual star to choose a rating. `.accessibilityElement()`, `.accessibilityLabel`, and `.accessibilityValue` are missing.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Adjustable Action")
+            .navigationTitle("Adjustable Action")
             .padding()
         }
  

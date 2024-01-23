@@ -65,7 +65,7 @@ struct ListsView: View {
                     Text("The bad list example uses lists with a single `Text()` element for the entire list and each list item visually separated using the `\\n` new line character.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Lists")
+            .navigationTitle("Lists")
             .padding()
         }
  

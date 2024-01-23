@@ -1,7 +1,7 @@
 # Sources
 
 - [Creating Accessible Views | Apple Developer Documentation](https://developer.apple.com/documentation/swiftui/creating_accessible_views)
-
+- [accessibilityShowsLargeContentViewer() | Apple Developer Documentation](https://developer.apple.com/documentation/swiftui/view/accessibilityshowslargecontentviewer())
 ----
 
 Copyright 2024 CVS Health and/or one of its affiliates

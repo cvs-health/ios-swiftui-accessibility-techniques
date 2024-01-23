@@ -114,7 +114,7 @@ struct InformativeView: View {
                 }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Informative Images")
+            .navigationTitle("Informative Images")
         }
      }
 }

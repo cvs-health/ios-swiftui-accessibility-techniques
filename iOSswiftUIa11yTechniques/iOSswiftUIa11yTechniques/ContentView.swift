@@ -102,7 +102,7 @@ struct ContentView: View {
                     Text("Contact Form")
                 }
             }
-            .navigationBarTitle("iOS SwiftUI Accessibility")
+            .navigationTitle("iOS SwiftUI Accessibility")
             Text("👩‍🦯🦼🧏‍♂️♿️🦮👨‍🦽🦻 \n \nWelcome to the iOS SwiftUI Accessibility Techniques Demo App! \n \nActivate the navigation menu button to view the iOS SwiftUI Accessibility Techniques. \n \nUse VoiceOver to set focus to the good and bad examples. Expand the details for an explanation of each example.")
                 .font(.largeTitle)
                 .padding()

@@ -90,7 +90,7 @@ struct DarkModeView: View {
                     Text("The bad dark mode example uses the default blue button text which has insufficient contrast in light mode. `.background(.black)` is used without providing a foreground color or changing colors for dark and light mode. The custom button uses `.tint(.white)` and `.background(Color(colorScheme == .dark ? .white : .black))` which changes the background color but does not change the button text color to a sufficient contrasting color in dark mode.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Dark Mode")
+            .navigationTitle("Dark Mode")
             .padding()
         }
  

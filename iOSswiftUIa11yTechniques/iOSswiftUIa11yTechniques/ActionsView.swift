@@ -207,7 +207,7 @@ struct ActionsView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
 
             }
-            .navigationBarTitle("Actions")
+            .navigationTitle("Actions")
             .padding()
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text("\(actionTitle) Action Activated"), message: Text("You activated the accessibility action named \(actionTitle)!"), dismissButton: .default(Text("OK")))

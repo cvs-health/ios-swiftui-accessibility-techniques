@@ -210,7 +210,7 @@ struct TextFieldsView: View {
                     Text("The bad Text Fields example uses placeholder text which disappears and has insufficient contrast rather than visible label text. There is no `.accessibilityLabel` for each `TextField`. The default border style has an insufficient contrast ratio. Keyboard types are not specified. AutoFill and password management are not enabled.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Text Fields")
+            .navigationTitle("Text Fields")
             .padding()
             .gesture(TapGesture().onEnded(){_ in UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)}) //dismiss keyboard on tap
         }

@@ -80,7 +80,7 @@ struct MenusView: View {
                     Text("The bad menu example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed. VoiceOver reads \"Actions, Button\" and does not read that it is a popup button that activates a picker.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Menus")
+            .navigationTitle("Menus")
             .padding()
 
         }

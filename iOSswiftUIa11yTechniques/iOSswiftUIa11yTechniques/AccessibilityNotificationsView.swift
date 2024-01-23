@@ -87,7 +87,7 @@ struct AccessibilityNotificationsView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Accessibility Notifications")
+            .navigationTitle("Accessibility Notifications")
 
         }
  

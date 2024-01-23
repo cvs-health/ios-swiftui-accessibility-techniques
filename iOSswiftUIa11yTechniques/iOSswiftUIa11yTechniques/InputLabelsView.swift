@@ -83,7 +83,7 @@ struct InputLabelsView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Input Labels")
+            .navigationTitle("Input Labels")
 
         }
  

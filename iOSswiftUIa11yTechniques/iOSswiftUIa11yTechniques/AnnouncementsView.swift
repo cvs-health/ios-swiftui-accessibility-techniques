@@ -28,7 +28,7 @@ struct AnnouncementsView: View {
                 Text("Error Validation")
             }
         }
-        .navigationBarTitle("Announcements")
+        .navigationTitle("Announcements")
     }
 }
 

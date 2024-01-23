@@ -95,7 +95,7 @@ struct PopoversView: View {
                     Text("The bad popover example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Popovers")
+            .navigationTitle("Popovers")
             .padding()
             .onChange(of: isShowingPopover) {
                if isShowingPopover == true {

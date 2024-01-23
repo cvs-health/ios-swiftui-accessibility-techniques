@@ -101,7 +101,7 @@ struct SheetsView: View {
                     Text("The bad sheet example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Sheets")
+            .navigationTitle("Sheets")
             .padding()
         }
  

@@ -87,7 +87,7 @@ struct ReadingOrderView: View {
                     Text("The bad reading order example does not use `.accessibilityElement(children: .contain)` on each `VStack{}` container which causes VoiceOver to read the first line of each column then read the next line of each column which does not match the expected visual reading order.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
-            .navigationBarTitle("Reading Order")
+            .navigationTitle("Reading Order")
             .padding()
         }
  

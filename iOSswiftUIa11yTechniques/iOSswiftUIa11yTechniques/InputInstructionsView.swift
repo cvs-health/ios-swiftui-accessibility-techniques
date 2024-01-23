@@ -137,7 +137,7 @@ struct InputInstructionsView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Input Instructions")
+            .navigationTitle("Input Instructions")
         }
  
     }

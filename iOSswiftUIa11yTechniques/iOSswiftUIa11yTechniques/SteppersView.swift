@@ -119,7 +119,7 @@ struct SteppersView: View {
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .padding()
-            .navigationBarTitle("Steppers")
+            .navigationTitle("Steppers")
 
         }
  

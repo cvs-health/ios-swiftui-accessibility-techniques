@@ -5,6 +5,8 @@ Use `Toggle` to create native toggle controls with an "On" and "Off" state.
 
 Use `Toggle("Label Text")` to give the toggle a visible label and accessibility label. 
 
+A custom `.toggleStyle` can be used to customize the appearance and color of the toggle, e.g., to set the off state color to `Color.gray` which has 3:1 contrast ratio in the off state.
+
 Notes:
 - If there is no unique `Toggle("Label Text")` then the toggle must have a unique and specific `.accessibilityLabel`. 
 - Set the correct `.accessibilityValue` if the toggle has visible value text other than On and Off.

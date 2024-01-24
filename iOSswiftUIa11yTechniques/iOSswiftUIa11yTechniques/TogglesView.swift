@@ -15,6 +15,30 @@
  */
 
 import SwiftUI
+
+struct ColoredToggleStyle: ToggleStyle {
+    var onColor = Color.green
+    var offColor = Color.gray
+
+    func makeBody(configuration: Self.Configuration) -> some View {
+        Button(action: { configuration.isOn.toggle() }) {
+            HStack {
+                Text("Use Face ID to log in.") // This is where the text is displayed
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(configuration.isOn ? onColor : offColor)
+                    .frame(width: 50, height: 30)
+                    .overlay(
+                        Circle()
+                            .fill(Color.white)
+                            .shadow(radius: 1, x: 0, y: 1)
+                            .padding(1.5)
+                            .offset(x: configuration.isOn ? 10 : -10)
+                    )
+                    .animation(.linear)
+            }
+        }
+    }
+}
  
 struct TogglesView: View {
     
@@ -24,6 +48,7 @@ struct TogglesView: View {
     @State private var toggleBadOn2 = false
     @State private var isAustinBookmarked = false
     @State private var isCupertinoBookmarked = false
+    @State private var isToggleOn = false
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
@@ -32,7 +57,7 @@ struct TogglesView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Toggles are used to switch between two options (also called switch controls). Use `Toggle` to create native toggle controls with an \"On\" and \"Off\" state. Use `Toggle(\"Label Text\")` to create label text. Give each `Toggle` without unique label text a specific `.accessibilityLabel`. Set the correct `.accessibilityValue` if the toggles have visible value text other than On and Off.")
+                Text("Toggles are used to switch between two options (also called switch controls). Use `Toggle` to create native toggle controls with an \"On\" and \"Off\" state. Use `Toggle(\"Label Text\")` to create label text. Give each `Toggle` without unique label text a specific `.accessibilityLabel`. Set the correct `.accessibilityValue` if the toggles have visible value text other than On and Off. A custom `.toggleStyle` can be used to customize the appearance and color of the toggle, e.g., to set the off state color to `Color.gray` which has 3:1 contrast ratio in the off state.")
                     .padding([.bottom])
                 Text("Good Examples")
                     .font(.subheadline)
@@ -126,6 +151,21 @@ struct TogglesView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The third good toggle example uses `.toggleStyle(.button)` and includes unique and specific `.accessibilityLabel` text for each bookmark button.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Good Example Custom `.toggleStyle`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                VStack {
+                    Toggle(isOn: $isToggleOn) {
+                        }
+                    .toggleStyle(ColoredToggleStyle())
+                    .padding()
+                    .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The good custom `.toggleStyle` example uses `.toggleStyle(ColoredToggleStyle())` which customizes the appearance and color of the toggle and sets the off state color to `Color.gray` which has 3:1 contrast ratio in the off state.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Examples")
                     .font(.subheadline)

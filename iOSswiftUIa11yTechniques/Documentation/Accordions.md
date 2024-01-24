@@ -1,5 +1,5 @@
 # Accordions
-Accordion controls expand and collapse to show and hide content. VoiceOver users must hear the \"Expanded\" and \"Collapsed\" state of accordions.
+Accordion controls expand and collapse to show and hide content. VoiceOver users must hear the "Expanded" and "Collapsed" state of accordions.
 
 Use `DisclosureGroup` to create an accessible accordion with expanded and collapsed states for VoiceOver. 
 

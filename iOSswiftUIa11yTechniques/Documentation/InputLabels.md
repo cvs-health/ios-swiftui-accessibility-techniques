@@ -5,11 +5,11 @@ Accessibility Input Labels can provide multiple alternative voice input labels f
 Use `.accessibilityInputLabels` to provide multiple voice input labels in descending order of importance. 
 
 
-Use the Voice Control \"Show Names\" and \"Tap\" commands to test this technique.
+Use the Voice Control "Show Names" and "Tap" commands to test this technique.
 
 Notes:
 
-- The first input label provided will be displayed to Voice Control users with the \"Show Names\" command. 
+- The first input label provided will be displayed to Voice Control users with the "Show Names" command. 
 
 ## Applicable WCAG Success Criteria
 - [2.5.3 Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name)

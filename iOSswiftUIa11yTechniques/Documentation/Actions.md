@@ -1,7 +1,7 @@
 # Actions
 Use `accessibilityAction()` to provide actions on a view that can be activated by iOS Assistive Technologies like VoiceOver.
 
-Include a name for the action when using multiple accessibility actions, e.g., `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark Unread\")`.
+Include a name for the action when using multiple accessibility actions, e.g., `.accessibilityAction(named: "Delete")` and `.accessibilityAction(named: "Mark Unread")`.
 
 ## Applicable WCAG Success Criteria
 - N/A

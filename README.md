@@ -24,10 +24,10 @@ Documentation files for each technique are listed below.
     - [x] [Error Validation](iOSswiftUIa11yTechniques/Documentation/ErrorValidation.md)
 - [x] [Reading Order](iOSswiftUIa11yTechniques/Documentation/ReadingOrder.md)
 - [x] [Focus Management](iOSswiftUIa11yTechniques/Documentation/FocusManagement.md)
-- [ ] Accessibility UX Enhancements
+- [x] Accessibility UX Enhancements
     - [x] [Actions](iOSswiftUIa11yTechniques/Documentation/Actions.md)
     - [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
-    - [ ] Attributed Strings
+    - [x] [Attributed Strings](iOSswiftUIa11yTechniques/Documentation/AttributedStrings.md)
     - [x] [Assistive Technology Detection](iOSswiftUIa11yTechniques/Documentation/AssistiveTechnologyDetection.md)
     - [x] [Escape](iOSswiftUIa11yTechniques/Documentation/Escape.md)
     - [x] [Input Labels](iOSswiftUIa11yTechniques/Documentation/InputLabels.md)

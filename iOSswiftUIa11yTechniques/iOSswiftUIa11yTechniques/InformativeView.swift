@@ -25,7 +25,7 @@ struct InformativeView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Informative images provide information or convey meaning to sighted users that must also be accessible to VoiceOver users. Give informative images an accessibility label either through `Label(\"text\")` or `.accessibilityLabel(\"text\")`.")
+                Text("Informative images provide information or convey meaning to sighted users that must be accessible to VoiceOver users. Give informative images an accessibility label either through `Label(\"text\")` or `.accessibilityLabel(\"text\")`. Use `.accessibilityElement(children: .combine)` to combine an image and text into a single focusable element with VoiceOver.")
                     .padding([.bottom])
                 Text("Good Examples")
                     .font(.subheadline)

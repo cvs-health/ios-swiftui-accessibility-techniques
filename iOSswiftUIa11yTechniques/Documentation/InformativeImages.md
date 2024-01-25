@@ -6,6 +6,7 @@ The `.accessibilityLabel` of an informative image must match all relevant conten
 Notes:
 
 * Don't include the word "Image" in the `.accessibilityLabel` value because the "Image" trait is already spoken to VoiceOver when focused on an image element, otherwise VoiceOver would speak "Image, Image".
+- Use `.accessibilityElement(children: .combine)` to combine an image and text into a single focusable element with VoiceOver.
 
 ## Applicable WCAG Success Criteria
 - [1.1.1: Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content)

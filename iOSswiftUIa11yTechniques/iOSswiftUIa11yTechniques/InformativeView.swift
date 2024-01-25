@@ -70,6 +70,39 @@ struct InformativeView: View {
                         Text("The good informative icon image example uses `Label(\"World\", systemImage: \"globe\").labelStyle(IconOnlyLabelStyle())` to give the informative icon an accessibility label that is not displayed visually. Additionally `.accessibilityRemoveTraits(.isImage)` must be used on the icon image so that the accessibility label is spoken to VoiceOver when the `HStack` is combined into a single focusable element using `.accessibilityElement(children: .combine)`.")
                     }
                 }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Good Example `Image` combined with `Text`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Image(systemName: "exclamationmark.circle")
+                        .accessibilityLabel("Error:")
+                    Text("We're sorry. We can't show the offer details right now.").bold().font(.callout)
+                }
+                .accessibilityElement(children: .combine)
+                .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                DisclosureGroup("Details") {
+                    VStack {
+                        Text("The good `Image` combined with `Text` example uses `Image(systemName: \"exclamationmark.circle\").accessibilityLabel(\"Error:\")` to give the error icon alt text. `.accessibilityElement(children: .combine)` is used on the `HStack` to combine the image and text into a single focusable element with VoiceOver.")
+                    }
+                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Good Example `Label` combined with `Text`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Label("Error:", systemImage: "exclamationmark.circle").labelStyle(IconOnlyLabelStyle()).accessibilityRemoveTraits(.isImage)
+                    Text("We're sorry. We can't show the offer details right now.").bold().font(.callout)
+                }
+                .accessibilityElement(children: .combine)
+                .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                DisclosureGroup("Details") {
+                    VStack {
+                        Text("The good `Label` combined with `Text` example uses `Label(\"Error:\", systemImage: \"exclamationmark.circle\").labelStyle(IconOnlyLabelStyle())` to give the icon an accessibility `Label` that is not displayed visually. Additionally `.accessibilityRemoveTraits(.isImage)` must be used on the `Label` icon image so that the accessibility label is spoken to VoiceOver when the `HStack` is combined into a single focusable element using `.accessibilityElement(children: .combine)`.")
+                    }
+                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -110,6 +143,36 @@ struct InformativeView: View {
                 DisclosureGroup("Details") {
                     VStack {
                         Text("The bad informative icon image example uses no `Label` text to give the informative icon an accessibility label causing VoiceOver to read the image as \"Image\". VoiceOver focuses on each individual part of the line of text because the `HStack` is not combined into one focusable element.")
+                    }
+                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Bad Example `Image` combined with `Text`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Image(systemName: "exclamationmark.circle")
+                    Text("We're sorry. We can't show the offer details right now.").bold().font(.callout)
+                }
+                .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                DisclosureGroup("Details") {
+                    VStack {
+                        Text("The bad `Image` combined with `Text` example uses `Image(systemName: \"exclamationmark.circle\")` with no accessibility label to give the error icon alt text. `.accessibilityElement(children: .combine)` is not used on the `HStack` to combine the image and text into a single focusable element with VoiceOver.")
+                    }
+                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Bad Example `Label` combined with `Text`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Label("", systemImage: "exclamationmark.circle").labelStyle(IconOnlyLabelStyle())
+                    Text("We're sorry. We can't show the offer details right now.").bold().font(.callout)
+                }
+                .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                DisclosureGroup("Details") {
+                    VStack {
+                        Text("The bad `Label` combined with `Text` example uses `Label(\"\", systemImage: \"exclamationmark.circle\").labelStyle(IconOnlyLabelStyle())` which does not give the icon an accessibility `Label` that is not displayed visually. The `HStack` is not combined into a single focusable element using `.accessibilityElement(children: .combine)` and `.accessibilityRemoveTraits(.isImage)` is not used on the `Label` icon image so that the accessibility label is spoken to VoiceOver when combined with the text.")
                     }
                 }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }

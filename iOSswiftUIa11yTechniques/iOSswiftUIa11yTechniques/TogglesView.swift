@@ -39,7 +39,30 @@ struct ColoredToggleStyle: ToggleStyle {
         }
     }
 }
- 
+struct ColoredToggleStyleBad: ToggleStyle {
+    var onColor = Color.green
+    var offColor = Color(red: 240 / 255, green: 240 / 255, blue: 240 / 255)
+
+    func makeBody(configuration: Self.Configuration) -> some View {
+        Button(action: { configuration.isOn.toggle() }) {
+            HStack {
+                Text("Use Face ID to log in.") // This is where the text is displayed
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(configuration.isOn ? onColor : offColor)
+                    .frame(width: 50, height: 30)
+                    .overlay(
+                        Circle()
+                            .fill(Color.white)
+                            .shadow(radius: 1, x: 0, y: 1)
+                            .padding(1.5)
+                            .offset(x: configuration.isOn ? 10 : -10)
+                    )
+                    .animation(.linear)
+            }
+        }
+    }
+}
+
 struct TogglesView: View {
     
     @State private var toggleGoodOn1 = false
@@ -251,6 +274,21 @@ struct TogglesView: View {
                 DisclosureGroup("Details") {
                     Text("The third bad toggle example uses `.toggleStyle(.button)` and does not include unique and specific `.accessibilityLabel` text for each bookmark button.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Bad Example Custom `.toggleStyle`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                VStack {
+                    Toggle(isOn: $isToggleOn) {
+                        }
+                    .toggleStyle(ColoredToggleStyleBad())
+                    .padding()
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The bad custom `.toggleStyle` example uses `.toggleStyle(ColoredToggleStyleBad())` which customizes the appearance and color of the toggle and sets the off state color to `Color(red: 240 / 255, green: 240 / 255, blue: 240 / 255)` which does not have a 3:1 contrast ratio in the off state.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+
             }
             .padding()
             .navigationTitle("Toggles")

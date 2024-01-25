@@ -5,6 +5,8 @@
 	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
+	<false/>
+	<key>UISupportsFullScreenInAssistiveAccess</key>
+	<true/>
 </dict>
 </plist>

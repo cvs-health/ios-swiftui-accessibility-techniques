@@ -28,15 +28,15 @@ struct ContactAtlanta: View {
     @State private var nameErrorVisible = false
     @AccessibilityFocusState private var isNameA11yFocused: Bool
     @FocusState private var isNameFocused: Bool
-    @State private var nameLabel = "Full Name *"
-    @State private var nameInstructions = "First Middle Last"
-    @State private var nameError = "⚠ First Name is required. Please enter your first name."
-    @State private var emailLabel = "Email *"
+    @State private var nameLabel = "User ID (required)"
+    @State private var nameInstructions = "The last 5 digits of your account number."
+    @State private var nameError = "⚠ User ID is required. Please enter the last 5 digits of your account number."
+    @State private var emailLabel = "Email (required)"
     @State private var emailError = "⚠ Email is required. Please enter your email address."
     @State private var emailErrorVisible = false
     @AccessibilityFocusState private var isEmailA11yFocused: Bool
     @FocusState private var isEmailFocused: Bool
-    @State private var messageLabel = "Message *"
+    @State private var messageLabel = "Message (required)"
     @State private var messageInstructions = "Questions, Comments, or Feedback"
     @State private var messageError = "⚠ Message is required. Please enter your question, comment, or feedback in the message field."
     @State private var messageErrorVisible = false
@@ -54,40 +54,36 @@ struct ContactAtlanta: View {
             VStack {
                 Text("Use the contact form below to send the Atlanta office a question or comment.")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text("* indicates required fields")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .italic()
-                    .font(.caption)
-                    .padding(.top)
                 //This is the .accessibilityLabel and .accessibilityValue coded form
                 Text(nameLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top)
+                Text(nameInstructions)
+                    .italic()
+                    .font(.caption)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 TextField("", text: $name, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(nameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(nameLabel)
                     .accessibilityValue(nameErrorVisible ? name+", "+nameError+", "+nameInstructions : name+", "+nameInstructions)
                     .autocorrectionDisabled(true)
-                    .textContentType(.name)
+                    .textContentType(.username)
+                    .keyboardType(.numberPad)
                     .accessibilityFocused($isNameA11yFocused)
                     .focused($isNameFocused)
-                Text(nameInstructions)
-                    .italic()
-                    .font(.caption)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 if nameErrorVisible {
                     Text(nameError)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 }
-                Text("Phone Number")
+                Text("Phone Number (optional)")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top)
                 TextField("", text: $phone, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
-                    .accessibilityLabel("Phone Number")
+                    .accessibilityLabel("Phone Number (optional)")
                     .keyboardType(.phonePad)
                 Text(emailLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -109,6 +105,10 @@ struct ContactAtlanta: View {
                 Text(messageLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top)
+                Text(messageInstructions)
+                    .italic()
+                    .font(.caption)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 TextEditor(text: $message)
                     .textFieldStyle(.roundedBorder)
                     .border(messageErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
@@ -118,10 +118,6 @@ struct ContactAtlanta: View {
                     .focused($isMessageFocused)
                     .frame(minHeight:100, maxHeight: .infinity)
                     .padding(.horizontal, 1)
-                Text(messageInstructions)
-                    .italic()
-                    .font(.caption)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 if messageErrorVisible {
                     Text(messageError)
                         .frame(maxWidth: .infinity, alignment: .leading)

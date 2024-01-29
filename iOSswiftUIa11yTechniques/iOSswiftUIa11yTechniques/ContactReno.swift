@@ -28,15 +28,15 @@ struct ContactReno: View {
     @State private var nameErrorVisible = false
     @AccessibilityFocusState private var isNameA11yFocused: Bool
     @FocusState private var isNameFocused: Bool
-    @State private var nameLabel = "Full Name *"
-    @State private var nameInstructions = "First Middle Last"
-    @State private var nameError = "⚠ First Name is required. Please enter your first name."
-    @State private var emailLabel = "Email *"
+    @State private var nameLabel = "User ID (required)"
+    @State private var nameInstructions = "The last 5 digits of your account number."
+    @State private var nameError = "⚠ User ID is required. Please enter the last 5 digits of your account number."
+    @State private var emailLabel = "Email (required)"
     @State private var emailError = "⚠ Email is required. Please enter your email address."
     @State private var emailErrorVisible = false
     @AccessibilityFocusState private var isEmailA11yFocused: Bool
     @FocusState private var isEmailFocused: Bool
-    @State private var messageLabel = "Message *"
+    @State private var messageLabel = "Message (required)"
     @State private var messageInstructions = "Questions, Comments, or Feedback"
     @State private var messageError = "⚠ Message is required. Please enter your question, comment, or feedback in the message field."
     @State private var messageErrorVisible = false
@@ -56,11 +56,6 @@ struct ContactReno: View {
             VStack {
                 Text("Use the contact form below to send the Reno office a question or comment.")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text("* indicates required fields")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .italic()
-                    .font(.caption)
-                    .padding(.top)
                 //This is the LabeledContent and .accessibilityValue coded form
                 LabeledContent(nameLabel) {
                       TextField("", text:$name)
@@ -68,10 +63,11 @@ struct ContactReno: View {
                         .border(nameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                         .accessibilityValue(nameErrorVisible ? name+", "+nameError+", "+nameInstructions : name+", "+nameInstructions)
                         .autocorrectionDisabled(true)
-                        .textContentType(.name)
+                        .textContentType(.username)
+                        .keyboardType(.numberPad)
                         .accessibilityFocused($isNameA11yFocused)
                         .focused($isNameFocused)
-                }.labeledContentStyle(.vertical).padding(.top)
+                }.padding(.top)
                 Text(nameInstructions)
                     .italic()
                     .font(.caption)
@@ -81,12 +77,12 @@ struct ContactReno: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 }
-                LabeledContent("Phone Number") {
+                LabeledContent("Phone Number (optional)") {
                       TextField("", text:$phone)
                         .textFieldStyle(.roundedBorder)
                         .border(.secondary)
                         .keyboardType(.phonePad)
-                }.labeledContentStyle(.vertical).padding(.top)
+                }.padding(.top)
                 LabeledContent(emailLabel) {
                       TextField("", text:$email)
                         .textFieldStyle(.roundedBorder)
@@ -96,7 +92,7 @@ struct ContactReno: View {
                         .textContentType(.emailAddress)
                         .accessibilityFocused($isEmailA11yFocused)
                         .focused($isEmailFocused)
-                }.labeledContentStyle(.vertical).padding(.top)
+                }.padding(.top)
                 if emailErrorVisible {
                     Text(emailError)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -111,7 +107,7 @@ struct ContactReno: View {
                         .focused($isMessageFocused)
                         .frame(minHeight:100, maxHeight: .infinity)
                         .padding(.horizontal, 1)
-                }.labeledContentStyle(.vertical).padding(.top)
+                }.padding(.top)
                 Text(messageInstructions)
                     .italic()
                     .font(.caption)

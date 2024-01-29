@@ -162,7 +162,7 @@ struct TextFieldsView: View {
                         .autocorrectionDisabled(true)
                         .textContentType(.givenName)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                }.labeledContentStyle(.vertical) // this plus the struct and extension at the bottom enable vertical stacking of the label and textfield
+                }
                 LabeledContent("Last Name") {
                       TextField("", text:$lname)
                         .textFieldStyle(.roundedBorder)
@@ -170,9 +170,9 @@ struct TextFieldsView: View {
                         .autocorrectionDisabled(true)
                         .textContentType(.familyName)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                }.labeledContentStyle(.vertical)
+                }
                 DisclosureGroup("Details") {
-                    Text("The second good Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required.")
+                    Text("The second good Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required. Don't stack the labels vertically or else VoiceOver TextField activation will be blocked to due to an Apple bug.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Example")
                     .font(.subheadline)
@@ -208,6 +208,30 @@ struct TextFieldsView: View {
                     .textFieldStyle(.roundedBorder)
                 DisclosureGroup("Details") {
                     Text("The bad Text Fields example uses placeholder text which disappears and has insufficient contrast rather than visible label text. There is no `.accessibilityLabel` for each `TextField`. The default border style has an insufficient contrast ratio. Keyboard types are not specified. AutoFill and password management are not enabled.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Bad Example Using `LabeledContent`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                LabeledContent("First Name") {
+                      TextField("", text:$fname)
+                        .textFieldStyle(.roundedBorder)
+                        .border(.secondary)
+                        .autocorrectionDisabled(true)
+                        .textContentType(.givenName)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }.labeledContentStyle(.vertical) // this plus the struct and extension at the bottom enable vertical stacking of the label and textfield
+                LabeledContent("Last Name") {
+                      TextField("", text:$lname)
+                        .textFieldStyle(.roundedBorder)
+                        .border(.secondary)
+                        .autocorrectionDisabled(true)
+                        .textContentType(.familyName)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }.labeledContentStyle(.vertical)
+                DisclosureGroup("Details") {
+                    Text("The second bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. When using `LabeledContent` an `.accessibilityLabel` is not required.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .navigationTitle("Text Fields")

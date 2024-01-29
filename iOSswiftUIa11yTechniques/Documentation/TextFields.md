@@ -1,5 +1,7 @@
 # Text Fields
-Text fields require visible label text next to the field which must be set as the `.accessibilityLabel` of the `TextField`. 
+Text fields require visible label text next to the field which must be set as the `.accessibilityLabel` of the `TextField`.
+
+Or provide visible labels using `LabeledContent` and then an `.accessibilityLabel` is not required. Don't use `.labeledContentStyle(.vertical)` or else VoiceOver won't be able to double tap to activate the `TextField`.
 
 VoiceOver users must hear the label text spoken when focused on the text field.
 
@@ -13,7 +15,7 @@ Notes:
 * Use `.textContentType` to enable form AutoFill for each `TextField`.
 
 VoiceOver Bugs:
-- VoiceOver operation is blocked when using `LabeledContent` with a `TextField` because VoiceOver users cannot double tap to activate the TextField and enter a value. Bug reports should be filed with Apple. 
+- VoiceOver operation is blocked when using `LabeledContent` with a `TextField` and `.labeledContentStyle(.vertical)` because VoiceOver users cannot double tap to activate the TextField and enter a value. Bug reports should be filed with Apple. 
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)

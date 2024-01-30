@@ -19,6 +19,8 @@ import SwiftUI
 struct DialogsView: View {
     @State private var isPresentingDialog = false
     @State private var isPresentingBadDialog = false
+    @AccessibilityFocusState private var isTriggerFocused: Bool
+
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -27,7 +29,7 @@ struct DialogsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("VoiceOver focus must move to the confirmation dialog when displayed. Use `.confirmationDialog()` to code a native SwiftUI confirmation dialog that manages VoiceOver focus.")
+                Text("VoiceOver focus must move to the confirmation dialog when displayed. Use `.confirmationDialog()` to code a native SwiftUI confirmation dialog that manages VoiceOver focus. Use `AccessibilityFocusState` to send focus back to the trigger button that opened the dialog when the dialog is closed.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -42,10 +44,15 @@ struct DialogsView: View {
                 Button("Delete All Messages", role: .destructive) {
                   isPresentingDialog = true
                 }
+                .accessibilityFocused($isTriggerFocused)
                .confirmationDialog("Are you sure you want to delete all messages?",
                                    isPresented: $isPresentingDialog, titleVisibility: .visible) {
                  Button("Delete All Messages", role: .destructive) {
+                     isTriggerFocused = true
                   }
+                 Button("Cancel", role: .cancel) {
+                     isTriggerFocused = true
+                 }
                 } message: {
                     Text("You cannot undo deleting all messages!")
                   }

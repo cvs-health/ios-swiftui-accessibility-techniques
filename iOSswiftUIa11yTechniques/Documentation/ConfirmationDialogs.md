@@ -1,7 +1,14 @@
 # Confirmation Dialogs
 VoiceOver focus must move to the confirmation dialog when displayed. 
 
-Use `.confirmationDialog()` to code a native SwiftUI confirmation dialog that receives VoiceOver focus when displayed.                
+Use `.confirmationDialog()` to code a native SwiftUI confirmation dialog that receives VoiceOver focus when displayed.           
+
+Use `AccessibilityFocusState` to send focus back to the trigger button that opened the dialog when the dialog is closed.            
+
+
+Notes:
+- Confirmation dialogs will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `.confirmationDialog()` component in which case bugs should be filed with Apple.
+     
 
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)

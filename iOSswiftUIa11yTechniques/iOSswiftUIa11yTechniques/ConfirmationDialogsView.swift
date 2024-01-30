@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct DialogsView: View {
+struct ConfirmationDialogsView: View {
     @State private var isPresentingDialog = false
     @State private var isPresentingBadDialog = false
     @AccessibilityFocusState private var isTriggerFocused: Bool
@@ -96,8 +96,8 @@ struct DialogsView: View {
 
 }
  
-struct DialogsView_Previews: PreviewProvider {
+struct ConfirmationDialogsView_Previews: PreviewProvider {
     static var previews: some View {
-        DialogsView()
+        ConfirmationDialogsView()
     }
 }

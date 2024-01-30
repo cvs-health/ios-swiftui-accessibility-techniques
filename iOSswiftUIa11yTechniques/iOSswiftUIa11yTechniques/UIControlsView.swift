@@ -33,7 +33,7 @@ struct UIControlsView: View {
             NavigationLink(destination: CheckboxesView()) {
                 Text("Checkboxes")
             }
-            NavigationLink(destination: DialogsView()) {
+            NavigationLink(destination: ConfirmationDialogsView()) {
                 Text("Confirmation Dialogs")
             }
             NavigationLink(destination: GroupingControlsView()) {

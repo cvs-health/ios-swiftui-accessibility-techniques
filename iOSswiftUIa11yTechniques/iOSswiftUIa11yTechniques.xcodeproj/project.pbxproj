@@ -51,7 +51,7 @@
 		BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
 		BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B662B465B9F00C77B57 /* CheckboxesView.swift */; };
-		BC8129032B3CDA4F00CB19D2 /* DialogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129022B3CDA4F00CB19D2 /* DialogsView.swift */; };
+		BC8129032B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */; };
 		BC8129062B3D36CF00CB19D2 /* DataTablesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */; };
 		BC8129092B3F5FAB00CB19D2 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129082B3F5FAB00CB19D2 /* LanguageView.swift */; };
 		BC81290C2B3F7BBE00CB19D2 /* InputLabelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC81290B2B3F7BBE00CB19D2 /* InputLabelsView.swift */; };
@@ -170,7 +170,7 @@
 		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
 		BC715B662B465B9F00C77B57 /* CheckboxesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxesView.swift; sourceTree = "<group>"; };
 		BC8129012B3CCF4F00CB19D2 /* Sheets.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Sheets.md; sourceTree = "<group>"; };
-		BC8129022B3CDA4F00CB19D2 /* DialogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogsView.swift; sourceTree = "<group>"; };
+		BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialogsView.swift; sourceTree = "<group>"; };
 		BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConfirmationDialogs.md; sourceTree = "<group>"; };
 		BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTablesView.swift; sourceTree = "<group>"; };
 		BC8129072B3E042000CB19D2 /* DataTables.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DataTables.md; sourceTree = "<group>"; };
@@ -360,7 +360,7 @@
 				BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */,
 				BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */,
 				BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */,
-				BC8129022B3CDA4F00CB19D2 /* DialogsView.swift */,
+				BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */,
 				AABB44092AE6C0FB003480B3 /* DynamicTypeView.swift */,
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				BCD1CF972B57670D00A26ED3 /* EscapeView.swift */,
@@ -594,7 +594,7 @@
 				BC8C92132B324859006DAC20 /* ReadingOrderView.swift in Sources */,
 				AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */,
 				BC8129062B3D36CF00CB19D2 /* DataTablesView.swift in Sources */,
-				BC8129032B3CDA4F00CB19D2 /* DialogsView.swift in Sources */,
+				BC8129032B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift in Sources */,
 				AABD27D62A9FF12A00F718F7 /* InformativeView.swift in Sources */,
 				BCD1CF982B57670D00A26ED3 /* EscapeView.swift in Sources */,
 			);
@@ -616,7 +616,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -639,7 +639,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -778,7 +778,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -796,7 +796,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.15;
+				MARKETING_VERSION = 4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -811,7 +811,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -829,7 +829,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.15;
+				MARKETING_VERSION = 4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

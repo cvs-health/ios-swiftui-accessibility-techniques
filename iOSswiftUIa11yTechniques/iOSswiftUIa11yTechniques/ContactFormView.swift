@@ -33,6 +33,12 @@ struct ContactFormView: View {
             NavigationLink(destination: ContactReno()) {
                 Text("Reno")
             }
+            NavigationLink(destination: ContactBoston()) {
+                Text("Boston")
+            }
+            NavigationLink(destination: ContactOrlando()) {
+                Text("Orlando")
+            }
         }
         .navigationTitle("Contact Our Offices")
     }

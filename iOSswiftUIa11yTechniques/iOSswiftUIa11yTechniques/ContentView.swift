@@ -51,8 +51,12 @@ struct ContentView: View {
                     Text("Focus Management")
                 }
                 NavigationLink(destination: A11yEnhancementsView()) {
-                    Text("Accessibility UX Enhancements")
-                }
+                    VStack {
+                        Text("Accessibility UX Enhancements").frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Magic Tap, Actions, Rotor, VoiceOver Proununciation, etc.").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
+                    }
+                }.accessibilityIdentifier("Accessibility UX Enhancements")
+
                 NavigationLink(destination: DetailView()) {
                     Text("Motion Animations") //Reduce motion
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

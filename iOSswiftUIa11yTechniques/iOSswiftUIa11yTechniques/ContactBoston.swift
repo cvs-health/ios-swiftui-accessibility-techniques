@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct ContactAtlanta: View {
+struct ContactBoston: View {
     @State private var showingAlert = false
     @AccessibilityFocusState private var isTriggerFocused: Bool
 
@@ -31,7 +31,7 @@ struct ContactAtlanta: View {
     @FocusState private var isUseridFocused: Bool
     @State private var useridLabel = "User ID (required)"
     @State private var useridInstructions = "The last 5 digits of your account number."
-    @State private var useridValue = "The last 5 digits of your account number."
+    @State private var useridHint = "The last 5 digits of your account number."
     @State private var useridError = "⚠ User ID is required. Please enter the last 5 digits of your account number."
     @State private var useridOverUnderDigitsError = "⚠ User ID is not 5 digits. Please enter only the last 5 digits of your account number."
     @State private var emailLabel = "Email (required)"
@@ -55,22 +55,60 @@ struct ContactAtlanta: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use the contact form below to send the Atlanta office a question or comment.")
+                Text("Use the contact form below to send the Boston office a question or comment.")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                //This is the .accessibilityLabel and .accessibilityValue coded form
+                //This is the Pulse annotations and .accessibilityHint coded form
+//                VStack {
+//                    Text(useridLabel)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .padding(.top)
+//                        .bold()
+//                    Text(useridInstructions)
+//                        .italic()
+//                        .font(.caption)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    TextField("", text: $name, axis: .vertical)
+//                        .textFieldStyle(.roundedBorder)
+//                        .border(useridErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+//                        .accessibilityLabel(useridLabel)
+//                        .accessibilityHint(useridHint)
+//                        .autocorrectionDisabled(true)
+//                        .textContentType(.username)
+//                        .keyboardType(.numberPad)
+//                        .accessibilityFocused($isUseridA11yFocused)
+//                        .focused($isUseridFocused)
+//                    if useridErrorVisible {
+//                        Text(useridError)
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                            .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+//                    }else if useridOverUnderDigitsErrorVisible {
+//                        Text(useridOverUnderDigitsError)
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                            .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+//                    }
+//                }.accessibilityRepresentation { // a11yRepresentation fails for VoiceOver the user can't activate the TextField
+//                    TextField("", text: $name)
+//                        .accessibilityLabel(useridLabel)
+//                        .accessibilityHint(useridHint)
+//                }.accessibilityAction(named: "Activate TextField") {
+//                    isUseridFocused = true
+//                    isUseridA11yFocused = true
+//                }
                 Text(useridLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top)
                     .bold()
+                    .accessibilityHidden(true)
                 Text(useridInstructions)
                     .italic()
                     .font(.caption)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityHidden(true)
                 TextField("", text: $name, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(useridErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(useridLabel)
-                    .accessibilityValue(useridValue)
+                    .accessibilityHint(useridHint)
                     .autocorrectionDisabled(true)
                     .textContentType(.username)
                     .keyboardType(.numberPad)
@@ -80,34 +118,56 @@ struct ContactAtlanta: View {
                     Text(useridError)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                        .accessibilityHidden(true)
                 }else if useridOverUnderDigitsErrorVisible {
                     Text(useridOverUnderDigitsError)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                        .accessibilityHidden(true)
                 }
+
+//                VStack {
+//                    Text("Phone Number (optional)")
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .padding(.top)
+//                        .bold()
+//                    Text("10-digit, U.S. only, for example 999-999-9999")
+//                        .italic()
+//                        .font(.caption)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    TextField("", text: $phone, axis: .vertical)
+//                        .textFieldStyle(.roundedBorder)
+//                        .border(.secondary)
+//                        .accessibilityLabel("Phone Number (optional)")
+//                        .accessibilityHint("10-digit, U.S. only, for example 999-999-9999")
+//                        .keyboardType(.phonePad)
+//                }.accessibilityElement(children: .combine) // a11yElement .combine fails for VoiceOver there is no TextField trait spoken
                 Text("Phone Number (optional)")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top)
                     .bold()
+                    .accessibilityHidden(true)
                 Text("10-digit, U.S. only, for example 999-999-9999")
                     .italic()
                     .font(.caption)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityHidden(true)
                 TextField("", text: $phone, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
                     .accessibilityLabel("Phone Number (optional)")
+                    .accessibilityHint("10-digit, U.S. only, for example 999-999-9999")
                     .keyboardType(.phonePad)
-                    .accessibilityValue(phone+", 10-digit, U.S. only, for example 999-999-9999")
                 Text(emailLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top)
                     .bold()
+                    .accessibilityHidden(true)
                 TextField("", text: $email, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(emailErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(emailLabel)
-                    .accessibilityValue(emailErrorVisible ? email+", "+emailError : email)
+                    .accessibilityHint(emailErrorVisible ? emailError : "")
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
                     .accessibilityFocused($isEmailA11yFocused)
@@ -116,20 +176,23 @@ struct ContactAtlanta: View {
                     Text(emailError)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                        .accessibilityHidden(true)
                 }
                 Text(messageLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top)
                     .bold()
+                    .accessibilityHidden(true)
                 Text(messageInstructions)
                     .italic()
                     .font(.caption)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityHidden(true)
                 TextEditor(text: $message)
                     .textFieldStyle(.roundedBorder)
                     .border(messageErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(messageLabel)
-                    .accessibilityValue(messageErrorVisible ? message+", "+messageError+", "+messageInstructions : message+", "+messageInstructions)
+                    .accessibilityHint(messageErrorVisible ? messageError+", "+messageInstructions : messageInstructions)
                     .accessibilityFocused($isMessageA11yFocused)
                     .focused($isMessageFocused)
                     .frame(minHeight:100, maxHeight: .infinity)
@@ -138,6 +201,7 @@ struct ContactAtlanta: View {
                     Text(messageError)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                        .accessibilityHidden(true)
                 }
                 Button(action: {
                     // Handle button action
@@ -151,7 +215,7 @@ struct ContactAtlanta: View {
                     messageErrorVisible = false
                     isMessageFocused = false
                     isMessageA11yFocused = false
-                    useridValue = useridInstructions
+                    useridHint = useridInstructions
                     if message.isEmpty {
                         messageErrorVisible = true
                         isMessageFocused = true
@@ -163,13 +227,13 @@ struct ContactAtlanta: View {
                         isEmailA11yFocused = true
                     }
                     if name.isEmpty && name.count < 1 {
-                        useridValue = useridError+", "+useridInstructions
+                        useridHint = useridError+", "+useridInstructions
                         useridErrorVisible = true
                         isUseridFocused = true
                         isUseridA11yFocused = true
                     }
                     if name.count != 5 && name.count > 0 {
-                        useridValue = useridOverUnderDigitsError+", "+useridInstructions
+                        useridHint = useridOverUnderDigitsError+", "+useridInstructions
                         useridOverUnderDigitsErrorVisible = true
                         isUseridFocused = true
                         isUseridA11yFocused = true
@@ -189,7 +253,7 @@ struct ContactAtlanta: View {
                 }
                 .accessibilityFocused($isTriggerFocused)
                 .padding(.top).frame(maxWidth: .infinity, alignment: .leading)
-                .alert("Thanks for contacting Atlanta office!", isPresented: $showingAlert) {
+                .alert("Thanks for contacting Boston office!", isPresented: $showingAlert) {
                     Button("OK", role: .cancel) {
                         isTriggerFocused = true
                     }
@@ -197,18 +261,17 @@ struct ContactAtlanta: View {
                     Text("We'll reply as soon as possible.")
                 }
                 Spacer(minLength: 100)
-                Text(".aL .aV").frame(maxWidth: .infinity, alignment: .trailing).font(.caption2).foregroundStyle(.gray).accessibilityHidden(true)
-
+                Text("PL .aH").frame(maxWidth: .infinity, alignment: .trailing).font(.caption2).foregroundStyle(.gray).accessibilityHidden(true)
             }
             .padding()
-            .navigationTitle("Contact Atlanta Office")
+            .navigationTitle("Contact Boston Office")
         }
  
     }
 }
  
-struct ContactAtlanta_Previews: PreviewProvider {
+struct ContactBoston_Previews: PreviewProvider {
     static var previews: some View {
-        ContactAtlanta()
+        ContactBoston()
     }
 }

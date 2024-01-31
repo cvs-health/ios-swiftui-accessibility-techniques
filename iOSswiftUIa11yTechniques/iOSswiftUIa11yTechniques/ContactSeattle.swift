@@ -25,12 +25,15 @@ struct ContactSeattle: View {
     @State private var phone = ""
     @State private var email = ""
     @State private var message = ""
-    @State private var nameErrorVisible = false
-    @AccessibilityFocusState private var isNameA11yFocused: Bool
-    @FocusState private var isNameFocused: Bool
-    @State private var nameLabel = "User ID (required)"
-    @State private var nameInstructions = "The last 5 digits of your account number."
-    @State private var nameError = "⚠ User ID is required. Please enter the last 5 digits of your account number."
+    @State private var useridErrorVisible = false
+    @State private var useridOverUnderDigitsErrorVisible = false
+    @AccessibilityFocusState private var isUseridA11yFocused: Bool
+    @FocusState private var isUseridFocused: Bool
+    @State private var useridLabel = "User ID (required)"
+    @State private var useridInstructions = "The last 5 digits of your account number."
+    @State private var useridHint = "The last 5 digits of your account number."
+    @State private var useridError = "⚠ User ID is required. Please enter the last 5 digits of your account number."
+    @State private var useridOverUnderDigitsError = "⚠ User ID is not 5 digits. Please enter only the last 5 digits of your account number."
     @State private var emailLabel = "Email (required)"
     @State private var emailError = "⚠ Email is required. Please enter your email address."
     @State private var emailErrorVisible = false
@@ -57,23 +60,27 @@ struct ContactSeattle: View {
                 Text("Use the contact form below to send the Seattle office a question or comment.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 //This is the LabeledContent and .accessibilityHint coded form
-                LabeledContent(nameLabel) {
+                LabeledContent(useridLabel) {
                       TextField("", text:$name)
                         .textFieldStyle(.roundedBorder)
-                        .border(nameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
-                        .accessibilityHint(nameErrorVisible ? nameError+", "+nameInstructions : nameInstructions)
+                        .border(useridErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+                        .accessibilityHint(useridHint)
                         .autocorrectionDisabled(true)
                         .textContentType(.username)
                         .keyboardType(.numberPad)
-                        .accessibilityFocused($isNameA11yFocused)
-                        .focused($isNameFocused)
+                        .accessibilityFocused($isUseridA11yFocused)
+                        .focused($isUseridFocused)
                 }.padding(.top)
-                Text(nameInstructions)
+                Text(useridInstructions)
                     .italic()
                     .font(.caption)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                if nameErrorVisible {
-                    Text(nameError)
+                if useridErrorVisible {
+                    Text(useridError)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }else if useridOverUnderDigitsErrorVisible {
+                    Text(useridOverUnderDigitsError)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 }
@@ -124,15 +131,17 @@ struct ContactSeattle: View {
                 }
                 Button(action: {
                     // Handle button action
-                    nameErrorVisible = false
-                    isNameFocused = false
-                    isNameA11yFocused = false
+                    useridErrorVisible = false
+                    useridOverUnderDigitsErrorVisible = false
+                    isUseridFocused = false
+                    isUseridA11yFocused = false
                     emailErrorVisible = false
                     isEmailFocused = false
                     isEmailA11yFocused = false
                     messageErrorVisible = false
                     isMessageFocused = false
                     isMessageA11yFocused = false
+                    useridHint = useridInstructions
                     if message.isEmpty {
                         messageErrorVisible = true
                         isMessageFocused = true
@@ -143,10 +152,17 @@ struct ContactSeattle: View {
                         isEmailFocused = true
                         isEmailA11yFocused = true
                     }
-                    if name.isEmpty {
-                        nameErrorVisible = true
-                        isNameFocused = true
-                        isNameA11yFocused = true
+                    if name.isEmpty && name.count < 1 {
+                        useridHint = useridError+", "+useridInstructions
+                        useridErrorVisible = true
+                        isUseridFocused = true
+                        isUseridA11yFocused = true
+                    }
+                    if name.count != 5 && name.count > 0 {
+                        useridHint = useridOverUnderDigitsError+", "+useridInstructions
+                        useridOverUnderDigitsErrorVisible = true
+                        isUseridFocused = true
+                        isUseridA11yFocused = true
                     }
                     if !message.isEmpty && !name.isEmpty && !email.isEmpty {
                         showingAlert = true

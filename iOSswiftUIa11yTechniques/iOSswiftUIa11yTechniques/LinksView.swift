@@ -21,6 +21,34 @@ struct LinksView: View {
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
     
+    var attributedString: AttributedString {
+        var result = AttributedString("To get started Login or Create Account. Contact Us if you need help.")
+        let loginLink = result.range(of: "Login")!
+        result[loginLink].link = URL(string: "https://example.com/login")
+        result[loginLink].underlineStyle = Text.LineStyle(nsUnderlineStyle: .single)
+        result[loginLink].foregroundColor = Color(colorScheme == .dark ? .systemBlue : .blue)
+        let createLink = result.range(of: "Create Account")!
+        result[createLink].link = URL(string: "https://example.com/create-account")
+        result[createLink].underlineStyle = Text.LineStyle(nsUnderlineStyle: .single)
+        result[createLink].foregroundColor = Color(colorScheme == .dark ? .systemBlue : .blue)
+        let contactLink = result.range(of: "Contact Us")!
+        result[contactLink].link = URL(string: "https://example.com/contact")
+        result[contactLink].underlineStyle = Text.LineStyle(nsUnderlineStyle: .single)
+        result[contactLink].foregroundColor = Color(colorScheme == .dark ? .systemBlue : .blue)
+        return result
+    }
+    var attributedStringBad: AttributedString {
+        var result = AttributedString("To get started Login or Create Account. Contact Us if you need help.")
+        let loginLink = result.range(of: "Login")!
+        result[loginLink].link = URL(string: "https://example.com/login")
+        let createLink = result.range(of: "Create Account")!
+        result[createLink].link = URL(string: "https://example.com/create-account")
+        let contactLink = result.range(of: "Contact Us")!
+        result[contactLink].link = URL(string: "https://example.com/contact")
+        return result
+    }
+
+    
     var body: some View {
         ScrollView {
             VStack {
@@ -72,6 +100,25 @@ struct LinksView: View {
                 DisclosureGroup("Details") {
                     Text("The second good link example is correctly coded as a `Link` element which speaks a \"Link\" trait to VoiceOver. The color contrast is corrected and the Button trait removed.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Good AttributedString Inline Links Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text(attributedString)
+                DisclosureGroup("Details") {
+                    Text("The good `AttributedString` inline links example uses `AttributedString` to set `.underlineStyle = Text.LineStyle(nsUnderlineStyle: .single)` and `.foregroundColor = Color(colorScheme == .dark ? .systemBlue : .blue)` for each link inside the attributed string. VoiceOver users must focus each link invidiually using the Rotor.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Markdown Links Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("To get started [Log In](https://www.example.com/login) or [Create Account](https://www.example.com/create-account). [Contact Us](https://www.example.com/contact) if you need help.")
+                    .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                DisclosureGroup("Details") {
+                    Text("The markdown links example uses markdown format links `[Name](https://www.example.com)` where each link must be focused invidually using the VoiceOver Rotor. The markdown links have a `.tint` applied with sufficient contrast but they cannot be underlined or have different text style than the surrounding inline text.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -115,14 +162,23 @@ struct LinksView: View {
                 DisclosureGroup("Details") {
                     Text("The second bad link example is incorrectly coded as a `Button` element which speaks a \"Button\" trait to VoiceOver rather than a \"Link\" trait. The default link contrast is below the WCAG minimum. ")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
-                Text("Bad Example 3")
+                Text("Bad AttributedString Inline Links Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("To get started [Login](https://www.example.com/login) or [Create Account](https://www.example.com/create-account)")
+                Text(attributedStringBad)
                 DisclosureGroup("Details") {
-                    Text("The third bad link example uses Markdown inline links which have insufficient contrast and are not underlined.")
+                    Text("The bad `AttributedString` inline links example uses `AttributedString` with the default link style for each link inside the attributed string. VoiceOver users must focus each link invidiually using the Rotor.")
+                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                Text("Bad Markdown Links Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("To get started [Log In](https://www.example.com/login) or [Create Account](https://www.example.com/create-account). [Contact Us](https://www.example.com/contact) if you need help.")
+                DisclosureGroup("Details") {
+                    Text("The bad markdown links example uses Markdown inline links which have insufficient contrast and are not underlined.")
                 }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
             }
             .navigationTitle("Links")

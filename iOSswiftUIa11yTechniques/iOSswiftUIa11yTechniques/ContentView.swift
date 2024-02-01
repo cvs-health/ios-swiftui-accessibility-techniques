@@ -53,7 +53,7 @@ struct ContentView: View {
                 NavigationLink(destination: A11yEnhancementsView()) {
                     VStack {
                         Text("Accessibility UX Enhancements").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Magic Tap, Actions, Rotor, VoiceOver Proununciation, etc.").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
+                        Text("Assistive Access, Magic Tap, Actions, Rotor, VoiceOver Proununciation, etc.").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
                     }
                 }.accessibilityIdentifier("Accessibility UX Enhancements")
 

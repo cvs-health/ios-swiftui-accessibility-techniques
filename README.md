@@ -28,6 +28,7 @@ Documentation files for each technique are listed below.
     - [x] [Actions](iOSswiftUIa11yTechniques/Documentation/Actions.md)
     - [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
     - [x] [Attributed Strings](iOSswiftUIa11yTechniques/Documentation/AttributedStrings.md)
+    - [x] [Assistive Access](iOSswiftUIa11yTechniques/Documentation/AssistiveAccess.md)
     - [x] [Assistive Technology Detection](iOSswiftUIa11yTechniques/Documentation/AssistiveTechnologyDetection.md)
     - [x] [Escape](iOSswiftUIa11yTechniques/Documentation/Escape.md)
     - [x] [Input Labels](iOSswiftUIa11yTechniques/Documentation/InputLabels.md)

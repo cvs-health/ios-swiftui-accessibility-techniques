@@ -30,11 +30,11 @@ struct A11yEnhancementsView: View {
             NavigationLink(destination: AttributedStringsView()) {
                 Text("Attributed Strings")
             }
-            NavigationLink(destination: ATdetectionView()) {
-                Text("Assistive Technology Detection")
-            }
             NavigationLink(destination: AssistiveAccessView()) {
                 Text("Assistive Access")
+            }
+            NavigationLink(destination: ATdetectionView()) {
+                Text("Assistive Technology Detection")
             }
             NavigationLink(destination: EscapeView()) {
                 Text("Escape")

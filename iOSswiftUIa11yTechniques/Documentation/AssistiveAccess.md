@@ -3,7 +3,7 @@ Assistive Access simplifies the iOS experience for users with cognitive disabili
 
 Use `UISupportsFullScreenInAssistiveAccess` for the app to appear as full screen in Assistive Access. 
 
-Add the \"Supports full screen in Assistive Access\" Boolean property with the value `YES` to your `Info.plist` which is: `<key>UISupportsFullScreenInAssistiveAccess</key>`\n `<true/>` \n if editing the `Info.plist` source code. 
+Add the "Supports full screen in Assistive Access" Boolean property with the value `YES` to your `Info.plist` which is: `<key>UISupportsFullScreenInAssistiveAccess</key>` `<true/>` if editing the `Info.plist` source code. 
 
 Do not used fixed screen sizes in the app.
 

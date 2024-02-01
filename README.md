@@ -68,7 +68,7 @@ Documentation files for each technique are listed below.
     - [x] [Dark Mode](iOSswiftUIa11yTechniques/Documentation/DarkMode.md)
     - [ ] Smart Invert
 - [x] [Progress Indicators](iOSswiftUIa11yTechniques/Documentation/ProgressIndicators.md)
-- [ ] Custom Controls using .accessibilityRepresentation
+- [x] [Accessibility Representation Custom Controls](iOSswiftUIa11yTechniques/Documentation/AccessibilityRepresentation.md)
 - [ ] Meaningful Accessible Names
 - [x] [Combining Focus](iOSswiftUIa11yTechniques/Documentation/CombiningFocus.md)
 - [x] [Device Orientation](iOSswiftUIa11yTechniques/Documentation/DeviceOrientation.md)

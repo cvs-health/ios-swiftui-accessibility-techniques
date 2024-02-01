@@ -87,9 +87,9 @@ struct ContentView: View {
                 NavigationLink(destination: ProgressIndicatorsView()) {
                     Text("Progress Indicators")
                 }
-                NavigationLink(destination: DetailView()) {
-                    Text("Custom Controls using .accessibilityRepresentation")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                NavigationLink(destination: AccessibilityRepresentationView()) {
+                    Text("Accessibility Representation Custom Controls")
+                }
                 NavigationLink(destination: DetailView()) {
                     Text("Meaningful Accessible Names")
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

@@ -3,6 +3,7 @@
 - [Creating Accessible Views | Apple Developer Documentation](https://developer.apple.com/documentation/swiftui/creating_accessible_views)
 - [accessibilityShowsLargeContentViewer() | Apple Developer Documentation](https://developer.apple.com/documentation/swiftui/view/accessibilityshowslargecontentviewer())
 - [UISupportsFullScreenInAssistiveAccess | Apple Developer Documentation](https://developer.apple.com/documentation/bundleresources/information_property_list/uisupportsfullscreeninassistiveaccess/)
+- [accessibilityRepresentation(representation:) | Apple Developer Documentation](https://developer.apple.com/documentation/swiftui/view/accessibilityrepresentation(representation:))
 ----
 
 Copyright 2024 CVS Health and/or one of its affiliates

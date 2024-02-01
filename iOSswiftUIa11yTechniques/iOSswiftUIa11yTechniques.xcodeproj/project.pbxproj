@@ -46,6 +46,7 @@
 		BC0030362B363B560063EAD5 /* SheetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0030352B363B560063EAD5 /* SheetsView.swift */; };
 		BC163FC22B6AD3F3009E3A83 /* ContactBoston.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */; };
 		BC163FC42B6AD3FB009E3A83 /* ContactOrlando.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */; };
+		BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */; };
 		BC1A5FA22B6079080008513C /* AttributedStringsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A5FA12B6079070008513C /* AttributedStringsView.swift */; };
 		BC1B59C32B4E664700E8F782 /* MenusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59C22B4E664700E8F782 /* MenusView.swift */; };
 		BC1B59C82B5064BF00E8F782 /* TouchTargetSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */; };
@@ -158,6 +159,8 @@
 		BC0030352B363B560063EAD5 /* SheetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetsView.swift; sourceTree = "<group>"; };
 		BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactBoston.swift; sourceTree = "<group>"; };
 		BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactOrlando.swift; sourceTree = "<group>"; };
+		BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistiveAccessView.swift; sourceTree = "<group>"; };
+		BC163FC72B6C03DE009E3A83 /* AssistiveAccess.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AssistiveAccess.md; sourceTree = "<group>"; };
 		BC1A5FA02B5F6B340008513C /* LargeContentViewer.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LargeContentViewer.md; sourceTree = "<group>"; };
 		BC1A5FA12B6079070008513C /* AttributedStringsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringsView.swift; sourceTree = "<group>"; };
 		BC1A5FA32B6079200008513C /* AttributedStrings.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AttributedStrings.md; sourceTree = "<group>"; };
@@ -266,6 +269,7 @@
 				BC00300A2B332C020063EAD5 /* AdjustableAction.md */,
 				BC715B642B44C81A00C77B57 /* Alerts.md */,
 				BCE205212B579FC3000DF400 /* AssistiveTechnologyDetection.md */,
+				BC163FC72B6C03DE009E3A83 /* AssistiveAccess.md */,
 				BC1A5FA32B6079200008513C /* AttributedStrings.md */,
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
 				BC8C920E2B2C0FDE006DAC20 /* Cards.md */,
@@ -347,6 +351,7 @@
 				AABD27BD2A9FE69500F718F7 /* Assets.xcassets */,
 				BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */,
 				BC1A5FA12B6079070008513C /* AttributedStringsView.swift */,
+				BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
 				BC8C920C2B2BAE41006DAC20 /* CardsView.swift */,
 				BC715B662B465B9F00C77B57 /* CheckboxesView.swift */,
@@ -562,6 +567,7 @@
 				AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */,
 				AA7ADED02AF2BAFE0019D210 /* PickersView.swift in Sources */,
 				AABD27D82A9FF13E00F718F7 /* DetailView.swift in Sources */,
+				BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */,
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
 				AA0F3EF42AB26D930062E7BC /* LinksView.swift in Sources */,
 				AA74DD5A2AFDCC8E00348078 /* PageTitlesView.swift in Sources */,

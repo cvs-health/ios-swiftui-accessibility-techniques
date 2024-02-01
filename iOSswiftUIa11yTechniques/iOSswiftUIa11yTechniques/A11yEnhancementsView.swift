@@ -27,11 +27,14 @@ struct A11yEnhancementsView: View {
             NavigationLink(destination: AdjustableActionView()) {
                 Text("Adjustable Action")
             }
+            NavigationLink(destination: AttributedStringsView()) {
+                Text("Attributed Strings")
+            }
             NavigationLink(destination: ATdetectionView()) {
                 Text("Assistive Technology Detection")
             }
-            NavigationLink(destination: AttributedStringsView()) {
-                Text("Attributed Strings")
+            NavigationLink(destination: AssistiveAccessView()) {
+                Text("Assistive Access")
             }
             NavigationLink(destination: EscapeView()) {
                 Text("Escape")

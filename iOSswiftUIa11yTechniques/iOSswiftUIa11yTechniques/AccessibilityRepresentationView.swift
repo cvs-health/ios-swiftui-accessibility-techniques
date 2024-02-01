@@ -113,7 +113,7 @@ struct AccessibilityRepresentationView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Accessibility Representation is used to provide accessibility support to custom controls. Use `accessibilityRepresentation` to provide a hidden native control representation for the otherwise inaccessible custom control.")
+                Text("Accessibility Representation is used to provide accessibility support to custom controls. Use `.accessibilityRepresentation` to provide a hidden native control representation for the otherwise inaccessible custom control.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

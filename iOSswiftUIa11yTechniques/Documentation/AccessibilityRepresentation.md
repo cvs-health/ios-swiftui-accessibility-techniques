@@ -1,7 +1,7 @@
 # Accessibility Representation
 Accessibility Representation is used to provide accessibility support to custom controls. 
 
-Use `accessibilityRepresentation` to provide a hidden native control representation for the otherwise inaccessible custom control.
+Use `.accessibilityRepresentation` to provide a hidden native control representation for the otherwise inaccessible custom control.
 
 
 ## Applicable WCAG Success Criteria

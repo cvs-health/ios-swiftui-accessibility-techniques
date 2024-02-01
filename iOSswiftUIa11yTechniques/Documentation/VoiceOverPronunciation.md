@@ -5,6 +5,8 @@ VoiceOver Pronunciation can be controlled by using `.speechAlwaysIncludesPunctua
 Use `.speechAlwaysIncludesPunctuation()` to make VoiceOver speak all punctuation characters, e.g., for code snippets or grammar usage guidance. 
 
 Use `.speechSpellsOutCharacters()` if VoiceOver incorrectly speaks text together as one word when it should speak the text letter by letter.
+
+Follow Chicago Manual of Style for all abbreviations and VoiceOver reads them correctly. [Numbers - Topic Q&A List - Chicago Manual of Style Online](https://www.chicagomanualofstyle.org/qanda/data/faq/topics/Numbers.html?page=1)
     
 ## Applicable WCAG Success Criteria
 - N/A

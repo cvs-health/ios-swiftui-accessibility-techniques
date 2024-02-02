@@ -38,12 +38,12 @@ struct CustomSlider: View {
                     .fill(LinearGradient(gradient: .init(colors: [.white, .black]), startPoint: .leading, endPoint: .trailing))
                     .contentShape(.capsule)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .overlay(.white, in: Capsule().stroke(style: .init()))
+                    .overlay(.primary, in: Capsule().stroke(style: .init()))
 
                 Circle()
                     .fill(Color.white)
                     .stroke(.black, style: .init(lineWidth: 3))
-                    .frame(width: 24, height: 24)
+                    .frame(width: 30, height: 30)
                     .offset(x: thumbPosition - 10)
                     .gesture(
                         DragGesture()
@@ -79,12 +79,12 @@ struct CustomSliderBad: View {
                     .fill(LinearGradient(gradient: .init(colors: [.white, .black]), startPoint: .leading, endPoint: .trailing))
                     .contentShape(.capsule)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .overlay(.white, in: Capsule().stroke(style: .init()))
+                    .overlay(.primary, in: Capsule().stroke(style: .init()))
 
                 Circle()
                     .fill(Color.white)
                     .stroke(.black, style: .init(lineWidth: 3))
-                    .frame(width: 24, height: 24)
+                    .frame(width: 30, height: 30)
                     .offset(x: thumbPosition - 10)
                     .gesture(
                         DragGesture()
@@ -125,7 +125,7 @@ struct AccessibilityRepresentationView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                VStack(spacing:5) {
+                VStack(spacing:10) {
                     HStack {
                         Text("Opacity")
                             .fontWeight(.bold)
@@ -133,7 +133,7 @@ struct AccessibilityRepresentationView: View {
                     }.frame(maxWidth: .infinity, alignment: .leading)
                     CustomSlider(value: $currentValue, maxValue: 100)
                         .frame(minHeight: 24)
-                        .padding(.leading, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        .padding(.leading, 15)
                         .accessibilityRepresentation {
                                 Slider(value: $currentValue, in: 0...100) {
                                     Text("Opacity")
@@ -154,7 +154,7 @@ struct AccessibilityRepresentationView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                VStack(spacing:5) {
+                VStack(spacing:10) {
                     HStack {
                         Text("Opacity")
                             .fontWeight(.bold)
@@ -162,7 +162,7 @@ struct AccessibilityRepresentationView: View {
                     }.frame(maxWidth: .infinity, alignment: .leading)
                     CustomSliderBad(value: $currentValueBad, maxValue: 100)
                         .frame(minHeight: 24)
-                        .padding(.leading, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        .padding(.leading, 15)
                 }
                 DisclosureGroup("Details") {
                     Text("The bad accessibility representation example does not use `.accessibilityRepresentation` on the `CustomSliderBad` view to make it behave like a native `Slider` with a label and value that is focusable and adjustable with VoiceOver. VoiceOver users cannot directly touch and move the slider or swipe up or down to adjust the value.")

@@ -57,9 +57,9 @@ struct ContentView: View {
                     }
                 }.accessibilityIdentifier("Accessibility UX Enhancements")
 
-                NavigationLink(destination: DetailView()) {
-                    Text("Motion Animations") //Reduce motion
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                NavigationLink(destination: ReduceMotionView()) {
+                    Text("Reduce Motion")
+                }
                 NavigationLink(destination: DynamicTypeView()) {
                     Text("Dynamic Type")
                 }

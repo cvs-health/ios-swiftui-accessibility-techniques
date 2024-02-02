@@ -36,7 +36,7 @@ Documentation files for each technique are listed below.
     - [x] [Magic Tap](iOSswiftUIa11yTechniques/Documentation/MagicTap.md)
     - [x] [Rotor](iOSswiftUIa11yTechniques/Documentation/Rotor.md)
     - [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
-- [ ] Motion Animations
+- [x] [Reduce Motion](iOSswiftUIa11yTechniques/Documentation/ReduceMotion.md)
 - [x] [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)
 - [x] [Language](iOSswiftUIa11yTechniques/Documentation/Language.md)
 - [ ] UI Controls

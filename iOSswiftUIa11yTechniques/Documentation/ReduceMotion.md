@@ -4,7 +4,7 @@ Motion and Animations must have a method to be paused, stopped, or hidden so tha
 
 Provide a pause button when animations or moving content are used or support the user's Reduce Motion accessibility preferences and stop moving content when enabled. 
 
-Use the `@Environment(\\.accessibilityReduceMotion)` variable to stop moving content when Reduce Motion is enabled.    
+Use the `@Environment(\.accessibilityReduceMotion)` variable to stop moving content when Reduce Motion is enabled.    
 
 ## Applicable WCAG Success Criteria
 - [2.2.2 Pause, Stop, Hide](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide)

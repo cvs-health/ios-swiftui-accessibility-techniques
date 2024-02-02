@@ -174,8 +174,11 @@ struct ContactAustin: View {
                         isUseridFocused = true
                         isUseridA11yFocused = true
                     }
-                    if !message.isEmpty && !name.isEmpty && !email.isEmpty {
+                    if !message.isEmpty && !name.isEmpty && name.count == 5 && !email.isEmpty {
                         showingAlert = true
+                        message = ""
+                        name = ""
+                        email = ""
                     }
                 }) {
                     Text("Send Message")

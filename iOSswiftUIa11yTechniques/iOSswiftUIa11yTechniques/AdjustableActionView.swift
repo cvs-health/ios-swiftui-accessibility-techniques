@@ -19,10 +19,10 @@ import SwiftUI
 struct RatingView: View {
    @Binding var rating: Int
    var maximumRating: Int = 5
-   var offImage: Image?
+   var offImage = Image(systemName: "star")
    var onImage = Image(systemName: "star.fill")
    var offColor = Color.gray
-   var onColor = Color.yellow
+   var onColor = Color.red
 
    var body: some View {
        HStack {
@@ -39,7 +39,7 @@ struct RatingView: View {
 
    func image(for number: Int) -> Image {
        if number > rating {
-           offImage ?? onImage
+           offImage 
        } else {
            onImage
        }

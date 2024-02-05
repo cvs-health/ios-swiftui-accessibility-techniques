@@ -90,9 +90,9 @@ struct ContentView: View {
                 NavigationLink(destination: AccessibilityRepresentationView()) {
                     Text("Accessibility Representation Custom Controls")
                 }
-                NavigationLink(destination: DetailView()) {
+                NavigationLink(destination: MeaningfulAccessibleNamesView()) {
                     Text("Meaningful Accessible Names")
-                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 NavigationLink(destination: CombiningFocusView()) {
                     Text("Combining Focus")
                 }

@@ -53,6 +53,7 @@
 		BC1B59C82B5064BF00E8F782 /* TouchTargetSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */; };
 		BC1B59CB2B508BDD00E8F782 /* ATdetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */; };
 		BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */; };
+		BC2133A32B713B1100753693 /* MeaningfulAccessibleNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
 		BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B662B465B9F00C77B57 /* CheckboxesView.swift */; };
 		BC8129032B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */; };
@@ -175,6 +176,8 @@
 		BC1B59C92B507B3000E8F782 /* TouchTargetSize.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TouchTargetSize.md; sourceTree = "<group>"; };
 		BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATdetectionView.swift; sourceTree = "<group>"; };
 		BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactFormView.swift; sourceTree = "<group>"; };
+		BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeaningfulAccessibleNamesView.swift; sourceTree = "<group>"; };
+		BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MeaningfulAccessibleNames.md; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
 		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
 		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
@@ -299,6 +302,7 @@
 				BC1A5FA02B5F6B340008513C /* LargeContentViewer.md */,
 				AA0F3EF52AB377740062E7BC /* Links.md */,
 				BC8C920A2B2A9DB8006DAC20 /* Lists.md */,
+				BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */,
 				BC95CC752B4DF94600196E32 /* MagicTap.md */,
 				BC1B59C62B4FA09600E8F782 /* Menus.md */,
 				BCA5BDED2B61E641007823A6 /* ReduceMotion.md */,
@@ -395,6 +399,7 @@
 				BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
+				BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */,
 				BC8CD0E42B4D06FC00B9A28A /* MagicTapView.swift */,
 				BC1B59C22B4E664700E8F782 /* MenusView.swift */,
 				AA59CDCD2ABA209D0004908F /* MessagesTabView.swift */,
@@ -561,6 +566,7 @@
 				BCE2052E2B5A1C50000DF400 /* ContactSeattle.swift in Sources */,
 				BCE205232B58D0BE000DF400 /* DarkModeView.swift in Sources */,
 				AA636C8A2ADD7FD900014BAF /* ProgressIndicatorsView.swift in Sources */,
+				BC2133A32B713B1100753693 /* MeaningfulAccessibleNamesView.swift in Sources */,
 				AABD27D02A9FF11400F718F7 /* AnnouncementsView.swift in Sources */,
 				BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */,
 				AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */,
@@ -636,7 +642,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -659,7 +665,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -798,7 +804,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -816,7 +822,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.4;
+				MARKETING_VERSION = 4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -831,7 +837,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -849,7 +855,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.4;
+				MARKETING_VERSION = 4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -69,7 +69,7 @@ Documentation files for each technique are listed below.
     - [ ] Smart Invert
 - [x] [Progress Indicators](iOSswiftUIa11yTechniques/Documentation/ProgressIndicators.md)
 - [x] [Accessibility Representation Custom Controls](iOSswiftUIa11yTechniques/Documentation/AccessibilityRepresentation.md)
-- [ ] Meaningful Accessible Names
+- [x] [Meaningful Accessible Names](iOSswiftUIa11yTechniques/Documentation/MeaningfulAccessibleNames.md)
 - [x] [Combining Focus](iOSswiftUIa11yTechniques/Documentation/CombiningFocus.md)
 - [x] [Device Orientation](iOSswiftUIa11yTechniques/Documentation/DeviceOrientation.md)
 - [ ] Siri Shortcuts

@@ -55,7 +55,7 @@ struct ReadingOrderView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good reading order example uses `.accessibilityElement(children: .contain)` on each `VStack{}` container which causes VoiceOver to read the full text of each column before moving to the next column.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -85,7 +85,7 @@ struct ReadingOrderView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad reading order example does not use `.accessibilityElement(children: .contain)` on each `VStack{}` container which causes VoiceOver to read the first line of each column then read the next line of each column which does not match the expected visual reading order.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Reading Order")
             .padding()

@@ -53,7 +53,7 @@ struct InputLabelsView: View {
                     }) {
                         Label("Help for Username", systemImage: "questionmark.app").labelStyle(IconOnlyLabelStyle())
                     }
-                        .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                        
                         .accessibilityInputLabels(["Username Help", "Username icon", "Help for Username"])
                         .alert(isPresented: $showingAlertUsername) {
                             Alert(title: Text("Username Help Tapped"), message: Text("You tapped the ? help icon for username!"), dismissButton: .default(Text("OK")))
@@ -72,7 +72,7 @@ struct InputLabelsView: View {
                     }) {
                         Label("Help for Email", systemImage: "questionmark.app").labelStyle(IconOnlyLabelStyle())
                     }
-                        .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                        
                         .accessibilityInputLabels(["Email Help", "Email icon", "Help for Email"])
                         .alert(isPresented: $showingAlertEmail) {
                             Alert(title: Text("Email Help Tapped"), message: Text("You tapped the ? help icon for email!"), dismissButton: .default(Text("OK")))
@@ -80,7 +80,7 @@ struct InputLabelsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good accessibility input labels example uses `.accessibilityInputLabels([\"Username Help\", \"Username icon\", \"Help for Username\"])` and `.accessibilityInputLabels([\"Email Help\", \"Email icon\", \"Help for Email\"])`to give each help icon button multiple voice command input labels enabling Voice Control users to speak a variety of possible voice commands to tap the icon buttons.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Input Labels")

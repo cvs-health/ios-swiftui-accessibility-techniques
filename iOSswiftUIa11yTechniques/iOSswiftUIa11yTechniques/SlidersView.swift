@@ -53,7 +53,7 @@ struct SlidersView: View {
                     .accessibilityIdentifier("sliderGood1")
                 DisclosureGroup("Details") {
                     Text("The first good slider example uses `Text(\"Brightness\")` as the visible label text and `.accessibilityLabel(\"Brightness\")` as the VoiceOver accessibility label.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -86,7 +86,7 @@ struct SlidersView: View {
                     }
                 DisclosureGroup("Details") {
                     Text("The second good slider example uses visible label text as well as minimum and maximum value labels. A `TextField` and `Stepper` are included to allow users to see the exact value and have fine control when adjusting the value. The `Slider` uses internal `Text(\"Speed\")` as the invisible accessibility label. The `TextField` and `Stepper` use `.accessibilityLabel(\"Speed\")` as their VoiceOver labels.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -106,7 +106,7 @@ struct SlidersView: View {
                     .accessibilityIdentifier("sliderBad1")
                 DisclosureGroup("Details") {
                     Text("The first bad slider example uses no visible label text and no VoiceOver accessibility label.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -122,7 +122,7 @@ struct SlidersView: View {
                     .accessibilityIdentifier("sliderBad2")
                 DisclosureGroup("Details") {
                     Text("The second bad slider example uses no label text and no accessibility label for VoiceOver. Users can see the slider value but their is no `TextField` or `Stepper` included to allow fine control.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Sliders")

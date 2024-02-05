@@ -64,7 +64,7 @@ struct CheckboxesView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good single checkbox example uses a native `Toggle` with a custom `.toggleStyle` to look like a square checkbox control. Additionally `.accessibilityValue(isChecked ? \"Checked\" : \"Unchecked\")` is used to create custom value text for VoiceOver. VoiceOver reads the \"Switch button\" trait and \"Checked\" and \"Unchecked\" values.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example Checkbox Group")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -95,7 +95,7 @@ struct CheckboxesView: View {
                     .accessibilityLabel("Preferred contact method(s):")
                 DisclosureGroup("Details") {
                     Text("The good checkbox group example uses `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the checkbox group container so that VoiceOver users hear the group label spoken when first moving focus to a checkbox in the group.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -140,7 +140,7 @@ struct CheckboxesView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad single checkbox example uses a `Button` that changes an `Image` when tapped to look like a square checkbox control. VoiceOver reads a \"Button\" trait and does not read \"Checked\" or \"Unchecked\" values.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example Checkbox Group")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -166,7 +166,7 @@ struct CheckboxesView: View {
                 }.padding(.trailing, 150)
                 DisclosureGroup("Details") {
                     Text("The bad checkbox group example has no group accessibility label on the checkbox group container so VoiceOver users don't hear the group label spoken when first moving focus to a checkbox in the group.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Checkboxes")

@@ -27,7 +27,7 @@ struct VoiceOverPronunciationView: View {
                 Text("VoiceOver Pronunciation can be controlled by using `.speechAlwaysIncludesPunctuation()` or `.speechSpellsOutCharacters()`. Use `.speechAlwaysIncludesPunctuation()` to make VoiceOver speak all punctuation characters, e.g., for code snippets or grammar usage guidance. Use `.speechSpellsOutCharacters()` if VoiceOver incorrectly speaks text together as one word when it should speak the text letter by letter. Follow Chicago Manual of Style for all abbreviations and VoiceOver reads them correctly.")
                 Link(destination: URL(string: "https://www.chicagomanualofstyle.org/qanda/data/faq/topics/Numbers.html?page=1")!, label: {
                     Text("Numbers - Topic Q&A List - Chicago Manual of Style Online")
-                }).tint(Color(colorScheme == .dark ? .systemBlue : .blue)).accessibilityRemoveTraits(.isButton)
+                }).accessibilityRemoveTraits(.isButton)
                     .padding(.bottom)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text("Good Example")
@@ -50,7 +50,7 @@ struct VoiceOverPronunciationView: View {
                 Text("The length of this audiobook is 13 hr., 6 min., 33 sec.").padding(.top)
                 DisclosureGroup("Details") {
                     Text("The good VoiceOver Pronunciation example uses `.speechAlwaysIncludesPunctuation()` so that VoiceOver speaks all punctuation characters in the SwiftUI code snippet. `.speechSpellsOutCharacters()` is used so that the GOOG stock symbol is spoken as G-O-O-G to VoiceOver and 2525 spoken as “two-five-two-five” rather than “two-thousand-five-hundred-twenty-five”. The audiobook time abbreviations follow the Chicago Manual of Style and speak correctly to VoiceOver.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -70,7 +70,7 @@ struct VoiceOverPronunciationView: View {
                 Text("The length of this audiobook is 13h, 6m, 33s").padding(.top)
                 DisclosureGroup("Details") {
                     Text("The bad VoiceOver Pronunciation example does not use `.speechAlwaysIncludesPunctuation()` which causes VoiceOver to ignore all punctuation characters in the SwiftUI code snippet. `.speechSpellsOutCharacters()` is not used causing VoiceOver to speak the GOOG stock symbol as “GOOG” rather than “G-O-O-G” and 2525 is spoken as “two-thousand-five-hundred-twenty-five” rather than “two-five-two-five”. The audiobook time abbreviations do not follow the Chicago Manual of Style and speak incorrectly to VoiceOver.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("VoiceOver Pronunciation")
             .padding()

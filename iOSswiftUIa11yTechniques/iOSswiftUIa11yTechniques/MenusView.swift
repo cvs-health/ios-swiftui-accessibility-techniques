@@ -45,11 +45,11 @@ struct MenusView: View {
                     Button("Rename", action: rename)
                     Button("Delete…", action: delete)
                 }
-                .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                
                 .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good menu example uses `Menu` to create a native SwiftUI menu that receives VoiceOver focus when opened. It is not possible to send focus back to the trigger button after closing a `Menu`. VoiceOver reads \"Actions, Button, Pop up button, Double tap to activate the picker\"")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -78,7 +78,7 @@ struct MenusView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad menu example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed. VoiceOver reads \"Actions, Button\" and does not read that it is a popup button that activates a picker.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Menus")
             .padding()

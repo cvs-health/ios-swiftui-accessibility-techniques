@@ -50,7 +50,7 @@ struct SegmentedControlsView: View {
                 .accessibilityIdentifier("pickerGood")
                 DisclosureGroup("Details") {
                     Text("The good Segmented controls example uses `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"What is your favorite color?\")` on the `Picker{}` so that VoiceOver users hear the group label spoken when first moving focus to a segment in the group.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -71,7 +71,7 @@ struct SegmentedControlsView: View {
                 .accessibilityIdentifier("pickerBad")
                 DisclosureGroup("Details") {
                     Text("The bad Segmented controls example does not use `.accessibilityLabel` for each `tag()` segment button causing VoiceOver users to only hear the segment label and not the group label spoken together.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Segmented Controls")
             .padding()

@@ -47,10 +47,10 @@ struct TabsView: View {
                     .accessibilityAddTraits(.isHeader)
                 NavigationLink(destination: TabsGoodView()) {
                     Text("Tabs Good Example")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 DisclosureGroup("Details") {
                     Text("The first good tabs example uses a native `TabView` with default functionality. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -69,7 +69,7 @@ struct TabsView: View {
                 .accessibilityIdentifier("tabsGood2")
                 DisclosureGroup("Details") {
                     Text("The second good tabs example uses a native `TabView` with `.tabViewStyle(.page)` and `.indexViewStyle(.page(backgroundDisplayMode: .always))` to display page indicator dots with a background. The `TabView` also has an `.accessibilityLabel`.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -94,7 +94,7 @@ struct TabsView: View {
                             Image(systemName: "house")
                                 .font(.system(size: 24))
                             Text("Home")
-                        }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                        }
                     }.padding()
                     Button(action: {
                         tab2Visible.toggle()
@@ -104,7 +104,7 @@ struct TabsView: View {
                             Image(systemName: "envelope")
                                 .font(.system(size: 24))
                             Text("Messages")
-                        }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                        }
                     }.padding()
                 }
                 if tab1Visible {
@@ -115,7 +115,7 @@ struct TabsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The first bad tabs example is coded as buttons that show and hide text. VoiceOver does not hear a selected state or tab trait for the tabs.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -132,7 +132,7 @@ struct TabsView: View {
                 .accessibilityIdentifier("tabsBad2")
                 DisclosureGroup("Details") {
                     Text("The second bad tabs example uses `.tabViewStyle(.page)` which has white page indicator dots that are only visible in dark mode but are invisible in light mode. There is also no `.accessibilityLabel`.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Tabs")

@@ -45,7 +45,7 @@ struct SheetsView: View {
                     isShowingSheet.toggle()
                 }) {
                     Text("Show License Agreement")
-                }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }
                     .accessibilityFocused($isTriggerFocused)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 .sheet(isPresented: $isShowingSheet,
@@ -62,13 +62,13 @@ struct SheetsView: View {
                                action: { 
                                     isShowingSheet.toggle()
                                 })
-                        .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                        
                         
                     }
                 }
                 DisclosureGroup("Details") {
                     Text("The good sheet example uses `.sheet()` to create a native SwiftUI sheet that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the sheet when the sheet is closed.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -99,7 +99,7 @@ struct SheetsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad sheet example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Sheets")
             .padding()

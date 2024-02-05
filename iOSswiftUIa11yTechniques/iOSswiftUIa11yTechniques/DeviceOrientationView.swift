@@ -41,10 +41,10 @@ struct DeviceOrientationView: View {
                     .padding(.bottom)
                 NavigationLink(destination: DeviceOrientationGood()) {
                     Text("Device Orientation Good Example")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue)).frame(maxWidth: .infinity, alignment: .leading)
+                }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good device orientation example does not use `AppDelegate.orientationLock = .portrait` to lock the screen orientation of the page.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -57,10 +57,10 @@ struct DeviceOrientationView: View {
                     .padding(.bottom)
                 NavigationLink(destination: DeviceOrientationBad()) {
                     Text("Device Orientation Bad Example")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue)).frame(maxWidth: .infinity, alignment: .leading)
+                }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad device orientation example uses `AppDelegate.orientationLock = .portrait` to lock the screen orientation of the page.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Device Orientation")

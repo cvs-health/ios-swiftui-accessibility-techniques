@@ -149,7 +149,7 @@ struct TextFieldsView: View {
                     .accessibilityIdentifier("websiteGood")
                 DisclosureGroup("Details") {
                     Text("The first good Text Fields example uses visible label text that is set as the `.accessibilityLabel` for each `TextField`. `.border(.secondary)` is used to give the border a 3:1 contrast ratio. `.keyboardType` is used to provide the most usable keyboard for each type of input. `.textContentType` is used to enable AutoFill for each `TextField` and automatic password management.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example Using `LabeledContent`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -173,7 +173,7 @@ struct TextFieldsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The second good Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required. Don't stack the labels vertically or else VoiceOver TextField activation will be blocked to due to an Apple bug.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -208,7 +208,7 @@ struct TextFieldsView: View {
                     .textFieldStyle(.roundedBorder)
                 DisclosureGroup("Details") {
                     Text("The bad Text Fields example uses placeholder text which disappears and has insufficient contrast rather than visible label text. There is no `.accessibilityLabel` for each `TextField`. The default border style has an insufficient contrast ratio. Keyboard types are not specified. AutoFill and password management are not enabled.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example Using `LabeledContent`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -232,7 +232,7 @@ struct TextFieldsView: View {
                 }.labeledContentStyle(.vertical)
                 DisclosureGroup("Details") {
                     Text("The second bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. When using `LabeledContent` an `.accessibilityLabel` is not required.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Text Fields")
             .padding()

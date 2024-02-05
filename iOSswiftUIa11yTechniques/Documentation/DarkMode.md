@@ -6,7 +6,7 @@ Make sure that text and non-text content has sufficient contrast in both light a
 Use `@Environment(\.colorScheme)` to check if the user is in dark or light mode and then adjust the colors to meet contrast requirements for both modes.
 
 Notes:
-- Use `.tint(Color(colorScheme == .dark ? .systemBlue : .blue))` to give blue button text sufficient contrast in light and dark mode.
+- Choose an `AccentColor` with sufficient contrast for light and dark appearance in the assets catalog `Assets.xcassets` file.
 
 ## Applicable WCAG Success Criteria
 - [1.4.3 Contrast (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum)

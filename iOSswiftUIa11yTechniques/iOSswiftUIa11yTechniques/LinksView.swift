@@ -26,15 +26,12 @@ struct LinksView: View {
         let loginLink = result.range(of: "Login")!
         result[loginLink].link = URL(string: "https://example.com/login")
         result[loginLink].underlineStyle = Text.LineStyle(nsUnderlineStyle: .single)
-        result[loginLink].foregroundColor = Color(colorScheme == .dark ? .systemBlue : .blue)
         let createLink = result.range(of: "Create Account")!
         result[createLink].link = URL(string: "https://example.com/create-account")
         result[createLink].underlineStyle = Text.LineStyle(nsUnderlineStyle: .single)
-        result[createLink].foregroundColor = Color(colorScheme == .dark ? .systemBlue : .blue)
         let contactLink = result.range(of: "Contact Us")!
         result[contactLink].link = URL(string: "https://example.com/contact")
         result[contactLink].underlineStyle = Text.LineStyle(nsUnderlineStyle: .single)
-        result[contactLink].foregroundColor = Color(colorScheme == .dark ? .systemBlue : .blue)
         return result
     }
     var attributedStringBad: AttributedString {
@@ -52,7 +49,7 @@ struct LinksView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Links are used to open a URL in the user's web browser. The \"Link\" trait indicates to VoiceOver users that it will exit the app and open in their web browser. Link text must be specific to its purpose. Link text style must be discernable without using color alone when placed inline with static text, e.g. using `.underline()`. Link text color must have 4.5:1 contrast ratio in light and dark modes.")
+                Text("Links are used to open a URL in the user's web browser. The \"Link\" trait indicates to VoiceOver users that it will exit the app and open in their web browser. Link text must be specific to its purpose. Link text style must be discernable without using color alone when placed inline with static text, e.g. using `.underline()`. Link text color must have 4.5:1 contrast ratio in light and dark modes. Choose an `AccentColor` with sufficient contrast for light and dark appearance in the assets catalog `Assets.xcassets` file.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -74,20 +71,18 @@ struct LinksView: View {
                     Link(destination: URL(string: "https://www.example.com/login")!, label: {
                         Text("Log In")
                             .underline()
-                            .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                     }).accessibilityRemoveTraits(.isButton)
                         .accessibilityIdentifier("goodLink1a")
                     Text("or")
                     Link(destination: URL(string: "https://www.example.com/create-account")!, label: {
                         Text("Create Account")
                             .underline()
-                            .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                     }).accessibilityRemoveTraits(.isButton)
                         .accessibilityIdentifier("goodLink1b")
                 }
                 DisclosureGroup("Details") {
-                    Text("The good link example uses unique and specific link text, `.underline()` to make links visually distinct without color, and `.tint(Color(colorScheme == .dark ? .systemBlue : .blue))` to fix the default link text color contrast. Additionally `.accessibilityRemoveTraits(.isButton)` is used to remove the Button trait so that VoiceOver users don't hear \"Button\" spoken.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    Text("The good link example uses unique and specific link text, `.underline()` to make links visually distinct without color. An `AccentColor` with sufficient contrast for light and dark appearance is specified in the assets catalog `Assets.xcassets` file. Additionally `.accessibilityRemoveTraits(.isButton)` is used to remove the Button trait so that VoiceOver users don't hear \"Button\" spoken.")
+                }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -95,11 +90,11 @@ struct LinksView: View {
                     .accessibilityAddTraits(.isHeader)
                 Link(destination: URL(string: "https://store.apple.com")!, label: {
                     Text("Shop Online")
-                }).tint(Color(colorScheme == .dark ? .systemBlue : .blue)).accessibilityRemoveTraits(.isButton)
+                }).accessibilityRemoveTraits(.isButton)
                     .accessibilityIdentifier("goodLink2")
                 DisclosureGroup("Details") {
                     Text("The second good link example is correctly coded as a `Link` element which speaks a \"Link\" trait to VoiceOver. The color contrast is corrected and the Button trait removed.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good AttributedString Inline Links Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -107,18 +102,17 @@ struct LinksView: View {
                     .accessibilityAddTraits(.isHeader)
                 Text(attributedString)
                 DisclosureGroup("Details") {
-                    Text("The good `AttributedString` inline links example uses `AttributedString` to set `.underlineStyle = Text.LineStyle(nsUnderlineStyle: .single)` and `.foregroundColor = Color(colorScheme == .dark ? .systemBlue : .blue)` for each link inside the attributed string. VoiceOver users must focus each link invidiually using the Rotor.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    Text("The good `AttributedString` inline links example uses `AttributedString` to set `.underlineStyle = Text.LineStyle(nsUnderlineStyle: .single)`. An `AccentColor` with sufficient contrast for light and dark appearance is specified in the assets catalog `Assets.xcassets` file. VoiceOver users must focus each link invidiually using the Rotor. ")
+                }.padding()
                 Text("Markdown Links Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 Text("To get started [Log In](https://www.example.com/login) or [Create Account](https://www.example.com/create-account). [Contact Us](https://www.example.com/contact) if you need help.")
-                    .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
                 DisclosureGroup("Details") {
-                    Text("The markdown links example uses markdown format links `[Name](https://www.example.com)` where each link must be focused invidually using the VoiceOver Rotor. The markdown links have a `.tint` applied with sufficient contrast but they cannot be underlined or have different text style than the surrounding inline text.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    Text("The markdown links example uses markdown format links `[Name](https://www.example.com)` where each link must be focused invidually using the VoiceOver Rotor. The markdown links have a `AccentColor` applied with sufficient contrast but they cannot be underlined or have different text style than the surrounding inline text.")
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -138,15 +132,17 @@ struct LinksView: View {
                     Link(destination: URL(string: "https://www.example.com/login")!, label: {
                         Text("Click here")
                     }).accessibilityIdentifier("badLink1a")
+                        .tint(.blue)
                     Text("to login, or")
                     Link(destination: URL(string: "https://www.example.com/create-account")!, label: {
                         Text("here")
                     }).accessibilityIdentifier("badLink1b")
+                        .tint(.blue)
                     Text("to create account.")
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad link example uses generic link text \"Click here\" and \"here\" and the links are not underlined to be visually distinct without color. The bad link examples also use the default color which has an insufficient contrast ratio and the default Button trait remains.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    Text("The bad link example uses generic link text \"Click here\" and \"here\" and the links are not underlined to be visually distinct without color. The bad link examples also use the `.tint(.blue)` color which has an insufficient contrast ratio and the default Button trait remains.")
+                }.padding()
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -159,9 +155,10 @@ struct LinksView: View {
                         }) {
                             Text("Shop Online")
                         }.accessibilityIdentifier("badLink2")
+                    .tint(.blue)
                 DisclosureGroup("Details") {
-                    Text("The second bad link example is incorrectly coded as a `Button` element which speaks a \"Button\" trait to VoiceOver rather than a \"Link\" trait. The default link contrast is below the WCAG minimum. ")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    Text("The second bad link example is incorrectly coded as a `Button` element which speaks a \"Button\" trait to VoiceOver rather than a \"Link\" trait. The `.tint(.blue)` color link contrast is below the WCAG minimum. ")
+                }.padding()
                 Text("Bad AttributedString Inline Links Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -170,16 +167,17 @@ struct LinksView: View {
                 Text(attributedStringBad)
                 DisclosureGroup("Details") {
                     Text("The bad `AttributedString` inline links example uses `AttributedString` with the default link style for each link inside the attributed string. VoiceOver users must focus each link invidiually using the Rotor.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Markdown Links Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 Text("To get started [Log In](https://www.example.com/login) or [Create Account](https://www.example.com/create-account). [Contact Us](https://www.example.com/contact) if you need help.")
+                    .tint(.blue)
                 DisclosureGroup("Details") {
-                    Text("The bad markdown links example uses Markdown inline links which have insufficient contrast and are not underlined.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    Text("The bad markdown links example uses Markdown inline links with `.tint(.blue)` which have insufficient contrast and are not underlined.")
+                }.padding()
             }
             .navigationTitle("Links")
             .padding()

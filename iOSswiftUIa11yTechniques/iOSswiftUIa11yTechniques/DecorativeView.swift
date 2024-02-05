@@ -52,10 +52,10 @@ struct DecorativeView: View {
                     Text("Shop weekly ad")
                         .underline()
                         .padding(.bottom, 10)
-                }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }
                 DisclosureGroup("Details") {
                     Text("The good decorative image example uses `Image(decorative: \"newspaper\")` which prevents VoiceOver from focusing on the image.")
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -69,7 +69,7 @@ struct DecorativeView: View {
                 Text("Hello, world!")
                 DisclosureGroup("Details") {
                     Text("The good decorative icon image example uses `.accessibilityHidden(true)` which prevents VoiceOver from focusing on the icon.")
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -94,11 +94,11 @@ struct DecorativeView: View {
                 Link(destination: URL(string: "https://www.example.com/weeklyad")!) {
                     Text("Shop weekly ad")
                         .underline()
-                        .padding(.bottom, 10).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                        .padding(.bottom, 10)
                 }
                 DisclosureGroup("Details") {
                     Text("The bad decorative image example does not use the `decorative:` parameter which allows VoiceOver to focus on the image and read \"newspaper\" as its accessibility label.")
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -111,7 +111,7 @@ struct DecorativeView: View {
                 Text("Hello, world!")
                 DisclosureGroup("Details") {
                     Text("The bad decorative icon image example does not use `.accessibilityHidden(true)` which allows VoiceOver to focus on the image and read \"globe\" as its accessibility label.")
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
             }
             .navigationTitle("Decorative Images")
             .padding()

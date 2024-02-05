@@ -668,7 +668,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
-    func testDialogs() throws {
+    func testConfirmationDialogs() throws {
         let app = XCUIApplication()
         app.launch()
         if UIDevice.current.userInterfaceIdiom == .pad {

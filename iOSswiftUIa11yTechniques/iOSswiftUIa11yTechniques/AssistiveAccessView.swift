@@ -44,11 +44,11 @@ struct AssistiveAccessView: View {
                 Text("This app supports Assistive Access which allows the UI to expand into all available space above the Back button.")
                 DisclosureGroup("Details") {
                     Text("The good assistive access example uses `<key>UISupportsFullScreenInAssistiveAccess</key>`\n `<true/>`\n on the `Info.plist` so the app appears as full screen in Assistive Access. Fixed screen sizes are not used in the app.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("To learn more about supporting Assistive Access in your app, visit the `UISupportsFullScreenInAssistiveAccess` Apple Developer Documentation link below:").padding(.bottom)
                 Link(destination: URL(string: "https://developer.apple.com/documentation/bundleresources/information_property_list/uisupportsfullscreeninassistiveaccess")!, label: {
                     Text("UISupportsFullScreenInAssistiveAccess")
-                }).tint(Color(colorScheme == .dark ? .systemBlue : .blue)).accessibilityRemoveTraits(.isButton)
+                }).accessibilityRemoveTraits(.isButton)
             }
             .navigationTitle("Assistive Access")
             .padding()

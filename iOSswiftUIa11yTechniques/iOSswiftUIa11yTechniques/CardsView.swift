@@ -73,7 +73,7 @@ struct CardsView: View {
                 )
                 DisclosureGroup("Details") {
                     Text("The good card example uses a heading element at the top of the card and a more specific `.accessibilityLabel` for the call to action button.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -119,7 +119,7 @@ struct CardsView: View {
                 )
                 DisclosureGroup("Details") {
                     Text("The bad card example uses a heading element that is not at the top of the card and a generic call to action button.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Cards")
             .padding()

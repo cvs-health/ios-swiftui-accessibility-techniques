@@ -44,7 +44,7 @@ struct PopoversView: View {
                 Button("Show License Agreement") {
                     self.isShowingPopover = true
                 }
-                .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityFocused($isTriggerFocused)
                 .popover(isPresented: $isShowingPopover) {
@@ -62,7 +62,7 @@ struct PopoversView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good alert example uses `.popover()` to create a native SwiftUI popover that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the popover when the popover is closed.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -93,7 +93,7 @@ struct PopoversView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad popover example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Popovers")
             .padding()

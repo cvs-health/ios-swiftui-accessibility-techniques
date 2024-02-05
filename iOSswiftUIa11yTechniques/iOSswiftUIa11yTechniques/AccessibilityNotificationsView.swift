@@ -54,11 +54,11 @@ struct AccessibilityNotificationsView: View {
                         }
                     }) {
                         Text("Add to Cart")
-                    }.padding().frame(maxWidth: .infinity, alignment: .leading).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 }
                 DisclosureGroup("Details") {
                     Text("The good Accessibility Notifications example posts an `AccessibilityNotification.Announcement` that speaks the \"1 Item added to cart.\" status message to VoiceOver when activating the Add to Cart button. The announcement is posted with a 0.1 second delay to make it speak correctly to VoiceOver.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -80,11 +80,11 @@ struct AccessibilityNotificationsView: View {
                         }
                     }) {
                         Text("Add to Cart")
-                    }.padding().frame(maxWidth: .infinity, alignment: .leading).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 }
                 DisclosureGroup("Details") {
                     Text("The bad Accessibility Notifications example does not speak an accessibility announcement notification to VoiceOver when the \"1 Item added to cart.\" status message displays.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Accessibility Notifications")

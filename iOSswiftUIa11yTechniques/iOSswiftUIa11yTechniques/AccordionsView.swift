@@ -71,11 +71,11 @@ struct AccordionsView: View {
                     .accessibilityAddTraits(.isHeader)
                 DisclosureGroup("Terms and Conditions") {
                     Text(ipsum)
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                     .accessibilityIdentifier("accordionGood1")
                 DisclosureGroup("Details") {
                     Text("The good accordion example uses a native `DisclosureGroup`. VoiceOver speaks \"Collapsed, Double-tap to expand\" and \"Expanded, Double-tap to collapse\" as the state and hint text.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -87,7 +87,7 @@ struct AccordionsView: View {
                 .disclosureGroupStyle(CustomDisclosureGroupStyle(button: Label("", systemImage: "plus")))
                 DisclosureGroup("Details") {
                     Text("The second good accordion example uses a custom `DisclosureGroupStyle`. VoiceOver speaks the same \"Collapsed, Double-tap to expand\" and \"Expanded, Double-tap to collapse\" state and hint text.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                     .accessibilityIdentifier("accordionGood2")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -116,8 +116,8 @@ struct AccordionsView: View {
                         .padding([.leading, .trailing])
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad accordion example is coded as a `Button` that hides and shows text. VoiceOver does not speak an expanded or collapsed state or hint. The `.foregroundColor(.blue)` also has an insufficient contrast ratio.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    Text("The bad accordion example is coded as a `Button` that hides and shows text. VoiceOver does not speak an expanded or collapsed state or hint. The `.foregroundColor(.blue)` also has an insufficient contrast ratio in light mode.")
+                }.padding()
             }
             .navigationTitle("Accordions")
             .padding()

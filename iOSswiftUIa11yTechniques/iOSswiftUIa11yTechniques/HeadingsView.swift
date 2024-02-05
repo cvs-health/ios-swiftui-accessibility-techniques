@@ -47,12 +47,12 @@ struct HeadingsView: View {
                     .accessibilityIdentifier("goodHeading")
                 DisclosureGroup("I received a promotion, but I cannot log in to the website.") {
                     Text("In order to access your promotions online, we invite you to create an account. Just go to the Sign In page in the app and tap the banner at the bottom of the screen.")
-                }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }
                 DisclosureGroup("Details") {
                     VStack {
                         Text("The good example FAQ heading uses `.accessibilityAddTraits(.isHeader)` which allows VoiceOver users to quickly navigate to the heading using the Rotor.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -76,12 +76,12 @@ struct HeadingsView: View {
                     .accessibilityIdentifier("badHeading1")
                 DisclosureGroup("I received a promotion, but I cannot log in to the website.") {
                     Text("In order to access your promotions online, we invite you to create an account. Just go to the Sign In page in the app and tap the banner at the bottom of the screen.")
-                }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }
                 DisclosureGroup("Details") {
                     VStack {
                         Text("The first bad example FAQ heading does not use `.accessibilityAddTraits(.isHeader)` which prevents VoiceOver users from being able to quickly navigate to the heading using the Rotor.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -96,12 +96,12 @@ struct HeadingsView: View {
                     .accessibilityIdentifier("badHeading2")
                 DisclosureGroup("I received a promotion, but I cannot log in to the website.") {
                     Text("In order to access your promotions online, we invite you to create an account. Just go to the Sign In page in the app and tap the banner at the bottom of the screen.")
-                }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }
                 DisclosureGroup("Details") {
                     VStack {
                         Text("The second bad example FAQ heading uses `.accessibilityLabel(\"FAQ heading\")` which incorrectly modifies the accessible name of the text by adding \" heading\" and does not allow VoiceOver users to quickly navigate to the heading using the Rotor.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
             }
             .padding()
             .navigationTitle("Headings")

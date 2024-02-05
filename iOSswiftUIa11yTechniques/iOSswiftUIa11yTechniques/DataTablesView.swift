@@ -74,7 +74,7 @@ struct DataTablesView: View {
                 .accessibilityLabel("Generic Price List")
                 DisclosureGroup("Details") {
                     Text("The first good data table example uses an `.accessibilityHint` for each price cell that includes its row and column header text. VoiceOver speaks the price and then speaks the column and row header text as the hint. Additionally `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Generic Price List\")` are used to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example using `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -113,7 +113,7 @@ struct DataTablesView: View {
                 .accessibilityLabel("Generic Price List")
                 DisclosureGroup("Details") {
                     Text("The second good data table example uses an `.accessibilityLabel` for each price cell that includes its row and column header text. VoiceOver speaks the column and row header text then speaks the price. Additionally `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Generic Price List\")` are used to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example using `.accessibilityValue`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -152,7 +152,7 @@ struct DataTablesView: View {
                 .accessibilityLabel("Generic Price List")
                 DisclosureGroup("Details") {
                     Text("The third good data table example uses an `.accessibilityValue` for each price cell that includes its row and column header text. VoiceOver speaks the price and then speaks the column and row header text as the value. Additionally `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Generic Price List\")` are used to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -191,7 +191,7 @@ struct DataTablesView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad data table example has no `.accessibilityHint`, `.accessibilityValue`, or `.accessibilityLabel` for each price cell that includes its row and column header text. VoiceOver users only hear the price cell text and don't hear the row or column header text. There is no heading for the table and no group label spoken to VoiceOver users when they first focus on a cell in the table.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Data Tables")
             .padding()

@@ -55,7 +55,7 @@ struct ButtonsView: View {
                     }) {
                         Text("Edit")
                     }.accessibilityLabel("Edit Username")
-                        .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                        
                         .accessibilityIdentifier("edit1good")
                 }
                 HStack {
@@ -70,12 +70,12 @@ struct ButtonsView: View {
                     }) {
                         Text("Edit")
                     }.accessibilityLabel("Edit Email")
-                        .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                        
                         .accessibilityIdentifier("edit2good")
                 }
                 DisclosureGroup("Details") {
                     Text("The good button example uses `.accessibilityLabel(\"Edit Username\")` and `.accessibilityLabel(\"Edit Email\")` to give each Edit button a unique and specific accessibility label for VoiceOver users.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -102,7 +102,7 @@ struct ButtonsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good Log In button example uses `.disabled(true)` to set the disabled state of the button.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -127,7 +127,7 @@ struct ButtonsView: View {
                         // Handle button action
                     }) {
                         Text("Edit")
-                    }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    }
                         .accessibilityIdentifier("edit1bad")
                 }
                 HStack {
@@ -139,13 +139,13 @@ struct ButtonsView: View {
                         // Handle button action
                     }) {
                         Text("Edit")
-                    }.tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    }
                         .accessibilityLabel("Edit Button")
                         .accessibilityIdentifier("edit2bad")
                 }
                 DisclosureGroup("Details") {
                     Text("The bad button example uses the same label text \"Edit\" for both buttons without providing a unique and specific `.accessibilityLabel` for VoiceOver users.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -172,7 +172,7 @@ struct ButtonsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad Log In button example uses `.tint(.gray)` to visually convey that the button is disabled but VoiceOver will not speak a disabled state.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Buttons")

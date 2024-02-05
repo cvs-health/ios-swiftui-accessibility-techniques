@@ -62,12 +62,12 @@ struct ProgressIndicatorsView: View {
                         }
                     }) {
                         Text("Save")
-                    }.padding().frame(maxWidth: .infinity, alignment: .leading).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    }.padding().frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityIdentifier("saveGood")
                 }
                 DisclosureGroup("Details") {
                     Text("The first good progress indicator example posts an `AccessibilityNotification.Announcement` that speaks the indicator text \"Updating your information\" to VoiceOver when the progress view displays. The announcement is posted with a 0.1 second delay to make it speak correctly to VoiceOver.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -77,7 +77,7 @@ struct ProgressIndicatorsView: View {
                     .accessibilityIdentifier("progressView2good")
                 DisclosureGroup("Details") {
                     Text("The second good progress indicator example uses visible label text `ProgressView(\"Downloading Purchase Receipt\")`.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -105,12 +105,12 @@ struct ProgressIndicatorsView: View {
                         }
                     }) {
                         Text("Save")
-                    }.padding().frame(maxWidth: .infinity, alignment: .leading).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    }.padding().frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityIdentifier("saveBad")
                 }
                 DisclosureGroup("Details") {
                     Text("The first bad progress indicator example does not speak an accessibility announcement notification to VoiceOver when the progress view displays. There is no label text for the progress view and no accessibility label for VoiceOver.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -120,7 +120,7 @@ struct ProgressIndicatorsView: View {
                     .accessibilityIdentifier("progressView2bad")
                 DisclosureGroup("Details") {
                     Text("The second bad progress indicator example has no visible label text and no accessibility label for VoiceOver.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Progress Indicators")

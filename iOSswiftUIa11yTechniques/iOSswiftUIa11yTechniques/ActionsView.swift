@@ -132,7 +132,7 @@ struct ActionsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good actions example uses `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark Unread\")` to provide assistive technology users accessibility actions as alternatives to the swipe to delete and long press to mark unread gestures.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -204,7 +204,7 @@ struct ActionsView: View {
 
                 DisclosureGroup("Details") {
                     Text("The bad actions example does not use `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark Unread\")` to provide assistive technology users accessibility actions as alternatives to the swipe to delete and long press to mark unread gestures. VoiceOver does not speak that there is a swipe to delete or long press gesture on the buttons.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
 
             }
             .navigationTitle("Actions")

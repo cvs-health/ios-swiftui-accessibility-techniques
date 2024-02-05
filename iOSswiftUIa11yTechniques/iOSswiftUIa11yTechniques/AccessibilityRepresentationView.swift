@@ -143,7 +143,7 @@ struct AccessibilityRepresentationView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good accessibility representation example uses `.accessibilityRepresentation { Slider(value: $currentValue, in: 0...100) { Text(\"Opacity\") } }` on a `CustomSlider` view to make it behave like a native `Slider` with a label and value that is focusable and adjustable with VoiceOver. `.accessibilityAddTraits(.allowsDirectInteraction)` is added to allow VoiceOver users to directly touch and move the slider in addition to swiping up or down to adjust the value.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -166,7 +166,7 @@ struct AccessibilityRepresentationView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad accessibility representation example does not use `.accessibilityRepresentation` on the `CustomSliderBad` view to make it behave like a native `Slider` with a label and value that is focusable and adjustable with VoiceOver. VoiceOver users cannot directly touch and move the slider or swipe up or down to adjust the value.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Accessibility Representation")
             .padding()

@@ -44,6 +44,7 @@ struct ConfirmationDialogsView: View {
                 Button("Delete All Messages", role: .destructive) {
                   isPresentingDialog = true
                 }
+                .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 .accessibilityFocused($isTriggerFocused)
                .confirmationDialog("Are you sure you want to delete all messages?",
                                    isPresented: $isPresentingDialog, titleVisibility: .visible) {
@@ -58,7 +59,7 @@ struct ConfirmationDialogsView: View {
                   }
                 DisclosureGroup("Details") {
                     Text("The good confirmation dialog example uses `.confirmationDialog()` to create a native SwiftUI confirmation dialog that receives VoiceOver focus when displayed.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -86,7 +87,7 @@ struct ConfirmationDialogsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad confirmation dialog example uses a custom view which does not receive VoiceOver focus when displayed.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Confirmation Dialogs")
             .padding()

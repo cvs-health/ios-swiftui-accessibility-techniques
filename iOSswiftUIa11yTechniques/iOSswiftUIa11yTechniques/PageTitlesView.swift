@@ -46,10 +46,10 @@ struct PageTitlesView: View {
                     .accessibilityAddTraits(.isHeader)
                 NavigationLink(destination: PageTitleGood()) {
                     Text("Page Titles Good Example")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue)).frame(maxWidth: .infinity, alignment: .leading)
+                }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The first good page title example uses `.navigationTitle` to create a page title that describes the purpose of the page.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -60,10 +60,10 @@ struct PageTitlesView: View {
                     }) {
                         Text("Update Page Title")
                     }
-                    .tint(Color(colorScheme == .dark ? .systemBlue : .blue)).frame(maxWidth: .infinity, alignment: .leading).padding()
+                    .frame(maxWidth: .infinity, alignment: .leading).padding()
                 DisclosureGroup("Details") {
                     Text("The second good page title example uses a variable for the value of the `.navigationTitle` which is dynamically updated after tapping the Button.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -76,10 +76,10 @@ struct PageTitlesView: View {
                     .padding(.bottom)
                 NavigationLink(destination: PageTitleBad()) {
                     Text("Page Titles Bad Example")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue)).frame(maxWidth: .infinity, alignment: .leading)
+                }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad page title example does not use a `.navigationTitle` to create a page title.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             //.navigationTitle("Page Titles")//static title

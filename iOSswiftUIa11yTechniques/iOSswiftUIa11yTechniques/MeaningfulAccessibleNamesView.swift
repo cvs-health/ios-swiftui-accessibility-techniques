@@ -51,12 +51,12 @@ struct MeaningfulAccessibleNamesView: View {
                     }) {
                         Text("Read More about Lorem Ipsum").padding(.leading)
                     }
-                    .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good meaningful label text example uses `Text(\"Read More about Lorem Ipsum\")` to give the button a unique and specific accessible name for VoiceOver users.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example Meaningful `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -96,7 +96,7 @@ struct MeaningfulAccessibleNamesView: View {
                 )
                 DisclosureGroup("Details") {
                     Text("The good meaningful `.accessibilityLabel` example uses `.accessibilityLabel(\"Add to cart, ACME® Inc. BOOM-ERANG\")` to modify the accessible name of the ADD TO CART button by adding the specific product name to the end of the `.accessibilityLabel` and adding the visible label text to the beginning of the `.accessibilityLabel`. VoiceOver does not say \"A D D to cart\" because \"Add\" has been written lower-case.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -119,12 +119,12 @@ struct MeaningfulAccessibleNamesView: View {
                     }) {
                         Text("Read More").padding(.leading)
                     }
-                    .tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad meaningful label text example uses `Text(\"Read More\")` to give the button a generic accessible name that is not unique and specific for VoiceOver users.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -163,7 +163,7 @@ struct MeaningfulAccessibleNamesView: View {
                 )
                 DisclosureGroup("Details") {
                     Text("The bad meaningful `.accessibilityLabel` example uses `Text(\"ADD TO CART\")` as the the accessible name of the ADD TO CART button which does specifically include the name of the product that will be added to the cart.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Meaningful Accessible Names")

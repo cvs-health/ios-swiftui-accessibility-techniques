@@ -203,7 +203,7 @@ struct ErrorValidationView: View {
                 }.padding()
                 DisclosureGroup("Details") {
                     Text("The first good error validation example uses `AccessibilityFocusState` to move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input has an `.accessibilityHint` matching the visible error message text so that VoiceOver users hear the error message when focused on the invalid inputs. Error messages are meaningful and specific. Required fields are indicated with a * and the meaning of the * is defined at the top of the form.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example Using .accessibilityValue")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -313,7 +313,7 @@ struct ErrorValidationView: View {
                 }.padding()
                 DisclosureGroup("Details") {
                     Text("The second good error validation example uses `AccessibilityFocusState` to move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input has an `.accessibilityValue` matching the visible error message text so that VoiceOver users hear the error message when focused on the invalid inputs. Error messages are meaningful and specific. Required fields are indicated with a * and the meaning of the * is defined at the top of the form.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -404,7 +404,7 @@ struct ErrorValidationView: View {
 
                 DisclosureGroup("Details") {
                     Text("The bad error validation example does not move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input does not speak its error message text to VoiceOver users when focused on the invalid inputs. Error messages are generic and not specific. Required fields are not indicated.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Error Validation")

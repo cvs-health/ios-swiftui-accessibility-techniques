@@ -3,9 +3,11 @@ Links need unique and specific label text or `.accessibilityLabel` that describe
 
 Links must be underlined (or have other visual distinction) when placed inline with static text. Use `.underline()` to underline inline links.
 
+Choose an `AccentColor` with sufficient contrast for light and dark appearance in the assets catalog `Assets.xcassets` file.
+
 Notes:
 
-* The default color contrast ratio of links is not sufficient for WCAG. Modify the link text color to have at least a 4.5:1 contrast ratio, e.g., using `.tint(Color(red: 0.0, green: 0.0, blue: 1.0))` to make the links dark blue with sufficient contrast.
+* The default color contrast ratio of links is not sufficient for WCAG. Modify the link text color to have at least a 4.5:1 contrast ratio, e.g., using `AccentColor` or using `.tint(Color(red: 0.0, green: 0.0, blue: 1.0))` to make the links dark blue with sufficient contrast.
 * By default links in SwiftUI include a Button trait which must be removed using `.accessibilityRemoveTraits(.isButton)` or else VoiceOver will speak \"Button, Link\".
 
 ## Applicable WCAG Success Criteria

@@ -52,7 +52,7 @@ struct SteppersView: View {
                 .accessibilityIdentifier("stepperGood1")
                 DisclosureGroup("Details") {
                     Text("The first good Stepper example uses `Text(\"Tickets: \\(tickets)\")` as the visible label text which becomes the VoiceOver accessibility label.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -80,7 +80,7 @@ struct SteppersView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The second good Stepper example includes a text field so that users can quickly enter a large value, e.g., 50 copies. The Stepper uses `.accessibilityLabel(\"Copies\")` to create an accessibility label for VoiceOver because the visible stepper text is empty.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -103,7 +103,7 @@ struct SteppersView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The first bad Stepper example has no internal `Stepper` label text so there is no accessibility label spoken to VoiceOver.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -116,7 +116,7 @@ struct SteppersView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The second bad Stepper example has no text field for users to quickly enter a large value, e.g., 50 copies. The Stepper has no internal label text and no `.accessibilityLabel` for VoiceOver users.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .padding()
             .navigationTitle("Steppers")

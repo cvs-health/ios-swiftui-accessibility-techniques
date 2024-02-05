@@ -41,10 +41,10 @@ struct NavigationLinkView: View {
                     .padding(.bottom)
                 NavigationLink(destination: PageTitleGood()) {
                     Text("Navigation Good Example")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue)).frame(maxWidth: .infinity, alignment: .leading)
+                }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good navigation example uses `NavigationLink` to create a button that opens a new page inside the app.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -90,7 +90,7 @@ struct NavigationLinkView: View {
                }
                 DisclosureGroup("Details") {
                     Text("The first bad navigation example uses `Text` with an `.onTapGesture` to open a custom view.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -108,7 +108,7 @@ struct NavigationLinkView: View {
                 }
                     DisclosureGroup("Details") {
                         Text("The second bad navigation example uses `Text` with an `.onTapGesture` to open a fullscreen view.")
-                    }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                    }.padding()
                 }
                 .padding()
                 .navigationTitle("Navigation")

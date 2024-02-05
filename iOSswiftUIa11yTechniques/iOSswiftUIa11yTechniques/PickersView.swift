@@ -81,7 +81,7 @@ struct PickersView: View {
                 .accessibilityIdentifier("dateTimeGood")
                 DisclosureGroup("Details") {
                     Text("The first good Pickers example uses `.accessibilityLabel` on each `DatePicker` that matches the visible label text.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -102,7 +102,7 @@ struct PickersView: View {
                     .accessibilityIdentifier("wheelGood")
                 DisclosureGroup("Details") {
                     Text("The second good Pickers example uses visible `DatePicker(\"Label\")` text for each picker that is spoken to VoiceOver as the accessibility label.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -141,7 +141,7 @@ struct PickersView: View {
                 .accessibilityIdentifier("dateTimeBad")
                 DisclosureGroup("Details") {
                     Text("The first bad Pickers example has no `.accessibilityLabel` for each `DatePicker` that matches the visible label text.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -162,7 +162,7 @@ struct PickersView: View {
                     .accessibilityIdentifier("wheelBad")
                 DisclosureGroup("Details") {
                     Text("The second bad Pickers example uses no visible `DatePicker(\"\")` text for each picker so nothing is spoken to VoiceOver as the accessibility label.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Pickers")
             .padding()

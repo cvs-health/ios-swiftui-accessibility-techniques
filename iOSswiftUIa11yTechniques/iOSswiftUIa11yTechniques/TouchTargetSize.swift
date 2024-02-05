@@ -60,7 +60,7 @@ struct TouchTargetSize: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good touch target size example uses `.frame(minWidth: 24, minHeight: 24)` on each icon button `Image`.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -95,7 +95,7 @@ struct TouchTargetSize: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad touch target size example uses `.frame(width:18, height:18)` on each icon button `Image`.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Touch Target Size")
             .padding()

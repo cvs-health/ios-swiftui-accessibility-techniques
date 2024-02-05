@@ -53,7 +53,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The good informative image example uses `.accessibilityLabel(\"Get 10% off\")` to give it an accessibility label that matches the visible text shown in the image.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Good Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -69,7 +69,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The good informative icon image example uses `Label(\"World\", systemImage: \"globe\").labelStyle(IconOnlyLabelStyle())` to give the informative icon an accessibility label that is not displayed visually. Additionally `.accessibilityRemoveTraits(.isImage)` must be used on the icon image so that the accessibility label is spoken to VoiceOver when the `HStack` is combined into a single focusable element using `.accessibilityElement(children: .combine)`.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Good Example `Image` combined with `Text`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -86,7 +86,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The good `Image` combined with `Text` example uses `Image(systemName: \"exclamationmark.circle\").accessibilityLabel(\"Error:\")` to give the error icon alt text. `.accessibilityElement(children: .combine)` is used on the `HStack` to combine the image and text into a single focusable element with VoiceOver.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Good Example `Label` combined with `Text`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -102,7 +102,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The good `Label` combined with `Text` example uses `Label(\"Error:\", systemImage: \"exclamationmark.circle\").labelStyle(IconOnlyLabelStyle())` to give the icon an accessibility `Label` that is not displayed visually. Additionally `.accessibilityRemoveTraits(.isImage)` must be used on the `Label` icon image so that the accessibility label is spoken to VoiceOver when the `HStack` is combined into a single focusable element using `.accessibilityElement(children: .combine)`.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -128,7 +128,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The bad informative image example uses no `.accessibilityLabel` for the image causing VoiceOver to read the image filename* which is not meaningful. *Disable VoiceOver Text Recognition")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -144,7 +144,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The bad informative icon image example uses no `Label` text to give the informative icon an accessibility label causing VoiceOver to read the image as \"Image\". VoiceOver focuses on each individual part of the line of text because the `HStack` is not combined into one focusable element.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Example `Image` combined with `Text`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -159,7 +159,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The bad `Image` combined with `Text` example uses `Image(systemName: \"exclamationmark.circle\")` with no accessibility label to give the error icon alt text. `.accessibilityElement(children: .combine)` is not used on the `HStack` to combine the image and text into a single focusable element with VoiceOver.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Example `Label` combined with `Text`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -174,7 +174,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The bad `Label` combined with `Text` example uses `Label(\"\", systemImage: \"exclamationmark.circle\").labelStyle(IconOnlyLabelStyle())` which does not give the icon an accessibility `Label` that is not displayed visually. The `HStack` is not combined into a single focusable element using `.accessibilityElement(children: .combine)` and `.accessibilityRemoveTraits(.isImage)` is not used on the `Label` icon image so that the accessibility label is spoken to VoiceOver when combined with the text.")
                     }
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
             }
             .padding()
             .navigationTitle("Informative Images")

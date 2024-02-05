@@ -55,7 +55,7 @@ struct FunctionalView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good functional image example uses `.accessibilityLabel(\"Scan barcode\"))` to give the button a meaningful accessibility label that describes its purpose to VoiceOver users.")
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -86,7 +86,7 @@ struct FunctionalView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad functional image example uses no `.accessibilityLabel` to give the button a meaningful accessibility label causing VoiceOver to read \"barcode.viewfinder\" as the name of the button.")
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -106,7 +106,7 @@ struct FunctionalView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The second bad functional image example is incorrectly coded as an `Image` element with a `TapGesture` rather than as a `Button` which prevents VoiceOver users from hearing the \"Button\" trait spoken and they won't know the image is an actionable control.")
-                }.padding(.bottom).tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding(.bottom)
             }
             .navigationTitle("Functional Images")
             .padding()

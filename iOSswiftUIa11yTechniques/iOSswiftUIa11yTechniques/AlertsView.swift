@@ -57,7 +57,7 @@ struct AlertsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good alert example uses `.alert()` to create a native SwiftUI alert that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the alert when the alert is closed.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -85,7 +85,7 @@ struct AlertsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad alert example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
-                }.padding().tint(Color(colorScheme == .dark ? .systemBlue : .blue))
+                }.padding()
             }
             .navigationTitle("Alerts")
             .padding()

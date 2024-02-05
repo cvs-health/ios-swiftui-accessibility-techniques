@@ -93,7 +93,7 @@ struct ReduceMotionView: View {
                             }
                             .accessibilityLabel("Rotating gear icon that does not stop moving even when reduce motion is enabled.")
                 DisclosureGroup("Details") {
-                    Text("The good reduce motion example does not use the `@Environment(\\.accessibilityReduceMotion)` variable to stop the pulsing red circle animation and the gear image from spinning when the user's Reduce Motion accessibility setting is enabled.")
+                    Text("The bad reduce motion example does not use the `@Environment(\\.accessibilityReduceMotion)` variable to stop the pulsing red circle animation and the gear image from spinning when the user's Reduce Motion accessibility setting is enabled.")
                 }.padding()
             }
             .navigationTitle("Reduce Motion")

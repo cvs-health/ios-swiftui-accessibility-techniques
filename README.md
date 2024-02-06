@@ -64,7 +64,7 @@ Documentation files for each technique are listed below.
 - [x] [Lists](iOSswiftUIa11yTechniques/Documentation/Lists.md)
 - [x] [Cards](iOSswiftUIa11yTechniques/Documentation/Cards.md)
 - [x] [Touch Target Size](iOSswiftUIa11yTechniques/Documentation/TouchTargetSize.md)
-- [ ] Responding to User Accessibility Preferences
+- [x] Responding to User Accessibility Preferences
     - [x] [Dark Mode](iOSswiftUIa11yTechniques/Documentation/DarkMode.md)
     - [x] [Smart Invert](iOSswiftUIa11yTechniques/Documentation/SmartInvert.md)
 - [x] [Progress Indicators](iOSswiftUIa11yTechniques/Documentation/ProgressIndicators.md)

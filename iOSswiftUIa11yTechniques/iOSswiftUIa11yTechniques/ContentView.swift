@@ -100,7 +100,7 @@ struct ContentView: View {
                     Text("Device Orientation")
                 }
                 NavigationLink(destination: DetailView()) {
-                    Text("Siri Shortcuts")
+                    Text("Siri Shortcuts") // https://www.kodeco.com/40950083-creating-shortcuts-with-app-intents
                 }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 NavigationLink(destination: ContactFormView()) {
                     Text("Contact Form")

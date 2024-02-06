@@ -69,6 +69,7 @@
 		BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */; };
 		BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC782B4E1E6F00196E32 /* PopoversView.swift */; };
 		BC95CC7B2B4E4A8D00196E32 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */; };
+		BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */; };
 		BCA5BDEC2B61E633007823A6 /* ReduceMotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */; };
 		BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
@@ -206,6 +207,8 @@
 		BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputInstructionsView.swift; sourceTree = "<group>"; };
 		BC95CC782B4E1E6F00196E32 /* PopoversView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoversView.swift; sourceTree = "<group>"; };
 		BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
+		BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartInvertView.swift; sourceTree = "<group>"; };
+		BCA3DD0F2B72DEA900033712 /* SmartInvert.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SmartInvert.md; sourceTree = "<group>"; };
 		BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduceMotionView.swift; sourceTree = "<group>"; };
 		BCA5BDED2B61E641007823A6 /* ReduceMotion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReduceMotion.md; sourceTree = "<group>"; };
 		BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeContentViewerView.swift; sourceTree = "<group>"; };
@@ -317,6 +320,7 @@
 				BC8129012B3CCF4F00CB19D2 /* Sheets.md */,
 				AA636C882AC3B48C00014BAF /* Sliders.md */,
 				BCE2052A2B5991B7000DF400 /* Sources.md */,
+				BCA3DD0F2B72DEA900033712 /* SmartInvert.md */,
 				AA1303192B027685001AE0BF /* Steppers.md */,
 				AAF6D09A2ABA29EE00188DE0 /* Tabs.md */,
 				AA1303162AFED27C001AE0BF /* TextFields.md */,
@@ -417,6 +421,7 @@
 				AA74DD552AFD8DA800348078 /* SegmentedControlsView.swift */,
 				BC0030352B363B560063EAD5 /* SheetsView.swift */,
 				AA65F7922AC2889100E143B4 /* SlidersView.swift */,
+				BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */,
 				AA74DD572AFDACA100348078 /* SteppersView.swift */,
 				AA59CDC92ABA1F4E0004908F /* TabsGoodView.swift */,
 				AA59CDC72ABA1F3B0004908F /* TabsView.swift */,
@@ -578,6 +583,7 @@
 				AABD27D42A9FF12400F718F7 /* DecorativeView.swift in Sources */,
 				AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */,
 				AA7ADED02AF2BAFE0019D210 /* PickersView.swift in Sources */,
+				BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */,
 				AABD27D82A9FF13E00F718F7 /* DetailView.swift in Sources */,
 				BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */,
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
@@ -642,7 +648,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -665,7 +671,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -804,7 +810,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -822,7 +828,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6;
+				MARKETING_VERSION = 4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -837,7 +843,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -855,7 +861,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6;
+				MARKETING_VERSION = 4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

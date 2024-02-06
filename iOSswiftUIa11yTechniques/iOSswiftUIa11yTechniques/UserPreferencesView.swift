@@ -24,9 +24,9 @@ struct UserPreferencesView: View {
             NavigationLink(destination: DarkModeView()) {
                 Text("Dark Mode")
             }
-            NavigationLink(destination: DetailView()) {
+            NavigationLink(destination: SmartInvertView()) {
                 Text("Smart Invert")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
         }
         .navigationTitle("User Accessibility Preferences")
     }

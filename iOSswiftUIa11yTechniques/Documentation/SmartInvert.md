@@ -1,6 +1,6 @@
 # Smart Invert
 
-Invert colors is an accessibility setting enabled by users with visual disabilities or light sensitivity which prevents them from using bright colored screens. 
+Invert colors is an accessibility setting enabled by users with visual disabilities or light sensitivity which prevents them from viewing bright colored screens. 
 
 Smart Invert reverses the colors of the display except for images, media, and controls like Toggles. 
 

@@ -26,7 +26,7 @@ struct SmartInvertView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Invert colors is an accessibility setting enabled by users with visual disabilities or light sensitivity which prevents them from using bright colored screens. Smart Invert reverses the colors of the display except for images, media, and controls like Toggles. Use `.accessibilityIgnoresInvertColors()` on images or other views that should not be inverted when Smart Invert is enabled.")
+                Text("Invert colors is an accessibility setting enabled by users with visual disabilities or light sensitivity which prevents them from viewing bright colored screens. Smart Invert reverses the colors of the display except for images, media, and controls like Toggles. Use `.accessibilityIgnoresInvertColors()` on images or other views that should not be inverted when Smart Invert is enabled.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

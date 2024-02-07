@@ -3,7 +3,7 @@ There is no native radio button control for SwiftUI in iOS.
 
 Either use another native control like a `Picker` which allows only one selection or mimic radio group behavior on the web with VoiceOver.
 
-e.g.:
+For example to create a custom radio button group out of `Button` elements and manually adding and removing accessibility properties:
 - Use `.accessibilityRemoveTraits(.isButton)` to remove the button trait.
 - Use `.accessibilityAddTraits(isSelected.rawValue == title ? .isSelected : [])` to add a selected trait when checked.
 - Use `.accessibilityRemoveTraits(isSelected.rawValue != title ? .isSelected : [])` removes the selected trait when unchecked.

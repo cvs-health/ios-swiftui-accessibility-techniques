@@ -17,6 +17,10 @@
 import SwiftUI
  
 struct PickersView: View {
+    @State private var selectedCategory = "Mexican"
+
+    
+    
     @State private var date = Date()
     @State private var dateStart = Date()
     @State private var dateEnd = Date()
@@ -49,6 +53,24 @@ struct PickersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                VStack {
+                    Text("Food Category: \(selectedCategory)")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Picker("Food Category",
+                         selection: $selectedCategory) {
+                        Text("Italian")
+                            .tag("Italian")
+                        Text("Chinese")
+                            .tag("Chinese")
+                        Text("Indian")
+                            .tag("Indian")
+                        Text("Mexican")
+                            .tag("Mexican")
+                        Text("American")
+                            .tag("American")
+                    }
+                         .frame(maxWidth: .infinity, alignment: .leading)
+                }
                 Text("Good Example 1")
                     .font(.subheadline)
                     .fontWeight(.bold)

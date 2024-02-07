@@ -27,7 +27,7 @@ struct RadioButtonsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("There is no native radio button control for SwiftUI in iOS. Either use another native control like a `Picker` which allows only one selection or mimic radio group behavior on the web with VoiceOver.")
+                Text("There is no native radio button control for SwiftUI in iOS. Use another native control like a `Picker` which allows only one selection or mimic radio group behavior on the web with VoiceOver.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

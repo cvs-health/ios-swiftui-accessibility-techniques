@@ -211,6 +211,7 @@
 		BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartInvertView.swift; sourceTree = "<group>"; };
 		BCA3DD0F2B72DEA900033712 /* SmartInvert.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SmartInvert.md; sourceTree = "<group>"; };
 		BCA3DD102B7302E700033712 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
+		BCA3DD122B733C5A00033712 /* RadioButtons.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RadioButtons.md; sourceTree = "<group>"; };
 		BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduceMotionView.swift; sourceTree = "<group>"; };
 		BCA5BDED2B61E641007823A6 /* ReduceMotion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReduceMotion.md; sourceTree = "<group>"; };
 		BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeContentViewerView.swift; sourceTree = "<group>"; };
@@ -317,6 +318,7 @@
 				BC1B59C52B4F964200E8F782 /* Popovers.md */,
 				AABB44082AE06297003480B3 /* ProgressIndicators.md */,
 				BC8C92142B3256D0006DAC20 /* ReadingOrder.md */,
+				BCA3DD122B733C5A00033712 /* RadioButtons.md */,
 				BCE205292B5971A8000DF400 /* Rotor.md */,
 				AA1303172AFEE5FD001AE0BF /* SegmentedControls.md */,
 				BC8129012B3CCF4F00CB19D2 /* Sheets.md */,

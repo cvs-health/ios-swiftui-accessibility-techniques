@@ -962,6 +962,26 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testRadioButtons() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.collectionViews.buttons["UI Controls"].tap()
+        app.swipeUp()
+        app.collectionViews.buttons["Radio Buttons"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()//test wrong (previous) screen
+            app.swipeUp()
+            try app.performAccessibilityAudit()//test wrong (previous) screen and dynamic type false positive
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+
     override func setUp() {
        super.setUp()
        let app = XCUIApplication()

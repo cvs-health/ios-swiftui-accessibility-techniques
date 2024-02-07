@@ -39,7 +39,7 @@ Documentation files for each technique are listed below.
 - [x] [Reduce Motion](iOSswiftUIa11yTechniques/Documentation/ReduceMotion.md)
 - [x] [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)
 - [x] [Language](iOSswiftUIa11yTechniques/Documentation/Language.md)
-- [ ] UI Controls
+- [x] UI Controls
     - [x] [Accordions](iOSswiftUIa11yTechniques/Documentation/Accordions.md)
     - [x] [Alerts](iOSswiftUIa11yTechniques/Documentation/Alerts.md)
     - [x] [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
@@ -58,7 +58,7 @@ Documentation files for each technique are listed below.
     - [x] [Tabs](iOSswiftUIa11yTechniques/Documentation/Tabs.md)
     - [x] [Text Fields](iOSswiftUIa11yTechniques/Documentation/TextFields.md)
     - [x] [Toggles](iOSswiftUIa11yTechniques/Documentation/Toggles.md)
-    - [ ] Radio Buttons
+    - [x] [Radio Buttons](iOSswiftUIa11yTechniques/Documentation/RadioButtons.md)
 - [x] [Navigation](iOSswiftUIa11yTechniques/Documentation/Navigation.md)
 - [x] [Data Tables](iOSswiftUIa11yTechniques/Documentation/DataTables.md)
 - [x] [Lists](iOSswiftUIa11yTechniques/Documentation/Lists.md)

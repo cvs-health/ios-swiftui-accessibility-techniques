@@ -75,6 +75,7 @@ struct MeaningfulAccessibleNamesView: View {
                         Text("ADD TO CART").font(.headline)
                     }
                     .accessibilityLabel("Add to cart, ACME® Inc. BOOM-ERANG")
+                    .accessibilityInputLabels(["Add to Cart", "Add Boomerang to Cart"])
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 15)
@@ -95,7 +96,7 @@ struct MeaningfulAccessibleNamesView: View {
                         .shadow(color: .gray, radius: 5, x: 4, y: 4)
                 )
                 DisclosureGroup("Details") {
-                    Text("The good meaningful `.accessibilityLabel` example uses `.accessibilityLabel(\"Add to cart, ACME® Inc. BOOM-ERANG\")` to modify the accessible name of the ADD TO CART button by adding the specific product name to the end of the `.accessibilityLabel` and adding the visible label text to the beginning of the `.accessibilityLabel`. VoiceOver does not say \"A D D to cart\" because \"Add\" has been written lower-case.")
+                    Text("The good meaningful `.accessibilityLabel` example uses `.accessibilityLabel(\"Add to cart, ACME® Inc. BOOM-ERANG\")` to modify the accessible name of the ADD TO CART button by adding the specific product name to the end of the `.accessibilityLabel` and adding the visible label text to the beginning of the `.accessibilityLabel`. VoiceOver does not say \"A D D to cart\" because \"Add\" has been written lower-case. Additionally, `.accessibilityInputLabels([\"Add to Cart\", \"Add Boomerang to Cart\"])` is added so that Voice Control users can speak the visible label text when they say a \"Tap\" command.")
                 }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)

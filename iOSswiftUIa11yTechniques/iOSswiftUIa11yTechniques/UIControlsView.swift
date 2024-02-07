@@ -54,9 +54,9 @@ struct UIControlsView: View {
             NavigationLink(destination: PopoversView()) {
                 Text("Popovers")
             }
-            NavigationLink(destination: DetailView()) {
+            NavigationLink(destination: RadioButtonsView()) {
                 Text("Radio Buttons")
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
             NavigationLink(destination: SegmentedControlsView()) {
                 Text("Segmented Controls")
             }

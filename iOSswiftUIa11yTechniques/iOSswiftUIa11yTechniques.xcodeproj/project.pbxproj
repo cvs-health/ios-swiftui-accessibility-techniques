@@ -70,6 +70,7 @@
 		BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC782B4E1E6F00196E32 /* PopoversView.swift */; };
 		BC95CC7B2B4E4A8D00196E32 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */; };
 		BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */; };
+		BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD102B7302E700033712 /* RadioButtonsView.swift */; };
 		BCA5BDEC2B61E633007823A6 /* ReduceMotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */; };
 		BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
@@ -209,6 +210,7 @@
 		BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartInvertView.swift; sourceTree = "<group>"; };
 		BCA3DD0F2B72DEA900033712 /* SmartInvert.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SmartInvert.md; sourceTree = "<group>"; };
+		BCA3DD102B7302E700033712 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
 		BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduceMotionView.swift; sourceTree = "<group>"; };
 		BCA5BDED2B61E641007823A6 /* ReduceMotion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReduceMotion.md; sourceTree = "<group>"; };
 		BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeContentViewerView.swift; sourceTree = "<group>"; };
@@ -362,9 +364,9 @@
 				BC715B622B449F0500C77B57 /* AlertsView.swift */,
 				AABD27CF2A9FF11400F718F7 /* AnnouncementsView.swift */,
 				AABD27BD2A9FE69500F718F7 /* Assets.xcassets */,
+				BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */,
 				BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */,
 				BC1A5FA12B6079070008513C /* AttributedStringsView.swift */,
-				BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
 				BC8C920C2B2BAE41006DAC20 /* CardsView.swift */,
 				BC715B662B465B9F00C77B57 /* CheckboxesView.swift */,
@@ -373,8 +375,8 @@
 				BCE2052F2B5A1C5F000DF400 /* ContactAtlanta.swift */,
 				BCE2052B2B5A1C38000DF400 /* ContactAustin.swift */,
 				BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */,
-				BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */,
 				BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */,
+				BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */,
 				BCE205312B5A1C6C000DF400 /* ContactReno.swift */,
 				BCE2052D2B5A1C50000DF400 /* ContactSeattle.swift */,
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
@@ -403,11 +405,10 @@
 				BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
-				BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */,
 				BC8CD0E42B4D06FC00B9A28A /* MagicTapView.swift */,
+				BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */,
 				BC1B59C22B4E664700E8F782 /* MenusView.swift */,
 				AA59CDCD2ABA209D0004908F /* MessagesTabView.swift */,
-				BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */,
 				BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */,
 				AA74DD5C2AFDCCFA00348078 /* PageTitleBad.swift */,
 				AA74DD5B2AFDCCF900348078 /* PageTitleGood.swift */,
@@ -416,7 +417,9 @@
 				BC95CC782B4E1E6F00196E32 /* PopoversView.swift */,
 				AABD27BF2A9FE69500F718F7 /* Preview Content */,
 				AA636C892ADD7FD900014BAF /* ProgressIndicatorsView.swift */,
+				BCA3DD102B7302E700033712 /* RadioButtonsView.swift */,
 				BC8C92122B324859006DAC20 /* ReadingOrderView.swift */,
+				BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */,
 				BCE205272B597199000DF400 /* RotorView.swift */,
 				AA74DD552AFD8DA800348078 /* SegmentedControlsView.swift */,
 				BC0030352B363B560063EAD5 /* SheetsView.swift */,
@@ -576,6 +579,7 @@
 				BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */,
 				AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */,
 				BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */,
+				BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */,
 				AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */,
 				BCE205322B5A1C6C000DF400 /* ContactReno.swift in Sources */,
 				BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */,
@@ -648,7 +652,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -671,7 +675,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -810,7 +814,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -843,7 +847,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;

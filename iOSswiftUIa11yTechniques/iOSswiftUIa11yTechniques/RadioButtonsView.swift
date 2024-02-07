@@ -18,7 +18,7 @@ enum ColorOption: String, CaseIterable {
 
 struct RadioButtonsView: View {
     @State private var selectedColor: ColorOption = .black
-    @State private var selectedColorBad: ColorOption = .black
+    @State private var selectedColorBad: ColorOption = .red
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -27,7 +27,7 @@ struct RadioButtonsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("There is no native radio button control for SwiftUI in iOS. Use another native control like a `Picker` which allows only one selection or mimic radio group behavior on the web with VoiceOver.")
+                Text("There is no native radio button control for SwiftUI in iOS. Use another native control like a `Picker` which allows only one selection or mimic radio group behavior on the web with VoiceOver by manually adding and removing accessibility traits and values to create fake radio buttons.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

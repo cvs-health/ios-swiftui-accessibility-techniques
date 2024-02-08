@@ -57,6 +57,9 @@ struct UIControlsView: View {
             NavigationLink(destination: RadioButtonsView()) {
                 Text("Radio Buttons")
             }
+            NavigationLink(destination: SearchSuggestionsView()) {
+                Text("Search Suggestions")
+            }
             NavigationLink(destination: SegmentedControlsView()) {
                 Text("Segmented Controls")
             }

@@ -95,6 +95,7 @@ struct TextFieldsView: View {
                     .border(.secondary)
                     .accessibilityLabel("Email")
                     .keyboardType(.emailAddress)
+                    .textInputAutocapitalization(.never)
                     .textContentType(.emailAddress)
                     .accessibilityIdentifier("emailGood")
                 Text("Street Address")

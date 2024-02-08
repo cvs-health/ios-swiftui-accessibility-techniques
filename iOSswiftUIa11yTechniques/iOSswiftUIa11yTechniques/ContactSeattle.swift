@@ -101,6 +101,7 @@ struct ContactSeattle: View {
                         .border(emailErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                         .accessibilityHint(emailErrorVisible ? emailError : "")
                         .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
                         .textContentType(.emailAddress)
                         .accessibilityFocused($isEmailA11yFocused)
                         .focused($isEmailFocused)

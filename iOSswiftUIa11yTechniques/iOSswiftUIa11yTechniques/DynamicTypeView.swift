@@ -129,6 +129,8 @@ struct DynamicTypeView: View {
                 ).font(.largeTitle).padding()
                 .keyboardType(.emailAddress)
                 .textInputAutocapitalization(.never)
+                .textContentType(.emailAddress)
+                .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
                 .border(.secondary)
                 .accessibilityIdentifier("badTextField")

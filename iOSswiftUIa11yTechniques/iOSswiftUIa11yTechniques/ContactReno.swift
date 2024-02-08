@@ -101,6 +101,7 @@ struct ContactReno: View {
                         .border(emailErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                         .accessibilityValue(emailErrorVisible ? email+", "+emailError : email)
                         .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
                         .textContentType(.emailAddress)
                         .accessibilityFocused($isEmailA11yFocused)
                         .focused($isEmailFocused)

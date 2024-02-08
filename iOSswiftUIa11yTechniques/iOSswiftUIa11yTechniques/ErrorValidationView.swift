@@ -155,6 +155,7 @@ struct ErrorValidationView: View {
                     .accessibilityLabel(emailLabel)
                     .accessibilityHint(emailErrorVisible ? emailError : "")
                     .keyboardType(.emailAddress)
+                    .textInputAutocapitalization(.never)
                     .textContentType(.emailAddress)
                     .accessibilityIdentifier("emailGood")
                     .accessibilityFocused($isEmailA11yFocused)
@@ -265,6 +266,7 @@ struct ErrorValidationView: View {
                     .accessibilityLabel(emailLabel2)
                     .accessibilityValue(emailErrorVisible2 ? email2+emailError2 : email2)
                     .keyboardType(.emailAddress)
+                    .textInputAutocapitalization(.never)
                     .textContentType(.emailAddress)
                     .accessibilityIdentifier("emailGood2")
                     .accessibilityFocused($isEmailA11yFocused2)
@@ -369,6 +371,7 @@ struct ErrorValidationView: View {
                     .border(emailErrorVisibleBad ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(emailLabel)
                     .keyboardType(.emailAddress)
+                    .textInputAutocapitalization(.never)
                     .textContentType(.emailAddress)
                     .accessibilityIdentifier("emailBad")
                 if emailErrorVisibleBad {

@@ -109,6 +109,7 @@ struct ContactAustin: View {
                     .accessibilityLabel(emailLabel)
                     .accessibilityHint(emailErrorVisible ? emailError : "")
                     .keyboardType(.emailAddress)
+                    .textInputAutocapitalization(.never)
                     .textContentType(.emailAddress)
                     .accessibilityFocused($isEmailA11yFocused)
                     .focused($isEmailFocused)

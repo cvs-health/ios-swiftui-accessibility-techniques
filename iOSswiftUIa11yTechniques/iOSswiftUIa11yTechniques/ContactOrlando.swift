@@ -72,7 +72,7 @@ struct ContactOrlando: View {
                     .textFieldStyle(.roundedBorder)
                     .border(useridErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel(useridLabel)
-                    .accessibilityValue(useridValue)
+                    .accessibilityValue(name+", "+useridValue)
                     .autocorrectionDisabled(true)
                     .textContentType(.username)
                     .keyboardType(.numberPad)
@@ -175,13 +175,13 @@ struct ContactOrlando: View {
                         isEmailA11yFocused = true
                     }
                     if name.isEmpty && name.count < 1 {
-                        useridValue = useridError+", "+useridInstructions
+                        useridValue = name+", "+useridError+", "+useridInstructions
                         useridErrorVisible = true
                         isUseridFocused = true
                         isUseridA11yFocused = true
                     }
                     if name.count != 5 && name.count > 0 {
-                        useridValue = useridOverUnderDigitsError+", "+useridInstructions
+                        useridValue = name+", "+useridOverUnderDigitsError+", "+useridInstructions
                         useridOverUnderDigitsErrorVisible = true
                         isUseridFocused = true
                         isUseridA11yFocused = true

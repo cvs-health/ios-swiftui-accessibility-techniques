@@ -18,7 +18,29 @@ import SwiftUI
 
 struct SearchSuggestionsView: View {
     @State private var searchText = ""
-    let suggestions = ["Apple", "Banana", "Cherry", "Date", "Fig", "Grape"]
+    @State private var searchTextBad = ""
+    let suggestions = [
+        "Apple", "Apricot", "Avocado", "Banana", "Bilberry", "Blackberry", "Blackcurrant", "Blueberry",
+        "Boysenberry", "Breadfruit", "Canary Melon", "Cantaloupe", "Cherimoya", "Cherry", "Cherry Tomato",
+        "Citron", "Coco Plum", "Coconut", "Cola Nut", "Cordial Plum", "Currant", "Custard Apple", "Damson",
+        "Date", "Dewberry", "Dragonfruit", "Durian", "Elderberry", "Feijoa", "Fig", "Figue", "Finger Lime",
+        "Flame Grape", "Flaxseed", "French Bean", "Grape", "Grapefruit", "Guaba", "Guava", "Halibut Berry",
+        "Honeydew", "Huckleberry", "Huito", "Indian Fig", "Jackfruit", "Jabuticaba", "Jambul", "Jujube",
+        "Jujubes", "Kaki", "Kiwano", "Kiwifruit", "Kumquat", "Lemon", "Lime", "Loquat", "Lychee", "Mango",
+        "Mangosteen", "Marionberry", "Melon", "Mulberry", "Nectarine", "Nance", "Nektarine", "Nias Fruit",
+        "Olive", "Orange", "Papaya", "Passion Fruit", "Peach", "Pear", "Peas", "Pepino", "Pineapple",
+        "Pineapple Guava", "Pistachio", "Plum", "Plumcot", "Pomegranate", "Pomelo", "Pomme Grise",
+        "Potato Berry", "Powdered Sugar Pear", "Prune", "Prunelle", "Pulpy Pear", "Pupunha", "Quince",
+        "Rabbit Ears", "Rack Of Lamb", "Raisin", "Rambutan", "Raspberry", "Redcurrant", "Rhubarb",
+        "Rose Apple", "Rowan Berry", "Royal Pineapple", "Rum Fruit", "Sapodilla", "Sapota", "Satsuma",
+        "Satsuma Cherry", "Serissa", "Shrub Grapes", "Snow Apple", "Solomon's Seal", "Spiked Apple",
+        "Strawberry", "Surinam Cherry", "Sweet Potato", "Sycamore", "Tamarillo", "Tamarind", "Tangelo",
+        "Tangerine", "Taro", "Tatarian Cherry", "Tea Berry", "Tomato", "Tropical Blueberry", "Ugni",
+        "Victoria Plum", "Watermelon", "White Mulberry", "White Passion Fruit", "Wongi", "Xigua Melon",
+        "Yangmei", "Yangmei Gooseberry", "Yellow Cherry", "Yellow Mulberry", "Yellow Passion Fruit",
+        "Yellow Watermelon", "Yuzu"
+    ]
+
     
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -41,6 +63,15 @@ struct SearchSuggestionsView: View {
                     .padding(.bottom)
                 NavigationView {
                     List {
+                        if (!filteredSuggestions().isEmpty) {
+                            ForEach(filteredSuggestions(), id: \.self) { suggestion in
+                                Text(suggestion)
+                            }
+                        } else {
+                            ForEach(suggestions, id: \.self) { suggestion in
+                                Text(suggestion)
+                            }
+                        }
                     }
                     .searchable(text: $searchText)
                     .searchSuggestions {
@@ -56,7 +87,7 @@ struct SearchSuggestionsView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The good Accessibility Notifications example posts an `AccessibilityNotification.Announcement` that speaks the \"1 Item added to cart.\" status message to VoiceOver when activating the Add to Cart button. The announcement is posted with a 0.1 second delay to make it speak correctly to VoiceOver.")
+                    Text("The good search suggestions example posts an `AccessibilityNotification.Announcement` that speaks the number of suggestions shown. The suggestion buttons have a fake \"suggestion\" trait added to the `.accessibilityLabel` and a `.accessibilityHint` that says the suggestion buttons will insert the suggestion into the search bar.")
                 }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
@@ -68,12 +99,32 @@ struct SearchSuggestionsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
+                NavigationView {
+                    List {
+                        if (!filteredSuggestionsBad().isEmpty) {
+                            ForEach(filteredSuggestionsBad(), id: \.self) { suggestion in
+                                Text(suggestion)
+                            }
+                        } else {
+                            ForEach(suggestions, id: \.self) { suggestion in
+                                Text(suggestion)
+                            }
+                        }
+                    }
+                    .searchable(text: $searchTextBad)
+                    .searchSuggestions {
+                        ForEach(filteredSuggestionsBad(), id: \.self) { suggestion in
+                            Text(suggestion)
+                                .searchCompletion(suggestion)
+                        }
+                    }
+                }
                 DisclosureGroup("Details") {
-                    Text("The bad Accessibility Notifications example does not speak an accessibility announcement notification to VoiceOver when the \"1 Item added to cart.\" status message displays.")
+                    Text("The bad search suggestions example does not speak the number of suggestions shown to VoiceOver. The suggestion buttons do not have a fake \"suggestion\" trait added to the `.accessibilityLabel` or a `.accessibilityHint` that says the suggestion buttons will insert the suggestion into the search bar.")
                 }.padding()
             }
             .padding()
-            .navigationTitle("Accessibility Notifications")
+            .navigationTitle("Search Suggestions")
 
         }
  
@@ -87,11 +138,20 @@ struct SearchSuggestionsView: View {
             }
         }
     }
-    
+    func filteredSuggestionsBad() -> [String] {
+        if searchTextBad.isEmpty {
+            return []
+        } else {
+            return suggestions.filter { suggestion in
+                suggestion.lowercased().contains(searchTextBad.lowercased())
+            }
+        }
+    }
+
     func postAccessibilityAnnouncement() {
         let count = filteredSuggestions().count
         if count >  0 {
-            AccessibilityNotification.Announcement("\(count) suggestions are now available.").post()
+            AccessibilityNotification.Announcement("\(count) suggestions shown.").post()
         }
     }
 }

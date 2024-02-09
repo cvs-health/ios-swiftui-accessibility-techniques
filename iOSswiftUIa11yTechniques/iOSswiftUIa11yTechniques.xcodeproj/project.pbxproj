@@ -181,6 +181,7 @@
 		BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactFormView.swift; sourceTree = "<group>"; };
 		BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeaningfulAccessibleNamesView.swift; sourceTree = "<group>"; };
 		BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MeaningfulAccessibleNames.md; sourceTree = "<group>"; };
+		BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SearchSuggestions.md; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
 		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
 		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
@@ -323,6 +324,7 @@
 				BCA3DD122B733C5A00033712 /* RadioButtons.md */,
 				BCE205292B5971A8000DF400 /* Rotor.md */,
 				AA1303172AFEE5FD001AE0BF /* SegmentedControls.md */,
+				BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */,
 				BC8129012B3CCF4F00CB19D2 /* Sheets.md */,
 				AA636C882AC3B48C00014BAF /* Sliders.md */,
 				BCE2052A2B5991B7000DF400 /* Sources.md */,

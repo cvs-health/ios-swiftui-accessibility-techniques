@@ -54,6 +54,7 @@
 		BC1B59CB2B508BDD00E8F782 /* ATdetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */; };
 		BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */; };
 		BC2133A32B713B1100753693 /* MeaningfulAccessibleNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */; };
+		BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
 		BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B662B465B9F00C77B57 /* CheckboxesView.swift */; };
 		BC8129032B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */; };
@@ -182,6 +183,7 @@
 		BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeaningfulAccessibleNamesView.swift; sourceTree = "<group>"; };
 		BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MeaningfulAccessibleNames.md; sourceTree = "<group>"; };
 		BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SearchSuggestions.md; sourceTree = "<group>"; };
+		BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickers.swift; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
 		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
 		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
 				BCE205222B58D0BE000DF400 /* DarkModeView.swift */,
 				BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */,
+				BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */,
 				AABD27D32A9FF12400F718F7 /* DecorativeView.swift */,
 				AABD27D72A9FF13E00F718F7 /* DetailView.swift */,
 				BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */,
@@ -620,6 +623,7 @@
 				BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */,
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,
+				BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */,
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
 				BC163FC22B6AD3F3009E3A83 /* ContactBoston.swift in Sources */,
 				BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */,

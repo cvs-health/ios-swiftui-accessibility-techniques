@@ -1,5 +1,5 @@
 /*
-   Copyright 2023 CVS Health and/or one of its affiliates
+   Copyright 2024 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,11 +15,19 @@
  */
 
 import SwiftUI
+
+enum Fruit: String, CaseIterable, Identifiable {
+    case apple = "Apple"
+    case banana = "Banana"
+    case cherry = "Cherry"
+    case grape = "Grape"
+
+    var id: Self { self }
+}
+
  
 struct PickersView: View {
-    @State private var selectedCategory = "Mexican"
-
-    
+    @State private var selectedFruit: Fruit = .apple
     
     @State private var date = Date()
     @State private var dateStart = Date()
@@ -53,77 +61,59 @@ struct PickersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                VStack {
-                    Text("Food Category: \(selectedCategory)")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Picker("Food Category",
-                         selection: $selectedCategory) {
-                        Text("Italian")
-                            .tag("Italian")
-                        Text("Chinese")
-                            .tag("Chinese")
-                        Text("Indian")
-                            .tag("Indian")
-                        Text("Mexican")
-                            .tag("Mexican")
-                        Text("American")
-                            .tag("American")
-                    }
-                         .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                Text("Good Example 1")
+                Text("Good Example Default Style")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                DatePicker(
-                        "Start Date",
-                        selection: $dateStart,
-                        displayedComponents: [.date]
-                    )
-                .accessibilityLabel("Start Date")
-                .accessibilityIdentifier("startDateGood")
-                DatePicker(
-                        "End Date",
-                        selection: $dateEnd,
-                        displayedComponents: [.date]
-                    )
-                .accessibilityLabel("End Date")
-                .accessibilityIdentifier("endDateGood")
-                DatePicker("Scheduled Time", selection: $time, displayedComponents: .hourAndMinute)
-                    .accessibilityLabel("Scheduled Time")
-                    .accessibilityIdentifier("timeGood")
-                DatePicker(
-                        "Reservation",
-                         selection: $date,
-                         in: dateRange,
-                         displayedComponents: [.date, .hourAndMinute]
-                    )
-                .accessibilityLabel("Reservation")
-                .accessibilityIdentifier("dateTimeGood")
+                Text("Fruit: \(selectedFruit.rawValue)")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Picker("Fruit", selection: $selectedFruit) {
+                    ForEach(Fruit.allCases) { fruit in
+                        Text(fruit.rawValue).tag(fruit)
+                    }
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                Text("Good Example Wheel Style")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Fruit: \(selectedFruit.rawValue)")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Picker("Fruit", selection: $selectedFruit) {
+                    ForEach(Fruit.allCases) { fruit in
+                        Text(fruit.rawValue).tag(fruit)
+                    }
+                }
+                .pickerStyle(WheelPickerStyle())
+                Text("Good Example Segmented Style")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Fruit: \(selectedFruit.rawValue)")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Picker("Fruit", selection: $selectedFruit) {
+                    ForEach(Fruit.allCases) { fruit in
+                        Text(fruit.rawValue).tag(fruit)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                Text("Good Example Menu Style")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Fruit: \(selectedFruit.rawValue)")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Picker("Fruit", selection: $selectedFruit) {
+                    ForEach(Fruit.allCases) { fruit in
+                        Text(fruit.rawValue).tag(fruit)
+                    }
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                .pickerStyle(MenuPickerStyle())
                 DisclosureGroup("Details") {
                     Text("The first good Pickers example uses `.accessibilityLabel` on each `DatePicker` that matches the visible label text.")
-                }.padding()
-                Text("Good Example 2")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                Text("Check In").frame(maxWidth: .infinity, alignment: .leading)
-                DatePicker(
-                        "Check In",
-                        selection: $date,
-                        displayedComponents: [.date]
-                    )
-                    .datePickerStyle(.graphical)
-                    .accessibilityIdentifier("graphicalGood")
-                Text("Check Out").frame(maxWidth: .infinity, alignment: .leading)
-                DatePicker("Check Out", selection: $time, displayedComponents: .hourAndMinute)
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-                    .accessibilityIdentifier("wheelGood")
-                DisclosureGroup("Details") {
-                    Text("The second good Pickers example uses visible `DatePicker(\"Label\")` text for each picker that is spoken to VoiceOver as the accessibility label.")
                 }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
@@ -135,53 +125,6 @@ struct PickersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                DatePicker(
-                        "Start Date",
-                        selection: $dateStart,
-                        displayedComponents: [.date]
-                    )
-                .accessibilityIdentifier("startDateBad")
-                DatePicker(
-                        "End Date",
-                        selection: $dateEnd,
-                        displayedComponents: [.date]
-                    )
-                .accessibilityIdentifier("endDateBad")
-                DatePicker("Scheduled Time", selection: $time, displayedComponents: .hourAndMinute)
-                    .accessibilityIdentifier("timeBad")
-                DatePicker(
-                        "Reservation",
-                         selection: $date,
-                         in: dateRange,
-                         displayedComponents: [.date, .hourAndMinute]
-                    )
-                .accessibilityIdentifier("dateTimeBad")
-                DisclosureGroup("Details") {
-                    Text("The first bad Pickers example has no `.accessibilityLabel` for each `DatePicker` that matches the visible label text.")
-                }.padding()
-                Text("Bad Example 2")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                Text("Check In").frame(maxWidth: .infinity, alignment: .leading)
-                DatePicker(
-                        "",
-                        selection: $date,
-                        displayedComponents: [.date]
-                    )
-                    .datePickerStyle(.graphical)
-                    .accessibilityIdentifier("graphicalBad")
-                Text("Check Out").frame(maxWidth: .infinity, alignment: .leading)
-                DatePicker("", selection: $time, displayedComponents: .hourAndMinute)
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-                    .accessibilityIdentifier("wheelBad")
                 DisclosureGroup("Details") {
                     Text("The second bad Pickers example uses no visible `DatePicker(\"\")` text for each picker so nothing is spoken to VoiceOver as the accessibility label.")
                 }.padding()

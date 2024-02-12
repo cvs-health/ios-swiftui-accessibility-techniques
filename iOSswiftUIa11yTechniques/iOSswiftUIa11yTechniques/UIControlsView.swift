@@ -36,6 +36,9 @@ struct UIControlsView: View {
             NavigationLink(destination: ConfirmationDialogsView()) {
                 Text("Confirmation Dialogs")
             }
+            NavigationLink(destination: DateTimePickersView()) {
+                Text("Date & Time Pickers")
+            }
             NavigationLink(destination: GroupingControlsView()) {
                 Text("Grouping Controls")
             }

@@ -1,5 +1,5 @@
 # Pickers
-Pickers need visible label text and an accessibility label. Pickers with the default or `MenuPickerStyle` need `Picker(\"Label\")` text which is spoken to VoiceOver as the accessibility label. 
+Pickers need visible label text and an accessibility label. Pickers with the default or `MenuPickerStyle` need `Picker("Label")` text which is spoken to VoiceOver as the accessibility label. 
 
 Pickers with the `WheelPickerStyle` or `SegmentedPickerStyle` need an `.accessibilityLabel` set to match their visible label text and need `.accessibilityElement(children: .contain)` or else the accessibility label will not be spoken to VoiceOver. 
 

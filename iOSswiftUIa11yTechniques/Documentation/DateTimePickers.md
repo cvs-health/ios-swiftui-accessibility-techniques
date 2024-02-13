@@ -3,7 +3,7 @@ Date Pickers are used to select dates and times. VoiceOver users need to hear th
 
 Date Pickers without the `.graphical` or `.wheel` style need an `.accessibilityLabel` set to match their visible label text. 
 
-Date Pickers with the `.graphical` or `.wheel` style need visible `DatePicker(\"Label\")` text for each date picker so it is spoken to VoiceOver as the accessibility label.
+Date Pickers with the `.graphical` or `.wheel` style need visible `DatePicker("Label")` text for each date picker so it is spoken to VoiceOver as the accessibility label.
 
 Limitations:
 

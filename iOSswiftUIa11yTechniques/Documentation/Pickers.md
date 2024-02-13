@@ -6,8 +6,7 @@ Pickers with the `WheelPickerStyle` or `SegmentedPickerStyle` need an `.accessib
 Don't use `.accessibilityLabel` on `Picker` with the default or `MenuPickerStyle` or else VoiceOver will not speak the visible picker value text when the picker is closed. 
 
 Use `AccessibilityFocusState` to send VoiceOver focus back to the picker when the value has been changed.
-
-`Picker` has no `onDismiss` method like a `Sheet` that could be used to return focus when the picker is closed.
+- `Picker` has no `onDismiss` method like a `Sheet` that could be used to return focus when the picker is closed.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)

@@ -184,6 +184,7 @@
 		BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MeaningfulAccessibleNames.md; sourceTree = "<group>"; };
 		BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SearchSuggestions.md; sourceTree = "<group>"; };
 		BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickers.swift; sourceTree = "<group>"; };
+		BC3EA3B32B7B25550003B8A2 /* DateTimePickers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DateTimePickers.md; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
 		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
 		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
@@ -307,6 +308,7 @@
 				AA9B134D2AA923FA009A3D84 /* Headings.md */,
 				AAAFD7132AA9305D008DA3AD /* Images.md */,
 				AAAFD7122AA92FF7008DA3AD /* InformativeImages.md */,
+				BC3EA3B32B7B25550003B8A2 /* DateTimePickers.md */,
 				BC1B59C42B4F102100E8F782 /* InputInstructions.md */,
 				BCC4F1822B3F8757004AAB65 /* InputLabels.md */,
 				BC81290A2B3F6C5A00CB19D2 /* Language.md */,

@@ -45,6 +45,7 @@ Documentation files for each technique are listed below.
     - [x] [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
     - [x] [Checkboxes](iOSswiftUIa11yTechniques/Documentation/Checkboxes.md)
     - [x] [Confirmation Dialogs](iOSswiftUIa11yTechniques/Documentation/ConfirmationDialogs.md)
+    - [x] [Date & Time Pickers](iOSswiftUIa11yTechniques/Documentation/DateTimePickers.md)
     - [x] [Grouping Controls](iOSswiftUIa11yTechniques/Documentation/GroupingControls.md)
     - [x] [Input Instructions](iOSswiftUIa11yTechniques/Documentation/InputInstructions.md)
     - [x] [Links](iOSswiftUIa11yTechniques/Documentation/Links.md)

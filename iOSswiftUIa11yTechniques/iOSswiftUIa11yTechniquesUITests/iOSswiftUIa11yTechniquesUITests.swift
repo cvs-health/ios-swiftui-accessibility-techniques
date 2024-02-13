@@ -473,14 +473,14 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
-    func testPickers() throws {
+    func testDateTimePickers() throws {
         let app = XCUIApplication()
         app.launch()
         if UIDevice.current.userInterfaceIdiom == .pad {
             app.navigationBars.buttons["ToggleSidebar"].tap()
         }
         app.collectionViews.buttons["UI Controls"].tap()
-        app.collectionViews.buttons["Pickers"].tap()
+        app.collectionViews.buttons["Date & Time Pickers"].tap()
         
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.datePickers["startDateGood"].exists)
@@ -977,6 +977,24 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             try app.performAccessibilityAudit()//test wrong (previous) screen
             app.swipeUp()
             try app.performAccessibilityAudit()//test wrong (previous) screen and dynamic type false positive
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    func testPickers() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.collectionViews.buttons["UI Controls"].tap()
+        app.swipeUp()
+        app.collectionViews.buttons["Pickers"].tap()
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            app.swipeUp()
+            try app.performAccessibilityAudit()//test wrong (previous) screen and contrast false positive
         } else {
             // Fallback on earlier versions
         }

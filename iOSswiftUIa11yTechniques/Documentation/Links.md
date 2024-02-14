@@ -10,6 +10,10 @@ Notes:
 * The default color contrast ratio of links is not sufficient for WCAG. Modify the link text color to have at least a 4.5:1 contrast ratio, e.g., using `AccentColor` or using `.tint(Color(red: 0.0, green: 0.0, blue: 1.0))` to make the links dark blue with sufficient contrast.
 * By default links in SwiftUI include a Button trait which must be removed using `.accessibilityRemoveTraits(.isButton)` or else VoiceOver will speak \"Button, Link\".
 
+Bugs:
+
+- `AttributedString` inline links and Markdown inline links are not keyboard focusable or operable when using Full Keyboard Access. This is a bug in Apple's native link controls and bug reports should be filed with Apple. The only way to ensure links are operable with full keyboard access would be to avoid using inline links until Apple fixes the bug.
+
 ## Applicable WCAG Success Criteria
 - [1.4.1: Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color)
 - [2.4.4: Link Purpose (In Context)](https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context)

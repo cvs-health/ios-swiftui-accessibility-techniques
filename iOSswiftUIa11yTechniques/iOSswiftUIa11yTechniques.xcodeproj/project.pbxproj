@@ -56,6 +56,7 @@
 		BC2133A32B713B1100753693 /* MeaningfulAccessibleNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */; };
 		BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */; };
 		BC3EA3B52B7C069F0003B8A2 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B42B7C069F0003B8A2 /* MapView.swift */; };
+		BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
 		BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B662B465B9F00C77B57 /* CheckboxesView.swift */; };
 		BC8129032B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */; };
@@ -187,6 +188,8 @@
 		BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickers.swift; sourceTree = "<group>"; };
 		BC3EA3B32B7B25550003B8A2 /* DateTimePickers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DateTimePickers.md; sourceTree = "<group>"; };
 		BC3EA3B42B7C069F0003B8A2 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViews.swift; sourceTree = "<group>"; };
+		BC3EA3B82B7D26460003B8A2 /* ScrollViews.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ScrollViews.md; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
 		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
 		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
@@ -330,6 +333,7 @@
 				BCA3DD122B733C5A00033712 /* RadioButtons.md */,
 				BCE205292B5971A8000DF400 /* Rotor.md */,
 				AA1303172AFEE5FD001AE0BF /* SegmentedControls.md */,
+				BC3EA3B82B7D26460003B8A2 /* ScrollViews.md */,
 				BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */,
 				BC8129012B3CCF4F00CB19D2 /* Sheets.md */,
 				AA636C882AC3B48C00014BAF /* Sliders.md */,
@@ -436,6 +440,7 @@
 				BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */,
 				BCE205272B597199000DF400 /* RotorView.swift */,
 				AA74DD552AFD8DA800348078 /* SegmentedControlsView.swift */,
+				BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */,
 				BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */,
 				BC0030352B363B560063EAD5 /* SheetsView.swift */,
 				AA65F7922AC2889100E143B4 /* SlidersView.swift */,
@@ -625,6 +630,7 @@
 				BC8C92102B3144BA006DAC20 /* GroupingControlsView.swift in Sources */,
 				BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */,
 				BCE2052C2B5A1C38000DF400 /* ContactAustin.swift in Sources */,
+				BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */,
 				AABD27D22A9FF11F00F718F7 /* FunctionalView.swift in Sources */,
 				BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */,
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,

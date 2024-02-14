@@ -105,6 +105,9 @@ struct ContentView: View {
 //                NavigationLink(destination: MapView()) {
 //                    Text("Maps")
 //                }
+                NavigationLink(destination: ScrollViews()) {
+                    Text("Scroll Views")
+                }
                 NavigationLink(destination: ContactFormView()) {
                     Text("Contact Form")
                 }

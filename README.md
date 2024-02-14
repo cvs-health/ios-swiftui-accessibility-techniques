@@ -75,6 +75,7 @@ Documentation files for each technique are listed below.
 - [x] [Meaningful Accessible Names](iOSswiftUIa11yTechniques/Documentation/MeaningfulAccessibleNames.md)
 - [x] [Combining Focus](iOSswiftUIa11yTechniques/Documentation/CombiningFocus.md)
 - [x] [Device Orientation](iOSswiftUIa11yTechniques/Documentation/DeviceOrientation.md)
+- [x] [Scroll Views](iOSswiftUIa11yTechniques/Documentation/ScrollViews.md)
 - [ ] Siri Shortcuts
 
 ## Contributor Guide

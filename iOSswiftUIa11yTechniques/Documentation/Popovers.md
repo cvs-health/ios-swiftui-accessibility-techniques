@@ -8,7 +8,7 @@ Use `.popover()` to code a native SwiftUI popover that receives VoiceOver focus 
 
 Use `AccessibilityFocusState` to send focus back to the trigger button that opened the popover when the popover is closed.
 
-Notes:
+Bugs:
 
 - Popovers will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `.popover()` component in which case bugs should be filed with Apple.
     

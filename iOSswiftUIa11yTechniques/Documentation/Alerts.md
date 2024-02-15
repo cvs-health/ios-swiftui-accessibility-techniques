@@ -5,7 +5,7 @@ Use `.alert()` to code a native SwiftUI alert that receives VoiceOver focus when
 
 Use `AccessibilityFocusState` to send focus back to the trigger button that opened the alert when the alert is closed.
 
-Notes:
+Bugs:
 
 - Alerts will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `.alert()` component in which case bugs should be filed with Apple.
 - Native SwiftUI Alerts will not have their heading text spoken as a Heading to VoiceOver users and this could be considered an accessibility defect in Apple's native `.alert()` component in which case bugs should be filed with Apple.

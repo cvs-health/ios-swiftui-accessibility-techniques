@@ -7,7 +7,7 @@ Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when
 
 Use `AccessibilityFocusState` to send focus back to the trigger button that opened the sheet when the sheet is closed.            
 
-Notes:
+Bugs:
 
 - Sheets will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `.sheet()` component in which case bugs should be filed with Apple.
     

@@ -145,7 +145,7 @@ struct CardsView: View {
                                                 .offset(x: 5, y: 5)
                                             
                                         }
-                                        .accessibilityLabel("Add coupon to wallet.")
+                                        .accessibilityLabel("Add coupon to wallet")
                                         .accessibilityFocused($isTriggerFocused)
                                         .alert("Coupon added to wallet.", isPresented: $showingAlert) {
                                             Button("OK", role: .cancel) {

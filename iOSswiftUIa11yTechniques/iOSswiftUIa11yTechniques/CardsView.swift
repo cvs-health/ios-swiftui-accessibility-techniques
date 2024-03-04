@@ -17,6 +17,15 @@
 import SwiftUI
  
 struct CardsView: View {
+    @State private var showDetailView: Bool = false
+    
+    @State private var actionTitle = ""
+    @State private var isExpanded: Bool = false
+
+    @State private var showingAlert = false
+    @State private var showingAlertBad = false
+    @AccessibilityFocusState private var isTriggerFocused: Bool
+
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
@@ -24,9 +33,9 @@ struct CardsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Cards need a heading as the first focused element with VoiceOver. Card call to action button or link needs to be unique and specific when spoken to VoiceOver users and may require an `.accessibilityLabel`.")
+                Text("Cards need a heading as the first focused element with VoiceOver. Card call to action button or link needs to be unique and specific when spoken to VoiceOver users and may require an `.accessibilityLabel`. Cards with many actions can be combined as one focusable element by wrapping the card in a `NavigationLink` or using `.accessibilityElement(children: .combine)` and any actions missing when combined can be included using `.accessibilityAction`.")
                     .padding(.bottom)
-                Text("Good Example")
+                Text("Good Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -36,6 +45,11 @@ struct CardsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                Text("Card with correct heading placement & `.accessibilityLabel`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 VStack(alignment: .leading) {
                     Text("Sign Up for Newsletter")
                         .font(.headline)
@@ -72,9 +86,97 @@ struct CardsView: View {
                         .shadow(color: .gray, radius: 5, x: 4, y: 4)
                 )
                 DisclosureGroup("Details") {
-                    Text("The good card example uses a heading element at the top of the card and a more specific `.accessibilityLabel` for the call to action button.")
+                    Text("The good card with correct heading placement and `.accessibilityLabel` example uses a heading element at the top of the card and a more specific `.accessibilityLabel` for the call to action button.")
                 }.padding()
-                Text("Bad Example")
+                Text("Card with Focus Combined & Accessibility Actions")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                NavigationLink(destination: DetailView()) {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("NEW")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .padding(8)
+                                .background(colorScheme == .dark ? Color(.white) : Color(.blue))
+                                .foregroundColor(colorScheme == .dark ? Color(.black) : Color(.white))
+                                .foregroundColor(.white)
+                                .cornerRadius(4)
+                                .offset(x: -5, y: -5)
+                            Spacer()
+                            Text("$3.00 off")
+                                .font(.largeTitle).bold()
+                                .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                                .offset(x: -10, y: 0)
+                            Spacer()
+                            Spacer()
+                        }
+                        HStack(alignment: .top) {
+                            Image("barber-shop")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 80, height: 150)
+                                .clipped()
+                                .accessibilityLabel("Barber Shop")
+                            VStack(alignment: .leading) {
+                                Text("$3.00 off any haircut, trim, or shave with purchase of any styling products or shave cream.")
+                                    .foregroundColor(colorScheme == .dark ? Color(.white) : Color(.black))
+                                HStack {
+                                    VStack {
+                                        DisclosureGroup("Show details", isExpanded: $isExpanded) {
+                                            Text("Must purchase at least one styling or shave cream product. Valid only during time of purchase.")
+                                                .foregroundColor(colorScheme == .dark ? Color(.white) : Color(.black))
+                                        }
+                                        Text("Expires 05/31/24").frame(maxWidth: .infinity, alignment: .leading)
+                                            .foregroundColor(colorScheme == .dark ? Color(.white) : Color(.black))
+                                    }
+                                    Button(action: {
+                                        showingAlert = true
+                                        }) {
+                                            Image(systemName: "plus")
+                                                .font(.title.weight(.semibold))
+                                                .padding(8)
+                                                .background(colorScheme == .dark ? Color(.white) : darkRed)
+                                                .foregroundColor(colorScheme == .dark ? darkRed : Color(.white))
+                                                .clipShape(Circle())
+                                                .shadow(radius: 2, x: 1, y: 2)
+                                                .offset(x: 5, y: 5)
+                                            
+                                        }
+                                        .accessibilityLabel("Add coupon to wallet.")
+                                        .accessibilityFocused($isTriggerFocused)
+                                        .alert("Coupon added to wallet.", isPresented: $showingAlert) {
+                                            Button("OK", role: .cancel) {
+                                                isTriggerFocused = true
+                                            }
+                                        } message: {
+                                            Text("The coupon has been added to your digital wallet.")
+                                        }
+                                }
+                            }
+                        }
+                    }
+                    .accessibilityAction(named: "Show details") {
+                        actionTitle = "Show details"
+                        isExpanded.toggle()
+                    }
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.gray, lineWidth: 2)
+                    )
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(colorScheme == .dark ? Color.black : Color.white)
+                            .shadow(color: .gray, radius: 5, x: 4, y: 4)
+                    )
+                }
+                DisclosureGroup("Details") {
+                    Text("The good card with combined focus and accessibility actions example wraps the card in a `NavigationLink` to combine it as one focusable element and adds `.accessibilityAction(named: \"Show details\")` to include the Show details accordion in the list of accessibility actions.")
+                }.padding()
+                Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -84,6 +186,11 @@ struct CardsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
+                Text("Card with incorrect heading placement and no `.accessibilityLabel`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 VStack(alignment: .leading) {
                     Image("get10off")
                         .resizable()
@@ -118,8 +225,94 @@ struct CardsView: View {
                         .shadow(color: .gray, radius: 5, x: 4, y: 4)
                 )
                 DisclosureGroup("Details") {
-                    Text("The bad card example uses a heading element that is not at the top of the card and a generic call to action button.")
+                    Text("The bad card with incorrect heading placement and no `.accessibilityLabel` example uses a heading element that is not at the top of the card and a generic call to action button with no `.accessibilityLabel`.")
                 }.padding()
+                Text("Card without Focus Combined or Accessibility Actions")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("NEW")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .padding(8)
+                            .background(colorScheme == .dark ? Color(.white) : Color(.blue))
+                            .foregroundColor(colorScheme == .dark ? Color(.black) : Color(.white))
+                            .foregroundColor(.white)
+                            .cornerRadius(4)
+                            .offset(x: -5, y: -5)
+                        Spacer()
+                        Text("$3.00 off")
+                            .font(.largeTitle).bold()
+                            .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                            .offset(x: -10, y: 0)
+                        Spacer()
+                        Spacer()
+                    }
+                    HStack(alignment: .top) {
+                        Image("barber-shop")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 80, height: 150)
+                            .clipped()
+                        VStack(alignment: .leading) {
+                            Text("$3.00 off any haircut, trim, or shave with purchase of any styling products or shave cream.")
+                                .foregroundColor(colorScheme == .dark ? Color(.white) : Color(.black))
+                            HStack {
+                                VStack {
+                                    DisclosureGroup("Show details") {
+                                        Text("Must purchase at least one styling or shave cream product. Valid only during time of purchase.")
+                                            .foregroundColor(colorScheme == .dark ? Color(.white) : Color(.black))
+                                    }
+                                    Text("Expires 05/31/24").frame(maxWidth: .infinity, alignment: .leading)
+                                        .foregroundColor(colorScheme == .dark ? Color(.white) : Color(.black))
+                                }
+                                Button(action: {
+                                    showingAlert = true
+                                    }) {
+                                        Image(systemName: "plus")
+                                            .font(.title.weight(.semibold))
+                                            .padding(8)
+                                            .background(colorScheme == .dark ? Color(.white) : darkRed)
+                                            .foregroundColor(colorScheme == .dark ? darkRed : Color(.white))
+                                            .clipShape(Circle())
+                                            .shadow(radius: 2, x: 1, y: 2)
+                                            .offset(x: 5, y: 5)
+                                        
+                                    }
+                                    .alert("Coupon added to wallet.", isPresented: $showingAlert) {
+                                        Button("OK", role: .cancel) {
+                                            isTriggerFocused = false
+                                        }
+                                    } message: {
+                                        Text("The coupon has been added to your digital wallet.")
+                                    }
+                            }
+                        }
+                    }
+                }
+                .onTapGesture {
+                    showDetailView = true
+                }
+                .sheet(isPresented: $showDetailView) {
+                    DetailView()
+                }
+                .padding()
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.gray, lineWidth: 2)
+                )
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(colorScheme == .dark ? Color.black : Color.white)
+                        .shadow(color: .gray, radius: 5, x: 4, y: 4)
+                )
+                DisclosureGroup("Details") {
+                    Text("The bad card without combined focus or accessibility actions example does not combine the card as one focusable element and does not include the Show details accordion in the list of accessibility actions.")
+                }.padding()
+
             }
             .navigationTitle("Cards")
             .padding()

@@ -2,7 +2,9 @@
 
 Cards need a heading as the first focused element with VoiceOver. 
 
-Card call to action button or link needs to be unique and specific when spoken to VoiceOver users and may require an `.accessibilityLabel`.
+Card call to action button or link needs to be unique and specific when spoken to VoiceOver users and may require an `.accessibilityLabel`. 
+
+Cards with many actions can be combined as one focusable element by wrapping the card in a `NavigationLink` or using `.accessibilityElement(children: .combine)` and any actions missing when combined can be included using `.accessibilityAction`.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)

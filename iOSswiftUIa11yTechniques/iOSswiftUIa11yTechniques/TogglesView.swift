@@ -111,7 +111,7 @@ struct TogglesView: View {
                 Text("Display Mode").frame(maxWidth: .infinity, alignment: .leading)
                 HStack {
                     Text("Light")
-                        .foregroundColor(toggleGoodOn2 ? .gray : Color(.blue))
+                        .foregroundColor(toggleGoodOn2 ? .white : .black)
                         .onTapGesture {
                             toggleGoodOn2 = false
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -125,7 +125,7 @@ struct TogglesView: View {
                     .accessibilityValue(toggleGoodOn2 ? "Dark" : "Light")
                     .accessibilityIdentifier("toggleGood2")
                     Text("Dark")
-                        .foregroundColor(toggleGoodOn2 ? .blue : .gray)
+                        .foregroundColor(toggleGoodOn2 ? .white : .black)
                         .onTapGesture {
                             toggleGoodOn2 = true
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()

@@ -18,6 +18,7 @@ import SwiftUI
  
 struct FunctionalView: View {
     
+    @AccessibilityFocusState private var isTriggerFocused: Bool
     @State private var showingAlert = false
     @State private var showingAlertImage = false
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
@@ -49,9 +50,14 @@ struct FunctionalView: View {
                         .frame(width: 44, height: 44)
                         .accessibilityLabel("Scan barcode")
                 }
+                .accessibilityFocused($isTriggerFocused)
                 .accessibilityIdentifier("goodImage")
-                .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Button Activated"), message: Text("You activated the button!"), dismissButton: .default(Text("OK")))
+                .alert("Button Activated", isPresented: $showingAlert) {
+                    Button("OK", role: .cancel) {
+                        isTriggerFocused = true
+                    }
+                } message: {
+                    Text("You activated the button!")
                 }
                 DisclosureGroup("Details") {
                     Text("The good functional image example uses `.accessibilityLabel(\"Scan barcode\"))` to give the button a meaningful accessibility label that describes its purpose to VoiceOver users.")

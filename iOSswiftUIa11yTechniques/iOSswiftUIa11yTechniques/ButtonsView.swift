@@ -17,9 +17,15 @@
 import SwiftUI
  
 struct ButtonsView: View {
+    
+    @AccessibilityFocusState private var isUsernameFocused: Bool
+    @AccessibilityFocusState private var isEmailFocused: Bool
     @State private var username: String = "jdoe24"
     @State private var email: String = "jdoe24@gmail.com"
+    @AccessibilityFocusState private var isUsername2Focused: Bool
+    @AccessibilityFocusState private var isPassword2Focused: Bool
     @State private var username2: String = ""
+    @State private var password2: String = ""
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
@@ -39,7 +45,7 @@ struct ButtonsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom) 
-                Text("Good Example 1")
+                Text("Good Example Unique `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -49,34 +55,44 @@ struct ButtonsView: View {
                         .frame(minWidth: 80, alignment:.leading)
                     TextField("", text: $username)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textContentType(.username)
+                        .autocorrectionDisabled(true)
+                        .keyboardType(.asciiCapable)
                         .accessibilityLabel("Username")
+                        .onSubmit {
+                            isUsernameFocused = true
+                        }
+                        .accessibilityFocused($isUsernameFocused)
                     Button(action: {
                         // Handle button action
                     }) {
                         Text("Edit")
                     }.accessibilityLabel("Edit Username")
-                        
-                        .accessibilityIdentifier("edit1good")
+                    .accessibilityIdentifier("edit1good")
                 }
                 HStack {
                     Text("Email")
                         .frame(minWidth: 80, alignment:.leading)
                     TextField("", text: $email)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textContentType(.emailAddress)
                         .accessibilityLabel("Email")
                         .font(.body)
+                        .onSubmit {
+                            isEmailFocused = true
+                        }
+                        .accessibilityFocused($isEmailFocused)
                     Button(action: {
                         // Handle button action
                     }) {
                         Text("Edit")
                     }.accessibilityLabel("Edit Email")
-                        
                         .accessibilityIdentifier("edit2good")
                 }
                 DisclosureGroup("Details") {
-                    Text("The good button example uses `.accessibilityLabel(\"Edit Username\")` and `.accessibilityLabel(\"Edit Email\")` to give each Edit button a unique and specific accessibility label for VoiceOver users.")
+                    Text("The good button example with unique `.accessibilityLabel` uses `.accessibilityLabel(\"Edit Username\")` and `.accessibilityLabel(\"Edit Email\")` to give each Edit button a unique and specific accessibility label for VoiceOver users.")
                 }.padding()
-                Text("Good Example 2")
+                Text("Good Example Disabled Button")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -85,12 +101,24 @@ struct ButtonsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 TextField("", text: $username2)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textContentType(.username)
+                    .autocorrectionDisabled(true)
+                    .keyboardType(.asciiCapable)
                     .accessibilityLabel("Username")
+                    .onSubmit {
+                        isUsername2Focused = true
+                    }
+                    .accessibilityFocused($isUsername2Focused)
                 Text("Password")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                TextField("", text: $username2)
+                TextField("", text: $password2)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textContentType(.password)
                     .accessibilityLabel("Password")
+                    .onSubmit {
+                        isPassword2Focused = true
+                    }
+                    .accessibilityFocused($isPassword2Focused)
                 Button(action: {
                     // Handle button action
                 }) {
@@ -101,7 +129,7 @@ struct ButtonsView: View {
                         .accessibilityIdentifier("loginGood")
                 }
                 DisclosureGroup("Details") {
-                    Text("The good Log In button example uses `.disabled(true)` to set the disabled state of the button.")
+                    Text("The good disabled button example uses `.disabled(true)` to set the disabled state of the Log In button.")
                 }.padding()
                 Text("Bad Examples")
                     .font(.subheadline)
@@ -113,7 +141,7 @@ struct ButtonsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example Generic Labels")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -144,9 +172,9 @@ struct ButtonsView: View {
                         .accessibilityIdentifier("edit2bad")
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad button example uses the same label text \"Edit\" for both buttons without providing a unique and specific `.accessibilityLabel` for VoiceOver users.")
+                    Text("The bad generic button labels example uses the same label text \"Edit\" for both buttons without providing a unique and specific `.accessibilityLabel` for VoiceOver users.")
                 }.padding()
-                Text("Bad Example 2")
+                Text("Bad Example Disabled Button")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -171,7 +199,7 @@ struct ButtonsView: View {
                         .accessibilityIdentifier("loginBad")
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad Log In button example uses `.tint(.gray)` to visually convey that the button is disabled but VoiceOver will not speak a disabled state.")
+                    Text("The bad disabled button example uses `.tint(.gray)` to visually convey that the Log In button is disabled but VoiceOver will not speak a disabled state.")
                 }.padding()
             }
             .padding()

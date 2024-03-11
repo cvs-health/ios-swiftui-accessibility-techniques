@@ -17,6 +17,9 @@
 import SwiftUI
  
 struct InputLabelsView: View {
+    @AccessibilityFocusState private var isEmailHelpFocused: Bool
+    @AccessibilityFocusState private var isUsernameHelpFocused: Bool
+    
     @State private var showingAlertUsername = false
     @State private var showingAlertEmail = false
 
@@ -53,10 +56,14 @@ struct InputLabelsView: View {
                     }) {
                         Label("Help for Username", systemImage: "questionmark.app").labelStyle(IconOnlyLabelStyle())
                     }
-                        
+                    .accessibilityFocused($isUsernameHelpFocused)
                         .accessibilityInputLabels(["Username Help", "Username icon", "Help for Username"])
-                        .alert(isPresented: $showingAlertUsername) {
-                            Alert(title: Text("Username Help Tapped"), message: Text("You tapped the ? help icon for username!"), dismissButton: .default(Text("OK")))
+                        .alert("Username Help Tapped", isPresented: $showingAlertUsername) {
+                            Button("OK", role: .cancel) {
+                                isUsernameHelpFocused = true
+                            }
+                        } message: {
+                            Text("You tapped the ? help icon for username!")
                         }
                 }
                 HStack {
@@ -72,10 +79,14 @@ struct InputLabelsView: View {
                     }) {
                         Label("Help for Email", systemImage: "questionmark.app").labelStyle(IconOnlyLabelStyle())
                     }
-                        
+                    .accessibilityFocused($isEmailHelpFocused)
                         .accessibilityInputLabels(["Email Help", "Email icon", "Help for Email"])
-                        .alert(isPresented: $showingAlertEmail) {
-                            Alert(title: Text("Email Help Tapped"), message: Text("You tapped the ? help icon for email!"), dismissButton: .default(Text("OK")))
+                        .alert("Email Help Tapped", isPresented: $showingAlertEmail) {
+                            Button("OK", role: .cancel) {
+                                isEmailHelpFocused = true
+                            }
+                        } message: {
+                            Text("You tapped the ? help icon for email!")
                         }
                 }
                 DisclosureGroup("Details") {

@@ -36,7 +36,8 @@ struct PickersView: View {
     @State private var selectedFruitWheelBad: Fruit = .cherry
     @State private var selectedFruitSegmentedBad: Fruit = .grape
     @AccessibilityFocusState private var isTriggerFocused: Bool
-    
+    @AccessibilityFocusState private var isFruitFocused: Bool
+
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
@@ -124,6 +125,10 @@ struct PickersView: View {
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 .pickerStyle(MenuPickerStyle())
+                .onChange(of: selectedFruit) {
+                    isFruitFocused = true
+                }
+                .accessibilityFocused($isFruitFocused)
                 DisclosureGroup("Details") {
                     Text("The menu style good example uses `Picker(\"Fruit\")` label text which is spoken as the accessibility label to VoiceOver.")
                 }.padding()

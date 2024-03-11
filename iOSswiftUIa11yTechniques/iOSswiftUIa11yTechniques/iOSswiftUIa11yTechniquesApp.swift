@@ -24,9 +24,12 @@ struct iOSswiftUIa11yTechniquesApp: App {
             ContentView()
         }
     }
-    //stop navigation page title from truncating
+    
     init() {
-            UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
-        }
+        //stop navigation page title from truncating
+        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+        //customize color of non-destructive Alert buttons
+        //UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .purple //this fails contrast in dark mode
+    }
 
 }

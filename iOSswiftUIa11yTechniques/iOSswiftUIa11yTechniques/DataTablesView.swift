@@ -20,7 +20,8 @@ struct DataTablesView: View {
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
-    
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+
     var body: some View {
         ScrollView {
             VStack {
@@ -43,29 +44,37 @@ struct DataTablesView: View {
                     .accessibilityAddTraits(.isHeader)
                 Text("Generic Price List").font(.headline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
                 VStack {
-                    GeometryReader { geometry in
-                        HStack {
-                            Text("Name")
-                                .frame(width: geometry.size.width / 2)
-                            Text("30 Day")
-                                .frame(width: geometry.size.width / 4)
-                            Text("90 Day")
-                                .frame(width: geometry.size.width / 4)
-                        }.fontWeight(.bold).font(.footnote)
+                    if (dynamicTypeSize <= DynamicTypeSize.xxxLarge) {
+                        GeometryReader { geometry in
+                            HStack {
+                                Text("Name")
+                                    .frame(width: geometry.size.width / 2)
+                                Text("30 Day")
+                                    .frame(width: geometry.size.width / 4)
+                                Text("90 Day")
+                                    .frame(width: geometry.size.width / 4)
+                            }.fontWeight(.bold).font(.footnote)
+                        }
                     }
                     ForEach(items) { item in
                         VStack(alignment: .leading) {
-                            GeometryReader { geometry in
-                                HStack {
-                                    Text(item.name)
-                                        .frame(width: geometry.size.width / 2)
-                                    Text("$\(item.oneMonth)")
-                                        .frame(width: geometry.size.width / 4)
-                                        .accessibilityHint("30 Day, \(item.name)")
-                                    Text("$\(item.threeMonth)")
-                                        .frame(width: geometry.size.width / 4)
-                                        .accessibilityHint("90 Day, \(item.name)")
-                                }.font(.footnote)
+                            if (dynamicTypeSize <= DynamicTypeSize.xxxLarge) {
+                                GeometryReader { geometry in
+                                    HStack {
+                                        Text(item.name)
+                                            .frame(width: geometry.size.width / 2)
+                                        Text("$\(item.oneMonth)")
+                                            .frame(width: geometry.size.width / 4)
+                                            .accessibilityHint("30 Day, \(item.name)")
+                                        Text("$\(item.threeMonth)")
+                                            .frame(width: geometry.size.width / 4)
+                                            .accessibilityHint("90 Day, \(item.name)")
+                                    }.font(.footnote)
+                                }
+                            } else {
+                                Text(item.name).font(.headline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                                Text("30 Day: $\(item.oneMonth)")
+                                Text("90 Day: $\(item.threeMonth)")
                             }
                         }.frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -80,31 +89,39 @@ struct DataTablesView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("Generic Price List").font(.headline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                Text("Generic Price List").font(.headline).accessibilityAddTraits(.isHeader)
                 VStack {
-                    GeometryReader { geometry in
-                        HStack {
-                            Text("Name")
-                                .frame(width: geometry.size.width / 2)
-                            Text("30 Day")
-                                .frame(width: geometry.size.width / 4)
-                            Text("90 Day")
-                                .frame(width: geometry.size.width / 4)
-                        }.fontWeight(.bold).font(.footnote)
+                    if (dynamicTypeSize <= DynamicTypeSize.xxxLarge) {
+                        GeometryReader { geometry in
+                            HStack {
+                                Text("Name")
+                                    .frame(width: geometry.size.width / 2)
+                                Text("30 Day")
+                                    .frame(width: geometry.size.width / 4)
+                                Text("90 Day")
+                                    .frame(width: geometry.size.width / 4)
+                            }.fontWeight(.bold).font(.footnote)
+                        }
                     }
                     ForEach(items) { item in
                         VStack(alignment: .leading) {
-                            GeometryReader { geometry in
-                                HStack {
-                                    Text(item.name)
-                                        .frame(width: geometry.size.width / 2)
-                                    Text("$\(item.oneMonth)")
-                                        .frame(width: geometry.size.width / 4)
-                                        .accessibilityLabel("30 Day, \(item.name), $\(item.oneMonth)")
-                                    Text("$\(item.threeMonth)")
-                                        .frame(width: geometry.size.width / 4)
-                                        .accessibilityLabel("90 Day, \(item.name), $\(item.threeMonth)")
-                                }.font(.footnote)
+                            if (dynamicTypeSize <= DynamicTypeSize.xxxLarge) {
+                                GeometryReader { geometry in
+                                    HStack {
+                                        Text(item.name)
+                                            .frame(width: geometry.size.width / 2)
+                                        Text("$\(item.oneMonth)")
+                                            .frame(width: geometry.size.width / 4)
+                                            .accessibilityLabel("30 Day, \(item.name), $\(item.oneMonth)")
+                                        Text("$\(item.threeMonth)")
+                                            .frame(width: geometry.size.width / 4)
+                                            .accessibilityLabel("90 Day, \(item.name), $\(item.threeMonth)")
+                                    }.font(.footnote)
+                                }
+                            } else {
+                                Text(item.name).font(.headline).accessibilityAddTraits(.isHeader)
+                                Text("30 Day: $\(item.oneMonth)")
+                                Text("90 Day: $\(item.threeMonth)")
                             }
                         }.frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -121,29 +138,37 @@ struct DataTablesView: View {
                     .accessibilityAddTraits(.isHeader)
                 Text("Generic Price List").font(.headline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
                 VStack {
-                    GeometryReader { geometry in
-                        HStack {
-                            Text("Name")
-                                .frame(width: geometry.size.width / 2)
-                            Text("30 Day")
-                                .frame(width: geometry.size.width / 4)
-                            Text("90 Day")
-                                .frame(width: geometry.size.width / 4)
-                        }.fontWeight(.bold).font(.footnote)
+                    if (dynamicTypeSize <= DynamicTypeSize.xxxLarge) {
+                        GeometryReader { geometry in
+                            HStack {
+                                Text("Name")
+                                    .frame(width: geometry.size.width / 2)
+                                Text("30 Day")
+                                    .frame(width: geometry.size.width / 4)
+                                Text("90 Day")
+                                    .frame(width: geometry.size.width / 4)
+                            }.fontWeight(.bold).font(.footnote)
+                        }
                     }
                     ForEach(items) { item in
                         VStack(alignment: .leading) {
-                            GeometryReader { geometry in
-                                HStack {
-                                    Text(item.name)
-                                        .frame(width: geometry.size.width / 2)
-                                    Text("$\(item.oneMonth)")
-                                        .frame(width: geometry.size.width / 4)
-                                        .accessibilityValue("30 Day, \(item.name)")
-                                    Text("$\(item.threeMonth)")
-                                        .frame(width: geometry.size.width / 4)
-                                        .accessibilityValue("90 Day, \(item.name)")
-                                }.font(.footnote)
+                            if (dynamicTypeSize <= DynamicTypeSize.xxxLarge) {
+                                GeometryReader { geometry in
+                                    HStack {
+                                        Text(item.name)
+                                            .frame(width: geometry.size.width / 2)
+                                        Text("$\(item.oneMonth)")
+                                            .frame(width: geometry.size.width / 4)
+                                            .accessibilityValue("30 Day, \(item.name)")
+                                        Text("$\(item.threeMonth)")
+                                            .frame(width: geometry.size.width / 4)
+                                            .accessibilityValue("90 Day, \(item.name)")
+                                    }.font(.footnote)
+                                }
+                            } else {
+                                Text(item.name).font(.headline).accessibilityAddTraits(.isHeader)
+                                Text("30 Day: $\(item.oneMonth)")
+                                Text("90 Day: $\(item.threeMonth)")
                             }
                         }.frame(maxWidth: .infinity, alignment: .leading)
                     }

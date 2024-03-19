@@ -175,7 +175,7 @@ struct TextFieldsView: View {
                 DisclosureGroup("Details") {
                     Text("The second good Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required. Don't stack the labels vertically or else VoiceOver TextField activation will be blocked to due to an Apple bug.")
                 }.padding()
-                Text("Bad Example")
+                Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)

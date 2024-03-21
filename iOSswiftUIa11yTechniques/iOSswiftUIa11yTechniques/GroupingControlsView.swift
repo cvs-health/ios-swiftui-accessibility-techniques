@@ -30,13 +30,13 @@ struct GroupingControlsView: View {
         ScrollView {
             VStack {
                 Text("Groups of related controls need `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` applied to the group container so that VoiceOver users hear the group label spoken when first moving focus to a control in the group.")
-                    .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.top)
                 Divider()
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
@@ -81,13 +81,14 @@ struct GroupingControlsView: View {
                 .accessibilityLabel("Do you want to join our email newsletter?")
                 DisclosureGroup("Details") {
                     Text("The good grouping controls example uses `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the `HStack{}` so that VoiceOver users hear the group label spoken when first moving focus to a control in the group.")
-                }.padding().accessibilityLabel("Details, Good Example")
+                }.accessibilityLabel("Details, Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.top)
                 Divider()
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
@@ -124,7 +125,7 @@ struct GroupingControlsView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad grouping controls example does not use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the `HStack{}` which prevents VoiceOver users from hearing the group label spoken when first moving focus to a control in the group.")
-                }.padding().accessibilityLabel("Details, Bad Example")
+                }.accessibilityLabel("Details, Bad Example")
             }
             .navigationTitle("Grouping Controls")
             .padding()

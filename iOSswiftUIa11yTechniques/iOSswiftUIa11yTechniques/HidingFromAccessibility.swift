@@ -28,13 +28,13 @@ struct HidingFromAccessibility: View {
         ScrollView {
             VStack {
                 Text("Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from accessibility. Don't hide informative or functional content from assistive technology users. Don't use `.accessibilityHidden(true)` on any informative content or UI controls. Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden from accessibility users.")
-                    .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.top)
                 Divider()
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
@@ -42,13 +42,14 @@ struct HidingFromAccessibility: View {
                 HeaderContainer(searchText: $searchText)
                 DisclosureGroup("Details") {
                     Text("The good example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is used on the icon button's badge numbers to avoid VoiceOver speaking repetitive text.")
-                }
+                }.accessibilityLabel("Details, Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.top)
                 Divider()
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
@@ -57,7 +58,7 @@ struct HidingFromAccessibility: View {
                     .accessibilityHidden(true)
                 DisclosureGroup("Details") {
                     Text("The bad example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is incorrectly used to hide the contents of the custom view from assistive technology users. VoiceOver, Voice Control, and Full Keyboard Access users cannot focus on or activate any of the controls inside the custom view with `.accessibilityHidden(true)` applied.")
-                }
+                }.accessibilityLabel("Details, Bad Example")
             }
             .navigationTitle("Hiding from Accessibility")
             .padding()

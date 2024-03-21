@@ -27,7 +27,7 @@ struct AccessibilityHidden: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from accessibility users. Don't hide informative or functional content from accessibility users. Don't use `.accessibilityHidden(true)` on any informative content or UI controls. Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden from accessibility users.")
+                Text("Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control users. Don't use `.accessibilityHidden(true)` on any informative content or UI controls. Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden.")
                 Text("Good Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -57,7 +57,7 @@ struct AccessibilityHidden: View {
                 HeaderContainer(searchText: $searchText)
                     .accessibilityHidden(true)
                 DisclosureGroup("Details") {
-                    Text("The bad example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is incorrectly used to hide the contents of the custom view from accessibility users. VoiceOver, Voice Control, and Full Keyboard Access users cannot focus on or activate any of the controls inside the custom view with `.accessibilityHidden(true)` applied.")
+                    Text("The bad example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is incorrectly used to hide the contents of the custom view. VoiceOver, Voice Control, Full Keyboard Access, and Switch Control users cannot focus on or activate any of the controls inside the custom view with `.accessibilityHidden(true)` applied.")
                 }.accessibilityLabel("Details, Bad Example")
             }
             .navigationTitle("Accessibility Hidden")

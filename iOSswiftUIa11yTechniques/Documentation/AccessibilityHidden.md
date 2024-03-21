@@ -1,11 +1,9 @@
 # Accessibility Hidden
-Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from accessibility users. 
-
-Don't hide informative or functional content from accessibility users. 
+Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control users. 
 
 Don't use `.accessibilityHidden(true)` on any informative content or UI controls. 
 
-Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden from accessibility users.
+Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden.
 
 ## Applicable WCAG Success Criteria
 - [1.3.2 Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)

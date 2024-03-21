@@ -1,7 +1,7 @@
-# Hiding from Accessibility
-Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from accessibility. 
+# Accessibility Hidden
+Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from accessibility users. 
 
-Don't hide informative or functional content from assistive technology users. 
+Don't hide informative or functional content from accessibility users. 
 
 Don't use `.accessibilityHidden(true)` on any informative content or UI controls. 
 

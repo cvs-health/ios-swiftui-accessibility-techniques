@@ -76,7 +76,7 @@ Documentation files for each technique are listed below.
 - [x] [Combining Focus](iOSswiftUIa11yTechniques/Documentation/CombiningFocus.md)
 - [x] [Device Orientation](iOSswiftUIa11yTechniques/Documentation/DeviceOrientation.md)
 - [x] [Scroll Views](iOSswiftUIa11yTechniques/Documentation/ScrollViews.md)
-- [x] [Hiding from Accessibility](iOSswiftUIa11yTechniques/Documentation/HidingFromAccessibility.md)
+- [x] [Accessibility Hidden](iOSswiftUIa11yTechniques/Documentation/AccessibilityHidden.md)
 - [ ] Siri Shortcuts
 
 ## Contributor Guide

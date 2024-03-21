@@ -108,8 +108,8 @@ struct ContentView: View {
                 NavigationLink(destination: ScrollViews()) {
                     Text("Scroll Views")
                 }
-                NavigationLink(destination: HidingFromAccessibility()) {
-                    Text("Hiding from Accessibility")
+                NavigationLink(destination: AccessibilityHidden()) {
+                    Text("Accessibility Hidden")
                 }
                 NavigationLink(destination: ContactFormView()) {
                     Text("Contact Form")

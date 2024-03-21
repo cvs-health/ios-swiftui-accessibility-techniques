@@ -16,7 +16,7 @@
 
 import SwiftUI
  
-struct HidingFromAccessibility: View {
+struct AccessibilityHidden: View {
     @State private var searchText = ""
 
     
@@ -27,7 +27,7 @@ struct HidingFromAccessibility: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from accessibility. Don't hide informative or functional content from assistive technology users. Don't use `.accessibilityHidden(true)` on any informative content or UI controls. Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden from accessibility users.")
+                Text("Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from accessibility users. Don't hide informative or functional content from accessibility users. Don't use `.accessibilityHidden(true)` on any informative content or UI controls. Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden from accessibility users.")
                 Text("Good Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -57,19 +57,19 @@ struct HidingFromAccessibility: View {
                 HeaderContainer(searchText: $searchText)
                     .accessibilityHidden(true)
                 DisclosureGroup("Details") {
-                    Text("The bad example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is incorrectly used to hide the contents of the custom view from assistive technology users. VoiceOver, Voice Control, and Full Keyboard Access users cannot focus on or activate any of the controls inside the custom view with `.accessibilityHidden(true)` applied.")
+                    Text("The bad example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is incorrectly used to hide the contents of the custom view from accessibility users. VoiceOver, Voice Control, and Full Keyboard Access users cannot focus on or activate any of the controls inside the custom view with `.accessibilityHidden(true)` applied.")
                 }.accessibilityLabel("Details, Bad Example")
             }
-            .navigationTitle("Hiding from Accessibility")
+            .navigationTitle("Accessibility Hidden")
             .padding()
         }
  
     }
 }
  
-struct HidingFromAccessibility_Previews: PreviewProvider {
+struct AccessibilityHidden_Previews: PreviewProvider {
     static var previews: some View {
-        HidingFromAccessibility()
+        AccessibilityHidden()
     }
 }
 

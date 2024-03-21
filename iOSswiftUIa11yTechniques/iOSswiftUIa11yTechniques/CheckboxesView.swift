@@ -148,17 +148,17 @@ struct CheckboxesView: View {
                     .accessibilityAddTraits(.isHeader)
                 Text("Preferred contact method(s):").frame(maxWidth: .infinity, alignment: .leading)
                 VStack {
-                    Toggle(isOn: $isEmailChecked) {
+                    Toggle(isOn: $isEmailCheckedBad) {
                             Text("Email")
                             .frame(maxWidth: .infinity, alignment: .trailing)
                           }
                         .toggleStyle(CheckboxToggleStyle())
-                    Toggle(isOn: $isPhoneChecked) {
+                    Toggle(isOn: $isPhoneCheckedBad) {
                             Text("Phone")
                             .frame(maxWidth: .infinity, alignment: .trailing)
                           }
                         .toggleStyle(CheckboxToggleStyle())
-                    Toggle(isOn: $isTextChecked) {
+                    Toggle(isOn: $isTextCheckedBad) {
                             Text("Text")
                             .frame(maxWidth: .infinity, alignment: .trailing)
                           }

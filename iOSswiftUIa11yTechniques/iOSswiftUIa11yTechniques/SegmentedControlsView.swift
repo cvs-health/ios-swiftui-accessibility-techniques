@@ -18,6 +18,7 @@ import SwiftUI
  
 struct SegmentedControlsView: View {
     @State private var favoriteColor = "Red"
+    @State private var favoriteColorBad = "Green"
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
@@ -61,8 +62,8 @@ struct SegmentedControlsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("What is your favorite color? \(favoriteColor)").frame(maxWidth: .infinity, alignment: .leading)
-                Picker("What is your favorite color?", selection: $favoriteColor) {
+                Text("What is your favorite color? \(favoriteColorBad)").frame(maxWidth: .infinity, alignment: .leading)
+                Picker("What is your favorite color?", selection: $favoriteColorBad) {
                     Text("Red").tag("Red")
                     Text("Green").tag("Green")
                     Text("Blue").tag("Blue")

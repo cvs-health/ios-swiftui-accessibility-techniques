@@ -108,6 +108,9 @@ struct ContentView: View {
                 NavigationLink(destination: ScrollViews()) {
                     Text("Scroll Views")
                 }
+                NavigationLink(destination: HidingFromA11y()) {
+                    Text("Hiding from Accessibility")
+                }
                 NavigationLink(destination: ContactFormView()) {
                     Text("Contact Form")
                 }

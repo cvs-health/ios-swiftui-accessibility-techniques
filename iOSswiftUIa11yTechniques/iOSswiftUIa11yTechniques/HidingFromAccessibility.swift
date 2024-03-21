@@ -1,5 +1,5 @@
 /*
-   Copyright 2023 CVS Health and/or one of its affiliates
+   Copyright 2024 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import SwiftUI
  
-struct HidingFromA11y: View {
+struct HidingFromAccessibility: View {
     @State private var searchText = ""
 
     
@@ -66,9 +66,9 @@ struct HidingFromA11y: View {
     }
 }
  
-struct HidingFromA11y_Previews: PreviewProvider {
+struct HidingFromAccessibility_Previews: PreviewProvider {
     static var previews: some View {
-        HidingFromA11y()
+        HidingFromAccessibility()
     }
 }
 

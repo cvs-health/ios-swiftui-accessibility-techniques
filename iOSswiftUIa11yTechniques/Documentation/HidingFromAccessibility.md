@@ -1,5 +1,5 @@
 # Hiding from Accessibility
-Only purely decorative images or content like repetitive text should be hidden from accessibility. 
+Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from accessibility. 
 
 Don't hide informative or functional content from assistive technology users. 
 

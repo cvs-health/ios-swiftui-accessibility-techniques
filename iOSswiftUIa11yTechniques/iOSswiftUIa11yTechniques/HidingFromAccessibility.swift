@@ -27,7 +27,7 @@ struct HidingFromAccessibility: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Only purely decorative images or content like repetitive text should be hidden from accessibility. Don't hide informative or functional content from assistive technology users. Don't use `.accessibilityHidden(true)` on any informative content or UI controls. Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden from accessibility users.")
+                Text("Use `.accessibilityHidden(true)` to hide purely decorative images or content like repetitive text from accessibility. Don't hide informative or functional content from assistive technology users. Don't use `.accessibilityHidden(true)` on any informative content or UI controls. Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden from accessibility users.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

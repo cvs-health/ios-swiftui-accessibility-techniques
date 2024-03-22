@@ -81,7 +81,7 @@ struct GroupingControlsView: View {
                 .accessibilityLabel("Do you want to join our email newsletter?")
                 DisclosureGroup("Details") {
                     Text("The good grouping controls example uses `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the `HStack{}` so that VoiceOver users hear the group label spoken when first moving focus to a control in the group.")
-                }.accessibilityLabel("Details, Good Example")
+                }.accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -125,7 +125,7 @@ struct GroupingControlsView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad grouping controls example does not use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the `HStack{}` which prevents VoiceOver users from hearing the group label spoken when first moving focus to a control in the group.")
-                }.accessibilityLabel("Details, Bad Example")
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Grouping Controls")
             .padding()

@@ -42,7 +42,7 @@ struct AccessibilityHidden: View {
                 HeaderContainer(searchText: $searchText)
                 DisclosureGroup("Details") {
                     Text("The good example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is used on the icon button's badge numbers to prevent VoiceOver from speaking repetitive text.")
-                }.accessibilityLabel("Details, Good Example")
+                }.accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -58,7 +58,7 @@ struct AccessibilityHidden: View {
                     .accessibilityHidden(true)
                 DisclosureGroup("Details") {
                     Text("The bad example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is incorrectly used to hide the contents of the custom view. VoiceOver, Voice Control, Full Keyboard Access, and Switch Control users cannot focus on or activate any of the controls inside the custom view with `.accessibilityHidden(true)` applied.")
-                }.accessibilityLabel("Details, Bad Example")
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Accessibility Hidden")
             .padding()

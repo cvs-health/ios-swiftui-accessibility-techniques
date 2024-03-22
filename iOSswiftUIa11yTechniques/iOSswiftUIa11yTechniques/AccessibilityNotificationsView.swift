@@ -58,7 +58,7 @@ struct AccessibilityNotificationsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good Accessibility Notifications example posts an `AccessibilityNotification.Announcement` that speaks the \"1 Item added to cart.\" status message to VoiceOver when activating the Add to Cart button. The announcement is posted with a 0.1 second delay to make it speak correctly to VoiceOver.")
-                }.padding([.bottom]).accessibilityLabel("Details, Good Example")
+                }.padding([.bottom]).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -84,7 +84,7 @@ struct AccessibilityNotificationsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad Accessibility Notifications example does not speak an accessibility announcement notification to VoiceOver when the \"1 Item added to cart.\" status message displays.")
-                }.accessibilityLabel("Details, Bad Example")
+                }.accessibilityHint("Bad Example")
             }
             .padding()
             .navigationTitle("Accessibility Notifications")

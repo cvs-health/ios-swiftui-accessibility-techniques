@@ -3,9 +3,11 @@ Accordion controls expand and collapse to show and hide content. VoiceOver users
 
 Use `DisclosureGroup` to create an accessible accordion with expanded and collapsed states for VoiceOver. 
 
-Notes:
+Use `DisclosureGroupStyle` to create a custom accordion style using the native `DisclosureGroup`. 
 
-* Use `DisclosureGroupStyle` to create a custom accordion style using the native `DisclosureGroup` that retains the expanded and collapsed states.
+Known Issues:
+
+* Don't use an `.accessibilityLabel` on a `DisclosureGroup` because it will override all text inside the expanded accordion and only the `.accessibilityLabel` will be spoken to VoiceOver. Instead use `.accessibilityHint` if you want to add unique text to repeating `DisclosureGroup` accordions.
 
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)

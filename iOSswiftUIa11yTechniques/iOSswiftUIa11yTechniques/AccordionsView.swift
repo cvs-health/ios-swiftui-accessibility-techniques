@@ -52,7 +52,7 @@ struct AccordionsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Accordions hide and show content. Use `DisclosureGroup` to create an accessible accordion with expanded and collapsed states for VoiceOver. Use `DisclosureGroupStyle` to create a custom accordion style using the native `DisclosureGroup`.")
+                Text("Accordions hide and show content. Use `DisclosureGroup` to create an accessible accordion with expanded and collapsed states for VoiceOver. Use `DisclosureGroupStyle` to create a custom accordion style using the native `DisclosureGroup`. Don't use an `.accessibilityLabel` on a `DisclosureGroup` because it will override all text inside the expanded accordion and only the `.accessibilityLabel` will be spoken to VoiceOver. Instead use `.accessibilityHint` if you want to add unique text to repeating `DisclosureGroup` accordions.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -64,7 +64,7 @@ struct AccordionsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example `DisclosureGroup`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -74,9 +74,9 @@ struct AccordionsView: View {
                 }.padding()
                     .accessibilityIdentifier("accordionGood1")
                 DisclosureGroup("Details") {
-                    Text("The good accordion example uses a native `DisclosureGroup`. VoiceOver speaks \"Collapsed, Double-tap to expand\" and \"Expanded, Double-tap to collapse\" as the state and hint text.")
-                }.padding()
-                Text("Good Example 2")
+                    Text("The good accordion examples use a native `DisclosureGroup`. VoiceOver speaks \"Collapsed, Double-tap to expand\" and \"Expanded, Double-tap to collapse\" as the state and hint text.")
+                }.padding(.bottom).accessibilityHint("Good Example DisclosureGroup")
+                Text("Good Example `DisclosureGroupStyle`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -87,7 +87,7 @@ struct AccordionsView: View {
                 .disclosureGroupStyle(CustomDisclosureGroupStyle(button: Label("", systemImage: "plus")))
                 DisclosureGroup("Details") {
                     Text("The second good accordion example uses a custom `DisclosureGroupStyle`. VoiceOver speaks the same \"Collapsed, Double-tap to expand\" and \"Expanded, Double-tap to collapse\" state and hint text.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example DisclosureGroupStyle")
                     .accessibilityIdentifier("accordionGood2")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -117,7 +117,7 @@ struct AccordionsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad accordion example is coded as a `Button` that hides and shows text. VoiceOver does not speak an expanded or collapsed state or hint. The `.foregroundColor(.blue)` also has an insufficient contrast ratio in light mode.")
-                }.padding()
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Accordions")
             .padding()

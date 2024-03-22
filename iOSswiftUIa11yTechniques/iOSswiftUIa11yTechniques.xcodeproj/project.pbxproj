@@ -376,6 +376,7 @@
 			isa = PBXGroup;
 			children = (
 				AABD27CD2A9FF10700F718F7 /* A11yEnhancementsView.swift */,
+				BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */,
 				AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */,
 				BC163FC82B6C1585009E3A83 /* AccessibilityRepresentationView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
@@ -415,7 +416,6 @@
 				AABD27D12A9FF11F00F718F7 /* FunctionalView.swift */,
 				BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */,
 				AABD27C72A9FF0D800F718F7 /* HeadingsView.swift */,
-				BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */,
 				AA59CDCB2ABA20920004908F /* HomeTabView.swift */,
 				AABD27C92A9FF0E700F718F7 /* ImagesView.swift */,
 				BC8C920B2B2AA0C9006DAC20 /* Info.plist */,
@@ -444,9 +444,9 @@
 				BC8C92122B324859006DAC20 /* ReadingOrderView.swift */,
 				BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */,
 				BCE205272B597199000DF400 /* RotorView.swift */,
-				AA74DD552AFD8DA800348078 /* SegmentedControlsView.swift */,
 				BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */,
 				BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */,
+				AA74DD552AFD8DA800348078 /* SegmentedControlsView.swift */,
 				BC0030352B363B560063EAD5 /* SheetsView.swift */,
 				AA65F7922AC2889100E143B4 /* SlidersView.swift */,
 				BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */,

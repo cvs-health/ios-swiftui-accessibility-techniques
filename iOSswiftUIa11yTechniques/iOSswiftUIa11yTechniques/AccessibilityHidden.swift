@@ -41,7 +41,7 @@ struct AccessibilityHidden: View {
                     .padding(.bottom)
                 HeaderContainer(searchText: $searchText)
                 DisclosureGroup("Details") {
-                    Text("The good example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is used on the icon button's badge numbers to avoid VoiceOver speaking repetitive text.")
+                    Text("The good example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is used on the icon button's badge numbers to prevent VoiceOver from speaking repetitive text.")
                 }.accessibilityLabel("Details, Good Example")
                 Text("Bad Example")
                     .font(.subheadline)

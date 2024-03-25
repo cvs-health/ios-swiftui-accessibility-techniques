@@ -13,6 +13,7 @@ Notes:
 Bugs:
 
 - `AttributedString` inline links and Markdown inline links are not keyboard focusable or operable when using Full Keyboard Access. This is a bug in Apple's native link controls and bug reports should be filed with Apple. The only way to ensure links are operable with full keyboard access would be to avoid using inline links until Apple fixes the bug.
+- Markdown links cannot be underlined or made bold to have a different text style than their surrounding inline text.
 
 ## Applicable WCAG Success Criteria
 - [1.4.1: Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color)

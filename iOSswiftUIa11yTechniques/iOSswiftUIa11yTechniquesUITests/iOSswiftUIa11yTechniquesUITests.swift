@@ -999,6 +999,25 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             // Fallback on earlier versions
         }
     }
+    func testAccessibilityHidden() throws {
+        let app = XCUIApplication()
+        app.launch()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            app.navigationBars.buttons["ToggleSidebar"].tap()
+        }
+        app.swipeUp()
+        app.collectionViews.buttons["Accessibility Hidden"].tap()
+        
+        
+        
+
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            try app.performAccessibilityAudit()// text clipped false positive
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
     override func setUp() {
        super.setUp()

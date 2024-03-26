@@ -66,8 +66,8 @@ struct LinksView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Link(destination: URL(string: "https://store.apple.com")!, label: {
-                    Text("Shop Online")
+                Link(destination: URL(string: "https://www.example.com/weekly-ad")!, label: {
+                    Text("View Weekly Ad")
                 }).accessibilityRemoveTraits(.isButton)
                     .accessibilityIdentifier("goodLink2")
                 DisclosureGroup("Details") {
@@ -129,11 +129,11 @@ struct LinksView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 Button(action: {
-                            if let url = URL(string: "https://store.apple.com") {
+                            if let url = URL(string: "https://www.example.com/weekly-ad") {
                                 UIApplication.shared.open(url)
                             }
                         }) {
-                            Text("Shop Online")
+                            Text("View Weekly Ad")
                         }.accessibilityIdentifier("badLink2")
                     .tint(.blue)
                 DisclosureGroup("Details") {

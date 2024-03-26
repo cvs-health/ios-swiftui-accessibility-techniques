@@ -29,7 +29,7 @@ struct ConfirmationDialogsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("VoiceOver focus must move to the confirmation dialog when displayed. Use `.confirmationDialog()` to code a native SwiftUI confirmation dialog that manages VoiceOver focus. Use `AccessibilityFocusState` to send focus back to the trigger button that opened the dialog when the dialog is closed.")
+                Text("VoiceOver focus must move to the confirmation dialog when displayed. Use `.confirmationDialog()` to code a native SwiftUI confirmation dialog that receives VoiceOver focus when displayed. Use `AccessibilityFocusState` to send focus back to the trigger button that opened the dialog when the dialog is closed.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -58,8 +58,8 @@ struct ConfirmationDialogsView: View {
                     Text("You cannot undo deleting all messages!")
                   }
                 DisclosureGroup("Details") {
-                    Text("The good confirmation dialog example uses `.confirmationDialog()` to create a native SwiftUI confirmation dialog that receives VoiceOver focus when displayed.")
-                }.padding()
+                    Text("The good confirmation dialog example uses `.confirmationDialog()` to create a native SwiftUI confirmation dialog that receives VoiceOver focus when displayed. `AccessibilityFocusState` is used to send focus back to the trigger button that opened the dialog when the dialog is closed.")
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -86,8 +86,8 @@ struct ConfirmationDialogsView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad confirmation dialog example uses a custom view which does not receive VoiceOver focus when displayed.")
-                }.padding()
+                    Text("The bad confirmation dialog example uses a custom view which does not receive VoiceOver focus when displayed. `AccessibilityFocusState` is not used to send focus back to the trigger button that opened the dialog when the dialog is closed.")
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Confirmation Dialogs")
             .padding()

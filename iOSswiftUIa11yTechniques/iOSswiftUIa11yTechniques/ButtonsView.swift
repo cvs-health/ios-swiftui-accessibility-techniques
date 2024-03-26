@@ -91,7 +91,7 @@ struct ButtonsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good button example with unique `.accessibilityLabel` uses `.accessibilityLabel(\"Edit Username\")` and `.accessibilityLabel(\"Edit Email\")` to give each Edit button a unique and specific accessibility label for VoiceOver users.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example Unique .accessibilityLabel")
                 Text("Good Example Disabled Button")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -129,8 +129,8 @@ struct ButtonsView: View {
                         .accessibilityIdentifier("loginGood")
                 }
                 DisclosureGroup("Details") {
-                    Text("The good disabled button example uses `.disabled(true)` to set the disabled state of the Log In button.")
-                }.padding()
+                    Text("The good disabled button example uses `.disabled(true)` to set the disabled state of the Log In button. VoiceOver users will hear the disabled (dimmed) state. Full Keyboard Access users will not be able to move focus to the good disabled button example which is the expected behavior for disabled buttons.")
+                }.padding(.bottom).accessibilityHint("Good Example Disabled Button")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -173,7 +173,7 @@ struct ButtonsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad generic button labels example uses the same label text \"Edit\" for both buttons without providing a unique and specific `.accessibilityLabel` for VoiceOver users.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example Generic Labels")
                 Text("Bad Example Disabled Button")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -199,8 +199,8 @@ struct ButtonsView: View {
                         .accessibilityIdentifier("loginBad")
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad disabled button example uses `.tint(.gray)` to visually convey that the Log In button is disabled but VoiceOver will not speak a disabled state.")
-                }.padding()
+                    Text("The bad disabled button example uses `.tint(.gray)` to visually convey that the Log In button is disabled but VoiceOver will not speak a disabled state. Full Keyboard Access users will be able to move focus to the bad disabled button example which is not the expected behavior for disabled buttons.")
+                }.padding(.bottom).accessibilityHint("Bad Example Disabled Button")
             }
             .padding()
             .navigationTitle("Buttons")

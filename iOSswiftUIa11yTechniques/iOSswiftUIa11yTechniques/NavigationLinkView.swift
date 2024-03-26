@@ -44,7 +44,7 @@ struct NavigationLinkView: View {
                 }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good navigation example uses `NavigationLink` to create a button that opens a new page inside the app.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -89,8 +89,8 @@ struct NavigationLinkView: View {
                    }
                }
                 DisclosureGroup("Details") {
-                    Text("The first bad navigation example uses `Text` with an `.onTapGesture` to open a custom view.")
-                }.padding()
+                    Text("The first bad navigation example uses `Text` with an `.onTapGesture` to open a custom view. There is no Button trait spoken to VoiceOver. Focus is not set to the dynamically displayed view and VoiceOver can incorrectly focus behind the custom view. ")
+                }.padding(.bottom).accessibilityHint("Bad Example 1")
                 Text("Bad Example 2")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -107,8 +107,8 @@ struct NavigationLinkView: View {
                         }
                 }
                     DisclosureGroup("Details") {
-                        Text("The second bad navigation example uses `Text` with an `.onTapGesture` to open a fullscreen view.")
-                    }.padding()
+                        Text("The second bad navigation example uses `Text` with an `.onTapGesture` to open a fullscreen view. There is no Button trait spoken to VoiceOver.")
+                    }.padding(.bottom).accessibilityHint("Bad Example 2")
                 }
                 .padding()
                 .navigationTitle("Navigation")

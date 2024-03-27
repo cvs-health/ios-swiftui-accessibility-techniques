@@ -3,7 +3,9 @@ iOS SwiftUI sample code demonstrating a variety of good and bad accessibility co
 
 Demonstrates accessibility techniques for iOS SwiftUI apps using a collection of good and bad examples that can be tested with VoiceOver and other iOS assistive technologies.
 
-Using the app with VoiceOver will demonstrate the right and wrong ways of applying accessibility to a SwiftUI app. 
+Explains how to apply WCAG to iOS SwiftUI apps.
+
+Using the app with VoiceOver and other iOS assistive technologies will demonstrate the right and wrong ways of applying accessibility to a SwiftUI app. 
 
 [Download iOS app from the AppStore.](https://apps.apple.com/us/app/swiftui-accessibility-techs/id6474141089)
 

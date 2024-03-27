@@ -6,7 +6,7 @@ Use another native control like a `Picker` which allows only one selection or mi
 For example, create a custom radio button group out of `Button` elements and manually add and remove accessibility traits and values:
 - Use `.accessibilityRemoveTraits(.isButton)` to remove the button trait.
 - Use `.accessibilityAddTraits(isSelected.rawValue == title ? .isSelected : [])` to add a selected trait when checked.
-- Use `.accessibilityRemoveTraits(isSelected.rawValue != title ? .isSelected : [])` removes the selected trait when unchecked.
+- Use `.accessibilityRemoveTraits(isSelected.rawValue != title ? .isSelected : [])` to remove the selected trait when unchecked.
 - Use `.accessibilityValue(isSelected.rawValue == title ? Text("Radio button, checked") : Text("Radio button, unchecked"))` to add a fake radio button trait and a checked and unchecked state.
 - Additionally use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("Choose Color")` to give the radio group a label for VoiceOver.
 

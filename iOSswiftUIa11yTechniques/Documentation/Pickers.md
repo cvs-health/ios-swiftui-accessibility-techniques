@@ -8,6 +8,9 @@ Don't use `.accessibilityLabel` on `Picker` with the default or `MenuPickerStyle
 Use `AccessibilityFocusState` to send VoiceOver focus back to the picker when the value has been changed.
 - `Picker` has no `onDismiss` method like a `Sheet` that could be used to return focus when the picker is closed.
 
+Platform Defects:
+- Wheel style Pickers do not have sufficient text contrast for their non-selected options.
+
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)

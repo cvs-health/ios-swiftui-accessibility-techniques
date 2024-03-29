@@ -9,6 +9,10 @@ Limitations:
 
 - The visible `DatePicker` label text will not automatically become the accessibility label for VoiceOver and will need a `.accessibilityLabel` manually applied.
   - `DatePicker` with `.graphical` or `.wheel` style does not need the extra `.accessibilityLabel` manually applied or else both the visible label and the accessibility will be spoken.
+  
+ Platform Defects:
+- Wheel style Pickers do not have sufficient text contrast for their non-selected options.
+- Date Pickers do not have sufficient contrast for their (S, M, T, W, T, F, S) column header text.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)

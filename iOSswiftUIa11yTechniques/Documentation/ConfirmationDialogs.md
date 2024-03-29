@@ -6,8 +6,8 @@ Use `.confirmationDialog()` to code a native SwiftUI confirmation dialog that re
 Use `AccessibilityFocusState` to send focus back to the trigger button that opened the dialog when the dialog is closed.            
 
 
-Bugs:
-
+Platform Defects:
+- Confirmation Dialog button text does not have sufficient contrast ratios.
 - Confirmation dialogs will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `.confirmationDialog()` component in which case bugs should be filed with Apple.
      
 

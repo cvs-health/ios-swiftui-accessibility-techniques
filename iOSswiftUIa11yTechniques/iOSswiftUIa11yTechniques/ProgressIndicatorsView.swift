@@ -51,6 +51,7 @@ struct ProgressIndicatorsView: View {
                     if progressIndicatorGoodVisible {
                         ProgressView("Updating your information")
                             .accessibilityIdentifier("progressView1good")
+                            .foregroundColor(.primary)
                     }
                     Button(action: {
                         progressIndicatorGoodVisible = true
@@ -66,7 +67,7 @@ struct ProgressIndicatorsView: View {
                         .accessibilityIdentifier("saveGood")
                 }
                 DisclosureGroup("Details") {
-                    Text("The first good progress indicator example posts an `AccessibilityNotification.Announcement` that speaks the indicator text \"Updating your information\" to VoiceOver when the progress view displays. The announcement is posted with a 0.1 second delay to make it speak correctly to VoiceOver.")
+                    Text("The first good progress indicator example posts an `AccessibilityNotification.Announcement` that speaks the indicator text \"Updating your information\" to VoiceOver when the progress view displays. The announcement is posted with a 0.1 second delay to make it speak correctly to VoiceOver. The `ProgressView` uses `.foregroundColor(.primary)` to give the spinner label text sufficient contrast.")
                 }.padding()
                 Text("Good Example 2")
                     .font(.subheadline)

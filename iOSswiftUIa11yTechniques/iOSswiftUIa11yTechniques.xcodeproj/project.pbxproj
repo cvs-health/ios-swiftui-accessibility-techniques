@@ -57,6 +57,7 @@
 		BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */; };
 		BC3EA3B52B7C069F0003B8A2 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B42B7C069F0003B8A2 /* MapView.swift */; };
 		BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */; };
+		BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6F3E432BB5DC5800868AE5 /* WebView.swift */; };
 		BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
 		BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B662B465B9F00C77B57 /* CheckboxesView.swift */; };
@@ -191,6 +192,7 @@
 		BC3EA3B42B7C069F0003B8A2 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViews.swift; sourceTree = "<group>"; };
 		BC3EA3B82B7D26460003B8A2 /* ScrollViews.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ScrollViews.md; sourceTree = "<group>"; };
+		BC6F3E432BB5DC5800868AE5 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHidden.swift; sourceTree = "<group>"; };
 		BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityHidden.md; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
@@ -457,6 +459,7 @@
 				AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */,
 				BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */,
 				AABD27CB2A9FF0F000F718F7 /* UIControlsView.swift */,
+				BC6F3E432BB5DC5800868AE5 /* WebView.swift */,
 				BCE205242B58D50D000DF400 /* UserPreferencesView.swift */,
 				BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */,
 			);
@@ -617,6 +620,7 @@
 				BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */,
 				AABD27D82A9FF13E00F718F7 /* DetailView.swift in Sources */,
 				BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */,
+				BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */,
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
 				AA0F3EF42AB26D930062E7BC /* LinksView.swift in Sources */,
 				AA74DD5A2AFDCC8E00348078 /* PageTitlesView.swift in Sources */,

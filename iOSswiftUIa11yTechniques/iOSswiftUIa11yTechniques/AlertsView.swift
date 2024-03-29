@@ -44,6 +44,7 @@ struct AlertsView: View {
                 Button("Delete All Messages", role: .destructive) {
                     showingAlert = true
                 }
+                .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 .accessibilityFocused($isTriggerFocused)
                 .alert("Are you sure you want to delete all messages?", isPresented: $showingAlert) {
                     Button("Cancel", role: .cancel) {

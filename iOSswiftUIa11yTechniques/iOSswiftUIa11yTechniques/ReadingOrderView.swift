@@ -1,5 +1,5 @@
 /*
-   Copyright 2023 CVS Health and/or one of its affiliates
+   Copyright 2023-20024 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ struct ReadingOrderView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good reading order example uses `.accessibilityElement(children: .contain)` on each `VStack{}` container which causes VoiceOver to read the full text of each column before moving to the next column.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -85,7 +85,7 @@ struct ReadingOrderView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad reading order example does not use `.accessibilityElement(children: .contain)` on each `VStack{}` container which causes VoiceOver to read the first line of each column then read the next line of each column which does not match the expected visual reading order.")
-                }.padding()
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Reading Order")
             .padding()
@@ -96,6 +96,8 @@ struct ReadingOrderView: View {
  
 struct ReadingOrderView_Previews: PreviewProvider {
     static var previews: some View {
-        ReadingOrderView()
+        NavigationStack {
+            ReadingOrderView()
+        }
     }
 }

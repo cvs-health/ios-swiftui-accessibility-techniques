@@ -188,6 +188,14 @@ struct LinksView: View {
  
 struct LinksView_Previews: PreviewProvider {
     static var previews: some View {
+        NavigationStack {
+            LinksView()
+        }
+    }
+}
+
+#Preview("Landscape", traits: .landscapeLeft) {
+    NavigationStack {
         LinksView()
     }
 }

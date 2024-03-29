@@ -111,6 +111,9 @@ struct ContentView: View {
                 NavigationLink(destination: AccessibilityHidden()) {
                     Text("Accessibility Hidden")
                 }
+//                NavigationLink(destination: WebView()) {
+//                    Text("Web View")
+//                }
                 NavigationLink(destination: ContactFormView()) {
                     Text("Contact Form")
                 }

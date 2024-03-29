@@ -10,6 +10,7 @@ Use `AccessibilityFocusState` to send VoiceOver focus back to the picker when th
 
 Platform Defects:
 - Wheel style Pickers do not have sufficient text contrast for their non-selected options.
+- Wheel style Pickers do not support Large Content Viewer.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)

@@ -7,6 +7,11 @@ Notes:
 
 - Manually applying a `.accessibilityLabel` is not necessary for a `Stepper` because the internal label text becomes the accessibility label for VoiceOver.
 
+Platform Defects:
+- Steppers do not support Large Content Viewer.
+
+
+
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 

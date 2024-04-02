@@ -40,7 +40,7 @@ struct ActionsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use `accessibilityAction()` to provide actions on a view that can be activated by iOS Assistive Technologies like VoiceOver. Full Keyboard Access users can press `Tab + z` to open Actions menu.")
+                Text("Use `accessibilityAction()` to provide actions on a view that can be activated by iOS Assistive Technologies like VoiceOver. Full Keyboard Access users can press `Tab + z` to open Actions menu. Voice Control users can say \"Show actions for\" and the name or number of the element to open its Actions menu.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

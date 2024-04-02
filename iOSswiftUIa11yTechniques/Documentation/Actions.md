@@ -3,6 +3,8 @@ Use `accessibilityAction()` to provide actions on a view that can be activated b
 
 Full Keyboard Access users can press `Tab + z` to open Actions menu.
 
+Voice Control users can say "Show actions for" and the name or number of the element to open its Actions menu.
+
 Include a name for the action when using multiple accessibility actions, e.g., `.accessibilityAction(named: "Delete")` and `.accessibilityAction(named: "Mark Unread")`.
 
 ## Applicable WCAG Success Criteria

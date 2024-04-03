@@ -27,32 +27,59 @@ struct HeadingsView: View {
             VStack {
                 Text("Headings are used to title sections of content. The header trait must be applied to heading text to enable VoiceOver users to quickly navigate to headings. Use `.accessibilityAddTraits(.isHeader)` to set text as a heading for VoiceOver users. Additionally if you want to provide a level for the heading use `.accessibilityHeading(.h1)` or `(.h2-h6)` with the `.accessibilityAddTraits(.isHeader)`. When using heading levels make sure the headings do not skip a level, e.g., don't skip from a Heading Level 1 to a Heading Level 3.")
                     .padding(.bottom)
-                Text("Good Example")
+                Text("Good Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                    .accessibilityHeading(.h2)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("FAQ")
-                    .font(.title)
+                Text("Good Example `.isHeader` Trait")
+                    .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                    //.accessibilityHeading(/*@START_MENU_TOKEN@*/.h1/*@END_MENU_TOKEN@*/)//.accessibilityHeading only works with VoiceOver if the .isHeader trait is also applied!
+                Text("Store Hours")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                     .accessibilityIdentifier("goodHeading")
-                DisclosureGroup("I received a promotion, but I cannot log in to the website.") {
-                    Text("In order to access your promotions online, we invite you to create an account. Just go to the Sign In page in the app and tap the banner at the bottom of the screen.")
-                }
+                VStack(alignment: .leading) {
+                    Text("Monday to Friday 8AM to 9PM")
+                    Text("Saturday 9AM to 10PM")
+                    Text("Sunday 10AM to 6PM")
+                }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     VStack {
-                        Text("The good example FAQ heading uses `.accessibilityAddTraits(.isHeader)` which allows VoiceOver users to quickly navigate to the heading using the Rotor.")
+                        Text("The first good example Store Hours heading uses `.accessibilityAddTraits(.isHeader)` which allows VoiceOver users to quickly navigate to the heading using the Rotor.")
                     }
-                }.padding(.bottom)
+                }.padding(.bottom).accessibilityHint("Good Example .isHeader Trait")
+                Text("Good Example `.isHeader` Trait and `.accessibilityHeading`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Store Hours")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityHeading(.h2)//.accessibilityHeading only works with VoiceOver if the .isHeader trait is also applied!
+                    .accessibilityIdentifier("goodHeading2")
+                VStack(alignment: .leading) {
+                    Text("Monday to Friday 8AM to 9PM")
+                    Text("Saturday 9AM to 10PM")
+                    Text("Sunday 10AM to 6PM")
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    VStack {
+                        Text("The second good example Store Hours heading uses `.accessibilityAddTraits(.isHeader)` and `.accessibilityHeading(.h2)` which allows VoiceOver users to quickly navigate to the heading using the Rotor and hear the heading level.")
+                    }
+                }.padding(.bottom).accessibilityHint("Good Example .isHeader Trait and .accessibilityHeading")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -63,45 +90,47 @@ struct HeadingsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example No Heading Trait")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                    .padding([.bottom])
-                Text("FAQ")
-                    .font(.title)
+                Text("Store Hours")
+                    .font(.title2)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityIdentifier("badHeading1")
-                DisclosureGroup("I received a promotion, but I cannot log in to the website.") {
-                    Text("In order to access your promotions online, we invite you to create an account. Just go to the Sign In page in the app and tap the banner at the bottom of the screen.")
-                }
+                VStack(alignment: .leading) {
+                    Text("Monday to Friday 8AM to 9PM")
+                    Text("Saturday 9AM to 10PM")
+                    Text("Sunday 10AM to 6PM")
+                }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     VStack {
-                        Text("The first bad example FAQ heading does not use `.accessibilityAddTraits(.isHeader)` which prevents VoiceOver users from being able to quickly navigate to the heading using the Rotor.")
+                        Text("The first bad example Store Hours heading does not use `.accessibilityAddTraits(.isHeader)` which prevents VoiceOver users from being able to quickly navigate to the heading using the Rotor.")
                     }
-                }.padding(.bottom)
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example No Heading Trait")
+                Text("Bad Example Fake \"Heading\" in `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                    .padding([.bottom])
-                Text("FAQ")
-                    .font(.title)
+                Text("Store Hours")
+                    .font(.title2)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityLabel("FAQ heading")
+                    .accessibilityLabel("Store Hours heading")
                     .accessibilityIdentifier("badHeading2")
-                DisclosureGroup("I received a promotion, but I cannot log in to the website.") {
-                    Text("In order to access your promotions online, we invite you to create an account. Just go to the Sign In page in the app and tap the banner at the bottom of the screen.")
-                }
+                VStack(alignment: .leading) {
+                                    Text("Monday to Friday 8AM to 9PM")
+                                    Text("Saturday 9AM to 10PM")
+                                    Text("Sunday 10AM to 6PM")
+                }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     VStack {
-                        Text("The second bad example FAQ heading uses `.accessibilityLabel(\"FAQ heading\")` which incorrectly modifies the accessible name of the text by adding \" heading\" and does not allow VoiceOver users to quickly navigate to the heading using the Rotor.")
+                        Text("The second bad example Store Hours heading uses `.accessibilityLabel(\"Store Hours heading\")` which incorrectly modifies the accessible name of the text by adding \" heading\" and does not allow VoiceOver users to quickly navigate to the heading using the Rotor.")
                     }
-                }.padding(.bottom)
+                }.padding(.bottom).accessibilityHint("Bad Example Fake \"Heading\" in .accessibilityLabel")
             }
             .padding()
             .navigationTitle("Headings")

@@ -89,7 +89,7 @@ struct AdjustableActionView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good adjustable example uses `.accessibilityAdjustableAction` to increment and decrement the star rating when VoiceOver users swipe up and down. `.accessibilityElement()`, `.accessibilityLabel`, and `.accessibilityValue` are also added to make the custom control accessible.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -104,7 +104,7 @@ struct AdjustableActionView: View {
                 RatingView(rating: $ratingBad).frame(maxWidth: .infinity, alignment: .leading).padding()
                 DisclosureGroup("Details") {
                     Text("The bad adjustable example does not use `.accessibilityAdjustableAction` to increment and decrement the star rating when VoiceOver users swipe up and down. Instead VoiceOver users must focus on each individual star to choose a rating. `.accessibilityElement()`, `.accessibilityLabel`, and `.accessibilityValue` are missing.")
-                }.padding()
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Adjustable Action")
             .padding()
@@ -115,6 +115,8 @@ struct AdjustableActionView: View {
  
 struct AdjustableActionView_Previews: PreviewProvider {
     static var previews: some View {
-        AdjustableActionView()
+        NavigationStack {
+            AdjustableActionView()
+        }
     }
 }

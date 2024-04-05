@@ -20,7 +20,7 @@ struct AnnouncementsView: View {
 
     var body: some View {
         List {
-            Text("Messages can be spoken to VoiceOver users either by setting their focus to an element or using `AccessibilityNotification.Announcement` to speak a messsage without moving focus. The Error Validation example uses `AccessibilityFocusState` to move VoiceOver focus.")
+            Text("Announcement messages can be spoken to VoiceOver users either by moving their focus to an element or using `AccessibilityNotification.Announcement` to speak a messsage without moving focus. The Error Validation example uses `AccessibilityFocusState` to move VoiceOver focus.")
             NavigationLink(destination: AccessibilityNotificationsView()) {
                 Text("Accessibility Notifications")
             }
@@ -34,6 +34,8 @@ struct AnnouncementsView: View {
 
 struct AnnouncementsView_Previews: PreviewProvider {
     static var previews: some View {
-        AnnouncementsView()
+        NavigationStack {
+            AnnouncementsView()
+        }
     }
 }

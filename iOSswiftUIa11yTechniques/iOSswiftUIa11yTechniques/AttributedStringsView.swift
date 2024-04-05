@@ -44,7 +44,7 @@ struct AttributedStringsView: View {
                     .accessibility(label: Text(getAccessibilityAttributedLabel()))
                 DisclosureGroup("Details") {
                     Text("The good attributed strings example uses `.accessibilityLabel(\"Old Price: $99, New Price: $79\")` to give the attributed string with a strike-through price a meaningful accesibility label that includes alt text for the old price. The high and low pitch attributed string uses `.accessibilitySpeechAdjustedPitch` to speak \"Squeek, Squeek\" in a high pitched voice and \"Fee, Fie, Fo, Fum\" in a low pitched voice.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -61,7 +61,7 @@ struct AttributedStringsView: View {
                 Text("\"Squeek, Squeek\" said the mouse. \"Fee, Fie, Fo, Fum\" said the giant.")
                 DisclosureGroup("Details") {
                     Text("The bad attributed strings example does not use an `.accessibilityLabel` to give the attributed string with a strike-through price a meaningful accesibility label that includes alt text for the old price. VoiceOver users don't know which is the old price or the new price. The high and low pitch attributed string does not use `.accessibilitySpeechAdjustedPitch` to speak \"Squeek, Squeek\" in a high pitched voice and \"Fee, Fie, Fo, Fum\" in a low pitched voice.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .navigationTitle("Attributed Strings")
             .padding()
@@ -85,6 +85,8 @@ struct AttributedStringsView: View {
  
 struct AttributedStringsView_Previews: PreviewProvider {
     static var previews: some View {
-        AttributedStringsView()
+        NavigationStack {
+            AttributedStringsView()
+        }
     }
 }

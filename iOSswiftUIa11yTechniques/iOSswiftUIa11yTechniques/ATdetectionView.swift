@@ -50,7 +50,7 @@ struct ATdetectionView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good assistive technology detection example uses `UIAccessibility.isVoiceOverRunning` check if VoiceOver is running when the page loads and then shows an alert reminding the VoiceOver user not to disable VoiceOver Hints.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
             }.onAppear {
                 if UIAccessibility.isVoiceOverRunning {
                     showingAlert = true
@@ -76,6 +76,8 @@ struct ATdetectionView: View {
  
 struct ATdetectionView_Previews: PreviewProvider {
     static var previews: some View {
-        ATdetectionView()
+        NavigationStack {
+            ATdetectionView()
+        }
     }
 }

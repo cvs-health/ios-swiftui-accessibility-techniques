@@ -179,6 +179,8 @@ struct AccessibilityRepresentationView: View {
  
 struct AccessibilityRepresentationView_Previews: PreviewProvider {
     static var previews: some View {
-        AccessibilityRepresentationView()
+        NavigationStack {
+            AccessibilityRepresentationView()
+        }
     }
 }

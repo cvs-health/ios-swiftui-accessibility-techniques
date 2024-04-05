@@ -128,6 +128,8 @@ struct AccordionsView: View {
  
 struct AccordionsView_Previews: PreviewProvider {
     static var previews: some View {
-        AccordionsView()
+        NavigationStack {
+            AccordionsView()
+        }
     }
 }

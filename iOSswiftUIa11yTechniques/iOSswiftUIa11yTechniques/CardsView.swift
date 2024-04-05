@@ -45,7 +45,7 @@ struct CardsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Card with correct heading placement & `.accessibilityLabel`")
+                Text("Good Example Card with correct heading placement and `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -86,9 +86,9 @@ struct CardsView: View {
                         .shadow(color: .gray, radius: 5, x: 4, y: 4)
                 )
                 DisclosureGroup("Details") {
-                    Text("The good card with correct heading placement and `.accessibilityLabel` example uses a heading element at the top of the card and a more specific `.accessibilityLabel` for the call to action button.")
-                }.padding()
-                Text("Card with Focus Combined & Accessibility Actions")
+                    Text("The good example card with correct heading placement and `.accessibilityLabel` example uses a heading element at the top of the card and a more specific `.accessibilityLabel` for the call to action button.")
+                }.padding([.bottom,.top]).accessibilityHint("Good Example Card with correct heading placement and .accessibilityLabel")
+                Text("Good Example Card with Focus Combined & Accessibility Actions")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -174,8 +174,8 @@ struct CardsView: View {
                     )
                 }
                 DisclosureGroup("Details") {
-                    Text("The good card with combined focus and accessibility actions example wraps the card in a `NavigationLink` to combine it as one focusable element and adds `.accessibilityAction(named: \"Show details\")` to include the Show details accordion in the list of accessibility actions.")
-                }.padding()
+                    Text("The good example card with combined focus and accessibility actions example wraps the card in a `NavigationLink` to combine it as one focusable element and adds `.accessibilityAction(named: \"Show details\")` to include the Show details accordion in the list of accessibility actions.")
+                }.padding([.top,.bottom]).accessibilityHint("Good Example Card with Focus Combined & Accessibility Actions")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -186,7 +186,7 @@ struct CardsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Card with incorrect heading placement and no `.accessibilityLabel`")
+                Text("Bad Example Card with incorrect heading placement and no `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -225,9 +225,9 @@ struct CardsView: View {
                         .shadow(color: .gray, radius: 5, x: 4, y: 4)
                 )
                 DisclosureGroup("Details") {
-                    Text("The bad card with incorrect heading placement and no `.accessibilityLabel` example uses a heading element that is not at the top of the card and a generic call to action button with no `.accessibilityLabel`.")
-                }.padding()
-                Text("Card without Focus Combined or Accessibility Actions")
+                    Text("The bad example card with incorrect heading placement and no `.accessibilityLabel` example uses a heading element that is not at the top of the card and a generic call to action button with no `.accessibilityLabel`.")
+                }.padding([.top,.bottom]).accessibilityHint("Bad Example Card with incorrect heading placement and no .accessibilityLabel")
+                Text("Bad Example Card without Focus Combined or Accessibility Actions")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -310,8 +310,8 @@ struct CardsView: View {
                         .shadow(color: .gray, radius: 5, x: 4, y: 4)
                 )
                 DisclosureGroup("Details") {
-                    Text("The bad card without combined focus or accessibility actions example does not combine the card as one focusable element and does not include the Show details accordion in the list of accessibility actions.")
-                }.padding()
+                    Text("The bad example card without combined focus or accessibility actions example does not combine the card as one focusable element and does not include the Show details accordion in the list of accessibility actions.")
+                }.padding([.top,.bottom]).accessibilityHint("Bad Example Card without Focus Combined or Accessibility Actions")
 
             }
             .navigationTitle("Cards")
@@ -323,6 +323,8 @@ struct CardsView: View {
  
 struct CardsView_Previews: PreviewProvider {
     static var previews: some View {
-        CardsView()
+        NavigationStack {
+            CardsView()
+        }
     }
 }

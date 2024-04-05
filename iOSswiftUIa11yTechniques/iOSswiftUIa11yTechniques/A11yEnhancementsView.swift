@@ -61,6 +61,8 @@ struct A11yEnhancementsView: View {
 
 struct A11yEnhancementsView_Previews: PreviewProvider {
     static var previews: some View {
-        A11yEnhancementsView()
+        NavigationStack {
+            A11yEnhancementsView()
+        }
     }
 }

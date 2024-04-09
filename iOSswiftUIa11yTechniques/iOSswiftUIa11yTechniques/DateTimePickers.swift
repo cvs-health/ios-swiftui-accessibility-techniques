@@ -53,7 +53,7 @@ struct DateTimePickersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example Using `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -85,8 +85,8 @@ struct DateTimePickersView: View {
                 .accessibilityIdentifier("dateTimeGood")
                 DisclosureGroup("Details") {
                     Text("The first good Date Pickers example uses `.accessibilityLabel` on each `DatePicker` that matches the visible label text.")
-                }.padding()
-                Text("Good Example 2")
+                }.padding(.bottom).accessibilityHint("Good Example Using `.accessibilityLabel")
+                Text("Good Example Using `DatePicker(\"Label\")`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -106,7 +106,7 @@ struct DateTimePickersView: View {
                     .accessibilityIdentifier("wheelGood")
                 DisclosureGroup("Details") {
                     Text("The second good Date Pickers example uses visible `DatePicker(\"Label\")` text for each date picker that is spoken to VoiceOver as the accessibility label.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example Using DatePicker(\"Label\")")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -117,7 +117,7 @@ struct DateTimePickersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example No `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -145,8 +145,8 @@ struct DateTimePickersView: View {
                 .accessibilityIdentifier("dateTimeBad")
                 DisclosureGroup("Details") {
                     Text("The first bad Date Pickers example has no `.accessibilityLabel` for each `DatePicker` that matches the visible label text.")
-                }.padding()
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example No `.accessibilityLabel`")
+                Text("Bad Example No `DatePicker(\"Label\")`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -166,7 +166,7 @@ struct DateTimePickersView: View {
                     .accessibilityIdentifier("wheelBad")
                 DisclosureGroup("Details") {
                     Text("The second bad Date Pickers example uses no visible `DatePicker(\"\")` text for each date picker so nothing is spoken to VoiceOver as the accessibility label.")
-                }.padding()
+                }.accessibilityHint("`Bad Example No DatePicker(\"Label\")`")
             }
             .navigationTitle("Date & Time Pickers")
             .padding()
@@ -177,6 +177,8 @@ struct DateTimePickersView: View {
  
 struct DateTimePickersView_Previews: PreviewProvider {
     static var previews: some View {
-        DateTimePickersView()
+        NavigationStack {
+            DateTimePickersView()
+        }
     }
 }

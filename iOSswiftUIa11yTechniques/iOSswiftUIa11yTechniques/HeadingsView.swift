@@ -20,6 +20,7 @@ struct HeadingsView: View {
     
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+    private var darkOrange = Color(red: 203 / 255, green: 77 / 255, blue: 0 / 255)
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
@@ -131,6 +132,56 @@ struct HeadingsView: View {
                         Text("The second bad example Store Hours heading uses `.accessibilityLabel(\"Store Hours heading\")` which incorrectly modifies the accessible name of the text by adding \" heading\" and does not allow VoiceOver users to quickly navigate to the heading using the Rotor.")
                     }
                 }.padding(.bottom).accessibilityHint("Bad Example Fake \"Heading\" in .accessibilityLabel")
+                Text("Platform Defect Examples")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.orange) : darkOrange)
+                Divider()
+                    .frame(height: 2.0, alignment:.leading)
+                    .background(colorScheme == .dark ? Color(.orange) : darkOrange)
+                    .padding(.bottom)
+                Text("Platform Defect Example `.accessibilityHeading(.unspecified)`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Store Hours")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityHeading(.unspecified)
+                VStack(alignment: .leading) {
+                    Text("Monday to Friday 8AM to 9PM")
+                    Text("Saturday 9AM to 10PM")
+                    Text("Sunday 10AM to 6PM")
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    VStack {
+                        Text("The platform defect example Store Hours heading uses `.accessibilityHeading(.unspecified)` which should create a heading without a level for VoiceOver users, however, the code does not work and it does not become a heading for VoiceOver users.")
+                    }
+                }.padding(.bottom).accessibilityHint("Platform Defect Example `.accessibilityHeading(.unspecified)`")
+                Text("Platform Defect Example `.accessibilityHeading(.h2)`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Store Hours")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityHeading(.h2)
+                VStack(alignment: .leading) {
+                    Text("Monday to Friday 8AM to 9PM")
+                    Text("Saturday 9AM to 10PM")
+                    Text("Sunday 10AM to 6PM")
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    VStack {
+                        Text("The platform defect example Store Hours heading uses `.accessibilityHeading(.h2)` which should create a heading with a level 2 for VoiceOver users, however, the code does not work and it does not become a heading for VoiceOver users. Heading level code will only work if `.accessibilityAddTraits(.isHeader)` is included.")
+                    }
+                }.padding(.bottom).accessibilityHint("Platform Defect Example `.accessibilityHeading(.unspecified)`")
             }
             .padding()
             .navigationTitle("Headings")
@@ -140,6 +191,8 @@ struct HeadingsView: View {
  
 struct HeadingsView_Previews: PreviewProvider {
     static var previews: some View {
-        HeadingsView()
+        NavigationStack {
+            HeadingsView()
+        }
     }
 }

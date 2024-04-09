@@ -58,7 +58,7 @@ struct DarkModeView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good dark mode example uses `AccentColor` to give the blue button text sufficient contrast in light and dark mode. `.background(colorScheme == .dark ? .white : .black)` and `.foregroundColor(colorScheme == .dark ? .black : .white)` are used to provide sufficient contrasting colors in dark and light mode. The custom button uses `.tint(Color(colorScheme == .dark ? .black : .white))` and `.background(Color(colorScheme == .dark ? .white : .black))` to change between colors with sufficient contrast in dark and light mode. The `AccentColor` for light and dark appearance has been set in the assets catalog `Assets.xcassets`")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -89,7 +89,7 @@ struct DarkModeView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad dark mode example uses the `.tint(.blue)` to create blue button text which has insufficient contrast in light mode. `.background(.black)` is used without providing a foreground color or changing colors for dark and light mode. The custom button uses `.tint(.white)` and `.background(Color(colorScheme == .dark ? .white : .black))` which changes the background color but does not change the button text color to a sufficient contrasting color in dark mode.")
-                }.padding()
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Dark Mode")
             .padding()
@@ -108,6 +108,8 @@ struct DarkModeView: View {
  
 struct DarkModeView_Previews: PreviewProvider {
     static var previews: some View {
-        DarkModeView()
+        NavigationStack {
+            DarkModeView()
+        }
     }
 }

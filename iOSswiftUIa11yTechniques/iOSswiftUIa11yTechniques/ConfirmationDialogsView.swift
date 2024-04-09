@@ -99,6 +99,8 @@ struct ConfirmationDialogsView: View {
  
 struct ConfirmationDialogsView_Previews: PreviewProvider {
     static var previews: some View {
-        ConfirmationDialogsView()
+        NavigationStack {
+            ConfirmationDialogsView()
+        }
     }
 }

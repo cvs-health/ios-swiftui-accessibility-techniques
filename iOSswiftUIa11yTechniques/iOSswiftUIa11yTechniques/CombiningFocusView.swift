@@ -87,7 +87,7 @@ struct CombiningFocusView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good combining focus example uses `.accessibilityElement(children: .combine)` to combine child views into a parent view focused by VoiceOver as a single element. `.accessibility(removeTraits: .isButton)` is used to remove the button trait off the child button element so that the button's accessibility label becomes part of the combined parent element. `.accessibility(addTraits: .isButton)` is used to add the button trait back to the combined parent element.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -105,7 +105,7 @@ struct CombiningFocusView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad combining focus example does not use `.accessibilityElement(children: .combine)` to combine child views into a parent view focused by VoiceOver as a single element. VoiceOver focuses on each individual child element and they are not spoken in a unique and meaningful way.")
-                }.padding()
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Combining Focus")
             .padding()
@@ -116,7 +116,9 @@ struct CombiningFocusView: View {
  
 struct CombiningFocusView_Previews: PreviewProvider {
     static var previews: some View {
-        CombiningFocusView()
+        NavigationStack {
+            CombiningFocusView()
+        }
     }
 }
 

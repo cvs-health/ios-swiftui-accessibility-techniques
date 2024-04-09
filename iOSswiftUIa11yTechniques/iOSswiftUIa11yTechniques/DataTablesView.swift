@@ -227,7 +227,9 @@ struct DataTablesView: View {
  
 struct DataTablesView_Previews: PreviewProvider {
     static var previews: some View {
-        DataTablesView()
+        NavigationStack {
+            DataTablesView()
+        }
     }
 }
 

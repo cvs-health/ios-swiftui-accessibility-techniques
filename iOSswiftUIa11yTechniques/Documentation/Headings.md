@@ -13,6 +13,10 @@ Notes:
 Known Issues:
 * You can't make the Page Title heading have a heading level. For example using `.navigationTitle("Headings").accessibilityAddTraits(.isHeader).accessibilityHeading(.h1)` will not make the page title a Heading Level 1.
 
+Platform Defects:
+- [AX: SwiftUI .accessibilityHeading(.h1-6,.unspecified) do not speak as Heading or Heading with Level to VoiceOver](https://feedbackassistant.apple.com/feedback/13723717)
+
+
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 

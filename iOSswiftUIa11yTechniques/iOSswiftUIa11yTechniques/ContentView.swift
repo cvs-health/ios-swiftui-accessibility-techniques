@@ -57,9 +57,6 @@ struct ContentView: View {
                     }
                 }.accessibilityIdentifier("Accessibility UX Enhancements")
 
-                NavigationLink(destination: ReduceMotionView()) {
-                    Text("Reduce Motion")
-                }
                 NavigationLink(destination: DynamicTypeView()) {
                     Text("Dynamic Type")
                 }
@@ -82,7 +79,7 @@ struct ContentView: View {
                     Text("Touch Target Size")
                 }
                 NavigationLink(destination: UserPreferencesView()) {
-                    Text("Responding to User Accessibility Preferences") // dark mode, smart invert, bold text, differientate without colors, reduce transparancy, motion, ignore invert colors, increase contrast
+                    Text("User Accessibility Preferences") // dark mode, smart invert, bold text, differientate without colors, reduce transparancy, motion, ignore invert colors, increase contrast
                 }
                 NavigationLink(destination: ProgressIndicatorsView()) {
                     Text("Progress Indicators")
@@ -111,9 +108,9 @@ struct ContentView: View {
                 NavigationLink(destination: AccessibilityHidden()) {
                     Text("Accessibility Hidden")
                 }
-//                NavigationLink(destination: WebView()) {
-//                    Text("Web View")
-//                }
+                NavigationLink(destination: WebView()) {
+                    Text("Web View")
+                }
                 NavigationLink(destination: ContactFormView()) {
                     Text("Contact Form")
                 }

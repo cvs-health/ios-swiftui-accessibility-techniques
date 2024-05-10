@@ -25,15 +25,15 @@ struct WebView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-//        WebViewRepresentable(url: "https://pauljadam.com/demos/apple-system-css-font.html")
-//            .edgesIgnoringSafeArea(.all)
-        Button("Present SFSafariViewController") {
-                    // 1
-                    let vc = SFSafariViewController(url: URL(string: "https://pauljadam.com/demos/apple-system-css-font.html")!)
-
-                    // 2
-                    UIApplication.shared.firstKeyWindow?.rootViewController?.present(vc, animated: true)
-                }
+        WebViewRepresentable(url: "https://pauljadam.com/demos/apple-system-css-font.html")
+            .edgesIgnoringSafeArea(.all)
+//        Button("Present SFSafariViewController") {
+//                    // 1
+//                    let vc = SFSafariViewController(url: URL(string: "https://pauljadam.com/demos/apple-system-css-font.html")!)
+//
+//                    // 2
+//                    UIApplication.shared.firstKeyWindow?.rootViewController?.present(vc, animated: true)
+//                }
     }
 }
 

@@ -44,7 +44,6 @@ struct PopoversView: View {
                 Button("Show License Agreement") {
                     self.isShowingPopover = true
                 }
-                
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityFocused($isTriggerFocused)
                 .popover(isPresented: $isShowingPopover) {

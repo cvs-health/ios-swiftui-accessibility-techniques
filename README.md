@@ -72,6 +72,7 @@ Documentation files for each technique are listed below.
 - [x] Responding to User Accessibility Preferences
     - [x] [Dark Mode](iOSswiftUIa11yTechniques/Documentation/DarkMode.md)
     - [x] [Smart Invert](iOSswiftUIa11yTechniques/Documentation/SmartInvert.md)
+    - [ ] Increase Contrast
 - [x] [Progress Indicators](iOSswiftUIa11yTechniques/Documentation/ProgressIndicators.md)
 - [x] [Accessibility Representation Custom Controls](iOSswiftUIa11yTechniques/Documentation/AccessibilityRepresentation.md)
 - [x] [Meaningful Accessible Names](iOSswiftUIa11yTechniques/Documentation/MeaningfulAccessibleNames.md)

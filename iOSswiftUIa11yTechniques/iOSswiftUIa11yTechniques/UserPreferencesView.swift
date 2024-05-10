@@ -24,6 +24,15 @@ struct UserPreferencesView: View {
             NavigationLink(destination: DarkModeView()) {
                 Text("Dark Mode")
             }
+            NavigationLink(destination: IncreaseContrastView()) {
+                Text("Increase Contrast")
+            }
+            NavigationLink(destination: ReduceMotionView()) {
+                Text("Reduce Motion")
+            }
+            NavigationLink(destination: ReduceTransparencyView()) {
+                Text("Reduce Transparency")
+            }
             NavigationLink(destination: SmartInvertView()) {
                 Text("Smart Invert")
             }

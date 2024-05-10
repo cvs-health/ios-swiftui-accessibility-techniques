@@ -18,7 +18,9 @@ import SwiftUI
  
 struct DateTimePickersView: View {
     @State private var selectedCategory = "Mexican"
-
+    @AccessibilityFocusState private var isTriggerFocused: Bool
+    @State var selectedDate: Date = .now
+        @State var showCalendar = false
     
     
     @State private var date = Date()
@@ -41,7 +43,7 @@ struct DateTimePickersView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Date Pickers are used to select dates and times. Date Pickers without the `.graphical` or `.wheel` style need an `.accessibilityLabel` set to match their visible label text. Date Pickers with the `.graphical` or `.wheel` style need visible `DatePicker(\"Label\")` text for each picker so it is spoken to VoiceOver as the accessibility label.")
+                Text("Date Pickers are used to select dates and times. Date Pickers without the `.graphical` or `.wheel` style need an `.accessibilityLabel` set to match their visible label text. Date Pickers with the `.graphical` or `.wheel` style need visible `DatePicker(\"Label\")` text for each picker so it is spoken to VoiceOver as the accessibility label. `AccessibilityFocusState` does not work with `DatePicker` to return focus. The workaround to return focus is using a `Button` with a `.popover` holding the `DatePicker` then `AccessibilityFocusState` works to return the focus to the trigger button after a date is chosen.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -107,6 +109,41 @@ struct DateTimePickersView: View {
                 DisclosureGroup("Details") {
                     Text("The second good Date Pickers example uses visible `DatePicker(\"Label\")` text for each date picker that is spoken to VoiceOver as the accessibility label.")
                 }.padding(.bottom).accessibilityHint("Good Example Using DatePicker(\"Label\")")
+                Text("Good Example Using `DatePicker` inside a `Button` `.popover` and `AccessibilityFocusState`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Text("Day:")
+                    Button(action: {
+                        showCalendar = true // Presenting the Calendar
+                    }, label: {
+                            Image(systemName: "calendar")
+                            Text(selectedDate, style:.date)
+                    })
+                   .popover(isPresented: $showCalendar) {
+                        DatePicker(
+                            "Select date",
+                            selection: $selectedDate,
+                            displayedComponents:.date
+                        )
+                       .datePickerStyle(.graphical)
+                       .padding()
+                       .frame(width: 365, height: 365) // Adjust frame size as needed
+                       .presentationCompactAdaptation(.popover) // Ensures popover presentation on compact devices
+                    }
+                   .onChange(of: selectedDate) { _, _ in
+                        showCalendar = false // Dismisses the calendar
+                       isTriggerFocused = true
+                    }
+                   .accessibilityFocused($isTriggerFocused)
+                   .accessibility(removeTraits: .isButton)//a11y hack fix to make sure visible Options text is included in a11ylabel when combined
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityElement(children: .combine)
+                DisclosureGroup("Details") {
+                    Text("The last good Date Pickers example uses a `Button` with a `.popover` holding the `DatePicker` so that `AccessibilityFocusState` can be used to return the focus to the trigger button after a date is chosen.")
+                }.padding(.bottom).accessibilityHint("Good Example Using DatePicker inside a Button .popover and AccessibilityFocusState")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)

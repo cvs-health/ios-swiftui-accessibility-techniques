@@ -44,6 +44,8 @@
 		AAF127C22B23EDB500D5313D /* AccessibilityNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */; };
 		AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF127C32B23EDCB00D5313D /* ContentView.swift */; };
 		BC0030362B363B560063EAD5 /* SheetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0030352B363B560063EAD5 /* SheetsView.swift */; };
+		BC046F2B2BEDC83800E498E1 /* ReduceTransparencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC046F2A2BEDC83800E498E1 /* ReduceTransparencyView.swift */; };
+		BC046F2D2BEE547900E498E1 /* IncreaseContrastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC046F2C2BEE547900E498E1 /* IncreaseContrastView.swift */; };
 		BC163FC22B6AD3F3009E3A83 /* ContactBoston.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */; };
 		BC163FC42B6AD3FB009E3A83 /* ContactOrlando.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */; };
 		BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */; };
@@ -167,6 +169,8 @@
 		AAF6D09A2ABA29EE00188DE0 /* Tabs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Tabs.md; sourceTree = "<group>"; };
 		BC00300A2B332C020063EAD5 /* AdjustableAction.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdjustableAction.md; sourceTree = "<group>"; };
 		BC0030352B363B560063EAD5 /* SheetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetsView.swift; sourceTree = "<group>"; };
+		BC046F2A2BEDC83800E498E1 /* ReduceTransparencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduceTransparencyView.swift; sourceTree = "<group>"; };
+		BC046F2C2BEE547900E498E1 /* IncreaseContrastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncreaseContrastView.swift; sourceTree = "<group>"; };
 		BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactBoston.swift; sourceTree = "<group>"; };
 		BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactOrlando.swift; sourceTree = "<group>"; };
 		BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistiveAccessView.swift; sourceTree = "<group>"; };
@@ -404,6 +408,8 @@
 				BCE2052D2B5A1C50000DF400 /* ContactSeattle.swift */,
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
 				BCE205222B58D0BE000DF400 /* DarkModeView.swift */,
+				BC046F2A2BEDC83800E498E1 /* ReduceTransparencyView.swift */,
+				BC046F2C2BEE547900E498E1 /* IncreaseContrastView.swift */,
 				BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */,
 				BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */,
 				AABD27D32A9FF12400F718F7 /* DecorativeView.swift */,
@@ -609,6 +615,7 @@
 				BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */,
 				AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */,
 				BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */,
+				BC046F2D2BEE547900E498E1 /* IncreaseContrastView.swift in Sources */,
 				BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */,
 				AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */,
 				BCE205322B5A1C6C000DF400 /* ContactReno.swift in Sources */,
@@ -622,6 +629,7 @@
 				BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */,
 				BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */,
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
+				BC046F2B2BEDC83800E498E1 /* ReduceTransparencyView.swift in Sources */,
 				AA0F3EF42AB26D930062E7BC /* LinksView.swift in Sources */,
 				AA74DD5A2AFDCC8E00348078 /* PageTitlesView.swift in Sources */,
 				BC0030362B363B560063EAD5 /* SheetsView.swift in Sources */,
@@ -686,7 +694,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -709,7 +717,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -848,7 +856,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -866,7 +874,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.4;
+				MARKETING_VERSION = 6.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -881,7 +889,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -899,7 +907,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.4;
+				MARKETING_VERSION = 6.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -38,7 +38,6 @@ Documentation files for each technique are listed below.
     - [x] [Magic Tap](iOSswiftUIa11yTechniques/Documentation/MagicTap.md)
     - [x] [Rotor](iOSswiftUIa11yTechniques/Documentation/Rotor.md)
     - [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
-- [x] [Reduce Motion](iOSswiftUIa11yTechniques/Documentation/ReduceMotion.md)
 - [x] [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)
 - [x] [Language](iOSswiftUIa11yTechniques/Documentation/Language.md)
 - [x] UI Controls
@@ -71,8 +70,10 @@ Documentation files for each technique are listed below.
 - [x] [Touch Target Size](iOSswiftUIa11yTechniques/Documentation/TouchTargetSize.md)
 - [x] Responding to User Accessibility Preferences
     - [x] [Dark Mode](iOSswiftUIa11yTechniques/Documentation/DarkMode.md)
+    - [x] [Increase Contrast](iOSswiftUIa11yTechniques/Documentation/IncreaseContrast.md)
+    - [x] [Reduce Motion](iOSswiftUIa11yTechniques/Documentation/ReduceMotion.md)
+    - [x] [Reduce Transparency](iOSswiftUIa11yTechniques/Documentation/ReduceTransparency.md)
     - [x] [Smart Invert](iOSswiftUIa11yTechniques/Documentation/SmartInvert.md)
-    - [ ] Increase Contrast
 - [x] [Progress Indicators](iOSswiftUIa11yTechniques/Documentation/ProgressIndicators.md)
 - [x] [Accessibility Representation Custom Controls](iOSswiftUIa11yTechniques/Documentation/AccessibilityRepresentation.md)
 - [x] [Meaningful Accessible Names](iOSswiftUIa11yTechniques/Documentation/MeaningfulAccessibleNames.md)

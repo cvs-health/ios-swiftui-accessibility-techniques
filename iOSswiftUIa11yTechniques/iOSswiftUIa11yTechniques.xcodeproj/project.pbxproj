@@ -172,7 +172,7 @@
 		BC046F2A2BEDC83800E498E1 /* ReduceTransparencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduceTransparencyView.swift; sourceTree = "<group>"; };
 		BC046F2C2BEE547900E498E1 /* IncreaseContrastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncreaseContrastView.swift; sourceTree = "<group>"; };
 		BC046F2E2BEE822A00E498E1 /* IncreaseContrast.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = IncreaseContrast.md; sourceTree = "<group>"; };
-		BC046F2F2BEE823800E498E1 /* ReduceTranparency.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReduceTranparency.md; sourceTree = "<group>"; };
+		BC046F2F2BEE823800E498E1 /* ReduceTransparency.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReduceTransparency.md; sourceTree = "<group>"; };
 		BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactBoston.swift; sourceTree = "<group>"; };
 		BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactOrlando.swift; sourceTree = "<group>"; };
 		BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistiveAccessView.swift; sourceTree = "<group>"; };
@@ -313,7 +313,7 @@
 				BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */,
 				BCE205262B58E529000DF400 /* DarkMode.md */,
 				BC046F2E2BEE822A00E498E1 /* IncreaseContrast.md */,
-				BC046F2F2BEE823800E498E1 /* ReduceTranparency.md */,
+				BC046F2F2BEE823800E498E1 /* ReduceTransparency.md */,
 				BC8129072B3E042000CB19D2 /* DataTables.md */,
 				AA9B134E2AAA3867009A3D84 /* DecorativeImages.md */,
 				BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */,

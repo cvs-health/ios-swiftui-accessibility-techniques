@@ -45,8 +45,8 @@ struct IncreaseContrastView: View {
                     }) {
                         Text(colorSchemeContrast == .standard ? "Standard Contrast" : "Increased Contrast")
                             .padding()
-                            .background(Color.black.opacity(0.1))
-                            .foregroundColor(colorSchemeContrast == .increased ? Color.black : Color(red: 108 / 255, green: 108 / 255, blue: 108 / 255))
+                            .background(colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.1))
+                            .foregroundColor(getForegroundColor())
                             .border(colorSchemeContrast == .increased ? Color.gray : Color.clear, width: 2)
                     }
                 }
@@ -69,6 +69,29 @@ struct IncreaseContrastView: View {
         }
  
     }
+    
+    func getForegroundColor() -> Color {
+        if colorSchemeContrast == .increased {
+            if colorScheme == .dark {
+                // Dark mode with increased contrast
+                return Color.white
+            } else if colorScheme == .light {
+                // Light mode with increased contrast
+                return Color.black
+            }
+        } else {
+            if colorScheme == .dark {
+                // Dark mode with standard contrast
+                return Color.gray
+            } else if colorScheme == .light {
+                // Light mode with standard contrast
+                return Color(red: 108 / 255, green: 108 / 255, blue: 108 / 255)
+            }
+        }
+        // Default color if none of the conditions are met
+        return Color.black
+    }
+
     
     private func openSettings() {
           if let url = URL(string: UIApplication.openSettingsURLString) {

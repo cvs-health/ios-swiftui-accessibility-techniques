@@ -9,6 +9,8 @@ Using the app with VoiceOver and other iOS assistive technologies will demonstra
 
 [Download iOS app from the AppStore.](https://apps.apple.com/us/app/swiftui-accessibility-techs/id6474141089)
 
+Read the blog post, [Announcing the iOS SwiftUI Accessibility Techniques Open Source Project](https://www.linkedin.com/pulse/announcing-ios-swiftui-accessibility-techniques-open-source-adam-ldahc/).
+
 Review the project source code to see how to apply the accessibility techniques in working SwiftUI code examples.
 
 Documentation files for each technique are listed below.

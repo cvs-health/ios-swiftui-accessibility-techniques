@@ -75,7 +75,6 @@
 		BC8CD0E52B4D06FD00B9A28A /* MagicTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8CD0E42B4D06FC00B9A28A /* MagicTapView.swift */; };
 		BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */; };
 		BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC782B4E1E6F00196E32 /* PopoversView.swift */; };
-		BC95CC7B2B4E4A8D00196E32 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */; };
 		BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */; };
 		BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD102B7302E700033712 /* RadioButtonsView.swift */; };
 		BCA3DD142B741FDB00033712 /* SearchSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */; };
@@ -228,7 +227,6 @@
 		BC95CC752B4DF94600196E32 /* MagicTap.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MagicTap.md; sourceTree = "<group>"; };
 		BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputInstructionsView.swift; sourceTree = "<group>"; };
 		BC95CC782B4E1E6F00196E32 /* PopoversView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoversView.swift; sourceTree = "<group>"; };
-		BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartInvertView.swift; sourceTree = "<group>"; };
 		BCA3DD0F2B72DEA900033712 /* SmartInvert.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SmartInvert.md; sourceTree = "<group>"; };
 		BCA3DD102B7302E700033712 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
@@ -289,7 +287,6 @@
 			children = (
 				AADEFB462B23F3DA003534A9 /* iOSswiftUIa11yTechniquesUITests.swift */,
 				AA7367492AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift */,
-				BC95CC7A2B4E4A8D00196E32 /* SnapshotHelper.swift */,
 			);
 			path = iOSswiftUIa11yTechniquesUITests;
 			sourceTree = "<group>";
@@ -587,7 +584,6 @@
 			files = (
 				AADEFB472B23F3DA003534A9 /* iOSswiftUIa11yTechniquesUITests.swift in Sources */,
 				AA73674A2AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITestsLaunchTests.swift in Sources */,
-				BC95CC7B2B4E4A8D00196E32 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

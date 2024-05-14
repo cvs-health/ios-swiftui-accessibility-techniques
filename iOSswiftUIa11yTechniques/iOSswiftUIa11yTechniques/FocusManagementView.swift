@@ -77,7 +77,7 @@ struct FocusManagementView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good focus management example uses `.accessibilityFocused` to set VoiceOver focus to the dialog heading when it's opened and back to the dialog trigger button when it's closed. `.accessibilityAddTraits(.isModal)` is used to trap VoiceOver focus inside the modal dialog and prevent focus of the grayed out content under the modal. `.accessibilityAction(.escape)` is used to close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -112,7 +112,7 @@ struct FocusManagementView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad focus management example does not use `.accessibilityFocused` to set VoiceOver focus to the dialog heading when it's opened or back to the dialog trigger button when it's closed. `.accessibilityAddTraits(.isModal)` is not used to trap VoiceOver focus inside the modal dialog and prevent focus of the grayed out content under the modal. `.accessibilityAction(.escape)` is not used to close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .background(showModal || showModalBad == true ? colorScheme == .dark ? Color(.gray).opacity(0.5) : Color.black.opacity(0.5) : colorScheme == .dark ? Color(.black) : Color(.white))
             .navigationTitle("Focus Management")

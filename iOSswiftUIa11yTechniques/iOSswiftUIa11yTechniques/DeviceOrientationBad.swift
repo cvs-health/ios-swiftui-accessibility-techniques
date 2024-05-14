@@ -42,7 +42,9 @@ struct DeviceOrientationBad: View {
  
 struct DeviceOrientationBad_Previews: PreviewProvider {
     static var previews: some View {
-        DeviceOrientationBad()
+        NavigationStack {
+            DeviceOrientationBad()
+        }
     }
 }
 

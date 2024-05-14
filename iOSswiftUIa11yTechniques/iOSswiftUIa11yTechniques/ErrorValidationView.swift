@@ -286,6 +286,8 @@ struct ErrorValidationView: View {
  
 struct ErrorValidationView_Previews: PreviewProvider {
     static var previews: some View {
-        ErrorValidationView()
+        NavigationStack {
+            ErrorValidationView()
+        }
     }
 }

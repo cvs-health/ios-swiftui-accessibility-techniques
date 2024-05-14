@@ -194,6 +194,8 @@ struct DynamicTypeView: View {
  
 struct DynamicTypeView_Previews: PreviewProvider {
     static var previews: some View {
-        DynamicTypeView()
+        NavigationStack {
+            DynamicTypeView()
+        }
     }
 }

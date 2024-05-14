@@ -136,6 +136,8 @@ struct GroupingControlsView: View {
  
 struct GroupingControlsView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupingControlsView()
+        NavigationStack {
+            GroupingControlsView()
+        }
     }
 }

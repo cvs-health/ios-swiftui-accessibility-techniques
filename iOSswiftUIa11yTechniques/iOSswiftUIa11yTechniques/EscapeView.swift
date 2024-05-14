@@ -130,6 +130,8 @@ struct EscapeView: View {
  
 struct EscapeView_Previews: PreviewProvider {
     static var previews: some View {
-        EscapeView()
+        NavigationStack {
+            EscapeView()
+        }
     }
 }

@@ -124,6 +124,8 @@ struct FocusManagementView: View {
  
 struct FocusManagementView_Previews: PreviewProvider {
     static var previews: some View {
-        FocusManagementView()
+        NavigationStack {
+            FocusManagementView()
+        }
     }
 }

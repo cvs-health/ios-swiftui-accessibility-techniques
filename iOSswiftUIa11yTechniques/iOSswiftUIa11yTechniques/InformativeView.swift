@@ -37,7 +37,7 @@ struct InformativeView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example `Image().accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -53,8 +53,8 @@ struct InformativeView: View {
                     VStack {
                         Text("The good informative image example uses `.accessibilityLabel(\"Get 10% off\")` to give it an accessibility label that matches the visible text shown in the image.")
                     }
-                }.padding(.bottom)
-                Text("Good Example 2")
+                }.padding(.bottom).accessibilityHint("Good Example `Image().accessibilityLabel`")
+                Text("Good Example `Label(\"Text\", systemImage:).accessibilityRemoveTraits(.isImage)` `HStack {}.accessibilityElement(children: .combine)`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -69,7 +69,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The good informative icon image example uses `Label(\"World\", systemImage: \"globe\").labelStyle(IconOnlyLabelStyle())` to give the informative icon an accessibility label that is not displayed visually. Additionally `.accessibilityRemoveTraits(.isImage)` must be used on the icon image so that the accessibility label is spoken to VoiceOver when the `HStack` is combined into a single focusable element using `.accessibilityElement(children: .combine)`.")
                     }
-                }.padding(.bottom)
+                }.padding(.bottom).accessibilityHint("Good Example `Label(\"Text\", systemImage:).accessibilityRemoveTraits(.isImage)` `HStack {}.accessibilityElement(children: .combine)`")
                 Text("Good Example `Image` combined with `Text`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -86,7 +86,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The good `Image` combined with `Text` example uses `Image(systemName: \"exclamationmark.circle\").accessibilityLabel(\"Error:\")` to give the error icon alt text. `.accessibilityElement(children: .combine)` is used on the `HStack` to combine the image and text into a single focusable element with VoiceOver.")
                     }
-                }.padding(.bottom)
+                }.padding(.bottom).accessibilityHint("Good Example `Image` combined with `Text`")
                 Text("Good Example `Label` combined with `Text`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -102,7 +102,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The good `Label` combined with `Text` example uses `Label(\"Error:\", systemImage: \"exclamationmark.circle\").labelStyle(IconOnlyLabelStyle())` to give the icon an accessibility `Label` that is not displayed visually. Additionally `.accessibilityRemoveTraits(.isImage)` must be used on the `Label` icon image so that the accessibility label is spoken to VoiceOver when the `HStack` is combined into a single focusable element using `.accessibilityElement(children: .combine)`.")
                     }
-                }.padding(.bottom)
+                }.padding(.bottom).accessibilityHint("Good Example `Label` combined with `Text`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -113,7 +113,7 @@ struct InformativeView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example `Image` no `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -128,8 +128,8 @@ struct InformativeView: View {
                     VStack {
                         Text("The bad informative image example uses no `.accessibilityLabel` for the image causing VoiceOver to read the image filename* which is not meaningful. *Disable VoiceOver Text Recognition")
                     }
-                }.padding(.bottom)
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example `Image` no `.accessibilityLabel`")
+                Text("Bad Example `systemImage:` no `Label` text `HStack` not combined")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -144,7 +144,7 @@ struct InformativeView: View {
                     VStack {
                         Text("The bad informative icon image example uses no `Label` text to give the informative icon an accessibility label causing VoiceOver to read the image as \"Image\". VoiceOver focuses on each individual part of the line of text because the `HStack` is not combined into one focusable element.")
                     }
-                }.padding(.bottom)
+                }.padding(.bottom).accessibilityHint("Bad Example `systemImage:` no `Label` text `HStack` not combined")
                 Text("Bad Example `Image` combined with `Text`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -184,6 +184,8 @@ struct InformativeView: View {
  
 struct InformativeView_Previews: PreviewProvider {
     static var previews: some View {
-        InformativeView()
+        NavigationStack {
+            InformativeView()
+        }
     }
 }

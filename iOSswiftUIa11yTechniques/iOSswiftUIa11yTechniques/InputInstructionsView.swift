@@ -82,7 +82,7 @@ struct InputInstructionsView: View {
                 }.padding(.top).frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good input instructions example uses an `.accessibilityHint` on each `TextField` matching the visible instruction text so that VoiceOver users hear the input requirements when focused on the inputs.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -134,7 +134,7 @@ struct InputInstructionsView: View {
                 }.padding(.top).frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad input instructions example does not use an `.accessibilityHint` on each `TextField` matching the visible instruction text. VoiceOver users don't hear the input requirements when focused on the inputs.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .padding()
             .navigationTitle("Input Instructions")
@@ -145,6 +145,8 @@ struct InputInstructionsView: View {
  
 struct InputInstructionsView_Previews: PreviewProvider {
     static var previews: some View {
-        InputInstructionsView()
+        NavigationStack {
+            InputInstructionsView()
+        }
     }
 }

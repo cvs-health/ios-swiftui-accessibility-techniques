@@ -55,7 +55,7 @@ struct NavigationLinkView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example `Text` `.onTapGesture` opens custom view")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -90,8 +90,8 @@ struct NavigationLinkView: View {
                }
                 DisclosureGroup("Details") {
                     Text("The first bad navigation example uses `Text` with an `.onTapGesture` to open a custom view. There is no Button trait spoken to VoiceOver. Focus is not set to the dynamically displayed view and VoiceOver can incorrectly focus behind the custom view. ")
-                }.padding(.bottom).accessibilityHint("Bad Example 1")
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example `Text` `.onTapGesture` opens custom view")
+                Text("Bad Example `Text` `.onTapGesture` opens fullscreen view")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -108,7 +108,7 @@ struct NavigationLinkView: View {
                 }
                     DisclosureGroup("Details") {
                         Text("The second bad navigation example uses `Text` with an `.onTapGesture` to open a fullscreen view. There is no Button trait spoken to VoiceOver.")
-                    }.padding(.bottom).accessibilityHint("Bad Example 2")
+                    }.padding(.bottom).accessibilityHint("Bad Example `Text` `.onTapGesture` opens fullscreen view")
                 }
                 .padding()
                 .navigationTitle("Navigation")

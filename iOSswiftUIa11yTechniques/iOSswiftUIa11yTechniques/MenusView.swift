@@ -90,7 +90,7 @@ struct MenusView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good menu example uses `Menu` to create a native SwiftUI menu that receives VoiceOver focus when opened. It is not possible to send focus back to the trigger button after closing a `Menu`. VoiceOver reads \"Actions, Button, Pop up button, Double tap to activate the picker\"")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -119,7 +119,7 @@ struct MenusView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad menu example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed. VoiceOver reads \"Actions, Button\" and does not read that it is a popup button that activates a picker.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .navigationTitle("Menus")
             .padding()
@@ -144,6 +144,8 @@ struct MenusView: View {
  
 struct MenusView_Previews: PreviewProvider {
     static var previews: some View {
-        MenusView()
+        NavigationStack {
+            MenusView()
+        }
     }
 }

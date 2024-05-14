@@ -91,7 +91,7 @@ struct InputLabelsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good accessibility input labels example uses `.accessibilityInputLabels([\"Username Help\", \"Username icon\", \"Help for Username\"])` and `.accessibilityInputLabels([\"Email Help\", \"Email icon\", \"Help for Email\"])`to give each help icon button multiple voice command input labels enabling Voice Control users to speak a variety of possible voice commands to tap the icon buttons.")
-                }.padding()
+                }.padding(.bottom)
             }
             .padding()
             .navigationTitle("Input Labels")
@@ -103,6 +103,8 @@ struct InputLabelsView: View {
  
 struct InputLabelsView_Previews: PreviewProvider {
     static var previews: some View {
-        InputLabelsView()
+        NavigationStack {
+            InputLabelsView()
+        }
     }
 }

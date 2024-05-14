@@ -41,7 +41,7 @@ struct MagicTapView: View {
                 Text("Turn on VoiceOver and double tap with 2 fingers to activate Magic Tap.")
                 DisclosureGroup("Details") {
                     Text("The good Magic Tap example uses `.accessibilityAction(.magicTap)` to display an alert dialog when VoiceOver users double tap with 2 fingers anywhere on this page.")
-                }.padding()
+                }.padding(.bottom)
             }
             .navigationTitle("Magic Tap")
             .padding()
@@ -59,6 +59,8 @@ struct MagicTapView: View {
  
 struct MagicTapView_Previews: PreviewProvider {
     static var previews: some View {
-        MagicTapView()
+        NavigationStack {
+            MagicTapView()
+        }
     }
 }

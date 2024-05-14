@@ -78,7 +78,7 @@ struct EscapeView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good escape example uses `.accessibilityAction(.escape)` to close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -118,7 +118,7 @@ struct EscapeView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad escape example does not use `.accessibilityAction(.escape)` to close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .background(showModal || showModalBad == true ? colorScheme == .dark ? Color(.gray).opacity(0.5) : Color.black.opacity(0.5) : colorScheme == .dark ? Color(.black) : Color(.white))
             .navigationTitle("Escape")

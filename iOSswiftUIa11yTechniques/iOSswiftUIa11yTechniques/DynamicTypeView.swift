@@ -18,7 +18,7 @@ import SwiftUI
  
 struct DynamicTypeView: View {
     
-    @State private var email: String = ""
+    @State private var email: String = "first.m.last2@company.com"
     
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -41,7 +41,7 @@ struct DynamicTypeView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example `Text().font(.largeTitle)` and `TextField(axis: .vertical)`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -72,8 +72,8 @@ struct DynamicTypeView: View {
                 .accessibilityIdentifier("goodButton")
                 DisclosureGroup("Details") {
                     Text("The first good dynamic type example uses `.font(.largeTitle)` which scales to multiple lines when enlarged. The text field uses `axis: .vertical` to allow values larger than one line to expand vertically.")
-                }.padding()
-                Text("Good Example 2")
+                }.padding(.bottom).accessibilityHint("Good Example Text().font(.largeTitle) and TextField(axis: .vertical)")
+                Text("Good Example `AnyLayout()` `HStackLayout()` to `VStackLayout()` conditonal layout")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -96,8 +96,8 @@ struct DynamicTypeView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The second good dynamic type example uses `AnyLayout()` conditional layout to display two links in an `HStack` at smaller text sizes or a `VStack` at larger text sizes.")
-                }.padding()
-                Text("Good Example 3")
+                }.padding(.bottom).accessibilityHint("Good Example `AnyLayout()` `HStackLayout()` to `VStackLayout()` conditonal layout")
+                Text("Good Example `Text().font(.largeTitle)`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -105,7 +105,7 @@ struct DynamicTypeView: View {
                 Text("Lorem Ipsum").font(.largeTitle)
                 DisclosureGroup("Details") {
                     Text("The third good dynamic type example uses `.font(.largeTitle)` which resizes when the user adjusts their system text size settings.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example `Text().font(.largeTitle)`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -116,7 +116,7 @@ struct DynamicTypeView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example `Text().lineLimit(1)` and `TextField` default horizontal axis")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -150,7 +150,7 @@ struct DynamicTypeView: View {
                 DisclosureGroup("Details") {
                     Text("The first bad dynamic type example uses `.lineLimit(1)` which truncates text that grows larger than one line. The text field uses the default horizontal axis causing values larger than one line to truncate.")
                 }.padding()
-                Text("Bad Example 2")
+                Text("Bad Example `HStack` fixed layout")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -174,7 +174,7 @@ struct DynamicTypeView: View {
                 DisclosureGroup("Details") {
                     Text("The second bad dynamic type example uses an `HStack` layout to display two links horizontally even at larger text sizes which reduces the readability")
                 }.padding()
-                Text("Bad Example 3")
+                Text("Bad Example `Text().font(.system(size: 30))`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -182,7 +182,7 @@ struct DynamicTypeView: View {
                 Text("Lorem Ipsum").font(.system(size: 30))
                 DisclosureGroup("Details") {
                     Text("The third bad dynamic type example uses a fixed sized font `.font(.system(size: 30))` which does not resize when the user adjusts their system text size settings.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example `Text().font(.system(size: 30))`")
             }
             .padding()
             .navigationTitle("Dynamic Type")

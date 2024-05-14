@@ -40,6 +40,11 @@ struct FunctionalView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                Text("Good Example `Image` `Button` `.accessibilityLabel`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 Button(action: {
                     showingAlert = true
                 }) {
@@ -60,8 +65,8 @@ struct FunctionalView: View {
                     Text("You activated the button!")
                 }
                 DisclosureGroup("Details") {
-                    Text("The good functional image example uses `.accessibilityLabel(\"Scan barcode\"))` to give the button a meaningful accessibility label that describes its purpose to VoiceOver users.")
-                }.padding(.bottom)
+                    Text("The good functional image example uses an image button with `.accessibilityLabel(\"Scan barcode\"))` to give the button a meaningful accessibility label that describes its purpose to VoiceOver users.")
+                }.padding(.bottom).accessibilityHint("Good Example `Image` `Button` `.accessibilityLabel`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -72,7 +77,7 @@ struct FunctionalView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example `Image` `Button` no `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -91,9 +96,9 @@ struct FunctionalView: View {
                     Alert(title: Text("Button Activated"), message: Text("You activated the button!"), dismissButton: .default(Text("OK")))
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad functional image example uses no `.accessibilityLabel` to give the button a meaningful accessibility label causing VoiceOver to read \"barcode.viewfinder\" as the name of the button.")
-                }.padding(.bottom)
-                Text("Bad Example 2")
+                    Text("The bad functional image example uses no `.accessibilityLabel` to give the image button a meaningful accessibility label causing VoiceOver to read the image filename \"barcode.viewfinder\" as the name of the button.")
+                }.padding(.bottom).accessibilityHint("Bad Example `Image` `Button` no `.accessibilityLabel`")
+                Text("Bad Example `Image` `TapGesture()` no `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -111,8 +116,8 @@ struct FunctionalView: View {
                     Alert(title: Text("Image Tapped"), message: Text("You tapped the image!"), dismissButton: .default(Text("OK")))
                 }
                 DisclosureGroup("Details") {
-                    Text("The second bad functional image example is incorrectly coded as an `Image` element with a `TapGesture` rather than as a `Button` which prevents VoiceOver users from hearing the \"Button\" trait spoken and they won't know the image is an actionable control.")
-                }.padding(.bottom)
+                    Text("The second bad functional image example is incorrectly coded as an `Image` element with a `TapGesture` rather than as a `Button` which prevents VoiceOver users from hearing the \"Button\" trait spoken and they won't know the image is an actionable control. There is also no `.accessibilityLabel`.")
+                }.padding(.bottom).accessibilityHint("Bad Example `Image` `TapGesture()` no `.accessibilityLabel`")
             }
             .navigationTitle("Functional Images")
             .padding()

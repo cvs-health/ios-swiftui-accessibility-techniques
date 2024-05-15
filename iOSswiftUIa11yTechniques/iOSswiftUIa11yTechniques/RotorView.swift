@@ -75,7 +75,7 @@ struct RotorView: View {
                 .accessibilityRotor("Fruits", entries: model.values.filter(\.isRotorFruit), entryLabel: \.label)
                 DisclosureGroup("Details") {
                     Text("The good rotor example uses `.accessibilityRotor(\"Vegetables\", entries: model.values.filter(\\.isRotorVeggie), entryLabel: \\.label)` and `.accessibilityRotor(\"Fruits\", entries: model.values.filter(\\.isRotorFruit), entryLabel: \\.label)` to create two rotors that allow VoiceOver users to quickly navigate between Vegetables or Fruits.")
-                }.padding()
+                }
             }
             .padding()
             .navigationTitle("Rotor")
@@ -87,6 +87,8 @@ struct RotorView: View {
  
 struct RotorView_Previews: PreviewProvider {
     static var previews: some View {
-        RotorView()
+        NavigationStack {
+            RotorView()
+        }
     }
 }

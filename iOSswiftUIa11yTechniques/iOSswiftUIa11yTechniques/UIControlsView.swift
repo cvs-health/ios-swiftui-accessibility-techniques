@@ -91,6 +91,8 @@ struct UIControlsView: View {
 
 struct UIControlsView_Previews: PreviewProvider {
     static var previews: some View {
-        UIControlsView()
+        NavigationStack {
+            UIControlsView()
+        }
     }
 }

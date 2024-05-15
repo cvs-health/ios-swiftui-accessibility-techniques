@@ -75,7 +75,7 @@ struct PickersView: View {
                     .accessibilityFocused($isTriggerFocused)
                 DisclosureGroup("Details") {
                     Text("The default style good example uses `Picker(\"Fruit\")` label text which is spoken as the accessibility label to VoiceOver. `AccessibilityFocusState` is used to send VoiceOver focus back to the picker when the value has been changed.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example Default Style")
                 Text("Good Example Wheel Style")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -93,7 +93,7 @@ struct PickersView: View {
                 .accessibilityLabel("Fruit")
                 DisclosureGroup("Details") {
                     Text("The wheel style good example uses `.accessibilityLabel(\"Fruit\")` which matches the visible label text and `.accessibilityElement(children: .contain)` to make sure the accessibility label is spoken to VoiceOver.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example Wheel Style")
                 Text("Good Example Segmented Style")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -208,6 +208,8 @@ struct PickersView: View {
  
 struct PickersView_Previews: PreviewProvider {
     static var previews: some View {
-        PickersView()
+        NavigationStack {
+            PickersView()
+        }
     }
 }

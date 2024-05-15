@@ -41,7 +41,7 @@ struct SteppersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example `Stepper` with `Text` label")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -52,8 +52,8 @@ struct SteppersView: View {
                 .accessibilityIdentifier("stepperGood1")
                 DisclosureGroup("Details") {
                     Text("The first good Stepper example uses `Text(\"Tickets: \\(tickets)\")` as the visible label text which becomes the VoiceOver accessibility label.")
-                }.padding()
-                Text("Good Example 2")
+                }.padding(.bottom).accessibilityHint("Good Example `Stepper` with `Text` label")
+                Text("Good Example with `TextField` and `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -80,7 +80,7 @@ struct SteppersView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The second good Stepper example includes a text field so that users can quickly enter a large value, e.g., 50 copies. The Stepper uses `.accessibilityLabel(\"Copies\")` to create an accessibility label for VoiceOver because the visible stepper text is empty.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example with `TextField` and `.accessibilityLabel`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -91,7 +91,7 @@ struct SteppersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example `Stepper` with no `Text` label")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -103,8 +103,8 @@ struct SteppersView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The first bad Stepper example has no internal `Stepper` label text so there is no accessibility label spoken to VoiceOver.")
-                }.padding()
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example `Stepper` with no `Text` label")
+                Text("Bad Example no label text, no `.accessibilityLabel`, and no `TextField`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -116,7 +116,7 @@ struct SteppersView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The second bad Stepper example has no text field for users to quickly enter a large value, e.g., 50 copies. The Stepper has no internal label text and no `.accessibilityLabel` for VoiceOver users.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example no label text, no `.accessibilityLabel`, and no `TextField`")
             }
             .padding()
             .navigationTitle("Steppers")
@@ -128,6 +128,8 @@ struct SteppersView: View {
  
 struct SteppersView_Previews: PreviewProvider {
     static var previews: some View {
-        SteppersView()
+        NavigationStack {
+            SteppersView()
+        }
     }
 }

@@ -72,7 +72,7 @@ struct SegmentedControlsView: View {
                 .accessibilityIdentifier("pickerBad")
                 DisclosureGroup("Details") {
                     Text("The bad Segmented controls example does not use `.accessibilityLabel` for each `tag()` segment button causing VoiceOver users to only hear the segment label and not the group label spoken together.")
-                }.padding()
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Segmented Controls")
             .padding()
@@ -83,6 +83,8 @@ struct SegmentedControlsView: View {
  
 struct SegmentedControlsView_Previews: PreviewProvider {
     static var previews: some View {
-        SegmentedControlsView()
+        NavigationStack {
+            SegmentedControlsView()
+        }
     }
 }

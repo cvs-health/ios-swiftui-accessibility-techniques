@@ -119,7 +119,9 @@ struct NavigationLinkView: View {
     
     struct NavigationLinkView_Previews: PreviewProvider {
         static var previews: some View {
-            NavigationLinkView()
+            NavigationStack {
+                NavigationLinkView()
+            }
         }
     }
     

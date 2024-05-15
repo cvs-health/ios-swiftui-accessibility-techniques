@@ -92,7 +92,7 @@ struct TogglesView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example `Toggle` with label text")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -102,8 +102,8 @@ struct TogglesView: View {
                     .accessibilityIdentifier("toggleGood1")
                 DisclosureGroup("Details") {
                     Text("The first good toggle example uses a native `Toggle` with included label text. VoiceOver reads the accessibility label and the \"On\" and \"Off\" state.")
-                }.padding()
-                Text("Good Example 2")
+                }.padding(.bottom).accessibilityHint("Good Example `Toggle` with label text")
+                Text("Good Example `Toggle` with `.accessibilityLabel` and `.accessibilityValue`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -139,8 +139,8 @@ struct TogglesView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The second good toggle example uses `.toggleStyle(SwitchToggleStyle(tint: .blue))`. The `Toggle` label is hidden with `.labelsHidden()`. The values \"Light\" and \"Dark\" are also included in the `.accessibilityValue` so that VoiceOver speaks \"Light\" and \"Dark\" instead of \"On\" and \"Off\".")
-                }.padding()
-                Text("Good Example 3")
+                }.padding(.bottom).accessibilityHint("Good Example `Toggle` with `.accessibilityLabel` and `.accessibilityValue`")
+                Text("Good Example `.toggleStyle(.button)` and unique `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -174,7 +174,7 @@ struct TogglesView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The third good toggle example uses `.toggleStyle(.button)` and includes unique and specific `.accessibilityLabel` text for each bookmark button.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example `.toggleStyle(.button)` and unique `.accessibilityLabel`")
                 Text("Good Example Custom `.toggleStyle`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -189,7 +189,7 @@ struct TogglesView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good custom `.toggleStyle` example uses `.toggleStyle(ColoredToggleStyle())` which customizes the appearance and color of the toggle and sets the off state color to `Color.gray` which has 3:1 contrast ratio in the off state.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example Custom `.toggleStyle`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -200,7 +200,7 @@ struct TogglesView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example `Toggle` with no label text")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -213,8 +213,8 @@ struct TogglesView: View {
                 }.padding()
                 DisclosureGroup("Details") {
                     Text("The first bad toggle example uses `Toggle(\"\").labelsHidden()` to remove the label text. A separate `Text()` element is placed next to the toggle which is not spoken to VoiceOver as the accessibility label.")
-                }.padding()
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example `Toggle` with no label text")
+                Text("Bad Example `Toggle` with no `.accessibilityLabel` and no `.accessibilityValue`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -240,8 +240,8 @@ struct TogglesView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The second bad toggle example hides its label using `.labelsHidden()` and does not provide an `.accessibilityLabel`. The values \"Light\" and \"Dark\" are not included in the `.accessibilityValue` so VoiceOver incorrectly speaks \"On\" and \"Off\" instead of \"Light\" and \"Dark\".")
-                }.padding()
-                Text("Bad Example 3")
+                }.padding(.bottom).accessibilityHint("Bad Example `Toggle` with no `.accessibilityLabel` and no `.accessibilityValue`")
+                Text("Bad Example `.toggleStyle(.button)` and no unique `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -273,7 +273,7 @@ struct TogglesView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The third bad toggle example uses `.toggleStyle(.button)` and does not include unique and specific `.accessibilityLabel` text for each bookmark button.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example `.toggleStyle(.button)` and no unique `.accessibilityLabel`")
                 Text("Bad Example Custom `.toggleStyle`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -287,8 +287,7 @@ struct TogglesView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad custom `.toggleStyle` example uses `.toggleStyle(ColoredToggleStyleBad())` which customizes the appearance and color of the toggle and sets the off state color to `Color(red: 240 / 255, green: 240 / 255, blue: 240 / 255)` which does not have a 3:1 contrast ratio in the off state.")
-                }.padding()
-
+                }.accessibilityHint("Bad Example Custom `.toggleStyle`")
             }
             .padding()
             .navigationTitle("Toggles")
@@ -300,6 +299,8 @@ struct TogglesView: View {
  
 struct TogglesView_Previews: PreviewProvider {
     static var previews: some View {
-        TogglesView()
+        NavigationStack {
+            TogglesView()
+        }
     }
 }

@@ -50,7 +50,7 @@ struct VoiceOverPronunciationView: View {
                 Text("The length of this audiobook is 13 hr., 6 min., 33 sec.").padding(.top)
                 DisclosureGroup("Details") {
                     Text("The good VoiceOver Pronunciation example uses `.speechAlwaysIncludesPunctuation()` so that VoiceOver speaks all punctuation characters in the SwiftUI code snippet. `.speechSpellsOutCharacters()` is used so that the GOOG stock symbol is spoken as G-O-O-G to VoiceOver and 2525 spoken as “two-five-two-five” rather than “two-thousand-five-hundred-twenty-five”. The audiobook time abbreviations follow the Chicago Manual of Style and speak correctly to VoiceOver.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -70,7 +70,7 @@ struct VoiceOverPronunciationView: View {
                 Text("The length of this audiobook is 13h, 6m, 33s").padding(.top)
                 DisclosureGroup("Details") {
                     Text("The bad VoiceOver Pronunciation example does not use `.speechAlwaysIncludesPunctuation()` which causes VoiceOver to ignore all punctuation characters in the SwiftUI code snippet. `.speechSpellsOutCharacters()` is not used causing VoiceOver to speak the GOOG stock symbol as “GOOG” rather than “G-O-O-G” and 2525 is spoken as “two-thousand-five-hundred-twenty-five” rather than “two-five-two-five”. The audiobook time abbreviations do not follow the Chicago Manual of Style and speak incorrectly to VoiceOver.")
-                }.padding()
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("VoiceOver Pronunciation")
             .padding()
@@ -81,6 +81,8 @@ struct VoiceOverPronunciationView: View {
  
 struct VoiceOverPronunciationView_Previews: PreviewProvider {
     static var previews: some View {
-        VoiceOverPronunciationView()
+        NavigationStack {
+            VoiceOverPronunciationView()
+        }
     }
 }

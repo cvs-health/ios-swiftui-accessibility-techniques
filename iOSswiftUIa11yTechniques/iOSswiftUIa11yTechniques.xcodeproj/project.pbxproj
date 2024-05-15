@@ -79,6 +79,7 @@
 		BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD102B7302E700033712 /* RadioButtonsView.swift */; };
 		BCA3DD142B741FDB00033712 /* SearchSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */; };
 		BCA5BDEC2B61E633007823A6 /* ReduceMotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */; };
+		BCAD630E2BF512EE004AD305 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD630D2BF512EE004AD305 /* ActivityIndicatorView.swift */; };
 		BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
 		BCD1CF952B574C8800A26ED3 /* VoiceOverPronunciationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */; };
@@ -234,6 +235,7 @@
 		BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestionsView.swift; sourceTree = "<group>"; };
 		BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduceMotionView.swift; sourceTree = "<group>"; };
 		BCA5BDED2B61E641007823A6 /* ReduceMotion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReduceMotion.md; sourceTree = "<group>"; };
+		BCAD630D2BF512EE004AD305 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeContentViewerView.swift; sourceTree = "<group>"; };
 		BCC4F1822B3F8757004AAB65 /* InputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 				BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */,
 				AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */,
 				BC163FC82B6C1585009E3A83 /* AccessibilityRepresentationView.swift */,
+				BCAD630D2BF512EE004AD305 /* ActivityIndicatorView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
 				BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */,
 				BC8C92152B327D93006DAC20 /* AdjustableActionView.swift */,
@@ -607,6 +610,7 @@
 				AABD27C82A9FF0D800F718F7 /* HeadingsView.swift in Sources */,
 				BC163FC92B6C1585009E3A83 /* AccessibilityRepresentationView.swift in Sources */,
 				BCE2052E2B5A1C50000DF400 /* ContactSeattle.swift in Sources */,
+				BCAD630E2BF512EE004AD305 /* ActivityIndicatorView.swift in Sources */,
 				BCA3DD142B741FDB00033712 /* SearchSuggestionsView.swift in Sources */,
 				BCE205232B58D0BE000DF400 /* DarkModeView.swift in Sources */,
 				AA636C8A2ADD7FD900014BAF /* ProgressIndicatorsView.swift in Sources */,

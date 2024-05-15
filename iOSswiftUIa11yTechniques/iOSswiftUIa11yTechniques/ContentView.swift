@@ -47,6 +47,9 @@ struct ContentView: View {
                 NavigationLink(destination: ReadingOrderView()) {
                     Text("Reading Order")
                 }
+                NavigationLink(destination: ActivityIndicatorView()) {
+                    Text("Activity Ring Indicator")
+                }
                 NavigationLink(destination: FocusManagementView()) {
                     Text("Focus Management")
                 }

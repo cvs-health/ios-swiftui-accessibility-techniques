@@ -185,6 +185,9 @@ struct TextFieldsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
+                TextField("", text: $fname, prompt: Text("First Name `prompt:`")
+                    .foregroundColor(.primary)) // Set the color here
+                .textFieldStyle(.roundedBorder)
                 TextField("First Name", text: $fname)
                     .textFieldStyle(.roundedBorder)
                 TextField("Last Name", text: $lname)

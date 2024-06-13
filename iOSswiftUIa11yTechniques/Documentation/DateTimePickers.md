@@ -8,11 +8,14 @@ Date Pickers with the `.graphical` or `.wheel` style need visible `DatePicker("L
 Limitations:
 
 - The visible `DatePicker` label text will not automatically become the accessibility label for VoiceOver and will need a `.accessibilityLabel` manually applied.
-  - `DatePicker` with `.graphical` or `.wheel` style does not need the extra `.accessibilityLabel` manually applied or else both the visible label and the accessibility will be spoken.
+- `DatePicker` with `.graphical` or `.wheel` style does not need the extra `.accessibilityLabel` manually applied or else both the visible label and the accessibility will be spoken.
+- `AccessibilityFocusState` does not work with `DatePicker` to return focus.
   
  Platform Defects:
 - Wheel style Pickers do not have sufficient text contrast for their non-selected options.
 - Date Pickers do not have sufficient contrast for their (S, M, T, W, T, F, S) column header text.
+- Date & Time Pickers will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `DatePicker` component in which case bugs should be filed with Apple.
+
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)

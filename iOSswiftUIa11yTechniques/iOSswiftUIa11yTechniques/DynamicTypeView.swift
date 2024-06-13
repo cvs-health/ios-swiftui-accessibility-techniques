@@ -18,8 +18,7 @@ import SwiftUI
  
 struct DynamicTypeView: View {
     
-    @State private var email: String = "first.m.last2@company.com"
-    
+    @State private var email: String = "givenname.familyname2@companyname.com"    
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme

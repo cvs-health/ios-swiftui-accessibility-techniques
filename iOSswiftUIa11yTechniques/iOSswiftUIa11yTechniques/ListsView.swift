@@ -47,7 +47,7 @@ struct ListsView: View {
                 Text("4. Merge into main branch.").frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good list example uses lists with a separate `Text()` element for each list item.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -63,7 +63,7 @@ struct ListsView: View {
                 Text("1. Fork repository.\n2. Make code changes.\n3. Submit pull request.\n4. Merge into main branch.").frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad list example uses lists with a single `Text()` element for the entire list and each list item visually separated using the `\\n` new line character.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .navigationTitle("Lists")
             .padding()
@@ -74,6 +74,8 @@ struct ListsView: View {
  
 struct ListsView_Previews: PreviewProvider {
     static var previews: some View {
-        ListsView()
+        NavigationStack {
+            ListsView()
+        }
     }
 }

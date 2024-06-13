@@ -40,7 +40,7 @@ struct TabsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example native `TabView`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -50,8 +50,8 @@ struct TabsView: View {
                 }.padding()
                 DisclosureGroup("Details") {
                     Text("The first good tabs example uses a native `TabView` with default functionality. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number.")
-                }.padding()
-                Text("Good Example 2")
+                }.padding(.bottom).accessibilityHint("Good Example native `TabView`")
+                Text("Good Example `.tabViewStyle(.page)` with `.accessibilityLabel` and `backgroundDisplayMode: .always`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -69,7 +69,7 @@ struct TabsView: View {
                 .accessibilityIdentifier("tabsGood2")
                 DisclosureGroup("Details") {
                     Text("The second good tabs example uses a native `TabView` with `.tabViewStyle(.page)` and `.indexViewStyle(.page(backgroundDisplayMode: .always))` to display page indicator dots with a background. The `TabView` also has an `.accessibilityLabel`.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example `.tabViewStyle(.page)` with `.accessibilityLabel` and `backgroundDisplayMode: .always`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -80,7 +80,7 @@ struct TabsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example buttons that show and hide text")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -115,8 +115,8 @@ struct TabsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The first bad tabs example is coded as buttons that show and hide text. VoiceOver does not hear a selected state or tab trait for the tabs.")
-                }.padding()
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example buttons that show and hide text")
+                Text("Bad Example `.tabViewStyle(.page)` with no `.accessibilityLabel` and no `backgroundDisplayMode: .always`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -132,7 +132,7 @@ struct TabsView: View {
                 .accessibilityIdentifier("tabsBad2")
                 DisclosureGroup("Details") {
                     Text("The second bad tabs example uses `.tabViewStyle(.page)` which has white page indicator dots that are only visible in dark mode but are invisible in light mode. There is also no `.accessibilityLabel`.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example `.tabViewStyle(.page)` with no `.accessibilityLabel` and no `backgroundDisplayMode: .always`")
             }
             .padding()
             .navigationTitle("Tabs")
@@ -144,6 +144,8 @@ struct TabsView: View {
  
 struct TabsView_Previews: PreviewProvider {
     static var previews: some View {
-        TabsView()
+        NavigationStack {
+            TabsView()
+        }
     }
 }

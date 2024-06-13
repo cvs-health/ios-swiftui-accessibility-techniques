@@ -73,7 +73,7 @@ struct SmartInvertView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good smart invert example uses `.accessibilityIgnoresInvertColors()` on each `Image` to prevent them from inverting so that they display their natural colors.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -116,7 +116,7 @@ struct SmartInvertView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad smart invert example does not use `.accessibilityIgnoresInvertColors()` on each `Image` to prevent them from inverting which causes the images to display in reversed colors.")
-                }.padding()
+                }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Smart Invert")
             .padding()
@@ -127,6 +127,8 @@ struct SmartInvertView: View {
  
 struct SmartInvertView_Previews: PreviewProvider {
     static var previews: some View {
-        SmartInvertView()
+        NavigationStack {
+            SmartInvertView()
+        }
     }
 }

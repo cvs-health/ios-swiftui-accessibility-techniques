@@ -43,6 +43,8 @@ struct UserPreferencesView: View {
 
 struct UserPreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        UserPreferencesView()
+        NavigationStack {
+            UserPreferencesView()
+        }
     }
 }

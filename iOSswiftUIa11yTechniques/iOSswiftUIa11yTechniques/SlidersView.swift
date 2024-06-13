@@ -42,7 +42,7 @@ struct SlidersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example with label text and `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -53,8 +53,8 @@ struct SlidersView: View {
                     .accessibilityIdentifier("sliderGood1")
                 DisclosureGroup("Details") {
                     Text("The first good slider example uses `Text(\"Brightness\")` as the visible label text and `.accessibilityLabel(\"Brightness\")` as the VoiceOver accessibility label.")
-                }.padding()
-                Text("Good Example 2")
+                }.padding(.bottom).accessibilityHint("Good Example with label text and `.accessibilityLabel`")
+                Text("Good Example `Slider` internal label text with `Stepper` and `TextField`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -86,7 +86,7 @@ struct SlidersView: View {
                     }
                 DisclosureGroup("Details") {
                     Text("The second good slider example uses visible label text as well as minimum and maximum value labels. A `TextField` and `Stepper` are included to allow users to see the exact value and have fine control when adjusting the value. The `Slider` uses internal `Text(\"Speed\")` as the invisible accessibility label. The `TextField` and `Stepper` use `.accessibilityLabel(\"Speed\")` as their VoiceOver labels.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example `Slider` internal label text with `Stepper` and `TextField`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -97,7 +97,7 @@ struct SlidersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example no label text or `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -106,8 +106,8 @@ struct SlidersView: View {
                     .accessibilityIdentifier("sliderBad1")
                 DisclosureGroup("Details") {
                     Text("The first bad slider example uses no visible label text and no VoiceOver accessibility label.")
-                }.padding()
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example no label text or `.accessibilityLabel`")
+                Text("Bad Example no label, no `.accessibilityLabel`, no `TextField`, no `Stepper`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -122,7 +122,7 @@ struct SlidersView: View {
                     .accessibilityIdentifier("sliderBad2")
                 DisclosureGroup("Details") {
                     Text("The second bad slider example uses no label text and no accessibility label for VoiceOver. Users can see the slider value but their is no `TextField` or `Stepper` included to allow fine control.")
-                }.padding()
+                }.accessibilityHint("Bad Example no label, no `.accessibilityLabel`, no `TextField`, no `Stepper`")
             }
             .padding()
             .navigationTitle("Sliders")
@@ -134,6 +134,8 @@ struct SlidersView: View {
  
 struct SlidersView_Previews: PreviewProvider {
     static var previews: some View {
-        SlidersView()
+        NavigationStack {
+            SlidersView()
+        }
     }
 }

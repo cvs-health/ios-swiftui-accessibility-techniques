@@ -39,7 +39,7 @@ struct PageTitlesView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example `.navigationTitle`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -49,8 +49,8 @@ struct PageTitlesView: View {
                 }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The first good page title example uses `.navigationTitle` to create a page title that describes the purpose of the page.")
-                }.padding()
-                Text("Good Example 2")
+                }.padding(.bottom).accessibilityHint("Good Example `.navigationTitle`")
+                Text("Good Example dynamic variable `.navigationTitle`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -63,7 +63,7 @@ struct PageTitlesView: View {
                     .frame(maxWidth: .infinity, alignment: .leading).padding()
                 DisclosureGroup("Details") {
                     Text("The second good page title example uses a variable for the value of the `.navigationTitle` which is dynamically updated after tapping the Button.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example dynamic variable `.navigationTitle`")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -79,7 +79,7 @@ struct PageTitlesView: View {
                 }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad page title example does not use a `.navigationTitle` to create a page title.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .padding()
             //.navigationTitle("Page Titles")//static title
@@ -92,6 +92,8 @@ struct PageTitlesView: View {
  
 struct PageTitlesView_Previews: PreviewProvider {
     static var previews: some View {
-        PageTitlesView()
+        NavigationStack {
+            PageTitlesView()
+        }
     }
 }

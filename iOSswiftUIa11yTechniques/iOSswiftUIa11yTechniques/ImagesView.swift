@@ -37,6 +37,8 @@ struct ImagesView: View {
 
 struct ImagesView_Previews: PreviewProvider {
     static var previews: some View {
-        ImagesView()
+        NavigationStack {
+            ImagesView()
+        }
     }
 }

@@ -58,7 +58,7 @@ struct RadioButtonsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good radio button example uses custom `Button` elements styled to look like radio buttons. `.accessibilityRemoveTraits(.isButton)` removes the button trait. `.accessibilityAddTraits(isSelected.rawValue == title ? .isSelected : [])` adds the selected trait when checked. `.accessibilityRemoveTraits(isSelected.rawValue != title ? .isSelected : [])` removes the selected trait when unchecked. `.accessibilityValue(isSelected.rawValue == title ? Text(\"Radio button, checked\") : Text(\"Radio button, unchecked\"))` adds a fake radio button trait and a checked and unchecked state. Additionally `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Choose Color\")` are used to give the radio group a label for VoiceOver.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -86,7 +86,7 @@ struct RadioButtonsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad radio button example uses custom `Button` elements styled to look like radio buttons. There is no additional code to add a radio button trait or a selected and checked/unchecked states. VoiceOver users don't know these are radio buttons or which button is checked or unchecked. There is also no radio group label for VoiceOver.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .navigationTitle("Radio Buttons")
             .padding()
@@ -143,6 +143,8 @@ struct RadioButtonBad: View {
 
 struct RadioButtonsView_Previews: PreviewProvider {
     static var previews: some View {
-        RadioButtonsView()
+        NavigationStack {
+            RadioButtonsView()
+        }
     }
 }

@@ -66,7 +66,7 @@ struct LargeContentViewerView: View {
                     .padding(.leading)
                 DisclosureGroup("Details") {
                     Text("The good large content viewer example uses `.accessibilityShowsLargeContentViewer{}` to display the fixed sized button's `Label` and `systemImage` in the large content viewer. When holding one finger on the Get Help and Show My Location buttons they display a large version in the middle of the screen.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -98,7 +98,7 @@ struct LargeContentViewerView: View {
                     .padding(.leading)
                 DisclosureGroup("Details") {
                     Text("The bad large content viewer example does not use `.accessibilityShowsLargeContentViewer{}` to display the fixed sized button's `Label` and `systemImage` in the large content viewer. When holding one finger on the Get Help and Show My Location buttons they do not display a large version in the middle of the screen.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .padding()
             .navigationTitle("Large Content Viewer")
@@ -114,6 +114,8 @@ struct LargeContentViewerView: View {
  
 struct LargeContentViewerView_Previews: PreviewProvider {
     static var previews: some View {
-        LargeContentViewerView()
+        NavigationStack {
+            LargeContentViewerView()
+        }
     }
 }

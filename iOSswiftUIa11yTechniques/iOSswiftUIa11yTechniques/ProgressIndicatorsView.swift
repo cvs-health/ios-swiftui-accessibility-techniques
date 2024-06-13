@@ -42,7 +42,7 @@ struct ProgressIndicatorsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example 1")
+                Text("Good Example `ProgressView(\"Label\")`, `AccessibilityNotification.Announcement`, and `.foregroundColor` with sufficient contrast")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -68,8 +68,8 @@ struct ProgressIndicatorsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The first good progress indicator example posts an `AccessibilityNotification.Announcement` that speaks the indicator text \"Updating your information\" to VoiceOver when the progress view displays. The announcement is posted with a 0.1 second delay to make it speak correctly to VoiceOver. The `ProgressView` uses `.foregroundColor(.primary)` to give the spinner label text sufficient contrast.")
-                }.padding()
-                Text("Good Example 2")
+                }.padding(.bottom).accessibilityHint("Good Example `ProgressView(\"Label\")`, `AccessibilityNotification.Announcement`, and `.foregroundColor` with sufficient contrast")
+                Text("Good Example `ProgressView(\"Label\")`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -78,7 +78,7 @@ struct ProgressIndicatorsView: View {
                     .accessibilityIdentifier("progressView2good")
                 DisclosureGroup("Details") {
                     Text("The second good progress indicator example uses visible label text `ProgressView(\"Downloading Purchase Receipt\")`.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example `ProgressView(\"Label\")`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -89,7 +89,7 @@ struct ProgressIndicatorsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example 1")
+                Text("Bad Example `ProgressView()` no label, no accessibility announcement")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -111,8 +111,8 @@ struct ProgressIndicatorsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The first bad progress indicator example does not speak an accessibility announcement notification to VoiceOver when the progress view displays. There is no label text for the progress view and no accessibility label for VoiceOver.")
-                }.padding()
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example `ProgressView()` no label, no accessibility announcement")
+                Text("Bad Example `ProgressView()` no label text or accessibility label")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -121,7 +121,7 @@ struct ProgressIndicatorsView: View {
                     .accessibilityIdentifier("progressView2bad")
                 DisclosureGroup("Details") {
                     Text("The second bad progress indicator example has no visible label text and no accessibility label for VoiceOver.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example `ProgressView()` no label text or accessibility label")
             }
             .padding()
             .navigationTitle("Progress Indicators")
@@ -133,6 +133,8 @@ struct ProgressIndicatorsView: View {
  
 struct ProgressIndicatorsView_Previews: PreviewProvider {
     static var previews: some View {
-        ProgressIndicatorsView()
+        NavigationStack {
+            ProgressIndicatorsView()
+        }
     }
 }

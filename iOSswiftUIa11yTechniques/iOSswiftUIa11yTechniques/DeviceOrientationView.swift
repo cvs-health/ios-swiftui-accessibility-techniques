@@ -44,7 +44,7 @@ struct DeviceOrientationView: View {
                 }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good device orientation example does not use `AppDelegate.orientationLock = .portrait` to lock the screen orientation of the page.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -60,7 +60,7 @@ struct DeviceOrientationView: View {
                 }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad device orientation example uses `AppDelegate.orientationLock = .portrait` to lock the screen orientation of the page.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .padding()
             .navigationTitle("Device Orientation")
@@ -71,6 +71,8 @@ struct DeviceOrientationView: View {
  
 struct DeviceOrientationView_Previews: PreviewProvider {
     static var previews: some View {
-        DeviceOrientationView()
+        NavigationStack {
+            DeviceOrientationView()
+        }
     }
 }

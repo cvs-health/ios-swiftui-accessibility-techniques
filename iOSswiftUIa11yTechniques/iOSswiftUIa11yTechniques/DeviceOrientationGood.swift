@@ -37,6 +37,8 @@ struct DeviceOrientationGood: View {
  
 struct DeviceOrientationGood_Previews: PreviewProvider {
     static var previews: some View {
-        DeviceOrientationGood()
+        NavigationStack {
+            DeviceOrientationGood()
+        }
     }
 }

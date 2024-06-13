@@ -56,7 +56,7 @@ struct MeaningfulAccessibleNamesView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good meaningful label text example uses `Text(\"Read More about Lorem Ipsum\")` to give the button a unique and specific accessible name for VoiceOver users.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example Meaningful Label Text")
                 Text("Good Example Meaningful `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -65,7 +65,7 @@ struct MeaningfulAccessibleNamesView: View {
                 VStack(alignment: .leading) {
                     Text("ACME® Inc. BOOM-ERANG")
                         .font(.headline)
-                        .accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                        .accessibilityAddTraits(.isHeader)
                     Text("🪃")
                         .font(.largeTitle)
                     Text("Guaranteed to return.")
@@ -97,7 +97,7 @@ struct MeaningfulAccessibleNamesView: View {
                 )
                 DisclosureGroup("Details") {
                     Text("The good meaningful `.accessibilityLabel` example uses `.accessibilityLabel(\"Add to cart, ACME® Inc. BOOM-ERANG\")` to modify the accessible name of the ADD TO CART button by adding the specific product name to the end of the `.accessibilityLabel` and adding the visible label text to the beginning of the `.accessibilityLabel`. VoiceOver does not say \"A D D to cart\" because \"Add\" has been written lower-case. Additionally, `.accessibilityInputLabels([\"Add to Cart\", \"Add Boomerang to Cart\"])` is added so that Voice Control users can speak the visible label text when they say a \"Tap\" command.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example Meaningful `.accessibilityLabel`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -108,7 +108,7 @@ struct MeaningfulAccessibleNamesView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example Meaningful Label Text")
+                Text("Bad Example no Meaningful Label Text")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -125,8 +125,8 @@ struct MeaningfulAccessibleNamesView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad meaningful label text example uses `Text(\"Read More\")` to give the button a generic accessible name that is not unique and specific for VoiceOver users.")
-                }.padding()
-                Text("Bad Example 2")
+                }.padding(.bottom).accessibilityHint("Bad Example no Meaningful Label Text")
+                Text("Bad Example no Meaningful `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -164,7 +164,7 @@ struct MeaningfulAccessibleNamesView: View {
                 )
                 DisclosureGroup("Details") {
                     Text("The bad meaningful `.accessibilityLabel` example uses `Text(\"ADD TO CART\")` as the the accessible name of the ADD TO CART button which does specifically include the name of the product that will be added to the cart.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Bad Example no Meaningful `.accessibilityLabel`")
             }
             .padding()
             .navigationTitle("Meaningful Accessible Names")
@@ -176,6 +176,8 @@ struct MeaningfulAccessibleNamesView: View {
  
 struct MeaningfulAccessibleNamesView_Previews: PreviewProvider {
     static var previews: some View {
-        MeaningfulAccessibleNamesView()
+        NavigationStack {
+            MeaningfulAccessibleNamesView()
+        }
     }
 }

@@ -88,7 +88,7 @@ struct SearchSuggestionsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The good search suggestions example posts an `AccessibilityNotification.Announcement` that speaks the number of suggestions shown. The suggestion buttons have a fake \"suggestion\" trait added to the `.accessibilityLabel` and a `.accessibilityHint` that says the suggestion buttons will insert the suggestion into the search bar.")
-                }.padding()
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -121,7 +121,7 @@ struct SearchSuggestionsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad search suggestions example does not speak the number of suggestions shown to VoiceOver. The suggestion buttons do not have a fake \"suggestion\" trait added to the `.accessibilityLabel` or a `.accessibilityHint` that says the suggestion buttons will insert the suggestion into the search bar.")
-                }.padding()
+                }.accessibilityHint("Bad Example")
             }
             .padding()
             .navigationTitle("Search Suggestions")
@@ -160,6 +160,8 @@ struct SearchSuggestionsView: View {
 
 struct SearchSuggestionsView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchSuggestionsView()
+        NavigationStack {
+            SearchSuggestionsView()
+        }
     }
 }

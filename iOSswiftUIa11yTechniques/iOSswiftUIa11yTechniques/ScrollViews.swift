@@ -47,7 +47,7 @@ struct ScrollViews: View {
                     }
                 DisclosureGroup("Details") {
                     Text("The good scroll view example uses a `Button` at the top of the `ScrollView` which allows Full Keyboard Access to scroll the view using the up and down arrow keys The bad scroll view example below does not have a `Button` or a `DisclosureGroup` in the scroll view or after the scroll view which prevents Full Keyboard Access from scrolling the view using the up or down arrow keys.")
-                }.padding()
+                }.padding(.bottom)
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -75,6 +75,8 @@ struct ScrollViews: View {
  
 struct ScrollViews_Previews: PreviewProvider {
     static var previews: some View {
-        ScrollViews()
+        NavigationStack {
+            ScrollViews()
+        }
     }
 }

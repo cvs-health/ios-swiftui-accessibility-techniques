@@ -71,7 +71,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         XCTAssertFalse(app.otherElements.images["badImage"].label.isEmpty) // badImage gets its label from the image filename
         XCTAssertTrue(app.otherElements.images["badIcon"].label.isEmpty) // badIcon exists but has empty label
         // Run a11y audit
-        try app.performAccessibilityAudit() // fails a11y audit because badIcon element has no description
+        try app.performAccessibilityAudit() // EITHER fails a11y audit because badIcon element has no description OR incorectly test the previous page and passes that but never test this intended page.
     }
     func testDecorative() throws {
         // Launch the app to begin testing.

@@ -51,13 +51,14 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         try app.performAccessibilityAudit()
     }
     func testInformative() throws {
-        // UI tests must launch the application that they test.
+        // Lanuch the app to begin testing.
         let app = XCUIApplication()
         app.launch()
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // Check if iPad then tap the Sidebar navigation bar button.
         if UIDevice.current.userInterfaceIdiom == .pad {
             app.navigationBars.buttons["ToggleSidebar"].tap()
         }
+        // Tap the navigation buttons to load the specific page to test.
         app.otherElements.buttons["Images"].tap()
         app.otherElements.buttons["Informative Images"].tap()
         // Check existance of good and bad examples with accessibility identifiers
@@ -73,13 +74,14 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         try app.performAccessibilityAudit() // fails a11y audit because badIcon element has no description
     }
     func testDecorative() throws {
-        // UI tests must launch the application that they test.
+        // Lanuch the app to begin testing.
         let app = XCUIApplication()
         app.launch()
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // Check if iPad then tap the Sidebar navigation bar button.
         if UIDevice.current.userInterfaceIdiom == .pad {
             app.navigationBars.buttons["ToggleSidebar"].tap()
         }
+        // Tap the navigation buttons to load the specific page to test.
         app.otherElements.buttons["Images"].tap()
         app.otherElements.buttons["Decorative Images"].tap()
         // Check existance of good and bad examples with accessibility identifiers

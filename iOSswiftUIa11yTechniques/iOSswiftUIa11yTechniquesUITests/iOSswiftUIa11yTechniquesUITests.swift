@@ -51,7 +51,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         try app.performAccessibilityAudit()
     }
     func testInformative() throws {
-        // Lanuch the app to begin testing.
+        // Launch the app to begin testing.
         let app = XCUIApplication()
         app.launch()
         // Check if iPad then tap the Sidebar navigation bar button.
@@ -74,7 +74,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         try app.performAccessibilityAudit() // fails a11y audit because badIcon element has no description
     }
     func testDecorative() throws {
-        // Lanuch the app to begin testing.
+        // Launch the app to begin testing.
         let app = XCUIApplication()
         app.launch()
         // Check if iPad then tap the Sidebar navigation bar button.

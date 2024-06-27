@@ -53,7 +53,7 @@ struct CardsView: View {
                 VStack(alignment: .leading) {
                     Text("Sign Up for Newsletter")
                         .font(.headline)
-                        .accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                        .accessibilityAddTraits(.isHeader)
                     Image("get10off")
                         .resizable()
                         .aspectRatio(contentMode: .fit)

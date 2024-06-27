@@ -7,7 +7,7 @@ Explains how to apply WCAG to iOS SwiftUI apps.
 
 Using the app with VoiceOver and other iOS assistive technologies will demonstrate the right and wrong ways of applying accessibility to a SwiftUI app. 
 
-[Download iOS app from the AppStore.](https://apps.apple.com/us/app/swiftui-accessibility-techs/id6474141089)
+[Download iOS app from the AppStore.](https://apps.apple.com/app/accessibility-techniques/id6474141089)
 
 Read the blog post, [Announcing the iOS SwiftUI Accessibility Techniques Open Source Project](https://www.linkedin.com/pulse/announcing-ios-swiftui-accessibility-techniques-open-source-adam-ldahc/).
 
@@ -84,6 +84,7 @@ Documentation files for each technique are listed below.
 - [x] [Scroll Views](iOSswiftUIa11yTechniques/Documentation/ScrollViews.md)
 - [x] [Accessibility Hidden](iOSswiftUIa11yTechniques/Documentation/AccessibilityHidden.md)
 - [ ] Siri Shortcuts
+- [ ] Responsive Layouts
 
 ## Contributor Guide
 

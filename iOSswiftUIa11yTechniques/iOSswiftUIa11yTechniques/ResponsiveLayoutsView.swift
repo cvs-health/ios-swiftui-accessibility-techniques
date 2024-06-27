@@ -31,7 +31,7 @@ struct ResponsiveLayoutsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use size classes to create layouts that respond to the user's screen size and device orientation to present a more usable view. Make sure that text is readable in landscape and portrait orientaitons.")
+                Text("Use size classes to create layouts that respond to the user's screen size and device orientation to present a more usable view. Make sure that text is readable in landscape and portrait orientations.")
                 Text("Your Device Size Class:")
                     .font(.headline)
                     .accessibilityAddTraits(.isHeader)

@@ -29,8 +29,10 @@ struct FocusManagementView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Focus Management is required when displaying custom dialogs or views. Use `.accessibilityFocused` to move VoiceOver focus when opening and closing custom dialogs or views. Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog. Use `.accessibilityAction(.escape)` to close a custom dialog or view and return focus when the VoiceOver escape gesture (2 finger Z) is activated.")
-                    .padding(.bottom)
+                Text("Focus Management is required when displaying custom dialogs or views. Use `.accessibilityFocused` to move VoiceOver focus when opening and closing custom dialogs or views. Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog. Use `.accessibilityAction(.escape)` to close a custom dialog or view and return focus when the VoiceOver escape gesture (2 finger Z) is activated. See Text Fields Focus Management below to learn how to return focus after dismissing the keyboard.")
+                NavigationLink(destination: TextFieldsFocusManagement()) {
+                    Text("Text Fields Focus Management")
+                }.padding().frame(maxWidth: .infinity, alignment: .leading)
                 Text("Good Example")
                     .font(.subheadline)
                     .fontWeight(.bold)

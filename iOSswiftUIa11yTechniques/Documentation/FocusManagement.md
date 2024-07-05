@@ -5,6 +5,8 @@ Focus Management is required when displaying custom dialogs or views. Use `.acce
 
 Use `AccessibilityFocusState` to send focus back to the trigger button that opened the custom dialog or view when it is closed.
 
+Text fields will not return Accessibility Focus by default after the user dismisses the keyboard. Use `AccessibilityFocusState` to return Accessibility Focus after the Done button is activated on the keyboard `.toolbar`.
+
 Notes:
 
 - Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog.

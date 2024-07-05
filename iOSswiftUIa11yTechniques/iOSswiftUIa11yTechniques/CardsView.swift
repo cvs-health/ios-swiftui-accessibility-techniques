@@ -17,6 +17,10 @@
 import SwiftUI
  
 struct CardsView: View {
+    
+    @State private var showShopAlert = false
+    @AccessibilityFocusState private var isShopTriggerFocused: Bool
+    
     @State private var showDetailView: Bool = false
     
     @State private var actionTitle = ""
@@ -88,6 +92,56 @@ struct CardsView: View {
                 DisclosureGroup("Details") {
                     Text("The good example card with correct heading placement and `.accessibilityLabel` example uses a heading element at the top of the card and a more specific `.accessibilityLabel` for the call to action button.")
                 }.padding([.bottom,.top]).accessibilityHint("Good Example Card with correct heading placement and .accessibilityLabel")
+                Text("Good Card with heading, `.accessibilityElement(children: .combine)`, and button label fix")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                VStack(alignment: .leading) {
+                    Text("Get 20% off with code SUMMER20")
+                        .font(.headline)
+                        .accessibilityAddTraits(.isHeader)
+                    Text("Save on summer go‐tos when you choose same‐day delivery or FREE pickup.")
+                    HStack {
+                        Text("🏖️")
+                            .font(.system(size: 70))
+                        Button(action: {
+                            self.showShopAlert.toggle()
+                        }) {
+                            Text("Shop Now").font(.headline)
+                        }.accessibility(removeTraits: .isButton)//a11y hack fix to make sure button label is included when combined
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color.green)
+                                .shadow(color: .gray, radius: 1, x: 0, y: 2)
+                        )
+                        .foregroundColor(colorScheme == .dark ? Color.black : Color.black)
+                        .buttonStyle(PlainButtonStyle())
+                        .accessibilityFocused($isShopTriggerFocused)
+                    }
+                }
+                .accessibilityElement(children: .combine)
+                .accessibility(addTraits: .isButton)//add button trait back
+                .padding()
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.gray, lineWidth: 2)
+                )
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(colorScheme == .dark ? Color.black : Color.white)
+                        .shadow(color: .gray, radius: 5, x: 4, y: 4)
+                )
+                .alert(isPresented: $showShopAlert) { 
+                    Alert(title: Text("Success"), message: Text("You activated Shop Now."),
+                          dismissButton:.default(Text("OK")) {
+                            isShopTriggerFocused = true
+                          })
+                 }
+                DisclosureGroup("Details") {
+                    Text("The good card with heading, `.accessibilityElement(children: .combine)`, and button label fix combines the card into one focusable element which retains its child heading semantics. The card button label will not be spoken to VoiceOver unless the a11y hack fix of using `accessibility(removeTraits: .isButton)` is applied to the child button. The Button trait will also not be spoken to VoiceOver unless you manually add it back to the combined card element using `.accessibility(addTraits: .isButton)`.")
+                }.padding([.bottom,.top]).accessibilityHint("Good Card with heading, `.accessibilityElement(children: .combine)`, and button label fix")
                 Text("Good Example Card with Focus Combined & Accessibility Actions")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -174,7 +228,7 @@ struct CardsView: View {
                     )
                 }
                 DisclosureGroup("Details") {
-                    Text("The good example card with combined focus and accessibility actions example wraps the card in a `NavigationLink` to combine it as one focusable element and adds `.accessibilityAction(named: \"Show details\")` to include the Show details accordion in the list of accessibility actions.")
+                    Text("The good example card with combined focus and accessibility actions example wraps the card in a `NavigationLink` to combine it as one focusable element and adds `.accessibilityAction(named: \"Show details\")` to include the Show details accordion in the list of accessibility actions. There is a platform defect using `NavigationLink` and `.accessibilityAction` where the child controls' accessibility labels are not included in the accessibility label of the combined parent element.")
                 }.padding([.top,.bottom]).accessibilityHint("Good Example Card with Focus Combined & Accessibility Actions")
                 Text("Bad Examples")
                     .font(.subheadline)

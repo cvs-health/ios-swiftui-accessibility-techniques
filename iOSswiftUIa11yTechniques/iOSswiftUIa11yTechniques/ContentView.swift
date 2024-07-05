@@ -117,6 +117,9 @@ struct ContentView: View {
                 NavigationLink(destination: ResponsiveLayoutsView()) {
                     Text("Responsive Layouts")
                 }
+                NavigationLink(destination: PrototypesView()) {
+                    Text("Prototypes")
+                }
 //                NavigationLink(destination: WebView()) {
 //                    Text("Web View")
 //                }

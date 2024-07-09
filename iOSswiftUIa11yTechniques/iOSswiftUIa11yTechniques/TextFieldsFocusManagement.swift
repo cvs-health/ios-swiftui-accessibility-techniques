@@ -73,6 +73,17 @@ struct TextFieldsFocusManagement: View {
                         .onTapGesture {
                             lastFocusedField = .firstName
                         }
+                        .submitLabel(.next)
+                        .onChange(of: first) {oldValue, newValue in // .onChange to handle when user hits the submit button and prevent a new line
+                            guard let newValueLastChar = newValue.last else { return }
+                            if newValueLastChar == "\n" {
+                                first.removeLast()
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                lastFocusedField = .lastName
+                                isLastNameFocused = true
+                                isLastNameA11yFocused = true
+                            }
+                        }
                     Text("Last Name")
                         .frame(maxWidth: .infinity, alignment: .leading)
                     TextField("", text: $last, axis: .vertical)
@@ -86,6 +97,17 @@ struct TextFieldsFocusManagement: View {
                         .onTapGesture {
                             lastFocusedField = .lastName
                         }
+                        .submitLabel(.next)
+                        .onChange(of: last) {oldValue, newValue in
+                            guard let newValueLastChar = newValue.last else { return }
+                            if newValueLastChar == "\n" {
+                                last.removeLast()
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                lastFocusedField = .phone
+                                isPhoneFocused = true
+                                isPhoneA11yFocused = true
+                            }
+                        }
                     Text("Phone Number")
                         .frame(maxWidth: .infinity, alignment: .leading)
                     TextField("", text: $phone, axis: .vertical)
@@ -95,6 +117,7 @@ struct TextFieldsFocusManagement: View {
                         .accessibilityFocused($isPhoneA11yFocused)
                         .accessibilityLabel("Phone Number")
                         .keyboardType(.phonePad)
+                        .textContentType(.telephoneNumber)
                         .onTapGesture {
                             lastFocusedField = .phone
                         }
@@ -105,16 +128,16 @@ struct TextFieldsFocusManagement: View {
                         Button("Done") {
                             switch lastFocusedField {
                                 case .firstName?:
-                                    isFirstNameA11yFocused = true
                                     isFirstNameFocused = false
+                                    isFirstNameA11yFocused = true
                                 case .lastName?:
-                                    isLastNameA11yFocused = true
                                     isLastNameFocused = false
+                                    isLastNameA11yFocused = true
                                 case .phone?:
-                                    isPhoneA11yFocused = true
                                     isPhoneFocused = false
-                                    default:
-                                        break
+                                    isPhoneA11yFocused = true
+                                default:
+                                    break
                             }
                         }
                     }

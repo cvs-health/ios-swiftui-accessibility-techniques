@@ -1,6 +1,6 @@
 # Reading Order
 
-The VoiceOver reading order must match the visual reading order presented to sighted users. 
+The VoiceOver reading order should match the visual reading order presented to sighted users. 
 
 If the visual layout of a page disrupts the expected VoiceOver reading order then use `.accessibilityElement(children: .contain)` to make VoiceOver read all elements in the group before moving to the next element.
 

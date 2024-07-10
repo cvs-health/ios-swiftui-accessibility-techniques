@@ -172,7 +172,7 @@ struct ButtonsView: View {
                         .accessibilityIdentifier("edit2bad")
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad generic button labels example uses the same label text \"Edit\" for both buttons without providing a unique and specific `.accessibilityLabel` for VoiceOver users.")
+                    Text("The bad generic button labels example uses the same label text \"Edit\" for both buttons without providing a unique and specific `.accessibilityLabel` for VoiceOver users. The second bad Edit button incorrectly includes the role \"Button\" inside the `.accessibilityLabel`.")
                 }.padding(.bottom).accessibilityHint("Bad Example Generic Labels")
                 Text("Bad Example Disabled Button")
                     .font(.subheadline)

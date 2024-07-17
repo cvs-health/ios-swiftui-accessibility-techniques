@@ -213,7 +213,7 @@ struct CardsView: View {
                         }
                     }
                     .accessibilityAction(named: "Show details") {
-                        actionTitle = "Show details"
+                        actionTitle = "Show details ACTION TITLE"
                         isExpanded.toggle()
                     }
                     .padding()

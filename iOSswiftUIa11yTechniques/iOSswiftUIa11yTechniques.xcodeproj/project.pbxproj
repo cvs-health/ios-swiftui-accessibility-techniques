@@ -63,6 +63,9 @@
 		BC6C39C02C2E044000AA842A /* PrototypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6C39BF2C2E044000AA842A /* PrototypesView.swift */; };
 		BC6C39C22C2E054600AA842A /* Prototype1.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6C39C12C2E054600AA842A /* Prototype1.swift */; };
 		BC6C39C42C2F60C900AA842A /* Prototype2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6C39C32C2F60C900AA842A /* Prototype2.swift */; };
+		BC6CA9FC2C459A6600138BA3 /* Page1Prototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6CA9FB2C459A6600138BA3 /* Page1Prototype.swift */; };
+		BC6CA9FE2C45A18E00138BA3 /* Page2Prototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6CA9FD2C45A18E00138BA3 /* Page2Prototype.swift */; };
+		BC6CAA002C45A43000138BA3 /* Page3Prototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6CA9FF2C45A43000138BA3 /* Page3Prototype.swift */; };
 		BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6F3E432BB5DC5800868AE5 /* WebView.swift */; };
 		BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
@@ -211,6 +214,9 @@
 		BC6C39BF2C2E044000AA842A /* PrototypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypesView.swift; sourceTree = "<group>"; };
 		BC6C39C12C2E054600AA842A /* Prototype1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prototype1.swift; sourceTree = "<group>"; };
 		BC6C39C32C2F60C900AA842A /* Prototype2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prototype2.swift; sourceTree = "<group>"; };
+		BC6CA9FB2C459A6600138BA3 /* Page1Prototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page1Prototype.swift; sourceTree = "<group>"; };
+		BC6CA9FD2C45A18E00138BA3 /* Page2Prototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page2Prototype.swift; sourceTree = "<group>"; };
+		BC6CA9FF2C45A43000138BA3 /* Page3Prototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page3Prototype.swift; sourceTree = "<group>"; };
 		BC6F3E432BB5DC5800868AE5 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHidden.swift; sourceTree = "<group>"; };
 		BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityHidden.md; sourceTree = "<group>"; };
@@ -441,6 +447,8 @@
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				BCD1CF972B57670D00A26ED3 /* EscapeView.swift */,
 				BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */,
+				BC75478B2C2FA7EA00A4ABC7 /* FormA.swift */,
+				BC75478D2C2FA83C00A4ABC7 /* FormB.swift */,
 				AABD27D12A9FF11F00F718F7 /* FunctionalView.swift */,
 				BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */,
 				AABD27C72A9FF0D800F718F7 /* HeadingsView.swift */,
@@ -462,20 +470,21 @@
 				BC1B59C22B4E664700E8F782 /* MenusView.swift */,
 				AA59CDCD2ABA209D0004908F /* MessagesTabView.swift */,
 				BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */,
+				BC6CA9FB2C459A6600138BA3 /* Page1Prototype.swift */,
+				BC75478F2C2FAAF400A4ABC7 /* PageA.swift */,
+				BC7547912C2FAAF900A4ABC7 /* PageB.swift */,
 				AA74DD5C2AFDCCFA00348078 /* PageTitleBad.swift */,
 				AA74DD5B2AFDCCF900348078 /* PageTitleGood.swift */,
 				AA74DD592AFDCC8E00348078 /* PageTitlesView.swift */,
 				AA7ADECF2AF2BAFE0019D210 /* PickersView.swift */,
 				BC95CC782B4E1E6F00196E32 /* PopoversView.swift */,
-				BC6C39C12C2E054600AA842A /* Prototype1.swift */,
-				BC75478F2C2FAAF400A4ABC7 /* PageA.swift */,
-				BC7547912C2FAAF900A4ABC7 /* PageB.swift */,
-				BC6C39C32C2F60C900AA842A /* Prototype2.swift */,
-				BC75478B2C2FA7EA00A4ABC7 /* FormA.swift */,
-				BC75478D2C2FA83C00A4ABC7 /* FormB.swift */,
 				AABD27BF2A9FE69500F718F7 /* Preview Content */,
 				AA636C892ADD7FD900014BAF /* ProgressIndicatorsView.swift */,
+				BC6C39C12C2E054600AA842A /* Prototype1.swift */,
+				BC6C39C32C2F60C900AA842A /* Prototype2.swift */,
 				BC6C39BF2C2E044000AA842A /* PrototypesView.swift */,
+				BC6CA9FD2C45A18E00138BA3 /* Page2Prototype.swift */,
+				BC6CA9FF2C45A43000138BA3 /* Page3Prototype.swift */,
 				BCA3DD102B7302E700033712 /* RadioButtonsView.swift */,
 				BC8C92122B324859006DAC20 /* ReadingOrderView.swift */,
 				BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */,
@@ -491,8 +500,8 @@
 				AA74DD572AFDACA100348078 /* SteppersView.swift */,
 				AA59CDC92ABA1F4E0004908F /* TabsGoodView.swift */,
 				AA59CDC72ABA1F3B0004908F /* TabsView.swift */,
-				AA74DD532AFD8D0000348078 /* TextFieldsView.swift */,
 				BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */,
+				AA74DD532AFD8D0000348078 /* TextFieldsView.swift */,
 				AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */,
 				BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */,
 				AABD27CB2A9FF0F000F718F7 /* UIControlsView.swift */,
@@ -663,6 +672,7 @@
 				BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */,
 				AABD27D82A9FF13E00F718F7 /* DetailView.swift in Sources */,
 				BC75478E2C2FA83C00A4ABC7 /* FormB.swift in Sources */,
+				BC6CAA002C45A43000138BA3 /* Page3Prototype.swift in Sources */,
 				BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */,
 				BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */,
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
@@ -673,6 +683,7 @@
 				BCD1CF952B574C8800A26ED3 /* VoiceOverPronunciationView.swift in Sources */,
 				AA9B13512AABADD5009A3D84 /* ButtonsView.swift in Sources */,
 				AA59CDC82ABA1F3B0004908F /* TabsView.swift in Sources */,
+				BC6CA9FE2C45A18E00138BA3 /* Page2Prototype.swift in Sources */,
 				AA74DD542AFD8D0000348078 /* TextFieldsView.swift in Sources */,
 				BCA5BDEC2B61E633007823A6 /* ReduceMotionView.swift in Sources */,
 				BC1A5FA22B6079080008513C /* AttributedStringsView.swift in Sources */,
@@ -692,6 +703,7 @@
 				BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,
 				BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */,
+				BC6CA9FC2C459A6600138BA3 /* Page1Prototype.swift in Sources */,
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
 				BC163FC22B6AD3F3009E3A83 /* ContactBoston.swift in Sources */,
 				BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */,
@@ -734,7 +746,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -757,7 +769,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -896,7 +908,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -914,7 +926,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 7.5;
+				MARKETING_VERSION = 7.6;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -929,7 +941,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -947,7 +959,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 7.5;
+				MARKETING_VERSION = 7.6;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

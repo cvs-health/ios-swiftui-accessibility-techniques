@@ -26,6 +26,15 @@ struct PrototypesView: View {
             NavigationLink(destination: Prototype2()) {
                 Text("Prototype 2")
             }
+            NavigationLink(destination: Page1Prototype()) {
+                Text("Page 1")
+            }
+            NavigationLink(destination: Page2Prototype()) {
+                Text("Page 2")
+            }
+            NavigationLink(destination: Page3Prototype()) {
+                Text("Page 3")
+            }
         }
         .navigationTitle("Prototypes")
     }

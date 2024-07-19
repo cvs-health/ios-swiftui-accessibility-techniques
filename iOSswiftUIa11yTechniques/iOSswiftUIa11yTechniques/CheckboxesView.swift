@@ -54,12 +54,11 @@ struct CheckboxesView: View {
                 HStack {
                     Toggle(isOn: $isChecked) {
                             Text("Accept Terms")
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                           }
                         .toggleStyle(CheckboxToggleStyle())
                         .accessibilityValue(isChecked ? "Checked" : "Unchecked")
                         .accessibilityIdentifier("checkboxGood")
-                        .frame(maxWidth: 200)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good single checkbox example uses a native `Toggle` with a custom `.toggleStyle` to look like a square checkbox control. Additionally `.accessibilityValue(isChecked ? \"Checked\" : \"Unchecked\")` is used to create custom value text for VoiceOver. VoiceOver reads the \"Switch button\" trait and \"Checked\" and \"Unchecked\" values.")
@@ -74,26 +73,25 @@ struct CheckboxesView: View {
                     VStack {
                         Toggle(isOn: $isEmailChecked) {
                                 Text("Email")
-                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                               }
                             .toggleStyle(CheckboxToggleStyle())
                             .accessibilityValue(isEmailChecked ? "Checked" : "Unchecked")
                         Toggle(isOn: $isPhoneChecked) {
                                 Text("Phone")
-                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                               }
                             .toggleStyle(CheckboxToggleStyle())
                             .accessibilityValue(isPhoneChecked ? "Checked" : "Unchecked")
                         Toggle(isOn: $isTextChecked) {
                                 Text("Text")
-                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                               }
                             .toggleStyle(CheckboxToggleStyle())
                             .accessibilityValue(isTextChecked ? "Checked" : "Unchecked")
                     }
                         .accessibilityElement(children: .contain)
                         .accessibilityLabel("Preferred contact method(s):")
-                        .frame(width: 200)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good checkbox group example uses `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Group Label\")` on the checkbox group container so that VoiceOver users hear the group label spoken when first moving focus to a checkbox in the group.")
@@ -119,17 +117,17 @@ struct CheckboxesView: View {
                         } label: {
                             if isCheckedBad {
                                 HStack {
-                                    Text("Accept Terms")
                                     Image(systemName: "checkmark.square")
                                       .resizable()
                                       .frame(width: 24, height: 24)
+                                    Text("Accept Terms")
                                 }
                             } else {
                                 HStack {
-                                    Text("Accept Terms")
                                     Image(systemName: "square")
                                       .resizable()
                                       .frame(width: 24, height: 24)
+                                    Text("Accept Terms")
                                 }
                             }
                         }
@@ -150,17 +148,17 @@ struct CheckboxesView: View {
                 VStack {
                     Toggle(isOn: $isEmailCheckedBad) {
                             Text("Email")
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                           }
                         .toggleStyle(CheckboxToggleStyle())
                     Toggle(isOn: $isPhoneCheckedBad) {
                             Text("Phone")
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                           }
                         .toggleStyle(CheckboxToggleStyle())
                     Toggle(isOn: $isTextCheckedBad) {
                             Text("Text")
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                           }
                         .toggleStyle(CheckboxToggleStyle())
                 }.padding(.trailing, 150)
@@ -188,12 +186,13 @@ struct CheckboxesView_Previews: PreviewProvider {
 struct CheckboxToggleStyle: ToggleStyle {
   func makeBody(configuration: Self.Configuration) -> some View {
     HStack {
-      configuration.label
-      Spacer()
-      Image(systemName: configuration.isOn ? "checkmark.square" : "square")
-        .resizable()
-        .frame(width: 24, height: 24)
-    }
+        Spacer()
+        Image(systemName: configuration.isOn ? "checkmark.square" : "square")
+          .resizable()
+          .frame(width: 24, height: 24)
+        configuration.label
+        Spacer()
+    }.frame(maxWidth: .infinity, alignment: .leading)
     .onTapGesture { configuration.isOn.toggle() }
   }
 }

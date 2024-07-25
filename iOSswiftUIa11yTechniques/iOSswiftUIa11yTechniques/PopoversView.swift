@@ -47,17 +47,19 @@ struct PopoversView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityFocused($isTriggerFocused)
                 .popover(isPresented: $isShowingPopover) {
-                    Text("License Agreement")
-                        .font(.headline)
+                    ScrollView {
+                        Text("License Agreement")
+                            .font(.headline)
+                            .padding()
+                            .accessibilityAddTraits(.isHeader)
+                        Text("""
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            """)
+                            .padding()
+                        Button("Dismiss",
+                               action: { isShowingPopover.toggle() })
                         .padding()
-                        .accessibilityAddTraits(.isHeader)
-                    Text("""
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        """)
-                        .padding()
-                    Button("Dismiss",
-                           action: { isShowingPopover.toggle() })
-                    .padding()
+                    }
                 }
                 DisclosureGroup("Details") {
                     Text("The good alert example uses `.popover()` to create a native SwiftUI popover that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the popover when the popover is closed. The popover title is correctly coded as a heading.")

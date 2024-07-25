@@ -5,7 +5,9 @@ Sheet title text must be coded as a Heading for VoiceOver users.
 
 Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. 
 
-Use `AccessibilityFocusState` and `.sheet(onDismiss:)` to send focus back to the trigger button that opened the sheet when the sheet is closed.            
+Use `AccessibilityFocusState` and `.sheet(onDismiss:)` to send focus back to the trigger button that opened the sheet when the sheet is closed.      
+
+Place the sheet's content inside a `ScrollView` or else the text will truncate when enlarged.      
 
 Platform Defects:
 

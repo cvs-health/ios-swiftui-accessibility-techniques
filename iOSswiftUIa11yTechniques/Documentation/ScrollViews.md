@@ -2,7 +2,7 @@
 
 Bugs:
 
-- Scroll views are not scrollable with Full Keyboard Access unless there is a focusable control like a `Button` or `DisclosureGroup` inside or after the scroll view.
+- Scroll views are not scrollable with Full Keyboard Access unless there is a focusable control like a `Button` or `DisclosureGroup` inside or after the scroll view. The `ScrollView` can also be made `.focusable()` or a focusable element can be placed inside the scroll view to allow Full Keyboard Access.
 
 ## Applicable WCAG Success Criteria
 - [2.1.1: Keyboard](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)

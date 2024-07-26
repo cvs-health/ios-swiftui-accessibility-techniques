@@ -63,8 +63,10 @@ struct ScrollViews: View {
                             ForEach(0..<100) {
                                 Text("Row \($0)")
                             }
+                            Text("Test Focusable")
+                                .focusable()
                         }
-                    }
+                }
             }
             .navigationTitle("Scroll Views")
             .padding()

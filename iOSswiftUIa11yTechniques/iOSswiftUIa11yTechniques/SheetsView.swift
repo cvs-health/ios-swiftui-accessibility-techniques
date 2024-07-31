@@ -64,7 +64,11 @@ struct SheetsView: View {
                                         isShowingSheet.toggle()
                                     })
                         }
+                        .padding()
                     }
+                    .presentationDetents([.medium, .large]) // Supports medium and large sizes
+                    .presentationDragIndicator(.hidden) // Optionally hides the drag indicator
+
                 }
                 DisclosureGroup("Details") {
                     Text("The good sheet example uses `.sheet()` to create a native SwiftUI sheet that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the sheet when the sheet is closed. The sheet title is correctly coded as a heading.")

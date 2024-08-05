@@ -16,31 +16,29 @@
 
 import SwiftUI
 
-struct PrototypesView: View {
-
+struct Prototype4: View {
+    
     var body: some View {
         List {
-            NavigationLink(destination: Prototype1()) {
-                Text("Prototype 1")
+            NavigationLink(destination: PrototypeHeadings1()) {
+                Text("Page 1")
             }
-            NavigationLink(destination: Prototype2()) {
-                Text("Prototype 2")
+            NavigationLink(destination: PrototypeHeadings2()) {
+                Text("Page 2")
             }
-            NavigationLink(destination: Prototype3()) {
-                Text("Prototype 3")
-            }
-            NavigationLink(destination: Prototype4()) {
-                Text("Prototype 4")
+            NavigationLink(destination: PrototypeHeadings3()) {
+                Text("Page 3")
             }
         }
-        .navigationTitle("Prototypes")
+        .navigationTitle("Prototype 4")
     }
 }
 
-struct PrototypesView_Previews: PreviewProvider {
+ 
+struct Prototype4_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            PrototypesView()
+            Prototype4()
         }
     }
 }

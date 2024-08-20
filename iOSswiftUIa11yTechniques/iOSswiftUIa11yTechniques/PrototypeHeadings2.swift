@@ -18,10 +18,22 @@ import SwiftUI
 
 struct PrototypeHeadings2: View {
 
+    func generateRandomPrice() -> Double {
+        let minPrice = 19.99
+        let maxPrice = 49.99
+        return Double.random(in: minPrice...maxPrice)
+    }
+
     
     var body: some View {
         ScrollView {
             VStack {
+                Text("Summer Deals")
+                    .font(.title).bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Discover summer deals available right now. If you are looking to save money, shop on our app.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 Text("Summer Clearance")
                     .font(.title2).bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -30,10 +42,41 @@ struct PrototypeHeadings2: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
                 VStack(alignment:.leading) {
-                    Text("Outdoor living")
-                    Text("Toys")
-                    Text("Sports")
-                    Text("Clear out deals")
+                    Button(action: {}) {
+                        HStack {
+                            Text("Outdoor living")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Toys")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Sports")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Clear out deals")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
@@ -45,10 +88,46 @@ struct PrototypeHeadings2: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
                 VStack(alignment:.leading) {
-                    Text("Hawaiian Tropic sunscreen cream")
-                    Text("Sport Clear Sunscreen Spray")
-                    Text("Soothing Aloe After Sun Gel")
-                    Text("Insect repellent spray for kids")
+                    Button(action: {}) {
+                            HStack {
+                                Text("Hawaiian Tropic sunscreen cream")
+                                Spacer()
+                                Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                            }
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        Button(action: {}) {
+                            HStack {
+                                Text("Sport Clear Sunscreen Spray")
+                                Spacer()
+                                Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                            }
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        Button(action: {}) {
+                            HStack {
+                                Text("Soothing Aloe After Sun Gel")
+                                Spacer()
+                                Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                            }
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        Button(action: {}) {
+                            HStack {
+                                Text("Insect repellent spray for kids")
+                                Spacer()
+                                Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                            }
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
@@ -57,12 +136,56 @@ struct PrototypeHeadings2: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 VStack(alignment:.leading) {
-                    Text("QuickSnap Waterproof Camera")
-                    Text("Reserve Power Bank, 10000mAh")
-                    Text("Batteries")
-                    Text("Portable Speaker")
-                    Text("Bluetooth Speaker")
-                }
+                    Button(action: {}) {
+                            HStack {
+                                Text("QuickSnap Waterproof Camera")
+                                Spacer()
+                                Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                            }
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        Button(action: {}) {
+                            HStack {
+                                Text("Reserve Power Bank, 10000mAh")
+                                Spacer()
+                                Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                            }
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        Button(action: {}) {
+                            HStack {
+                                Text("Batteries")
+                                Spacer()
+                                Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                            }
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        Button(action: {}) {
+                            HStack {
+                                Text("Portable Speaker")
+                                Spacer()
+                                Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                            }
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        Button(action: {}) {
+                            HStack {
+                                Text("Bluetooth Speaker")
+                                Spacer()
+                                Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                            }
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }                }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .navigationTitle("Summer Deals")

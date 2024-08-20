@@ -17,16 +17,42 @@
 import SwiftUI
 
 struct PrototypeHeadings3: View {
+    
+
+    func generateRandomPrice() -> Double {
+        let minPrice = 19.99
+        let maxPrice = 49.99
+        return Double.random(in: minPrice...maxPrice)
+    }
 
     
     var body: some View {
         ScrollView {
             VStack {
+                Text("Hottest Deals")
+                    .font(.title).bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityHeading(.h1)
+                Text("Get the best deals on all our products. Up to 70% off on some selected items.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 Text("Browse by department")
                     .font(.title2).bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h2)
+                Spacer()
+                Text("Household")
+                    .font(.title3).bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityHeading(.h3)
+                Spacer()
+                Text("Furnitures")
+                    .font(.title3).bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityHeading(.h3)
                 Spacer()
                 Text("Clothing, shoes, and accessories")
                     .font(.title3).bold()
@@ -34,18 +60,45 @@ struct PrototypeHeadings3: View {
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h3)
                 Spacer()
+                Text("Low prices every day on clothes, accessories & shoes. Find the latest men's, women's, kids', and baby fashion, and don't forget our huge selection of accessories.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Spacer()
                 Text("Men's clothing and shoes")
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h4)
                 Spacer()
-                VStack(alignment:.leading) {
-                    Text("Men’s outdoor performance pant")
-                    Text("Short sleeve T-shirt")
-                    Text("Men’s cool-zone crew-neck shirt")
+                Button(action: {}) {
+                    HStack {
+                        Text("Men’s outdoor performance pant")
+                        Spacer()
+                        Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                    }
+                    .padding()
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                Button(action: {}) {
+                    HStack {
+                        Text("Short sleeve T-shirt")
+                        Spacer()
+                        Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                    }
+                    .padding()
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+                Button(action: {}) {
+                    HStack {
+                        Text("Men’s cool-zone crew-neck shirt")
+                        Spacer()
+                        Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                    }
+                    .padding()
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
                 Spacer()
                 Text("Women's clothing and shoes")
                     .bold()
@@ -60,10 +113,38 @@ struct PrototypeHeadings3: View {
                     .accessibilityHeading(.h5)
                 Spacer()
                 VStack(alignment:.leading) {
-                    Text("Puff sleeve eyelet dress")
-                    Text("Tiered Maxi dress")
-                    Text("Summer long dress for women")
-                    Text("Vitamins")
+                    Button(action: {}) {
+                       HStack {
+                           Text("Puff sleeve eyelet dress")
+                           Spacer()
+                           Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                       }
+                       .padding()
+                       .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                       .clipShape(RoundedRectangle(cornerRadius: 10))
+                   }
+                   
+                   Button(action: {}) {
+                       HStack {
+                           Text("Tiered Maxi dress")
+                           Spacer()
+                           Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                       }
+                       .padding()
+                       .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                       .clipShape(RoundedRectangle(cornerRadius: 10))
+                   }
+                   
+                   Button(action: {}) {
+                       HStack {
+                           Text("Summer long dress for women")
+                           Spacer()
+                           Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                       }
+                       .padding()
+                       .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                       .clipShape(RoundedRectangle(cornerRadius: 10))
+                   }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
@@ -74,10 +155,49 @@ struct PrototypeHeadings3: View {
                     .accessibilityHeading(.h5)
                 Spacer()
                 VStack(alignment:.leading) {
-                    Text("Flannel shirt")
-                    Text("Twist Front T-shirt")
-                    Text("Stretch Poplin shirt")
-                    Text("Women’s full-zip hoodies")
+                    Button(action: {}) {
+                        HStack {
+                            Text("Flannel shirt")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Twist Front T-shirt")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Stretch Poplin shirt")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Women’s full-zip hoodies")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
@@ -88,10 +208,49 @@ struct PrototypeHeadings3: View {
                     .accessibilityHeading(.h5)
                 Spacer()
                 VStack(alignment:.leading) {
-                    Text("Cargo jogger")
-                    Text("Midi Denim skirt")
-                    Text("Linen short")
-                    Text("Cropped legging")
+                    Button(action: {}) {
+                        HStack {
+                            Text("Cargo jogger")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Midi Denim skirt")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Linen short")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Cropped legging")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
@@ -102,9 +261,60 @@ struct PrototypeHeadings3: View {
                     .accessibilityHeading(.h4)
                 Spacer()
                 VStack(alignment:.leading) {
-                    Text("Men’s outdoor performance pant")
-                    Text("Short sleeve T-shirt")
-                    Text("Men’s cool-zone crew-neck shirt")
+                    Button(action: {}) {
+                        HStack {
+                            Text("Boys’ pajama 2-piece set")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Boys’ graphic T-shirt, X-XL")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Girls’ swimming wear")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Girls’ skater dress")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Text("Toddler sleeper, size 0-24 months")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 

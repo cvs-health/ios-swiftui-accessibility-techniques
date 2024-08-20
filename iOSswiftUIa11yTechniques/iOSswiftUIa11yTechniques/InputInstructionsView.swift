@@ -41,6 +41,10 @@ struct InputInstructionsView: View {
                     .padding(.bottom)
                 Text("Username")
                     .frame(maxWidth: .infinity, alignment: .leading)
+                Text("4 to 10 characters, no spaces.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .italic()
+                    .font(.caption)
                 TextField("", text: $username, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
@@ -49,13 +53,13 @@ struct InputInstructionsView: View {
                     .autocorrectionDisabled(true)
                     .textContentType(.username)
                     .accessibilityIdentifier("usernameGood")
-                Text("4 to 10 characters, no spaces.")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .italic()
-                    .font(.caption)
                 Text("Password")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top)
+                Text("8 character minimum, at least one uppercase, one number, and one special character, no spaces.")
+                    .italic()
+                    .font(.caption)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 TextField("", text: $password, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
@@ -64,10 +68,6 @@ struct InputInstructionsView: View {
                     .autocorrectionDisabled(true)
                     .textContentType(.password)
                     .accessibilityIdentifier("passwordGood")
-                Text("8 character minimum, at least one uppercase, one number, and one special character, no spaces.")
-                    .italic()
-                    .font(.caption)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 Button(action: {
                     // Handle button action
                 }) {
@@ -133,7 +133,7 @@ struct InputInstructionsView: View {
                     .opacity(0.8)
                 }.padding(.top).frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The bad input instructions example does not use an `.accessibilityHint` on each `TextField` matching the visible instruction text. VoiceOver users don't hear the input requirements when focused on the inputs.")
+                    Text("The bad input instructions example does not use an `.accessibilityHint` on each `TextField` matching the visible instruction text. VoiceOver users don't hear the input requirements when focused on the inputs. The instruction text is placed after the input which means VoiceOver users won't hear the instruction text before the input during linear navigation.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .padding()

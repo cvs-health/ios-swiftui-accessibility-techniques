@@ -17,25 +17,80 @@
 import SwiftUI
 
 struct PrototypeHeadings1: View {
-
     
+    func generateRandomPrice() -> Double {
+        let minPrice = 19.99
+        let maxPrice = 49.99
+        return Double.random(in: minPrice...maxPrice)
+    }
+
+
     var body: some View {
         ScrollView {
             VStack {
+                Text("Find the perfect destination to shop for your summer essentials. From back-to-school items to summer essentials, we have got you covered.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Spacer()
                 Text("Save on back-to-school essentials")
                     .font(.title2).bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h2)
+                Spacer()
                 Text("Don't miss out on savings! Grab all your back-to-school today with same-day delivery or FREE Pickup.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
                 VStack(alignment:.leading) {
-                    Text("Kid's backpacks")
-                    Text("Kid's clothing")
-                    Text("Books")
-                    Text("Lunch bags")
-                    Text("Water bottles")
+                    Button(action: {}) {
+                        HStack {
+                            Text("Kid's backpacks")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    Button(action: {}) {
+                        HStack {
+                            Text("Kid's clothing")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    Button(action: {}) {
+                        HStack {
+                            Text("Books")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    Button(action: {}) {
+                        HStack {
+                            Text("Lunch bags")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    Button(action: {}) {
+                        HStack {
+                            Text("Water bottles")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
@@ -45,10 +100,46 @@ struct PrototypeHeadings1: View {
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h2)
                 VStack(alignment:.leading) {
-                    Text("Sunscreen")
-                    Text("Personal care")
-                    Text("Skin care")
-                    Text("Vitamins")
+                    Button(action: {}) {
+                        HStack {
+                            Text("Sunscreen")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    Button(action: {}) {
+                        HStack {
+                            Text("Personal care")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    Button(action: {}) {
+                        HStack {
+                            Text("Skin care")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    Button(action: {}) {
+                        HStack {
+                            Text("Vitamins")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
@@ -58,20 +149,45 @@ struct PrototypeHeadings1: View {
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h2)
                 VStack(alignment:.leading) {
-                    Text("Outsunny Outdoor lounge chair")
-                    Text("Costway 3 PCS Patio Rattan furniture")
-                    Text("Kids outdoor inflatable pool")
+                    Button(action: {}) {
+                        HStack {
+                            Text("Outsunny Outdoor lounge chair")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    Button(action: {}) {
+                        HStack {
+                            Text("Costway 3 PCS Patio Rattan furniture")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    Button(action: {}) {
+                        HStack {
+                            Text("Kids outdoor inflatable pool")
+                            Spacer()
+                            Text("$\(generateRandomPrice(), specifier: "%.2f")")
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .navigationTitle("Summer essentials")
             .padding()
-
         }
- 
     }
 }
- 
+
 struct PrototypeHeadings1_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {

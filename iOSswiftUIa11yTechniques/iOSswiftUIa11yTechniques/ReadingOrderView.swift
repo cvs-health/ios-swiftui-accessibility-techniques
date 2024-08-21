@@ -38,17 +38,17 @@ struct ReadingOrderView: View {
                     .padding(.bottom)
                 HStack(alignment: .top) {
                     VStack(alignment: .leading){
-                        Text("Starter").font(.headline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                        Text("Starter").font(.headline).accessibilityAddTraits(.isHeader)
                         Text("2 websites")
                         Text("10GB storage")
                     }.accessibilityElement(children: .contain)
                     VStack(alignment: .leading){
-                        Text("Business").font(.headline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                        Text("Business").font(.headline).accessibilityAddTraits(.isHeader)
                         Text("10 websites")
                         Text("100GB storage")
                     }.accessibilityElement(children: .contain)
                     VStack(alignment: .leading){
-                        Text("Enterprise").font(.headline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                        Text("Enterprise").font(.headline).accessibilityAddTraits(.isHeader)
                         Text("∞ websites")
                         Text("∞ storage")
                     }.accessibilityElement(children: .contain)

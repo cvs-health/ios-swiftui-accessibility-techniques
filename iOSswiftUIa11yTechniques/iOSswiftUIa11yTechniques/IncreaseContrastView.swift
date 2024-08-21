@@ -52,7 +52,7 @@ struct IncreaseContrastView: View {
                 }
                  .padding()
                 VStack(alignment:.leading) {
-                    Text("Enabling Increase Contrast").font(.subheadline).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/).bold()
+                    Text("Enabling Increase Contrast").font(.subheadline).accessibilityAddTraits(.isHeader).bold()
                     Text("1. Open iOS Settings")
                     Button(action: { self.openSettings() }) {
                        Text("Open Settings")

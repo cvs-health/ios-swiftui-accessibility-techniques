@@ -437,13 +437,6 @@
 				BC715B662B465B9F00C77B57 /* CheckboxesView.swift */,
 				BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */,
 				BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */,
-				BCE2052F2B5A1C5F000DF400 /* ContactAtlanta.swift */,
-				BCE2052B2B5A1C38000DF400 /* ContactAustin.swift */,
-				BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */,
-				BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */,
-				BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */,
-				BCE205312B5A1C6C000DF400 /* ContactReno.swift */,
-				BCE2052D2B5A1C50000DF400 /* ContactSeattle.swift */,
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
 				BCE205222B58D0BE000DF400 /* DarkModeView.swift */,
 				BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */,
@@ -480,9 +473,6 @@
 				BC1B59C22B4E664700E8F782 /* MenusView.swift */,
 				AA59CDCD2ABA209D0004908F /* MessagesTabView.swift */,
 				BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */,
-				BC6CA9FB2C459A6600138BA3 /* Page1Prototype.swift */,
-				BC75478F2C2FAAF400A4ABC7 /* PageA.swift */,
-				BC7547912C2FAAF900A4ABC7 /* PageB.swift */,
 				AA74DD5C2AFDCCFA00348078 /* PageTitleBad.swift */,
 				AA74DD5B2AFDCCF900348078 /* PageTitleGood.swift */,
 				AA74DD592AFDCC8E00348078 /* PageTitlesView.swift */,
@@ -490,16 +480,7 @@
 				BC95CC782B4E1E6F00196E32 /* PopoversView.swift */,
 				AABD27BF2A9FE69500F718F7 /* Preview Content */,
 				AA636C892ADD7FD900014BAF /* ProgressIndicatorsView.swift */,
-				BC6C39C12C2E054600AA842A /* Prototype1.swift */,
-				BC6C39C32C2F60C900AA842A /* Prototype2.swift */,
-				BC6CAA012C5D8F0A00138BA3 /* Prototype3.swift */,
-				BC6CAA032C5D8F8400138BA3 /* Prototype4.swift */,
-				BC6CAA052C5D909100138BA3 /* PrototypeHeadings1.swift */,
-				BC82DF6E2C60F46200680BC7 /* PrototypeHeadings2.swift */,
-				BC82DF702C60F69B00680BC7 /* PrototypeHeadings3.swift */,
-				BC6C39BF2C2E044000AA842A /* PrototypesView.swift */,
-				BC6CA9FD2C45A18E00138BA3 /* Page2Prototype.swift */,
-				BC6CA9FF2C45A43000138BA3 /* Page3Prototype.swift */,
+				BC82DF722C76860900680BC7 /* Prototypes */,
 				BCA3DD102B7302E700033712 /* RadioButtonsView.swift */,
 				BC8C92122B324859006DAC20 /* ReadingOrderView.swift */,
 				BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */,
@@ -533,6 +514,33 @@
 				AABD27C02A9FE69500F718F7 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		BC82DF722C76860900680BC7 /* Prototypes */ = {
+			isa = PBXGroup;
+			children = (
+				BCE2052F2B5A1C5F000DF400 /* ContactAtlanta.swift */,
+				BCE2052B2B5A1C38000DF400 /* ContactAustin.swift */,
+				BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */,
+				BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */,
+				BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */,
+				BCE205312B5A1C6C000DF400 /* ContactReno.swift */,
+				BCE2052D2B5A1C50000DF400 /* ContactSeattle.swift */,
+				BC6CA9FB2C459A6600138BA3 /* Page1Prototype.swift */,
+				BC6CA9FD2C45A18E00138BA3 /* Page2Prototype.swift */,
+				BC6CA9FF2C45A43000138BA3 /* Page3Prototype.swift */,
+				BC75478F2C2FAAF400A4ABC7 /* PageA.swift */,
+				BC7547912C2FAAF900A4ABC7 /* PageB.swift */,
+				BC6C39C12C2E054600AA842A /* Prototype1.swift */,
+				BC6C39C32C2F60C900AA842A /* Prototype2.swift */,
+				BC6CAA012C5D8F0A00138BA3 /* Prototype3.swift */,
+				BC6CAA032C5D8F8400138BA3 /* Prototype4.swift */,
+				BC6CAA052C5D909100138BA3 /* PrototypeHeadings1.swift */,
+				BC82DF6E2C60F46200680BC7 /* PrototypeHeadings2.swift */,
+				BC82DF702C60F69B00680BC7 /* PrototypeHeadings3.swift */,
+				BC6C39BF2C2E044000AA842A /* PrototypesView.swift */,
+			);
+			path = Prototypes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

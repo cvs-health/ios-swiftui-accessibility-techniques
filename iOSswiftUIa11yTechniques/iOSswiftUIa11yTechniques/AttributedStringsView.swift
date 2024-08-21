@@ -40,10 +40,10 @@ struct AttributedStringsView: View {
                 Text(getAttributedLabel())
                     .accessibilityLabel("Old Price: $99, New Price: $79")
                 Text("High and Low Pitch Text").font(.headline).accessibilityAddTraits(.isHeader).padding(.top)
-                Text("\"Squeek, Squeek\" said the mouse. \"Fee, Fie, Fo, Fum\" said the giant.")
+                Text("\"Squeak, Squeak\" said the mouse. \"Fee, Fie, Fo, Fum\" said the giant.")
                     .accessibility(label: Text(getAccessibilityAttributedLabel()))
                 DisclosureGroup("Details") {
-                    Text("The good attributed strings example uses `.accessibilityLabel(\"Old Price: $99, New Price: $79\")` to give the attributed string with a strike-through price a meaningful accesibility label that includes alt text for the old price. The high and low pitch attributed string uses `.accessibilitySpeechAdjustedPitch` to speak \"Squeek, Squeek\" in a high pitched voice and \"Fee, Fie, Fo, Fum\" in a low pitched voice.")
+                    Text("The good attributed strings example uses `.accessibilityLabel(\"Old Price: $99, New Price: $79\")` to give the attributed string with a strike-through price a meaningful accesibility label that includes alt text for the old price. The high and low pitch attributed string uses `.accessibilitySpeechAdjustedPitch` to speak \"Squeak, Squeak\" in a high pitched voice and \"Fee, Fie, Fo, Fum\" in a low pitched voice.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -58,9 +58,9 @@ struct AttributedStringsView: View {
                 Text("iOS Developer Membership Sale").font(.headline).accessibilityAddTraits(.isHeader)
                 Text(getAttributedLabel())
                 Text("High and Low Pitch Text").font(.headline).accessibilityAddTraits(.isHeader).padding(.top)
-                Text("\"Squeek, Squeek\" said the mouse. \"Fee, Fie, Fo, Fum\" said the giant.")
+                Text("\"Squeak, Squeak\" said the mouse. \"Fee, Fie, Fo, Fum\" said the giant.")
                 DisclosureGroup("Details") {
-                    Text("The bad attributed strings example does not use an `.accessibilityLabel` to give the attributed string with a strike-through price a meaningful accesibility label that includes alt text for the old price. VoiceOver users don't know which is the old price or the new price. The high and low pitch attributed string does not use `.accessibilitySpeechAdjustedPitch` to speak \"Squeek, Squeek\" in a high pitched voice and \"Fee, Fie, Fo, Fum\" in a low pitched voice.")
+                    Text("The bad attributed strings example does not use an `.accessibilityLabel` to give the attributed string with a strike-through price a meaningful accessibility label that includes alt text for the old price. VoiceOver users don't know which is the old price or the new price. The high and low pitch attributed string does not use `.accessibilitySpeechAdjustedPitch` to speak \"Squeak, Squeak\" in a high pitched voice and \"Fee, Fie, Fo, Fum\" in a low pitched voice.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .navigationTitle("Attributed Strings")
@@ -69,11 +69,11 @@ struct AttributedStringsView: View {
  
     }
     func getAccessibilityAttributedLabel() -> AttributedString {
-        var squeekSqueek = AttributedString("\"Squeek, Squeek\"")
-        squeekSqueek.accessibilitySpeechAdjustedPitch = 1.0
+        var squeekSqueak = AttributedString("\"Squeak, Squeak\"")
+        squeekSqueak.accessibilitySpeechAdjustedPitch = 1.0
         var feeFiFoFum = AttributedString("\"Fee, Fie, Fo, Fum\"")
         feeFiFoFum.accessibilitySpeechAdjustedPitch = -1.0
-        return squeekSqueek+" said the mouse, "+feeFiFoFum+"said the giant."
+        return squeekSqueak+" said the mouse, "+feeFiFoFum+"said the giant."
     }
     func getAttributedLabel() -> AttributedString {
         var text = AttributedString("$99")

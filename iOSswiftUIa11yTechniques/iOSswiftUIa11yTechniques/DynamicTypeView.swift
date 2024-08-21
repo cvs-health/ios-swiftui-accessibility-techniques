@@ -72,7 +72,7 @@ struct DynamicTypeView: View {
                 DisclosureGroup("Details") {
                     Text("The first good dynamic type example uses `.font(.largeTitle)` which scales to multiple lines when enlarged. The text field uses `axis: .vertical` to allow values larger than one line to expand vertically.")
                 }.padding(.bottom).accessibilityHint("Good Example Text().font(.largeTitle) and TextField(axis: .vertical)")
-                Text("Good Example `AnyLayout()` `HStackLayout()` to `VStackLayout()` conditonal layout")
+                Text("Good Example `AnyLayout()` `HStackLayout()` to `VStackLayout()` conditional layout")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -95,7 +95,7 @@ struct DynamicTypeView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The second good dynamic type example uses `AnyLayout()` conditional layout to display two links in an `HStack` at smaller text sizes or a `VStack` at larger text sizes.")
-                }.padding(.bottom).accessibilityHint("Good Example `AnyLayout()` `HStackLayout()` to `VStackLayout()` conditonal layout")
+                }.padding(.bottom).accessibilityHint("Good Example `AnyLayout()` `HStackLayout()` to `VStackLayout()` conditional layout")
                 Text("Good Example `Text().font(.largeTitle)`")
                     .font(.subheadline)
                     .fontWeight(.bold)

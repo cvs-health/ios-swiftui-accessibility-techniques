@@ -58,7 +58,7 @@ struct AdjustableActionView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use `.accessibilityAdjustableAction` to enable VoiceOver users to adjust an incrementable control like a custom star rating widget. With `.accessibilityAdjustableAction` VoiceOver users can swipe up or down to increment and decrement the adjustable control's value.")
+                Text("Use `.accessibilityAdjustableAction` to enable VoiceOver users to adjust an incremental control like a custom star rating widget. With `.accessibilityAdjustableAction` VoiceOver users can swipe up or down to increment and decrement the adjustable control's value.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

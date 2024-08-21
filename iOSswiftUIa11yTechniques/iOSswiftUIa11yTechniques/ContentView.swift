@@ -59,7 +59,7 @@ struct ContentView: View {
                 NavigationLink(destination: A11yEnhancementsView()) {
                     VStack {
                         Text("Accessibility UX Enhancements").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Assistive Access, Magic Tap, Actions, Rotor, VoiceOver Proununciation, etc.").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
+                        Text("Assistive Access, Magic Tap, Actions, Rotor, VoiceOver Pronunciation, etc.").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
                     }
                 }.accessibilityIdentifier("Accessibility UX Enhancements")
                     .accessibilityInputLabels(["Accessibility UX Enhancements"])
@@ -85,7 +85,7 @@ struct ContentView: View {
                     Text("Touch Target Size")
                 }
                 NavigationLink(destination: UserPreferencesView()) {
-                    Text("User Accessibility Preferences") // dark mode, smart invert, bold text, differientate without colors, reduce transparancy, motion, ignore invert colors, increase contrast
+                    Text("User Accessibility Preferences") // dark mode, smart invert, bold text, differentiate without colors, reduce transparency, motion, ignore invert colors, increase contrast
                 }
                 NavigationLink(destination: ProgressIndicatorsView()) {
                     Text("Progress Indicators")

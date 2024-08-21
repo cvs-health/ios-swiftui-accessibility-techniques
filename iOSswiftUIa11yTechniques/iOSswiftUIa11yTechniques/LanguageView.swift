@@ -39,7 +39,7 @@ struct LanguageView: View {
                 Text("Welcome to our home page.")
                 Text("Bienvenido a nuestra página de inicio.")
                 DisclosureGroup("Details") {
-                    Text("The bad language example uses Spanish text on parts of the page with English text but SwiftUI has no accessibility language property to set the correct locale or country code for the Spanish text so VoiceOver speaks it incorrectly with an English acccent.")
+                    Text("The bad language example uses Spanish text on parts of the page with English text but SwiftUI has no accessibility language property to set the correct locale or country code for the Spanish text so VoiceOver speaks it incorrectly with an English accent.")
                 }.padding(.bottom)
             }
             .navigationTitle("Language")

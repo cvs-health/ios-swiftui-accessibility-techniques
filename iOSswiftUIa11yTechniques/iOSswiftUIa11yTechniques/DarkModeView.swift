@@ -40,7 +40,7 @@ struct DarkModeView: View {
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
                 VStack(alignment:.leading) {
-                    Text("Enabling Dark Mode").font(.title).accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/).accessibilityHeading(.h1).bold().foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    Text("Enabling Dark Mode").font(.title).accessibilityAddTraits(.isHeader).accessibilityHeading(.h1).bold().foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     Text("1. Open iOS Settings")
                     Button(action: { self.openSettings() }) {
                        Text("Open Settings")

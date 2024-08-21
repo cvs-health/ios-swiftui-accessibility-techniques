@@ -216,6 +216,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             app.navigationBars.buttons["ToggleSidebar"].tap()
         }
         app.collectionViews.buttons["UI Controls"].tap()
+        app.swipeUp()
         app.collectionViews.buttons["Tabs"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.scrollViews.collectionViews["tabsGood2"].exists)
@@ -238,6 +239,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             app.navigationBars.buttons["ToggleSidebar"].tap()
         }
         app.collectionViews.buttons["UI Controls"].tap()
+        app.swipeUp()
         app.collectionViews.buttons["Toggles"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.switches["toggleGood1"].exists)
@@ -282,6 +284,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             app.navigationBars.buttons["ToggleSidebar"].tap()
         }
         app.collectionViews.buttons["UI Controls"].tap()
+        app.swipeUp()
         app.collectionViews.buttons["Sliders"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.sliders["sliderGood1"].exists)
@@ -464,8 +467,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         //assert that elements have accessibility labels
         XCTAssertFalse(app.steppers["stepperGood1"].label.isEmpty)
         XCTAssertFalse(app.steppers["stepperGood2"].label.isEmpty)
-        //XCTAssertFalse(app.steppers["stepperBad1"].label.isEmpty) // fails becase there is no label
-        //XCTAssertFalse(app.steppers["stepperBad2"].label.isEmpty) // fails becase there is no label
+        //XCTAssertFalse(app.steppers["stepperBad1"].label.isEmpty) // fails because there is no label
+        //XCTAssertFalse(app.steppers["stepperBad2"].label.isEmpty) // fails because there is no label
 
 
         //performA11yAudit
@@ -505,12 +508,12 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         XCTAssertFalse(app.datePickers["dateTimeGood"].label.isEmpty)
         XCTAssertFalse(app.datePickers["graphicalGood"].label.isEmpty)
         XCTAssertFalse(app.datePickers["wheelGood"].label.isEmpty)
-        //XCTAssertFalse(app.datePickers["startDateBad"].label.isEmpty) // fails becase there is no label
-        //XCTAssertFalse(app.datePickers["endDateBad"].label.isEmpty) // fails becase there is no label
-        //XCTAssertFalse(app.datePickers["timeBad"].label.isEmpty) // fails becase there is no label
-        //XCTAssertFalse(app.datePickers["dateTimeBad"].label.isEmpty) // fails becase there is no label
-        //XCTAssertFalse(app.datePickers["graphicalBad"].label.isEmpty) // fails becase there is no label
-        //XCTAssertFalse(app.datePickers["wheelBad"].label.isEmpty) // fails becase there is no label
+        //XCTAssertFalse(app.datePickers["startDateBad"].label.isEmpty) // fails because there is no label
+        //XCTAssertFalse(app.datePickers["endDateBad"].label.isEmpty) // fails because there is no label
+        //XCTAssertFalse(app.datePickers["timeBad"].label.isEmpty) // fails because there is no label
+        //XCTAssertFalse(app.datePickers["dateTimeBad"].label.isEmpty) // fails because there is no label
+        //XCTAssertFalse(app.datePickers["graphicalBad"].label.isEmpty) // fails because there is no label
+        //XCTAssertFalse(app.datePickers["wheelBad"].label.isEmpty) // fails because there is no label
 
 
         //performA11yAudit

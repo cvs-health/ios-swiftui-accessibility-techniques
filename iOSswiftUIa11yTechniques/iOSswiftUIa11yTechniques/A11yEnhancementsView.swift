@@ -52,7 +52,7 @@ struct A11yEnhancementsView: View {
                 Text("Rotor")
             }
             NavigationLink(destination: VoiceOverPronunciationView()) {
-                Text("VoiceOver Proununciation")
+                Text("VoiceOver Pronunciation")
             }
         }
         .navigationTitle("Accessibility UX Enhancements")

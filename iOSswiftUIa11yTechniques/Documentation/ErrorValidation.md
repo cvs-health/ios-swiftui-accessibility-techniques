@@ -4,14 +4,12 @@ Error validation is used to convey error messages for missing or incorrectly ent
 
 * Use [`AccessibilityFocusState`](https://developer.apple.com/documentation/swiftui/accessibilityfocusstate) to move VoiceOver focus to the first invalid input or error text when submitting a form with invalid data. 
 * Use an `.accessibilityHint` matching the visible error message text for each invalid input.
-  * Or use an `.accessibilityValue` matching the input value plus the visible error message text for each invalid input.
 * Visually indicate required fields e.g. with an \* and explain the meaning of the \*.
 
 Notes:
 
 * Make sure error messages are meaningful and specific. 
 * Don't rely on color as the only method of indicating errors. 
-* If you do use `.accessibilityValue` to include the error message then don't forget to add the visible value text back into the `.accessibilityValue` or it will be overriden and VoiceOver will never speak the visible input value text.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)

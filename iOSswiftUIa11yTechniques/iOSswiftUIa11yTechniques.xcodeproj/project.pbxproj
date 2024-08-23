@@ -330,14 +330,15 @@
 		AA9B134C2AA923CB009A3D84 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */,
 				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */,
 				BC163FCA2B6C1598009E3A83 /* AccessibilityRepresentation.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
 				BCD1CF9A2B577C5300A26ED3 /* Actions.md */,
 				BC00300A2B332C020063EAD5 /* AdjustableAction.md */,
 				BC715B642B44C81A00C77B57 /* Alerts.md */,
-				BCE205212B579FC3000DF400 /* AssistiveTechnologyDetection.md */,
 				BC163FC72B6C03DE009E3A83 /* AssistiveAccess.md */,
+				BCE205212B579FC3000DF400 /* AssistiveTechnologyDetection.md */,
 				BC1A5FA32B6079200008513C /* AttributedStrings.md */,
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
 				BC8C920E2B2C0FDE006DAC20 /* Cards.md */,
@@ -345,9 +346,8 @@
 				BCEDB9122B4A526800B4D85D /* CombiningFocus.md */,
 				BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */,
 				BCE205262B58E529000DF400 /* DarkMode.md */,
-				BC046F2E2BEE822A00E498E1 /* IncreaseContrast.md */,
-				BC046F2F2BEE823800E498E1 /* ReduceTransparency.md */,
 				BC8129072B3E042000CB19D2 /* DataTables.md */,
+				BC3EA3B32B7B25550003B8A2 /* DateTimePickers.md */,
 				AA9B134E2AAA3867009A3D84 /* DecorativeImages.md */,
 				BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */,
 				AA7786352AEFFE6000AA39DA /* DynamicType.md */,
@@ -357,35 +357,35 @@
 				AA9B134F2AAA4781009A3D84 /* FunctionalImages.md */,
 				BC8C92112B315816006DAC20 /* GroupingControls.md */,
 				AA9B134D2AA923FA009A3D84 /* Headings.md */,
-				BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */,
 				AAAFD7132AA9305D008DA3AD /* Images.md */,
+				BC046F2E2BEE822A00E498E1 /* IncreaseContrast.md */,
 				AAAFD7122AA92FF7008DA3AD /* InformativeImages.md */,
-				BC3EA3B32B7B25550003B8A2 /* DateTimePickers.md */,
 				BC1B59C42B4F102100E8F782 /* InputInstructions.md */,
 				BCC4F1822B3F8757004AAB65 /* InputLabels.md */,
 				BC81290A2B3F6C5A00CB19D2 /* Language.md */,
 				BC1A5FA02B5F6B340008513C /* LargeContentViewer.md */,
 				AA0F3EF52AB377740062E7BC /* Links.md */,
 				BC8C920A2B2A9DB8006DAC20 /* Lists.md */,
-				BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */,
 				BC95CC752B4DF94600196E32 /* MagicTap.md */,
+				BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */,
 				BC1B59C62B4FA09600E8F782 /* Menus.md */,
-				BCA5BDED2B61E641007823A6 /* ReduceMotion.md */,
 				BC8CD0E32B4CFC9400B9A28A /* Navigation.md */,
 				AA13031A2B0278FA001AE0BF /* PageTitles.md */,
 				AA1303182B02735F001AE0BF /* Pickers.md */,
 				BC1B59C52B4F964200E8F782 /* Popovers.md */,
 				AABB44082AE06297003480B3 /* ProgressIndicators.md */,
-				BC8C92142B3256D0006DAC20 /* ReadingOrder.md */,
 				BCA3DD122B733C5A00033712 /* RadioButtons.md */,
+				BC8C92142B3256D0006DAC20 /* ReadingOrder.md */,
+				BCA5BDED2B61E641007823A6 /* ReduceMotion.md */,
+				BC046F2F2BEE823800E498E1 /* ReduceTransparency.md */,
 				BCE205292B5971A8000DF400 /* Rotor.md */,
-				AA1303172AFEE5FD001AE0BF /* SegmentedControls.md */,
 				BC3EA3B82B7D26460003B8A2 /* ScrollViews.md */,
 				BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */,
+				AA1303172AFEE5FD001AE0BF /* SegmentedControls.md */,
 				BC8129012B3CCF4F00CB19D2 /* Sheets.md */,
 				AA636C882AC3B48C00014BAF /* Sliders.md */,
-				BCE2052A2B5991B7000DF400 /* Sources.md */,
 				BCA3DD0F2B72DEA900033712 /* SmartInvert.md */,
+				BCE2052A2B5991B7000DF400 /* Sources.md */,
 				AA1303192B027685001AE0BF /* Steppers.md */,
 				AAF6D09A2ABA29EE00188DE0 /* Tabs.md */,
 				AA1303162AFED27C001AE0BF /* TextFields.md */,
@@ -774,7 +774,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -797,7 +797,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -936,7 +936,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -954,7 +954,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 8.4;
+				MARKETING_VERSION = 8.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -969,7 +969,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -987,7 +987,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 8.4;
+				MARKETING_VERSION = 8.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

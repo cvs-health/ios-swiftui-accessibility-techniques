@@ -50,6 +50,7 @@
 		BC163FC42B6AD3FB009E3A83 /* ContactOrlando.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */; };
 		BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */; };
 		BC163FC92B6C1585009E3A83 /* AccessibilityRepresentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC82B6C1585009E3A83 /* AccessibilityRepresentationView.swift */; };
+		BC17B6132C9B212700403544 /* RedundantEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC17B6122C9B212700403544 /* RedundantEntryView.swift */; };
 		BC1A5FA22B6079080008513C /* AttributedStringsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A5FA12B6079070008513C /* AttributedStringsView.swift */; };
 		BC1B59C32B4E664700E8F782 /* MenusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59C22B4E664700E8F782 /* MenusView.swift */; };
 		BC1B59C82B5064BF00E8F782 /* TouchTargetSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */; };
@@ -196,6 +197,7 @@
 		BC163FC72B6C03DE009E3A83 /* AssistiveAccess.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AssistiveAccess.md; sourceTree = "<group>"; };
 		BC163FC82B6C1585009E3A83 /* AccessibilityRepresentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityRepresentationView.swift; sourceTree = "<group>"; };
 		BC163FCA2B6C1598009E3A83 /* AccessibilityRepresentation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityRepresentation.md; sourceTree = "<group>"; };
+		BC17B6122C9B212700403544 /* RedundantEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedundantEntryView.swift; sourceTree = "<group>"; };
 		BC1A5FA02B5F6B340008513C /* LargeContentViewer.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LargeContentViewer.md; sourceTree = "<group>"; };
 		BC1A5FA12B6079070008513C /* AttributedStringsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringsView.swift; sourceTree = "<group>"; };
 		BC1A5FA32B6079200008513C /* AttributedStrings.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AttributedStrings.md; sourceTree = "<group>"; };
@@ -485,6 +487,7 @@
 				BC8C92122B324859006DAC20 /* ReadingOrderView.swift */,
 				BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */,
 				BC046F2A2BEDC83800E498E1 /* ReduceTransparencyView.swift */,
+				BC17B6122C9B212700403544 /* RedundantEntryView.swift */,
 				BC6C39BD2C2CE70B00AA842A /* ResponsiveLayoutsView.swift */,
 				BCE205272B597199000DF400 /* RotorView.swift */,
 				BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */,
@@ -723,6 +726,7 @@
 				BC82DF6F2C60F46200680BC7 /* PrototypeHeadings2.swift in Sources */,
 				BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */,
 				BCE2052C2B5A1C38000DF400 /* ContactAustin.swift in Sources */,
+				BC17B6132C9B212700403544 /* RedundantEntryView.swift in Sources */,
 				BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */,
 				BC6CAA062C5D909100138BA3 /* PrototypeHeadings1.swift in Sources */,
 				AABD27D22A9FF11F00F718F7 /* FunctionalView.swift in Sources */,
@@ -774,7 +778,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -797,7 +801,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -936,7 +940,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -954,7 +958,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 8.5;
+				MARKETING_VERSION = 8.9;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -969,7 +973,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -987,7 +991,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 8.5;
+				MARKETING_VERSION = 8.9;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -11,13 +11,19 @@ Notes:
 
 - Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog.
 - Use `.accessibilityAction(.escape)` to close a custom dialog or view and return focus when the VoiceOver escape gesture (2 finger Z) is activated.
+- Use `.accessibilityElement(children: .ignore)` to prevent keyboard focus of elements behind a modal dialog.
+
+Platform Limitations:
+
+- `FocusState` does not work to send Full Keyboard Access focus to elements.
+
     
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
 
 ----
 
-Copyright 2023 CVS Health and/or one of its affiliates
+Copyright 2023-2024 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

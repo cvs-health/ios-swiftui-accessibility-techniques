@@ -13,9 +13,9 @@ Notes:
 - Use `.accessibilityAction(.escape)` to close a custom dialog or view and return focus when the VoiceOver escape gesture (2 finger Z) is activated.
 - Use `.accessibilityElement(children: .ignore)` to prevent keyboard focus of elements behind a modal dialog.
 
-Platform Limitations:
+Platform Defects:
 
-- `FocusState` does not work to send Full Keyboard Access focus to elements.
+- `FocusState` does not work to send Full Keyboard Access focus to elements except for `TextField`.
 
     
 ## Applicable WCAG Success Criteria

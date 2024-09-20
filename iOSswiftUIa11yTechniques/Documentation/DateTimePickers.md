@@ -15,6 +15,7 @@ Limitations:
 - Wheel style Pickers do not have sufficient text contrast for their non-selected options.
 - Date Pickers do not have sufficient contrast for their (S, M, T, W, T, F, S) column header text.
 - Date & Time Pickers will not automatically send focus back to the trigger button and this could be considered an accessibility defect in Apple's native `DatePicker` component in which case bugs should be filed with Apple.
+- Date, Time, and Wheel Pickers do not support Dynamic Type text resize or the Large Content Viewer.
 
 
 ## Applicable WCAG Success Criteria

@@ -20,6 +20,8 @@ struct TabsView: View {
     
     @State private var tab1Visible = true
     @State private var tab2Visible = false
+    @State private var tab1VisibleBad = true
+    @State private var tab2VisibleBad = false
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
@@ -28,7 +30,7 @@ struct TabsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Tabs show and hide content inside tab panels. VoiceOver users must hear the selected tab state. Use `TabView` to create native tab controls with selected state. Give each `TabView` a unique and meaningful `.accessibilityLabel`.")
+                Text("Tabs show and hide content inside tab panels. VoiceOver users must hear the selected tab state. Use `TabView` to create native tab controls with selected state. Give each `TabView` a unique and meaningful `.accessibilityLabel`. For custom tabs use `isTabBar` and `isSelected` Traits with `.accessibilityElement(children: .contain)`.")
                 .padding([.bottom])
                 Text("Good Examples")
                     .font(.subheadline)
@@ -70,6 +72,46 @@ struct TabsView: View {
                 DisclosureGroup("Details") {
                     Text("The second good tabs example uses a native `TabView` with `.tabViewStyle(.page)` and `.indexViewStyle(.page(backgroundDisplayMode: .always))` to display page indicator dots with a background. The `TabView` also has an `.accessibilityLabel`.")
                 }.padding(.bottom).accessibilityHint("Good Example `.tabViewStyle(.page)` with `.accessibilityLabel` and `backgroundDisplayMode: .always`")
+                Text("Good Example Custom Tabs using `isTabBar` and `isSelected` Traits with `.accessibilityElement(children: .contain)`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Button(action: {
+                        tab1Visible = true
+                        tab2Visible = false
+                    }) {
+                        VStack {
+                            Image(systemName: "house")
+                                .font(.system(size: 24))
+                            Text("Home")
+                        }
+                    }.padding()
+                        .accessibilityAddTraits(tab1Visible ? [.isSelected] : [])
+                    Button(action: {
+                        tab2Visible = true
+                        tab1Visible = false
+                    }) {
+                        VStack {
+                            Image(systemName: "envelope")
+                                .font(.system(size: 24))
+                            Text("Messages")
+                        }
+                    }.padding()
+                        .accessibilityAddTraits(tab2Visible ? [.isSelected] : [])
+                }
+                .accessibilityElement(children: .contain)
+                .accessibilityAddTraits(.isTabBar)
+                if tab1Visible {
+                    Text("Home tab panel text.")
+                }
+                if tab2Visible {
+                    Text("Messages tab panel text.")
+                }
+                DisclosureGroup("Details") {
+                    Text("The custom tabs good example uses `isTabBar` and `isSelected` traits with `.accessibilityElement(children: .contain)`. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number.")
+                }.padding(.bottom).accessibilityHint("Good Example Custom Tabs using `isTabBar` and `isSelected` Traits with `.accessibilityElement(children: .contain)`")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -80,15 +122,15 @@ struct TabsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example buttons that show and hide text")
+                Text("Bad Example custom tabs as buttons that show and hide text")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 HStack {
                     Button(action: {
-                        tab1Visible.toggle()
-                        tab2Visible.toggle()
+                        tab1VisibleBad = true
+                        tab2VisibleBad = false
                     }) {
                         VStack {
                             Image(systemName: "house")
@@ -97,8 +139,8 @@ struct TabsView: View {
                         }
                     }.padding()
                     Button(action: {
-                        tab2Visible.toggle()
-                        tab1Visible.toggle()
+                        tab1VisibleBad = false
+                        tab2VisibleBad = true
                     }) {
                         VStack {
                             Image(systemName: "envelope")
@@ -107,15 +149,15 @@ struct TabsView: View {
                         }
                     }.padding()
                 }
-                if tab1Visible {
+                if tab1VisibleBad {
                     Text("Home tab panel text.")
                 }
-                if tab2Visible {
+                if tab2VisibleBad {
                     Text("Messages tab panel text.")
                 }
                 DisclosureGroup("Details") {
                     Text("The first bad tabs example is coded as buttons that show and hide text. VoiceOver does not hear a selected state or tab trait for the tabs.")
-                }.padding(.bottom).accessibilityHint("Bad Example buttons that show and hide text")
+                }.padding(.bottom).accessibilityHint("Bad Example custom tabs as buttons that show and hide text")
                 Text("Bad Example `.tabViewStyle(.page)` with no `.accessibilityLabel` and no `backgroundDisplayMode: .always`")
                     .font(.subheadline)
                     .fontWeight(.bold)

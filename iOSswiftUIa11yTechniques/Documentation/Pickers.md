@@ -9,7 +9,7 @@ Use `AccessibilityFocusState` to send VoiceOver focus back to the picker when th
 - `Picker` has no `onDismiss` method like a `Sheet` that could be used to return focus when the picker is closed.
 
 Platform Defects:
-- Wheel style Pickers do not have sufficient text contrast for their non-selected options.
+- Wheel style Pickers do not have sufficient text contrast for their non-selected options, Apple Feedback Assistant #: FB15338784.
 - Wheel style Pickers do not support Large Content Viewer.
 
 ## Applicable WCAG Success Criteria

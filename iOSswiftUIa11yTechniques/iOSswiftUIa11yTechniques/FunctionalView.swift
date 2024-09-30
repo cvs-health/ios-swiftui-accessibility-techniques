@@ -21,6 +21,7 @@ struct FunctionalView: View {
     @AccessibilityFocusState private var isTriggerFocused: Bool
     @State private var showingAlert = false
     @State private var showingAlertImage = false
+    @State private var isSuperFavorite = false
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
@@ -67,6 +68,22 @@ struct FunctionalView: View {
                 DisclosureGroup("Details") {
                     Text("The good functional image example uses an image button with `.accessibilityLabel(\"Scan barcode\"))` to give the button a meaningful accessibility label that describes its purpose to VoiceOver users.")
                 }.padding(.bottom).accessibilityHint("Good Example `Image` `Button` `.accessibilityLabel`")
+                if #available(iOS 18.0, *) {
+                    Text("iOS 18+ Good Example `Image` `Button` `accessibilityLabel(_:isEnabled:)`")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityAddTraits(.isHeader)
+                    Button(action: {
+                        isSuperFavorite.toggle()
+                    }) {
+                        Image(systemName: isSuperFavorite ? "sparkles" : "star.fill")
+                    }
+                    .accessibilityLabel("Super Favorite", isEnabled: isSuperFavorite)
+                    DisclosureGroup("Details") {
+                        Text("The iOS 18+ good example image button uses `accessibilityLabel(_:isEnabled:)` to change the accessibility label to be \"Super Favorite\" when toggled and use the default SF Symbols VoiceOver label of \"Favorite\" when not toggled.")
+                    }.padding(.bottom).accessibilityHint("iOS 18+ Good Example `Image` `Button` `accessibilityLabel(_:isEnabled:)`")
+                }
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)

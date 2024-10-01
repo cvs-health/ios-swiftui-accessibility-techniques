@@ -19,13 +19,14 @@ import SwiftUI
 struct DataTablesView: View {
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+    private var darkOrange = Color(red: 203 / 255, green: 77 / 255, blue: 0 / 255)
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     var body: some View {
         ScrollView {
             VStack {
-                Text("Data table cells need to have their row and column header text spoken to VoiceOver users. Set the `.accessibilityHint`, `.accessibilityValue`, or `.accessibilityLabel` for each cell to include its row and column header text. The data table should also have a heading set as the `.accessibilityLabel` for the group. Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Table Name\")` to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table.")
+                Text("Data table cells need to have their row and column header text spoken to VoiceOver users. Set the `.accessibilityHint`, `.accessibilityValue`, or `.accessibilityLabel` for each cell to include its row and column header text. The data table should also have a heading set as the `.accessibilityLabel` for the group. Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Table Name\")` to give the table a group label that is spoken to VoiceOver users when they first focus on a cell in the table. Native `Table()` elements are designed to work only on iPad or macOS and have a platform defect where their row headers are not spoken to VoiceOver when moving between rows.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -217,6 +218,30 @@ struct DataTablesView: View {
                 DisclosureGroup("Details") {
                     Text("The bad data table example has no `.accessibilityHint`, `.accessibilityValue`, or `.accessibilityLabel` for each price cell that includes its row and column header text. VoiceOver users only hear the price cell text and don't hear the row or column header text. There is no heading for the table and no group label spoken to VoiceOver users when they first focus on a cell in the table. The bad data table example is unreadable when AX dynamic type accessibility text sizes are enabled because the text grows larger than the cells of the data table.")
                 }.accessibilityHint("Bad Example")
+                Text("Platform Defect Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.orange) : darkOrange)
+                Divider()
+                    .frame(height: 2.0, alignment:.leading)
+                    .background(colorScheme == .dark ? Color(.orange) : darkOrange)
+                    .padding(.bottom)
+                Text("Platform Defect Example `Table()` Speaks Column Headers but Not Row Headers")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                NavigationLink(destination: TableView()) {
+                    Text("Table View Example - iPad Only")
+                }.padding()
+                DisclosureGroup("Details") {
+                    VStack {
+                        Text("The platform defect example uses a native `Table()` element which does speak its column header text to VoiceOver when moving between columns but does not speak its row header text when moving between rows. `Table()` elements support iPad or macOS only. On iPhone only the first column of data cells in a `Table()` will display.")
+                    }
+                }.padding(.bottom).accessibilityHint("Platform Defect Example `Table()` Speaks Column Headers but Not Row Headers")
+
             }
             .navigationTitle("Data Tables")
             .padding()

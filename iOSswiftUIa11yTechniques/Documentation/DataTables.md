@@ -7,7 +7,11 @@ Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("Table 
 
 Notes:
 
-- iOS has no native data table semantics like `<table>`, `<th>`, `<td>`, or `<caption>` elements in HTML.
+- iOS has no native data table semantics like `<table>`, `<th>`, `<td>`, or `<caption>` elements in HTML, however, there is a native `Table()` element designed only for iPad and macOS which has an accessibility platform defect listed below.
+
+Platform Defects:
+
+- Native `Table()` elements are designed to work only on iPad or macOS and have a platform defect where their row headers are not spoken to VoiceOver when moving between rows.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)

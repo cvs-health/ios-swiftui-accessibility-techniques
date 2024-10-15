@@ -6,9 +6,11 @@ Use `Menu` to code a native SwiftUI menu that receives VoiceOver focus when open
 
 SwiftUI native `Menu` does not return focus back to the trigger button when closed. 
 
-Bugs:
+Platform Defects:
 
 - It is not possible to return focus using `AccessibilityFocusState` as you can with a `.sheet()` or `.popover()`. This can be considered a defect in the native `Menu` component and bugs should be filed with Apple.
+- `Menu` with `Section` `header` text and `.destructive` `Button` text have insufficient contrast. 
+- `Menu` `Section` `header` text is missing a heading trait.
     
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)

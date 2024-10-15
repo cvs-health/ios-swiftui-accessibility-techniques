@@ -24,6 +24,8 @@ struct MenusView: View {
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+    private var darkOrange = Color(red: 203 / 255, green: 77 / 255, blue: 0 / 255)
+
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
@@ -91,6 +93,90 @@ struct MenusView: View {
                 DisclosureGroup("Details") {
                     Text("The good menu example uses `Menu` to create a native SwiftUI menu that receives VoiceOver focus when opened. It is not possible to send focus back to the trigger button after closing a `Menu`. VoiceOver reads \"Actions, Button, Pop up button, Double tap to activate the picker\"")
                 }.padding(.bottom).accessibilityHint("Good Example")
+                Text("Platform Defect Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.orange) : darkOrange)
+                Divider()
+                    .frame(height: 2.0, alignment:.leading)
+                    .background(colorScheme == .dark ? Color(.orange) : darkOrange)
+                    .padding(.bottom)
+                Text("Platform Defect Example `Menu` `Section` `header` text and `.destructive` `Button` text have insufficient contrast. `Section` `header` text missing heading trait.")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Menu {
+                    Section(header: Text("Map")) {
+                        Button(action: {
+                            print("Map Action")
+                        }) {
+                            HStack {
+                                Image(systemName: "map")
+                                Text("Show Map")
+                            }
+                        }
+                    }
+                    Section(header: Text("Edit")) {
+                        Button(action: {
+                            print("Create New Action")
+                        }) {
+                            HStack {
+                                Image(systemName: "plus")
+                                Text("Create New")
+                            }
+                        }
+                        
+                        Button(action: {
+                            print("Lock Action")
+                        }) {
+                            HStack {
+                                Image(systemName: "lock")
+                                Text("Lock")
+                            }
+                        }
+                        Section(header: Text("Actions")) {
+                            Button(action: {
+                                print("Location Search Action")
+                            }) {
+                                HStack {
+                                    Image(systemName: "mappin")
+                                    Text("Location Search")
+                                }
+                            }
+                            
+                            Button(action: {
+                                print("Share Action")
+                            }) {
+                                HStack {
+                                    Image(systemName: "square.and.arrow.up")
+                                    Text("Share")
+                                }
+                            }
+                            Button(role: .destructive, action: {
+                                print("Delete Action")
+                            }) {
+                                HStack {
+                                    Image(systemName: "trash")
+                                    Text("Delete")
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .foregroundColor(.gray)
+                        .frame(width: 24, height: 24)
+                        .accessibilityLabel("Map Options")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    VStack {
+                        Text("The platform defect example uses a native `Menu` with `Section` `header` text and `.destructive` `Button` text have insufficient contrast. The `Section` `header` text is missing a heading trait.")
+                    }
+                }.padding(.bottom).accessibilityHint("Platform Defect Example `Menu` `Section` `header` text and `.destructive` `Button` text have insufficient contrast. `Section` `header` text missing heading trait.")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)

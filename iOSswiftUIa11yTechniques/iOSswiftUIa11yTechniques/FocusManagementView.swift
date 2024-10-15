@@ -62,7 +62,7 @@ struct FocusManagementView: View {
                 .accessibilityElement(children: showModal ? .ignore : .contain)
                .frame(maxWidth:.infinity, alignment:.leading)
                 DisclosureGroup("Details") {
-                    Text("The good focus management example uses `.accessibilityFocused` to set VoiceOver focus to the dialog heading when it's opened and back to the dialog trigger button when it's closed. `.accessibilityAddTraits(.isModal)` is used to trap VoiceOver focus inside the modal dialog and prevent focus of the grayed out content under the modal. `.accessibilityAction(.escape)` is used to close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated. `.accessibilityElement(children: .ignore)` is used to prevent keyboard focus of elements behind the modal dialog.")
+                    Text("The good focus management example uses `.accessibilityFocused` to set VoiceOver focus to the dialog heading when it's opened and back to the dialog trigger button when it's closed. `.accessibilityAddTraits(.isModal)` is used to trap VoiceOver focus inside the modal dialog and prevent focus of the grayed out content under the modal. `.accessibilityAction(.escape)` is used to close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated. `.accessibilityElement(children: .ignore)` is used to prevent keyboard focus of elements behind the modal dialog. `.keyboardShortcut(.defaultAction)` is added to allow full keyboard access users to close the dialog by pressing the return key.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                    .font(.subheadline)
@@ -120,6 +120,7 @@ struct FocusManagementView: View {
                                isTriggerFocused = true
                            }
                         }
+                       .keyboardShortcut(.defaultAction)
                         .zIndex(1)
                 }
                 if showModalBad {

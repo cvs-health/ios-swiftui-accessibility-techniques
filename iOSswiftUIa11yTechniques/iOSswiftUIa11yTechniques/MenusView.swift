@@ -174,7 +174,7 @@ struct MenusView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     VStack {
-                        Text("The platform defect example uses a native `Menu` with `Section` `header` text and `.destructive` `Button` text have insufficient contrast. The `Section` `header` text is missing a heading trait.")
+                        Text("The platform defect example uses a native `Menu` with `Section` `header` text and the `.destructive` `Button` text has insufficient contrast. The `Section` `header` text is also missing a heading trait.")
                     }
                 }.padding(.bottom).accessibilityHint("Platform Defect Example `Menu` `Section` `header` text and `.destructive` `Button` text have insufficient contrast. `Section` `header` text missing heading trait.")
                 Text("Bad Example")

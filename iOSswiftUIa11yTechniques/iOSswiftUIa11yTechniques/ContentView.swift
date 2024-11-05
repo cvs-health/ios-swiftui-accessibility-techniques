@@ -120,6 +120,9 @@ struct ContentView: View {
                 NavigationLink(destination: RedundantEntryView()) {
                     Text("Redundant Entry")
                 }
+                NavigationLink(destination: CarouselView()) {
+                    Text("Carousels")
+                }
                 NavigationLink(destination: PrototypesView()) {
                     Text("Prototypes")
                 }

@@ -137,6 +137,7 @@ struct TextFieldsFocusManagement: View {
                                     isPhoneFocused = false
                                     isPhoneA11yFocused = true
                                 default:
+                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                     break
                             }
                         }

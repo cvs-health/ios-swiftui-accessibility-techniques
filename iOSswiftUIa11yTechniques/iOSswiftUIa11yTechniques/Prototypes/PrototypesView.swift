@@ -32,6 +32,12 @@ struct PrototypesView: View {
             NavigationLink(destination: Prototype4()) {
                 Text("Prototype 4")
             }
+            NavigationLink(destination: VideoPlayerView()) {
+                Text("Video Player View Test")
+            }
+            NavigationLink(destination: DragDropView()) {
+                Text("Drag & Drop Test")
+            }
         }
         .navigationTitle("Prototypes")
     }

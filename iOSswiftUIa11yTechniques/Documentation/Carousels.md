@@ -11,6 +11,10 @@ Use a `ScrollView` on carousel slides to support Dynamic Type without truncation
 - [2.2.2: Pause, Stop, Hide](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide)
 - [2.5.1: Pointer Gestures](https://www.w3.org/WAI/WCAG22/Understanding/pointer-gestures)
 
+## WCAG Sufficient Techniques
+- [G215: Providing controls to achieve the same result as path based or multipoint gestures](https://www.w3.org/WAI/WCAG21/Techniques/general/G215)
+
+
 ----
 
 Copyright 2024 CVS Health and/or one of its affiliates

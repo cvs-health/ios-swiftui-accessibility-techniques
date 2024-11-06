@@ -38,6 +38,9 @@ struct PrototypesView: View {
             NavigationLink(destination: DragDropView()) {
                 Text("Drag & Drop Test")
             }
+            NavigationLink(destination: HorizontalScrollView()) {
+                Text("Horizontal Scroll View")
+            }
         }
         .navigationTitle("Prototypes")
     }

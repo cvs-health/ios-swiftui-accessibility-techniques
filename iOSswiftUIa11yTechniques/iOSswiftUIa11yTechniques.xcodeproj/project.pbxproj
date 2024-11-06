@@ -72,6 +72,7 @@
 		BC6CAA042C5D8F8400138BA3 /* Prototype4.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6CAA032C5D8F8400138BA3 /* Prototype4.swift */; };
 		BC6CAA062C5D909100138BA3 /* PrototypeHeadings1.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6CAA052C5D909100138BA3 /* PrototypeHeadings1.swift */; };
 		BC6D39552CDA896F00876212 /* CarouselViewBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6D39542CDA896F00876212 /* CarouselViewBad.swift */; };
+		BC6D39E02CDB112D00876212 /* HorizontalScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6D39DF2CDB112D00876212 /* HorizontalScrollView.swift */; };
 		BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6F3E432BB5DC5800868AE5 /* WebView.swift */; };
 		BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
@@ -235,6 +236,7 @@
 		BC6CAA052C5D909100138BA3 /* PrototypeHeadings1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeHeadings1.swift; sourceTree = "<group>"; };
 		BC6D39542CDA896F00876212 /* CarouselViewBad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselViewBad.swift; sourceTree = "<group>"; };
 		BC6D39652CDABF5A00876212 /* Carousels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Carousels.md; sourceTree = "<group>"; };
+		BC6D39DF2CDB112D00876212 /* HorizontalScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalScrollView.swift; sourceTree = "<group>"; };
 		BC6F3E432BB5DC5800868AE5 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHidden.swift; sourceTree = "<group>"; };
 		BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityHidden.md; sourceTree = "<group>"; };
@@ -474,6 +476,7 @@
 				BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */,
 				AABD27C72A9FF0D800F718F7 /* HeadingsView.swift */,
 				AA59CDCB2ABA20920004908F /* HomeTabView.swift */,
+				BC6D39DF2CDB112D00876212 /* HorizontalScrollView.swift */,
 				AABD27C92A9FF0E700F718F7 /* ImagesView.swift */,
 				BC046F2C2BEE547900E498E1 /* IncreaseContrastView.swift */,
 				BC8C920B2B2AA0C9006DAC20 /* Info.plist */,
@@ -709,6 +712,7 @@
 				BCB059572CAB5F9C00C670B8 /* TableView.swift in Sources */,
 				BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */,
 				AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */,
+				BC6D39E02CDB112D00876212 /* HorizontalScrollView.swift in Sources */,
 				BCE205322B5A1C6C000DF400 /* ContactReno.swift in Sources */,
 				BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */,
 				AA74DD5E2AFDCCFA00348078 /* PageTitleBad.swift in Sources */,
@@ -800,7 +804,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 53;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -823,7 +827,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 53;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -962,7 +966,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 53;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -995,7 +999,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 53;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;

@@ -30,7 +30,7 @@ struct SlidersView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Sliders are used to adjust a value by sliding the thumb between the minimum and maximum. Use `Slider` to create a native slider control that is adjustable with VoiceOver. Give each `Slider` a unique and meaningful accessibility label and visible label text. Include a `TextField` and `Stepper` to allow users fine control when adjusting the slider value.")
+                Text("Sliders are used to adjust a value by sliding the thumb between the minimum and maximum. Use `Slider` to create a native slider control that is adjustable with VoiceOver. Give each `Slider` a unique and meaningful accessibility label and visible label text. Include a `TextField` and `Stepper` to allow users fine control when adjusting the slider value. Provide buttons as single tap alternatives to adjusting the slider with gestures.")
                     .padding([.bottom])
                 Text("Good Examples")
                     .font(.subheadline)
@@ -42,18 +42,36 @@ struct SlidersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example with label text and `.accessibilityLabel`")
+                Text("Good Example with label text, `.accessibilityLabel`, and single tap gesture alternatives")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 Text("Brightness").frame(maxWidth: .infinity, alignment: .leading)
-                Slider(value: $brightnessGood, in: 0...100, step: 1)
-                    .accessibilityLabel("Brightness")
-                    .accessibilityIdentifier("sliderGood1")
+                HStack {
+                    Button(action: {
+                        if brightnessGood > 0 {
+                            brightnessGood -= 10
+                        }
+                    }) {
+                        Image(systemName: "sun.min")
+                            .accessibilityLabel("Decrease Brightness")
+                    }
+                    Slider(value: $brightnessGood, in: 0...100, step: 10)
+                        .accessibilityLabel("Brightness")
+                        .accessibilityIdentifier("sliderGood1")
+                    Button(action: {
+                        if brightnessGood < 100 {
+                            brightnessGood += 10
+                        }
+                    }) {
+                        Image(systemName: "sun.max.fill")
+                            .accessibilityLabel("Increase Brightness")
+                    }
+                }
                 DisclosureGroup("Details") {
-                    Text("The first good slider example uses `Text(\"Brightness\")` as the visible label text and `.accessibilityLabel(\"Brightness\")` as the VoiceOver accessibility label.")
-                }.padding(.bottom).accessibilityHint("Good Example with label text and `.accessibilityLabel`")
+                    Text("The first good slider example uses `Text(\"Brightness\")` as the visible label text and `.accessibilityLabel(\"Brightness\")` as the VoiceOver accessibility label. Buttons are used as single tap alternatives to the adjusting the slider with a gesture.")
+                }.padding(.bottom).accessibilityHint("Good Example with label text, `.accessibilityLabel`, and single tap gesture alternatives")
                 Text("Good Example `Slider` internal label text with `Stepper` and `TextField`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -97,7 +115,7 @@ struct SlidersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example no label text or `.accessibilityLabel`")
+                Text("Bad Example no label text or `.accessibilityLabel` and no single tap gesture alternatives")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -105,8 +123,8 @@ struct SlidersView: View {
                 Slider(value: $brightnessBad, in: 0...100, step: 1)
                     .accessibilityIdentifier("sliderBad1")
                 DisclosureGroup("Details") {
-                    Text("The first bad slider example uses no visible label text and no VoiceOver accessibility label.")
-                }.padding(.bottom).accessibilityHint("Bad Example no label text or `.accessibilityLabel`")
+                    Text("The first bad slider example uses no visible label text and no VoiceOver accessibility label. There are no single tap alternatives to adjusting the slider with a gesture.")
+                }.padding(.bottom).accessibilityHint("Bad Example no label text or `.accessibilityLabel` and no single tap gesture alternatives")
                 Text("Bad Example no label, no `.accessibilityLabel`, no `TextField`, no `Stepper`")
                     .font(.subheadline)
                     .fontWeight(.bold)

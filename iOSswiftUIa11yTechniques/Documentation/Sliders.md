@@ -5,12 +5,19 @@ Use `Slider` to create a native slider control that is adjustable with VoiceOver
 
 Give each `Slider` a unique and specific accessibility label using `.accessibilityLabel` and visible label `Text`. 
 
+Provide single tap alternatives to adjusting the slider with a gesture.
+
 Notes:
 
 - Include a `TextField` and `Stepper` to allow users fine control when adjusting the slider value.
 
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
+- [2.5.1: Pointer Gestures](https://www.w3.org/WAI/WCAG22/Understanding/pointer-gestures)
+
+## WCAG Sufficient Techniques
+- [G216: Providing single point activation for a control slider](https://www.w3.org/WAI/WCAG21/Techniques/general/G216)
+
 
 ----
 

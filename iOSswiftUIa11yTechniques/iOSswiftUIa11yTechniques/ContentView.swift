@@ -123,6 +123,9 @@ struct ContentView: View {
                 NavigationLink(destination: CarouselView()) {
                     Text("Carousels")
                 }
+                NavigationLink(destination: HorizontalScrollView()) {
+                    Text("Horizontal Scroll Views")
+                }
                 NavigationLink(destination: PrototypesView()) {
                     Text("Prototypes")
                 }

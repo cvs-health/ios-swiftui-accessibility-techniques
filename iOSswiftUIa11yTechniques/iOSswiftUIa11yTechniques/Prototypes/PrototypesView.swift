@@ -41,6 +41,9 @@ struct PrototypesView: View {
             NavigationLink(destination: HorizontalScrollView()) {
                 Text("Horizontal Scroll View")
             }
+            NavigationLink(destination: WebView()) {
+                Text("Web View Apple System CSS Font Test")
+            }
         }
         .navigationTitle("Prototypes")
     }

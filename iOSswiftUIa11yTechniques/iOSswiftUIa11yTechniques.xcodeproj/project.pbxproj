@@ -237,6 +237,7 @@
 		BC6D39542CDA896F00876212 /* CarouselViewBad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselViewBad.swift; sourceTree = "<group>"; };
 		BC6D39652CDABF5A00876212 /* Carousels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Carousels.md; sourceTree = "<group>"; };
 		BC6D39DF2CDB112D00876212 /* HorizontalScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalScrollView.swift; sourceTree = "<group>"; };
+		BC6D39E12CDDD56100876212 /* HorizontalScrollViews.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = HorizontalScrollViews.md; sourceTree = "<group>"; };
 		BC6F3E432BB5DC5800868AE5 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHidden.swift; sourceTree = "<group>"; };
 		BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityHidden.md; sourceTree = "<group>"; };
@@ -358,6 +359,7 @@
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
 				BC8C920E2B2C0FDE006DAC20 /* Cards.md */,
 				BC6D39652CDABF5A00876212 /* Carousels.md */,
+				BC6D39E12CDDD56100876212 /* HorizontalScrollViews.md */,
 				BCEDB8EE2B4760D800B4D85D /* Checkboxes.md */,
 				BCEDB9122B4A526800B4D85D /* CombiningFocus.md */,
 				BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */,

@@ -84,6 +84,7 @@ Documentation files for each technique are listed below.
 - [x] [Scroll Views](iOSswiftUIa11yTechniques/Documentation/ScrollViews.md)
 - [x] [Accessibility Hidden](iOSswiftUIa11yTechniques/Documentation/AccessibilityHidden.md)
 - [x] [Carousels](iOSswiftUIa11yTechniques/Documentation/Carousels.md)
+- [x] [Horizontal Scroll Views](iOSswiftUIa11yTechniques/Documentation/HorizontalScrollViews.md)
 - [ ] Siri Shortcuts
 - [ ] Responsive Layouts
 

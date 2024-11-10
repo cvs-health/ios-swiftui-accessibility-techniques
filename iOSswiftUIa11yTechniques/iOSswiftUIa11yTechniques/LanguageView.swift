@@ -59,7 +59,7 @@ struct LanguageView: View {
                 Text("Welcome to our home page.")
                 Text("Bienvenido a nuestra página de inicio.")
                 DisclosureGroup("Details") {
-                    Text("The bad language example uses Spanish text with no `.languageIdentifier` `AttributedString` `attributes: so VoiceOver speaks it incorrectly without a Spanish accent.")
+                    Text("The bad language example uses Spanish text with no `.languageIdentifier` `AttributedString` `attributes:` so VoiceOver speaks it incorrectly without a Spanish accent.")
                 }.padding(.bottom)
             }
             .navigationTitle("Language")

@@ -1,9 +1,7 @@
 # Language
 Parts of the app or page that are in a different language than the main language must be spoken to VoiceOver users in the correct speech synthesizer, i.e., Spanish text must be spoken in a Spanish synthesizer with the correct accent and pronunciations.
 
-Notes:
-
-- SwiftUI has no accessibility language property to set the correct locale or country code so VoiceOver will speak parts of the page in a different language incorrectly e.g., with an English acccent.
+Use an `AttributedString` with `attributes: AttributeContainer().languageIdentifier()` on the different language text so VoiceOver speaks it correctly with a proper accent for that language.
 
 ## Applicable WCAG Success Criteria
 - [3.1.1 Language of Page](https://www.w3.org/WAI/WCAG22/Understanding/language-of-page)

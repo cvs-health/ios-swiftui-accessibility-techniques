@@ -24,8 +24,28 @@ struct LanguageView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Parts of the app or page that are in a different language than the main language must be spoken to VoiceOver users in the correct speech synthesizer, i.e., Spanish text must be spoken in a Spanish synthesizer with the correct accent and pronunciations.")
+                Text("Parts of the app or page that are in a different language than the main language must be spoken to VoiceOver users in the correct speech synthesizer, i.e., Spanish text must be spoken in a Spanish synthesizer with the correct accent and pronunciations. Use an `AttributedString` with `attributes: AttributeContainer().languageIdentifier()` on the different language text so VoiceOver speaks it correctly with a proper accent for that language.")
                     .padding(.bottom)
+                Text("Good Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                Divider()
+                    .frame(height: 2.0, alignment:.leading)
+                    .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.bottom)
+                Text("Welcome to our home page.")
+                Text(
+                    AttributedString(
+                        "Bienvenido a nuestra página de inicio.",
+                        attributes: AttributeContainer().languageIdentifier("es")
+                    )
+                )
+                DisclosureGroup("Details") {
+                    Text("The good language example uses an `AttributedString` with `attributes: AttributeContainer().languageIdentifier(\"es\")` on the Spanish text so VoiceOver speaks it correctly with a Spanish accent.")
+                }.padding(.bottom)
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -39,7 +59,7 @@ struct LanguageView: View {
                 Text("Welcome to our home page.")
                 Text("Bienvenido a nuestra página de inicio.")
                 DisclosureGroup("Details") {
-                    Text("The bad language example uses Spanish text on parts of the page with English text but SwiftUI has no accessibility language property to set the correct locale or country code for the Spanish text so VoiceOver speaks it incorrectly with an English accent.")
+                    Text("The bad language example uses Spanish text with no `.languageIdentifier` `AttributedString` `attributes: so VoiceOver speaks it incorrectly without a Spanish accent.")
                 }.padding(.bottom)
             }
             .navigationTitle("Language")

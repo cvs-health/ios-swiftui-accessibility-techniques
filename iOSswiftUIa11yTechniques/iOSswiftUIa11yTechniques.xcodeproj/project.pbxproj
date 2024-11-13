@@ -87,6 +87,7 @@
 		BC81290C2B3F7BBE00CB19D2 /* InputLabelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC81290B2B3F7BBE00CB19D2 /* InputLabelsView.swift */; };
 		BC82DF6F2C60F46200680BC7 /* PrototypeHeadings2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC82DF6E2C60F46200680BC7 /* PrototypeHeadings2.swift */; };
 		BC82DF712C60F69B00680BC7 /* PrototypeHeadings3.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC82DF702C60F69B00680BC7 /* PrototypeHeadings3.swift */; };
+		BC877B872CE4304700B127F1 /* DOBpicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC877B862CE4304700B127F1 /* DOBpicker.swift */; };
 		BC8C92092B2A94B2006DAC20 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92082B2A94B2006DAC20 /* ListsView.swift */; };
 		BC8C920D2B2BAE41006DAC20 /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920C2B2BAE41006DAC20 /* CardsView.swift */; };
 		BC8C92102B3144BA006DAC20 /* GroupingControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C920F2B3144BA006DAC20 /* GroupingControlsView.swift */; };
@@ -259,6 +260,7 @@
 		BC81290B2B3F7BBE00CB19D2 /* InputLabelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputLabelsView.swift; sourceTree = "<group>"; };
 		BC82DF6E2C60F46200680BC7 /* PrototypeHeadings2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeHeadings2.swift; sourceTree = "<group>"; };
 		BC82DF702C60F69B00680BC7 /* PrototypeHeadings3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeHeadings3.swift; sourceTree = "<group>"; };
+		BC877B862CE4304700B127F1 /* DOBpicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOBpicker.swift; sourceTree = "<group>"; };
 		BC8C92082B2A94B2006DAC20 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
 		BC8C920A2B2A9DB8006DAC20 /* Lists.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Lists.md; sourceTree = "<group>"; };
 		BC8C920B2B2AA0C9006DAC20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				BC6CA9FD2C45A18E00138BA3 /* Page2Prototype.swift */,
 				BC6CA9FF2C45A43000138BA3 /* Page3Prototype.swift */,
 				BC75478F2C2FAAF400A4ABC7 /* PageA.swift */,
+				BC877B862CE4304700B127F1 /* DOBpicker.swift */,
 				BC7547912C2FAAF900A4ABC7 /* PageB.swift */,
 				BC6C39C12C2E054600AA842A /* Prototype1.swift */,
 				BC6C39C32C2F60C900AA842A /* Prototype2.swift */,
@@ -757,6 +760,7 @@
 				BC17B6132C9B212700403544 /* RedundantEntryView.swift in Sources */,
 				BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */,
 				BC6CAA062C5D909100138BA3 /* PrototypeHeadings1.swift in Sources */,
+				BC877B872CE4304700B127F1 /* DOBpicker.swift in Sources */,
 				AABD27D22A9FF11F00F718F7 /* FunctionalView.swift in Sources */,
 				BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */,
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
@@ -806,7 +810,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 62;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -829,7 +833,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 62;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -968,7 +972,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 62;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -986,7 +990,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 9.9;
+				MARKETING_VERSION = 10.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1001,7 +1005,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 62;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -1019,7 +1023,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 9.9;
+				MARKETING_VERSION = 10.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -20,6 +20,9 @@ struct PrototypesView: View {
 
     var body: some View {
         List {
+            NavigationLink(destination: DOBpicker()) {
+                Text("Date of Birth Picker")
+            }
             NavigationLink(destination: Prototype1()) {
                 Text("Prototype 1")
             }
@@ -37,9 +40,6 @@ struct PrototypesView: View {
             }
             NavigationLink(destination: DragDropView()) {
                 Text("Drag & Drop Test")
-            }
-            NavigationLink(destination: HorizontalScrollView()) {
-                Text("Horizontal Scroll View")
             }
             NavigationLink(destination: WebView()) {
                 Text("Web View Apple System CSS Font Test")

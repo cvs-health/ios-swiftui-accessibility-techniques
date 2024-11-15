@@ -125,6 +125,7 @@
 		BCEDB9142B4C812C00B4D85D /* NavigationLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */; };
 		BCEF61FA2CE6E75F00B0F757 /* SignUpC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEF61F92CE6E75F00B0F757 /* SignUpC.swift */; };
 		BCEF61FC2CE6EB5100B0F757 /* SignUpD.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEF61FB2CE6EB5100B0F757 /* SignUpD.swift */; };
+		BCEF61FE2CE7ECCC00B0F757 /* ThankYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEF61FD2CE7ECCC00B0F757 /* ThankYou.swift */; };
 		BCFBBE4D2CD93FCA006831D9 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFBBE4C2CD93FCA006831D9 /* CarouselView.swift */; };
 /* End PBXBuildFile section */
 
@@ -323,6 +324,7 @@
 		BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLinkView.swift; sourceTree = "<group>"; };
 		BCEF61F92CE6E75F00B0F757 /* SignUpC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpC.swift; sourceTree = "<group>"; };
 		BCEF61FB2CE6EB5100B0F757 /* SignUpD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpD.swift; sourceTree = "<group>"; };
+		BCEF61FD2CE7ECCC00B0F757 /* ThankYou.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThankYou.swift; sourceTree = "<group>"; };
 		BCFBBE4C2CD93FCA006831D9 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -577,6 +579,7 @@
 				BC6C39BF2C2E044000AA842A /* PrototypesView.swift */,
 				BC877B882CE543C200B127F1 /* SignUpA.swift */,
 				BCEF61FB2CE6EB5100B0F757 /* SignUpD.swift */,
+				BCEF61FD2CE7ECCC00B0F757 /* ThankYou.swift */,
 				BCEF61F92CE6E75F00B0F757 /* SignUpC.swift */,
 				BC877B8A2CE55D3600B127F1 /* SignUpB.swift */,
 			);
@@ -728,6 +731,7 @@
 				BC6C39C42C2F60C900AA842A /* Prototype2.swift in Sources */,
 				BCB059572CAB5F9C00C670B8 /* TableView.swift in Sources */,
 				BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */,
+				BCEF61FE2CE7ECCC00B0F757 /* ThankYou.swift in Sources */,
 				AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */,
 				BC6D39E02CDB112D00876212 /* HorizontalScrollView.swift in Sources */,
 				BCE205322B5A1C6C000DF400 /* ContactReno.swift in Sources */,
@@ -826,7 +830,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 64;
+				CURRENT_PROJECT_VERSION = 68;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -849,7 +853,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 64;
+				CURRENT_PROJECT_VERSION = 68;
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -988,7 +992,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 64;
+				CURRENT_PROJECT_VERSION = 68;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -1006,7 +1010,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 10.2;
+				MARKETING_VERSION = 10.4;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1021,7 +1025,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 64;
+				CURRENT_PROJECT_VERSION = 68;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -1039,7 +1043,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 10.2;
+				MARKETING_VERSION = 10.4;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

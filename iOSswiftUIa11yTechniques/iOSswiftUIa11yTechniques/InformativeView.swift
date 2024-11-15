@@ -15,18 +15,46 @@
  */
 
 import SwiftUI
+import SafariServices
+
  
 struct InformativeView: View {
     
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
+    @State var isPresentVC = false
+    @AccessibilityFocusState private var isTriggerFocused: Bool
+
 
     var body: some View {
         ScrollView {
             VStack {
                 Text("Informative images provide information or convey meaning to sighted users that must be accessible to VoiceOver users. Give informative images an accessibility label either through `Label(\"text\")` or `.accessibilityLabel(\"text\")`. Use `.accessibilityElement(children: .combine)` to combine an image and text into a single focusable element with VoiceOver.").textSelection(.enabled)
-                    .padding([.bottom])
+//                    .monospaced()
+//                    .padding()
+//                    .background(colorScheme == .dark ? Color.secondary.opacity(0.3) : Color.secondary.opacity(0.1))
+//                    .cornerRadius(8)
+//                    .lineLimit(nil)
+                ZStack {
+                    Button("Informative Images Documentation") {
+                        isPresentVC = true
+                    }
+                    .accessibilityFocused($isTriggerFocused)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                }.sheet(isPresented: $isPresentVC, content: {
+                    HStack {
+                        Spacer()
+                        Button("Done") {
+                            isPresentVC = false
+                            //isTriggerFocused = true
+                        }
+                    }
+                    .padding()
+                    WebViewRepresentable(url: "https://github.com/cvs-health/ios-swiftui-accessibility-techniques/blob/main/iOSswiftUIa11yTechniques/Documentation/InformativeImages.md#informative-images")
+                        .edgesIgnoringSafeArea(.all)
+                })
                 Text("Good Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -189,3 +217,5 @@ struct InformativeView_Previews: PreviewProvider {
         }
     }
 }
+
+

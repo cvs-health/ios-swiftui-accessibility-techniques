@@ -92,9 +92,7 @@ struct SignUpA: View {
                 Toggle("I confirm the above is accurate.", isOn: $confirmToggle)
                     .padding()
                     .bold()
-                Button(action: {
-                    print("Button tapped")
-                }) {
+                NavigationLink(destination: ThankYou()) {
                     HStack {
                         Image(systemName: "smiley")
                         Text("Sign Up")
@@ -103,8 +101,8 @@ struct SignUpA: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .bold()
                 }
-                .background(Color(red: 0, green: 0, blue: 139))
-                .foregroundColor(.white)
+                .background(Color("AccentColor"))
+                .foregroundColor(colorScheme == .dark ? .black : .white)
                 .clipShape(.capsule)
             }
             .navigationTitle("Sign Up A")

@@ -20,6 +20,18 @@ struct PrototypesView: View {
 
     var body: some View {
         List {
+            NavigationLink(destination: SignUpA()) {
+                Text("Sign Up A")
+            }
+            NavigationLink(destination: SignUpB()) {
+                Text("Sign Up B")
+            }
+            NavigationLink(destination: SignUpC()) {
+                Text("Sign Up C")
+            }
+            NavigationLink(destination: SignUpD()) {
+                Text("Sign Up D")
+            }
             NavigationLink(destination: DOBpicker()) {
                 Text("Date of Birth Picker")
             }

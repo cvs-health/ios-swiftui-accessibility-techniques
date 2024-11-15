@@ -25,7 +25,13 @@ struct TabsView: View {
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
-
+//    init() {
+//        UIPageControl.appearance().currentPageIndicatorTintColor = .red
+//        UIPageControl.appearance().pageIndicatorTintColor = .blue
+//        //UIPageControl.appearance().backgroundStyle = .prominent
+//        UIPageControl.appearance().preferredIndicatorImage = UIImage(systemName: "circle")
+//        UIPageControl.appearance().preferredCurrentPageIndicatorImage = UIImage(systemName: "circle.fill")
+//       }
 
     var body: some View {
         ScrollView {
@@ -69,6 +75,9 @@ struct TabsView: View {
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
                 .accessibilityLabel("Slideshow")
                 .accessibilityIdentifier("tabsGood2")
+                .onAppear {
+                      setupAppearance()
+                    }
                 DisclosureGroup("Details") {
                     Text("The second good tabs example uses a native `TabView` with `.tabViewStyle(.page)` and `.indexViewStyle(.page(backgroundDisplayMode: .always))` to display page indicator dots with a background. The `TabView` also has an `.accessibilityLabel`.")
                 }.padding(.bottom).accessibilityHint("Good Example `.tabViewStyle(.page)` with `.accessibilityLabel` and `backgroundDisplayMode: .always`")
@@ -181,6 +190,13 @@ struct TabsView: View {
 
         }
  
+    }
+    func setupAppearance() {
+        UIPageControl.appearance().currentPageIndicatorTintColor = .red
+        UIPageControl.appearance().pageIndicatorTintColor = .blue
+        //UIPageControl.appearance().backgroundStyle = .prominent
+        UIPageControl.appearance().preferredIndicatorImage = UIImage(systemName: "circle")
+        UIPageControl.appearance().preferredCurrentPageIndicatorImage = UIImage(systemName: "circle.fill")
     }
 }
  

@@ -16,16 +16,42 @@
 
 import SwiftUI
 
-struct DOBpicker: View {
+struct SignUpA: View {
     @State private var selectedDate = Calendar.current.date(byAdding: DateComponents(year: -40), to: Date()) ?? Date()
     @State private var isDatePickerPresented = false
     @AccessibilityFocusState private var isTriggerFocused: Bool
     @Environment(\.colorScheme) var colorScheme
+    @State private var fname = ""
+    @State private var nname = ""
+    @State private var confirmToggle = false
 
     
     var body: some View {
         ScrollView {
             VStack {
+                Text("Full Name (Required)")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .bold()
+                TextField("", text: $fname, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(.secondary)
+                    .accessibilityLabel("Full Name (Required)")
+                    .autocorrectionDisabled(true)
+                    .textContentType(.name)
+                Text("Nickname")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .bold()
+                Text("Max 12 characters")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.caption)
+                TextField("", text: $nname, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(.secondary)
+                    .accessibilityLabel("Nickname")
+                    .accessibilityHint("Max 12 characters")
+                    .autocorrectionDisabled(true)
+                    .textContentType(.nickname)
+                Spacer().frame(height: 20)
                 HStack {
                     Text("Birth Date")
                     Spacer()
@@ -63,8 +89,25 @@ struct DOBpicker: View {
                     RoundedRectangle(cornerRadius: 15)
                         .stroke(colorScheme == .dark ? .white : .black, lineWidth: 1)
                 )
+                Toggle("I confirm the above is accurate.", isOn: $confirmToggle)
+                    .padding()
+                    .bold()
+                Button(action: {
+                    print("Button tapped")
+                }) {
+                    HStack {
+                        Image(systemName: "smiley")
+                        Text("Sign Up")
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .bold()
+                }
+                .background(Color(red: 0, green: 0, blue: 139))
+                .foregroundColor(.white)
+                .clipShape(.capsule)
             }
-            .navigationTitle("Date of Birth Picker")
+            .navigationTitle("Sign Up A")
             .padding()
 
         }
@@ -79,7 +122,7 @@ struct DOBpicker: View {
 
 #Preview {
     NavigationStack {
-        DOBpicker()
+        SignUpA()
     }
 }
 

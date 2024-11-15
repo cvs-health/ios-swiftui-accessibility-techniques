@@ -25,7 +25,7 @@ struct InformativeView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Informative images provide information or convey meaning to sighted users that must be accessible to VoiceOver users. Give informative images an accessibility label either through `Label(\"text\")` or `.accessibilityLabel(\"text\")`. Use `.accessibilityElement(children: .combine)` to combine an image and text into a single focusable element with VoiceOver.")
+                Text("Informative images provide information or convey meaning to sighted users that must be accessible to VoiceOver users. Give informative images an accessibility label either through `Label(\"text\")` or `.accessibilityLabel(\"text\")`. Use `.accessibilityElement(children: .combine)` to combine an image and text into a single focusable element with VoiceOver.").textSelection(.enabled)
                     .padding([.bottom])
                 Text("Good Examples")
                     .font(.subheadline)
@@ -51,7 +51,7 @@ struct InformativeView: View {
                 Text("Sign up for our newsletter.")
                 DisclosureGroup("Details") {
                     VStack {
-                        Text("The good informative image example uses `.accessibilityLabel(\"Get 10% off\")` to give it an accessibility label that matches the visible text shown in the image.")
+                        Text("The good informative image example uses `.accessibilityLabel(\"Get 10% off\")` to give it an accessibility label that matches the visible text shown in the image.").textSelection(.enabled)
                     }
                 }.padding(.bottom).accessibilityHint("Good Example `Image().accessibilityLabel`")
                 Text("Good Example `Label(\"Text\", systemImage:).accessibilityRemoveTraits(.isImage)` `HStack {}.accessibilityElement(children: .combine)`")

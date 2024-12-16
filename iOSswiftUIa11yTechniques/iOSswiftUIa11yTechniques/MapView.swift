@@ -27,23 +27,29 @@ struct MapView: View {
                 center: storeCoordinates,
                 span: MKCoordinateSpan(latitudeDelta:  0.01, longitudeDelta:  0.01)
             ))
-        }
+            _regionBad = State(initialValue: MKCoordinateRegion(
+                center: storeCoordinates,
+                span: MKCoordinateSpan(latitudeDelta:  0.01, longitudeDelta:  0.01)
+            ))
 
+        }
     
-    @State var showModal: Bool = false
-    @State var showModalBad: Bool = false
-    @AccessibilityFocusState private var isDialogHeadingFocused: Bool
-    @AccessibilityFocusState private var isDialogBadHeadingFocused: Bool
-    @AccessibilityFocusState private var isTriggerFocused: Bool
+    @State private var regionBad: MKCoordinateRegion
+    
+    
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
     
+    let maxZoomLevel = 20.0
+    let minZoomLevel = 0.001
+
+    
     var body: some View {
         ScrollView {
             VStack {
-                Text("Map views.")
+                Text("Map require single tap alternatives to the pinch gestures used to zoom and the pan gestures used to move the map view.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -55,14 +61,53 @@ struct MapView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Map(coordinateRegion: $region, interactionModes: [])
-                       .frame(height:  200) // Adjust size as needed
-                   Text("Store Name")
-                       .font(.title)
-                   Text("123 Store Street")
-                   Text("City, State ZIP")
+                ZStack(alignment: .topTrailing) {
+                    Map(coordinateRegion: $region)
+                    VStack {
+                        Spacer()
+                        
+                        HStack(spacing: 10) {
+                            Spacer()
+                            VStack {
+                                Button(action: moveUp) {
+                                    Image(systemName: "arrowtriangle.up.square.fill")
+                                        .font(.title)
+                                }
+                                HStack {
+                                    Button(action: moveLeft) {
+                                        Image(systemName: "arrowtriangle.left.square.fill")
+                                            .font(.title)
+                                    }
+                                    Button(action: moveRight) {
+                                        Image(systemName: "arrowtriangle.right.square.fill")
+                                            .font(.title)
+                                    }
+
+                                }
+                                Button(action: moveDown) {
+                                    Image(systemName: "arrowtriangle.down.square.fill")
+                                        .font(.title)
+                                }
+
+                            }
+                            VStack {
+                                Button(action: zoomIn) {
+                                    Image(systemName: "plus.square.fill")
+                                        .font(.title)
+                                }
+                                Button(action: zoomOut) {
+                                    Image(systemName: "minus.square.fill")
+                                        .font(.title)
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+                .frame(height: 300)
                 DisclosureGroup("Details") {
-                    Text("The good .")
+                    Text("The good example uses Plus, Minus, Up, Down, Left, and Right buttons as single tap alternatives to move and zoom the map.")
                 }.padding()
                 Text("Bad Example")
                     .font(.subheadline)
@@ -74,16 +119,74 @@ struct MapView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
+                Map(coordinateRegion: $regionBad)
+                    .frame(height: 300)
                 DisclosureGroup("Details") {
-                    Text("The bad .")
+                    Text("The bad example has no single tap alternatives to move or zoom the map.")
                 }.padding()
             }
-            .background(showModal || showModalBad == true ? colorScheme == .dark ? Color(.gray).opacity(0.5) : Color.black.opacity(0.5) : colorScheme == .dark ? Color(.black) : Color(.white))
             .navigationTitle("Maps")
             .padding()
         }
  
     }
+    
+    func zoomIn() {
+        let newSpan = MKCoordinateSpan(
+            latitudeDelta: region.span.latitudeDelta / 1.5,
+            longitudeDelta: region.span.longitudeDelta / 1.5
+        )
+        let newRegion = MKCoordinateRegion(
+            center: region.center,
+            span: newSpan
+        )
+        region = newRegion
+    }
+    
+    func zoomOut() {
+        let newSpan = MKCoordinateSpan(
+            latitudeDelta: region.span.latitudeDelta * 1.5,
+            longitudeDelta: region.span.longitudeDelta * 1.5
+        )
+        let newRegion = MKCoordinateRegion(
+            center: region.center,
+            span: newSpan
+        )
+        region = newRegion
+    }
+    
+    func moveLeft() {
+        let newCenter = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: region.center.latitude, longitude: region.center.longitude - 0.01),
+            span: region.span
+        )
+        region = newCenter
+    }
+    
+    func moveUp() {
+        let newCenter = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: region.center.latitude + 0.01, longitude: region.center.longitude),
+            span: region.span
+        )
+        region = newCenter
+    }
+    
+    func moveDown() {
+        let newCenter = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: region.center.latitude - 0.01, longitude: region.center.longitude),
+            span: region.span
+        )
+        region = newCenter
+    }
+    
+    func moveRight() {
+        let newCenter = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: region.center.latitude, longitude: region.center.longitude + 0.01),
+            span: region.span
+        )
+        region = newCenter
+    }
+
 }
  
 struct MapView_Previews: PreviewProvider {

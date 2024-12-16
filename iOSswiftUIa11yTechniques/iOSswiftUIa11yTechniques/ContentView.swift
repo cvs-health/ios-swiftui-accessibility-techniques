@@ -105,9 +105,9 @@ struct ContentView: View {
 //                NavigationLink(destination: DetailView()) {
 //                    Text("Siri Shortcuts") // https://www.kodeco.com/40950083-creating-shortcuts-with-app-intents
 //                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-//                NavigationLink(destination: MapView()) {
-//                    Text("Maps")
-//                }
+                NavigationLink(destination: MapView()) {
+                    Text("Maps")
+                }
                 NavigationLink(destination: ScrollViews()) {
                     Text("Scroll Views")
                 }

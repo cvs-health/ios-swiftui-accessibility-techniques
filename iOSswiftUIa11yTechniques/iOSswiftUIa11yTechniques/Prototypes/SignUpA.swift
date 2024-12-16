@@ -20,10 +20,20 @@ struct SignUpA: View {
     @State private var selectedDate = Calendar.current.date(byAdding: DateComponents(year: -40), to: Date()) ?? Date()
     @State private var isDatePickerPresented = false
     @AccessibilityFocusState private var isTriggerFocused: Bool
+    @FocusState private var isFullNameFocused: Bool
+    @FocusState private var isNickNameFocused: Bool
+    @AccessibilityFocusState private var isFullNameA11yFocused: Bool
+    @AccessibilityFocusState private var isNickNameA11yFocused: Bool
     @Environment(\.colorScheme) var colorScheme
     @State private var fname = ""
     @State private var nname = ""
     @State private var confirmToggle = false
+    
+    @State private var lastFocusedField: FocusableField? = .fullName
+    enum FocusableField: Hashable {
+            case fullName
+            case nickName
+    }
 
     
     var body: some View {
@@ -38,6 +48,82 @@ struct SignUpA: View {
                     .accessibilityLabel("Full Name (Required)")
                     .autocorrectionDisabled(true)
                     .textContentType(.name)
+                    .focused($isFullNameFocused)
+                    .accessibilityFocused($isFullNameA11yFocused)
+                    .onTapGesture {
+                        lastFocusedField = .fullName
+                    }
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Button("Previous", systemImage: "arrow.left.square") {
+                                switch lastFocusedField {
+                                    case .fullName?:
+                                        isFullNameFocused = false
+                                        isNickNameFocused = false
+                                        isDatePickerPresented = true
+                                        DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                        }
+                                    case .nickName?:
+                                        isNickNameFocused = false
+                                        lastFocusedField = .fullName
+                                        isFullNameFocused = true
+                                        DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                            isFullNameA11yFocused = true
+                                        }
+                                    default:
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        break
+                                }
+                            }
+                            Button("Next", systemImage: "arrow.right.square") {
+                                switch lastFocusedField {
+                                    case .fullName?:
+                                        isFullNameFocused = false
+                                        isNickNameFocused = true
+                                        lastFocusedField = .nickName
+                                        DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                            isNickNameA11yFocused = true
+                                        }
+                                    case .nickName?:
+                                        isFullNameFocused = false
+                                        isNickNameFocused = false
+                                        isDatePickerPresented = true
+                                    default:
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        break
+                                }
+                            }
+                            Spacer()
+                            Button("Done") {
+                                switch lastFocusedField {
+                                    case .fullName?:
+                                        isFullNameFocused = false
+                                        DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                            isFullNameA11yFocused = true
+                                        }
+                                    case .nickName?:
+                                        isNickNameFocused = false
+                                    DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                        isNickNameA11yFocused = true
+                                    }
+                                    default:
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        break
+                                }
+                            }
+                        }
+                    }
+                    .submitLabel(.next)
+                    .onChange(of: fname) {oldValue, newValue in
+                        guard let newValueLastChar = newValue.last else { return }
+                        if newValueLastChar == "\n" {
+                            fname.removeLast()
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                            lastFocusedField = .fullName
+                            isNickNameFocused = true
+                            isNickNameA11yFocused = true
+                        }
+                    }
                 Text("Nickname")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
@@ -51,6 +137,21 @@ struct SignUpA: View {
                     .accessibilityHint("Max 12 characters")
                     .autocorrectionDisabled(true)
                     .textContentType(.nickname)
+                    .focused($isNickNameFocused)
+                    .accessibilityFocused($isNickNameA11yFocused)
+                    .onTapGesture {
+                        lastFocusedField = .nickName
+                    }
+                    .submitLabel(.next)
+                    .onChange(of: nname) {oldValue, newValue in
+                        guard let newValueLastChar = newValue.last else { return }
+                        if newValueLastChar == "\n" {
+                            nname.removeLast()
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                            isNickNameFocused = false
+                            isDatePickerPresented = true
+                        }
+                    }
                 Spacer().frame(height: 20)
                 HStack {
                     Text("Birth Date")
@@ -69,8 +170,26 @@ struct SignUpA: View {
                      .accessibilityLabel("Birth Date")
                      .accessibilityValue(selectedDate.formatted(date: .abbreviated, time: .omitted))
                      .accessibilityFocused($isTriggerFocused)
-                     .sheet(isPresented: $isDatePickerPresented, onDismiss: didDismiss) {
+                     .sheet(isPresented: $isDatePickerPresented) {
                          HStack {
+                             Button("", systemImage: "arrow.left.square") {
+                                 isDatePickerPresented = false
+                                 isNickNameFocused = true
+                                 lastFocusedField = .nickName
+                                 DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                     isNickNameA11yFocused = true
+                                 }
+                             }
+                             .accessibilityLabel("Previous")
+                             Button("", systemImage: "arrow.right.square") {
+                                 isDatePickerPresented = false
+                                 isFullNameFocused = true
+                                 lastFocusedField = .fullName
+                                 DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                     isFullNameA11yFocused = true
+                                 }
+                             }
+                             .accessibilityLabel("Next")
                              Spacer()
                              Button("Done") {
                                  isDatePickerPresented = false
@@ -110,9 +229,6 @@ struct SignUpA: View {
 
         }
  
-    }
-    func didDismiss() {
-        isTriggerFocused = true
     }
 
 

@@ -72,43 +72,41 @@ struct MapView: View {
                                 Button(action: moveUp) {
                                     Image(systemName: "arrowtriangle.up.square.fill")
                                         .font(.title)
-                                }
+                                }.accessibilityLabel("Move Up")
                                 HStack {
                                     Button(action: moveLeft) {
                                         Image(systemName: "arrowtriangle.left.square.fill")
                                             .font(.title)
-                                    }
+                                    }.accessibilityLabel("Move Left")
                                     Button(action: moveRight) {
                                         Image(systemName: "arrowtriangle.right.square.fill")
                                             .font(.title)
-                                    }
+                                    }.accessibilityLabel("Move Right")
 
                                 }
                                 Button(action: moveDown) {
                                     Image(systemName: "arrowtriangle.down.square.fill")
                                         .font(.title)
-                                }
+                                }.accessibilityLabel("Move Down")
 
-                            }
+                            }.accessibilityElement(children: .contain)
                             VStack {
                                 Button(action: zoomIn) {
                                     Image(systemName: "plus.square.fill")
                                         .font(.title)
-                                }
+                                }.accessibilityLabel("Zoom In")
                                 Button(action: zoomOut) {
                                     Image(systemName: "minus.square.fill")
                                         .font(.title)
-                                }
-
-                            }
-
+                                }.accessibilityLabel("Zoom Out")
+                            }.accessibilityElement(children: .contain)
                         }
                     }
                 }
                 .frame(height: 300)
                 DisclosureGroup("Details") {
                     Text("The good example uses Plus, Minus, Up, Down, Left, and Right buttons as single tap alternatives to move and zoom the map.")
-                }.padding()
+                }.padding().accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -123,7 +121,7 @@ struct MapView: View {
                     .frame(height: 300)
                 DisclosureGroup("Details") {
                     Text("The bad example has no single tap alternatives to move or zoom the map.")
-                }.padding()
+                }.padding().accessibilityHint("Bad Example")
             }
             .navigationTitle("Maps")
             .padding()

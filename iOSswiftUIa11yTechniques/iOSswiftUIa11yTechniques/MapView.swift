@@ -49,7 +49,7 @@ struct MapView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Map require single tap alternatives to the pinch gestures used to zoom and the pan gestures used to move the map view.")
+                Text("Maps require single tap alternatives to the pinch gestures used to zoom and the pan gestures used to move the map view.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -89,7 +89,7 @@ struct MapView: View {
                                         .font(.title)
                                 }.accessibilityLabel("Move Down")
 
-                            }.accessibilityElement(children: .contain)
+                            }.accessibilityElement(children: .contain).accessibilityLabel("Map Move Controls")
                             VStack {
                                 Button(action: zoomIn) {
                                     Image(systemName: "plus.square.fill")
@@ -99,7 +99,7 @@ struct MapView: View {
                                     Image(systemName: "minus.square.fill")
                                         .font(.title)
                                 }.accessibilityLabel("Zoom Out")
-                            }.accessibilityElement(children: .contain)
+                            }.accessibilityElement(children: .contain).accessibilityLabel("Map Zoom Controls")
                         }
                     }
                 }

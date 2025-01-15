@@ -94,7 +94,7 @@ struct TabsView: View {
                         VStack {
                             Image(systemName: "house")
                                 .font(.system(size: 24))
-                            Text("Home")
+                            Text("Home").underline(tab1Visible ? true : false)
                         }
                     }.padding()
                         .accessibilityAddTraits(tab1Visible ? [.isSelected] : [])
@@ -105,7 +105,7 @@ struct TabsView: View {
                         VStack {
                             Image(systemName: "envelope")
                                 .font(.system(size: 24))
-                            Text("Messages")
+                            Text("Messages").underline(tab2Visible ? true : false)
                         }
                     }.padding()
                         .accessibilityAddTraits(tab2Visible ? [.isSelected] : [])
@@ -119,7 +119,7 @@ struct TabsView: View {
                     Text("Messages tab panel text.")
                 }
                 DisclosureGroup("Details") {
-                    Text("The custom tabs good example uses `isTabBar` and `isSelected` traits with `.accessibilityElement(children: .contain)`. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number.")
+                    Text("The custom tabs good example uses `isTabBar` and `isSelected` traits with `.accessibilityElement(children: .contain)`. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number. The custom selected Tab has an underline to show selected state without using color alone.")
                 }.padding(.bottom).accessibilityHint("Good Example Custom Tabs using `isTabBar` and `isSelected` Traits with `.accessibilityElement(children: .contain)`")
                 Text("Bad Examples")
                     .font(.subheadline)

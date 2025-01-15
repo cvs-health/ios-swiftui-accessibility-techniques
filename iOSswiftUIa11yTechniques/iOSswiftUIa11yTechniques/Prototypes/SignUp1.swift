@@ -263,10 +263,15 @@ struct SignUp1: View {
                             isbMonthA11yFocused = true
                         }
                     }
-                HStack {
                     Text("Birth Date")
                         .bold()
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+//                Text("Format: MM/DD/YYYY (e.g. 05/18/1984)")
+//                    .font(.caption)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("MM/DD/YYYY")
+                    .font(.caption)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 HStack {
                     VStack {
                         Text("Month")

@@ -54,6 +54,12 @@ struct DateTimePickersView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                DatePicker(
+                    selection: $date,
+                    in: ...Date.now,
+                    displayedComponents: .date) {
+                        Text("Pick a Date")
+                    }
                 Text("Good Example Using `.accessibilityLabel`")
                     .font(.subheadline)
                     .fontWeight(.bold)

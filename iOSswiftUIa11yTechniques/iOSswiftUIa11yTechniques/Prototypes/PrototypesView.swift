@@ -20,6 +20,12 @@ struct PrototypesView: View {
 
     var body: some View {
         List {
+            NavigationLink(destination: SignUp0()) {
+                Text("Sign Up 0")
+            }
+            NavigationLink(destination: SignUp1()) {
+                Text("Sign Up 1")
+            }
             NavigationLink(destination: SignUpA()) {
                 Text("Sign Up A")
             }
@@ -46,6 +52,9 @@ struct PrototypesView: View {
             }
             NavigationLink(destination: Prototype4()) {
                 Text("Prototype 4")
+            }
+            NavigationLink(destination: MarkdownView()) {
+                Text("Markdown View Test")
             }
             NavigationLink(destination: VideoPlayerView()) {
                 Text("Video Player View Test")

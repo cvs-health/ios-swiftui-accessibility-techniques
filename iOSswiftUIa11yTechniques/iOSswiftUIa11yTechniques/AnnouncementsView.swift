@@ -27,6 +27,9 @@ struct AnnouncementsView: View {
             NavigationLink(destination: ErrorValidationView()) {
                 Text("Error Validation")
             }
+            NavigationLink(destination: VoiceOverAnnouncementDelayView()) {
+                Text("VoiceOver Announcement Delay")
+            }
         }
         .navigationTitle("Announcements")
     }

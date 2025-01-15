@@ -94,10 +94,8 @@ struct AccessibilityNotificationsView: View {
     }
 }
  
-struct AccessibilityNotificationsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            AccessibilityNotificationsView()
-        }
+#Preview {
+    NavigationStack {
+        AccessibilityNotificationsView()
     }
 }

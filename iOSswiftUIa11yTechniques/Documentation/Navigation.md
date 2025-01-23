@@ -4,7 +4,7 @@ Use a `NavigationLink` to navigate users between different pages in the app.
 
 When using `NavigationLink` VoiceOver focus does not need to be managed when opening the page. VoiceOver focus will not go to the first element at the top of the new page, it may go to the first element below the page title. 
 
-Apple chooses how to handle focus managment when using a `NavigationLink` and you should not worry about setting VoiceOver focus to the back button or page title.
+Apple chooses how to handle focus management when using a `NavigationLink` and you should not worry about setting VoiceOver focus to the back button or page title.
     
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)

@@ -56,9 +56,9 @@ struct SignUp0: View {
                     .textContentType(.name)
                     .focused($isFullNameFocused)
                     .accessibilityFocused($isFullNameA11yFocused)
-                    .onTapGesture {
+                    .simultaneousGesture(TapGesture().onEnded {
                         lastFocusedField = .fullName
-                    }
+                    })
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
                             Button("Previous", systemImage: "arrow.left.square") {
@@ -133,23 +133,23 @@ struct SignUp0: View {
                                         DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
                                             isFullNameA11yFocused = true
                                         }
-                                case .nickName?:
-                                    isBirthDateFocused = false
-                                    isFullNameFocused = false
-                                    isNickNameFocused = false
-                                DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                    isNickNameA11yFocused = true
-                                }
-                                case .birthDate?:
-                                    isBirthDateFocused = false
-                                    isFullNameFocused = false
-                                    isNickNameFocused = false
-                                DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                    isBirthDateA11yFocused = true
-                                }
-                                    default:
-                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                        break
+                                    case .nickName?:
+                                        isBirthDateFocused = false
+                                        isFullNameFocused = false
+                                        isNickNameFocused = false
+                                    DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                        isNickNameA11yFocused = true
+                                    }
+                                    case .birthDate?:
+                                        isBirthDateFocused = false
+                                        isFullNameFocused = false
+                                        isNickNameFocused = false
+                                    DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                        isBirthDateA11yFocused = true
+                                    }
+                                        default:
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                            break
                                 }
                             }
                         }
@@ -180,9 +180,9 @@ struct SignUp0: View {
                     .textContentType(.nickname)
                     .focused($isNickNameFocused)
                     .accessibilityFocused($isNickNameA11yFocused)
-                    .onTapGesture {
+                    .simultaneousGesture(TapGesture().onEnded {
                         lastFocusedField = .nickName
-                    }
+                    })
                     .submitLabel(.next)
                     .onChange(of: nname) {oldValue, newValue in
                         guard let newValueLastChar = newValue.last else { return }
@@ -210,9 +210,9 @@ struct SignUp0: View {
                     .keyboardType(.numberPad)
                     .focused($isBirthDateFocused)
                     .accessibilityFocused($isBirthDateA11yFocused)
-                    .onTapGesture {
+                    .simultaneousGesture(TapGesture().onEnded {
                         lastFocusedField = .birthDate
-                    }
+                    })
                     .submitLabel(.done)
                     .onChange(of: bday) {oldValue, newValue in
                         guard let newValueLastChar = newValue.last else { return }

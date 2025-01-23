@@ -165,7 +165,7 @@ struct TabsView: View {
                     Text("Messages tab panel text.")
                 }
                 DisclosureGroup("Details") {
-                    Text("The first bad tabs example is coded as buttons that show and hide text. VoiceOver does not hear a selected state or tab trait for the tabs.")
+                    Text("The first bad tabs example is coded as buttons that show and hide text. VoiceOver does not hear a selected state or tab trait for the tabs. The custom selected Tab has no underline to show selected state.")
                 }.padding(.bottom).accessibilityHint("Bad Example custom tabs as buttons that show and hide text")
                 Text("Bad Example `.tabViewStyle(.page)` with no `.accessibilityLabel` and no `backgroundDisplayMode: .always`")
                     .font(.subheadline)

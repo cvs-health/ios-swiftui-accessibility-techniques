@@ -50,9 +50,9 @@ struct SignUpA: View {
                     .textContentType(.name)
                     .focused($isFullNameFocused)
                     .accessibilityFocused($isFullNameA11yFocused)
-                    .onTapGesture {
+                    .simultaneousGesture(TapGesture().onEnded {
                         lastFocusedField = .fullName
-                    }
+                    })
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
                             Button("Previous", systemImage: "arrow.left.square") {
@@ -139,9 +139,9 @@ struct SignUpA: View {
                     .textContentType(.nickname)
                     .focused($isNickNameFocused)
                     .accessibilityFocused($isNickNameA11yFocused)
-                    .onTapGesture {
+                    .simultaneousGesture(TapGesture().onEnded {
                         lastFocusedField = .nickName
-                    }
+                    })
                     .submitLabel(.next)
                     .onChange(of: nname) {oldValue, newValue in
                         guard let newValueLastChar = newValue.last else { return }

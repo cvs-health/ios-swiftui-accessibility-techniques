@@ -70,9 +70,9 @@ struct TextFieldsFocusManagement: View {
                         .accessibilityFocused($isFirstNameA11yFocused)
                         .autocorrectionDisabled(true)
                         .textContentType(.givenName)
-                        .onTapGesture {
+                        .simultaneousGesture(TapGesture().onEnded {
                             lastFocusedField = .firstName
-                        }
+                        })
                         .submitLabel(.next)
                         .onChange(of: first) {oldValue, newValue in // .onChange to handle when user hits the submit button and prevent a new line
                             guard let newValueLastChar = newValue.last else { return }
@@ -94,9 +94,9 @@ struct TextFieldsFocusManagement: View {
                         .accessibilityFocused($isLastNameA11yFocused)
                         .autocorrectionDisabled(true)
                         .textContentType(.familyName)
-                        .onTapGesture {
+                        .simultaneousGesture(TapGesture().onEnded {
                             lastFocusedField = .lastName
-                        }
+                        })
                         .submitLabel(.next)
                         .onChange(of: last) {oldValue, newValue in
                             guard let newValueLastChar = newValue.last else { return }
@@ -118,9 +118,9 @@ struct TextFieldsFocusManagement: View {
                         .accessibilityLabel("Phone Number")
                         .keyboardType(.phonePad)
                         .textContentType(.telephoneNumber)
-                        .onTapGesture {
+                        .simultaneousGesture(TapGesture().onEnded {
                             lastFocusedField = .phone
-                        }
+                        })
                 }
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {

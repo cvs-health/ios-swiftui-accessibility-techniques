@@ -42,6 +42,7 @@ struct SignUpA: View {
                 Text("Full Name (Required)")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
+                    .accessibilityHidden(true)
                 TextField("", text: $fname, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
@@ -127,14 +128,16 @@ struct SignUpA: View {
                 Text("Nickname")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
+                    .accessibilityHidden(true)
                 Text("Max 12 characters")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.caption)
+                    .accessibilityHidden(true)
                 TextField("", text: $nname, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
                     .accessibilityLabel("Nickname")
-                    .accessibilityHint("Max 12 characters")
+                    .accessibilityValue(nname + ", Max 12 characters")
                     .autocorrectionDisabled(true)
                     .textContentType(.nickname)
                     .focused($isNickNameFocused)
@@ -155,6 +158,7 @@ struct SignUpA: View {
                 Spacer().frame(height: 20)
                 HStack {
                     Text("Birth Date")
+                        .accessibilityHidden(true)
                     Spacer()
                     Button(action: {
                          isDatePickerPresented = true
@@ -172,24 +176,6 @@ struct SignUpA: View {
                      .accessibilityFocused($isTriggerFocused)
                      .sheet(isPresented: $isDatePickerPresented) {
                          HStack {
-                             Button("", systemImage: "arrow.left.square") {
-                                 isDatePickerPresented = false
-                                 isNickNameFocused = true
-                                 lastFocusedField = .nickName
-                                 DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                     isNickNameA11yFocused = true
-                                 }
-                             }
-                             .accessibilityLabel("Previous")
-                             Button("", systemImage: "arrow.right.square") {
-                                 isDatePickerPresented = false
-                                 isFullNameFocused = true
-                                 lastFocusedField = .fullName
-                                 DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                     isFullNameA11yFocused = true
-                                 }
-                             }
-                             .accessibilityLabel("Next")
                              Spacer()
                              Button("Done") {
                                  isDatePickerPresented = false
@@ -199,6 +185,7 @@ struct SignUpA: View {
                          DatePicker("Birth Date", selection: $selectedDate, displayedComponents: [.date])
                              .datePickerStyle(.wheel)
                              .labelsHidden()
+                             .accessibilitySortPriority(1) // make VoiceOver focus go here first when sheet opens
                          .presentationDetents([.height(300)])
                          .presentationDragIndicator(.hidden)
                      }

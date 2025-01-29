@@ -40,6 +40,47 @@ struct SignUp0: View {
         formatter.dateFormat = "MM/dd/yyyy"
         return formatter
     }
+    
+    @State private var showingAlert = false
+    @State private var submitActive = false
+
+    @State private var errorText = ""
+    @State private var errorVisible = false
+    @State private var bdayInvalid = false
+    private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+
+    
+    func validateInputs() {
+        bdayInvalid = false
+        errorVisible = false
+        if bday.count != 10 {
+            errorText = "Error: Birth Date must be 10 digits. MM/DD/YYYY format."
+            bdayInvalid = true
+            errorVisible = true
+            showingAlert = true
+        } else {
+            errorText = ""
+            bdayInvalid = false
+            errorVisible = false
+            submitActive = true
+        }
+    }
+    func validateInputsNoAlert() {
+        if errorVisible {
+            bdayInvalid = false
+            errorVisible = false
+            if bday.count != 10 {
+                errorText = "Error: Birth Date must be 10 digits. MM/DD/YYYY format."
+                bdayInvalid = true
+                errorVisible = true
+            } else {
+                errorText = ""
+                bdayInvalid = false
+                errorVisible = false
+            }
+        }
+    }
+
 
     
     var body: some View {
@@ -48,6 +89,7 @@ struct SignUp0: View {
                 Text("Full Name (Required)")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
+                    .accessibilityHidden(true)
                 TextField("", text: $fname, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
@@ -168,14 +210,16 @@ struct SignUp0: View {
                 Text("Nickname")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
+                    .accessibilityHidden(true)
                 Text("Max 12 characters")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.caption)
+                    .accessibilityHidden(true)
                 TextField("", text: $nname, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
                     .accessibilityLabel("Nickname")
-                    .accessibilityHint("Max 12 characters")
+                    .accessibilityValue(nname + ", Max 12 characters")
                     .autocorrectionDisabled(true)
                     .textContentType(.nickname)
                     .focused($isNickNameFocused)
@@ -197,18 +241,26 @@ struct SignUp0: View {
                 Text("Birth Date")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
+                    .accessibilityHidden(true)
                 Text("MM/DD/YYYY")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.caption)
+                    .accessibilityHidden(true)
                 TextField("", text: $bday, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
-                    .border(.secondary)
+                    .border(bdayInvalid ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                     .accessibilityLabel("Birth Date")
-                    .accessibilityHint("MM/DD/YYYY")
+                    .accessibilityValue(bday  + errorText + ", MM/DD/YYYY")
                     .autocorrectionDisabled(true)
                     .textContentType(.birthdate)
                     .keyboardType(.numberPad)
                     .focused($isBirthDateFocused)
+                    .onChange(of: isBirthDateFocused) {oldValue, newValue in
+                        if !newValue {
+                            // Focus lost
+                            validateInputsNoAlert()
+                        }
+                    }
                     .accessibilityFocused($isBirthDateA11yFocused)
                     .simultaneousGesture(TapGesture().onEnded {
                         lastFocusedField = .birthDate
@@ -241,21 +293,48 @@ struct SignUp0: View {
 
                         bday = formatted
                     }
+                if errorVisible {
+                    HStack {
+                        Image(systemName: "exclamationmark.circle")
+                        Text(errorText)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.caption)
+                    }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityHidden(true)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
                 Toggle("I confirm the above is accurate.", isOn: $confirmToggle)
                     .padding()
                     .bold()
-                NavigationLink(destination: ThankYou()) {
-                    HStack {
-                        Image(systemName: "smiley")
-                        Text("Sign Up")
+                NavigationLink(destination: ThankYou(), isActive: $submitActive) {
+                    Button(action: {
+                        validateInputs()
+                    }) {
+                        HStack {
+                            Image(systemName: "smiley")
+                            Text("Sign Up")
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .bold()
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .bold()
+                }
+                .accessibilityAction() {
+                    validateInputs()
                 }
                 .background(Color("AccentColor"))
                 .foregroundColor(colorScheme == .dark ? .black : .white)
                 .clipShape(.capsule)
+                .alert(errorText, isPresented: $showingAlert) {
+                    Button("Ok", role: .cancel) {
+                        isBirthDateFocused = true
+                        DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                            isBirthDateA11yFocused = true
+                        }
+                    }
+                }
+
             }
             .navigationTitle("Sign Up 0")
             .padding()

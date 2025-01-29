@@ -35,6 +35,17 @@ struct SignUp1: View {
     @State private var byear = ""
     @State private var confirmToggle = false
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    
+    @State private var showingAlert = false
+    @State private var submitActive = false
+
+    @State private var errorText = ""
+    @State private var errorVisible = false
+    @State private var monthInvalid = false
+    @State private var dayInvalid = false
+    @State private var yearInvalid = false
+    private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+
 
     @State private var lastFocusedField: FocusableField? = .fullName
     enum FocusableField: Hashable {
@@ -45,6 +56,110 @@ struct SignUp1: View {
         case bYear
     }
 
+    func validateInputs() {
+        monthInvalid = false
+        dayInvalid = false
+        yearInvalid = false
+        errorVisible = false
+        if bmonth.count != 2 && bday.count != 2 && byear.count != 4 {
+            errorText = "Error: Month must be 2 digits. MM format. Day must be 2 digits. DD format. Year must be 4 digits. YYYY format."
+            monthInvalid = true
+            dayInvalid = true
+            yearInvalid = true
+            errorVisible = true
+            showingAlert = true
+        } else if bday.count != 2 && byear.count != 4 {
+            errorText = "Error: Day must be 2 digits. DD format. Year must be 4 digits. YYYY format."
+            dayInvalid = true
+            yearInvalid = true
+            errorVisible = true
+            showingAlert = true
+        } else if bmonth.count != 2 && byear.count != 4 {
+            errorText = "Error: Month must be 2 digits. MM format. Year must be 4 digits. YYYY format."
+            monthInvalid = true
+            yearInvalid = true
+            errorVisible = true
+            showingAlert = true
+        } else if bmonth.count != 2 && bday.count != 2 {
+            errorText = "Error: Month must be 2 digits. MM format. Day must be 2 digits. DD format."
+            monthInvalid = true
+            dayInvalid = true
+            errorVisible = true
+            showingAlert = true
+        } else if bmonth.count != 2 {
+            errorText = "Error: Month must be 2 digits. MM format."
+            monthInvalid = true
+            errorVisible = true
+            showingAlert = true
+        } else if bday.count != 2 {
+            errorText = "Error: Day must be 2 digits. DD format."
+            dayInvalid = true
+            errorVisible = true
+            showingAlert = true
+        } else if byear.count != 4 {
+            errorText = "Error: Year must be 4 digits. YYYY format."
+            yearInvalid = true
+            errorVisible = true
+            showingAlert = true
+        } else {
+            errorText = ""
+            monthInvalid = false
+            dayInvalid = false
+            yearInvalid = false
+            errorVisible = false
+            submitActive = true
+        }
+    }
+    func validateInputsNoAlert() {
+        if errorVisible {
+            monthInvalid = false
+            dayInvalid = false
+            yearInvalid = false
+            errorVisible = false
+            if bmonth.count != 2 && bday.count != 2 && byear.count != 4 {
+                errorText = "Error: Month must be 2 digits. MM format. Day must be 2 digits. DD format. Year must be 4 digits. YYYY format."
+                monthInvalid = true
+                dayInvalid = true
+                yearInvalid = true
+                errorVisible = true
+            } else if bday.count != 2 && byear.count != 4 {
+                errorText = "Error: Day must be 2 digits. DD format. Year must be 4 digits. YYYY format."
+                dayInvalid = true
+                yearInvalid = true
+                errorVisible = true
+            } else if bmonth.count != 2 && byear.count != 4 {
+                errorText = "Error: Month must be 2 digits. MM format. Year must be 4 digits. YYYY format."
+                monthInvalid = true
+                yearInvalid = true
+                errorVisible = true
+            } else if bmonth.count != 2 && bday.count != 2 {
+                errorText = "Error: Month must be 2 digits. MM format. Day must be 2 digits. DD format."
+                monthInvalid = true
+                dayInvalid = true
+                errorVisible = true
+            } else if bmonth.count != 2 {
+                errorText = "Error: Month must be 2 digits. MM format."
+                monthInvalid = true
+                errorVisible = true
+            } else if bday.count != 2 {
+                errorText = "Error: Day must be 2 digits. DD format."
+                dayInvalid = true
+                errorVisible = true
+            } else if byear.count != 4 {
+                errorText = "Error: Year must be 4 digits. YYYY format."
+                yearInvalid = true
+                errorVisible = true
+            } else {
+                errorText = ""
+                monthInvalid = false
+                dayInvalid = false
+                yearInvalid = false
+                errorVisible = false
+            }
+
+        }
+    }
+
     
     var body: some View {
         ScrollView {
@@ -52,6 +167,7 @@ struct SignUp1: View {
                 Text("Full Name (Required)")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
+                    .accessibilityHidden(true)
                 TextField("", text: $fname, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
@@ -238,14 +354,16 @@ struct SignUp1: View {
                 Text("Nickname")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
+                    .accessibilityHidden(true)
                 Text("Max 12 characters")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.caption)
+                    .accessibilityHidden(true)
                 TextField("", text: $nname, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
                     .accessibilityLabel("Nickname")
-                    .accessibilityHint("Max 12 characters")
+                    .accessibilityValue(nname + ", Max 12 characters")
                     .autocorrectionDisabled(true)
                     .textContentType(.nickname)
                     .focused($isNickNameFocused)
@@ -264,34 +382,43 @@ struct SignUp1: View {
                             isbMonthA11yFocused = true
                         }
                     }
+                VStack {
                     Text("Birth Date")
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
-//                Text("Format: MM/DD/YYYY (e.g. 05/18/1984)")
-//                    .font(.caption)
-//                    .frame(maxWidth: .infinity, alignment: .leading)
-                Text("MM/DD/YYYY")
-                    .font(.caption)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    Text("MM/DD/YYYY")
+                        .font(.caption)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityHidden(true)
+                }.accessibilityElement(children: .combine)
+                    .accessibilityLabel("Birth Date")
+                    .accessibilityValue("MM/DD/YYYY" + errorText)
                 HStack {
                     let layout = (dynamicTypeSize > DynamicTypeSize.xxxLarge) ? AnyLayout(VStackLayout()) : AnyLayout(HStackLayout())
                     layout {
                         HStack {
                             VStack {
                                 Text("Month")
-                                    .bold()
                                     .font(.caption)
                                     .fixedSize(horizontal: false, vertical: true)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+                                    .accessibilityHidden(true)
                                 TextField("", text: $bmonth, axis: .vertical)
                                     .textFieldStyle(.roundedBorder)
-                                    .border(.secondary)
+                                    .border(monthInvalid ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                                     .accessibilityLabel("Month")
+                                    .accessibilityValue(bmonth + errorText)
                                     .accessibilityHint("MM, 2 digit month")
                                     .autocorrectionDisabled(true)
                                     .textContentType(.birthdateMonth)
                                     .keyboardType(.numberPad)
                                     .focused($isbMonthFocused)
+                                    .onChange(of: isbMonthFocused) {oldValue, newValue in
+                                        if !newValue {
+                                            // Focus lost
+                                            validateInputsNoAlert()
+                                        }
+                                    }
                                     .accessibilityFocused($isbMonthA11yFocused)
                                     .simultaneousGesture(TapGesture().onEnded {
                                         lastFocusedField = .bMonth
@@ -312,22 +439,29 @@ struct SignUp1: View {
                                             isbDayA11yFocused = true
                                         }
                                     }
-                            }
+                            }.accessibilityElement(children: .contain)
                             VStack {
                                 Text("Day")
-                                    .bold()
                                     .font(.caption)
                                     .fixedSize(horizontal: false, vertical: true)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+                                    .accessibilityHidden(true)
                                 TextField("", text: $bday, axis: .vertical)
                                     .textFieldStyle(.roundedBorder)
-                                    .border(.secondary)
+                                    .border(dayInvalid ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                                     .accessibilityLabel("Day")
+                                    .accessibilityValue(bday + errorText)
                                     .accessibilityHint("DD, 2 digit day")
                                     .autocorrectionDisabled(true)
                                     .textContentType(.birthdateDay)
                                     .keyboardType(.numberPad)
                                     .focused($isbDayFocused)
+                                    .onChange(of: isbDayFocused) {oldValue, newValue in
+                                        if !newValue {
+                                            // Focus lost
+                                            validateInputsNoAlert()
+                                        }
+                                    }
                                     .accessibilityFocused($isbDayA11yFocused)
                                     .simultaneousGesture(TapGesture().onEnded {
                                         lastFocusedField = .bDay
@@ -349,23 +483,30 @@ struct SignUp1: View {
                                         }
 
                                     }
-                            }
+                            }.accessibilityElement(children: .contain)
                         }
                         VStack {
                             Text("Year")
-                                .bold()
                                 .font(.caption)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                                .accessibilityHidden(true)
                             TextField("", text: $byear, axis: .vertical)
                                 .textFieldStyle(.roundedBorder)
-                                .border(.secondary)
+                                .border(yearInvalid ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                                 .accessibilityLabel("Year")
+                                .accessibilityValue(byear + errorText)
                                 .accessibilityHint("YYYY, 4 digit year")
                                 .autocorrectionDisabled(true)
                                 .textContentType(.birthdateYear)
                                 .keyboardType(.numberPad)
                                 .focused($isbYearFocused)
+                                .onChange(of: isbYearFocused) {oldValue, newValue in
+                                    if !newValue {
+                                        // Focus lost
+                                        validateInputsNoAlert()
+                                    }
+                                }
                                 .accessibilityFocused($isbYearA11yFocused)
                                 .simultaneousGesture(TapGesture().onEnded {
                                     lastFocusedField = .bYear
@@ -385,29 +526,89 @@ struct SignUp1: View {
                                         isbYearA11yFocused = true
                                     }
                                 }
-                        }
+                        }.accessibilityElement(children: .contain)
                     }
                     
   
                 }.frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityElement(children: .contain)
-                    .accessibilityLabel("Birth Date")
-                    .accessibilityHint("MM/DD/YYYY")
+//                    .accessibilityElement(children: .contain)
+//                    .accessibilityLabel("Birth Date")
+//                    .accessibilityValue("MM/DD/YYYY")
+                if errorVisible {
+                    HStack {
+                        Image(systemName: "exclamationmark.circle")
+                        Text(errorText)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.caption)
+                    }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityHidden(true)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
+
                 Toggle("I confirm the above is accurate.", isOn: $confirmToggle)
                     .padding()
                     .bold()
-                NavigationLink(destination: ThankYou()) {
-                    HStack {
-                        Image(systemName: "smiley")
-                        Text("Sign Up")
+                NavigationLink(destination: ThankYou(), isActive: $submitActive) {
+                    Button(action: {
+                        validateInputs()
+                    }) {
+                        HStack {
+                            Image(systemName: "smiley")
+                            Text("Sign Up")
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .bold()
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .bold()
+                }
+                .accessibilityAction() {
+                    validateInputs()
                 }
                 .background(Color("AccentColor"))
                 .foregroundColor(colorScheme == .dark ? .black : .white)
                 .clipShape(.capsule)
+                .alert(errorText, isPresented: $showingAlert) {
+                    Button("Ok", role: .cancel) {
+                        if bmonth.count != 2 && bday.count != 2 && byear.count != 4 {
+                            isbMonthFocused = true
+                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                isbMonthA11yFocused = true
+                            }
+                        } else if bday.count != 2 && byear.count != 4 {
+                            isbDayFocused = true
+                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                isbDayA11yFocused = true
+                            }
+                        } else if bmonth.count != 2 && byear.count != 4 {
+                            isbMonthFocused = true
+                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                isbMonthA11yFocused = true
+                            }
+                        } else if bmonth.count != 2 && bday.count != 2 {
+                            isbMonthFocused = true
+                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                isbMonthA11yFocused = true
+                            }
+                        } else if bmonth.count != 2 {
+                            isbMonthFocused = true
+                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                isbMonthA11yFocused = true
+                            }
+                        } else if bday.count != 2 {
+                            isbDayFocused = true
+                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                isbDayA11yFocused = true
+                            }
+                        } else if byear.count != 4 {
+                            isbYearFocused = true
+                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
+                                isbYearA11yFocused = true
+                            }
+                        }
+                    }
+                }
+
             }
             .navigationTitle("Sign Up 1")
             .padding()

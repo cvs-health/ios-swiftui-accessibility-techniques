@@ -75,6 +75,7 @@
 		BC6D39552CDA896F00876212 /* CarouselViewBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6D39542CDA896F00876212 /* CarouselViewBad.swift */; };
 		BC6D39E02CDB112D00876212 /* HorizontalScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6D39DF2CDB112D00876212 /* HorizontalScrollView.swift */; };
 		BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6F3E432BB5DC5800868AE5 /* WebView.swift */; };
+		BC6F7D722D47D21D00B7A590 /* FormViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6F7D712D47D21D00B7A590 /* FormViewTest.swift */; };
 		BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
 		BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B662B465B9F00C77B57 /* CheckboxesView.swift */; };
@@ -250,6 +251,7 @@
 		BC6D39DF2CDB112D00876212 /* HorizontalScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalScrollView.swift; sourceTree = "<group>"; };
 		BC6D39E12CDDD56100876212 /* HorizontalScrollViews.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = HorizontalScrollViews.md; sourceTree = "<group>"; };
 		BC6F3E432BB5DC5800868AE5 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		BC6F7D712D47D21D00B7A590 /* FormViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewTest.swift; sourceTree = "<group>"; };
 		BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHidden.swift; sourceTree = "<group>"; };
 		BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityHidden.md; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
@@ -589,6 +591,7 @@
 				BCB086F32D1D982600623141 /* MarkdownView.swift */,
 				BC877B882CE543C200B127F1 /* SignUpA.swift */,
 				BCF615B82D36F2D3006AEA80 /* SignUp0.swift */,
+				BC6F7D712D47D21D00B7A590 /* FormViewTest.swift */,
 				BC07D1922D3760600076F496 /* SignUp1.swift */,
 				BCEF61FB2CE6EB5100B0F757 /* SignUpD.swift */,
 				BCEF61FD2CE7ECCC00B0F757 /* ThankYou.swift */,
@@ -806,6 +809,7 @@
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
 				BC163FC22B6AD3F3009E3A83 /* ContactBoston.swift in Sources */,
 				BCEDB8F22B4872BF00B4D85D /* DeviceOrientationBad.swift in Sources */,
+				BC6F7D722D47D21D00B7A590 /* FormViewTest.swift in Sources */,
 				BCB086F42D1D982600623141 /* MarkdownView.swift in Sources */,
 				BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */,
 				BCEDB9112B49C74B00B4D85D /* CombiningFocusView.swift in Sources */,
@@ -1009,7 +1013,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 84;
+				CURRENT_PROJECT_VERSION = 85;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -1027,7 +1031,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 11.1;
+				MARKETING_VERSION = 11.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1044,7 +1048,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 84;
+				CURRENT_PROJECT_VERSION = 85;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -1062,7 +1066,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 11.1;
+				MARKETING_VERSION = 11.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

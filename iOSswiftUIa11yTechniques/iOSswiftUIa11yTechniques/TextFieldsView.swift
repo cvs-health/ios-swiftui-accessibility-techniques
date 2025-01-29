@@ -139,6 +139,7 @@ struct TextFieldsView: View {
                     .border(.secondary)
                     .accessibilityLabel("Phone Number")
                     .keyboardType(.phonePad)
+                    .textContentType(.telephoneNumber)
                     .accessibilityIdentifier("phoneGood")
                 Text("Website")
                     .frame(maxWidth: .infinity, alignment: .leading)

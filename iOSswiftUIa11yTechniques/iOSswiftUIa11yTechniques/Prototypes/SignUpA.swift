@@ -17,7 +17,9 @@
 import SwiftUI
 
 struct SignUpA: View {
-    @State private var selectedDate = Calendar.current.date(byAdding: DateComponents(year: -40), to: Date()) ?? Date()
+    //@State private var selectedDate = Calendar.current.date(byAdding: DateComponents(year: -40), to: Date()) ?? Date()
+    //set the selected date to be today's date
+    @State private var selectedDate = Date()
     @State private var isDatePickerPresented = false
     @AccessibilityFocusState private var isTriggerFocused: Bool
     @FocusState private var isFullNameFocused: Bool

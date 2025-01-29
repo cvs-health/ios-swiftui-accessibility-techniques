@@ -114,6 +114,7 @@
 		BCD1CF982B57670D00A26ED3 /* EscapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF972B57670D00A26ED3 /* EscapeView.swift */; };
 		BCD1CF9C2B577C5A00A26ED3 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */; };
 		BCD814062C3858D600124B7C /* TextFieldsFocusManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */; };
+		BCDF3F562D4AE1D000A13D09 /* SignUp2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */; };
 		BCE205232B58D0BE000DF400 /* DarkModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205222B58D0BE000DF400 /* DarkModeView.swift */; };
 		BCE205252B58D50D000DF400 /* UserPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205242B58D50D000DF400 /* UserPreferencesView.swift */; };
 		BCE205282B597199000DF400 /* RotorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205272B597199000DF400 /* RotorView.swift */; };
@@ -311,6 +312,7 @@
 		BCD1CF9A2B577C5300A26ED3 /* Actions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Actions.md; sourceTree = "<group>"; };
 		BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsView.swift; sourceTree = "<group>"; };
 		BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsFocusManagement.swift; sourceTree = "<group>"; };
+		BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp2.swift; sourceTree = "<group>"; };
 		BCE205212B579FC3000DF400 /* AssistiveTechnologyDetection.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AssistiveTechnologyDetection.md; sourceTree = "<group>"; };
 		BCE205222B58D0BE000DF400 /* DarkModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeView.swift; sourceTree = "<group>"; };
 		BCE205242B58D50D000DF400 /* UserPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesView.swift; sourceTree = "<group>"; };
@@ -593,6 +595,7 @@
 				BCF615B82D36F2D3006AEA80 /* SignUp0.swift */,
 				BC6F7D712D47D21D00B7A590 /* FormViewTest.swift */,
 				BC07D1922D3760600076F496 /* SignUp1.swift */,
+				BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */,
 				BCEF61FB2CE6EB5100B0F757 /* SignUpD.swift */,
 				BCEF61FD2CE7ECCC00B0F757 /* ThankYou.swift */,
 				BCEF61F92CE6E75F00B0F757 /* SignUpC.swift */,
@@ -785,6 +788,7 @@
 				BC7547922C2FAAF900A4ABC7 /* PageB.swift in Sources */,
 				BC8C92092B2A94B2006DAC20 /* ListsView.swift in Sources */,
 				AA9FCA2E2AB4D50400DF93A5 /* AccordionsView.swift in Sources */,
+				BCDF3F562D4AE1D000A13D09 /* SignUp2.swift in Sources */,
 				BCB059552CAB371C00C670B8 /* VideoPlayerView.swift in Sources */,
 				BC8CD0E52B4D06FD00B9A28A /* MagicTapView.swift in Sources */,
 				AA59CDCC2ABA20920004908F /* HomeTabView.swift in Sources */,
@@ -1013,7 +1017,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 87;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -1031,7 +1035,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 11.3;
+				MARKETING_VERSION = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1048,7 +1052,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 87;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -1066,7 +1070,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 11.3;
+				MARKETING_VERSION = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

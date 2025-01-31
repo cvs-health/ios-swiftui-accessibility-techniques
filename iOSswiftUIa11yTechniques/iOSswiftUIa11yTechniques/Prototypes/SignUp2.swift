@@ -55,40 +55,37 @@ struct SignUp2: View {
         case bMonth
         case bYear
     }
+    
+    enum Month: String, CaseIterable, Identifiable {
+        case january = "January"
+        case february = "February"
+        case march = "March"
+        case april = "April"
+        case may = "May"
+        case june = "June"
+        case july = "July"
+        case august = "August"
+        case september = "September"
+        case october = "October"
+        case november = "November"
+        case december = "December"
+
+        var id: Self { self }
+    }
+    @State private var selectedMonth: Month = .january
+    @AccessibilityFocusState private var isMonthA11yFocused: Bool
+    @FocusState private var isMonthFocused: Bool
+
 
     func validateInputs() {
         monthInvalid = false
         dayInvalid = false
         yearInvalid = false
         errorVisible = false
-        if bmonth.count != 2 && bday.count != 2 && byear.count != 4 {
-            errorText = "Error: Month must be 2 digits. MM format. Day must be 2 digits. DD format. Year must be 4 digits. YYYY format."
-            monthInvalid = true
-            dayInvalid = true
-            yearInvalid = true
-            errorVisible = true
-            showingAlert = true
-        } else if bday.count != 2 && byear.count != 4 {
+        if bday.count != 2 && byear.count != 4 {
             errorText = "Error: Day must be 2 digits. DD format. Year must be 4 digits. YYYY format."
             dayInvalid = true
             yearInvalid = true
-            errorVisible = true
-            showingAlert = true
-        } else if bmonth.count != 2 && byear.count != 4 {
-            errorText = "Error: Month must be 2 digits. MM format. Year must be 4 digits. YYYY format."
-            monthInvalid = true
-            yearInvalid = true
-            errorVisible = true
-            showingAlert = true
-        } else if bmonth.count != 2 && bday.count != 2 {
-            errorText = "Error: Month must be 2 digits. MM format. Day must be 2 digits. DD format."
-            monthInvalid = true
-            dayInvalid = true
-            errorVisible = true
-            showingAlert = true
-        } else if bmonth.count != 2 {
-            errorText = "Error: Month must be 2 digits. MM format."
-            monthInvalid = true
             errorVisible = true
             showingAlert = true
         } else if bday.count != 2 {
@@ -116,30 +113,10 @@ struct SignUp2: View {
             dayInvalid = false
             yearInvalid = false
             errorVisible = false
-            if bmonth.count != 2 && bday.count != 2 && byear.count != 4 {
-                errorText = "Error: Month must be 2 digits. MM format. Day must be 2 digits. DD format. Year must be 4 digits. YYYY format."
-                monthInvalid = true
-                dayInvalid = true
-                yearInvalid = true
-                errorVisible = true
-            } else if bday.count != 2 && byear.count != 4 {
+            if bday.count != 2 && byear.count != 4 {
                 errorText = "Error: Day must be 2 digits. DD format. Year must be 4 digits. YYYY format."
                 dayInvalid = true
                 yearInvalid = true
-                errorVisible = true
-            } else if bmonth.count != 2 && byear.count != 4 {
-                errorText = "Error: Month must be 2 digits. MM format. Year must be 4 digits. YYYY format."
-                monthInvalid = true
-                yearInvalid = true
-                errorVisible = true
-            } else if bmonth.count != 2 && bday.count != 2 {
-                errorText = "Error: Month must be 2 digits. MM format. Day must be 2 digits. DD format."
-                monthInvalid = true
-                dayInvalid = true
-                errorVisible = true
-            } else if bmonth.count != 2 {
-                errorText = "Error: Month must be 2 digits. MM format."
-                monthInvalid = true
                 errorVisible = true
             } else if bday.count != 2 {
                 errorText = "Error: Day must be 2 digits. DD format."
@@ -181,7 +158,7 @@ struct SignUp2: View {
                     })
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
-                        Button("Previous", systemImage: "arrow.left.square") {
+                        Button("Previous", systemImage: "chevron.up") {
                             switch lastFocusedField {
                                 case .fullName?:
                                     isFullNameFocused = false
@@ -214,9 +191,9 @@ struct SignUp2: View {
                                     isNickNameFocused = false
                                     isFullNameFocused = false
                                     lastFocusedField = .bMonth
-                                    isbMonthFocused = true
+                                    isMonthFocused = true
                                     DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                        isbMonthA11yFocused = true
+                                        isMonthA11yFocused = true
                                     }
                                 case .bYear?:
                                     isbDayFocused = true
@@ -232,8 +209,8 @@ struct SignUp2: View {
                                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                 break
                             }
-                        }
-                            Button("Next", systemImage: "arrow.right.square") {
+                        }.disabled(isFullNameFocused)
+                            Button("Next", systemImage: "chevron.down") {
                                 switch lastFocusedField {
                                     case .fullName?:
                                         isFullNameFocused = false
@@ -249,10 +226,10 @@ struct SignUp2: View {
                                         isNickNameFocused = false
                                     isbDayFocused = false
                                     isbYearFocused = false
-                                    isbMonthFocused = true
+                                    isMonthFocused = true
                                         lastFocusedField = .bMonth
                                         DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                       isbMonthA11yFocused = true
+                                       isMonthA11yFocused = true
                                         }
                                 case .bMonth?:
                                 isbDayFocused = true
@@ -284,7 +261,7 @@ struct SignUp2: View {
                                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                         break
                                 }
-                            }
+                            }.disabled(isbYearFocused)
                             Spacer()
                             Button("Done") {
                                 switch lastFocusedField {
@@ -378,21 +355,17 @@ struct SignUp2: View {
                             nname.removeLast()
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             isNickNameFocused = false
-                            isbMonthFocused = true
-                            isbMonthA11yFocused = true
+                            isMonthFocused = true
+                            isMonthA11yFocused = true
                         }
                     }
                 VStack {
                     Text("Birth Date")
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("MM/DD/YYYY")
-                        .font(.caption)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityHidden(true)
                 }.accessibilityElement(children: .combine)
                     .accessibilityLabel("Birth Date")
-                    .accessibilityValue("MM/DD/YYYY" + errorText)
+                    .accessibilityValue(errorText)
                 HStack {
                     let layout = (dynamicTypeSize > DynamicTypeSize.xxxLarge) ? AnyLayout(VStackLayout()) : AnyLayout(HStackLayout())
                     layout {
@@ -403,45 +376,35 @@ struct SignUp2: View {
                                     .fixedSize(horizontal: false, vertical: true)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .accessibilityHidden(true)
-                                TextField("", text: $bmonth, axis: .vertical)
-                                    .textFieldStyle(.roundedBorder)
-                                    .border(monthInvalid ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
-                                    .accessibilityLabel("Month")
-                                    .accessibilityValue(bmonth + errorText)
-                                    .accessibilityHint("MM, 2 digit month")
-                                    .autocorrectionDisabled(true)
-                                    .textContentType(.birthdateMonth)
-                                    .keyboardType(.numberPad)
-                                    .focused($isbMonthFocused)
-                                    .onChange(of: isbMonthFocused) {oldValue, newValue in
-                                        if !newValue {
-                                            // Focus lost
-                                            validateInputsNoAlert()
-                                        }
+                                    .bold()
+                                Text("Select one")
+                                    .font(.caption)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .accessibilityHidden(true)
+                                Picker("Month", selection: $selectedMonth) {
+                                    ForEach(Month.allCases) { month in
+                                        Text(month.rawValue).tag(month)
                                     }
-                                    .accessibilityFocused($isbMonthA11yFocused)
-                                    .simultaneousGesture(TapGesture().onEnded {
-                                        lastFocusedField = .bMonth
-                                    })
-                                    .submitLabel(.next)
-                                    .onChange(of: bmonth) {oldValue, newValue in
-                                        let filtered = newValue.filter { "0123456789".contains($0) }
-                                        bmonth = String(filtered.prefix(2))
-                                        
-                                        guard let newValueLastChar = newValue.last else { return }
-                                        if newValueLastChar == "\n" {
-                                            if bmonth.count > 2 {
-                                                bmonth.removeLast()
-                                            }
-                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                            isbMonthFocused = false
-                                            isbDayFocused = true
-                                            isbDayA11yFocused = true
-                                        }
+                                }.frame(maxWidth: .infinity, alignment: .leading)
+                                    .onChange(of: selectedMonth) {
+                                        isMonthA11yFocused = true
                                     }
+                                    .accessibilityFocused($isMonthA11yFocused)
+                                    .focused($isMonthFocused)
+                                    .accessibilityValue(selectedMonth.rawValue + ", Select one, " + errorText)
+                                    .accessibilityHint("Select one")
                             }.accessibilityElement(children: .contain)
+                        }
+                        HStack {
                             VStack {
                                 Text("Day")
+                                    .font(.caption)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .accessibilityHidden(true)
+                                    .bold()
+                                Text("MM")
                                     .font(.caption)
                                     .fixedSize(horizontal: false, vertical: true)
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -450,7 +413,7 @@ struct SignUp2: View {
                                     .textFieldStyle(.roundedBorder)
                                     .border(dayInvalid ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
                                     .accessibilityLabel("Day")
-                                    .accessibilityValue(bday + errorText)
+                                    .accessibilityValue(bday + ", MM, " + errorText)
                                     .accessibilityHint("DD, 2 digit day")
                                     .autocorrectionDisabled(true)
                                     .textContentType(.birthdateDay)
@@ -483,53 +446,60 @@ struct SignUp2: View {
                                         }
 
                                     }
+                                    .frame(minWidth:50)
+                            }.accessibilityElement(children: .contain)
+
+                            VStack {
+                                Text("Year")
+                                    .font(.caption)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .accessibilityHidden(true)
+                                    .bold()
+                                Text("YYYY")
+                                    .font(.caption)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .accessibilityHidden(true)
+                                TextField("", text: $byear, axis: .vertical)
+                                    .textFieldStyle(.roundedBorder)
+                                    .border(yearInvalid ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
+                                    .accessibilityLabel("Year")
+                                    .accessibilityValue(byear + ", YYYY, " + errorText)
+                                    .accessibilityHint("YYYY, 4 digit year")
+                                    .autocorrectionDisabled(true)
+                                    .textContentType(.birthdateYear)
+                                    .keyboardType(.numberPad)
+                                    .focused($isbYearFocused)
+                                    .onChange(of: isbYearFocused) {oldValue, newValue in
+                                        if !newValue {
+                                            // Focus lost
+                                            validateInputsNoAlert()
+                                        }
+                                    }
+                                    .accessibilityFocused($isbYearA11yFocused)
+                                    .simultaneousGesture(TapGesture().onEnded {
+                                        lastFocusedField = .bYear
+                                    })
+                                    .submitLabel(.done)
+                                    .onChange(of: byear) {oldValue, newValue in
+                                        let filtered = newValue.filter { "0123456789".contains($0) }
+                                        byear = String(filtered.prefix(4))
+                                        
+                                        guard let newValueLastChar = newValue.last else { return }
+                                        if newValueLastChar == "\n" {
+                                            if byear.count > 4 {
+                                                byear.removeLast()
+                                            }
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                            isbYearFocused = false
+                                            isbYearA11yFocused = true
+                                        }
+                                    }
+                                    .frame(minWidth:75)
                             }.accessibilityElement(children: .contain)
                         }
-                        VStack {
-                            Text("Year")
-                                .font(.caption)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .accessibilityHidden(true)
-                            TextField("", text: $byear, axis: .vertical)
-                                .textFieldStyle(.roundedBorder)
-                                .border(yearInvalid ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
-                                .accessibilityLabel("Year")
-                                .accessibilityValue(byear + errorText)
-                                .accessibilityHint("YYYY, 4 digit year")
-                                .autocorrectionDisabled(true)
-                                .textContentType(.birthdateYear)
-                                .keyboardType(.numberPad)
-                                .focused($isbYearFocused)
-                                .onChange(of: isbYearFocused) {oldValue, newValue in
-                                    if !newValue {
-                                        // Focus lost
-                                        validateInputsNoAlert()
-                                    }
-                                }
-                                .accessibilityFocused($isbYearA11yFocused)
-                                .simultaneousGesture(TapGesture().onEnded {
-                                    lastFocusedField = .bYear
-                                })
-                                .submitLabel(.done)
-                                .onChange(of: byear) {oldValue, newValue in
-                                    let filtered = newValue.filter { "0123456789".contains($0) }
-                                    byear = String(filtered.prefix(4))
-                                    
-                                    guard let newValueLastChar = newValue.last else { return }
-                                    if newValueLastChar == "\n" {
-                                        if byear.count > 4 {
-                                            byear.removeLast()
-                                        }
-                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                        isbYearFocused = false
-                                        isbYearA11yFocused = true
-                                    }
-                                }
-                        }.accessibilityElement(children: .contain)
                     }
-                    
-  
                 }.frame(maxWidth: .infinity, alignment: .leading)
 //                    .accessibilityElement(children: .contain)
 //                    .accessibilityLabel("Birth Date")
@@ -570,38 +540,21 @@ struct SignUp2: View {
                 .clipShape(.capsule)
                 .alert(errorText, isPresented: $showingAlert) {
                     Button("Ok", role: .cancel) {
-                        if bmonth.count != 2 && bday.count != 2 && byear.count != 4 {
-                            isbMonthFocused = true
-                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                isbMonthA11yFocused = true
-                            }
-                        } else if bday.count != 2 && byear.count != 4 {
+                        if bday.count != 2 && byear.count != 4 {
                             isbDayFocused = true
+                            lastFocusedField = .bDay
                             DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
                                 isbDayA11yFocused = true
                             }
-                        } else if bmonth.count != 2 && byear.count != 4 {
-                            isbMonthFocused = true
-                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                isbMonthA11yFocused = true
-                            }
-                        } else if bmonth.count != 2 && bday.count != 2 {
-                            isbMonthFocused = true
-                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                isbMonthA11yFocused = true
-                            }
-                        } else if bmonth.count != 2 {
-                            isbMonthFocused = true
-                            DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
-                                isbMonthA11yFocused = true
-                            }
                         } else if bday.count != 2 {
                             isbDayFocused = true
+                            lastFocusedField = .bDay
                             DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
                                 isbDayA11yFocused = true
                             }
                         } else if byear.count != 4 {
                             isbYearFocused = true
+                            lastFocusedField = .bYear
                             DispatchQueue.main.asyncAfter(deadline:.now() + 0.1) {
                                 isbYearA11yFocused = true
                             }

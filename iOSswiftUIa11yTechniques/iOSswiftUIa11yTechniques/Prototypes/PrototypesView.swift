@@ -26,6 +26,9 @@ struct PrototypesView: View {
             NavigationLink(destination: SignUp1()) {
                 Text("Sign Up 1")
             }
+            NavigationLink(destination: SignUp2()) {
+                Text("Sign Up 2")
+            }
             NavigationLink(destination: SignUpA()) {
                 Text("Sign Up A")
             }

@@ -58,7 +58,7 @@ struct SignUpA: View {
                     })
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
-                            Button("Previous", systemImage: "arrow.left.square") {
+                            Button("Previous", systemImage: "chevron.up") {
                                 switch lastFocusedField {
                                     case .fullName?:
                                         isFullNameFocused = false
@@ -77,8 +77,8 @@ struct SignUpA: View {
                                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                         break
                                 }
-                            }
-                            Button("Next", systemImage: "arrow.right.square") {
+                            }.disabled(isFullNameFocused)
+                            Button("Next", systemImage: "chevron.down") {
                                 switch lastFocusedField {
                                     case .fullName?:
                                         isFullNameFocused = false

@@ -29,6 +29,11 @@ struct TextFieldsView: View {
     @State private var city = ""
     @State private var state = ""
     @State private var website = ""
+    @State private var bmonth = ""
+    @State private var bday = ""
+    @State private var byear = ""
+    @State private var birthday = ""
+
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -149,6 +154,42 @@ struct TextFieldsView: View {
                     .accessibilityLabel("Website")
                     .keyboardType(.URL)
                     .accessibilityIdentifier("websiteGood")
+                Text("Birth Date")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("", text: $birthday, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(.secondary)
+                    .accessibilityLabel("Birth Date")
+                    .autocorrectionDisabled(true)
+                    .textContentType(.birthdate)
+                    .keyboardType(.numbersAndPunctuation)
+                Text("Birth Date Day")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("", text: $bday, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(.secondary)
+                    .accessibilityLabel("Birth Date Day")
+                    .autocorrectionDisabled(true)
+                    .textContentType(.birthdateDay)
+                    .keyboardType(.numberPad)
+                Text("Birth Date Month")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("", text: $bmonth, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(.secondary)
+                    .accessibilityLabel("Birth Date Month")
+                    .autocorrectionDisabled(true)
+                    .textContentType(.birthdateMonth)
+                    .keyboardType(.numberPad)
+                Text("Birth Date Year")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("", text: $byear, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .border(.secondary)
+                    .accessibilityLabel("Birth Date Year")
+                    .autocorrectionDisabled(true)
+                    .textContentType(.birthdateYear)
+                    .keyboardType(.numberPad)
                 DisclosureGroup("Details") {
                     Text("The first good Text Fields example uses visible label text that is set as the `.accessibilityLabel` for each `TextField`. `.border(.secondary)` is used to give the border a 3:1 contrast ratio. `.keyboardType` is used to provide the most usable keyboard for each type of input. `.textContentType` is used to enable AutoFill for each `TextField` and automatic password management.")
                 }.padding(.bottom).accessibilityHint("Good Example Using `.accessibilityLabel`")

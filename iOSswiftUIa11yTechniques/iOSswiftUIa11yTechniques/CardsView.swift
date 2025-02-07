@@ -216,6 +216,10 @@ struct CardsView: View {
                         actionTitle = "Show details"
                         isExpanded.toggle()
                     }
+                    .accessibilityAction(named: "Add coupon to wallet") {
+                        actionTitle = "Add coupon to wallet"
+                        showingAlert = true
+                    }
                     .padding()
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)

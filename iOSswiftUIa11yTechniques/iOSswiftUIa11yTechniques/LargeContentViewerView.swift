@@ -62,6 +62,30 @@ struct LargeContentViewerView: View {
                     .accessibilityShowsLargeContentViewer {
                         Label("Show My Location", systemImage: "location.fill")
                     }
+                    Button(action: {
+                        // Handle button tap here
+                    }) {
+                        Image(systemName: "envelope.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(.blue)
+                            .overlay(
+                                Text("9")
+                                    .accessibilityHidden(true)
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                                    .padding(4)
+                                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                                    .clipShape(Circle())
+                                    .offset(x: 10, y: -10),
+                                alignment: .topTrailing
+                            )
+                    }
+                    .accessibilityLabel("Messages")
+                    .accessibilityShowsLargeContentViewer {
+                        Label("9 Messages", systemImage: "envelope.fill")
+                    }
                 }.frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading)
                 DisclosureGroup("Details") {

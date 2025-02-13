@@ -29,7 +29,7 @@ struct ATdetectionView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Detecting assistive technology running on a user's device is not recommended because it may lead to creating unequal experiences between all users. However, sometimes it may be necessary to detect if an assistive technology is running, for example, if you need to provide a specific message to VoiceOver users only. e.g., using `UIAccessibility.isVoiceOverRunning` to check if VoiceOver is running when the page loads and then show an alert reminding the VoiceOver user not to disable VoiceOver Hints. All of the iOS assistive technologies can be detected, i.e., using `UIAccessibility.is{AccessibilityFeature}Running` and replacing `{AccessibilityFeature}` with the name of the accessibility feature you're detecting.")
+                Text("Detecting accessibility features running on a user's device is not recommended because it may lead to creating unequal experiences between all users. However, sometimes it may be necessary to detect if an accessibility feature is running, for example, if you need to provide a specific message to VoiceOver users only. e.g., using `UIAccessibility.isVoiceOverRunning` to check if VoiceOver is running when the page loads and then show an alert reminding the VoiceOver user not to disable VoiceOver Hints. All of the iOS accessibility features can be detected, i.e., using `UIAccessibility.is{AccessibilityFeature}Running` and replacing `{AccessibilityFeature}` with the name of the accessibility feature you're detecting.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -49,7 +49,7 @@ struct ATdetectionView: View {
                     Text("VoiceOver was turned off when this page loaded.").font(.title)
                 }
                 DisclosureGroup("Details") {
-                    Text("The good assistive technology detection example uses `UIAccessibility.isVoiceOverRunning` check if VoiceOver is running when the page loads and then shows an alert reminding the VoiceOver user not to disable VoiceOver Hints.")
+                    Text("The good example uses `UIAccessibility.isVoiceOverRunning` check if VoiceOver is running when the page loads and then shows an alert reminding the VoiceOver user not to disable VoiceOver Hints.")
                 }.padding(.bottom).accessibilityHint("Good Example")
             }.onAppear {
                 if UIAccessibility.isVoiceOverRunning {
@@ -65,7 +65,7 @@ struct ATdetectionView: View {
             } message: {
                 Text("This application uses VoiceOver Accessibility Hints to improve the accessibility of controls so if a control does not appear to be fully accessible to VoiceOver please make sure you have not disabled VoiceOver Hints.")
             }
-            .navigationTitle("Assistive Technology Detection")
+            .navigationTitle("Accessibility Detection")
             .padding()
 
         }

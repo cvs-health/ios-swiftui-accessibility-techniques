@@ -121,7 +121,7 @@ struct EscapeView: View {
                 }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .background(showModal || showModalBad == true ? colorScheme == .dark ? Color(.gray).opacity(0.5) : Color.black.opacity(0.5) : colorScheme == .dark ? Color(.black) : Color(.white))
-            .navigationTitle("Escape")
+            .navigationTitle("Escape Action")
             .padding()
         }
  

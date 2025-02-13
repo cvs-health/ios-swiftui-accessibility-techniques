@@ -94,7 +94,7 @@ struct InputLabelsView: View {
                 }.padding(.bottom)
             }
             .padding()
-            .navigationTitle("Input Labels")
+            .navigationTitle("Accessibility Input Labels")
 
         }
  

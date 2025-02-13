@@ -1,5 +1,5 @@
 /*
-   Copyright 2023-2024 CVS Health and/or one of its affiliates
+   Copyright 2023-2025 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,131 +16,122 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+    @State private var searchKeyword = ""
+    @State private var selection: UUID?
+
+    var filteredAndSortedItems: [Techniques] {
+        let filtered = techniques.filter { item in
+            searchKeyword.isEmpty || item.name.lowercased().contains(searchKeyword.lowercased())
+        }
+        return filtered.sorted { $0.name < $1.name }
+    }
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
-                NavigationLink(destination: HeadingsView()) {
-                    Text("Headings")
-                }
-                NavigationLink(destination: ImagesView()) {
-                    VStack {
-                        Text("Images").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Informative, Decorative, or Functional").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
+                ForEach(filteredAndSortedItems) { technique in
+                    NavigationLink(value: technique.id) {
+                        Text(technique.name)
                     }
-                }.accessibilityIdentifier("Images")
-                    .accessibilityInputLabels(["Images"])
-                NavigationLink(destination: UIControlsView()) {
-                    VStack {
-                        Text("UI Controls").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Accordions, Buttons, Pickers, TextFields, Toggles, etc. ").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
-                    }
-                }.accessibilityIdentifier("UI Controls")
-                    .accessibilityInputLabels(["UI Controls"])
-                NavigationLink(destination: PageTitlesView()) {
-                    Text("Page Titles")
                 }
-                NavigationLink(destination: AnnouncementsView()) {
-                    VStack {
-                        Text("Announcements").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Accessibility Notifications, Error Validation").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
-                    }
-                }.accessibilityIdentifier("Announcements")
-                    .accessibilityInputLabels(["Announcements"])
-                NavigationLink(destination: ReadingOrderView()) {
-                    Text("Reading Order")
-                }
-//                NavigationLink(destination: ActivityIndicatorView()) {
-//                    Text("Activity Ring Indicator")
-//                }
-                NavigationLink(destination: FocusManagementView()) {
-                    Text("Focus Management")
-                }
-                NavigationLink(destination: A11yEnhancementsView()) {
-                    VStack {
-                        Text("Accessibility UX Enhancements").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Assistive Access, Magic Tap, Actions, Rotor, VoiceOver Pronunciation, etc.").frame(maxWidth: .infinity, alignment: .leading).font(.footnote).foregroundColor(.primary.opacity(0.7))
-                    }
-                }.accessibilityIdentifier("Accessibility UX Enhancements")
-                    .accessibilityInputLabels(["Accessibility UX Enhancements"])
-                NavigationLink(destination: DynamicTypeView()) {
-                    Text("Dynamic Type")
-                }
-                NavigationLink(destination: LanguageView()) {
-                    Text("Language")
-                }
-                NavigationLink(destination: NavigationLinkView()) {
-                    Text("Navigation")
-                }
-                NavigationLink(destination: DataTablesView()) {
-                    Text("Data Tables")
-                }
-                NavigationLink(destination: ListsView()) {
-                    Text("Lists")
-                }
-                NavigationLink(destination: CardsView()) {
-                    Text("Cards")
-                }
-                NavigationLink(destination: TouchTargetSize()) {
-                    Text("Touch Target Size")
-                }
-                NavigationLink(destination: UserPreferencesView()) {
-                    Text("User Accessibility Preferences") // dark mode, smart invert, bold text, differentiate without colors, reduce transparency, motion, ignore invert colors, increase contrast
-                }
-                NavigationLink(destination: ProgressIndicatorsView()) {
-                    Text("Progress Indicators")
-                }
-                NavigationLink(destination: AccessibilityRepresentationView()) {
-                    Text("Accessibility Representation Custom Controls")
-                }
-                NavigationLink(destination: MeaningfulAccessibleNamesView()) {
-                    Text("Meaningful Accessible Names")
-                }
-                NavigationLink(destination: CombiningFocusView()) {
-                    Text("Combining Focus")
-                }
-                NavigationLink(destination: DeviceOrientationView()) {
-                    Text("Device Orientation")
-                }
-//                NavigationLink(destination: DetailView()) {
-//                    Text("Siri Shortcuts") // https://www.kodeco.com/40950083-creating-shortcuts-with-app-intents
-//                }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                NavigationLink(destination: MapView()) {
-                    Text("Maps")
-                }
-                NavigationLink(destination: ScrollViews()) {
-                    Text("Scroll Views")
-                }
-                NavigationLink(destination: AccessibilityHidden()) {
-                    Text("Accessibility Hidden")
-                }
-                NavigationLink(destination: ResponsiveLayoutsView()) {
-                    Text("Responsive Layouts")
-                }
-                NavigationLink(destination: RedundantEntryView()) {
-                    Text("Redundant Entry")
-                }
-                NavigationLink(destination: CarouselView()) {
-                    Text("Carousels")
-                }
-                NavigationLink(destination: HorizontalScrollView()) {
-                    Text("Horizontal Scroll Views")
-                }
-                NavigationLink(destination: PrototypesView()) {
-                    Text("Prototypes")
-                }
-//                NavigationLink(destination: WebView()) {
-//                    Text("Web View")
-//                }
-//                NavigationLink(destination: ContactFormView()) {
-//                    Text("Contact Form")
-//                }
             }
-            .navigationViewStyle(.stack) // stops the back button from activating when rotating the device
             .navigationTitle("SwiftUI A11y Techniques")
-            Text("👩‍🦯🦼🧏‍♂️♿️🦮👨‍🦽🦻 \n \nWelcome to the iOS SwiftUI Accessibility Techniques Demo App! \n \nActivate the navigation menu button to view the iOS SwiftUI Accessibility Techniques. \n \nUse VoiceOver and other iOS accessibility features to explore the good and bad examples. Expand the details for an explanation of each example.")
-                .font(.largeTitle)
-                .padding()
+            .navigationViewStyle(.stack)
+            .searchable(text: $searchKeyword, placement: .navigationBarDrawer(displayMode: .always))
+            .onChange(of: searchKeyword) {
+                postAccessibilityAnnouncement()
+            }
+            .navigationDestination(for: UUID.self) { id in
+                if let technique = techniques.first(where: { $0.id == id }) {
+                    getItemDetailView(for: technique)
+                        .navigationTitle(technique.name)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func getItemDetailView(for technique: Techniques) -> some View {
+        switch technique.name.lowercased() {
+        case "informative": InformativeView()
+        case "decorative": DecorativeView()
+        case "functional": FunctionalView()
+        case "accessibility hidden": AccessibilityHidden()
+        case "accessibility notifications": AccessibilityNotificationsView()
+        case "accessibility representation": AccessibilityRepresentationView()
+        case "accessibility actions": ActionsView()
+        case "accordions": AccordionsView()
+        case "adjustable action": AdjustableActionView()
+        case "alerts": AlertsView()
+        case "accessibility detection": ATdetectionView()
+        case "attributed strings": AttributedStringsView()
+        case "assistive access": AssistiveAccessView()
+        case "buttons": ButtonsView()
+        case "cards": CardsView()
+        case "carousels": CarouselView()
+        case "checkboxes": CheckboxesView()
+        case "combining focus": CombiningFocusView()
+        case "confirmation dialogs": ConfirmationDialogsView()
+        case "data tables": DataTablesView()
+        case "date & time pickers": DateTimePickersView()
+        case "decorative images": DecorativeView()
+        case "device orientation": DeviceOrientationView()
+        case "dynamic type": DynamicTypeView()
+        case "error validation": ErrorValidationView()
+        case "escape action": EscapeView()
+        case "focus management": FocusManagementView()
+        case "functional images": FunctionalView()
+        case "grouping controls": GroupingControlsView()
+        case "headings": HeadingsView()
+        case "horizontal scroll views": HorizontalScrollView()
+        case "informative images": InformativeView()
+        case "input instructions": InputInstructionsView()
+        case "accessibility input labels": InputLabelsView()
+        case "language": LanguageView()
+        case "large content viewer": LargeContentViewerView()
+        case "links": LinksView()
+        case "lists": ListsView()
+        case "magic tap": MagicTapView()
+        case "maps": MapView()
+        case "meaningful accessible names": MeaningfulAccessibleNamesView()
+        case "menus": MenusView()
+        case "navigation": NavigationLinkView()
+        case "page titles": PageTitlesView()
+        case "pickers": PickersView()
+        case "popovers": PopoversView()
+        case "progress indicators": ProgressIndicatorsView()
+        case "prototypes": PrototypesView()
+        case "radio buttons": RadioButtonsView()
+        case "reading order": ReadingOrderView()
+        case "redundant entry": RedundantEntryView()
+        case "responsive layouts": ResponsiveLayoutsView()
+        case "accessibility rotor": RotorView()
+        case "scroll views": ScrollViews()
+        case "search suggestions": SearchSuggestionsView()
+        case "segmented controls": SegmentedControlsView()
+        case "sheets": SheetsView()
+        case "sliders": SlidersView()
+        case "steppers": SteppersView()
+        case "tabs": TabsView()
+        case "text fields": TextFieldsView()
+        case "toggles": TogglesView()
+        case "touch target size": TouchTargetSize()
+        case "voiceover announcement delay": VoiceOverAnnouncementDelayView()
+        case "voiceover pronunciation": VoiceOverPronunciationView()
+        case "dark mode": DarkModeView()
+        case "increase contrast": IncreaseContrastView()
+        case "reduce motion": ReduceMotionView()
+        case "reduce transparency": ReduceTransparencyView()
+        case "smart invert": SmartInvertView()
+        default: InformativeView()
+        }
+    }
+
+    func postAccessibilityAnnouncement() {
+        let count = filteredAndSortedItems.count
+        if count > 0 {
+            let message = "\(count) suggestion\(count != 1 ? "s" : "") shown"
+            UIAccessibility.post(notification: .announcement, argument: message)
         }
     }
 }

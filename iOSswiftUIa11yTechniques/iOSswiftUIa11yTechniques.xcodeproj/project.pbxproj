@@ -110,6 +110,8 @@
 		BCB059572CAB5F9C00C670B8 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB059562CAB5F9C00C670B8 /* TableView.swift */; };
 		BCB086F42D1D982600623141 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB086F32D1D982600623141 /* MarkdownView.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
+		BCCDED8E2D5C5F5500B8DB6E /* Techniques.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */; };
+		BCCDED902D5C649500B8DB6E /* ContentViewOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */; };
 		BCD1CF952B574C8800A26ED3 /* VoiceOverPronunciationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */; };
 		BCD1CF982B57670D00A26ED3 /* EscapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF972B57670D00A26ED3 /* EscapeView.swift */; };
 		BCD1CF9C2B577C5A00A26ED3 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */; };
@@ -305,6 +307,8 @@
 		BCB086F32D1D982600623141 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
 		BCC4F1822B3F8757004AAB65 /* InputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
+		BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Techniques.swift; sourceTree = "<group>"; };
+		BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewOld.swift; sourceTree = "<group>"; };
 		BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceOverPronunciationView.swift; sourceTree = "<group>"; };
 		BCD1CF962B5760E200A26ED3 /* VoiceOverPronunciation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = VoiceOverPronunciation.md; sourceTree = "<group>"; };
 		BCD1CF972B57670D00A26ED3 /* EscapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EscapeView.swift; sourceTree = "<group>"; };
@@ -483,6 +487,8 @@
 				BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */,
 				BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */,
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
+				BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */,
+				BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */,
 				BCE205222B58D0BE000DF400 /* DarkModeView.swift */,
 				BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */,
 				BCB059562CAB5F9C00C670B8 /* TableView.swift */,
@@ -723,6 +729,7 @@
 				BCFBBE4D2CD93FCA006831D9 /* CarouselView.swift in Sources */,
 				BCE205252B58D50D000DF400 /* UserPreferencesView.swift in Sources */,
 				BC8129092B3F5FAB00CB19D2 /* LanguageView.swift in Sources */,
+				BCCDED8E2D5C5F5500B8DB6E /* Techniques.swift in Sources */,
 				BC3EA3B52B7C069F0003B8A2 /* MapView.swift in Sources */,
 				BC1B59C32B4E664700E8F782 /* MenusView.swift in Sources */,
 				BC1B59C82B5064BF00E8F782 /* TouchTargetSize.swift in Sources */,
@@ -770,6 +777,7 @@
 				BCF615B72D35AE58006AEA80 /* VoiceOverAnnouncementDelayView.swift in Sources */,
 				BCF615B92D36F2D3006AEA80 /* SignUp0.swift in Sources */,
 				BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */,
+				BCCDED902D5C649500B8DB6E /* ContentViewOld.swift in Sources */,
 				BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */,
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
 				BC046F2B2BEDC83800E498E1 /* ReduceTransparencyView.swift in Sources */,
@@ -1017,7 +1025,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -1035,7 +1043,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 11.9;
+				MARKETING_VERSION = 12;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1052,7 +1060,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
@@ -1070,7 +1078,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 11.9;
+				MARKETING_VERSION = 12;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

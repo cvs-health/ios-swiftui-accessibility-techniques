@@ -78,7 +78,7 @@ struct RotorView: View {
                 }
             }
             .padding()
-            .navigationTitle("Rotor")
+            .navigationTitle("Accessibility Rotor")
 
         }
  

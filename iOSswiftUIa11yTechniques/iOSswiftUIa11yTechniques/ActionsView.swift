@@ -40,7 +40,7 @@ struct ActionsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use `accessibilityAction()` to provide actions on a view that can be activated by iOS Assistive Technologies like VoiceOver. Full Keyboard Access users can press `Tab + z` to open Actions menu. Voice Control users can say \"Show actions for\" and the name or number of the element to open its Actions menu.")
+                Text("Use `accessibilityAction()` to provide actions that can be activated by iOS accessibility features like VoiceOver. Full Keyboard Access users can press `Tab + z` to open Actions menu. Voice Control users can say \"Show actions for\" and the name or number of the element to open its Actions menu. With \"Show numbers\" Voice Control users will see a right arrow next to elements with actions.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -207,7 +207,7 @@ struct ActionsView: View {
                 }.accessibilityHint("Bad Example")
 
             }
-            .navigationTitle("Actions")
+            .navigationTitle("Accessibility Actions")
             .padding()
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text("\(actionTitle) Action Activated"), message: Text("You activated the accessibility action named \(actionTitle)!"), dismissButton: .default(Text("OK")))

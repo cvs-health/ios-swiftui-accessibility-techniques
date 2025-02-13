@@ -32,7 +32,6 @@ struct DragDropView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        NavigationStack {
             List(names, id: \.self, selection: $selection) { name in
                 Text(name)
             }
@@ -47,7 +46,6 @@ struct DragDropView: View {
                     })
                 }
             }
-        }
     }
     
 }

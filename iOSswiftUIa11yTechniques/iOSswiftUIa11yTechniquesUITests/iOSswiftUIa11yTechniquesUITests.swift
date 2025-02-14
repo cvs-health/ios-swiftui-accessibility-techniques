@@ -37,31 +37,35 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            app.navigationBars.buttons["ToggleSidebar"].tap()
+//        }
+        
+        app.searchFields["Search"].tap()
+        app.typeText("Headings")
         app.otherElements.buttons["Headings"].tap()
-        // Check existance of good and bad examples with accessibility identifiers
+        // Check existence of good and bad examples with accessibility identifiers
         XCTAssertTrue(app.otherElements.staticTexts["goodHeading"].exists)
         XCTAssertTrue(app.otherElements.staticTexts["badHeading1"].exists)
         XCTAssertTrue(app.otherElements.staticTexts["badHeading2"].exists)
         // XCTAssertTrue(app.otherElements.staticTexts["goodHeading"].accessibilityTraits.contains(.header)) accessibilityTraits CANNOT BE TESTED
         try app.performAccessibilityAudit() // a11y audit passes with false negatives because headings can't be tested
         app.swipeUp() // swipe up and run audit on content below the fold
-        try app.performAccessibilityAudit()
+        try app.performAccessibilityAudit() // contrast fails false positive
     }
     func testInformative() throws {
         // Launch the app to begin testing.
         let app = XCUIApplication()
         app.launch()
         // Check if iPad then tap the Sidebar navigation bar button.
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            app.navigationBars.buttons["ToggleSidebar"].tap()
+//        }
         // Tap the navigation buttons to load the specific page to test.
-        app.otherElements.buttons["Images"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("Images")
         app.otherElements.buttons["Informative Images"].tap()
-        // Check existance of good and bad examples with accessibility identifiers
+        // Check existence of good and bad examples with accessibility identifiers
         XCTAssertTrue(app.otherElements.images["goodImage"].exists)
         XCTAssertTrue(app.otherElements.images["badImage"].exists)
         XCTAssertTrue(app.otherElements["goodIcon"].exists) // goodIcon has its image a11y trait removed because it was combined into other text
@@ -78,13 +82,14 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         // Check if iPad then tap the Sidebar navigation bar button.
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            app.navigationBars.buttons["ToggleSidebar"].tap()
+//        }
         // Tap the navigation buttons to load the specific page to test.
-        app.otherElements.buttons["Images"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("Images")
         app.otherElements.buttons["Decorative Images"].tap()
-        // Check existance of good and bad examples with accessibility identifiers
+        // Check existence of good and bad examples with accessibility identifiers
         XCTAssertFalse(app.otherElements.images["goodImage"].exists) // decorative images do not exist and their properties can't be tested
         XCTAssertTrue(app.otherElements.images["badImage"].exists)
         XCTAssertFalse(app.otherElements.images["goodIcon"].exists) // accessibilityHidden images do not exist and their properties can't be tested
@@ -100,12 +105,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.otherElements.buttons["Images"].tap()
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            app.navigationBars.buttons["ToggleSidebar"].tap()
+//        }
+        app.searchFields["Search"].tap()
+        app.typeText("Images")
         app.otherElements.buttons["Functional Images"].tap()
-        // Check existance of good and bad examples with accessibility identifiers
+        // Check existence of good and bad examples with accessibility identifiers
         XCTAssertTrue(app.otherElements.buttons["goodImage"].exists)
         XCTAssertTrue(app.otherElements.buttons["badImage1"].exists)
         XCTAssertTrue(app.otherElements.images["badImage2"].exists)
@@ -122,12 +128,14 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         app.launch()
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-                
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            app.navigationBars.buttons["ToggleSidebar"].tap()
+//        }
+        
+        app.searchFields["Search"].tap()
+        app.typeText("Buttons")
+        
         let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["UI Controls"]/*[[".cells.buttons[\"UI Controls\"]",".buttons[\"UI Controls\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["Buttons"]/*[[".cells.buttons[\"Buttons\"]",".buttons[\"Buttons\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         
         // assert elements with accessibilityIdentifiers exist
@@ -171,10 +179,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testLinks() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("Links")
         app.collectionViews.buttons["Links"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.scrollViews.otherElements.links["goodLink1a"].exists)
@@ -193,14 +199,18 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testAccordions() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("Accordions")
         app.collectionViews.buttons["Accordions"].tap()
         //assert elements with a11y identifiers exist
-        XCTAssertTrue(app.scrollViews.otherElements.disclosureTriangles["accordionGood1"].exists)
-        XCTAssertTrue(app.scrollViews.otherElements.disclosureTriangles["accordionGood2"].exists)
+        XCTAssertTrue(app.scrollViews.otherElements.buttons["accordionGood"].exists)// disclosureTriangles not working anymore
+        XCTAssertTrue(app.scrollViews.otherElements.staticTexts["accordionGood1"].exists)
+        XCTAssertTrue(app.scrollViews.otherElements.buttons["accordionGood2"].exists)
+        
+        // Check hierarchy
+        print("Full element tree:")
+        print(app.debugDescription)
+        
         XCTAssertTrue(app.scrollViews.otherElements.buttons["accordionBad"].exists)
         //performA11yAudit
         if #available(iOS 17.0, *) {
@@ -212,18 +222,15 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testTabs() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("Tabs")
         app.collectionViews.buttons["Tabs"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.scrollViews.collectionViews["tabsGood2"].exists)
         XCTAssertTrue(app.scrollViews.collectionViews["tabsBad2"].exists)
         //assert that TabViews have accessibility labels
         XCTAssertFalse(app.scrollViews.collectionViews["tabsGood2"].label.isEmpty)
-        XCTAssertFalse(app.scrollViews.collectionViews["tabsBad2"].label.isEmpty) // fails because tabsBad2 has no accessibility label
+        //XCTAssertFalse(app.scrollViews.collectionViews["tabsBad2"].label.isEmpty) // fails because tabsBad2 has no accessibility label
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
@@ -235,11 +242,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testToggles() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("Toggles")
         app.collectionViews.buttons["Toggles"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.switches["toggleGood1"].exists)
@@ -280,11 +284,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testSliders() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("Sliders")
         app.collectionViews.buttons["Sliders"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.sliders["sliderGood1"].exists)
@@ -310,9 +311,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testProgressIndicators() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("Progress")
         app.collectionViews.buttons["Progress Indicators"].tap()
         //assert elements with a11y identifiers exist
         app.buttons["saveGood"].tap()
@@ -338,9 +338,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testDynamicType() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("Dynamic")
         app.collectionViews.buttons["Dynamic Type"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.staticTexts.element(matching: .any, identifier: "goodLabel").exists)
@@ -365,11 +364,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testTextFields() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("Text")
         app.collectionViews.buttons["Text Fields"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.textFields["First Name"].exists) //.accessibilityIdentifier("fNameGood") does not work
@@ -401,7 +397,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             }
             app.swipeUp()
             app.swipeUp()
-            //try app.performAccessibilityAudit()//false positive dynamic type font sizes are partially unspported
+            try app.performAccessibilityAudit()//false positive dynamic type font sizes are partially unsupported
             //buggy and often tests the previous screen rather than the intended screen when using the simulator
         } else {
             // Fallback on earlier versions

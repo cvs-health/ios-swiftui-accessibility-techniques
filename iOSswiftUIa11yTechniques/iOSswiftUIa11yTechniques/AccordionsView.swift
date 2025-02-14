@@ -72,7 +72,7 @@ struct AccordionsView: View {
                 DisclosureGroup("Terms and Conditions") {
                     Text(ipsum)
                 }.padding()
-                    .accessibilityIdentifier("accordionGood1")
+                    .accessibilityIdentifier("accordionGood")
                 DisclosureGroup("Details") {
                     Text("The good accordion examples use a native `DisclosureGroup`. VoiceOver speaks \"Collapsed, Double-tap to expand\" and \"Expanded, Double-tap to collapse\" as the state and hint text.")
                 }.padding(.bottom).accessibilityHint("Good Example DisclosureGroup")
@@ -85,6 +85,7 @@ struct AccordionsView: View {
                     Text(ipsum)
                 }.padding([.leading,.trailing])
                 .disclosureGroupStyle(CustomDisclosureGroupStyle(button: Label("", systemImage: "plus")))
+                .accessibilityIdentifier("accordionGood1")
                 DisclosureGroup("Details") {
                     Text("The second good accordion example uses a custom `DisclosureGroupStyle`. VoiceOver speaks the same \"Collapsed, Double-tap to expand\" and \"Expanded, Double-tap to collapse\" state and hint text.")
                 }.padding(.bottom).accessibilityHint("Good Example DisclosureGroupStyle")

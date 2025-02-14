@@ -252,6 +252,7 @@ struct TextFieldsView: View {
                     .textFieldStyle(.roundedBorder)
                 TextField("Phone Number", text: $phone)
                     .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("phoneBad")
                 TextField("Website", text: $website)
                     .textFieldStyle(.roundedBorder)
                 DisclosureGroup("Details") {

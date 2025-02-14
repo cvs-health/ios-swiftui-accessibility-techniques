@@ -1,5 +1,5 @@
 /*
-   Copyright 2023-2024 CVS Health and/or one of its affiliates
+   Copyright 2023-2025 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -37,10 +37,6 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-//        if UIDevice.current.userInterfaceIdiom == .pad {
-//            app.navigationBars.buttons["ToggleSidebar"].tap()
-//        }
-        
         app.searchFields["Search"].tap()
         app.typeText("Headings")
         app.otherElements.buttons["Headings"].tap()
@@ -105,9 +101,6 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-//        if UIDevice.current.userInterfaceIdiom == .pad {
-//            app.navigationBars.buttons["ToggleSidebar"].tap()
-//        }
         app.searchFields["Search"].tap()
         app.typeText("Images")
         app.otherElements.buttons["Functional Images"].tap()
@@ -128,10 +121,6 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         app.launch()
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-//        if UIDevice.current.userInterfaceIdiom == .pad {
-//            app.navigationBars.buttons["ToggleSidebar"].tap()
-//        }
-        
         app.searchFields["Search"].tap()
         app.typeText("Buttons")
         
@@ -159,8 +148,6 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         XCTAssertFalse(app.otherElements.buttons["edit2good"].label.lowercased().contains("button"))
         XCTAssertFalse(app.otherElements.buttons["edit1bad"].label.lowercased().contains("button"))
         //XCTAssertFalse(app.otherElements.buttons["edit2bad"].label.lowercased().contains("button")) // assert fails because bad edit button 2 has "button" in its accessibility label
-
-
 
         if #available(iOS 17.0, *) {
             try app.performAccessibilityAudit() { issue in // fails Label duplicates trait on bad edit button 2
@@ -368,23 +355,30 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         app.typeText("Text")
         app.collectionViews.buttons["Text Fields"].tap()
         //assert elements with a11y identifiers exist
-        XCTAssertTrue(app.textFields["First Name"].exists) //.accessibilityIdentifier("fNameGood") does not work
+        XCTAssertTrue(app.textFields["First Name"].exists)
+        XCTAssertTrue(app.textFields["fNameGood"].exists)
         XCTAssertTrue(app.textFields["Last Name"].exists)
         XCTAssertTrue(app.textFields["Username"].exists)
-        XCTAssertTrue(app.secureTextFields["passwordGood"].exists) //.accessibilityIdentifier("passwordGood") does work here
+        XCTAssertTrue(app.secureTextFields["passwordGood"].exists)
         XCTAssertTrue(app.textFields["Email"].exists)
         XCTAssertTrue(app.textFields["Street Address"].exists)
-        //XCTAssertTrue(app.textFields["Street Address Line 2"].exists) //wont work and .accessibilityIdentifier("street2Good") wont work either
+        XCTAssertTrue(app.textFields["Street Address Line 2"].exists)
+        XCTAssertTrue(app.textFields["street2Good"].exists)
         XCTAssertTrue(app.textFields["City"].exists)
         XCTAssertTrue(app.textFields["State"].exists)
-        //XCTAssertTrue(app.textFields["phoneGood"].exists) //wont work and "Phone" wont work either
+        XCTAssertTrue(app.textFields["phoneGood"].exists)
+        XCTAssertTrue(app.textFields["phoneBad"].exists)
         XCTAssertTrue(app.textFields["Website"].exists)
 
 
         //assert that elements have accessibility labels
+        XCTAssertFalse(app.textFields["fNameGood"].label.isEmpty)
         //XCTAssertFalse(app.textFields["First Name"].label.isEmpty) //wont work
         //XCTAssertFalse(app.textFields["Username"].label.isEmpty) //wont work to test if labels are not empty on textFields
-        XCTAssertFalse(app.secureTextFields["passwordGood"].label.isEmpty) //does work to check if labels are not empty on secureTextFields
+        //XCTAssertFalse(app.textFields["fNameBad"].label.isEmpty) //fails because fNameBad has no label
+        XCTAssertFalse(app.textFields["phoneGood"].label.isEmpty) //passes because phoneGood does have a label that is not empty
+        //XCTAssertFalse(app.textFields["phoneBad"].label.isEmpty) //fails because phoneBad has an empty label
+        XCTAssertFalse(app.secureTextFields["passwordGood"].label.isEmpty)
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
@@ -397,7 +391,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             }
             app.swipeUp()
             app.swipeUp()
-            try app.performAccessibilityAudit()//false positive dynamic type font sizes are partially unsupported
+            try app.performAccessibilityAudit()//false positive fail on contrast
             //buggy and often tests the previous screen rather than the intended screen when using the simulator
         } else {
             // Fallback on earlier versions
@@ -406,9 +400,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testPageTitles() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("Title")
         app.collectionViews.buttons["Page Titles"].tap()
         app.swipeUp()
         app.buttons["Page Titles Bad Example"].tap()
@@ -416,7 +409,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit() //tests the wrong screen (the previous screen)
+            try app.performAccessibilityAudit() //passes because there is no test for missing page title
         } else {
             // Fallback on earlier versions
         }
@@ -424,11 +417,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testSegmentedControls() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("Segmented")
         app.collectionViews.buttons["Segmented Controls"].tap()
         
         //assert elements with a11y identifiers exist
@@ -439,7 +429,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit() //tests the wrong (previous) screen.
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -447,11 +437,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testSteppers() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("Steppers")
         app.collectionViews.buttons["Steppers"].tap()
         
         //assert elements with a11y identifiers exist
@@ -469,7 +456,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit() //tests the wrong (previous) screen.
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -477,10 +464,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testDateTimePickers() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("Date")
         app.collectionViews.buttons["Date & Time Pickers"].tap()
         
         //assert elements with a11y identifiers exist
@@ -514,7 +499,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit() // fails, tests the wrong (previous) screen
+            try app.performAccessibilityAudit() // fails dynamic type on a calendar picker date cell
             app.swipeUp()
             try app.performAccessibilityAudit()
         } else {
@@ -524,22 +509,26 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testErrorValidation() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["Announcements"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("Error")
         app.collectionViews.buttons["Error Validation"].tap()
         //assert elements with a11y identifiers exist
-        //XCTAssertTrue(app.textFields["First Name *"].exists) //.accessibilityIdentifier("fNameGood") does not work
-        //XCTAssertTrue(app.textFields["Last Name *"].exists)
-        //XCTAssertTrue(app.textFields["phoneGood"].exists) //wont work and "Phone" wont work either
-        //XCTAssertTrue(app.textFields["Phone Number"].exists)
-        //XCTAssertTrue(app.textFields["Email *"].exists)
+        XCTAssertTrue(app.textFields["fNameGood"].exists)
+        XCTAssertTrue(app.textFields["First Name *"].exists)
+        XCTAssertTrue(app.textFields["Last Name *"].exists)
+        XCTAssertTrue(app.textFields["phoneGood"].exists) //wont work and "Phone" wont work either
+        XCTAssertTrue(app.textFields["Phone Number"].exists)
+        XCTAssertTrue(app.textFields["Email *"].exists)
+        XCTAssertTrue(app.textFields["First Name"].exists)
+        XCTAssertTrue(app.textFields["Last Name"].exists)
+        XCTAssertTrue(app.textFields["emailBad"].exists)
 
 
         //assert that elements have accessibility labels
-        //XCTAssertFalse(app.textFields["First Name *"].label.isEmpty) //wont work
-        //XCTAssertFalse(app.textFields["Last Name *"].label.isEmpty) //wont work to test if labels are not empty on textFields
+        XCTAssertFalse(app.textFields["First Name *"].label.isEmpty)
+        XCTAssertFalse(app.textFields["Last Name *"].label.isEmpty)
+        XCTAssertFalse(app.textFields["fNameBad"].label.isEmpty)
+        XCTAssertFalse(app.textFields["Last Name"].label.isEmpty) // these bad examples do have labels because it's only a bad error validation example
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
@@ -552,7 +541,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
             }
             app.swipeUp()
             app.swipeUp()
-            try app.performAccessibilityAudit()//false positive dynamic type font sizes are partially unspported
+            try app.performAccessibilityAudit()
             //buggy and often tests the previous screen rather than the intended screen when using the simulator
         } else {
             // Fallback on earlier versions
@@ -561,15 +550,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testAccessibilityNotifications() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["Announcements"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("Notific")
         app.collectionViews.buttons["Accessibility Notifications"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//false positive text clipped for the previous screen
+            try app.performAccessibilityAudit()
             //buggy and often tests the previous screen rather than the intended screen when using the simulator 
         } else {
             // Fallback on earlier versions
@@ -578,9 +565,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testLists() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("Lists")
         app.collectionViews.buttons["Lists"].tap()
 
         //performA11yAudit
@@ -593,14 +579,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testCards() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("cards")
         app.collectionViews.buttons["Cards"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//passes
+            try app.performAccessibilityAudit()//contrast false positive fail
         } else {
             // Fallback on earlier versions
         }
@@ -608,15 +593,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testGroupingControls() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("group")
         app.collectionViews.buttons["Grouping Controls"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//tests the wrong (previous) page
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -624,14 +607,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testReadingOrder() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("read")
         app.collectionViews.buttons["Reading Order"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//fails with text clipped false positive
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -639,15 +621,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testAdjustableAction() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["Accessibility UX Enhancements"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("action")
         app.collectionViews.buttons["Adjustable Action"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//fails with text clipped false positive on the page title
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -655,16 +635,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testSheets() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("sheet")
         app.collectionViews.buttons["Sheets"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//tests the wrong (previous) page
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -672,15 +649,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testConfirmationDialogs() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("dialog")
         app.collectionViews.buttons["Confirmation Dialogs"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//tests the wrong (previous) page
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -688,15 +663,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testAlerts() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("alerts")
         app.collectionViews.buttons["Alerts"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//tests the wrong (previous) page
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -704,14 +677,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testDataTables() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("data")
         app.collectionViews.buttons["Data Tables"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//fails for text clipped on first item.name in the data table
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -719,9 +691,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testLanguage() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("lang")
         app.collectionViews.buttons["Language"].tap()
 
         //performA11yAudit
@@ -734,15 +705,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testInputLabels() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["Accessibility UX Enhancements"].tap()
-        app.collectionViews.buttons["Input Labels"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("input")
+        app.collectionViews.buttons["Accessibility Input Labels"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//fails with text clipped false positive on the wrong (previous) page
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -750,14 +719,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testFocusManagement() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("focus")
         app.collectionViews.buttons["Focus Management"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//false positive fails text clipped for page title text
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -765,10 +733,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testCheckboxes() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("check")
         app.collectionViews.buttons["Checkboxes"].tap()
         //assert elements with a11y identifiers exist
         XCTAssertTrue(app.switches["checkboxGood"].exists)
@@ -783,7 +749,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         if #available(iOS 17.0, *) {
             app.swipeUp()
             app.swipeUp()
-            try app.performAccessibilityAudit()
+            try app.performAccessibilityAudit() // contrast fails false positive
         } else {
             // Fallback on earlier versions
         }
@@ -791,16 +757,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testCombiningFocus() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.swipeUp()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("focus")
         app.collectionViews.buttons["Combining Focus"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//fails false positive for text clipped on page title
+            try app.performAccessibilityAudit()//fails label not human-readable on last bad person.fill icon image
         } else {
             // Fallback on earlier versions
         }
@@ -808,10 +771,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testNavigation() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("navigation")
         app.collectionViews.buttons["Navigation"].tap()
 
         //performA11yAudit
@@ -826,17 +787,14 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testInputInstructions() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("input")
         app.collectionViews.buttons["Input Instructions"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            //try app.performAccessibilityAudit()//fail text clipped false positive on page title
             app.swipeUp()
-            try app.performAccessibilityAudit()//test wrong (previous) screen, fails contrast false positive
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -844,17 +802,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testPopovers() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("pop")
         app.collectionViews.buttons["Popovers"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//test wrong (previous) screen
-            app.swipeUp()
-            try app.performAccessibilityAudit()//test wrong (previous) screen
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -862,17 +816,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testMenus() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("menus")
         app.collectionViews.buttons["Menus"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//test wrong (previous) screen
-            app.swipeUp()
-            try app.performAccessibilityAudit()//test wrong (previous) screen and contrast false positive
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -880,17 +830,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testTouchTargetSize() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("target")
         app.collectionViews.buttons["Touch Target Size"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//fails hit area is too small on the first bad example icon button
-            app.swipeUp()
-            try app.performAccessibilityAudit()//test wrong (previous) screen and contrast false positive
+            try app.performAccessibilityAudit() //false positive fails hit area is too small on good example division symbol because it does not account for the spacing
         } else {
             // Fallback on earlier versions
         }
@@ -898,17 +844,12 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testDarkMode() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.swipeUp()
-        app.collectionViews.buttons["Responding to User Accessibility Preferences"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("dark")
         app.collectionViews.buttons["Dark Mode"].tap()
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//tests the wrong screen 🤦🏻‍♂️
-            app.swipeUp()
-            try app.performAccessibilityAudit()//
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -916,11 +857,9 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testAccessibilityRepresentation() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.swipeUp()
-        app.collectionViews.buttons["Accessibility Representation Custom Controls"].tap()
+        app.searchFields["Search"].tap()
+        app.typeText("represent")
+        app.collectionViews.buttons["Accessibility Representation"].tap()
         //performA11yAudit
         if #available(iOS 17.0, *) {
             try app.performAccessibilityAudit()//fails contrast on the custom slider
@@ -931,13 +870,12 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testReduceMotion() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
+        app.searchFields["Search"].tap()
+        app.typeText("reduce")
         app.collectionViews.buttons["Reduce Motion"].tap()
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//fails false positive text clipped on the page title
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -945,10 +883,8 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testMeaningfulAccessibleNames() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("name")
         app.collectionViews.buttons["Meaningful Accessible Names"].tap()
         //performA11yAudit
         if #available(iOS 17.0, *) {
@@ -966,18 +902,13 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testRadioButtons() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("radio")
         app.collectionViews.buttons["Radio Buttons"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()//test wrong (previous) screen
-            app.swipeUp()
-            try app.performAccessibilityAudit()//test wrong (previous) screen and dynamic type false positive
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -985,17 +916,14 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testPickers() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.collectionViews.buttons["UI Controls"].tap()
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("picker")
         app.collectionViews.buttons["Pickers"].tap()
 
         //performA11yAudit
         if #available(iOS 17.0, *) {
             app.swipeUp()
-            try app.performAccessibilityAudit()//test wrong (previous) screen and contrast false positive
+            try app.performAccessibilityAudit() //false positive contrast fail
         } else {
             // Fallback on earlier versions
         }
@@ -1003,18 +931,12 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
     func testAccessibilityHidden() throws {
         let app = XCUIApplication()
         app.launch()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            app.navigationBars.buttons["ToggleSidebar"].tap()
-        }
-        app.swipeUp()
+        app.searchFields["Search"].tap()
+        app.typeText("hidden")
         app.collectionViews.buttons["Accessibility Hidden"].tap()
-        
-        
-        
-
         //performA11yAudit
         if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit()// text clipped false positive
+            try app.performAccessibilityAudit()
         } else {
             // Fallback on earlier versions
         }
@@ -1030,4 +952,4 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
 
 
 
-}
+} //end of tests file

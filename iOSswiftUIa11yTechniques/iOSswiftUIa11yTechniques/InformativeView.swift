@@ -165,12 +165,11 @@ struct InformativeView: View {
                 HStack {
                     Text("Hello,")
                     Label("", systemImage: "globe").labelStyle(IconOnlyLabelStyle())
-                        .accessibilityIdentifier("badIcon")
                     Text("!")
                 }
                 DisclosureGroup("Details") {
                     VStack {
-                        Text("The bad informative icon image example uses no `Label` text to give the informative icon an accessibility label causing VoiceOver to read the image as \"Image\". VoiceOver focuses on each individual part of the line of text because the `HStack` is not combined into one focusable element.")
+                        Text("The bad informative icon image example uses no `Label` text to give the informative icon an accessibility label causing VoiceOver to read the image as \"Globe, Image\". VoiceOver focuses on each individual part of the line of text because the `HStack` is not combined into one focusable element.")
                     }
                 }.padding(.bottom).accessibilityHint("Bad Example `systemImage:` no `Label` text `HStack` not combined")
                 Text("Bad Example `Image` combined with `Text`")

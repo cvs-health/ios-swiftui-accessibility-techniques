@@ -34,6 +34,18 @@ struct TextFieldsView: View {
     @State private var byear = ""
     @State private var birthday = ""
 
+    @State private var usernameBad = ""
+    @State private var passwordBad = ""
+    @State private var fnameBad = ""
+    @State private var lnameBad = ""
+    @State private var phoneBad = ""
+    @State private var emailBad = ""
+    @State private var addressBad = ""
+    @State private var address2Bad = ""
+    @State private var cityBad = ""
+    @State private var stateBad = ""
+    @State private var websiteBad = ""
+
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -42,7 +54,7 @@ struct TextFieldsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Text fields require visible label text next to the field and the label text must be set as the `.accessibilityLabel` of the `TextField`. Or provide visible labels using `LabeledContent` and then an `.accessibilityLabel` is not required. Don't use `.labeledContentStyle(.vertical)` or else VoiceOver won't be able to double tap to activate the `TextField`. Don't use placeholder text which has insufficient contrast and disappears. Use `.textFieldStyle(.roundedBorder)` to make the `TextField` visually identifiable. Use `.border(.secondary)` to give the border a 3:1 contrast ratio in light and dark mode. Use `.keyboardType` to specify the keyboard displayed on input. Use `.textContentType` to enable form AutoFill for each `TextField`.")
+                Text("Text fields require visible label text next to the field set as the `.accessibilityLabel` of the `TextField`. Or provide visible labels using `LabeledContent` and then an `.accessibilityLabel` is not required. Don't use `.labeledContentStyle(.vertical)` or else VoiceOver won't be able to double tap to activate the `TextField`. Don't use placeholder text which has insufficient contrast and disappears. Use `.textFieldStyle(.roundedBorder)` to make the `TextField` visually identifiable. Use `.border(.secondary)` to give the border a 3:1 contrast ratio in light and dark mode. Use `.keyboardType` to specify the keyboard displayed on input. Use `.textContentType` to enable form AutoFill for each `TextField`.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -232,28 +244,28 @@ struct TextFieldsView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                TextField("First Name", text: $fname)
+                TextField("First Name", text: $fnameBad)
                     .textFieldStyle(.roundedBorder)
-                TextField("Last Name", text: $lname)
+                TextField("Last Name", text: $lnameBad)
                     .textFieldStyle(.roundedBorder)
-                TextField("Username", text: $username)
+                TextField("Username", text: $usernameBad)
                     .textFieldStyle(.roundedBorder)
-                SecureField("Password", text: $password)
+                SecureField("Password", text: $passwordBad)
                     .textFieldStyle(.roundedBorder)
-                TextField("Email", text: $email)
+                TextField("Email", text: $emailBad)
                     .textFieldStyle(.roundedBorder)
-                TextField("Street Address", text: $address)
+                TextField("Street Address", text: $addressBad)
                     .textFieldStyle(.roundedBorder)
-                TextField("", text: $address2)
+                TextField("", text: $address2Bad)
                     .textFieldStyle(.roundedBorder)
-                TextField("City", text: $city)
+                TextField("City", text: $cityBad)
                     .textFieldStyle(.roundedBorder)
-                TextField("State", text: $state)
+                TextField("State", text: $stateBad)
                     .textFieldStyle(.roundedBorder)
-                TextField("Phone Number", text: $phone)
+                TextField("Phone Number", text: $phoneBad)
                     .textFieldStyle(.roundedBorder)
                     .accessibilityIdentifier("phoneBad")
-                TextField("Website", text: $website)
+                TextField("Website", text: $websiteBad)
                     .textFieldStyle(.roundedBorder)
                 DisclosureGroup("Details") {
                     Text("The bad Text Fields example uses placeholder text which disappears and has insufficient contrast rather than visible label text. There is no `.accessibilityLabel` for each `TextField`. The default border style has an insufficient contrast ratio. Keyboard types are not specified. AutoFill and password management are not enabled.")

@@ -112,6 +112,7 @@ struct TabsView: View {
                 }
                 .accessibilityElement(children: .contain)
                 .accessibilityAddTraits(.isTabBar)
+                .accessibilityLabel("Navigation")
                 if tab1Visible {
                     Text("Home tab panel text.")
                 }

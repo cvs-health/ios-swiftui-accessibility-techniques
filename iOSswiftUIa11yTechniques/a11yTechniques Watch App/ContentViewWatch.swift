@@ -55,8 +55,12 @@ struct ContentViewWatch: View {
             InformativeImagesWatch()
         case "decorative images":
             DecorativeImagesWatch()
+        case "tabs":
+            TabsWatch()
         case "headings":
             HeadingsWatch()
+        case "text fields":
+            TextFieldsWatch()
         case "functional images":
             FunctionalImagesWatch()
         default:

@@ -51,7 +51,7 @@ struct HeadingsWatch: View {
                 Text("Saturday 9AM to 10PM")
                 Text("Sunday 10AM to 6PM")
             }.frame(maxWidth: .infinity, alignment: .leading)
-            NavigationLink(destination: DetailGood()) {
+            NavigationLink(destination: DetailHeadingsGood()) {
                 Text("Details")
                     .frame(maxWidth: .infinity)
                     .padding(15)
@@ -80,7 +80,7 @@ struct HeadingsWatch: View {
                 Text("Saturday 9AM to 10PM")
                 Text("Sunday 10AM to 6PM")
             }.frame(maxWidth: .infinity, alignment: .leading)
-            NavigationLink(destination: DetailGood2()) {
+            NavigationLink(destination: DetailHeadingsGood2()) {
                 Text("Details")
                     .frame(maxWidth: .infinity)
                     .padding(15)
@@ -118,7 +118,7 @@ struct HeadingsWatch: View {
                 Text("Saturday 9AM to 10PM")
                 Text("Sunday 10AM to 6PM")
             }.frame(maxWidth: .infinity, alignment: .leading)
-            NavigationLink(destination: DetailBad()) {
+            NavigationLink(destination: DetailHeadingsBad()) {
                 Text("Details")
                     .frame(maxWidth: .infinity)
                     .padding(15)
@@ -146,7 +146,7 @@ struct HeadingsWatch: View {
                                 Text("Saturday 9AM to 10PM")
                                 Text("Sunday 10AM to 6PM")
             }.frame(maxWidth: .infinity, alignment: .leading)
-            NavigationLink(destination: DetailBad2()) {
+            NavigationLink(destination: DetailHeadingsBad2()) {
                 Text("Details")
                     .frame(maxWidth: .infinity)
                     .padding(15)
@@ -161,7 +161,7 @@ struct HeadingsWatch: View {
     }
 }
 
-struct DetailGood: View {
+struct DetailHeadingsGood: View {
     var body: some View {
         ScrollView {
             Text("The first good example Store Hours heading uses `.accessibilityAddTraits(.isHeader)` which allows VoiceOver users to quickly navigate to the heading using the Rotor.")
@@ -169,7 +169,7 @@ struct DetailGood: View {
             .navigationTitle("`.isHeader` Trait")
     }
 }
-struct DetailGood2: View {
+struct DetailHeadingsGood2: View {
     var body: some View {
         ScrollView {
             Text("The second good example Store Hours heading uses `.accessibilityAddTraits(.isHeader)` and `.accessibilityHeading(.h2)` which allows VoiceOver users to quickly navigate to the heading using the Rotor and hear the heading level.")
@@ -177,7 +177,7 @@ struct DetailGood2: View {
             .navigationTitle("`.isHeader` Trait and `.accessibilityHeading`")
     }
 }
-struct DetailBad: View {
+struct DetailHeadingsBad: View {
     var body: some View {
         ScrollView {
             Text("The first bad example Store Hours heading does not use `.accessibilityAddTraits(.isHeader)` which prevents VoiceOver users from being able to quickly navigate to the heading using the Rotor.")
@@ -185,7 +185,7 @@ struct DetailBad: View {
         .navigationTitle("No `Image(decorative:)`")
     }
 }
-struct DetailBad2: View {
+struct DetailHeadingsBad2: View {
     var body: some View {
         ScrollView {
             Text("The second bad example Store Hours heading uses `.accessibilityLabel(\"Store Hours heading\")` which incorrectly modifies the accessible name of the text by adding \" heading\" and does not allow VoiceOver users to quickly navigate to the heading using the Rotor.")

@@ -27,7 +27,7 @@ struct TabsGoodView: View {
                 .tabItem {
                     Label("Messages", systemImage: "envelope")
                 }
-        }
+        }.accessibilityLabel("Navigation")
     }
 }
  

@@ -369,7 +369,6 @@
 		BCE205262B58E529000DF400 /* DarkMode.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DarkMode.md; sourceTree = "<group>"; };
 		BCE205272B597199000DF400 /* RotorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotorView.swift; sourceTree = "<group>"; };
 		BCE205292B5971A8000DF400 /* Rotor.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Rotor.md; sourceTree = "<group>"; };
-		BCE2052A2B5991B7000DF400 /* Sources.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Sources.md; sourceTree = "<group>"; };
 		BCE2052B2B5A1C38000DF400 /* ContactAustin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAustin.swift; sourceTree = "<group>"; };
 		BCE2052D2B5A1C50000DF400 /* ContactSeattle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSeattle.swift; sourceTree = "<group>"; };
 		BCE2052F2B5A1C5F000DF400 /* ContactAtlanta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAtlanta.swift; sourceTree = "<group>"; };
@@ -505,7 +504,6 @@
 				BC8129012B3CCF4F00CB19D2 /* Sheets.md */,
 				AA636C882AC3B48C00014BAF /* Sliders.md */,
 				BCA3DD0F2B72DEA900033712 /* SmartInvert.md */,
-				BCE2052A2B5991B7000DF400 /* Sources.md */,
 				AA1303192B027685001AE0BF /* Steppers.md */,
 				AAF6D09A2ABA29EE00188DE0 /* Tabs.md */,
 				AA1303162AFED27C001AE0BF /* TextFields.md */,

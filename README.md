@@ -5,7 +5,7 @@ Demonstrates accessibility techniques for iOS SwiftUI apps using a collection of
 
 Explains how to apply WCAG to iOS SwiftUI apps.
 
-Using the app with VoiceOver and other iOS assistive technologies will demonstrate the right and wrong ways of applying accessibility to a SwiftUI app. 
+Using the app with VoiceOver and other iOS accessibility features will demonstrate the right and wrong ways of applying accessibility to a SwiftUI app. 
 
 [Download iOS app from the AppStore.](https://apps.apple.com/app/accessibility-techniques/id6474141089)
 
@@ -92,7 +92,7 @@ Documentation files for each technique are listed below.
 ## License
 iOS SwiftUI Accessibility Techniques is licensed under under the Apache License, Version 2.0.  See LICENSE file for more information.
 
-Copyright 2023-2024 CVS Health and/or one of its affiliates
+Copyright 2023-2025 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -47,6 +47,7 @@ Documentation files for each technique are listed below.
 - [x] [Grouping Controls](iOSswiftUIa11yTechniques/Documentation/GroupingControls.md)
 - [x] [Headings](iOSswiftUIa11yTechniques/Documentation/Headings.md)
 - [x] [Horizontal Scroll Views](iOSswiftUIa11yTechniques/Documentation/HorizontalScrollViews.md)
+- [x] [Images](iOSswiftUIa11yTechniques/Documentation/Images.md)
 - [x] [Increase Contrast](iOSswiftUIa11yTechniques/Documentation/IncreaseContrast.md)
 - [x] [Informative Images](iOSswiftUIa11yTechniques/Documentation/InformativeImages.md)
 - [x] [Input Instructions](iOSswiftUIa11yTechniques/Documentation/InputInstructions.md)

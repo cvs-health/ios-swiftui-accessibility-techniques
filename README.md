@@ -69,6 +69,7 @@ Documentation files for each technique are listed below.
 - [x] [Reduce Transparency](iOSswiftUIa11yTechniques/Documentation/ReduceTransparency.md)
 - [x] Responsive Layouts
 - [x] [Rotor](iOSswiftUIa11yTechniques/Documentation/Rotor.md)
+- [x] [Scroll Views](iOSswiftUIa11yTechniques/Documentation/ScrollViews.md)
 - [x] [Search Suggestions](iOSswiftUIa11yTechniques/Documentation/SearchSuggestions.md)
 - [x] [Segmented Controls](iOSswiftUIa11yTechniques/Documentation/SegmentedControls.md)
 - [x] [Sheets](iOSswiftUIa11yTechniques/Documentation/Sheets.md)

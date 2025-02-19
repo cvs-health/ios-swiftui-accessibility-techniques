@@ -17,12 +17,12 @@ Documentation files for each technique are listed below.
 
 ## Topics
 - [x] = Completed
+- [x] [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md)
 - [x] [Accessibility Detection](iOSswiftUIa11yTechniques/Documentation/AccessibilityDetection.md)
 - [x] [Accessibility Hidden](iOSswiftUIa11yTechniques/Documentation/AccessibilityHidden.md)
 - [x] [Accessibility Input Labels](iOSswiftUIa11yTechniques/Documentation/AccessibilityInputLabels.md)
 - [x] [Accessibility Notifications](iOSswiftUIa11yTechniques/Documentation/AccessibilityNotifications.md)
 - [x] [Accessibility Representation](iOSswiftUIa11yTechniques/Documentation/AccessibilityRepresentation.md)
-- [x] [Actions](iOSswiftUIa11yTechniques/Documentation/Actions.md)
 - [x] [Accordions](iOSswiftUIa11yTechniques/Documentation/Accordions.md)
 - [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
 - [x] [Alerts](iOSswiftUIa11yTechniques/Documentation/Alerts.md)

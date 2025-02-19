@@ -356,7 +356,7 @@
 		BCD1CF962B5760E200A26ED3 /* VoiceOverPronunciation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = VoiceOverPronunciation.md; sourceTree = "<group>"; };
 		BCD1CF972B57670D00A26ED3 /* EscapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EscapeView.swift; sourceTree = "<group>"; };
 		BCD1CF992B57671700A26ED3 /* EscapeAction.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = EscapeAction.md; sourceTree = "<group>"; };
-		BCD1CF9A2B577C5300A26ED3 /* Actions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Actions.md; sourceTree = "<group>"; };
+		BCD1CF9A2B577C5300A26ED3 /* AccessibilityActions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityActions.md; sourceTree = "<group>"; };
 		BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsView.swift; sourceTree = "<group>"; };
 		BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsFocusManagement.swift; sourceTree = "<group>"; };
 		BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp2.swift; sourceTree = "<group>"; };
@@ -451,7 +451,7 @@
 				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */,
 				BC163FCA2B6C1598009E3A83 /* AccessibilityRepresentation.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
-				BCD1CF9A2B577C5300A26ED3 /* Actions.md */,
+				BCD1CF9A2B577C5300A26ED3 /* AccessibilityActions.md */,
 				BC00300A2B332C020063EAD5 /* AdjustableAction.md */,
 				BC715B642B44C81A00C77B57 /* Alerts.md */,
 				BC163FC72B6C03DE009E3A83 /* AssistiveAccess.md */,

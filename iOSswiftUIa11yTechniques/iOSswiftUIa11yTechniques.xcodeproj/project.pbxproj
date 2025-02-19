@@ -348,14 +348,14 @@
 		BCB059542CAB371C00C670B8 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		BCB059562CAB5F9C00C670B8 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		BCB086F32D1D982600623141 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
-		BCC4F1822B3F8757004AAB65 /* InputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InputLabels.md; sourceTree = "<group>"; };
+		BCC4F1822B3F8757004AAB65 /* AccessibilityInputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityInputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
 		BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Techniques.swift; sourceTree = "<group>"; };
 		BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewOld.swift; sourceTree = "<group>"; };
 		BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceOverPronunciationView.swift; sourceTree = "<group>"; };
 		BCD1CF962B5760E200A26ED3 /* VoiceOverPronunciation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = VoiceOverPronunciation.md; sourceTree = "<group>"; };
 		BCD1CF972B57670D00A26ED3 /* EscapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EscapeView.swift; sourceTree = "<group>"; };
-		BCD1CF992B57671700A26ED3 /* Escape.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Escape.md; sourceTree = "<group>"; };
+		BCD1CF992B57671700A26ED3 /* EscapeAction.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = EscapeAction.md; sourceTree = "<group>"; };
 		BCD1CF9A2B577C5300A26ED3 /* Actions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Actions.md; sourceTree = "<group>"; };
 		BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsView.swift; sourceTree = "<group>"; };
 		BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsFocusManagement.swift; sourceTree = "<group>"; };
@@ -363,7 +363,7 @@
 		BCE1B4432D5FFE13001F92EF /* a11yTechniques Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a11yTechniques Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE1B4522D5FFE15001F92EF /* a11yTechniques Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "a11yTechniques Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE1B45C2D5FFE15001F92EF /* a11yTechniques Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "a11yTechniques Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BCE205212B579FC3000DF400 /* AssistiveTechnologyDetection.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AssistiveTechnologyDetection.md; sourceTree = "<group>"; };
+		BCE205212B579FC3000DF400 /* AccessibilityDetection.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityDetection.md; sourceTree = "<group>"; };
 		BCE205222B58D0BE000DF400 /* DarkModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeView.swift; sourceTree = "<group>"; };
 		BCE205242B58D50D000DF400 /* UserPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesView.swift; sourceTree = "<group>"; };
 		BCE205262B58E529000DF400 /* DarkMode.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DarkMode.md; sourceTree = "<group>"; };
@@ -455,7 +455,7 @@
 				BC00300A2B332C020063EAD5 /* AdjustableAction.md */,
 				BC715B642B44C81A00C77B57 /* Alerts.md */,
 				BC163FC72B6C03DE009E3A83 /* AssistiveAccess.md */,
-				BCE205212B579FC3000DF400 /* AssistiveTechnologyDetection.md */,
+				BCE205212B579FC3000DF400 /* AccessibilityDetection.md */,
 				BC1A5FA32B6079200008513C /* AttributedStrings.md */,
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
 				BC8C920E2B2C0FDE006DAC20 /* Cards.md */,
@@ -472,7 +472,7 @@
 				BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */,
 				AA7786352AEFFE6000AA39DA /* DynamicType.md */,
 				AAF127B62B2194E200D5313D /* ErrorValidation.md */,
-				BCD1CF992B57671700A26ED3 /* Escape.md */,
+				BCD1CF992B57671700A26ED3 /* EscapeAction.md */,
 				BC715B652B44D01200C77B57 /* FocusManagement.md */,
 				AA9B134F2AAA4781009A3D84 /* FunctionalImages.md */,
 				BC8C92112B315816006DAC20 /* GroupingControls.md */,
@@ -481,7 +481,7 @@
 				BC046F2E2BEE822A00E498E1 /* IncreaseContrast.md */,
 				AAAFD7122AA92FF7008DA3AD /* InformativeImages.md */,
 				BC1B59C42B4F102100E8F782 /* InputInstructions.md */,
-				BCC4F1822B3F8757004AAB65 /* InputLabels.md */,
+				BCC4F1822B3F8757004AAB65 /* AccessibilityInputLabels.md */,
 				BC81290A2B3F6C5A00CB19D2 /* Language.md */,
 				BC1A5FA02B5F6B340008513C /* LargeContentViewer.md */,
 				AA0F3EF52AB377740062E7BC /* Links.md */,

@@ -1,4 +1,4 @@
-# Input Labels
+# Accessibility Input Labels
 
 Accessibility Input Labels can provide multiple alternative voice input labels for Voice Control users to speak when tapping a control via voice commands. 
 

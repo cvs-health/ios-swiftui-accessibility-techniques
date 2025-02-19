@@ -15,7 +15,7 @@ Review the project source code to see how to apply the accessibility techniques 
 
 Documentation files for each technique are listed below.
 
-## Topics
+## Accessibility Documentation
 - [x] = Completed
 - [x] [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md)
 - [x] [Accessibility Detection](iOSswiftUIa11yTechniques/Documentation/AccessibilityDetection.md)

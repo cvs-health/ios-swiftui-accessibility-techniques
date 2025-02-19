@@ -51,20 +51,17 @@ struct ContentViewWatch: View {
     @ViewBuilder
     func getItemDetailView(for technique: Techniques) -> some View {
         switch technique.name.lowercased() {
-        case "informative images":
-            InformativeImagesWatch()
-        case "decorative images":
-            DecorativeImagesWatch()
-        case "tabs":
-            TabsWatch()
-        case "headings":
-            HeadingsWatch()
-        case "text fields":
-            TextFieldsWatch()
-        case "functional images":
-            FunctionalImagesWatch()
-        default:
-            InformativeImagesWatch()
+        case "informative images": InformativeImagesWatch()
+        case "decorative images": DecorativeImagesWatch()
+        case "tabs": TabsWatch()
+        case "sheets": SheetsWatch()
+        case "pickers": PickersWatch()
+        case "accessibility sort priority": AccessibilitySortPriorityWatch()
+        case "touch target size": TargetSizeWatch()
+        case "headings": HeadingsWatch()
+        case "text fields": TextFieldsWatch()
+        case "functional images": FunctionalImagesWatch()
+        default: InformativeImagesWatch()
         }
     }
     

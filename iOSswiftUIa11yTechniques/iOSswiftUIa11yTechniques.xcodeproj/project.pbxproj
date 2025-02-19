@@ -53,12 +53,14 @@
 		BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */; };
 		BC163FC92B6C1585009E3A83 /* AccessibilityRepresentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC82B6C1585009E3A83 /* AccessibilityRepresentationView.swift */; };
 		BC17B6132C9B212700403544 /* RedundantEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC17B6122C9B212700403544 /* RedundantEntryView.swift */; };
+		BC1A26512D64218900A23DD6 /* AccessibilitySortPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A26502D64218900A23DD6 /* AccessibilitySortPriority.swift */; };
 		BC1A5FA22B6079080008513C /* AttributedStringsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A5FA12B6079070008513C /* AttributedStringsView.swift */; };
 		BC1B59C32B4E664700E8F782 /* MenusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59C22B4E664700E8F782 /* MenusView.swift */; };
 		BC1B59C82B5064BF00E8F782 /* TouchTargetSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */; };
 		BC1B59CB2B508BDD00E8F782 /* ATdetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */; };
 		BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */; };
 		BC2133A32B713B1100753693 /* MeaningfulAccessibleNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */; };
+		BC3951EF2D64EB4200D26DBB /* AccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */; };
 		BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */; };
 		BC3EA3B52B7C069F0003B8A2 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B42B7C069F0003B8A2 /* MapView.swift */; };
 		BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */; };
@@ -256,6 +258,7 @@
 		BC163FC82B6C1585009E3A83 /* AccessibilityRepresentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityRepresentationView.swift; sourceTree = "<group>"; };
 		BC163FCA2B6C1598009E3A83 /* AccessibilityRepresentation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityRepresentation.md; sourceTree = "<group>"; };
 		BC17B6122C9B212700403544 /* RedundantEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedundantEntryView.swift; sourceTree = "<group>"; };
+		BC1A26502D64218900A23DD6 /* AccessibilitySortPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilitySortPriority.swift; sourceTree = "<group>"; };
 		BC1A5FA02B5F6B340008513C /* LargeContentViewer.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LargeContentViewer.md; sourceTree = "<group>"; };
 		BC1A5FA12B6079070008513C /* AttributedStringsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringsView.swift; sourceTree = "<group>"; };
 		BC1A5FA32B6079200008513C /* AttributedStrings.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AttributedStrings.md; sourceTree = "<group>"; };
@@ -269,6 +272,7 @@
 		BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactFormView.swift; sourceTree = "<group>"; };
 		BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeaningfulAccessibleNamesView.swift; sourceTree = "<group>"; };
 		BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MeaningfulAccessibleNames.md; sourceTree = "<group>"; };
+		BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifier.swift; sourceTree = "<group>"; };
 		BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SearchSuggestions.md; sourceTree = "<group>"; };
 		BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickers.swift; sourceTree = "<group>"; };
 		BC3EA3B32B7B25550003B8A2 /* DateTimePickers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DateTimePickers.md; sourceTree = "<group>"; };
@@ -549,6 +553,7 @@
 				AABD27BD2A9FE69500F718F7 /* Assets.xcassets */,
 				BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */,
 				BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */,
+				BC1A26502D64218900A23DD6 /* AccessibilitySortPriority.swift */,
 				BC1A5FA12B6079070008513C /* AttributedStringsView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
 				BC8C920C2B2BAE41006DAC20 /* CardsView.swift */,
@@ -590,6 +595,7 @@
 				BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
+				BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */,
 				BC8CD0E42B4D06FC00B9A28A /* MagicTapView.swift */,
 				BC3EA3B42B7C069F0003B8A2 /* MapView.swift */,
 				BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */,
@@ -943,6 +949,7 @@
 				BCEF61FA2CE6E75F00B0F757 /* SignUpC.swift in Sources */,
 				AAF127C42B23EDCB00D5313D /* ContentView.swift in Sources */,
 				AA7ADED02AF2BAFE0019D210 /* PickersView.swift in Sources */,
+				BC3951EF2D64EB4200D26DBB /* AccessibilityIdentifier.swift in Sources */,
 				BC82DF712C60F69B00680BC7 /* PrototypeHeadings3.swift in Sources */,
 				BC75478C2C2FA7EA00A4ABC7 /* FormA.swift in Sources */,
 				BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */,
@@ -1020,6 +1027,7 @@
 				BC163FC42B6AD3FB009E3A83 /* ContactOrlando.swift in Sources */,
 				AABD27D62A9FF12A00F718F7 /* InformativeView.swift in Sources */,
 				BCD1CF982B57670D00A26ED3 /* EscapeView.swift in Sources */,
+				BC1A26512D64218900A23DD6 /* AccessibilitySortPriority.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1256,7 +1264,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 12.4;
+				MARKETING_VERSION = 12.6;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1291,7 +1299,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 12.4;
+				MARKETING_VERSION = 12.6;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1324,7 +1332,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1360,7 +1368,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;

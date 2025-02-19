@@ -39,6 +39,21 @@ struct TouchTargetSize: View {
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
                 HStack {
+                    Button(action: {
+                        self.isMuted.toggle()
+                    }) {
+                        Image(systemName: self.isMuted ? "speaker.slash.fill" : "speaker.2.fill").frame(minWidth: 24, minHeight: 24)
+                    }
+                    .accessibilityLabel("Mute")
+                    .accessibilityAddTraits(.isToggle)
+                    .accessibility(addTraits: isMuted ? [.isSelected] : [])
+                    .accessibility(removeTraits: isMuted ? [] : [.isSelected])
+                    Button(action: {
+                    }) {
+                        Image(systemName: "play.fill").frame(minWidth: 24, minHeight: 24)
+                    }
+                    .accessibilityLabel("Play")
+                    .accessibilityAddTraits(.startsMediaSession)
                    Button(action: {
                        print("First button tapped")
                    }) {
@@ -71,22 +86,6 @@ struct TouchTargetSize: View {
                     }) {
                         Image(systemName: "multiply").frame(width:18, height:18)
                     }.accessibilityLabel("Multiply")
-                    Spacer()
-                    Button(action: {
-                        self.isMuted.toggle()
-                    }) {
-                        Image(systemName: self.isMuted ? "speaker.slash.fill" : "speaker.2.fill").frame(minWidth: 24, minHeight: 24)
-                    }
-                    .accessibilityLabel("Mute")
-                    .accessibilityAddTraits(.isToggle)
-                    .accessibility(addTraits: isMuted ? [.isSelected] : [])
-                    .accessibility(removeTraits: isMuted ? [] : [.isSelected])
-                    Button(action: {
-                    }) {
-                        Image(systemName: "play.fill").frame(minWidth: 24, minHeight: 24)
-                    }
-                    .accessibilityLabel("Play")
-                    .accessibilityAddTraits(.startsMediaSession)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good touch target size example uses `.frame(minWidth: 24, minHeight: 24)` on each icon button `Image`. The last 2 icon buttons in the example have target size below 24 by 24 but have additional spacing that adds up to greater than 24 by 24. Xcode Accessibility Inspector will fail those last 2 buttons as false positives.")

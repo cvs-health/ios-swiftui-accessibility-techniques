@@ -158,6 +158,7 @@ struct TogglesView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .accessibilityLabel("Bookmark Cupertino Location")
                             .accessibilityIdentifier("toggleGood3a")
+                            .sensoryFeedback(.impact, trigger: isCupertinoBookmarked)
                 }
                 HStack {
                     Text("Austin")
@@ -171,9 +172,10 @@ struct TogglesView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .accessibilityLabel("Bookmark Austin Location")
                             .accessibilityIdentifier("toggleGood3b")
+                            .sensoryFeedback(.impact, trigger: isAustinBookmarked)
                 }
                 DisclosureGroup("Details") {
-                    Text("The third good toggle example uses `.toggleStyle(.button)` and includes unique and specific `.accessibilityLabel` text for each bookmark button.")
+                    Text("The third good toggle example uses `.toggleStyle(.button)` and includes unique and specific `.accessibilityLabel` text for each bookmark button. `sensoryFeedback(_:trigger:)` is used to provide haptic feedback felt by users when they toggle the buttons.")
                 }.padding(.bottom).accessibilityHint("Good Example `.toggleStyle(.button)` and unique `.accessibilityLabel`")
                 Text("Good Example Custom `.toggleStyle`")
                     .font(.subheadline)
@@ -185,10 +187,13 @@ struct TogglesView: View {
                         }
                     .toggleStyle(ColoredToggleStyle())
                     .padding()
-                    
+                    .sensoryFeedback(
+                        .impact,
+                                trigger: isToggleOn
+                            )
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The good custom `.toggleStyle` example uses `.toggleStyle(ColoredToggleStyle())` which customizes the appearance and color of the toggle and sets the off state color to `Color.gray` which has 3:1 contrast ratio in the off state.")
+                    Text("The good custom `.toggleStyle` example uses `.toggleStyle(ColoredToggleStyle())` which customizes the appearance and color of the toggle and sets the off state color to `Color.gray` which has 3:1 contrast ratio in the off state. `sensoryFeedback(_:trigger:)` is used to provide haptic feedback felt by users when they toggle the custom switch.")
                 }.padding(.bottom).accessibilityHint("Good Example Custom `.toggleStyle`")
                 Text("Bad Examples")
                     .font(.subheadline)

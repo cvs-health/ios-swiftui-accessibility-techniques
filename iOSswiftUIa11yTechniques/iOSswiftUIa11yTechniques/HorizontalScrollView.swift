@@ -84,6 +84,7 @@ struct HorizontalScrollView: View {
                                     .shadow(color: .gray, radius: 1, x: 0, y: 2)
                             )
                             .buttonStyle(PlainButtonStyle())
+                            .foregroundColor(colorScheme == .dark ? Color.black : Color.black)
                         }
                     }
                     .scrollTargetLayout()
@@ -119,6 +120,7 @@ struct HorizontalScrollView: View {
                                     .shadow(color: .gray, radius: 1, x: 0, y: 2)
                             )
                             .buttonStyle(PlainButtonStyle())
+                            .foregroundColor(colorScheme == .dark ? Color.black : Color.black)
                         }
                     }
                     .scrollTargetLayout()

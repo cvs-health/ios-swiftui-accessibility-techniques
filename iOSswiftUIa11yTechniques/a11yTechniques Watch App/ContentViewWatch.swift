@@ -55,6 +55,7 @@ struct ContentViewWatch: View {
         case "decorative images": DecorativeImagesWatch()
         case "tabs": TabsWatch()
         case "sheets": SheetsWatch()
+        case "combining focus": CombiningFocusWatch()
         case "pickers": PickersWatch()
         case "accessibility sort priority": AccessibilitySortPriorityWatch()
         case "touch target size": TargetSizeWatch()

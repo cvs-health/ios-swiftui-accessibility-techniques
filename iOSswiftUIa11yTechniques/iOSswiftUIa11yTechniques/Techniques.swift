@@ -20,6 +20,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Assistive Access"),
     Techniques(name: "Buttons"),
     Techniques(name: "Cards"),
+    Techniques(name: "Charts"),
     Techniques(name: "Carousels"),
     Techniques(name: "Checkboxes"),
     Techniques(name: "Combining Focus"),

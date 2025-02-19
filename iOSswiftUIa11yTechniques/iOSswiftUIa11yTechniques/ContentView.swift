@@ -70,6 +70,7 @@ struct ContentView: View {
         case "assistive access": AssistiveAccessView()
         case "buttons": ButtonsView()
         case "cards": CardsView()
+        case "charts": ChartsView()
         case "carousels": CarouselView()
         case "checkboxes": CheckboxesView()
         case "combining focus": CombiningFocusView()

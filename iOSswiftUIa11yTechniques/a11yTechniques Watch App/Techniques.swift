@@ -8,6 +8,7 @@ struct Techniques: Identifiable {
 let techniques: [Techniques] = [
     Techniques(name: "Decorative Images"),
     Techniques(name: "Headings"),
+    Techniques(name: "Combining Focus"),
     Techniques(name: "Tabs"),
     Techniques(name: "Accessibility Sort Priority"),
     Techniques(name: "Touch Target Size"),

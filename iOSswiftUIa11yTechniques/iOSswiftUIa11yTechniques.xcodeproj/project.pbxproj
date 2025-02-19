@@ -275,6 +275,7 @@
 		BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MeaningfulAccessibleNames.md; sourceTree = "<group>"; };
 		BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifier.swift; sourceTree = "<group>"; };
 		BC3951F42D657B9400D26DBB /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
+		BC3951F62D668A1F00D26DBB /* Charts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Charts.md; sourceTree = "<group>"; };
 		BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SearchSuggestions.md; sourceTree = "<group>"; };
 		BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickers.swift; sourceTree = "<group>"; };
 		BC3EA3B32B7B25550003B8A2 /* DateTimePickers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DateTimePickers.md; sourceTree = "<group>"; };
@@ -458,6 +459,7 @@
 				BC1A5FA32B6079200008513C /* AttributedStrings.md */,
 				AAAFD7142AAFCC00008DA3AD /* Buttons.md */,
 				BC8C920E2B2C0FDE006DAC20 /* Cards.md */,
+				BC3951F62D668A1F00D26DBB /* Charts.md */,
 				BC6D39652CDABF5A00876212 /* Carousels.md */,
 				BC6D39E12CDDD56100876212 /* HorizontalScrollViews.md */,
 				BCEDB8EE2B4760D800B4D85D /* Checkboxes.md */,

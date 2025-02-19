@@ -36,7 +36,8 @@ struct ChartsView: View {
         TemperatureData(city: "Seattle", temperature: 42),
         TemperatureData(city: "Austin", temperature: 45)
     ]
-    
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+
     var body: some View {
         ScrollView {
             VStack {
@@ -66,7 +67,7 @@ struct ChartsView: View {
                     .symbolSize(90)
                     .annotation(position: .trailing) {
                         Text(String(dataPoint.temperature)+"°")
-                            .foregroundColor(.gray)
+                            .foregroundColor(.primary)
                     }
                     .accessibilityLabel(dataPoint.city)
                     .accessibilityValue(String(dataPoint.temperature) + "°")
@@ -74,17 +75,58 @@ struct ChartsView: View {
                 .chartYAxis {
                     AxisMarks(position: .leading) { _ in
                         AxisValueLabel()
+                            .foregroundStyle(Color.primary)
+                        AxisGridLine()
+                            .foregroundStyle(Color.secondary)
+                        AxisTick()
+                            .foregroundStyle(Color.primary)
                     }
                 }
                 .chartXAxis {
                     AxisMarks(position: .bottom) { _ in
+                        AxisGridLine()
+                            .foregroundStyle(Color.secondary)
+                        AxisTick()
+                            .foregroundStyle(Color.secondary)
 //                        AxisValueLabel() //hides bottom labels
                     }
+                }
+                .chartLegend(position: .bottom) {
+                    let layout = (dynamicTypeSize > DynamicTypeSize.xxLarge && UIDevice.current.userInterfaceIdiom != .pad) ? AnyLayout(VStackLayout()) : AnyLayout(HStackLayout())
+                    layout {
+                        HStack {
+                            BasicChartSymbolShape.circle
+                                .frame(width: 10, height: 10)
+                                .foregroundStyle(Color.blue)
+                            Text("New York")
+                            BasicChartSymbolShape.cross
+                                .frame(width: 10, height: 10)
+                                .foregroundStyle(Color.green)
+                            Text("Chicago")
+                        }.frame(alignment: .leading)
+                        HStack {
+                            BasicChartSymbolShape.triangle
+                                .frame(width: 10, height: 10)
+                                .foregroundStyle(Color.orange)
+                            Text("Miami")
+                            BasicChartSymbolShape.plus
+                                .frame(width: 10, height: 10)
+                                .foregroundStyle(Color.purple)
+                            Text("Seattle")
+                            BasicChartSymbolShape.square
+                                .frame(width: 10, height: 10)
+                                .foregroundStyle(Color.red)
+                            Text("Austin")
+                        }.frame(alignment: .leading)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundStyle(Color.primary)
+                    .font(.caption2)
                 }
                 .chartYScale(domain: 20...70)
                 .aspectRatio(1, contentMode: .fit)
                 DisclosureGroup("Details") {
-                    Text("The good chart example uses `.symbol(by: .value(\"City\", dataPoint.city))` to provide a different symbol for each city rather than using color as the only visual indicator. `.accessibilityLabel` and `.accessibilityValue` are used to provide meaningful labels and values to VoiceOver users for the data points. The default accessibility labels and values are overridden to stop VoiceOver repeating the label text and to make sure the ° symbol is spoken in the value. ")
+                    Text("The good chart example uses `.symbol(by: .value(\"City\", dataPoint.city))` to provide a different symbol for each city rather than using color as the only visual indicator. `.accessibilityLabel` and `.accessibilityValue` are used to provide meaningful labels and values to VoiceOver users for the data points. The default accessibility labels and values are overridden to stop VoiceOver repeating the label text and to make sure the ° symbol is spoken in the value. Chart text color is set to `.primary` and grid lines set to `.secondary` to increase contrast. A custom `.chartLegend` is used to provide better contrast for the legend text.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -114,18 +156,22 @@ struct ChartsView: View {
                 }
                 .chartYAxis {
                     AxisMarks(position: .leading) { _ in
+                        AxisGridLine()
+                        AxisTick()
                         AxisValueLabel()
                     }
                 }
                 .chartXAxis {
                     AxisMarks(position: .bottom) { _ in
+                        AxisGridLine()
+                        AxisTick()
 //                        AxisValueLabel() //hides bottom labels
                     }
                 }
                 .chartYScale(domain: 20...70)
                 .aspectRatio(1, contentMode: .fit)
                 DisclosureGroup("Details") {
-                    Text("The bad chart example does not use the `.symbol()` modifier to provide a different symbol for each city. Instead, it uses the `.foregroundStyle()` modifier to differentiate the points using colors alone. `.accessibilityLabel` and `.accessibilityValue` are not used to provide meaningful labels and values to VoiceOver users for the data points. The default accessibility labels and values are spoken to VoiceOver repeating the label text and ignoring the ° symbol in the value.")
+                    Text("The bad chart example does not use the `.symbol()` modifier to provide a different symbol for each city. Instead, it uses the `.foregroundStyle()` modifier to differentiate the points using colors alone. `.accessibilityLabel` and `.accessibilityValue` are not used to provide meaningful labels and values to VoiceOver users for the data points. The default accessibility labels and values are spoken to VoiceOver repeating the label text and ignoring the ° symbol in the value. The default legend is used which has lower text contrast.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .navigationTitle("Charts")

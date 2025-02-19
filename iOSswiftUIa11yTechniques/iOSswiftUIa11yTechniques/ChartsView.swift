@@ -21,7 +21,6 @@ struct TemperatureData: Identifiable {
     let id = UUID()
     var city: String
     var temperature: Int
-    //var shape: any ChartSymbolShape
 }
 
 
@@ -41,7 +40,7 @@ struct ChartsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Don't convey information using colors alone in charts. Include shapes, patterns, text, or other non-color indicators to convey meaning so the chart is understandable when the colors cannot be perceived.")
+                Text("Don't convey information using colors alone in charts. Include shapes, patterns, text, or other non-color indicators to convey meaning so the chart is understandable when the colors cannot be perceived. Use `.accessibilityLabel` and `.accessibilityValue` to provide meaningful labels and values to VoiceOver users for the data points.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -69,6 +68,8 @@ struct ChartsView: View {
                         Text(String(dataPoint.temperature)+"°")
                             .foregroundColor(.gray)
                     }
+                    .accessibilityLabel(dataPoint.city)
+                    .accessibilityValue(String(dataPoint.temperature) + "°")
                 }
                 .chartYAxis {
                     AxisMarks(position: .leading) { _ in
@@ -83,7 +84,7 @@ struct ChartsView: View {
                 .chartYScale(domain: 20...70)
                 .aspectRatio(1, contentMode: .fit)
                 DisclosureGroup("Details") {
-                    Text("The good chart example uses `.symbol(by: .value(\"City\", dataPoint.city))` to provide a different symbol for each city rather than using color as the only visual indicator.")
+                    Text("The good chart example uses `.symbol(by: .value(\"City\", dataPoint.city))` to provide a different symbol for each city rather than using color as the only visual indicator. `.accessibilityLabel` and `.accessibilityValue` are used to provide meaningful labels and values to VoiceOver users for the data points. The default accessibility labels and values are overridden to stop VoiceOver repeating the label text and to make sure the ° symbol is spoken in the value. ")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -124,7 +125,7 @@ struct ChartsView: View {
                 .chartYScale(domain: 20...70)
                 .aspectRatio(1, contentMode: .fit)
                 DisclosureGroup("Details") {
-                    Text("The bad chart example does not use the `.symbol()` modifier to provide a different symbol for each city. Instead, it uses the `.foregroundStyle()` modifier to differentiate the points using colors alone.")
+                    Text("The bad chart example does not use the `.symbol()` modifier to provide a different symbol for each city. Instead, it uses the `.foregroundStyle()` modifier to differentiate the points using colors alone. `.accessibilityLabel` and `.accessibilityValue` are not used to provide meaningful labels and values to VoiceOver users for the data points. The default accessibility labels and values are spoken to VoiceOver repeating the label text and ignoring the ° symbol in the value.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .navigationTitle("Charts")

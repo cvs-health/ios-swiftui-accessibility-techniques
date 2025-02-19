@@ -1,21 +1,15 @@
 # iOS SwiftUI Accessibility Techniques
-iOS SwiftUI sample code demonstrating a variety of good and bad accessibility coding techniques.
+iOS SwiftUI sample code demonstrating a variety of good and bad accessibility techniques. Learn how to apply WCAG to iOS SwiftUI apps.
 
-Demonstrates accessibility techniques for iOS SwiftUI apps using a collection of good and bad examples that can be tested with VoiceOver and other iOS assistive technologies.
-
-Explains how to apply WCAG to iOS SwiftUI apps.
-
-Using the app with VoiceOver and other iOS accessibility features will demonstrate the right and wrong ways of applying accessibility to a SwiftUI app. 
+Good and Bad examples that can be tested with VoiceOver and other iOS assistive technologies.
 
 [Download iOS app from the AppStore.](https://apps.apple.com/app/accessibility-techniques/id6474141089)
 
 Read the blog post, [Announcing the iOS SwiftUI Accessibility Techniques Open Source Project](https://www.linkedin.com/pulse/announcing-ios-swiftui-accessibility-techniques-open-source-adam-ldahc/).
 
-Review the project source code to see how to apply the accessibility techniques in working SwiftUI code examples.
+Review project source code to learn how to apply the accessibility techniques in working SwiftUI code examples.
 
-Documentation files for each technique are listed below.
-
-## Accessibility Documentation
+## Accessibility Techniques Documentation
 - [x] = Completed
 - [x] [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md)
 - [x] [Accessibility Detection](iOSswiftUIa11yTechniques/Documentation/AccessibilityDetection.md)

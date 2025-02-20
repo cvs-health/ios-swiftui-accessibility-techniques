@@ -14,10 +14,30 @@
    limitations under the License.
  */
 import SwiftUI
+import WebKit
+
+struct WebViewDocs: UIViewRepresentable {
+    let url: URL
+    
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        webView.load(URLRequest(url: url))
+        return webView
+    }
+    
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        webView.load(URLRequest(url: url))
+    }
+}
+
 
 struct ContentView: View {
     @State private var searchKeyword = ""
     @State private var selection: UUID?
+    @State private var showingWebPage = false
+    let url = URL(string: "https://github.com/cvs-health/ios-swiftui-accessibility-techniques?tab=readme-ov-file#accessibility-techniques-documentation")!
+    @AccessibilityFocusState private var isTriggerFocused: Bool
+
 
     var filteredAndSortedItems: [Techniques] {
         let filtered = techniques.filter { item in
@@ -36,6 +56,21 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("SwiftUI A11y Techniques")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showingWebPage.toggle()
+                    }) {
+                        Image(systemName: "doc.text.magnifyingglass")
+                            .accessibilityLabel(Text("Documentation"))
+                    }
+                    .accessibilityFocused($isTriggerFocused)
+                    .accessibilityShowsLargeContentViewer {
+                        Label("Documentation", systemImage: "doc.text.magnifyingglass")
+                    }
+
+                }
+            }
             .navigationViewStyle(.stack)
             .searchable(text: $searchKeyword, placement: .navigationBarDrawer(displayMode: .always))
             .onChange(of: searchKeyword) {
@@ -48,6 +83,30 @@ struct ContentView: View {
                 }
             }
         }
+        //present sheet fullscreen
+        .fullScreenCover(isPresented: $showingWebPage, onDismiss: didDismiss) {
+            WebViewDocs(url: url)
+                .overlay(
+                     Button(action: {
+                         showingWebPage = false
+                     }) {
+                         Image(systemName: "xmark")
+                             .font(.caption)
+                             .foregroundColor(.black)
+                             .bold()
+                             .accessibilityLabel("Close Documentation")
+                             .frame(minWidth:44, minHeight:44)
+                     }
+                     .overlay(
+                         RoundedRectangle(cornerRadius: 25)
+                             .stroke(Color.black, lineWidth: 4)
+                     )
+                     .background(Color.white)
+                     .cornerRadius(25)
+                     , alignment: .topTrailing
+                 )
+        }
+
     }
 
     @ViewBuilder
@@ -137,6 +196,11 @@ struct ContentView: View {
             UIAccessibility.post(notification: .announcement, argument: message)
         }
     }
+    
+    func didDismiss() {
+        isTriggerFocused = true
+    }
+
 }
 
 struct ContentView_Previews: PreviewProvider {

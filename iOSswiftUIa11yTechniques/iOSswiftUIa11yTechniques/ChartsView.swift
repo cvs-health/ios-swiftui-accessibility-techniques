@@ -92,31 +92,43 @@ struct ChartsView: View {
                     }
                 }
                 .chartLegend(position: .bottom) {
-                    let layout = (dynamicTypeSize > DynamicTypeSize.xxLarge && UIDevice.current.userInterfaceIdiom != .pad) ? AnyLayout(VStackLayout()) : AnyLayout(HStackLayout())
+                    let layout = (dynamicTypeSize > DynamicTypeSize.accessibility1 && UIDevice.current.userInterfaceIdiom != .pad) ? AnyLayout(VStackLayout()) : AnyLayout(HStackLayout())
+                    let layoutLarge = (dynamicTypeSize > DynamicTypeSize.xLarge && dynamicTypeSize < DynamicTypeSize.accessibility2 && UIDevice.current.userInterfaceIdiom != .pad) ? AnyLayout(VStackLayout()) : AnyLayout(HStackLayout())
                     layout {
                         HStack {
-                            BasicChartSymbolShape.circle
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(Color.blue)
-                            Text("New York")
-                            BasicChartSymbolShape.cross
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(Color.green)
-                            Text("Chicago")
+                            layoutLarge {
+                                BasicChartSymbolShape.circle
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(Color.blue)
+                                Text("New York")
+
+                            }
+                            layoutLarge {
+                                BasicChartSymbolShape.cross
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(Color.green)
+                                Text("Chicago")
+                            }
                         }.frame(alignment: .leading)
                         HStack {
-                            BasicChartSymbolShape.triangle
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(Color.orange)
-                            Text("Miami")
-                            BasicChartSymbolShape.plus
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(Color.purple)
-                            Text("Seattle")
-                            BasicChartSymbolShape.square
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(Color.red)
-                            Text("Austin")
+                            layoutLarge {
+                                BasicChartSymbolShape.triangle
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(Color.orange)
+                                Text("Miami")
+                            }
+                            layoutLarge {
+                                BasicChartSymbolShape.plus
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(Color.purple)
+                                Text("Seattle")
+                            }
+                            layoutLarge {
+                                BasicChartSymbolShape.square
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(Color.red)
+                                Text("Austin")
+                            }
                         }.frame(alignment: .leading)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)

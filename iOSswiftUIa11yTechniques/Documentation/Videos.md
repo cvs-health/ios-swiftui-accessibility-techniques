@@ -14,7 +14,7 @@ Swipe exploration with VoiceOver will not work so the custom play button is requ
 Full Keyboard Access users have no method to show the native player controls, only the custom play button is keyboard accessible.
 
 Platform Defects:
-- [Feedback Assistant:FB15583041 - Video Player Controls Not Keyboard or VoiceOver Operable Once Hidden](https://feedbackassistant.apple.com/feedback/15583041)
+- [Feedback Assistant: FB15583041 - Video Player Controls Not Keyboard or VoiceOver Operable Once Hidden](https://feedbackassistant.apple.com/feedback/15583041)
 
 
 ## Applicable WCAG Success Criteria

@@ -94,10 +94,8 @@ struct ReadingOrderView: View {
     }
 }
  
-struct ReadingOrderView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ReadingOrderView()
-        }
+#Preview {
+    NavigationStack {
+        ReadingOrderView()
     }
 }

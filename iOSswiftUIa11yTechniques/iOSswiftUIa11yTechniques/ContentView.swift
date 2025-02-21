@@ -175,6 +175,7 @@ struct ContentView: View {
         case "sliders": SlidersView()
         case "steppers": SteppersView()
         case "tabs": TabsView()
+        case "videos": VideosView()
         case "text fields": TextFieldsView()
         case "toggles": TogglesView()
         case "touch target size": TouchTargetSize()

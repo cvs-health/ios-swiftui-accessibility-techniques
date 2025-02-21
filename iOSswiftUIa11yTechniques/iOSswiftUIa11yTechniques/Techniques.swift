@@ -73,6 +73,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Tabs"),
     Techniques(name: "Text Fields"),
     Techniques(name: "Toggles"),
+    Techniques(name: "Videos"),
     Techniques(name: "Touch Target Size"),
     Techniques(name: "VoiceOver Announcement Delay"),
     Techniques(name: "VoiceOver Pronunciation")

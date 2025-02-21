@@ -14,6 +14,10 @@ struct VideoPlayerView: View {
                 .font(.largeTitle)
             
             VideoPlayer(player: player)
+                .accessibilityLabel("a11y label test") // don't work
+                .accessibilityHint("a11y hint test") // don't work
+                .focusable(true) // don't make it keyboard accessible
+                .accessibilityRespondsToUserInteraction(true) // don't make it keyboard accessible, just focusable
             
             Spacer()
             

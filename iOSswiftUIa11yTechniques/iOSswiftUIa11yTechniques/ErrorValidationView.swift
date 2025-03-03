@@ -84,6 +84,11 @@ struct ErrorValidationView: View {
                     .font(.caption)
                 Text(fnameLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                if firstNameErrorVisible {
+                    Text(fnameError)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
                 TextField("", text: $fname, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(firstNameErrorVisible ? colorScheme == .dark ? Color(.systemRed) : darkRed : .secondary)
@@ -94,13 +99,13 @@ struct ErrorValidationView: View {
                     .accessibilityIdentifier("fNameGood")
                     .accessibilityFocused($isFirstNameA11yFocused)
                     .focused($isFirstNameFocused)
-                if firstNameErrorVisible {
-                    Text(fnameError)
+                Text(lnameLabel)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if lastNameErrorVisible {
+                    Text(lnameError)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 }
-                Text(lnameLabel)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 TextField("", text: $lname, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
@@ -112,11 +117,6 @@ struct ErrorValidationView: View {
                     .accessibilityIdentifier("lNameGood")
                     .accessibilityFocused($isLastNameA11yFocused)
                     .focused($isLastNameFocused)
-                if lastNameErrorVisible {
-                    Text(lnameError)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                }
                 Text("Phone Number")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 TextField("", text: $phone, axis: .vertical)
@@ -127,6 +127,11 @@ struct ErrorValidationView: View {
                     .accessibilityIdentifier("phoneGood")
                 Text(emailLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                if emailErrorVisible {
+                    Text(emailError)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                }
                 TextField("", text: $email, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .border(.secondary)
@@ -139,11 +144,6 @@ struct ErrorValidationView: View {
                     .accessibilityIdentifier("emailGood")
                     .accessibilityFocused($isEmailA11yFocused)
                     .focused($isEmailFocused)
-                if emailErrorVisible {
-                    Text(emailError)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                }
                 Button(action: {
                     // Handle button action
                     firstNameErrorVisible = false
@@ -182,7 +182,7 @@ struct ErrorValidationView: View {
                         .opacity(0.8)
                 }.padding()
                 DisclosureGroup("Details") {
-                    Text("The first good error validation example uses `AccessibilityFocusState` to move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input has an `.accessibilityHint` matching the visible error message text so that VoiceOver users hear the error message when focused on the invalid inputs. Error messages are meaningful and specific. Required fields are indicated with a * and the meaning of the * is defined at the top of the form.")
+                    Text("The first good error validation example uses `AccessibilityFocusState` to move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input has an `.accessibilityHint` matching the visible error message text so that VoiceOver users hear the error message when focused on the invalid inputs. Error messages are meaningful and specific. Required fields are indicated with a * and the meaning of the * is defined at the top of the form. Errors are placed above the input so that the keyboard does not cover the message when the textfield has focus.")
                 }.padding(.bottom).accessibilityHint("Good Example Using .accessibilityHint")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -274,7 +274,7 @@ struct ErrorValidationView: View {
                 }.padding()
 
                 DisclosureGroup("Details") {
-                    Text("The bad error validation example does not move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input does not speak its error message text to VoiceOver users when focused on the invalid inputs. Error messages are generic and not specific. Required fields are not indicated.")
+                    Text("The bad error validation example does not move VoiceOver focus to the first invalid input when submitting the form with invalid data. Each invalid input does not speak its error message text to VoiceOver users when focused on the invalid inputs. Error messages are generic and not specific. Required fields are not indicated. Errors are placed below the input which causes the keyboard to cover the message when the textfield has focus.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .padding()

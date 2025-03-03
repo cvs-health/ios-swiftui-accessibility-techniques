@@ -1,5 +1,5 @@
 /*
-   Copyright 2024 CVS Health and/or one of its affiliates
+   Copyright 2024-2025 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -21,12 +21,14 @@ struct MenusView: View {
     @State private var isShowingPopoverBad = false
 
     @State private var selectedOption = "Best Match"
+    @State private var selectedPickerOption = 0
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     private var darkOrange = Color(red: 203 / 255, green: 77 / 255, blue: 0 / 255)
 
     @Environment(\.colorScheme) var colorScheme
+
     
     var body: some View {
         ScrollView {
@@ -43,44 +45,76 @@ struct MenusView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                //Basic Menu
                 Menu("Actions") {
                     Button("Duplicate", action: duplicate)
                     Button("Rename", action: rename)
                     Button("Delete…", action: delete)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                //Menu with Picker inside can have selected state checkmark shown on the left
+                Menu {
+                    Picker("Sort by", selection: $selectedPickerOption) {
+                        Text("Best Match").tag(0)
+                        Text("Distance").tag(1)
+                        Text("Rating").tag(2)
+                    }
+                }
+                label: {
+                    HStack {
+                        Text(selectedPickerOption == 0 ? "Sort by Best Match" :
+                             selectedPickerOption == 1 ? "Sort by Distance" : "Sort by Rating")
+                        Image(systemName: "chevron.down")
+                    }                    }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The good menu example uses `Menu` to create a native SwiftUI menu that receives VoiceOver focus when opened. It is not possible to send focus back to the trigger button after closing a `Menu`. VoiceOver reads \"Actions, Button, Pop up button, Double tap to activate the picker\" The `Menu` with `Picker` example shows a built-in selection checkmark on the left side of the text that will be visible in all dynamic type sizes.")
+                }.padding(.bottom).accessibilityHint("Good Example")
+                Text("Platform Defect Examples")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.orange) : darkOrange)
+                Divider()
+                    .frame(height: 2.0, alignment:.leading)
+                    .background(colorScheme == .dark ? Color(.orange) : darkOrange)
+                    .padding(.bottom)
+                Text("Platform Defect Example `Menu` with `Button` checkmark `Image` ")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                //Menu with buttons inside can have an image on the right side only but it will disappear in the largest dynamic type sizes
                 Menu {
                     Button(action: {
                         selectedOption = "Best Match"
                     }) {
                         HStack {
-                            Text("Best Match")
-                            Spacer()
                             if selectedOption == "Best Match" {
                                 Image(systemName: "checkmark")
                             }
+                            Text("Best Match")
                         }
                     }
                     Button(action: {
                         selectedOption = "Distance"
                     }) {
                         HStack {
-                            Text("Distance")
-                            Spacer()
                             if selectedOption == "Distance" {
                                 Image(systemName: "checkmark")
                             }
+                            Text("Distance")
                         }
                     }
                     Button(action: {
                         selectedOption = "Rating"
                     }) {
                         HStack {
-                            Text("Rating")
-                            Spacer()
                             if selectedOption == "Rating" {
                                 Image(systemName: "checkmark")
                             }
+                            Text("Rating")
                         }
                     }
                 } label: {
@@ -91,18 +125,10 @@ struct MenusView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The good menu example uses `Menu` to create a native SwiftUI menu that receives VoiceOver focus when opened. It is not possible to send focus back to the trigger button after closing a `Menu`. VoiceOver reads \"Actions, Button, Pop up button, Double tap to activate the picker\"")
-                }.padding(.bottom).accessibilityHint("Good Example")
-                Text("Platform Defect Example")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                    .foregroundColor(colorScheme == .dark ? Color(.orange) : darkOrange)
-                Divider()
-                    .frame(height: 2.0, alignment:.leading)
-                    .background(colorScheme == .dark ? Color(.orange) : darkOrange)
-                    .padding(.bottom)
+                    VStack {
+                        Text("The `Menu` with `Button` checkmark `Image` platform defect example uses menu button icon images that appear on the right side of the text and will disappear at the largest dynamic type sizes.")
+                    }
+                }.padding(.bottom).accessibilityHint("Platform Defect Example `Menu` with `Button` checkmark `Image`")
                 Text("Platform Defect Example `Menu` `Section` `header` text and `.destructive` `Button` text have insufficient contrast. `Section` `header` text missing heading trait.")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -174,7 +200,7 @@ struct MenusView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     VStack {
-                        Text("The platform defect example uses a native `Menu` with `Section` `header` text and the `.destructive` `Button` text has insufficient contrast. The `Section` `header` text is also missing a heading trait.")
+                        Text("The platform defect example uses a native `Menu` with `Section` `header` text and the `.destructive` `Button` text has insufficient contrast. The `Section` `header` text is also missing a heading trait. The menu button icon images will disappear at the largest dynamic type sizes.")
                     }
                 }.padding(.bottom).accessibilityHint("Platform Defect Example `Menu` `Section` `header` text and `.destructive` `Button` text have insufficient contrast. `Section` `header` text missing heading trait.")
                 Text("Bad Example")
@@ -228,10 +254,8 @@ struct MenusView: View {
 
 }
  
-struct MenusView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MenusView()
-        }
+#Preview {
+    NavigationStack {
+        MenusView()
     }
 }

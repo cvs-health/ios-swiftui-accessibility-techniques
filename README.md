@@ -15,6 +15,7 @@ Review project source code to learn how to apply the accessibility techniques in
 - [x] [Accessibility Input Labels](iOSswiftUIa11yTechniques/Documentation/AccessibilityInputLabels.md)
 - [x] [Accessibility Notifications](iOSswiftUIa11yTechniques/Documentation/AccessibilityNotifications.md)
 - [x] [Accessibility Representation](iOSswiftUIa11yTechniques/Documentation/AccessibilityRepresentation.md)
+- [x] [Accessibility Responds To User Interaction](iOSswiftUIa11yTechniques/Documentation/AccessibilityRespondsToUserInteraction.md)
 - [x] [Accordions](iOSswiftUIa11yTechniques/Documentation/Accordions.md)
 - [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
 - [x] [Alerts](iOSswiftUIa11yTechniques/Documentation/Alerts.md)

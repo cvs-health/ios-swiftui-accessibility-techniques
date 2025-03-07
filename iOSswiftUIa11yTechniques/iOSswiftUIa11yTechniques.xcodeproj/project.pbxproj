@@ -66,6 +66,7 @@
 		BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */; };
 		BC3EA3B52B7C069F0003B8A2 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B42B7C069F0003B8A2 /* MapView.swift */; };
 		BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */; };
+		BC4F17952D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4F17942D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift */; };
 		BC6C39BE2C2CE70B00AA842A /* ResponsiveLayoutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6C39BD2C2CE70B00AA842A /* ResponsiveLayoutsView.swift */; };
 		BC6C39C02C2E044000AA842A /* PrototypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6C39BF2C2E044000AA842A /* PrototypesView.swift */; };
 		BC6C39C22C2E054600AA842A /* Prototype1.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6C39C12C2E054600AA842A /* Prototype1.swift */; };
@@ -285,6 +286,8 @@
 		BC3EA3B42B7C069F0003B8A2 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViews.swift; sourceTree = "<group>"; };
 		BC3EA3B82B7D26460003B8A2 /* ScrollViews.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ScrollViews.md; sourceTree = "<group>"; };
+		BC4F17942D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityRespondsToUserInteraction.swift; sourceTree = "<group>"; };
+		BC4F17962D7B743000BB509B /* AccessibilityRespondsToUserInteraction.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityRespondsToUserInteraction.md; sourceTree = "<group>"; };
 		BC6C39BD2C2CE70B00AA842A /* ResponsiveLayoutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveLayoutsView.swift; sourceTree = "<group>"; };
 		BC6C39BF2C2E044000AA842A /* PrototypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypesView.swift; sourceTree = "<group>"; };
 		BC6C39C12C2E054600AA842A /* Prototype1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prototype1.swift; sourceTree = "<group>"; };
@@ -455,6 +458,7 @@
 				BCC4F1822B3F8757004AAB65 /* AccessibilityInputLabels.md */,
 				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */,
 				BC163FCA2B6C1598009E3A83 /* AccessibilityRepresentation.md */,
+				BC4F17962D7B743000BB509B /* AccessibilityRespondsToUserInteraction.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
 				BC00300A2B332C020063EAD5 /* AdjustableAction.md */,
 				BC715B642B44C81A00C77B57 /* Alerts.md */,
@@ -560,6 +564,7 @@
 				BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */,
 				BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */,
 				BC1A26502D64218900A23DD6 /* AccessibilitySortPriority.swift */,
+				BC4F17942D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift */,
 				BC3951F42D657B9400D26DBB /* ChartsView.swift */,
 				BC1A5FA12B6079070008513C /* AttributedStringsView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
@@ -1007,6 +1012,7 @@
 				AABD27D22A9FF11F00F718F7 /* FunctionalView.swift in Sources */,
 				BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */,
 				BC877B8B2CE55D3600B127F1 /* SignUpB.swift in Sources */,
+				BC4F17952D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift in Sources */,
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
 				BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,
@@ -1274,7 +1280,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 13.1;
+				MARKETING_VERSION = 13.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1309,7 +1315,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 13.1;
+				MARKETING_VERSION = 13.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

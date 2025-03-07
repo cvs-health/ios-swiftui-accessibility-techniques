@@ -66,8 +66,8 @@ struct SheetsView: View {
                         }
                         .padding()
                     }
-                    .presentationDetents([.medium, .large]) // Supports medium and large sizes
-                    .presentationDragIndicator(.hidden) // Optionally hides the drag indicator
+                    //.presentationDetents([.medium, .large]) // Supports medium and large sizes
+                    //.presentationDragIndicator(.hidden) // Optionally hides the drag indicator
 
                 }
                 DisclosureGroup("Details") {

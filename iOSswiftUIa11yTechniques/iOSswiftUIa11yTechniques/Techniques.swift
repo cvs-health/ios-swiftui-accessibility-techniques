@@ -10,6 +10,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Accessibility Notifications"),
     Techniques(name: "Accessibility Identifier"),
     Techniques(name: "Accessibility Representation"),
+    Techniques(name: "Accessibility Responds To User Interaction"),
     Techniques(name: "Accessibility Sort Priority"),
     Techniques(name: "Accessibility Actions"),
     Techniques(name: "Accordions"),

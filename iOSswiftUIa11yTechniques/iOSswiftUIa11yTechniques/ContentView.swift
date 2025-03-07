@@ -119,6 +119,7 @@ struct ContentView: View {
         case "accessibility notifications": AccessibilityNotificationsView()
         case "accessibility sort priority": AccessibilitySortPriority()
         case "accessibility representation": AccessibilityRepresentationView()
+        case "accessibility responds to user interaction": AccessibilityRespondsToUserInteraction()
         case "accessibility actions": ActionsView()
         case "accessibility identifier": AccessibilityIdentifier()
         case "accordions": AccordionsView()

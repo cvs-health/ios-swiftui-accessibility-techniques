@@ -7,6 +7,8 @@ Voice Control users can say "Show actions for" and the name or number of the ele
 
 Include a name for the action when using multiple accessibility actions, e.g., `.accessibilityAction(named: "Delete")` and `.accessibilityAction(named: "Mark Unread")`.
 
+Additionally make sure there are single tap alternatives to gesture functions.
+
 ## Applicable WCAG Success Criteria
 - N/A
 

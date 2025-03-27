@@ -19,8 +19,11 @@ import SwiftUI
 struct ActionsView: View {
     @State private var showingAlert = false
     @State private var actionTitle = ""
+    @State private var msg1label = "Your order has shipped!"
+    @State private var msg2label = "Your order was received!"
     @State private var msg1bold = true
     @State private var msg1hidden = false
+    @State private var editing = false
     @State private var msg2bold = true
     @State private var msg2hidden = false
     @State private var msg1offset: CGFloat = 0
@@ -40,7 +43,7 @@ struct ActionsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use `accessibilityAction()` to provide actions that can be activated by iOS accessibility features like VoiceOver. Full Keyboard Access users can press `Tab + z` to open Actions menu. Voice Control users can say \"Show actions for\" and the name or number of the element to open its Actions menu. With \"Show numbers\" Voice Control users will see a right arrow next to elements with actions.")
+                Text("Use `accessibilityAction()` to provide actions that can be activated by iOS accessibility features like VoiceOver. Full Keyboard Access users can press `Tab + z` to open Actions menu. Voice Control users can say \"Show actions for\" and the name or number of the element to open its Actions menu. With \"Show numbers\" Voice Control users will see a right arrow next to elements with actions. Additionally make sure there are single tap alternatives to gesture functions.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -52,86 +55,145 @@ struct ActionsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Secure Messages").frame(maxWidth: .infinity, alignment: .leading).padding(.bottom).bold().accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                HStack {
+                    Text("Secure Messages").frame(maxWidth: .infinity, alignment: .leading).padding(.bottom).bold().accessibilityAddTraits(/*@START_MENU_TOKEN@*/.isHeader/*@END_MENU_TOKEN@*/)
+                    Button(action: {
+                        editing = true
+                    }) {
+                        Text("Edit")
+                    }.accessibilityLabel("Edit Secure Messages")
+                }
                 if !msg1hidden {
-                    Button("Your order has shipped!") {
-                        
-                    }.padding(.init(top: 10, leading: 40, bottom: 10, trailing: 40)).tint(Color(colorScheme == .dark ? .black : .white)).bold(msg1bold)
-                        .simultaneousGesture(
-                             LongPressGesture()
-                               .onEnded { _ in
-                                   msg1bold = false
+                    HStack {
+                        Button(msg1label) {
+                            
+                        }.padding(.init(top: 10, leading: 40, bottom: 10, trailing: 40)).tint(Color(colorScheme == .dark ? .black : .white)).bold(msg1bold)
+                            .simultaneousGesture(
+                                 LongPressGesture()
+                                   .onEnded { _ in
+                                       msg1bold = false
+                                   }
+                              )
+                            .accessibilityAction(named: "Delete") {
+                                showingAlert = true
+                                actionTitle = "Delete"
+                                msg1hidden = true
+                            }
+                            .accessibilityAction(named: "Mark as Read") {
+                                showingAlert = true
+                                actionTitle = "Mark as Read"
+                                msg1bold = false
+                            }
+                            .frame(maxWidth: .infinity)
+                            .background(Color(colorScheme == .dark ? .white : .black))
+                            .cornerRadius(10)
+                            .offset(x: msg1offset)
+                            .gesture(
+                               DragGesture().onChanged { value in
+                                  self.msg1offset = value.translation.width
                                }
-                          )
-                        .accessibilityAction(named: "Delete") {
-                            showingAlert = true
-                            actionTitle = "Delete"
-                            msg1hidden = true
+                               .onEnded { value in
+                                  if abs(value.translation.width) > 100 {
+                                    self.msg1offset = -300
+                                      msg1hidden = true
+                                  } else {
+                                    self.msg1offset = 0
+                                  }
+                               }
+                            )
+                        if editing {
+                            VStack {
+                                Button(action: {
+                                    msg1hidden = true
+                                }) {
+                                    Image(systemName: "trash")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 44, height: 44)
+                                        .accessibilityLabel("Delete \(msg1label)")
+                                }
+                                Button(action: {
+                                    msg1bold = false
+                                }) {
+                                    Image(systemName: "envelope")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 44, height: 44)
+                                        .accessibilityLabel("Mark \(msg1label) as Read")
+                                }
+                            }
                         }
-                        .accessibilityAction(named: "Mark Unread") {
-                            showingAlert = true
-                            actionTitle = "Mark Unread"
-                            msg1bold = false
-                        }
-                        .frame(width: 300)
-                        .background(Color(colorScheme == .dark ? .white : .black))
-                        .cornerRadius(10)
-                        .offset(x: msg1offset)
-                        .gesture(
-                           DragGesture().onChanged { value in
-                              self.msg1offset = value.translation.width
-                           }
-                           .onEnded { value in
-                              if abs(value.translation.width) > 100 {
-                                self.msg1offset = -300
-                                  msg1hidden = true
-                              } else {
-                                self.msg1offset = 0
-                              }
-                           }
-                        )
+                    }
                 }
                 if !msg2hidden {
-                    Button("Your order was received!") {
+                    HStack {
+                        Button(msg2label) {
 
-                    }.padding(.init(top: 10, leading: 40, bottom: 10, trailing: 40)).tint(Color(colorScheme == .dark ? .black : .white)).bold(msg2bold)
-                        .simultaneousGesture(
-                             LongPressGesture()
-                               .onEnded { _ in
-                                   msg2bold = false
+                        }.padding(.init(top: 10, leading: 40, bottom: 10, trailing: 40)).tint(Color(colorScheme == .dark ? .black : .white)).bold(msg2bold)
+                            .simultaneousGesture(
+                                 LongPressGesture()
+                                   .onEnded { _ in
+                                       msg2bold = false
+                                   }
+                              )
+                            .lineLimit(.none)
+                            .accessibilityAction(named: "Delete") {
+                                showingAlert = true
+                                actionTitle = "Delete"
+                                msg2hidden = true
+                            }
+                            .accessibilityAction(named: "Mark as Read") {
+                                showingAlert = true
+                                actionTitle = "Mark as Read"
+                                msg2bold = false
+                            }
+                            .frame(maxWidth: .infinity)
+                            .background(Color(colorScheme == .dark ? .white : .black))
+                            .cornerRadius(10)
+                            .offset(x: msg2offset)
+                            .gesture(
+                               DragGesture().onChanged { value in
+                                  self.msg2offset = value.translation.width
                                }
-                          )
-                        .lineLimit(.none)
-                        .accessibilityAction(named: "Delete") {
-                            showingAlert = true
-                            actionTitle = "Delete"
-                            msg2hidden = true
+                               .onEnded { value in
+                                  if abs(value.translation.width) > 100 {
+                                    self.msg2offset = -300
+                                      msg2hidden = true
+                                  } else {
+                                    self.msg2offset = 0
+                                  }
+                               }
+                            )
+                        if editing {
+                            VStack {
+                                Button(action: {
+                                    msg2hidden = true
+                                }) {
+                                    Image(systemName: "trash")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 44, height: 44)
+                                        .accessibilityLabel("Delete \(msg2label)")
+                                }
+                                Button(action: {
+                                    msg2bold = false
+                                }) {
+                                    Image(systemName: "envelope")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 44, height: 44)
+                                        .accessibilityLabel("Mark \(msg2label) as Read")
+                                }
+                            }
                         }
-                        .accessibilityAction(named: "Mark Unread") {
-                            showingAlert = true
-                            actionTitle = "Mark Unread"
-                            msg2bold = false
-                        }
-                        .frame(width: 300)
-                        .background(Color(colorScheme == .dark ? .white : .black))
-                        .cornerRadius(10)
-                        .offset(x: msg2offset)
-                        .gesture(
-                           DragGesture().onChanged { value in
-                              self.msg2offset = value.translation.width
-                           }
-                           .onEnded { value in
-                              if abs(value.translation.width) > 100 {
-                                self.msg2offset = -300
-                                  msg2hidden = true
-                              } else {
-                                self.msg2offset = 0
-                              }
-                           }
-                        )
+                    }
                 }
                 DisclosureGroup("Details") {
-                    Text("The good actions example uses `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark Unread\")` to provide assistive technology users accessibility actions as alternatives to the swipe to delete and long press to mark unread gestures.")
+                    Text("The good actions example uses `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark as Read\")` to provide assistive technology users accessibility actions as alternatives to the swipe to delete and long press to mark as read gestures. There is an Edit mode which provides single tap button alternatives to the swipe to delete and long press gestures.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -154,7 +216,7 @@ struct ActionsView: View {
                                    msg1boldBad = false
                                }
                           )
-                        .frame(width: 300)
+                        .frame(maxWidth: .infinity)
                         .background(Color(colorScheme == .dark ? .white : .black))
                         .cornerRadius(10)
                         .offset(x: msg1offsetBad)
@@ -183,7 +245,7 @@ struct ActionsView: View {
                                }
                           )
                         .lineLimit(.none)
-                        .frame(width: 300)
+                        .frame(maxWidth: .infinity)
                         .background(Color(colorScheme == .dark ? .white : .black))
                         .cornerRadius(10)
                         .offset(x: msg2offsetBad)
@@ -203,7 +265,7 @@ struct ActionsView: View {
                 }
 
                 DisclosureGroup("Details") {
-                    Text("The bad actions example does not use `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark Unread\")` to provide assistive technology users accessibility actions as alternatives to the swipe to delete and long press to mark unread gestures. VoiceOver does not speak that there is a swipe to delete or long press gesture on the buttons.")
+                    Text("The bad actions example does not use `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark as Read\")` to provide assistive technology users accessibility actions as alternatives to the swipe to delete and long press to mark as read gestures. VoiceOver does not speak that there is a swipe to delete or long press gesture on the buttons. There is no Edit mode to provide single tap button alternatives to the swipe to delete and long press gestures.")
                 }.accessibilityHint("Bad Example")
 
             }

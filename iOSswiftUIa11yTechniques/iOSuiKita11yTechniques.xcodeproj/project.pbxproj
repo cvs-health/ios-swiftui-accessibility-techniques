@@ -22,7 +22,7 @@
 		AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA74DD5B2AFDCCF900348078 /* PageTitleGood.swift */; };
 		AA74DD5E2AFDCCFA00348078 /* PageTitleBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA74DD5C2AFDCCFA00348078 /* PageTitleBad.swift */; };
 		AA7ADED02AF2BAFE0019D210 /* PickersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7ADECF2AF2BAFE0019D210 /* PickersView.swift */; };
-		AA9B13512AABADD5009A3D84 /* ButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9B13502AABADD5009A3D84 /* ButtonsView.swift */; };
+		AA9B13512AABADD5009A3D84 /* ButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9B13502AABADD5009A3D84 /* ButtonsViewController.swift */; };
 		AA9FCA2E2AB4D50400DF93A5 /* AccordionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */; };
 		AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB44092AE6C0FB003480B3 /* DynamicTypeView.swift */; };
 		AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27B92A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift */; };
@@ -182,7 +182,7 @@
 		AA9B134D2AA923FA009A3D84 /* Headings.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Headings.md; sourceTree = "<group>"; };
 		AA9B134E2AAA3867009A3D84 /* DecorativeImages.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DecorativeImages.md; sourceTree = "<group>"; };
 		AA9B134F2AAA4781009A3D84 /* FunctionalImages.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FunctionalImages.md; sourceTree = "<group>"; };
-		AA9B13502AABADD5009A3D84 /* ButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsView.swift; sourceTree = "<group>"; };
+		AA9B13502AABADD5009A3D84 /* ButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewController.swift; sourceTree = "<group>"; };
 		AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccordionsView.swift; sourceTree = "<group>"; };
 		AAAFD7122AA92FF7008DA3AD /* InformativeImages.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = InformativeImages.md; sourceTree = "<group>"; };
 		AAAFD7132AA9305D008DA3AD /* Images.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Images.md; sourceTree = "<group>"; };
@@ -475,7 +475,7 @@
 				BC4F17942D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift */,
 				BC3951F42D657B9400D26DBB /* ChartsView.swift */,
 				BC1A5FA12B6079070008513C /* AttributedStringsView.swift */,
-				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
+				AA9B13502AABADD5009A3D84 /* ButtonsViewController.swift */,
 				BC8C920C2B2BAE41006DAC20 /* CardsView.swift */,
 				BCFBBE4C2CD93FCA006831D9 /* CarouselView.swift */,
 				BC6D39542CDA896F00876212 /* CarouselViewBad.swift */,
@@ -749,7 +749,7 @@
 				AA74DD5A2AFDCC8E00348078 /* PageTitlesView.swift in Sources */,
 				BC0030362B363B560063EAD5 /* SheetsView.swift in Sources */,
 				BCD1CF952B574C8800A26ED3 /* VoiceOverPronunciationView.swift in Sources */,
-				AA9B13512AABADD5009A3D84 /* ButtonsView.swift in Sources */,
+				AA9B13512AABADD5009A3D84 /* ButtonsViewController.swift in Sources */,
 				BC0C846F2CC811E900B3DB52 /* DragDropView.swift in Sources */,
 				AA59CDC82ABA1F3B0004908F /* TabsView.swift in Sources */,
 				BC6CA9FE2C45A18E00138BA3 /* Page2Prototype.swift in Sources */,

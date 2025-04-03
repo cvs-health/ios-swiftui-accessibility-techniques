@@ -27,7 +27,7 @@ struct UIControlsView: View {
             NavigationLink(destination: AlertsView()) {
                 Text("Alerts")
             }
-            NavigationLink(destination: ButtonsView()) {
+            NavigationLink(destination: ButtonsUIKitView()) {
                 Text("Buttons")
             }
             NavigationLink(destination: CheckboxesView()) {

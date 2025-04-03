@@ -128,7 +128,7 @@ struct ContentView: View {
         case "accessibility detection": ATdetectionView()
         case "attributed strings": AttributedStringsView()
         case "assistive access": AssistiveAccessView()
-        case "buttons": ButtonsView()
+        case "buttons": ButtonsUIKitView()
         case "cards": CardsView()
         case "charts": ChartsView()
         case "carousels": CarouselView()

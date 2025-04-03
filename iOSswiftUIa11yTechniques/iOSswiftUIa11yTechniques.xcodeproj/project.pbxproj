@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -122,7 +122,6 @@
 		BCD1CF9C2B577C5A00A26ED3 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */; };
 		BCD814062C3858D600124B7C /* TextFieldsFocusManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */; };
 		BCDF3F562D4AE1D000A13D09 /* SignUp2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */; };
-		BCE1B4662D5FFE15001F92EF /* a11yTechniques Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = BCE1B4432D5FFE13001F92EF /* a11yTechniques Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BCE205232B58D0BE000DF400 /* DarkModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205222B58D0BE000DF400 /* DarkModeView.swift */; };
 		BCE205252B58D50D000DF400 /* UserPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205242B58D50D000DF400 /* UserPreferencesView.swift */; };
 		BCE205282B597199000DF400 /* RotorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205272B597199000DF400 /* RotorView.swift */; };
@@ -151,27 +150,6 @@
 			remoteGlobalIDString = AABD27B52A9FE69300F718F7;
 			remoteInfo = iOSswiftUIa11yTechniques;
 		};
-		BCE1B4532D5FFE15001F92EF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AABD27AE2A9FE69300F718F7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BCE1B4422D5FFE13001F92EF;
-			remoteInfo = "a11yTechniques Watch App";
-		};
-		BCE1B45D2D5FFE15001F92EF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AABD27AE2A9FE69300F718F7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BCE1B4422D5FFE13001F92EF;
-			remoteInfo = "a11yTechniques Watch App";
-		};
-		BCE1B4642D5FFE15001F92EF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AABD27AE2A9FE69300F718F7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BCE1B4422D5FFE13001F92EF;
-			remoteInfo = "a11yTechniques Watch App";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -181,7 +159,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				BCE1B4662D5FFE15001F92EF /* a11yTechniques Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,9 +343,6 @@
 		BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsView.swift; sourceTree = "<group>"; };
 		BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsFocusManagement.swift; sourceTree = "<group>"; };
 		BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp2.swift; sourceTree = "<group>"; };
-		BCE1B4432D5FFE13001F92EF /* a11yTechniques Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a11yTechniques Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BCE1B4522D5FFE15001F92EF /* a11yTechniques Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "a11yTechniques Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BCE1B45C2D5FFE15001F92EF /* a11yTechniques Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "a11yTechniques Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE205212B579FC3000DF400 /* AccessibilityDetection.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityDetection.md; sourceTree = "<group>"; };
 		BCE205222B58D0BE000DF400 /* DarkModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeView.swift; sourceTree = "<group>"; };
 		BCE205242B58D50D000DF400 /* UserPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesView.swift; sourceTree = "<group>"; };
@@ -395,12 +369,6 @@
 		BCFBBE4C2CD93FCA006831D9 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		BCE1B4442D5FFE13001F92EF /* a11yTechniques Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "a11yTechniques Watch App"; sourceTree = "<group>"; };
-		BCE1B4552D5FFE15001F92EF /* a11yTechniques Watch AppTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "a11yTechniques Watch AppTests"; sourceTree = "<group>"; };
-		BCE1B45F2D5FFE15001F92EF /* a11yTechniques Watch AppUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "a11yTechniques Watch AppUITests"; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		AA7367422AA24F810008F9DC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -410,27 +378,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AABD27B32A9FE69300F718F7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BCE1B4402D5FFE13001F92EF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BCE1B44F2D5FFE15001F92EF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BCE1B4592D5FFE15001F92EF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -528,9 +475,6 @@
 				AA9B134C2AA923CB009A3D84 /* Documentation */,
 				AABD27B82A9FE69300F718F7 /* iOSswiftUIa11yTechniques */,
 				AA7367462AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests */,
-				BCE1B4442D5FFE13001F92EF /* a11yTechniques Watch App */,
-				BCE1B4552D5FFE15001F92EF /* a11yTechniques Watch AppTests */,
-				BCE1B45F2D5FFE15001F92EF /* a11yTechniques Watch AppUITests */,
 				AABD27B72A9FE69300F718F7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -540,9 +484,6 @@
 			children = (
 				AABD27B62A9FE69300F718F7 /* iOSswiftUIa11yTechniques.app */,
 				AA7367452AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests.xctest */,
-				BCE1B4432D5FFE13001F92EF /* a11yTechniques Watch App.app */,
-				BCE1B4522D5FFE15001F92EF /* a11yTechniques Watch AppTests.xctest */,
-				BCE1B45C2D5FFE15001F92EF /* a11yTechniques Watch AppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -734,80 +675,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				BCE1B4652D5FFE15001F92EF /* PBXTargetDependency */,
 			);
 			name = iOSswiftUIa11yTechniques;
 			productName = iOSswiftUIa11yTechniques;
 			productReference = AABD27B62A9FE69300F718F7 /* iOSswiftUIa11yTechniques.app */;
 			productType = "com.apple.product-type.application";
-		};
-		BCE1B4422D5FFE13001F92EF /* a11yTechniques Watch App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BCE1B46E2D5FFE15001F92EF /* Build configuration list for PBXNativeTarget "a11yTechniques Watch App" */;
-			buildPhases = (
-				BCE1B43F2D5FFE13001F92EF /* Sources */,
-				BCE1B4402D5FFE13001F92EF /* Frameworks */,
-				BCE1B4412D5FFE13001F92EF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				BCE1B4442D5FFE13001F92EF /* a11yTechniques Watch App */,
-			);
-			name = "a11yTechniques Watch App";
-			packageProductDependencies = (
-			);
-			productName = "a11yTechniques Watch App";
-			productReference = BCE1B4432D5FFE13001F92EF /* a11yTechniques Watch App.app */;
-			productType = "com.apple.product-type.application";
-		};
-		BCE1B4512D5FFE15001F92EF /* a11yTechniques Watch AppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BCE1B46F2D5FFE15001F92EF /* Build configuration list for PBXNativeTarget "a11yTechniques Watch AppTests" */;
-			buildPhases = (
-				BCE1B44E2D5FFE15001F92EF /* Sources */,
-				BCE1B44F2D5FFE15001F92EF /* Frameworks */,
-				BCE1B4502D5FFE15001F92EF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BCE1B4542D5FFE15001F92EF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				BCE1B4552D5FFE15001F92EF /* a11yTechniques Watch AppTests */,
-			);
-			name = "a11yTechniques Watch AppTests";
-			packageProductDependencies = (
-			);
-			productName = "a11yTechniques Watch AppTests";
-			productReference = BCE1B4522D5FFE15001F92EF /* a11yTechniques Watch AppTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		BCE1B45B2D5FFE15001F92EF /* a11yTechniques Watch AppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BCE1B4702D5FFE15001F92EF /* Build configuration list for PBXNativeTarget "a11yTechniques Watch AppUITests" */;
-			buildPhases = (
-				BCE1B4582D5FFE15001F92EF /* Sources */,
-				BCE1B4592D5FFE15001F92EF /* Frameworks */,
-				BCE1B45A2D5FFE15001F92EF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BCE1B45E2D5FFE15001F92EF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				BCE1B45F2D5FFE15001F92EF /* a11yTechniques Watch AppUITests */,
-			);
-			name = "a11yTechniques Watch AppUITests";
-			packageProductDependencies = (
-			);
-			productName = "a11yTechniques Watch AppUITests";
-			productReference = BCE1B45C2D5FFE15001F92EF /* a11yTechniques Watch AppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -826,17 +698,6 @@
 					AABD27B52A9FE69300F718F7 = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
-					BCE1B4422D5FFE13001F92EF = {
-						CreatedOnToolsVersion = 16.2;
-					};
-					BCE1B4512D5FFE15001F92EF = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = BCE1B4422D5FFE13001F92EF;
-					};
-					BCE1B45B2D5FFE15001F92EF = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = BCE1B4422D5FFE13001F92EF;
-					};
 				};
 			};
 			buildConfigurationList = AABD27B12A9FE69300F718F7 /* Build configuration list for PBXProject "iOSswiftUIa11yTechniques" */;
@@ -854,9 +715,6 @@
 			targets = (
 				AABD27B52A9FE69300F718F7 /* iOSswiftUIa11yTechniques */,
 				AA7367442AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests */,
-				BCE1B4422D5FFE13001F92EF /* a11yTechniques Watch App */,
-				BCE1B4512D5FFE15001F92EF /* a11yTechniques Watch AppTests */,
-				BCE1B45B2D5FFE15001F92EF /* a11yTechniques Watch AppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -876,27 +734,6 @@
 				AAF127BE2B23ED8600D5313D /* AccessibilityNotifications.md in Resources */,
 				AABD27C12A9FE69500F718F7 /* Preview Assets.xcassets in Resources */,
 				AABD27BE2A9FE69500F718F7 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BCE1B4412D5FFE13001F92EF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BCE1B4502D5FFE15001F92EF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BCE1B45A2D5FFE15001F92EF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1047,27 +884,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BCE1B43F2D5FFE13001F92EF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BCE1B44E2D5FFE15001F92EF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BCE1B4582D5FFE15001F92EF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1075,21 +891,6 @@
 			isa = PBXTargetDependency;
 			target = AABD27B52A9FE69300F718F7 /* iOSswiftUIa11yTechniques */;
 			targetProxy = AA73674B2AA24F810008F9DC /* PBXContainerItemProxy */;
-		};
-		BCE1B4542D5FFE15001F92EF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BCE1B4422D5FFE13001F92EF /* a11yTechniques Watch App */;
-			targetProxy = BCE1B4532D5FFE15001F92EF /* PBXContainerItemProxy */;
-		};
-		BCE1B45E2D5FFE15001F92EF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BCE1B4422D5FFE13001F92EF /* a11yTechniques Watch App */;
-			targetProxy = BCE1B45D2D5FFE15001F92EF /* PBXContainerItemProxy */;
-		};
-		BCE1B4652D5FFE15001F92EF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BCE1B4422D5FFE13001F92EF /* a11yTechniques Watch App */;
-			targetProxy = BCE1B4642D5FFE15001F92EF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1325,169 +1126,6 @@
 			};
 			name = Release;
 		};
-		BCE1B4682D5FFE15001F92EF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"a11yTechniques Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = VJ8862HM4M;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "A11Y Techniques";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = pauljadam.com.iOSswiftUIa11yTechniques;
-				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 10.6;
-			};
-			name = Debug;
-		};
-		BCE1B4692D5FFE15001F92EF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"a11yTechniques Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = VJ8862HM4M;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "A11Y Techniques";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = pauljadam.com.iOSswiftUIa11yTechniques;
-				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 10.6;
-			};
-			name = Release;
-		};
-		BCE1B46A2D5FFE15001F92EF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pauljadam.a11yTechniques-Watch-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/a11yTechniques Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/a11yTechniques Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 10.6;
-			};
-			name = Debug;
-		};
-		BCE1B46B2D5FFE15001F92EF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pauljadam.a11yTechniques-Watch-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/a11yTechniques Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/a11yTechniques Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 10.6;
-			};
-			name = Release;
-		};
-		BCE1B46C2D5FFE15001F92EF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pauljadam.a11yTechniques-Watch-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "a11yTechniques Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 10.6;
-			};
-			name = Debug;
-		};
-		BCE1B46D2D5FFE15001F92EF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pauljadam.a11yTechniques-Watch-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "a11yTechniques Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 10.6;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1514,33 +1152,6 @@
 			buildConfigurations = (
 				AABD27C52A9FE69500F718F7 /* Debug */,
 				AABD27C62A9FE69500F718F7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BCE1B46E2D5FFE15001F92EF /* Build configuration list for PBXNativeTarget "a11yTechniques Watch App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BCE1B4682D5FFE15001F92EF /* Debug */,
-				BCE1B4692D5FFE15001F92EF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BCE1B46F2D5FFE15001F92EF /* Build configuration list for PBXNativeTarget "a11yTechniques Watch AppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BCE1B46A2D5FFE15001F92EF /* Debug */,
-				BCE1B46B2D5FFE15001F92EF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BCE1B4702D5FFE15001F92EF /* Build configuration list for PBXNativeTarget "a11yTechniques Watch AppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BCE1B46C2D5FFE15001F92EF /* Debug */,
-				BCE1B46D2D5FFE15001F92EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

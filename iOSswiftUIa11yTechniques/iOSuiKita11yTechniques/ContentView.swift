@@ -132,7 +132,7 @@ struct ContentView: View {
         case "cards": CardsView()
         case "charts": ChartsView()
         case "carousels": CarouselView()
-        case "checkboxes": CheckboxesView()
+        case "checkboxes": CheckboxesUIKitView()
         case "combining focus": CombiningFocusView()
         case "confirmation dialogs": ConfirmationDialogsView()
         case "data tables": DataTablesView()

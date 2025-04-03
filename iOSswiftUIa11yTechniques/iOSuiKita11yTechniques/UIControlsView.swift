@@ -30,7 +30,7 @@ struct UIControlsView: View {
             NavigationLink(destination: ButtonsUIKitView()) {
                 Text("Buttons")
             }
-            NavigationLink(destination: CheckboxesView()) {
+            NavigationLink(destination: CheckboxesUIKitView()) {
                 Text("Checkboxes")
             }
             NavigationLink(destination: ConfirmationDialogsView()) {

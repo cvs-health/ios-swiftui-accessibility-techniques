@@ -189,7 +189,7 @@
 		AAAFD7142AAFCC00008DA3AD /* Buttons.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Buttons.md; sourceTree = "<group>"; };
 		AABB44082AE06297003480B3 /* ProgressIndicators.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ProgressIndicators.md; sourceTree = "<group>"; };
 		AABB44092AE6C0FB003480B3 /* DynamicTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTypeView.swift; sourceTree = "<group>"; };
-		AABD27B62A9FE69300F718F7 /* iOSswiftUIa11yTechniques.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSswiftUIa11yTechniques.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AABD27B62A9FE69300F718F7 /* iOSuiKita11yTechniques.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSuiKita11yTechniques.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABD27B92A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSswiftUIa11yTechniquesApp.swift; sourceTree = "<group>"; };
 		AABD27BD2A9FE69500F718F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AABD27C02A9FE69500F718F7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -442,7 +442,7 @@
 			isa = PBXGroup;
 			children = (
 				AA9B134C2AA923CB009A3D84 /* Documentation */,
-				AABD27B82A9FE69300F718F7 /* iOSswiftUIa11yTechniques */,
+				AABD27B82A9FE69300F718F7 /* iOSuiKita11yTechniques */,
 				AABD27B72A9FE69300F718F7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -450,12 +450,12 @@
 		AABD27B72A9FE69300F718F7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AABD27B62A9FE69300F718F7 /* iOSswiftUIa11yTechniques.app */,
+				AABD27B62A9FE69300F718F7 /* iOSuiKita11yTechniques.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AABD27B82A9FE69300F718F7 /* iOSswiftUIa11yTechniques */ = {
+		AABD27B82A9FE69300F718F7 /* iOSuiKita11yTechniques */ = {
 			isa = PBXGroup;
 			children = (
 				AABD27CD2A9FF10700F718F7 /* A11yEnhancementsView.swift */,
@@ -560,7 +560,7 @@
 				BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */,
 				BC6F3E432BB5DC5800868AE5 /* WebView.swift */,
 			);
-			path = iOSswiftUIa11yTechniques;
+			path = iOSuiKita11yTechniques;
 			sourceTree = "<group>";
 		};
 		AABD27BF2A9FE69500F718F7 /* Preview Content */ = {
@@ -612,9 +612,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AABD27B52A9FE69300F718F7 /* iOSswiftUIa11yTechniques */ = {
+		AABD27B52A9FE69300F718F7 /* iOSuiKita11yTechniques */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AABD27C42A9FE69500F718F7 /* Build configuration list for PBXNativeTarget "iOSswiftUIa11yTechniques" */;
+			buildConfigurationList = AABD27C42A9FE69500F718F7 /* Build configuration list for PBXNativeTarget "iOSuiKita11yTechniques" */;
 			buildPhases = (
 				AABD27B22A9FE69300F718F7 /* Sources */,
 				AABD27B32A9FE69300F718F7 /* Frameworks */,
@@ -625,9 +625,9 @@
 			);
 			dependencies = (
 			);
-			name = iOSswiftUIa11yTechniques;
+			name = iOSuiKita11yTechniques;
 			productName = iOSswiftUIa11yTechniques;
-			productReference = AABD27B62A9FE69300F718F7 /* iOSswiftUIa11yTechniques.app */;
+			productReference = AABD27B62A9FE69300F718F7 /* iOSuiKita11yTechniques.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -645,7 +645,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AABD27B12A9FE69300F718F7 /* Build configuration list for PBXProject "iOSswiftUIa11yTechniques" */;
+			buildConfigurationList = AABD27B12A9FE69300F718F7 /* Build configuration list for PBXProject "iOSuiKita11yTechniques" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -658,7 +658,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AABD27B52A9FE69300F718F7 /* iOSswiftUIa11yTechniques */,
+				AABD27B52A9FE69300F718F7 /* iOSuiKita11yTechniques */,
 			);
 		};
 /* End PBXProject section */
@@ -939,11 +939,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"iOSuiKita11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = iOSswiftUIa11yTechniques/Info.plist;
+				INFOPLIST_FILE = iOSuiKita11yTechniques/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "A11Y Techniques";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -957,7 +957,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 13.4;
-				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSuiKita11yTechniques\n";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -974,11 +974,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"iOSuiKita11yTechniques/Preview Content\"";
 				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = iOSswiftUIa11yTechniques/Info.plist;
+				INFOPLIST_FILE = iOSuiKita11yTechniques/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "A11Y Techniques";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -992,7 +992,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 13.4;
-				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSuiKita11yTechniques\n";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1004,7 +1004,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AABD27B12A9FE69300F718F7 /* Build configuration list for PBXProject "iOSswiftUIa11yTechniques" */ = {
+		AABD27B12A9FE69300F718F7 /* Build configuration list for PBXProject "iOSuiKita11yTechniques" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AABD27C22A9FE69500F718F7 /* Debug */,
@@ -1013,7 +1013,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AABD27C42A9FE69500F718F7 /* Build configuration list for PBXNativeTarget "iOSswiftUIa11yTechniques" */ = {
+		AABD27C42A9FE69500F718F7 /* Build configuration list for PBXNativeTarget "iOSuiKita11yTechniques" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AABD27C52A9FE69500F718F7 /* Debug */,

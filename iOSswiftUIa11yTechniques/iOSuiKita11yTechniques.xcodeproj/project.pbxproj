@@ -102,7 +102,7 @@
 		BC8C92162B327D93006DAC20 /* AdjustableActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C92152B327D93006DAC20 /* AdjustableActionView.swift */; };
 		BC8CD0E52B4D06FD00B9A28A /* MagicTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8CD0E42B4D06FC00B9A28A /* MagicTapView.swift */; };
 		BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */; };
-		BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC782B4E1E6F00196E32 /* PopoversView.swift */; };
+		BC95CC792B4E1E6F00196E32 /* PopoversViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC782B4E1E6F00196E32 /* PopoversViewController.swift */; };
 		BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */; };
 		BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD102B7302E700033712 /* RadioButtonsView.swift */; };
 		BCA3DD142B741FDB00033712 /* SearchSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */; };
@@ -303,7 +303,7 @@
 		BC8CD0E42B4D06FC00B9A28A /* MagicTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicTapView.swift; sourceTree = "<group>"; };
 		BC95CC752B4DF94600196E32 /* MagicTap.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MagicTap.md; sourceTree = "<group>"; };
 		BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputInstructionsView.swift; sourceTree = "<group>"; };
-		BC95CC782B4E1E6F00196E32 /* PopoversView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoversView.swift; sourceTree = "<group>"; };
+		BC95CC782B4E1E6F00196E32 /* PopoversViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoversViewController.swift; sourceTree = "<group>"; };
 		BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartInvertView.swift; sourceTree = "<group>"; };
 		BCA3DD0F2B72DEA900033712 /* SmartInvert.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SmartInvert.md; sourceTree = "<group>"; };
 		BCA3DD102B7302E700033712 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
@@ -526,7 +526,7 @@
 				AA74DD5B2AFDCCF900348078 /* PageTitleGood.swift */,
 				AA74DD592AFDCC8E00348078 /* PageTitlesView.swift */,
 				AA7ADECF2AF2BAFE0019D210 /* PickersView.swift */,
-				BC95CC782B4E1E6F00196E32 /* PopoversView.swift */,
+				BC95CC782B4E1E6F00196E32 /* PopoversViewController.swift */,
 				AABD27BF2A9FE69500F718F7 /* Preview Content */,
 				AA636C892ADD7FD900014BAF /* ProgressIndicatorsView.swift */,
 				BC82DF722C76860900680BC7 /* Prototypes */,
@@ -723,7 +723,7 @@
 				AAF127B82B2194EA00D5313D /* ErrorValidationView.swift in Sources */,
 				BC6D39E02CDB112D00876212 /* HorizontalScrollView.swift in Sources */,
 				BCE205322B5A1C6C000DF400 /* ContactReno.swift in Sources */,
-				BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */,
+				BC95CC792B4E1E6F00196E32 /* PopoversViewController.swift in Sources */,
 				AA74DD5E2AFDCCFA00348078 /* PageTitleBad.swift in Sources */,
 				AABD27D42A9FF12400F718F7 /* DecorativeViewController.swift in Sources */,
 				BCEF61FA2CE6E75F00B0F757 /* SignUpC.swift in Sources */,

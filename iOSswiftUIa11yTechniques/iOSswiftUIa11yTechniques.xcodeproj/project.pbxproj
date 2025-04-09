@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -395,12 +395,6 @@
 		BCFBBE4C2CD93FCA006831D9 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		BCE1B4442D5FFE13001F92EF /* a11yTechniques Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "a11yTechniques Watch App"; sourceTree = "<group>"; };
-		BCE1B4552D5FFE15001F92EF /* a11yTechniques Watch AppTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "a11yTechniques Watch AppTests"; sourceTree = "<group>"; };
-		BCE1B45F2D5FFE15001F92EF /* a11yTechniques Watch AppUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "a11yTechniques Watch AppUITests"; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		AA7367422AA24F810008F9DC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -528,9 +522,6 @@
 				AA9B134C2AA923CB009A3D84 /* Documentation */,
 				AABD27B82A9FE69300F718F7 /* iOSswiftUIa11yTechniques */,
 				AA7367462AA24F810008F9DC /* iOSswiftUIa11yTechniquesUITests */,
-				BCE1B4442D5FFE13001F92EF /* a11yTechniques Watch App */,
-				BCE1B4552D5FFE15001F92EF /* a11yTechniques Watch AppTests */,
-				BCE1B45F2D5FFE15001F92EF /* a11yTechniques Watch AppUITests */,
 				AABD27B72A9FE69300F718F7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -753,9 +744,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				BCE1B4442D5FFE13001F92EF /* a11yTechniques Watch App */,
-			);
 			name = "a11yTechniques Watch App";
 			packageProductDependencies = (
 			);
@@ -776,9 +764,6 @@
 			dependencies = (
 				BCE1B4542D5FFE15001F92EF /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				BCE1B4552D5FFE15001F92EF /* a11yTechniques Watch AppTests */,
-			);
 			name = "a11yTechniques Watch AppTests";
 			packageProductDependencies = (
 			);
@@ -798,9 +783,6 @@
 			);
 			dependencies = (
 				BCE1B45E2D5FFE15001F92EF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				BCE1B45F2D5FFE15001F92EF /* a11yTechniques Watch AppUITests */,
 			);
 			name = "a11yTechniques Watch AppUITests";
 			packageProductDependencies = (

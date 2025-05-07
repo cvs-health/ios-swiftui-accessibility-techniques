@@ -87,6 +87,7 @@ struct ResponsiveLayoutsView: View {
                         .foregroundColor(colorScheme == .dark ? Color.black : Color.black)
                         .buttonStyle(PlainButtonStyle())
                     }
+                    .accessibilityElement(children: .contain)
                     .padding()
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
@@ -119,6 +120,7 @@ struct ResponsiveLayoutsView: View {
                         .foregroundColor(colorScheme == .dark ? Color.black : Color.black)
                         .buttonStyle(PlainButtonStyle())
                     }
+                    .accessibilityElement(children: .contain)
                     .padding()
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
@@ -150,6 +152,7 @@ struct ResponsiveLayoutsView: View {
                         .foregroundColor(colorScheme == .dark ? Color.black : Color.black)
                         .buttonStyle(PlainButtonStyle())
                     }
+                    .accessibilityElement(children: .contain)
                     .padding()
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)

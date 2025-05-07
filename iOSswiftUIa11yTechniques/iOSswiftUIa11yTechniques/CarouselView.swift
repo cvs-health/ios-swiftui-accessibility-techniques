@@ -154,6 +154,7 @@ struct CarouselView: View {
                                             .stroke(Color.gray.opacity(0.8), lineWidth: 2)
                                     )
                                 }
+                                .buttonStyle(PlainButtonStyle()) //PlainButtonStyle() will prevent button text from showing as low contrast when the button is pressed
                                 .padding(.vertical, 16)
                                 Spacer()
                             }

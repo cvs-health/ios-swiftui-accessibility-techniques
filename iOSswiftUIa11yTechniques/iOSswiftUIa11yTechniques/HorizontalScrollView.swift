@@ -23,6 +23,7 @@ struct HorizontalScrollView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @State private var offset: CGFloat = 0
+    @State private var geometryData: CGRect = .zero
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -31,12 +32,20 @@ struct HorizontalScrollView: View {
     var body: some View {
         ScrollView {
             VStack {
-                HStack {
-                    Text("Your Width")
-                    Text(UIScreen.main.bounds.size.width.description)
-                    Text("Height")
-                    Text(UIScreen.main.bounds.size.height.description)
+                Text("Geometry Width")
+                GeometryReader { geometry in
+                    VStack {
+                        Text("\(Int(geometry.size.width))")
+                    }
+                    .onAppear {
+                        self.geometryData = geometry.frame(in: .global)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
                 }
+                Text("\nScreen Width")
+                Text(UIScreen.main.bounds.size.width.description)
+                Text("Screen Height")
+                Text(UIScreen.main.bounds.size.height.description)
                 Text("WCAG's Reflow success criterion requires no horizontal scrolling for vertically scrolling content at a width of 320 pixels or less. When horizontal scrolling is used then it must have single tap alternatives to the gestures used to scroll the content.")
                     .padding(.bottom)
                 Text("Good Example")
@@ -49,8 +58,8 @@ struct HorizontalScrollView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                let layout = (UIScreen.main.bounds.size.width <= 320) ? AnyLayout(VStackLayout()) : AnyLayout(HStackLayout())
-                if UIScreen.main.bounds.size.width <= 320 {
+                let layout = (UIScreen.main.bounds.size.width <= 320 || geometryData.size.width <= 288) ? AnyLayout(VStackLayout()) : AnyLayout(HStackLayout())
+                if UIScreen.main.bounds.size.width <= 320 || geometryData.size.width <= 288 {
                 } else {
                     HStack {
                         Spacer()
@@ -69,13 +78,13 @@ struct HorizontalScrollView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                ScrollView(UIScreen.main.bounds.size.width <= 320 ? .vertical : .horizontal) {
+                ScrollView(UIScreen.main.bounds.size.width <= 320 || geometryData.size.width <= 288 ? .vertical : .horizontal) {
                     layout {
                         ForEach(0..<10) { i in
                             Button(action: {
                                 // Handle button action
                             }) {
-                                Text(UIScreen.main.bounds.size.width <= 320 ? "Vertical Button \(i)" : "Horizontal Button \(i)")
+                                Text(UIScreen.main.bounds.size.width <= 320 || geometryData.size.width <= 288 ? "Vertical Button \(i)" : "Horizontal Button \(i)")
                                     .padding()
                             }
                             .background(
@@ -88,7 +97,7 @@ struct HorizontalScrollView: View {
                         }
                     }
                     .scrollTargetLayout()
-                    .offset(x: UIScreen.main.bounds.size.width <= 320 ? 0 : offset)
+                    .offset(x: UIScreen.main.bounds.size.width <= 320 || geometryData.size.width <= 288 ? 0 : offset)
                 }
                 .scrollTargetBehavior(.viewAligned)
                 .safeAreaPadding(.horizontal, 40)

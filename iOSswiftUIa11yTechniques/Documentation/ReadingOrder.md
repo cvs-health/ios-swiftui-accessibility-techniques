@@ -4,6 +4,8 @@ The VoiceOver reading order should match the visual reading order presented to s
 
 If the visual layout of a page disrupts the expected VoiceOver reading order then use `.accessibilityElement(children: .contain)` to make VoiceOver read all elements in the group before moving to the next element.
 
+Or use `.accessibilityElement(children: .combine)` which causes VoiceOver to read the combined elements as a single element with one focus point.
+
 Notes:
 
 - By default the VoiceOver reading order moves from left to right and then top to bottom.

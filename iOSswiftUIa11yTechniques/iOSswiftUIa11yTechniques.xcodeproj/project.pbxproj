@@ -60,6 +60,7 @@
 		BC1B59CB2B508BDD00E8F782 /* ATdetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */; };
 		BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */; };
 		BC2133A32B713B1100753693 /* MeaningfulAccessibleNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */; };
+		BC23BB762E15C88B000E749F /* TextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC23BB752E15C88B000E749F /* TextEditorView.swift */; };
 		BC3951EF2D64EB4200D26DBB /* AccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */; };
 		BC3951F52D657B9400D26DBB /* ChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3951F42D657B9400D26DBB /* ChartsView.swift */; };
 		BC3951F82D67C45E00D26DBB /* VideosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3951F72D67C45E00D26DBB /* VideosView.swift */; };
@@ -105,6 +106,7 @@
 		BC8CD0E52B4D06FD00B9A28A /* MagicTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8CD0E42B4D06FC00B9A28A /* MagicTapView.swift */; };
 		BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */; };
 		BC95CC792B4E1E6F00196E32 /* PopoversView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC95CC782B4E1E6F00196E32 /* PopoversView.swift */; };
+		BC9A8B792E15C47E0009BC58 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9A8B782E15C47E0009BC58 /* ToolbarView.swift */; };
 		BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */; };
 		BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD102B7302E700033712 /* RadioButtonsView.swift */; };
 		BCA3DD142B741FDB00033712 /* SearchSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */; };
@@ -275,6 +277,7 @@
 		BC1B59CC2B519AF700E8F782 /* ContactFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactFormView.swift; sourceTree = "<group>"; };
 		BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeaningfulAccessibleNamesView.swift; sourceTree = "<group>"; };
 		BC2133A42B713B1E00753693 /* MeaningfulAccessibleNames.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MeaningfulAccessibleNames.md; sourceTree = "<group>"; };
+		BC23BB752E15C88B000E749F /* TextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorView.swift; sourceTree = "<group>"; };
 		BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifier.swift; sourceTree = "<group>"; };
 		BC3951F42D657B9400D26DBB /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
 		BC3951F62D668A1F00D26DBB /* Charts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Charts.md; sourceTree = "<group>"; };
@@ -342,6 +345,7 @@
 		BC95CC752B4DF94600196E32 /* MagicTap.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MagicTap.md; sourceTree = "<group>"; };
 		BC95CC762B4E1DDB00196E32 /* InputInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputInstructionsView.swift; sourceTree = "<group>"; };
 		BC95CC782B4E1E6F00196E32 /* PopoversView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoversView.swift; sourceTree = "<group>"; };
+		BC9A8B782E15C47E0009BC58 /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
 		BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartInvertView.swift; sourceTree = "<group>"; };
 		BCA3DD0F2B72DEA900033712 /* SmartInvert.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SmartInvert.md; sourceTree = "<group>"; };
 		BCA3DD102B7302E700033712 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
@@ -642,6 +646,8 @@
 				BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */,
 				BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */,
 				AA74DD532AFD8D0000348078 /* TextFieldsView.swift */,
+				BC9A8B782E15C47E0009BC58 /* ToolbarView.swift */,
+				BC23BB752E15C88B000E749F /* TextEditorView.swift */,
 				AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */,
 				BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */,
 				AABD27CB2A9FF0F000F718F7 /* UIControlsView.swift */,
@@ -969,6 +975,7 @@
 				BC75478C2C2FA7EA00A4ABC7 /* FormA.swift in Sources */,
 				BCA3DD0E2B72C32200033712 /* SmartInvertView.swift in Sources */,
 				AABD27D82A9FF13E00F718F7 /* DetailView.swift in Sources */,
+				BC9A8B792E15C47E0009BC58 /* ToolbarView.swift in Sources */,
 				BC75478E2C2FA83C00A4ABC7 /* FormB.swift in Sources */,
 				BC07D1932D3760600076F496 /* SignUp1.swift in Sources */,
 				BCEF61FC2CE6EB5100B0F757 /* SignUpD.swift in Sources */,
@@ -1017,6 +1024,7 @@
 				BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,
 				BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */,
+				BC23BB762E15C88B000E749F /* TextEditorView.swift in Sources */,
 				BC6CA9FC2C459A6600138BA3 /* Page1Prototype.swift in Sources */,
 				AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */,
 				BC163FC22B6AD3F3009E3A83 /* ContactBoston.swift in Sources */,
@@ -1280,7 +1288,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 13.5;
+				MARKETING_VERSION = 13.7;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1315,7 +1323,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 13.5;
+				MARKETING_VERSION = 13.7;
 				PRODUCT_BUNDLE_IDENTIFIER = pauljadam.com.iOSswiftUIa11yTechniques;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -292,7 +292,7 @@ struct TextFieldsView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }.labeledContentStyle(.vertical)
                 DisclosureGroup("Details") {
-                    Text("The second bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. When using `LabeledContent` an `.accessibilityLabel` is not required.")
+                    Text("The second bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. Voice Control users also cannot speak the name or number of those textfields to set focus to the inputs. When using `LabeledContent` an `.accessibilityLabel` is not required.")
                 }.accessibilityHint("Bad Example Using `LabeledContent`")
             }
             .navigationTitle("Text Fields")

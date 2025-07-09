@@ -6,7 +6,7 @@ Button states must be conveyed to VoiceOver users. Use `.disabled(true)` to set 
 Notes:
 
 * When there are multiple buttons on a page with the same label modify each button's `.accessibilityLabel` so they are unique and specific when spoken to VoiceOver. 
-* If overriding a button's `.accessibilityLabel` make sure to include the visible button text at the beginning of the `.accessibilityLabel`, e.g., `.accessibilityLabel = "Edit Username"` for a button labeled "Edit".
+* If overriding a button's `.accessibilityLabel` make sure to include the visible button text at the beginning of the `.accessibilityLabel`, e.g., `.accessibilityLabel("Edit Username")` for a button labeled "Edit".
 * Don't include the word "Button" in an `.accessibilityLabel` or else VoiceOver will speak "Button, Button".
 
 ## Applicable WCAG Success Criteria

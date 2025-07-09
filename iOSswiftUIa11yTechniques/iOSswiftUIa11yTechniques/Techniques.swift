@@ -74,6 +74,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Tabs"),
     Techniques(name: "Text Fields"),
     Techniques(name: "Toggles"),
+    Techniques(name: "Toolbars"),
     Techniques(name: "Videos"),
     Techniques(name: "Touch Target Size"),
     Techniques(name: "VoiceOver Announcement Delay"),

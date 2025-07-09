@@ -117,6 +117,7 @@ struct CarouselView: View {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundColor(.white)
                                             .background(Color.black)
+                                            .clipShape(Circle())
                                             .font(.system(size: 40))
                                             .frame(width: 70, height: 70)
                                             .position(x: UIScreen.main.bounds.width - (UIDevice.current.orientation.isLandscape ? 200 : 70), y: 30)
@@ -176,6 +177,7 @@ struct CarouselView: View {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundColor(.white)
                                             .background(Color.black)
+                                            .clipShape(Circle())
                                             .font(.system(size: 40))
                                             .frame(width: 70, height: 70)
                                             .position(x: UIScreen.main.bounds.width - (UIDevice.current.orientation.isLandscape ? 200 : 70), y: 30)
@@ -234,6 +236,7 @@ struct CarouselView: View {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundColor(.white)
                                             .background(Color.black)
+                                            .clipShape(Circle())
                                             .font(.system(size: 40))
                                             .frame(width: 70, height: 70)
                                             .position(x: UIScreen.main.bounds.width - (UIDevice.current.orientation.isLandscape ? 200 : 70), y: 30)
@@ -285,6 +288,7 @@ struct CarouselView: View {
                         isTriggerFocused = true
                     }
                     .padding([.leading,.trailing])
+                    .background(.regularMaterial)
                 }
                 DisclosureGroup("Details") {
                     Text("The good Carousel example uses custom tab controls with `.isTabBar` and `.isSelected` traits as the single tap gesture alternatives to swipe between slides. The carousel does not auto-play. A `ScrollView` is used to support Dynamic Type text resize without truncation.")
@@ -487,6 +491,7 @@ struct CarouselView: View {
                         Spacer()
                     }
                     .padding([.leading,.trailing])
+                    .background(.regularMaterial)
                 }
 
                 DisclosureGroup("Details") {

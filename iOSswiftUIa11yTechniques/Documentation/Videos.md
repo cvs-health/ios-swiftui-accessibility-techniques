@@ -7,7 +7,7 @@ Apple's native video player controls are not accessible to VoiceOver, Full Keybo
 - Create a custom play button so that accessibility users can focus on the button and use it to play the video. 
 - Use `.accessibilityElement(children: .contain)` to create a group container for the video and for the custom play controls. 
 - Add `.accessibilityLabel(\"Name of Video\")` and VoiceOver users will hear the video name if using direct touch. 
-- Add `.accessibilityHint(\"Double-tap to play and show controls\")` so VoiceOver users hear how to play the video. 
+- Add `.accessibilityHint(\"Plays video and shows controls\")` so VoiceOver users hear how to play the video. 
 
 Swipe exploration with VoiceOver will not work so the custom play button is required. 
 

@@ -114,7 +114,7 @@ struct TouchTargetSize: View {
                    Button(action: {
                        print("Third button tapped")
                    }) {
-                       Image(systemName: "plus").frame(width:18, height:18)
+                       Image(systemName: "plus").frame(width:14, height:14)
                    }
                    Button(action: {
                        print("Fourth button tapped")

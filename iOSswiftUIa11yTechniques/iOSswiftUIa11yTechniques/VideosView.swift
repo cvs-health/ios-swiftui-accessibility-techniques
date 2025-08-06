@@ -63,7 +63,7 @@ struct VideosView: View {
                     .frame(width: .infinity, height: 320)
                     .accessibilityElement(children: .contain) // creates a group container
                     .accessibilityLabel("Biology 101 Video")
-                    .accessibilityHint("Double-tap to play and show controls") // let the VoiceOver user know they can double tap on this element to display the video controls and also play the video. They will only here this with direct-touch exploration, during swipe navigation the element is skipped over and never announced.
+                    .accessibilityHint("Plays video and shows controls") // let the VoiceOver user know they can double tap on this element to display the video controls and also play the video. They will only here this with direct-touch exploration, during swipe navigation the element is skipped over and never announced.
                     .accessibilityRespondsToUserInteraction() // not sure this has any effect
                     .focusable() // will show a full keyboard access focus outline but nothing is operable on the video
                 

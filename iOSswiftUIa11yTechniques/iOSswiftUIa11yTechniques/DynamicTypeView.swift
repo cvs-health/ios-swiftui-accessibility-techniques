@@ -28,7 +28,7 @@ struct DynamicTypeView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Dynamic Type is used to select text styles that automatically scale to larger sizes in response to the user's system text size settings. Use a `.font()` style like `.largeTitle`, `.caption`, `.headline`, `.subheadline`, etc. Or use text with no size defined and it will dynamically scale. Avoid using `.lineLimit()` which will cause text truncation. Use `axis: .vertical` to enable `TextField` value text to expand vertically rather than truncate.")
+                Text("Dynamic Type is used to select text styles that automatically scale to larger sizes in response to the user's system text size settings. Use a `.font()` style like `.largeTitle`, `.caption`, `.headline`, `.subheadline`, etc. Or use text with no size defined and it will dynamically scale. Avoid using `.lineLimit()` which will cause text truncation. Use `axis: .vertical` to enable `TextField` value text to expand vertically rather than truncate. Put `Text` inside a `ScrollView` so that it does not truncate when the size is increased.")
                     .padding([.bottom])
                 Text("Good Examples")
                     .font(.subheadline)

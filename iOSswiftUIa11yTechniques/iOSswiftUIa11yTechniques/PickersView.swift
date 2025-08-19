@@ -42,6 +42,8 @@ struct PickersView: View {
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
     
+
+    
     var body: some View {
         ScrollView {
             VStack {
@@ -73,6 +75,10 @@ struct PickersView: View {
                         isTriggerFocused = true
                     }
                     .accessibilityFocused($isTriggerFocused)
+                NavigationLink("Open Picker in List Page") {
+                                    PickerPage()
+                                }
+                                .padding()
                 DisclosureGroup("Details") {
                     Text("The default style good example uses `Picker(\"Fruit\")` label text which is spoken as the accessibility label to VoiceOver. `AccessibilityFocusState` is used to send VoiceOver focus back to the picker when the value has been changed.")
                 }.padding(.bottom).accessibilityHint("Good Example Default Style")
@@ -211,5 +217,27 @@ struct PickersView_Previews: PreviewProvider {
         NavigationStack {
             PickersView()
         }
+    }
+}
+
+
+struct PickerPage: View {
+    enum Flavor: String, CaseIterable, Identifiable {
+        case chocolate, vanilla, strawberry
+        var id: Self { self }
+    }
+
+
+    @State private var selectedFlavor: Flavor = .chocolate
+
+    var body: some View {
+        List {
+            Picker("Flavor", selection: $selectedFlavor) {
+                Text("Chocolate").tag(Flavor.chocolate)
+                Text("Vanilla").tag(Flavor.vanilla)
+                Text("Strawberry").tag(Flavor.strawberry)
+            }
+        }
+        .navigationTitle("Pick a Flavor")
     }
 }

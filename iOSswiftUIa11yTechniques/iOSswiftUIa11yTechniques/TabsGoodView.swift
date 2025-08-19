@@ -28,9 +28,20 @@ struct TabsGoodView: View {
                     Label("Messages", systemImage: "envelope")
                 }
         }.accessibilityLabel("Navigation")
+        .modifier(TabBarMinimizeBehaviorIfAvailable())
     }
 }
  
+struct TabBarMinimizeBehaviorIfAvailable: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content.tabBarMinimizeBehavior(.onScrollDown)
+        } else {
+            content
+        }
+    }
+}
+
 struct TabsGoodView_Previews: PreviewProvider {
     static var previews: some View {
         TabsGoodView()

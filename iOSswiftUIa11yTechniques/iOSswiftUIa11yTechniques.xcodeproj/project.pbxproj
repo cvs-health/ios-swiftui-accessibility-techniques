@@ -124,6 +124,8 @@
 		BCD1CF9C2B577C5A00A26ED3 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */; };
 		BCD814062C3858D600124B7C /* TextFieldsFocusManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */; };
 		BCDF3F562D4AE1D000A13D09 /* SignUp2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */; };
+		BCE15EF62E4D5B45001A8997 /* ContainersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE15EF52E4D5B45001A8997 /* ContainersView.swift */; };
+		BCE15EF82E4D7B8A001A8997 /* AccessibilityTraitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */; };
 		BCE1B4662D5FFE15001F92EF /* a11yTechniques Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = BCE1B4432D5FFE13001F92EF /* a11yTechniques Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BCE205232B58D0BE000DF400 /* DarkModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205222B58D0BE000DF400 /* DarkModeView.swift */; };
 		BCE205252B58D50D000DF400 /* UserPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE205242B58D50D000DF400 /* UserPreferencesView.swift */; };
@@ -370,6 +372,8 @@
 		BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsView.swift; sourceTree = "<group>"; };
 		BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsFocusManagement.swift; sourceTree = "<group>"; };
 		BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp2.swift; sourceTree = "<group>"; };
+		BCE15EF52E4D5B45001A8997 /* ContainersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersView.swift; sourceTree = "<group>"; };
+		BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityTraitsView.swift; sourceTree = "<group>"; };
 		BCE1B4432D5FFE13001F92EF /* a11yTechniques Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a11yTechniques Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE1B4522D5FFE15001F92EF /* a11yTechniques Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "a11yTechniques Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE1B45C2D5FFE15001F92EF /* a11yTechniques Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "a11yTechniques Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -556,8 +560,11 @@
 			children = (
 				AABD27CD2A9FF10700F718F7 /* A11yEnhancementsView.swift */,
 				BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */,
+				BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */,
 				AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */,
 				BC163FC82B6C1585009E3A83 /* AccessibilityRepresentationView.swift */,
+				BC4F17942D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift */,
+				BC1A26502D64218900A23DD6 /* AccessibilitySortPriority.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
 				BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */,
 				BCAD630D2BF512EE004AD305 /* ActivityIndicatorView.swift */,
@@ -567,17 +574,17 @@
 				AABD27BD2A9FE69500F718F7 /* Assets.xcassets */,
 				BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */,
 				BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */,
-				BC1A26502D64218900A23DD6 /* AccessibilitySortPriority.swift */,
-				BC4F17942D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift */,
-				BC3951F42D657B9400D26DBB /* ChartsView.swift */,
 				BC1A5FA12B6079070008513C /* AttributedStringsView.swift */,
 				AA9B13502AABADD5009A3D84 /* ButtonsView.swift */,
 				BC8C920C2B2BAE41006DAC20 /* CardsView.swift */,
 				BCFBBE4C2CD93FCA006831D9 /* CarouselView.swift */,
 				BC6D39542CDA896F00876212 /* CarouselViewBad.swift */,
+				BC3951F42D657B9400D26DBB /* ChartsView.swift */,
 				BC715B662B465B9F00C77B57 /* CheckboxesView.swift */,
 				BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */,
 				BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */,
+				BCE15EF52E4D5B45001A8997 /* ContainersView.swift */,
+				BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */,
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
 				BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */,
 				BCE205222B58D0BE000DF400 /* DarkModeView.swift */,
@@ -611,7 +618,6 @@
 				BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
-				BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */,
 				BC8CD0E42B4D06FC00B9A28A /* MagicTapView.swift */,
 				BC3EA3B42B7C069F0003B8A2 /* MapView.swift */,
 				BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */,
@@ -644,11 +650,11 @@
 				AA59CDC92ABA1F4E0004908F /* TabsGoodView.swift */,
 				AA59CDC72ABA1F3B0004908F /* TabsView.swift */,
 				BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */,
+				BC23BB752E15C88B000E749F /* TextEditorView.swift */,
 				BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */,
 				AA74DD532AFD8D0000348078 /* TextFieldsView.swift */,
-				BC9A8B782E15C47E0009BC58 /* ToolbarView.swift */,
-				BC23BB752E15C88B000E749F /* TextEditorView.swift */,
 				AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */,
+				BC9A8B782E15C47E0009BC58 /* ToolbarView.swift */,
 				BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */,
 				AABD27CB2A9FF0F000F718F7 /* UIControlsView.swift */,
 				BCE205242B58D50D000DF400 /* UserPreferencesView.swift */,
@@ -1011,6 +1017,7 @@
 				BC877B892CE543C200B127F1 /* SignUpA.swift in Sources */,
 				BC82DF6F2C60F46200680BC7 /* PrototypeHeadings2.swift in Sources */,
 				BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */,
+				BCE15EF62E4D5B45001A8997 /* ContainersView.swift in Sources */,
 				BCE2052C2B5A1C38000DF400 /* ContactAustin.swift in Sources */,
 				BC17B6132C9B212700403544 /* RedundantEntryView.swift in Sources */,
 				BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */,
@@ -1037,6 +1044,7 @@
 				BCEDB8F42B4872CA00B4D85D /* DeviceOrientationGood.swift in Sources */,
 				BC1B59CB2B508BDD00E8F782 /* ATdetectionView.swift in Sources */,
 				BCE205302B5A1C5F000DF400 /* ContactAtlanta.swift in Sources */,
+				BCE15EF82E4D7B8A001A8997 /* AccessibilityTraitsView.swift in Sources */,
 				BC8C92162B327D93006DAC20 /* AdjustableActionView.swift in Sources */,
 				AA59CDCE2ABA209D0004908F /* MessagesTabView.swift in Sources */,
 				AA1AC60C2ABD2C3800AC02DA /* TogglesView.swift in Sources */,

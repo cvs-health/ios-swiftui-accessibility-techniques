@@ -46,6 +46,38 @@ struct RatingView: View {
    }
 }
 
+struct RatingViewGood: View {
+   @Binding var rating: Int
+   var maximumRating: Int = 5
+   var offImage = Image(systemName: "star")
+   var onImage = Image(systemName: "star.fill")
+   var offColor = Color.gray
+   var onColor = Color.red
+
+   var body: some View {
+       HStack {
+           ForEach(1..<maximumRating + 1, id: \.self) { number in
+               Button {
+                  rating = number
+               } label: {
+                  image(for: number)
+                      .foregroundStyle(number > rating ? offColor : onColor)
+               }
+               .accessibilityLabel("\(number) star\(number > 1 ? "s" : "")")
+               .accessibilityAddTraits(number == rating ? .isSelected : [])
+           }
+       }
+   }
+
+   func image(for number: Int) -> Image {
+       if number > rating {
+           offImage
+       } else {
+           onImage
+       }
+   }
+}
+
  
 struct AdjustableActionView: View {
     @State var rating: Int = 0
@@ -71,10 +103,10 @@ struct AdjustableActionView: View {
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
                 Text("Rate your experience:").frame(maxWidth: .infinity, alignment: .leading)
-                RatingView(rating: $rating).frame(maxWidth: .infinity, alignment: .leading).padding()
+                RatingViewGood(rating: $rating).frame(maxWidth: .infinity, alignment: .leading).padding()
                 .accessibilityElement()
                 .accessibilityLabel("Rate your experience")
-                .accessibilityValue(String(rating)+" Star")
+                .accessibilityValue(String(rating)+" star\(rating > 1 ? "s" : "")")
                 .accessibilityAdjustableAction { direction in
                     switch direction {
                     case .increment:
@@ -87,8 +119,13 @@ struct AdjustableActionView: View {
                         break
                     }
                 }
+                .accessibilityAction(named: "1 star") { rating = 1 }
+                .accessibilityAction(named: "2 stars") { rating = 2 }
+                .accessibilityAction(named: "3 stars") { rating = 3 }
+                .accessibilityAction(named: "4 stars") { rating = 4 }
+                .accessibilityAction(named: "5 stars") { rating = 5 }
                 DisclosureGroup("Details") {
-                    Text("The good adjustable example uses `.accessibilityAdjustableAction` to increment and decrement the star rating when VoiceOver users swipe up and down. `.accessibilityElement()`, `.accessibilityLabel`, and `.accessibilityValue` are also added to make the custom control accessible.")
+                    Text("The good adjustable example uses `.accessibilityAdjustableAction` to increment and decrement the star rating when VoiceOver users swipe up and down. `.accessibilityElement()`, `.accessibilityLabel`, and `.accessibilityValue` are also added to make the custom control accessible. A named `.accessibilityAction` is also added to allow Voice Control users to say show actions for Rate and then choose a star rating.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)

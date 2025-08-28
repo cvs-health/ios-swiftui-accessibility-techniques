@@ -31,7 +31,7 @@ struct SheetsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("VoiceOver focus must move to the sheet when displayed and back to the trigger button when the sheet is closed. Sheet title text must be coded as a Heading for VoiceOver users. Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. Use `AccessibilityFocusState` to send focus back to the trigger button that opened the sheet when the sheet is closed.")
+                Text("VoiceOver focus must move to the sheet when displayed and back to the trigger button when the sheet is closed. Sheet title text must be coded as a Heading for VoiceOver users. Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. Use `AccessibilityFocusState` to send focus back to the trigger button that opened the sheet when the sheet is closed. Place the sheet's content inside a `ScrollView` or else the text will truncate when enlarged.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

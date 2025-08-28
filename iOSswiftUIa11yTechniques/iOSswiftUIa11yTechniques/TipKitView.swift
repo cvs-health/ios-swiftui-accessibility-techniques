@@ -25,8 +25,14 @@ struct TipKitView: View {
         var message: Text? { Text("Your favorite landmarks always appear at the top of the list.") }
         var image: Image? { Image(systemName: "star") }
     }
+    struct FavoriteLandmarkTipBad: Tip {
+        var title: Text { Text("Save as a Favorite") }
+        var message: Text? { Text("Your favorite landmarks always appear at the top of the list.") }
+        var image: Image? { Image(systemName: "star") }
+    }
     // Create an instance of your tip.
     var favoriteLandmarkTip = FavoriteLandmarkTip()
+    var favoriteLandmarkTipBad = FavoriteLandmarkTipBad()
 
     
     struct PasswordResetTip: Tip {
@@ -148,8 +154,47 @@ struct TipKitView: View {
                         }
                         .padding()
                 DisclosureGroup("Details") {
-                    Text("The good example uses `TipKit`.")
+                    Text("The good `TipKit` example uses `.accessibilityLabel` and `.accessibilityHint` to provide a unique label and hint for the `TipView`. `AccessibilityFocusState` is used to send VoiceOver focus to the tip's control after it is closed.")
                 }.padding(.bottom).accessibilityHint("Good Example")
+                Text("Bad Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                Divider()
+                    .frame(height: 2.0, alignment:.leading)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.bottom)
+                VStack {
+                    // Place the tip view near the feature you want to highlight.
+                    TipView(favoriteLandmarkTipBad, arrowEdge: .bottom)
+                    Button(action: {
+                        // Handle button action
+                    }) {
+                        Image(systemName: "star")
+                            .imageScale(.large)
+                    }
+                }
+                .task {
+                    do {
+                        // Configure TipKit with immediate display frequency
+                        try Tips.configure([
+                            .displayFrequency(.immediate)
+                        ])
+                        
+                        // Reset all tips so they appear fresh every time
+                        try Tips.resetDatastore()
+                    } catch {
+                        print("Error initializing TipKit: \(error)")
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                DisclosureGroup("Details") {
+                    Text("The bad `TipKit` example has no `.accessibilityLabel` or `.accessibilityHint` to make the Tip unique for VoiceOver users. There is no `AccessibilityFocusState` focus management used to send focus to the Tip's control when it is closed.")
+                }.padding(.bottom).accessibilityHint("Bad Example")
+
             }
             .navigationTitle("TipKit")
             .padding()

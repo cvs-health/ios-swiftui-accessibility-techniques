@@ -18,8 +18,10 @@ import SwiftUI
  
 struct SheetsView: View {
     @State private var isShowingSheet = false
+    @State private var isShowingSheet2 = false
     @State private var isShowingBadSheet = false
     @AccessibilityFocusState private var isTriggerFocused: Bool
+    @AccessibilityFocusState private var isTriggerFocused2: Bool
 
     
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
@@ -73,7 +75,7 @@ struct SheetsView: View {
                 DisclosureGroup("Details") {
                     Text("The good sheet example uses `.sheet()` to create a native SwiftUI sheet that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the sheet when the sheet is closed. The sheet title is correctly coded as a heading.")
                 }.padding(.bottom).accessibilityHint("Good Example")
-                Text("Bad Example")
+                Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -83,6 +85,11 @@ struct SheetsView: View {
                     .frame(height: 2.0, alignment:.leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
+                Text("Bad Example Custom View")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 Button(action: {
                     isShowingBadSheet.toggle()
                 }) {
@@ -103,7 +110,41 @@ struct SheetsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad sheet example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed. The sheet title is not coded as a heading.")
-                }.accessibilityHint("Bad Example")
+                }.accessibilityHint("Bad Example Custom View")
+                Text("Bad Example `.sheet` no `ScrollView`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button(action: {
+                    isShowingSheet2.toggle()
+                }) {
+                    Text("Show License Agreement")
+                }
+                    .accessibilityFocused($isTriggerFocused2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                .sheet(isPresented: $isShowingSheet2,
+                       onDismiss: didDismiss2) {
+                    VStack {
+                        Text("License Agreement")
+                            .font(.largeTitle)
+                            .accessibilityAddTraits(.isHeader)
+                            .lineLimit(1)
+                        Text("""
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            """)
+                            .padding(20)
+                            .font(.title3)
+                        Button("Dismiss",
+                               action: {
+                                    isShowingSheet2.toggle()
+                                })
+                    }
+                    .padding()
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad `.sheet` example that has no `ScrollView` shows how the text truncates when it is larger than the visible area.")
+                }.accessibilityHint("Bad Example .sheet no ScrollView")
             }
             .navigationTitle("Sheets")
             .padding()
@@ -113,6 +154,10 @@ struct SheetsView: View {
     func didDismiss() {
         // Handle the dismissing action.
         isTriggerFocused = true
+    }
+    func didDismiss2() {
+        // Handle the dismissing action.
+        isTriggerFocused2 = true
     }
 
 }

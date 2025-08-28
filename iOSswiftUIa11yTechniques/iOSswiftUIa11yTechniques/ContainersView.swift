@@ -120,7 +120,8 @@ struct ContainersView: View {
                 .accessibilityLabel("Footer")
             }
         }
-        .navigationBarHidden(true) // hides the automatic navigation title bar
+        .navigationBarTitleDisplayMode(.inline)
+        //.navigationBarHidden(true) // hides the automatic navigation title bar
 
     }
 }

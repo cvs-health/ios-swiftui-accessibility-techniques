@@ -64,6 +64,7 @@
 		BC3951EF2D64EB4200D26DBB /* AccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */; };
 		BC3951F52D657B9400D26DBB /* ChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3951F42D657B9400D26DBB /* ChartsView.swift */; };
 		BC3951F82D67C45E00D26DBB /* VideosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3951F72D67C45E00D26DBB /* VideosView.swift */; };
+		BC3C6D362E5D58FD00AE9B78 /* TipKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3C6D352E5D58FD00AE9B78 /* TipKitView.swift */; };
 		BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */; };
 		BC3EA3B52B7C069F0003B8A2 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B42B7C069F0003B8A2 /* MapView.swift */; };
 		BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */; };
@@ -285,6 +286,7 @@
 		BC3951F62D668A1F00D26DBB /* Charts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Charts.md; sourceTree = "<group>"; };
 		BC3951F72D67C45E00D26DBB /* VideosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosView.swift; sourceTree = "<group>"; };
 		BC3951F92D68E63E00D26DBB /* Videos.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Videos.md; sourceTree = "<group>"; };
+		BC3C6D352E5D58FD00AE9B78 /* TipKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipKitView.swift; sourceTree = "<group>"; };
 		BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SearchSuggestions.md; sourceTree = "<group>"; };
 		BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickers.swift; sourceTree = "<group>"; };
 		BC3EA3B32B7B25550003B8A2 /* DateTimePickers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DateTimePickers.md; sourceTree = "<group>"; };
@@ -565,6 +567,7 @@
 				BC163FC82B6C1585009E3A83 /* AccessibilityRepresentationView.swift */,
 				BC4F17942D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift */,
 				BC1A26502D64218900A23DD6 /* AccessibilitySortPriority.swift */,
+				BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
 				BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */,
 				BCAD630D2BF512EE004AD305 /* ActivityIndicatorView.swift */,
@@ -584,7 +587,6 @@
 				BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */,
 				BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */,
 				BCE15EF52E4D5B45001A8997 /* ContainersView.swift */,
-				BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */,
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
 				BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */,
 				BCE205222B58D0BE000DF400 /* DarkModeView.swift */,
@@ -653,6 +655,7 @@
 				BC23BB752E15C88B000E749F /* TextEditorView.swift */,
 				BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */,
 				AA74DD532AFD8D0000348078 /* TextFieldsView.swift */,
+				BC3C6D352E5D58FD00AE9B78 /* TipKitView.swift */,
 				AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */,
 				BC9A8B782E15C47E0009BC58 /* ToolbarView.swift */,
 				BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */,
@@ -954,6 +957,7 @@
 				BC6D39552CDA896F00876212 /* CarouselViewBad.swift in Sources */,
 				BC6C39C22C2E054600AA842A /* Prototype1.swift in Sources */,
 				BCA3DD142B741FDB00033712 /* SearchSuggestionsView.swift in Sources */,
+				BC3C6D362E5D58FD00AE9B78 /* TipKitView.swift in Sources */,
 				BCE205232B58D0BE000DF400 /* DarkModeView.swift in Sources */,
 				AA636C8A2ADD7FD900014BAF /* ProgressIndicatorsView.swift in Sources */,
 				BC2133A32B713B1100753693 /* MeaningfulAccessibleNamesView.swift in Sources */,

@@ -75,6 +75,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Steppers"),
     Techniques(name: "Tabs"),
     Techniques(name: "Text Fields"),
+    Techniques(name: "TipKit"),
     Techniques(name: "Toggles"),
     Techniques(name: "Toolbars"),
     Techniques(name: "Videos"),

@@ -390,6 +390,7 @@
 		BCE2052D2B5A1C50000DF400 /* ContactSeattle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSeattle.swift; sourceTree = "<group>"; };
 		BCE2052F2B5A1C5F000DF400 /* ContactAtlanta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAtlanta.swift; sourceTree = "<group>"; };
 		BCE205312B5A1C6C000DF400 /* ContactReno.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactReno.swift; sourceTree = "<group>"; };
+		BCE9EFAB2E61FDD30047F51E /* Toolbars.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Toolbars.md; sourceTree = "<group>"; };
 		BCEDB8EE2B4760D800B4D85D /* Checkboxes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Checkboxes.md; sourceTree = "<group>"; };
 		BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationView.swift; sourceTree = "<group>"; };
 		BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationBad.swift; sourceTree = "<group>"; };
@@ -526,6 +527,7 @@
 				AAF6D09A2ABA29EE00188DE0 /* Tabs.md */,
 				AA1303162AFED27C001AE0BF /* TextFields.md */,
 				AA2B1D452ABDDC76007B2383 /* Toggles.md */,
+				BCE9EFAB2E61FDD30047F51E /* Toolbars.md */,
 				BC1B59C92B507B3000E8F782 /* TouchTargetSize.md */,
 				BC3C6D372E6105A100AE9B78 /* TipKit.md */,
 				BC3951F92D68E63E00D26DBB /* Videos.md */,

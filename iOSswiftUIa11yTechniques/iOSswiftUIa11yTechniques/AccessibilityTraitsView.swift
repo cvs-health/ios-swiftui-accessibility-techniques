@@ -16,9 +16,7 @@
 
 import SwiftUI
 
-import SwiftUI
-
-struct AccessibilityTraitsView: View {
+struct AccessibilityTraitsListView: View {
     let traits: [(name: String, trait: AccessibilityTraits, iOSAvailable: Double)] = [
         ("Button", .isButton, 0),
         ("Header", .isHeader, 0),
@@ -59,6 +57,7 @@ struct AccessibilityTraitsView: View {
                 }
             }
             .padding()
+            .navigationTitle("List of Accessibility Traits (except .isModal)")
         }
     }
     
@@ -67,6 +66,81 @@ struct AccessibilityTraitsView: View {
         return item.iOSAvailable <= 16.9
     }
 }
+
+struct AccessibilityTraitsView: View {
+    private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
+    private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+    @Environment(\.colorScheme) var colorScheme
+    
+    @AccessibilityFocusState private var isTriggerFocused: Bool
+    @State private var showingAlertImage = false
+
+    
+    var body: some View {
+        ScrollView {
+            VStack {
+                Text("Accessibility Traits are used to manually add roles and states to custom UI controls. Standard native controls already include accessibility traits by default.")
+                NavigationLink("Accessibility Traits List (except .isModal)", destination: AccessibilityTraitsListView())
+                    .padding(.bottom)
+                Text("Good Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                Divider()
+                    .frame(height: 2.0, alignment:.leading)
+                    .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.bottom)
+                VStack {
+                    Image("barcode.viewfinder")
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                        .gesture(TapGesture().onEnded {
+                            showingAlertImage = true
+                        })
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityLabel("Scan Barcode")
+                }
+                .alert(isPresented: $showingAlertImage) {
+                    Alert(title: Text("Image Tapped"), message: Text("You tapped the image!"), dismissButton: .default(Text("OK")))
+                }
+                DisclosureGroup("Details") {
+                    Text("The good example uses an `Image` with a `TapGesture` and adds the `.isButton` Trait to make it speak a Button role to VoiceOver.")
+                }.padding(.bottom).accessibilityHint("Good Example")
+                Text("Bad Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                Divider()
+                    .frame(height: 2.0, alignment:.leading)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.bottom)
+                VStack {
+                    Image("barcode.viewfinder")
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                        .gesture(TapGesture().onEnded {
+                            showingAlertImage = true
+                        })
+                        .accessibilityLabel("Scan Barcode")
+                }
+                .alert(isPresented: $showingAlertImage) {
+                    Alert(title: Text("Image Tapped"), message: Text("You tapped the image!"), dismissButton: .default(Text("OK")))
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad example uses an `Image` with a `TapGesture` but has no Button Trait to make it speak a Button role to VoiceOver.")
+                }.padding(.bottom).accessibilityHint("Bad Example")
+            }
+            .navigationTitle("Accessibility Traits")
+            .padding()
+        }
+ 
+    }
+}
+
 
 #Preview {
     NavigationStack {

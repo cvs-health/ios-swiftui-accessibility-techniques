@@ -72,10 +72,8 @@ struct ListsView: View {
     }
 }
  
-struct ListsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ListsView()
-        }
+#Preview {
+    NavigationStack {
+        ListsView()
     }
 }

@@ -50,16 +50,16 @@ struct AlertsView: View {
                     Button("Cancel", role: .cancel) {
                         isTriggerFocused = true
                     }
-                    if #available(iOS 26.0, *) {
-                        Button ("Do Nothing", role: .confirm) {
-                            isTriggerFocused = true
-                        }
-                    } else {
-                        // Fallback on earlier versions
-                        Button ("Do Nothing") {
-                            isTriggerFocused = true
-                        }
-                    }
+//                    if #available(iOS 26.0, *) {
+//                        Button ("Do Nothing", role: .confirm) {
+//                            isTriggerFocused = true
+//                        }
+//                    } else {
+//                        // Fallback on earlier versions
+//                        Button ("Do Nothing") {
+//                            isTriggerFocused = true
+//                        }
+//                    }
                     Button ("Delete All Messages", role: .destructive) {
                         isTriggerFocused = true
                     }

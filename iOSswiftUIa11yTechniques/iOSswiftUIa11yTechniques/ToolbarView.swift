@@ -70,6 +70,7 @@ struct ToolbarGoodView: View {
                     .accessibilityShowsLargeContentViewer {
                         Label("Favorite", systemImage: isOn ? "heart.fill" : "heart")
                     }
+                    .accessibilityHint(isOn ? "Removes this page from your favorites" : "Adds this page to your favorites")
                     Spacer()
                     Button {
                         print("Share tapped")
@@ -195,7 +196,7 @@ struct ToolbarView: View {
                     .padding(.bottom)
                 NavigationLink("Toolbars Good Example", destination: ToolbarGoodView())
                 DisclosureGroup("Details") {
-                    Text("The good example uses an `Image` with a `TapGesture` and adds the `.isButton` Trait to make it speak a Button role to VoiceOver.")
+                    Text("The good example uses `Label` or `.accessibilityLabel` text for VoiceOver and Voice Control users. `.accessibilityShowsLargeContentViewer` is used when there is no `Label` text to show in the Large Content Viewer. An `.accessibilityHint` is added to describe what happens when the Favorite toggle is activated.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -209,7 +210,7 @@ struct ToolbarView: View {
                     .padding(.bottom)
                 NavigationLink("Toolbars Bad Example", destination: ToolbarBadView())
                 DisclosureGroup("Details") {
-                    Text("The bad example uses an `Image` with a `TapGesture` but has no Button Trait to make it speak a Button role to VoiceOver.")
+                    Text("The bad example has no `Label` or `.accessibilityLabel` text for VoiceOver and Voice Control users. `.accessibilityShowsLargeContentViewer` is not used to label text in the Large Content Viewer.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
             }
             .navigationTitle("Toolbars")

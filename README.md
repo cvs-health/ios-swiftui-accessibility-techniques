@@ -73,6 +73,8 @@ Review project source code to learn how to apply the accessibility techniques in
 - [x] [Tabs](iOSswiftUIa11yTechniques/Documentation/Tabs.md)
 - [x] [Text Fields](iOSswiftUIa11yTechniques/Documentation/TextFields.md)
 - [x] [Toggles](iOSswiftUIa11yTechniques/Documentation/Toggles.md)
+- [x] [TipKit](iOSswiftUIa11yTechniques/Documentation/TipKit.md)
+- [x] [Toolbars](iOSswiftUIa11yTechniques/Documentation/Toolbars.md)
 - [x] [Touch Target Size](iOSswiftUIa11yTechniques/Documentation/TouchTargetSize.md)
 - [x] [Videos](iOSswiftUIa11yTechniques/Documentation/Videos.md)
 - [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)

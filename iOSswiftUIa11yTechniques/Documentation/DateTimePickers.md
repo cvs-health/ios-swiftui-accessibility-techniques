@@ -23,7 +23,7 @@ Limitations:
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
 ## Swift Technique Source Code
-[DateTimePickersView.swift](../iOSswiftUIa11yTechniques/DateTimePickersView.swift)
+[DateTimePickers.swift](../iOSswiftUIa11yTechniques/DateTimePickers.swift)
 
 ----
 

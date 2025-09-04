@@ -15,7 +15,7 @@ For example, create a custom radio button group out of `Button` elements and man
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
 ## Swift Technique
-- View the Swift technique: [RadioButtonsView.swift](../iOSswiftUIa11yTechniques/RadioButtonsView.swift)
+[RadioButtonsView.swift](../iOSswiftUIa11yTechniques/RadioButtonsView.swift)
 
 ----
 

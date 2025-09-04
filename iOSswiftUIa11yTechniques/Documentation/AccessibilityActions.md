@@ -12,6 +12,9 @@ Additionally make sure there are single tap alternatives to gesture functions.
 ## Applicable WCAG Success Criteria
 - N/A
 
+## Swift Technique Source Code
+[AccessibilityActionsView.swift](../iOSswiftUIa11yTechniques/AccessibilityActionsView.swift)
+
 ----
 
 Copyright 2024 CVS Health and/or one of its affiliates

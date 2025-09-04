@@ -13,7 +13,7 @@ Additionally make sure there are single tap alternatives to gesture functions.
 - N/A
 
 ## Swift Technique Source Code
-[AccessibilityActionsView.swift](../iOSswiftUIa11yTechniques/AccessibilityActionsView.swift)
+[ActionsView.swift](../iOSswiftUIa11yTechniques/AccessibilityActionsView.swift)
 
 ----
 

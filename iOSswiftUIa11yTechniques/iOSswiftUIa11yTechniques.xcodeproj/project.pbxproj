@@ -286,6 +286,7 @@
 		BC3951F62D668A1F00D26DBB /* Charts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Charts.md; sourceTree = "<group>"; };
 		BC3951F72D67C45E00D26DBB /* VideosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosView.swift; sourceTree = "<group>"; };
 		BC3951F92D68E63E00D26DBB /* Videos.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Videos.md; sourceTree = "<group>"; };
+		BC3AF60D2E622B0B00FE7346 /* AccessibilityTraits.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityTraits.md; sourceTree = "<group>"; };
 		BC3C6D352E5D58FD00AE9B78 /* TipKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipKitView.swift; sourceTree = "<group>"; };
 		BC3C6D372E6105A100AE9B78 /* TipKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TipKit.md; sourceTree = "<group>"; };
 		BC3EA3B02B76B54E0003B8A2 /* SearchSuggestions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SearchSuggestions.md; sourceTree = "<group>"; };
@@ -470,6 +471,7 @@
 				BCC4F1822B3F8757004AAB65 /* AccessibilityInputLabels.md */,
 				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */,
 				BC163FCA2B6C1598009E3A83 /* AccessibilityRepresentation.md */,
+				BC3AF60D2E622B0B00FE7346 /* AccessibilityTraits.md */,
 				BC4F17962D7B743000BB509B /* AccessibilityRespondsToUserInteraction.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
 				BC00300A2B332C020063EAD5 /* AdjustableAction.md */,

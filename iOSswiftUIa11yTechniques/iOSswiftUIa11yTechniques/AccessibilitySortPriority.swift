@@ -77,6 +77,7 @@ struct AccessibilitySortPriority: View {
                 DisclosureGroup("Details") {
                     Text("The good example uses `DatePicker` with `.accessibilitySortPriority(1)` to make VoiceOver focus go to the wheel style date picker first when the sheet opens. Without a sort priority, focus would go to the Done button first.")
                 }.padding(.bottom).accessibilityHint("Good Example")
+                
             }
             .navigationTitle("Accessibility Sort Priority")
             .padding()

@@ -62,7 +62,7 @@ struct ChartsView: View {
                         x: .value("City", dataPoint.city),
                         y: .value("Temperature", dataPoint.temperature)
                     )
-                    .symbol(by: .value("City", dataPoint.city)) //give cities unique symbols
+                    .symbol(by: .value("City", dataPoint.city)) //give cities unique symbols appears broken in iOS 26 not sure why
                     .foregroundStyle(by: .value("City", dataPoint.city))
                     .symbolSize(90)
                     .annotation(position: .trailing) {

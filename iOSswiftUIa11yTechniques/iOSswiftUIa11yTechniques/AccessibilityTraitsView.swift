@@ -79,7 +79,7 @@ struct AccessibilityTraitsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Accessibility Traits are used to manually add roles and states to custom UI controls. Standard native controls already include accessibility traits by default.")
+                Text("Accessibility Traits are used to manually add roles and states to custom UI controls. Standard native controls already include accessibility traits by default. Use `.accessibilityAddTraits()` to add custom traits matching the roles and functionality of the control.")
                 NavigationLink("Accessibility Traits List (except .isModal)", destination: AccessibilityTraitsListView())
                     .padding(.bottom)
                 Text("Good Example")

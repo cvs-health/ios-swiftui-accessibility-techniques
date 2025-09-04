@@ -72,7 +72,7 @@ struct ContentView: View {
                 }
             }
             .navigationViewStyle(.stack)
-            .searchable(text: $searchKeyword, placement: .navigationBarDrawer(displayMode: .always))
+            .searchable(text: $searchKeyword)
             .onChange(of: searchKeyword) {
                 postAccessibilityAnnouncement()
             }

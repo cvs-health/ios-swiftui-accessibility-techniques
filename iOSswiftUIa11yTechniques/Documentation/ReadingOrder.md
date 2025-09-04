@@ -14,9 +14,12 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [1.3.2 Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
 
+## Swift Technique Source Code
+[ReadingOrderView.swift](../iOSswiftUIa11yTechniques/ReadingOrderView.swift)
+
 ----
 
-Copyright 2023 CVS Health and/or one of its affiliates
+Copyright 2023-2025 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

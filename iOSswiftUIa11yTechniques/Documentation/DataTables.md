@@ -16,9 +16,12 @@ Platform Defects:
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 
+## Swift Technique Source Code
+[DataTablesView.swift](../iOSswiftUIa11yTechniques/DataTablesView.swift)
+
 ----
 
-Copyright 2023 CVS Health and/or one of its affiliates
+Copyright 2023-2025 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,3 +34,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 See the License for the specific language governing permissions and
 limitations under the License.
+

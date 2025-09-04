@@ -8,6 +8,9 @@ Use `AccessibilityFocusState` to return focus to the Tip's control when dismisse
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
 
+## Swift Technique Source Code
+[TipKitView.swift](../iOSswiftUIa11yTechniques/TipKitView.swift)
+
 ----
 
 Copyright 2025 CVS Health and/or one of its affiliates
@@ -23,3 +26,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 See the License for the specific language governing permissions and
 limitations under the License.
+

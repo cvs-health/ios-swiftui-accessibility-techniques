@@ -22,9 +22,12 @@ VoiceOver Bugs:
 - [3.3.2: Labels or Instructions](https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions)
 - [1.3.5: Identify Input Purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose)
 
+## Swift Technique Source Code
+[TextFieldsView.swift](../iOSswiftUIa11yTechniques/TextFieldsView.swift)
+
 ----
 
-Copyright 2023 CVS Health and/or one of its affiliates
+Copyright 2023-2025 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

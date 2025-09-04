@@ -8,9 +8,12 @@ VoiceOver will speak the page title as a Heading.
 ## Applicable WCAG Success Criteria
 - [2.4.2: Page Titled](https://www.w3.org/WAI/WCAG22/Understanding/page-titled)
 
+## Swift Technique Source Code
+[PageTitlesView.swift](../iOSswiftUIa11yTechniques/PageTitlesView.swift)
+
 ----
 
-Copyright 2023 CVS Health and/or one of its affiliates
+Copyright 2023-2025 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,3 +26,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 See the License for the specific language governing permissions and
 limitations under the License.
+

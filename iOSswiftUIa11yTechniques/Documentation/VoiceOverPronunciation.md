@@ -11,9 +11,12 @@ Follow Chicago Manual of Style for all abbreviations and VoiceOver reads them co
 ## Applicable WCAG Success Criteria
 - N/A
 
+## Swift Technique Source Code
+[VoiceOverPronunciationView.swift](../iOSswiftUIa11yTechniques/VoiceOverPronunciationView.swift)
+
 ----
 
-Copyright 2024 CVS Health and/or one of its affiliates
+Copyright 2024-2025 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,3 +29,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 See the License for the specific language governing permissions and
 limitations under the License.
+

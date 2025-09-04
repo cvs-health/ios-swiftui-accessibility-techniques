@@ -18,10 +18,12 @@ Notes:
 ## WCAG Sufficient Techniques
 - [G216: Providing single point activation for a control slider](https://www.w3.org/WAI/WCAG21/Techniques/general/G216)
 
+## Swift Technique Source Code
+[SlidersView.swift](../iOSswiftUIa11yTechniques/SlidersView.swift)
 
 ----
 
-Copyright 2023-2024 CVS Health and/or one of its affiliates
+Copyright 2023-2025 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,3 +36,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 See the License for the specific language governing permissions and
 limitations under the License.
+

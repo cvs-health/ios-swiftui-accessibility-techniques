@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct ContainersView: View {
+struct ContainersViewGood: View {
 
     var body: some View {
         VStack {
@@ -125,6 +125,42 @@ struct ContainersView: View {
 
     }
 }
+
+
+
+struct ContainersView: View {
+    private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
+    private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+    @Environment(\.colorScheme) var colorScheme
+    
+    
+    var body: some View {
+        ScrollView {
+            VStack {
+                Text("Containers can group sections of a page with meaningful accessible names. VoiceOver users can jump between each container using the Rotor. Containers can group related controls like radio buttons or mimic the behavior of ARIA Landmarks. The container name is spoken to VoiceOver when focus is first placed on an element inside the group. Use `.accessibilityElement(children: .contain)` on the group container element and `.accessibilityLabel` to give the group a meaningful label for VoiceOver users.")
+                    .padding(.bottom)
+                Text("Good Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                Divider()
+                    .frame(height: 2.0, alignment:.leading)
+                    .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.bottom)
+                NavigationLink("Containers Good Example", destination: ContainersViewGood())
+                DisclosureGroup("Details") {
+                    Text("The good example uses `.accessibilityElement(children: .contain)` and `.accessibilityLabel` to mimic the behavior of ARIA Landmarks. There are containers labeled \"Main content\", \"Header\", and \"Footer\".")
+                }.padding(.bottom).accessibilityHint("Good Example")
+            }
+            .navigationTitle("Containers")
+            .padding()
+        }
+ 
+    }
+}
+
 
 #Preview {
     NavigationStack {

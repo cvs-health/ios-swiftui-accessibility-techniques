@@ -47,16 +47,16 @@ struct TextFieldsWatch: View {
     var body: some View {
         ScrollView {
             Text("Text fields require visible label text next to the field set as the `.accessibilityLabel` of the `TextField`. Or provide visible labels using `LabeledContent` and then an `.accessibilityLabel` is not required. Don't use placeholder text which has insufficient contrast and disappears. Use `.border(.secondary)` to give the border a 3:1 contrast ratio in light and dark mode. Use `.textContentType` to enable form AutoFill for each `TextField`.")
-            Text("Platform Defect Examples")
+            Text("Good Examples")
                 .font(.subheadline)
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityAddTraits(.isHeader)
                 .accessibilityHeading(.h2)
-                .foregroundColor(.orange)
+                .foregroundColor(.green)
             Divider()
                 .frame(height: 2.0, alignment:.leading)
-                .background(.orange)
+                .background(.green)
                 .padding(.bottom)
             Text("`.accessibilityLabel`")
                 .font(.subheadline)
@@ -207,7 +207,7 @@ struct TextFieldsWatch: View {
                     .textContentType(.familyName)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }.labeledContentStyle(.vertical)
-            NavigationLink(destination: DetailBad2()) {
+            NavigationLink(destination: DetailGood3()) {
                 Text("Details")
                     .frame(maxWidth: .infinity)
                     .padding(15)
@@ -266,7 +266,7 @@ struct TextFieldsWatch: View {
 struct DetailGood: View {
     var body: some View {
         ScrollView {
-            Text("The first platform defect Text Fields example uses visible label text that is set as the `.accessibilityLabel` for each `TextField`. `.border(.secondary)` is used to give the border a 3:1 contrast ratio. `.textContentType` is used to enable AutoFill for each `TextField` and automatic password management. VoiceOver does not read the `.accessibilityLabel` as expected.")
+            Text("The first good Text Fields example uses visible label text that is set as the `.accessibilityLabel` for each `TextField`. `.border(.secondary)` is used to give the border a 3:1 contrast ratio. `.textContentType` is used to enable AutoFill for each `TextField` and automatic password management.")
         }
             .navigationTitle("`.accessibilityLabel`")
     }
@@ -274,9 +274,17 @@ struct DetailGood: View {
 struct DetailGood2: View {
     var body: some View {
         ScrollView {
-            Text("The second platform defect Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required.  VoiceOver does not read the `LabeledContent` as expected. VoiceOver cannot focus on the label text.")
+            Text("The second good Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required.")
         }
             .navigationTitle("`LabeledContent`")
+    }
+}
+struct DetailGood3: View {
+    var body: some View {
+        ScrollView {
+            Text("The last good Text Fields example uses `LabeledContent` with a `.vertical` style to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required.")
+        }
+        .navigationTitle("`LabeledContent .vertical`")
     }
 }
 struct DetailBad: View {
@@ -285,14 +293,6 @@ struct DetailBad: View {
             Text("The bad Text Fields example uses placeholder text which disappears and has insufficient contrast rather than visible label text. There is no `.accessibilityLabel` for each `TextField`. The default border style has an insufficient contrast ratio. AutoFill and password management are not enabled.")
         }
         .navigationTitle("No `.accessibilityLabel`")
-    }
-}
-struct DetailBad2: View {
-    var body: some View {
-        ScrollView {
-            Text("The last platform defect Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `LabeledContent` an `.accessibilityLabel` is not required.  VoiceOver does not read the `LabeledContent` as expected. VoiceOver cannot focus on the label text.")
-        }
-        .navigationTitle("`LabeledContent .vertical`")
     }
 }
 

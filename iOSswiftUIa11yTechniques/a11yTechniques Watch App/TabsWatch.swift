@@ -335,7 +335,7 @@ struct DetailTabsGood3: View {
 struct DetailTabsGood4: View {
     var body: some View {
         ScrollView {
-            Text("The custom tabs good example uses `isTabBar` and `isSelected` traits with `.accessibilityElement(children: .contain)`. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number. The custom selected Tab has an underline to show selected state without using color alone.")
+            Text("The custom tabs good example uses `isTabBar` and `isSelected` traits with `.accessibilityElement(children: .contain)`. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number. The custom selected Tab has an underline to show selected state without using color alone. VoiceOver does not read the accessibility label of the TabBar on watchOS.")
 
         }
             .navigationTitle("Custom Tabs using `isTabBar` and `isSelected` Traits")

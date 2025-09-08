@@ -8,7 +8,7 @@ For example, create a custom radio button group out of `Button` elements and man
 - Use `.accessibilityAddTraits(isSelected.rawValue == title ? .isSelected : [])` to add a selected trait when checked.
 - Use `.accessibilityRemoveTraits(isSelected.rawValue != title ? .isSelected : [])` to remove the selected trait when unchecked.
 - Use `.accessibilityValue(isSelected.rawValue == title ? Text("Radio button, checked") : Text("Radio button, unchecked"))` to add a fake radio button trait and a checked and unchecked state.
-- Additionally use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("Choose Color")` to give the radio group a label for VoiceOver.
+- Additionally use `.accessibilityElement(children: .contain)` and `.accessibilityLabel` to give the radio group a label for VoiceOver.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)

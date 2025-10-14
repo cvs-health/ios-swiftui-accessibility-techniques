@@ -71,6 +71,9 @@ struct PrototypesView: View {
             NavigationLink(destination: FormViewTest()) {
                 Text("Form View Test")
             }
+            NavigationLink(destination: MultiSelectionListView()) {
+                Text("Multi Selection List View Test")
+            }
         }
         .navigationTitle("Prototypes")
     }

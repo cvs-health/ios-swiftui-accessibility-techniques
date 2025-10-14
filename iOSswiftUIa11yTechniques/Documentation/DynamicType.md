@@ -7,6 +7,8 @@ Avoid using `.lineLimit()` which will cause text truncation.
 
 Avoid using fixed sized text which does not scale.
 
+Avoid placing text inside a container with a fixed height or else the text will truncate when enlarged.
+
 Put `Text` inside a `ScrollView` so that it does not truncate when the size is increased.
 
 Avoid using `HStack` with multiple links at large text sizes. 

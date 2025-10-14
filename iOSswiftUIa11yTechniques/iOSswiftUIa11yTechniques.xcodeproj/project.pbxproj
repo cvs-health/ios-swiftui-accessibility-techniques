@@ -117,6 +117,7 @@
 		BCB059552CAB371C00C670B8 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB059542CAB371C00C670B8 /* VideoPlayerView.swift */; };
 		BCB059572CAB5F9C00C670B8 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB059562CAB5F9C00C670B8 /* TableView.swift */; };
 		BCB086F42D1D982600623141 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB086F32D1D982600623141 /* MarkdownView.swift */; };
+		BCB60D602E720E3B00ED2D51 /* MultiSelectionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
 		BCCDED8E2D5C5F5500B8DB6E /* Techniques.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */; };
 		BCCDED902D5C649500B8DB6E /* ContentViewOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */; };
@@ -364,6 +365,7 @@
 		BCB059542CAB371C00C670B8 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		BCB059562CAB5F9C00C670B8 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		BCB086F32D1D982600623141 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
+		BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSelectionListView.swift; sourceTree = "<group>"; };
 		BCC4F1822B3F8757004AAB65 /* AccessibilityInputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityInputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
 		BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Techniques.swift; sourceTree = "<group>"; };
@@ -633,6 +635,7 @@
 				BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */,
 				BC1B59C22B4E664700E8F782 /* MenusView.swift */,
 				AA59CDCD2ABA209D0004908F /* MessagesTabView.swift */,
+				BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */,
 				BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */,
 				AA74DD5C2AFDCCFA00348078 /* PageTitleBad.swift */,
 				AA74DD5B2AFDCCF900348078 /* PageTitleGood.swift */,
@@ -1012,6 +1015,7 @@
 				AA9B13512AABADD5009A3D84 /* ButtonsView.swift in Sources */,
 				BC0C846F2CC811E900B3DB52 /* DragDropView.swift in Sources */,
 				AA59CDC82ABA1F3B0004908F /* TabsView.swift in Sources */,
+				BCB60D602E720E3B00ED2D51 /* MultiSelectionListView.swift in Sources */,
 				BC6CA9FE2C45A18E00138BA3 /* Page2Prototype.swift in Sources */,
 				BC6CAA042C5D8F8400138BA3 /* Prototype4.swift in Sources */,
 				AA74DD542AFD8D0000348078 /* TextFieldsView.swift in Sources */,

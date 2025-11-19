@@ -177,6 +177,7 @@ struct ContentView: View {
         case "sheets": SheetsView()
         case "sliders": SlidersView()
         case "steppers": SteppersView()
+        case "swift lint": SwiftLintView()
         case "tabs": TabsView()
         case "videos": VideosView()
         case "text fields": TextFieldsView()

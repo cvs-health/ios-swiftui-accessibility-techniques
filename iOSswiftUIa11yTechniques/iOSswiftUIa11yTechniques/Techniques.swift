@@ -73,6 +73,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Sliders"),
     Techniques(name: "Smart Invert"),
     Techniques(name: "Steppers"),
+    Techniques(name: "Swift Lint"),
     Techniques(name: "Tabs"),
     Techniques(name: "Text Fields"),
     Techniques(name: "TipKit"),

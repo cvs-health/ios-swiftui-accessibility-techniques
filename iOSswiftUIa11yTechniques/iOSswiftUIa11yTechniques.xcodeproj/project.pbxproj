@@ -90,6 +90,7 @@
 		BC75478E2C2FA83C00A4ABC7 /* FormB.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC75478D2C2FA83C00A4ABC7 /* FormB.swift */; };
 		BC7547902C2FAAF400A4ABC7 /* PageA.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC75478F2C2FAAF400A4ABC7 /* PageA.swift */; };
 		BC7547922C2FAAF900A4ABC7 /* PageB.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7547912C2FAAF900A4ABC7 /* PageB.swift */; };
+		BC7D81842ECE889F00F98333 /* SwiftLintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7D81832ECE889F00F98333 /* SwiftLintView.swift */; };
 		BC8129032B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */; };
 		BC8129062B3D36CF00CB19D2 /* DataTablesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */; };
 		BC8129092B3F5FAB00CB19D2 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8129082B3F5FAB00CB19D2 /* LanguageView.swift */; };
@@ -324,6 +325,7 @@
 		BC75478D2C2FA83C00A4ABC7 /* FormB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormB.swift; sourceTree = "<group>"; };
 		BC75478F2C2FAAF400A4ABC7 /* PageA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageA.swift; sourceTree = "<group>"; };
 		BC7547912C2FAAF900A4ABC7 /* PageB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageB.swift; sourceTree = "<group>"; };
+		BC7D81832ECE889F00F98333 /* SwiftLintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLintView.swift; sourceTree = "<group>"; };
 		BC8129012B3CCF4F00CB19D2 /* Sheets.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Sheets.md; sourceTree = "<group>"; };
 		BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialogsView.swift; sourceTree = "<group>"; };
 		BC8129042B3D2F2500CB19D2 /* ConfirmationDialogs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConfirmationDialogs.md; sourceTree = "<group>"; };
@@ -653,6 +655,7 @@
 				BC6C39BD2C2CE70B00AA842A /* ResponsiveLayoutsView.swift */,
 				BCE205272B597199000DF400 /* RotorView.swift */,
 				BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */,
+				BC7D81832ECE889F00F98333 /* SwiftLintView.swift */,
 				BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */,
 				AA74DD552AFD8DA800348078 /* SegmentedControlsView.swift */,
 				BC0030352B363B560063EAD5 /* SheetsView.swift */,
@@ -1006,6 +1009,7 @@
 				BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */,
 				BCCDED902D5C649500B8DB6E /* ContentViewOld.swift in Sources */,
 				BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */,
+				BC7D81842ECE889F00F98333 /* SwiftLintView.swift in Sources */,
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
 				BC046F2B2BEDC83800E498E1 /* ReduceTransparencyView.swift in Sources */,
 				AA0F3EF42AB26D930062E7BC /* LinksView.swift in Sources */,

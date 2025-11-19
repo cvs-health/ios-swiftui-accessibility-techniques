@@ -1,0 +1,10 @@
+included:
+  - .
+
+custom_rules:
+  a11y_missing_accessibility_label:
+    included: ".*\\.swift"
+    name: "Missing Accessibility Label"
+    regex: "\\b(UIAccessibilityLabel|accessibilityLabel)\\s*=?\\s*nil"
+    message: "Views should not have nil accessibilityLabel"
+    severity: error

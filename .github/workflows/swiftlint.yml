@@ -2,20 +2,15 @@ name: SwiftLint
 
 on:
   pull_request:
-    branches:
-      - main
-      - develop
 
 jobs:
   swiftlint:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install SwiftLint
-      run: brew install swiftlint
-
-    - name: Run SwiftLint
-      run: swiftlint --strict
+      - name: Run SwiftLint with Annotations
+        uses: norio-nomura/action-swiftlint@v4
+        with:
+          strict: true

@@ -4,13 +4,13 @@ on:
   pull_request:
 
 jobs:
-  swiftlint:
+  lint:
     runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run SwiftLint with Annotations
-        uses: norio-nomura/action-swiftlint@v4
+      - name: Run SwiftLint with annotations
+        uses: norio-nomura/action-swiftlint@v3.2.1
         with:
           strict: true

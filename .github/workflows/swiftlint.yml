@@ -1,18 +1,24 @@
 name: SwiftLint
-
 on:
   pull_request:
+  push:
+    branches: [main, develop]
 
 jobs:
   lint:
     runs-on: macos-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      
+      - name: Cache SwiftLint
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/swiftlint
+          key: swiftlint-${{ runner.os }}
+      
       - name: Install SwiftLint
         run: brew install swiftlint
-
+      
       - name: Run SwiftLint
-        run: swiftlint --strict
+        run: swiftlint --strict --reporter github-actions-logging

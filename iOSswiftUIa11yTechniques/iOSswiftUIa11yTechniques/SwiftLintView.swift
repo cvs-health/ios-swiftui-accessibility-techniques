@@ -48,6 +48,20 @@ struct SwiftLintView: View {
                     .frame(width: 100, height: 100)
                     .accessibilityLabel("Get 10% off")
                     .accessibilityIdentifier("goodImage")
+                Image(systemName: "star.fill")
+                            .foregroundColor(.yellow)
+                Button {
+                            print("Tapped")
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                Circle()
+                           .fill(Color.blue)
+                           .frame(width: 50, height: 50)
+                           .onTapGesture {
+                               print("Tapped circle")
+                           }
+
                 DisclosureGroup("Details") {
                     Text("The good example has an `.accessibilityLabel` set on it.")
                 }.padding(.bottom).accessibilityHint("Good Example")

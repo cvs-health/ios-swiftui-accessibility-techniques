@@ -1,4 +1,5 @@
 name: SwiftLint
+
 on:
   pull_request:
   push:
@@ -16,9 +17,24 @@ jobs:
         with:
           path: /usr/local/bin/swiftlint
           key: swiftlint-${{ runner.os }}
-      
+
       - name: Install SwiftLint
         run: brew install swiftlint
-      
-      - name: Run SwiftLint
-        run: swiftlint --strict --reporter github-actions-logging
+
+      - name: Get Changed Swift Files
+        id: changed-files
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin ${{ github.base_ref }}
+            CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} | grep '\.swift$' || true)
+            echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          else
+            echo "changed_files=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run SwiftLint on Changed Files
+        if: steps.changed-files.outputs.changed_files != ''
+        run: |
+          for file in ${{ steps.changed-files.outputs.changed_files }}; do
+            swiftlint lint --strict --reporter github-actions-logging --path "$file"
+          done

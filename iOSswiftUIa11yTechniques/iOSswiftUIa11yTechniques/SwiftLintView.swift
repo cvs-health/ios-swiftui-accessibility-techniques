@@ -46,7 +46,7 @@ struct SwiftLintView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
-                    .accessibilityLabel("Get 10% off")
+//                    .accessibilityLabel("Get 10% off")
                     .accessibilityIdentifier("goodImage")
                 DisclosureGroup("Details") {
                     Text("The good example has an `.accessibilityLabel` set on it.")

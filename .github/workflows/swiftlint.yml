@@ -10,8 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run SwiftLint with annotations
-        uses: norio-nomura/action-swiftlint@3.2.1
-        with:
-          strict: true
+      - name: Install SwiftLint
+        run: brew install swiftlint
 
+      - name: Annotate SwiftLint errors in PR
+        uses: reviewdog/action-swiftlint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail_on_error: true

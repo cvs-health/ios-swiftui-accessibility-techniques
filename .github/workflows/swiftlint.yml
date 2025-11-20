@@ -20,5 +20,144 @@ jobs:
       - name: Install SwiftLint
         run: brew install swiftlint
       
-      - name: Run SwiftLint
-        run: swiftlint --strict --reporter github-actions-logging
+      - name: Run SwiftLint and capture results
+        id: swiftlint
+        continue-on-error: true
+        run: |
+          # Run SwiftLint and save output
+          swiftlint lint --strict --reporter markdown > swiftlint-report.md 2>&1 || echo "LINT_FAILED=true" >> $GITHUB_ENV
+          
+          # Also run with JSON reporter for stats
+          swiftlint lint --reporter json > swiftlint-results.json 2>&1 || true
+          
+          # Count violations
+          ERROR_COUNT=$(cat swiftlint-results.json | grep -o '"severity" : "error"' | wc -l | xargs)
+          WARNING_COUNT=$(cat swiftlint-results.json | grep -o '"severity" : "warning"' | wc -l | xargs)
+          
+          echo "ERROR_COUNT=$ERROR_COUNT" >> $GITHUB_ENV
+          echo "WARNING_COUNT=$WARNING_COUNT" >> $GITHUB_ENV
+          
+          # Show report in console
+          echo "## SwiftLint Results"
+          echo "Errors: $ERROR_COUNT"
+          echo "Warnings: $WARNING_COUNT"
+          
+          cat swiftlint-report.md
+      
+      - name: Generate Accessibility Report
+        if: always()
+        run: |
+          echo "# 🔍 Accessibility Check Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ env.LINT_FAILED }}" == "true" ]; then
+            echo "## ❌ SwiftLint Check Failed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ✅ SwiftLint Check Passed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Violation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Errors:** ${{ env.ERROR_COUNT }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Warnings:** ${{ env.WARNING_COUNT }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 🎯 Accessibility Rules Checked" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ \`accessibility_label_for_image\` - Images must have labels" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ \`accessibility_trait_for_button\` - Buttons must have proper traits" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f swiftlint-report.md ]; then
+            echo "### 📝 Detailed Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat swiftlint-report.md >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📚 Resources" >> $GITHUB_STEP_SUMMARY
+          echo "- [Apple Accessibility Guidelines](https://developer.apple.com/accessibility/)" >> $GITHUB_STEP_SUMMARY
+          echo "- [SwiftUI Accessibility](https://developer.apple.com/documentation/swiftui/view-accessibility)" >> $GITHUB_STEP_SUMMARY
+          echo "- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ env.ERROR_COUNT }}" != "0" ]; then
+            echo "### 🔧 Common Fixes" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`swift" >> $GITHUB_STEP_SUMMARY
+            echo "// ❌ Bad: Image without label" >> $GITHUB_STEP_SUMMARY
+            echo "Image(systemName: \"star\")" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "// ✅ Good: Image with descriptive label" >> $GITHUB_STEP_SUMMARY
+            echo "Image(systemName: \"star\")" >> $GITHUB_STEP_SUMMARY
+            echo "    .accessibilityLabel(\"Favorite\")" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "// ✅ Good: Decorative image hidden" >> $GITHUB_STEP_SUMMARY
+            echo "Image(systemName: \"sparkles\")" >> $GITHUB_STEP_SUMMARY
+            echo "    .accessibilityHidden(true)" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Upload SwiftLint Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: swiftlint-report
+          path: |
+            swiftlint-report.md
+            swiftlint-results.json
+          retention-days: 30
+      
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && env.LINT_FAILED == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const errorCount = process.env.ERROR_COUNT || '0';
+            const warningCount = process.env.WARNING_COUNT || '0';
+            
+            let report = '## 🔍 Accessibility Check Results\n\n';
+            
+            if (errorCount !== '0' || warningCount !== '0') {
+              report += '### ❌ Issues Found\n\n';
+              report += `- **Errors:** ${errorCount}\n`;
+              report += `- **Warnings:** ${warningCount}\n\n`;
+              
+              // Read the markdown report if it exists
+              try {
+                const markdownReport = fs.readFileSync('swiftlint-report.md', 'utf8');
+                report += '### 📝 Details\n\n';
+                report += '<details>\n<summary>Click to expand violations</summary>\n\n';
+                report += markdownReport;
+                report += '\n</details>\n\n';
+              } catch (error) {
+                console.log('Could not read markdown report');
+              }
+              
+              report += '### 🔧 Quick Fixes\n\n';
+              report += '```swift\n';
+              report += '// Add accessibility labels to images\n';
+              report += 'Image(systemName: "star")\n';
+              report += '    .accessibilityLabel("Favorite")\n\n';
+              report += '// Hide decorative images\n';
+              report += 'Image(systemName: "sparkles")\n';
+              report += '    .accessibilityHidden(true)\n';
+              report += '```\n\n';
+              report += '### 📚 Resources\n';
+              report += '- [Apple Accessibility Guidelines](https://developer.apple.com/accessibility/)\n';
+              report += '- [SwiftUI Accessibility](https://developer.apple.com/documentation/swiftui/view-accessibility)\n';
+            } else {
+              report += '### ✅ All checks passed!\n';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+      
+      - name: Fail if violations found
+        if: env.LINT_FAILED == 'true'
+        run: |
+          echo "::error::SwiftLint found accessibility violations"
+          exit 1

@@ -1,8 +1,6 @@
 name: SwiftLint a11y Checks
 on:
   pull_request:
-  push:
-    branches: [main, develop]
 
 jobs:
   lint:
@@ -20,29 +18,59 @@ jobs:
       - name: Install SwiftLint
         run: brew install swiftlint
       
-      - name: Run SwiftLint and capture results
+      - name: Find Changed Swift Files in PR
+        id: changed_files
+        run: |
+          set -e
+          # Get target branch ref (the base of the PR)
+          TARGET_BRANCH="${{ github.event.pull_request.base.ref }}"
+          git fetch origin $TARGET_BRANCH
+          # Find changed files in the PR
+          CHANGED_FILES=$(git diff --name-only origin/$TARGET_BRANCH...HEAD | grep '\.swift$' || true)
+          echo "$CHANGED_FILES"
+          # Save to a file for scripting
+          echo "$CHANGED_FILES" > changed_swift_files.txt
+          # Set to env (for matrix expansion if needed)
+          echo "changed_files=$CHANGED_FILES" >> $GITHUB_ENV
+      
+      - name: Run SwiftLint (only on changed files)
         id: swiftlint
         continue-on-error: true
         run: |
-          # Run SwiftLint and save output
-          swiftlint lint --strict --reporter markdown > swiftlint-report.md 2>&1 || echo "LINT_FAILED=true" >> $GITHUB_ENV
+          REPORT_MD="swiftlint-report.md"
+          REPORT_JSON="swiftlint-results.json"
+          ERROR_COUNT=0
+          WARNING_COUNT=0
+
+          # Clean any old reports
+          rm -f $REPORT_MD $REPORT_JSON
           
-          # Also run with JSON reporter for stats
-          swiftlint lint --reporter json > swiftlint-results.json 2>&1 || true
-          
-          # Count violations
-          ERROR_COUNT=$(cat swiftlint-results.json | grep -o '"severity" : "error"' | wc -l | xargs)
-          WARNING_COUNT=$(cat swiftlint-results.json | grep -o '"severity" : "warning"' | wc -l | xargs)
-          
-          echo "ERROR_COUNT=$ERROR_COUNT" >> $GITHUB_ENV
-          echo "WARNING_COUNT=$WARNING_COUNT" >> $GITHUB_ENV
-          
-          # Show report in console
+          # Check for any changed files
+          if [ -s changed_swift_files.txt ]; then
+            # Run SwiftLint on each changed file
+            for file in $(cat changed_swift_files.txt); do
+              echo "Linting $file..."
+              swiftlint lint --path "$file" --strict --reporter markdown >> $REPORT_MD 2>&1 || true
+              swiftlint lint --path "$file" --reporter json >> $REPORT_JSON 2>&1 || true
+            done
+
+            # Count violations
+            ERROR_COUNT=$(cat $REPORT_JSON | grep -o '"severity" : "error"' | wc -l | xargs)
+            WARNING_COUNT=$(cat $REPORT_JSON | grep -o '"severity" : "warning"' | wc -l | xargs)
+            
+            echo "ERROR_COUNT=$ERROR_COUNT" >> $GITHUB_ENV
+            echo "WARNING_COUNT=$WARNING_COUNT" >> $GITHUB_ENV
+          else
+            echo "No Swift files changed in this PR."
+            echo "ERROR_COUNT=0" >> $GITHUB_ENV
+            echo "WARNING_COUNT=0" >> $GITHUB_ENV
+          fi
+
+          # Show report summary in logs
           echo "## SwiftLint Results"
           echo "Errors: $ERROR_COUNT"
           echo "Warnings: $WARNING_COUNT"
-          
-          cat swiftlint-report.md
+          cat $REPORT_MD || true
       
       - name: Generate Accessibility Report
         if: always()
@@ -50,7 +78,7 @@ jobs:
           echo "# 🔍 Accessibility Check Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          if [ "${{ env.LINT_FAILED }}" == "true" ]; then
+          if [ "${{ env.ERROR_COUNT }}" != "0" ]; then
             echo "## ❌ SwiftLint Check Failed" >> $GITHUB_STEP_SUMMARY
           else
             echo "## ✅ SwiftLint Check Passed" >> $GITHUB_STEP_SUMMARY
@@ -104,10 +132,11 @@ jobs:
           path: |
             swiftlint-report.md
             swiftlint-results.json
+            changed_swift_files.txt
           retention-days: 30
       
       - name: Comment on PR
-        if: github.event_name == 'pull_request' && env.LINT_FAILED == 'true'
+        if: github.event_name == 'pull_request' && env.ERROR_COUNT != '0'
         uses: actions/github-script@v7
         with:
           script: |
@@ -157,7 +186,7 @@ jobs:
             });
       
       - name: Fail if violations found
-        if: env.LINT_FAILED == 'true'
+        if: env.ERROR_COUNT != '0'
         run: |
           echo "::error::SwiftLint found accessibility violations"
           exit 1

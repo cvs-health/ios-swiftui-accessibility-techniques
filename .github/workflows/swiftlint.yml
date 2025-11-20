@@ -33,11 +33,8 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo "Running SwiftLint on changed files..."
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "Linting: $file"
-            swiftlint lint --strict --reporter github-actions-logging "$file"
-          done
-      
+          echo "${{ steps.changed-files.outputs.all_changed_files }}" | xargs swiftlint lint --strict --reporter github-actions-logging
+            
       - name: No files to check
         if: steps.changed-files.outputs.any_changed != 'true'
         run: echo "No Swift files changed in this PR"

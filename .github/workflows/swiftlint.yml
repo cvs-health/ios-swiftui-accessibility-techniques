@@ -4,13 +4,15 @@ on:
   pull_request:
 
 jobs:
-  swiftlint:
+  lint:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Run SwiftLint with Annotations
-        uses: norio-nomura/action-swiftlint@v4
-        with:
-          strict: true
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Run SwiftLint
+        run: swiftlint --strict

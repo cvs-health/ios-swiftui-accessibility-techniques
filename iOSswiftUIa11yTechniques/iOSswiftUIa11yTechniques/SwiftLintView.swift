@@ -25,7 +25,7 @@ struct SwiftLintView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Scroll views are not scrollable with Full Keyboard Access unless there is a focusable control like a `Button` or `DisclosureGroup` inside or after the scroll view.")
+                Text("Swift Lint ... .")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -50,7 +50,7 @@ struct SwiftLintView: View {
                     .accessibilityIdentifier("goodImage")
                 DisclosureGroup("Details") {
                     Text("The good example has an `.accessibilityLabel` set on it.")
-                }.padding(.bottom)
+                }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -71,6 +71,10 @@ struct SwiftLintView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
                     .accessibilityIdentifier("badImage")
+                DisclosureGroup("Details") {
+                    Text("The bad example has no single tap alternatives to move or zoom the map.")
+                }.accessibilityHint("Bad Example")
+
             }
             .navigationTitle("Swift Lint")
             .padding()

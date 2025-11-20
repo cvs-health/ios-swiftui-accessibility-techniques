@@ -8,14 +8,11 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Install SwiftLint
         run: brew install swiftlint
 
-      - name: Annotate SwiftLint errors in PR
-        uses: reviewdog/action-swiftlint@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          fail_on_error: true
+      - name: Run SwiftLint
+        run: swiftlint --strict

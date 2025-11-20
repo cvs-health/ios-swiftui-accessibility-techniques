@@ -41,12 +41,12 @@ struct InputLabelsView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
                 HStack {
                     Text("Username")
-                        .frame(minWidth: 80, alignment:.leading)
+                        .frame(minWidth: 80, alignment: .leading)
                     TextField("", text: $username)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .accessibilityLabel("Username")
@@ -68,7 +68,7 @@ struct InputLabelsView: View {
                 }
                 HStack {
                     Text("Email")
-                        .frame(minWidth: 80, alignment:.leading)
+                        .frame(minWidth: 80, alignment: .leading)
                     TextField("", text: $email)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .accessibilityLabel("Email")

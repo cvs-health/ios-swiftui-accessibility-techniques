@@ -47,7 +47,7 @@ struct ContentViewWatch: View {
             }
         }
     }
-    
+
     @ViewBuilder
     func getItemDetailView(for technique: Techniques) -> some View {
         switch technique.name.lowercased() {
@@ -65,7 +65,7 @@ struct ContentViewWatch: View {
         default: InformativeImagesWatch()
         }
     }
-    
+
 }
 
 #Preview {

@@ -37,10 +37,10 @@ struct IncreaseContrastView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {
                     }) {
                         Text(colorSchemeContrast == .standard ? "Standard Contrast" : "Increased Contrast")
@@ -51,7 +51,7 @@ struct IncreaseContrastView: View {
                     }
                 }
                  .padding()
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text("Enabling Increase Contrast").font(.subheadline).accessibilityAddTraits(.isHeader).bold()
                     Text("1. Open iOS Settings")
                     Button(action: { self.openSettings() }) {

@@ -35,7 +35,7 @@ struct MagicTapView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
                 Text("Turn on VoiceOver and double tap with 2 fingers to activate Magic Tap.")

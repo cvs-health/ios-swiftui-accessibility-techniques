@@ -41,7 +41,7 @@ struct PrototypeHeadings2: View {
                 Text("Shop this week’s best buys and steepest savings")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                         HStack {
                             Text("Outdoor living")
@@ -87,7 +87,7 @@ struct PrototypeHeadings2: View {
                 Text("Don’t miss these Extra Big Deals! Deals so extra, they can’t be missed. But hurry, they’re not here for long!")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                             HStack {
                                 Text("Hawaiian Tropic sunscreen cream")
@@ -135,7 +135,7 @@ struct PrototypeHeadings2: View {
                     .font(.title2).bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                             HStack {
                                 Text("QuickSnap Waterproof Camera")

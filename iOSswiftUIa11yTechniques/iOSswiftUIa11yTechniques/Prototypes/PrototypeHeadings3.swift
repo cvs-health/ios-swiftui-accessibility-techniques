@@ -112,7 +112,7 @@ struct PrototypeHeadings3: View {
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h5)
                 Spacer()
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                        HStack {
                            Text("Puff sleeve eyelet dress")
@@ -154,7 +154,7 @@ struct PrototypeHeadings3: View {
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h5)
                 Spacer()
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                         HStack {
                             Text("Flannel shirt")
@@ -207,7 +207,7 @@ struct PrototypeHeadings3: View {
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h5)
                 Spacer()
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                         HStack {
                             Text("Cargo jogger")
@@ -260,7 +260,7 @@ struct PrototypeHeadings3: View {
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h4)
                 Spacer()
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                         HStack {
                             Text("Boys’ pajama 2-piece set")

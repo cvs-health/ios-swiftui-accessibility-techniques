@@ -29,7 +29,7 @@ struct Page2Prototype: View {
                     .accessibilityHeading(.h2)
                 Text("Build your baking pantry from ten essential ingredients that you use for everyday baking recipes. The following list can be further broken down by category, such as flour – basic flour, whole wheat flour, oatmeal flour. But if you are new to baking you will find our essential building blocks easy to add to your baking pantry. As you gain more baking experience, you'll start to figure out what the next level ingredients are for you.")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text("• Flour")
                     Text("• Leaveners")
                     Text("• Sugar")
@@ -50,7 +50,7 @@ struct Page2Prototype: View {
                     .accessibilityHeading(.h2)
                 Text("Build your baking pantry from ten essential ingredients that you use for everyday baking recipes. The following list can be further broken down by category, such as flour – basic flour, whole wheat flour, oatmeal flour. But if you are new to baking you will find our essential building blocks easy to add to your baking pantry. As you gain more baking experience, you'll start to figure out what the next level ingredients are for you.")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text("""
                     • Flour
                     • Leaveners

@@ -34,7 +34,7 @@ struct AccessibilitySortPriorityWatch: View {
                 .accessibilityHeading(.h2)
                 .foregroundColor(.orange)
             Divider()
-                .frame(height: 2.0, alignment:.leading)
+                .frame(height: 2.0, alignment: .leading)
                 .background(.orange)
                 .padding(.bottom)
             HStack {

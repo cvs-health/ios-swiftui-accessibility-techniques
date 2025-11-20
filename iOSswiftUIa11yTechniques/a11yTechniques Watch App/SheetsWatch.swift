@@ -34,7 +34,7 @@ struct SheetsWatch: View {
                 .accessibilityHeading(.h2)
                 .foregroundColor(.green)
             Divider()
-                .frame(height: 2.0, alignment:.leading)
+                .frame(height: 2.0, alignment: .leading)
                 .background(.green)
                 .padding(.bottom)
             Button(action: {
@@ -83,7 +83,7 @@ struct SheetsWatch: View {
                 .accessibilityHeading(.h2)
                 .foregroundColor(.red)
             Divider()
-                .frame(height: 2.0, alignment:.leading)
+                .frame(height: 2.0, alignment: .leading)
                 .background(.red)
                 .padding(.bottom)
             Button(action: {

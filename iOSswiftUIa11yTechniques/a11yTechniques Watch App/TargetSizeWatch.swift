@@ -32,7 +32,7 @@ struct TargetSizeWatch: View {
                 .accessibilityHeading(.h2)
                 .foregroundColor(.green)
             Divider()
-                .frame(height: 2.0, alignment:.leading)
+                .frame(height: 2.0, alignment: .leading)
                 .background(.green)
                 .padding(.bottom)
             HStack {
@@ -91,7 +91,7 @@ struct TargetSizeWatch: View {
                 .accessibilityHeading(.h2)
                 .foregroundColor(.red)
             Divider()
-                .frame(height: 2.0, alignment:.leading)
+                .frame(height: 2.0, alignment: .leading)
                 .background(.red)
                 .padding(.bottom)
             HStack {

@@ -35,16 +35,16 @@ struct FocusManagementView: View {
                 Text("Focus Management is required when displaying custom dialogs or views. Use `.accessibilityFocused` to move VoiceOver focus when opening and closing custom dialogs or views. Use `.accessibilityAddTraits(.isModal)` to trap VoiceOver focus inside a custom modal dialog. Use `.accessibilityAction(.escape)` to close a custom dialog or view and return focus when the VoiceOver escape gesture (2 finger Z) is activated. Use `.accessibilityElement(children: .ignore)` to prevent keyboard focus of elements behind a modal dialog. See Text Fields Focus Management below to learn how to return focus after dismissing the keyboard.")
                 NavigationLink(destination: TextFieldsFocusManagement()) {
                     Text("Text Fields Focus Management")
-                }.padding().frame(maxWidth:.infinity, alignment:.leading)
+                }.padding().frame(maxWidth:.infinity, alignment: .leading)
                     .accessibilityElement(children: showModal ? .ignore : .contain)
                 Text("Good Example")
                    .font(.subheadline)
                    .fontWeight(.bold)
-                   .frame(maxWidth:.infinity, alignment:.leading)
+                   .frame(maxWidth:.infinity, alignment: .leading)
                    .accessibilityAddTraits(.isHeader)
                    .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
-                   .frame(height: 2.0, alignment:.leading)
+                   .frame(height: 2.0, alignment: .leading)
                    .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                    .padding(.bottom)
                 Button(action: {
@@ -60,18 +60,18 @@ struct FocusManagementView: View {
                 .accessibilityFocused($isTriggerFocused)
                 .focused($isTriggerKeyboardFocused)
                 .accessibilityElement(children: showModal ? .ignore : .contain)
-               .frame(maxWidth:.infinity, alignment:.leading)
+               .frame(maxWidth:.infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The good focus management example uses `.accessibilityFocused` to set VoiceOver focus to the dialog heading when it's opened and back to the dialog trigger button when it's closed. `.accessibilityAddTraits(.isModal)` is used to trap VoiceOver focus inside the modal dialog and prevent focus of the grayed out content under the modal. `.accessibilityAction(.escape)` is used to close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated. `.accessibilityElement(children: .ignore)` is used to prevent keyboard focus of elements behind the modal dialog. `.keyboardShortcut(.defaultAction)` is added to allow full keyboard access users to close the dialog by pressing the return key.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                    .font(.subheadline)
                    .fontWeight(.bold)
-                   .frame(maxWidth:.infinity, alignment:.leading)
+                   .frame(maxWidth:.infinity, alignment: .leading)
                    .accessibilityAddTraits(.isHeader)
                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 Divider()
-                   .frame(height: 2.0, alignment:.leading)
+                   .frame(height: 2.0, alignment: .leading)
                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                    .padding(.bottom)
                 Button(action: {
@@ -79,7 +79,7 @@ struct FocusManagementView: View {
                 }) {
                     Text("Show License Agreement")
                 }
-               .frame(maxWidth:.infinity, alignment:.leading)
+               .frame(maxWidth:.infinity, alignment: .leading)
                 DisclosureGroup("Details") {
                     Text("The bad focus management example does not set VoiceOver focus to the dialog heading when it's opened or back to the dialog trigger button when it's closed. VoiceOver focus is not trapped inside the modal dialog and can focus on the grayed out content under the modal. VoiceOver users can't close the modal and return focus when the VoiceOver escape gesture (2 finger Z) is activated. Keyboard focus can move to elements behind the modal dialog.")
                 }.padding(.bottom).accessibilityHint("Bad Example")

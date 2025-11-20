@@ -17,9 +17,9 @@
 import SwiftUI
 
 struct DecorativeImagesWatch: View {
-    
+
     let darkBlue = Color(red: 26/255, green: 115/255, blue: 206/255)
-    
+
     var body: some View {
         ScrollView {
             Text("Decorative images are used purely for decoration and convey no meaning to sighted users. Decorative images must be hidden from VoiceOver users. Use `Image(decorative:)` or `.accessibilityHidden(true)` to hide decorative images from VoiceOver.")
@@ -31,7 +31,7 @@ struct DecorativeImagesWatch: View {
                 .accessibilityHeading(.h2)
                 .foregroundColor(.green)
             Divider()
-                .frame(height: 2.0, alignment:.leading)
+                .frame(height: 2.0, alignment: .leading)
                 .background(.green)
                 .padding(.bottom)
             Text("`Image(decorative:)`")
@@ -88,7 +88,7 @@ struct DecorativeImagesWatch: View {
                 .accessibilityHeading(.h2)
                 .foregroundColor(.red)
             Divider()
-                .frame(height: 2.0, alignment:.leading)
+                .frame(height: 2.0, alignment: .leading)
                 .background(.red)
                 .padding(.bottom)
             Text("`No Image(decorative:)`")

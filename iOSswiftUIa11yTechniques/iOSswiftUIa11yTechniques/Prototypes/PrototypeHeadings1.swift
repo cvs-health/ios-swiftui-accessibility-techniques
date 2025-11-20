@@ -40,7 +40,7 @@ struct PrototypeHeadings1: View {
                 Text("Don't miss out on savings! Grab all your back-to-school today with same-day delivery or FREE Pickup.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                         HStack {
                             Text("Kid's backpacks")
@@ -99,7 +99,7 @@ struct PrototypeHeadings1: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h2)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                         HStack {
                             Text("Sunscreen")
@@ -148,7 +148,7 @@ struct PrototypeHeadings1: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityHeading(.h2)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Button(action: {}) {
                         HStack {
                             Text("Outsunny Outdoor lounge chair")

@@ -34,7 +34,7 @@ struct LargeContentViewerView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
                 VStack {
@@ -98,7 +98,7 @@ struct LargeContentViewerView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
                 VStack {

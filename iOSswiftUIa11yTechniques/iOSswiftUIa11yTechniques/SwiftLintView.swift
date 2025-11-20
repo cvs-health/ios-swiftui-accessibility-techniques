@@ -71,16 +71,19 @@ struct SwiftLintView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
                     .accessibilityIdentifier("badImage")
-                Image("get10off")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)
-                    .accessibilityIdentifier("badImage")
-                Image("get10off")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)
-                    .accessibilityIdentifier("badImage")
+                Image(systemName: "star.fill")
+                            .foregroundColor(.yellow)
+                Button {
+                            print("Tapped")
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                Circle()
+                           .fill(Color.blue)
+                           .frame(width: 50, height: 50)
+                           .onTapGesture {
+                               print("Tapped circle")
+                           }
                 DisclosureGroup("Details") {
                     Text("The bad example has no single tap alternatives to move or zoom the map.")
                 }.accessibilityHint("Bad Example")

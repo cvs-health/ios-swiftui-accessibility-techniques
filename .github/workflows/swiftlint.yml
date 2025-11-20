@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run SwiftLint with annotations
-        uses: norio-nomura/action-swiftlint@v3.2.1
+        uses: norio-nomura/action-swiftlint@3.2.1
         with:
           strict: true
+

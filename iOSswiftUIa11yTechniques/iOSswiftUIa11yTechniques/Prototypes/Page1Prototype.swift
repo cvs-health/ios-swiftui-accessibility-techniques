@@ -29,7 +29,7 @@ struct Page1Prototype: View {
                     .accessibilityHeading(.h2)
                 Text("Best can be subjective. To find inspiration, we looked at the latest World Happiness Report which ranks countries based on what residents themselves feel about living there. Analyzing the top 10, there are several nations that stood out thanks to the excellent living conditions, economic stability, and safe and welcoming environment. Below are the rankings from the World Happiness Report 2024, ranked according to the self-assessed life evaluations of individuals living there between 2021 and 2023.")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text("1. Finland")
                     Text("2. Denmark")
                     Text("3. Iceland")
@@ -50,7 +50,7 @@ struct Page1Prototype: View {
                     .accessibilityHeading(.h2)
                 Text("Best can be subjective. To find inspiration, we looked at the latest World Happiness Report which ranks countries based on what residents themselves feel about living there. Analyzing the top 10, there are several nations that stood out thanks to the excellent living conditions, economic stability, and safe and welcoming environment. Below are the rankings from the World Happiness Report 2024, ranked according to the self-assessed life evaluations of individuals living there between 2021 and 2023.")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text("""
                         1. Finland
                         2. Denmark

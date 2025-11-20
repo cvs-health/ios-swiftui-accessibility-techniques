@@ -42,7 +42,7 @@ struct MenusView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
                 //Basic Menu
@@ -77,7 +77,7 @@ struct MenusView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.orange) : darkOrange)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.orange) : darkOrange)
                     .padding(.bottom)
                 Text("Platform Defect Example `Menu` with `Button` checkmark `Image` ")
@@ -210,7 +210,7 @@ struct MenusView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
                 Button(action: {

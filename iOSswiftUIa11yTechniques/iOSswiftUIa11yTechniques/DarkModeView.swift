@@ -36,10 +36,10 @@ struct DarkModeView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text("Enabling Dark Mode").font(.title).accessibilityAddTraits(.isHeader).accessibilityHeading(.h1).bold().foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     Text("1. Open iOS Settings")
                     Button(action: { self.openSettings() }) {
@@ -66,10 +66,10 @@ struct DarkModeView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text("Enabling Dark Mode").font(.title).bold().foregroundColor(darkRed)
                     Text("1. Open iOS Settings")
                     Button(action: { self.openSettings() }) {

@@ -42,7 +42,7 @@ struct ButtonsView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom) 
                 Text("Good Example Unique `.accessibilityLabel`")
@@ -52,7 +52,7 @@ struct ButtonsView: View {
                     .accessibilityAddTraits(.isHeader)
                 HStack {
                     Text("Username")
-                        .frame(minWidth: 80, alignment:.leading)
+                        .frame(minWidth: 80, alignment: .leading)
                     TextField("", text: $username)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .textContentType(.username)
@@ -72,7 +72,7 @@ struct ButtonsView: View {
                 }
                 HStack {
                     Text("Email")
-                        .frame(minWidth: 80, alignment:.leading)
+                        .frame(minWidth: 80, alignment: .leading)
                     TextField("", text: $email)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .textContentType(.emailAddress)
@@ -138,7 +138,7 @@ struct ButtonsView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
                 Text("Bad Example Generic Labels")
@@ -148,7 +148,7 @@ struct ButtonsView: View {
                     .accessibilityAddTraits(.isHeader)
                 HStack {
                     Text("Username")
-                        .frame(minWidth: 80, alignment:.leading)
+                        .frame(minWidth: 80, alignment: .leading)
                     TextField("", text: $username)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     Button(action: {
@@ -160,7 +160,7 @@ struct ButtonsView: View {
                 }
                 HStack {
                     Text("Email")
-                        .frame(minWidth: 80, alignment:.leading)
+                        .frame(minWidth: 80, alignment: .leading)
                     TextField("", text: $email)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     Button(action: {

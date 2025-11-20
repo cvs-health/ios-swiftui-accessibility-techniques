@@ -59,10 +59,10 @@ struct RotorView: View {
                     .accessibilityAddTraits(.isHeader)
                     .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                 Divider()
-                    .frame(height: 2.0, alignment:.leading)
+                    .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                LazyVStack(alignment:.leading) {
+                LazyVStack(alignment: .leading) {
                     Text("Fruits & Veggies").font(.title).bold().accessibilityAddTraits(.isHeader).accessibilityHeading(.h1)
                     ForEach(model.values) { value in
                         HStack {

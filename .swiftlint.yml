@@ -1,22 +1,23 @@
-# Disable ALL built-in SwiftLint rules
-disabled_rules:
-  - all
+# Enable ONLY these rules (this disables all other built-in rules)
+only_rules:
+  - a11y_swiftui_image_missing_label
+  - a11y_button_missing_label
+  - a11y_empty_text
 
-# Enable ONLY your custom a11y rules
+# Define your custom a11y rules
 custom_rules:
-
   a11y_swiftui_image_missing_label:
     name: "SwiftUI Image Missing Accessibility Label"
     regex: "\\bImage\\((?!.*accessibilityLabel)"
     message: "SwiftUI Image needs accessibilityLabel() or .accessibilityHidden(true)"
     severity: error
-
+  
   a11y_button_missing_label:
     name: "SwiftUI Button Missing Accessibility Label"
     regex: "Button\\s*\\{[^}]*\\}\\s*(?!.*accessibilityLabel)"
     message: "SwiftUI Button must have accessibilityLabel() or visible text."
     severity: error
-
+  
   a11y_empty_text:
     name: "Empty Text() is bad for accessibility"
     regex: "Text\\([\"']{2}\\)"

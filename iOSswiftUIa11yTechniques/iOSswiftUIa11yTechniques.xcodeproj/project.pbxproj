@@ -755,6 +755,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AABD27C42A9FE69500F718F7 /* Build configuration list for PBXNativeTarget "iOSswiftUIa11yTechniques" */;
 			buildPhases = (
+				BCA0FC562EE0AD0A001628CD /* SwiftLint */,
 				AABD27B22A9FE69300F718F7 /* Sources */,
 				AABD27B32A9FE69300F718F7 /* Frameworks */,
 				AABD27B42A9FE69300F718F7 /* Resources */,
@@ -930,6 +931,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BCA0FC562EE0AD0A001628CD /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\nif which swiftlint >/dev/null; then\n    swiftlint --config \"$SRCROOT/../.swiftlint.yml\"\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AA7367412AA24F810008F9DC /* Sources */ = {

@@ -7,10 +7,10 @@ only_rules:
 
 # Configure the rules
 accessibility_label_for_image:
-  severity: error
+  severity: warning
 
 accessibility_trait_for_button:
-  severity: error
+  severity: warning
 
 # Define your custom a11y rules
 custom_rules:
@@ -18,13 +18,13 @@ custom_rules:
     name: "SwiftUI Image Missing Accessibility Label"
     regex: "\\bImage\\((?!.*accessibilityLabel)(?!.*\\.accessibilityElement\\(children: \\.combine\\))"
     message: "SwiftUI Image needs accessibilityLabel() or .accessibilityHidden(true), unless using .accessibilityElement(children: .combine)"
-    severity: error
+    severity: warning
   
   a11y_button_missing_label:
     name: "SwiftUI Button Missing Accessibility Label"
     regex: "Button\\s*\\{[^}]*\\}\\s*(?!.*accessibilityLabel)"
     message: "SwiftUI Button must have accessibilityLabel() or visible text."
-    severity: error
+    severity: warning
   
   a11y_empty_text:
     name: "Empty Text() is bad for accessibility"

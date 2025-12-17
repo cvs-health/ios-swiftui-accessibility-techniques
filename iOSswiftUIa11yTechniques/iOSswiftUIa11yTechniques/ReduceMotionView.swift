@@ -1,5 +1,5 @@
 /*
-   Copyright 2024 CVS Health and/or one of its affiliates
+   Copyright 2024-2025 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -102,11 +102,9 @@ struct ReduceMotionView: View {
  
     }
 }
- 
-struct ReduceMotionView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ReduceMotionView()
-        }
+
+#Preview {
+    NavigationStack {
+        ReduceMotionView()
     }
 }

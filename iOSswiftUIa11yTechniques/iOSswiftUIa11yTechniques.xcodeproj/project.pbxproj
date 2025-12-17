@@ -126,6 +126,7 @@
 		BCD1CF982B57670D00A26ED3 /* EscapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF972B57670D00A26ED3 /* EscapeView.swift */; };
 		BCD1CF9C2B577C5A00A26ED3 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */; };
 		BCD814062C3858D600124B7C /* TextFieldsFocusManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */; };
+		BCDE3B312EF0B53E00FE8212 /* DimFlashingLightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDE3B302EF0B53E00FE8212 /* DimFlashingLightsView.swift */; };
 		BCDF3F562D4AE1D000A13D09 /* SignUp2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */; };
 		BCE15EF62E4D5B45001A8997 /* ContainersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE15EF52E4D5B45001A8997 /* ContainersView.swift */; };
 		BCE15EF82E4D7B8A001A8997 /* AccessibilityTraitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */; };
@@ -368,6 +369,8 @@
 		BCB059562CAB5F9C00C670B8 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		BCB086F32D1D982600623141 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
 		BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSelectionListView.swift; sourceTree = "<group>"; };
+		BCBAFAB42EF36B1300D5E700 /* DimFlashingLights.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DimFlashingLights.md; sourceTree = "<group>"; };
+		BCBAFAB52EF3727300D5E700 /* SwiftLint.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SwiftLint.md; sourceTree = "<group>"; };
 		BCC4F1822B3F8757004AAB65 /* AccessibilityInputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityInputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
 		BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Techniques.swift; sourceTree = "<group>"; };
@@ -379,6 +382,7 @@
 		BCD1CF9A2B577C5300A26ED3 /* AccessibilityActions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityActions.md; sourceTree = "<group>"; };
 		BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsView.swift; sourceTree = "<group>"; };
 		BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsFocusManagement.swift; sourceTree = "<group>"; };
+		BCDE3B302EF0B53E00FE8212 /* DimFlashingLightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimFlashingLightsView.swift; sourceTree = "<group>"; };
 		BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp2.swift; sourceTree = "<group>"; };
 		BCE15EF52E4D5B45001A8997 /* ContainersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersView.swift; sourceTree = "<group>"; };
 		BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityTraitsView.swift; sourceTree = "<group>"; };
@@ -496,6 +500,7 @@
 				BC3EA3B32B7B25550003B8A2 /* DateTimePickers.md */,
 				AA9B134E2AAA3867009A3D84 /* DecorativeImages.md */,
 				BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */,
+				BCBAFAB42EF36B1300D5E700 /* DimFlashingLights.md */,
 				AA7786352AEFFE6000AA39DA /* DynamicType.md */,
 				AAF127B62B2194E200D5313D /* ErrorValidation.md */,
 				BCD1CF992B57671700A26ED3 /* EscapeAction.md */,
@@ -532,6 +537,7 @@
 				AA636C882AC3B48C00014BAF /* Sliders.md */,
 				BCA3DD0F2B72DEA900033712 /* SmartInvert.md */,
 				AA1303192B027685001AE0BF /* Steppers.md */,
+				BCBAFAB52EF3727300D5E700 /* SwiftLint.md */,
 				AAF6D09A2ABA29EE00188DE0 /* Tabs.md */,
 				AA1303162AFED27C001AE0BF /* TextFields.md */,
 				BC3C6D372E6105A100AE9B78 /* TipKit.md */,
@@ -609,6 +615,7 @@
 				BCEDB8F12B4872BF00B4D85D /* DeviceOrientationBad.swift */,
 				BCEDB8F32B4872CA00B4D85D /* DeviceOrientationGood.swift */,
 				BCEDB8EF2B48722100B4D85D /* DeviceOrientationView.swift */,
+				BCDE3B302EF0B53E00FE8212 /* DimFlashingLightsView.swift */,
 				BC0C846E2CC811E900B3DB52 /* DragDropView.swift */,
 				AABB44092AE6C0FB003480B3 /* DynamicTypeView.swift */,
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
@@ -655,13 +662,13 @@
 				BC6C39BD2C2CE70B00AA842A /* ResponsiveLayoutsView.swift */,
 				BCE205272B597199000DF400 /* RotorView.swift */,
 				BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */,
-				BC7D81832ECE889F00F98333 /* SwiftLintView.swift */,
 				BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */,
 				AA74DD552AFD8DA800348078 /* SegmentedControlsView.swift */,
 				BC0030352B363B560063EAD5 /* SheetsView.swift */,
 				AA65F7922AC2889100E143B4 /* SlidersView.swift */,
 				BCA3DD0D2B72C32200033712 /* SmartInvertView.swift */,
 				AA74DD572AFDACA100348078 /* SteppersView.swift */,
+				BC7D81832ECE889F00F98333 /* SwiftLintView.swift */,
 				BCB059562CAB5F9C00C670B8 /* TableView.swift */,
 				AA59CDC92ABA1F4E0004908F /* TabsGoodView.swift */,
 				AA59CDC72ABA1F3B0004908F /* TabsView.swift */,
@@ -1069,6 +1076,7 @@
 				BC95CC772B4E1DDB00196E32 /* InputInstructionsView.swift in Sources */,
 				BC877B8B2CE55D3600B127F1 /* SignUpB.swift in Sources */,
 				BC4F17952D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift in Sources */,
+				BCDE3B312EF0B53E00FE8212 /* DimFlashingLightsView.swift in Sources */,
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
 				BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,

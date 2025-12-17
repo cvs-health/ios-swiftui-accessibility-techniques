@@ -7,7 +7,7 @@ If flashing content is used then support the Dim Flashing Lights accessibility s
 Use the `@Environment(\.accessibilityDimFlashingLights)` variable to stop flashing content when Dim Flashing Lights is enabled.    
 
 ## Applicable WCAG Success Criteria
-- [2.3.2 Three Flashes](https://www.w3.org/WAI/WCAG22/Understanding/three-flashes)
+- [2.3.1 Three Flashes or Below Threshold](https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold)
 
 ## Swift Technique Source Code
 [DimFlashingLightsView.swift](../iOSswiftUIa11yTechniques/DimFlashingLightsView.swift)

@@ -10,7 +10,8 @@ Notes:
 - If modifying the accessible name of a control, make sure to add the visible label text at the beginning of the `.accessibilityLabel`.
 
 ## Applicable WCAG Success Criteria
-- [2.5.3 Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name)
+- [2.4.6: Headings and Labels](https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels)
+- [2.5.3: Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
 ## Swift Technique Source Code

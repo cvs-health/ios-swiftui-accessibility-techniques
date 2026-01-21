@@ -72,7 +72,8 @@ struct ContentView: View {
                 }
             }
             .navigationViewStyle(.stack)
-            .searchable(text: $searchKeyword)
+            //.searchable(text: $searchKeyword, prompt:"") //hides the search input prompt placeholder text
+            .searchable(text: $searchKeyword,)
             .onChange(of: searchKeyword) {
                 postAccessibilityAnnouncement()
             }

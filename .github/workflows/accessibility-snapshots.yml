@@ -1,0 +1,22 @@
+name: Accessibility Snapshots
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  snapshot-tests:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run accessibility snapshot tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project "iOSswiftUIa11yTechniques/iOSswiftUIa11yTechniques.xcodeproj" \
+            -scheme "iOSswiftUIa11yTechniquesTests" \
+            -destination "platform=iOS Simulator,name=iPhone 15" \
+            -configuration Debug

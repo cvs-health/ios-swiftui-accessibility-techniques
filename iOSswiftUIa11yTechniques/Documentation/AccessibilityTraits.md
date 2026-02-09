@@ -1,8 +1,9 @@
 # Accessibility Traits
-Accessibility Representation is used to provide accessibility support to custom controls. 
+Accessibility Traits are used to manually add roles and states to custom UI controls. 
 
-Use `.accessibilityRepresentation` to provide a hidden native control representation for the otherwise inaccessible custom control.
+Standard native controls already include accessibility traits by default. 
 
+Use `.accessibilityAddTraits()` to add custom traits matching the roles and functionality of the control.
 
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)

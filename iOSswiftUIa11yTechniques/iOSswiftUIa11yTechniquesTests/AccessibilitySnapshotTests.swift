@@ -34,6 +34,12 @@ final class AccessibilitySnapshotTests: XCTestCase {
     func testInformativeViewAccessibilitySnapshot() {
         assertAccessibilitySnapshot(for: InformativeView())
     }
+    
+    func testErrorValidationViewAccessibilitySnapshot() {
+        let view = ErrorValidationView(configA11ySnapshot: true)
+        assertAccessibilitySnapshot(for: view)
+    }
+
 
     func testButtonsViewAccessibilitySnapshot() {
         assertAccessibilitySnapshot(for: ButtonsView())
@@ -57,3 +63,4 @@ final class AccessibilitySnapshotTests: XCTestCase {
         )
     }
 }
+

@@ -45,7 +45,8 @@ struct ErrorValidationView: View {
     @State private var emailErrorVisible = false
     @AccessibilityFocusState private var isEmailA11yFocused: Bool
     @FocusState private var isEmailFocused: Bool
-    
+    @State private var configA11ySnapshot = false
+
     @State private var fnameBad = ""
     @State private var lnameBad = ""
     @State private var phoneBad = ""
@@ -68,6 +69,25 @@ struct ErrorValidationView: View {
     @State private var choiceGroupError = "⚠ Please select one of the options."
     @State private var choiceGroupLabel = "Choose an option"
     @AccessibilityFocusState private var isFirstChoiceA11yFocused: Bool
+
+    init(configA11ySnapshot: Bool = false) {
+        // Configure initial error visibility for snapshots without mutating state via methods.
+        _configA11ySnapshot = State(initialValue: configA11ySnapshot)
+        if configA11ySnapshot {
+            // Good form errors
+            _firstNameErrorVisible = State(initialValue: true)
+            _lastNameErrorVisible = State(initialValue: true)
+            _emailErrorVisible = State(initialValue: true)
+            // Bad form errors
+            _firstNameErrorVisibleBad = State(initialValue: true)
+            _lastNameErrorVisibleBad = State(initialValue: true)
+            _emailErrorVisibleBad = State(initialValue: true)
+            // Choice group (good) error
+            _choiceGroupErrorVisible = State(initialValue: true)
+            // Choice group (bad) error
+            _choiceGroupErrorVisibleBad = State(initialValue: true)
+        }
+    }
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -304,7 +324,6 @@ struct ErrorValidationView: View {
                     Text(choiceGroupError)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(errorColor)
-                        .accessibilityHint(choiceGroupError)
                 }
                 Button(action: validateChoiceGroup) {
                     Text("Submit Choice")
@@ -531,9 +550,13 @@ struct ErrorValidationView: View {
                     Text("Error validation is used to convey error messages for missing or incorrectly entered data. Use `AccessibilityFocusState` to move VoiceOver focus to the first invalid input or error text when submitting a form with invalid data. Use an `.accessibilityHint` matching the visible error message text for each invalid input. Visually indicate required fields e.g. with an *.")
                         .padding(.bottom)
 
-                    GoodExampleForm()
+                    if !configA11ySnapshot {
+                        GoodExampleForm()
+                    }
                     ChoiceGroupSection()
-                    BadExampleForm()
+                    if !configA11ySnapshot {
+                        BadExampleForm()
+                    }
                     ChoiceGroupSectionBad()
                 }
                 .padding()
@@ -542,6 +565,11 @@ struct ErrorValidationView: View {
             .onChange(of: selectedChoice) { newValue in
                 if newValue != nil {
                     choiceGroupErrorVisible = false
+                }
+            }
+            .onAppear {
+                if configA11ySnapshot {
+                    validateGoodForm()
                 }
             }
             .onChange(of: choiceGroupErrorVisible) { visible in

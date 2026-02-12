@@ -26,7 +26,7 @@ final class AccessibilitySnapshotTests: XCTestCase {
 
     override func invokeTest() {
         // Switch to .all when you want to re-record snapshots.
-        withSnapshotTesting(record: .none) {
+        withSnapshotTesting(record: .all) {
             super.invokeTest()
         }
     }
@@ -37,6 +37,9 @@ final class AccessibilitySnapshotTests: XCTestCase {
 
     func testButtonsViewAccessibilitySnapshot() {
         assertAccessibilitySnapshot(for: ButtonsView())
+        
+        // Don't show any indicators.
+        // assertSnapshot(of: ButtonsView(), as: .accessibilityImage(showActivationPoints: .never))
     }
 
     private func assertAccessibilitySnapshot(for view: some View, file: StaticString = #file, testName: String = #function) {

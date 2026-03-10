@@ -20,10 +20,11 @@ Example: `./.build/debug/a11y-check .`
 
 ### Homebrew (from repo formula)
 
-Homebrew 4+ requires formulae to be in a tap. From the **repo root**, add this repo as a local tap, then install:
+Homebrew 4+ requires formulae to be in a tap. Have this repo on the machine (clone it if needed), then run from **this repo’s root** (folder containing `Formula/` and `A11yAgent/`), not from your app:
 
 ```bash
-cd /path/to/ios-swiftui-accessibility-techniques   # repo root
+git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
+cd ios-swiftui-accessibility-techniques
 brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
 brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 ```

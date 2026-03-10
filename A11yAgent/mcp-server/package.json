@@ -1,0 +1,30 @@
+{
+  "name": "mcp-a11y-check",
+  "version": "0.1.0",
+  "description": "MCP server that runs the SwiftUI a11y-check tool for Cursor and other AI clients",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "mcp-a11y-check": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "prepare": "npm run build"
+  },
+  "keywords": ["mcp", "accessibility", "a11y", "swiftui", "cursor"],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

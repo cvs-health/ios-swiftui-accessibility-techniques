@@ -7,6 +7,31 @@ Read the blog post, [Announcing the iOS SwiftUI Accessibility Techniques Open So
 
 Review project source code to learn how to apply the accessibility techniques in working SwiftUI code examples.
 
+## A11y Checker (a11y-check)
+
+Static analysis for SwiftUI accessibility issues, aligned with WCAG 2.2. Run it on your Swift sources to find missing labels, incorrect traits, touch target size, and more.
+
+**Install with Homebrew (easiest):**
+
+```bash
+brew tap cvs-health/ios-swiftui-accessibility-techniques
+brew install a11y-check
+a11y-check path/to/your/Sources
+```
+
+**Or build from source:**
+
+```bash
+git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
+cd ios-swiftui-accessibility-techniques/A11yAgent
+swift build
+.build/debug/a11y-check path/to/your/Sources
+```
+
+See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and CI integration.
+
+**Use in Cursor (MCP):** An [MCP server](A11yAgent/mcp-server/README.md) is included so you can run a11y-check from Cursor chat (e.g. “check this project for accessibility”). Install a11y-check first, then add the MCP server to Cursor and point it at `A11yAgent/mcp-server`.
+
 ## Accessibility Techniques Documentation
 - [x] = Completed
 - [x] [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md)

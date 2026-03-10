@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "a11y-check": {
+      "command": "node",
+      "args": ["/path/to/ios-swiftui-accessibility-techniques/A11yAgent/mcp-server/dist/index.js"],
+      "env": {
+        "A11Y_CHECK_PATH": "/path/to/ios-swiftui-accessibility-techniques/A11yAgent/.build/debug/a11y-check",
+        "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
+      }
+    }
+  }
+}

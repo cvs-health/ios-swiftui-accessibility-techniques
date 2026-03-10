@@ -11,11 +11,11 @@ class A11yCheck < Formula
   def install
     cd "A11yAgent" do
       # Swift 6.2 + swift-argument-parser need a toolchain SDK that provides
-      # SendableMetatype. Homebrew sets SDKROOT to an older SDK, which causes
-      # "cannot find type 'SendableMetatype' in scope". Pass env without SDKROOT
-      # so the swift build uses the active toolchain's SDK.
-      build_env = ENV.to_h.reject { |k, _| k == "SDKROOT" }
-      system build_env, "swift", "build", "-c", "release", "--disable-sandbox"
+      # SendableMetatype. Homebrew often sets SDKROOT to an older SDK, which
+      # causes "cannot find type 'SendableMetatype' in scope". Unset so the
+      # active toolchain's SDK is used.
+      ENV.delete("SDKROOT")
+      system "swift", "build", "-c", "release", "--disable-sandbox"
       bin.install ".build/release/a11y-check"
     end
   end

@@ -28,6 +28,9 @@ brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
 brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 ```
 
+If the build fails with `cannot find type 'SendableMetatype' in scope`, run the install with `SDKROOT` unset:  
+`env -u SDKROOT brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`
+
 Then run `a11y-check` from anywhere.
 
 ## Usage

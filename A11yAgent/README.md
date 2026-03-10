@@ -19,19 +19,7 @@ Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](htt
 
 Requires Swift 5.9+ and macOS 13+.
 
-### From source (recommended)
-
-```bash
-git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
-cd ios-swiftui-accessibility-techniques/A11yAgent
-swift build
-```
-
-Run the binary directly (no need to type `swift run`):  
-`.build/debug/a11y-check` or, after `swift build -c release`, `.build/release/a11y-check`.  
-Example: `./.build/debug/a11y-check .`
-
-### Homebrew (from repo formula)
+### Homebrew (easiest on any Mac)
 
 Homebrew 4+ requires formulae to be in a tap. Have this repo on the machine (clone it if needed), then run from **this repo’s root** (folder containing `Formula/` and `A11yAgent/`), not from your app:
 
@@ -46,6 +34,24 @@ If the build fails with `cannot find type 'SendableMetatype' in scope`, run the 
 `env -u SDKROOT brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`
 
 Then run `a11y-check` from anywhere.
+
+### Build from source
+
+Requires **Swift 5.9+** (Xcode or [Swift.org](https://swift.org) toolchain) and **macOS 13+**:
+
+```bash
+git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
+cd ios-swiftui-accessibility-techniques/A11yAgent
+swift build
+```
+
+The binary is at `./.build/debug/a11y-check` (or `.build/release/a11y-check` after `swift build -c release`). To check your app from any directory, use the full path to the binary:
+
+```bash
+/path/to/ios-swiftui-accessibility-techniques/A11yAgent/.build/debug/a11y-check /path/to/YourApp
+```
+
+If `swift build` fails, run `swift --version` (need 5.9+); otherwise use the Homebrew method above.
 
 ## Usage
 

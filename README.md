@@ -26,25 +26,34 @@ Static analysis for SwiftUI accessibility issues, aligned with WCAG 2.2. Run it 
 
 ---
 
-**Build from source (recommended):**
-
-```bash
-git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
-cd ios-swiftui-accessibility-techniques/A11yAgent
-swift build
-./.build/debug/a11y-check path/to/your/Sources
-```
-
-**Or install from the formula in this repo:**  
-Homebrew 4+ requires formulae to be in a tap. You must have this repo on the machine (clone it if needed), then run these commands from **this repo’s root** (the folder that contains `Formula/` and `A11yAgent/`), not from your app project:
+**Install via Homebrew (easiest on any Mac):**  
+Clone this repo, then from **this repo’s root** (not from your app):
 
 ```bash
 git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
 cd ios-swiftui-accessibility-techniques
 brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
 brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
-a11y-check path/to/your/Sources
 ```
+
+Then from your app folder: `a11y-check .`
+
+**Or build from source:**  
+Requires **Swift 5.9+** and **macOS 13+** (Xcode or [Swift.org](https://swift.org) toolchain). From a terminal:
+
+```bash
+git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
+cd ios-swiftui-accessibility-techniques/A11yAgent
+swift build
+```
+
+To run the checker on your app: from anywhere use the full path to the binary, with your app’s folder as the argument:
+
+```bash
+/path/to/ios-swiftui-accessibility-techniques/A11yAgent/.build/debug/a11y-check /path/to/YourApp
+```
+
+(Replace both paths with your actual paths.) If `swift build` fails, run `swift --version` (you need 5.9 or later); otherwise use the Homebrew method above.
 
 See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and CI integration.
 

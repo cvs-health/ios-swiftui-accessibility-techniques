@@ -116,14 +116,24 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
 
     /// Walk up the AST from a function call to find the outermost expression
     /// in a fluent modifier chain like `Image("x").accessibilityLabel("y").frame(...)`.
+    /// Modifier chains that cross `#if` / `#endif` are followed by walking through
+    /// the conditional expression so modifiers after `#endif` (e.g. `.accessibilityLabel`) are included.
     private func findChainRoot(for expr: ExprSyntax) -> ExprSyntax {
         var current = expr
         while let parent = current.parent {
             // If the parent is a MemberAccessExpr (`.modifier`), keep going up
             if let memberAccess = parent.as(MemberAccessExprSyntax.self) {
                 if let grandparent = memberAccess.parent?.as(FunctionCallExprSyntax.self) {
-                    current = ExprSyntax(grandparent)
-                    continue
+                    if memberAccess.base?.id == current.id {
+                        // We're the base of this modifier — step to the modifier call
+                        current = ExprSyntax(grandparent)
+                        continue
+                    }
+                    // Base is conditional compilation (#if / #endif) — walk through so we include modifiers after it
+                    if let base = memberAccess.base, Syntax(base).kind == .postfixIfConfigExpr {
+                        current = base
+                        continue
+                    }
                 }
             }
             // If the parent is a FunctionCallExpr wrapping our current node as the callee's base

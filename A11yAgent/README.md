@@ -70,7 +70,7 @@ a11y-check Sources/MyView.swift --compact
 Use JSON and the exit code to fail the build on accessibility errors:
 
 ```yaml
-# Example: GitHub Actions (install from repo formula; tap not required)
+# Example: GitHub Actions (install from repo formula)
 - name: Checkout repo
   uses: actions/checkout@v4
 - name: Accessibility check

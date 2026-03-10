@@ -20,7 +20,7 @@ swift build
 ./.build/debug/a11y-check path/to/your/Sources
 ```
 
-**Or install from the formula in this repo** (no tap needed):
+**Or install from the formula in this repo:**
 
 ```bash
 cd /path/to/ios-swiftui-accessibility-techniques

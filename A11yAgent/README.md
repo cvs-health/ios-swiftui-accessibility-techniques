@@ -20,10 +20,12 @@ Example: `./.build/debug/a11y-check .`
 
 ### Homebrew (from repo formula)
 
-From the repo root (parent of `Formula/`):
+Homebrew 4+ requires formulae to be in a tap. From the **repo root**, add this repo as a local tap, then install:
 
 ```bash
-brew install --build-from-source ./Formula/a11y-check.rb
+cd /path/to/ios-swiftui-accessibility-techniques   # repo root
+brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
+brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 ```
 
 Then run `a11y-check` from anywhere.
@@ -75,7 +77,8 @@ Use JSON and the exit code to fail the build on accessibility errors:
   uses: actions/checkout@v4
 - name: Accessibility check
   run: |
-    brew install --build-from-source ./Formula/a11y-check.rb
+    brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
+    brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
     a11y-check Sources/ --format json --only error
 ```
 

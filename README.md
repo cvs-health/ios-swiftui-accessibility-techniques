@@ -20,11 +20,13 @@ swift build
 ./.build/debug/a11y-check path/to/your/Sources
 ```
 
-**Or install from the formula in this repo:**
+**Or install from the formula in this repo:**  
+Homebrew 4+ requires formulae to be in a tap. From the **repo root**, add this repo as a local tap, then install:
 
 ```bash
-cd /path/to/ios-swiftui-accessibility-techniques
-brew install --build-from-source ./Formula/a11y-check.rb
+cd /path/to/ios-swiftui-accessibility-techniques   # repo root
+brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
+brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 a11y-check path/to/your/Sources
 ```
 

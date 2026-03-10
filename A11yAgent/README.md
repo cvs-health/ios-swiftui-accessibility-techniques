@@ -18,18 +18,7 @@ Run the binary directly (no need to type `swift run`):
 `.build/debug/a11y-check` or, after `swift build -c release`, `.build/release/a11y-check`.  
 Example: `./.build/debug/a11y-check .`
 
-### Homebrew (if tap is available)
-
-If the tap repo exists on GitHub, you can use:
-
-```bash
-brew tap cvs-health/ios-swiftui-accessibility-techniques
-brew install a11y-check
-```
-
-If `brew tap` fails with “Repository not found”, the tap has not been set up yet; use “From source” above.
-
-### Install from local formula (no tap)
+### Homebrew (from repo formula)
 
 From the repo root (parent of `Formula/`):
 
@@ -81,11 +70,12 @@ a11y-check Sources/MyView.swift --compact
 Use JSON and the exit code to fail the build on accessibility errors:
 
 ```yaml
-# Example: GitHub Actions
+# Example: GitHub Actions (install from repo formula; tap not required)
+- name: Checkout repo
+  uses: actions/checkout@v4
 - name: Accessibility check
   run: |
-    brew tap cvs-health/ios-swiftui-accessibility-techniques
-    brew install a11y-check
+    brew install --build-from-source ./Formula/a11y-check.rb
     a11y-check Sources/ --format json --only error
 ```
 

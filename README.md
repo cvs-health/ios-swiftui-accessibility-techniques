@@ -20,14 +20,6 @@ swift build
 ./.build/debug/a11y-check path/to/your/Sources
 ```
 
-**Or install via Homebrew** (only if the tap repo exists; otherwise use “build from source” or the local formula below):
-
-```bash
-brew tap cvs-health/ios-swiftui-accessibility-techniques
-brew install a11y-check
-a11y-check path/to/your/Sources
-```
-
 **Or install from the formula in this repo** (no tap needed):
 
 ```bash

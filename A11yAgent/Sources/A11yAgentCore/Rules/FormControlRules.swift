@@ -35,6 +35,27 @@ public struct TextFieldMissingLabelRule: A11yRule {
         return true
     }
 
+    /// Source-text fallback: after the chain root, look for ".accessibilityLabel(" before any other view.
+    /// Handles modifier chains split by #if / #endif where the AST-based collector misses the label.
+    private func hasAccessibilityLabelInSourceAfterView(chainRoot: ExprSyntax, context: RuleContext) -> Bool {
+        let viewEndOffset = chainRoot.endPosition.utf8Offset
+        let source = context.sourceText
+        let utf8 = source.utf8
+        guard viewEndOffset < utf8.count else { return false }
+        let startIdx = utf8.index(utf8.startIndex, offsetBy: viewEndOffset)
+        let windowLen = min(2048, utf8.distance(from: startIdx, to: utf8.endIndex))
+        guard windowLen > 0,
+              let endIdx = utf8.index(startIdx, offsetBy: windowLen, limitedBy: utf8.endIndex) else { return false }
+        let window = String(source[startIdx..<endIdx])
+        let labelPattern = ".accessibilityLabel("
+        let viewStarts = ["TextField(", "SecureField(", "Button(", "Toggle(", "Image(", "Text("]
+        guard let labelRange = window.range(of: labelPattern) else { return false }
+        let labelPos = window.distance(from: window.startIndex, to: labelRange.lowerBound)
+        let firstOtherView = viewStarts.compactMap { window.range(of: $0).map { window.distance(from: window.startIndex, to: $0.lowerBound) } }.min()
+        if let first = firstOtherView, first < labelPos { return false }
+        return true
+    }
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax)
         var diagnostics: [A11yDiagnostic] = []
@@ -50,6 +71,10 @@ public struct TextFieldMissingLabelRule: A11yRule {
             // Modifier chain may be split by #if / #endif; .accessibilityLabel may appear in a following statement
             let viewStart = view.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset
             if hasAccessibilityLabelInFollowingStatements(chainRoot: view.chainRoot, viewStartOffset: viewStart, syntax: syntax) {
+                continue
+            }
+            // Fallback: scan source after this view's chain for ".accessibilityLabel(" (handles #if / #endif splitting)
+            if hasAccessibilityLabelInSourceAfterView(chainRoot: view.chainRoot, context: context) {
                 continue
             }
 

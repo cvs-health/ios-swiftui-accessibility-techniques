@@ -11,7 +11,16 @@ Review project source code to learn how to apply the accessibility techniques in
 
 Static analysis for SwiftUI accessibility issues, aligned with WCAG 2.2. Run it on your Swift sources to find missing labels, incorrect traits, touch target size, and more.
 
-**Install with Homebrew (easiest):**
+**Build from source (recommended):**
+
+```bash
+git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
+cd ios-swiftui-accessibility-techniques/A11yAgent
+swift build
+./.build/debug/a11y-check path/to/your/Sources
+```
+
+**Or install via Homebrew** (only if the tap repo exists; otherwise use “build from source” or the local formula below):
 
 ```bash
 brew tap cvs-health/ios-swiftui-accessibility-techniques
@@ -19,13 +28,12 @@ brew install a11y-check
 a11y-check path/to/your/Sources
 ```
 
-**Or build from source:**
+**Or install from the formula in this repo** (no tap needed):
 
 ```bash
-git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
-cd ios-swiftui-accessibility-techniques/A11yAgent
-swift build
-.build/debug/a11y-check path/to/your/Sources
+cd /path/to/ios-swiftui-accessibility-techniques
+brew install --build-from-source ./Formula/a11y-check.rb
+a11y-check path/to/your/Sources
 ```
 
 See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and CI integration.

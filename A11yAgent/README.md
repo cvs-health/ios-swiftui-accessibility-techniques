@@ -4,16 +4,9 @@ Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](htt
 
 ## Installation
 
-### Homebrew (recommended)
-
-```bash
-brew tap cvs-health/ios-swiftui-accessibility-techniques
-brew install a11y-check
-```
-
-### From source
-
 Requires Swift 5.9+ and macOS 13+.
+
+### From source (recommended)
 
 ```bash
 git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
@@ -24,6 +17,27 @@ swift build
 Run the binary directly (no need to type `swift run`):  
 `.build/debug/a11y-check` or, after `swift build -c release`, `.build/release/a11y-check`.  
 Example: `./.build/debug/a11y-check .`
+
+### Homebrew (if tap is available)
+
+If the tap repo exists on GitHub, you can use:
+
+```bash
+brew tap cvs-health/ios-swiftui-accessibility-techniques
+brew install a11y-check
+```
+
+If `brew tap` fails with “Repository not found”, the tap has not been set up yet; use “From source” above.
+
+### Install from local formula (no tap)
+
+From the repo root (parent of `Formula/`):
+
+```bash
+brew install --build-from-source ./Formula/a11y-check.rb
+```
+
+Then run `a11y-check` from anywhere.
 
 ## Usage
 

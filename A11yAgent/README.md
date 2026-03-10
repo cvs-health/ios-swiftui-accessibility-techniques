@@ -2,6 +2,23 @@
 
 Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target size, dynamic type, and more.
 
+## Check your own iOS app
+
+1. **Install** a11y-check once (see [Installation](#installation) below).
+2. **Run it** on your app’s Swift sources — from anywhere, pass the path to your app (or to specific folders).
+
+Example: you have a project like “QuickQR” or any Xcode app. After installing:
+
+```bash
+cd /path/to/YourApp
+a11y-check .                      # all .swift in current directory
+a11y-check QuickQR/               # or your app’s main source folder
+a11y-check . --only error         # only show errors
+a11y-check --list-rules           # see all rules and IDs
+```
+
+Output shows file, line, rule ID, and message so you can fix missing labels, touch targets, and other a11y issues.
+
 ## Installation
 
 Requires Swift 5.9+ and macOS 13+.

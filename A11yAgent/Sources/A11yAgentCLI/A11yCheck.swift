@@ -23,7 +23,7 @@ struct A11yCheck: ParsableCommand {
     @Argument(help: "File or directory paths to analyze.")
     var paths: [String] = ["."]
 
-    @Option(name: .long, help: "Output format: terminal, json")
+    @Option(name: .long, help: "Output format: terminal, json, xcode, html")
     var format: OutputFormat = .terminal
 
     @Option(name: .long, help: "Comma-separated rule IDs to disable.")
@@ -37,6 +37,15 @@ struct A11yCheck: ParsableCommand {
 
     @Flag(name: .long, help: "Suppress file path in output (useful for single-file checks).")
     var compact = false
+
+    @Option(name: .long, help: "Path to a .a11ycheck.yml config file. Auto-detected if not specified.")
+    var config: String?
+
+    @Flag(name: .long, help: "Only report diagnostics on lines changed in the current git diff.")
+    var diff = false
+
+    @Option(name: .long, help: "Git ref to diff against (default: HEAD). Used with --diff.")
+    var diffBase: String?
 
     func run() throws {
         let registry = RuleRegistry()
@@ -53,11 +62,25 @@ struct A11yCheck: ParsableCommand {
             return
         }
 
-        // Apply --disable
+        // Load config
+        if let configPath = config {
+            let loadedConfig = try ConfigLoader.load(atPath: resolvePath(configPath))
+            registry.applyConfig(loadedConfig)
+        } else {
+            let searchDir = resolvePath(paths.first ?? ".")
+            let loadedConfig = try ConfigLoader.load(from: searchDir)
+            registry.applyConfig(loadedConfig)
+        }
+
+        // Apply --disable (additive on top of config)
         if let disableList = disable {
             let ids = disableList.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
-            registry.disabledRuleIDs = Set(ids)
+            registry.disabledRuleIDs.formUnion(ids)
         }
+
+        // Discover asset catalog colors for contrast checking
+        let projectRoot = resolvePath(paths.first ?? ".")
+        registry.assetColors = AssetCatalogParser.discoverColors(in: projectRoot)
 
         // Collect diagnostics
         var allDiagnostics: [A11yDiagnostic] = []
@@ -80,6 +103,13 @@ struct A11yCheck: ParsableCommand {
             }
         }
 
+        // Apply --diff filter
+        if diff {
+            let workDir = resolvePath(paths.first ?? ".")
+            let changedLines = DiffFilter.changedLines(in: workDir, baseBranch: diffBase)
+            allDiagnostics = DiffFilter.filter(allDiagnostics, changedLines: changedLines)
+        }
+
         // Apply --only severity filter
         if let minSeverity = only {
             allDiagnostics = allDiagnostics.filter { $0.severity >= minSeverity }
@@ -96,6 +126,14 @@ struct A11yCheck: ParsableCommand {
             let formatter = JSONFormatter()
             let output = try formatter.format(allDiagnostics)
             print(output)
+
+        case .xcode:
+            let formatter = XcodeFormatter()
+            print(formatter.format(allDiagnostics), terminator: "")
+
+        case .html:
+            let formatter = HTMLFormatter()
+            print(formatter.format(allDiagnostics, allRules: registry.rules))
         }
 
         // Exit with error code if there are errors
@@ -121,6 +159,8 @@ struct A11yCheck: ParsableCommand {
 enum OutputFormat: String, ExpressibleByArgument {
     case terminal
     case json
+    case xcode
+    case html
 }
 
 // Make A11ySeverity conform to ExpressibleByArgument for CLI parsing

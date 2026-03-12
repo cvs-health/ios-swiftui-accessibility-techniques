@@ -12,6 +12,12 @@ public final class RuleRegistry {
     /// Rule IDs to disable.
     public var disabledRuleIDs: Set<String> = []
 
+    /// Loaded project configuration.
+    public var config: A11yConfig = .empty
+
+    /// Asset catalog colors discovered for the project (name → RGBA).
+    public var assetColors: [String: (r: Double, g: Double, b: Double, a: Double)] = [:]
+
     /// Create a registry with all built-in rules.
     public init() {
         registerBuiltInRules()
@@ -62,6 +68,7 @@ public final class RuleRegistry {
 
         // Dark Mode / Contrast (WCAG 1.4.3)
         register(HardcodedColorRule())
+        register(ColorContrastRule())
 
         // Form Controls (WCAG 4.1.2)
         register(TextFieldMissingLabelRule())
@@ -73,9 +80,19 @@ public final class RuleRegistry {
         register(SheetFocusReturnRule())
     }
 
-    /// Get all enabled rules (excluding disabled ones).
+    /// Apply a config: merge disabled rules and enabled-only from config with CLI overrides.
+    public func applyConfig(_ config: A11yConfig) {
+        self.config = config
+        disabledRuleIDs.formUnion(config.disabledRules)
+    }
+
+    /// Get all enabled rules (excluding disabled ones, respecting enabledOnly allowlist).
     public var enabledRules: [any A11yRule] {
-        rules.filter { !disabledRuleIDs.contains($0.id) }
+        var filtered = rules.filter { !disabledRuleIDs.contains($0.id) }
+        if !config.enabledOnly.isEmpty {
+            filtered = filtered.filter { config.enabledOnly.contains($0.id) }
+        }
+        return filtered
     }
 
     /// Analyze a single source file and return all diagnostics.
@@ -86,7 +103,10 @@ public final class RuleRegistry {
             filePath: filePath,
             sourceText: sourceText,
             locationConverter: converter,
-            disabledRules: disabledRuleIDs
+            disabledRules: disabledRuleIDs,
+            severityOverrides: config.severityOverrides,
+            configOptions: config.options,
+            assetColors: assetColors
         )
 
         var allDiagnostics: [A11yDiagnostic] = []
@@ -94,6 +114,9 @@ public final class RuleRegistry {
             let diagnostics = rule.check(syntax: syntax, context: context)
             allDiagnostics.append(contentsOf: diagnostics)
         }
+
+        // Filter out inline suppressions
+        allDiagnostics = InlineSuppressionFilter.filter(allDiagnostics, sourceText: sourceText)
 
         // Sort by line, then column
         allDiagnostics.sort { ($0.line, $0.column) < ($1.line, $1.column) }
@@ -117,6 +140,7 @@ public final class RuleRegistry {
 
         while let relativePath = enumerator.nextObject() as? String {
             guard relativePath.hasSuffix(".swift") else { continue }
+            if config.shouldExclude(relativePath: relativePath) { continue }
             let fullPath = (path as NSString).appendingPathComponent(relativePath)
             do {
                 let diagnostics = try analyzeFile(at: fullPath)

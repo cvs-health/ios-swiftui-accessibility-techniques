@@ -75,6 +75,31 @@ public struct TerminalFormatter {
     }
 }
 
+/// Formats diagnostics for Xcode build phase scripts.
+/// Each diagnostic becomes a single line in the format Xcode recognizes:
+///   file:line:column: warning: message
+public struct XcodeFormatter {
+
+    public init() {}
+
+    public func format(_ diagnostics: [A11yDiagnostic]) -> String {
+        guard !diagnostics.isEmpty else { return "" }
+
+        var output = ""
+        for diag in diagnostics {
+            let xcodeSeverity: String
+            switch diag.severity {
+            case .error:   xcodeSeverity = "error"
+            case .warning: xcodeSeverity = "warning"
+            case .info:    xcodeSeverity = "note"
+            }
+            let wcag = diag.wcagCriteria.isEmpty ? "" : " [WCAG \(diag.wcagCriteria.joined(separator: ", "))]"
+            output += "\(diag.filePath):\(diag.line):\(diag.column): \(xcodeSeverity): [\(diag.ruleID)] \(diag.message)\(wcag)\n"
+        }
+        return output
+    }
+}
+
 /// Formats diagnostics as JSON for machine consumption.
 public struct JSONFormatter {
 

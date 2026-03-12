@@ -11,17 +11,29 @@ public struct RuleContext {
     public let locationConverter: SourceLocationConverter
     /// Per-rule configuration overrides (ruleID → enabled).
     public let disabledRules: Set<String>
+    /// Severity overrides from configuration file.
+    public let severityOverrides: [String: A11ySeverity]
+    /// Project configuration options.
+    public let configOptions: A11yConfig.ConfigOptions
+    /// Asset catalog colors resolved for the project (name → RGBA).
+    public let assetColors: [String: (r: Double, g: Double, b: Double, a: Double)]
 
     public init(
         filePath: String,
         sourceText: String,
         locationConverter: SourceLocationConverter,
-        disabledRules: Set<String> = []
+        disabledRules: Set<String> = [],
+        severityOverrides: [String: A11ySeverity] = [:],
+        configOptions: A11yConfig.ConfigOptions = .init(),
+        assetColors: [String: (r: Double, g: Double, b: Double, a: Double)] = [:]
     ) {
         self.filePath = filePath
         self.sourceText = sourceText
         self.locationConverter = locationConverter
         self.disabledRules = disabledRules
+        self.severityOverrides = severityOverrides
+        self.configOptions = configOptions
+        self.assetColors = assetColors
     }
 
     /// Convert a syntax node's position to a 1-based line number.
@@ -63,9 +75,12 @@ extension A11yRule {
         severityOverride: A11ySeverity? = nil,
         fix: A11yFix? = nil
     ) -> A11yDiagnostic {
-        A11yDiagnostic(
+        let effectiveSeverity = severityOverride
+            ?? context.severityOverrides[id]
+            ?? severity
+        return A11yDiagnostic(
             ruleID: id,
-            severity: severityOverride ?? severity,
+            severity: effectiveSeverity,
             message: message,
             filePath: context.filePath,
             line: context.line(for: node.positionAfterSkippingLeadingTrivia),

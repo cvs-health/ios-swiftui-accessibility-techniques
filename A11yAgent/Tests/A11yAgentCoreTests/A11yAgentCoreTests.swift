@@ -394,7 +394,7 @@ final class A11yAgentCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 21)
+        XCTAssertEqual(registry.rules.count, 23)
     }
 
     func testDisableRule() {
@@ -462,6 +462,261 @@ final class A11yAgentCoreTests: XCTestCase {
         let tapGesture = diags.filter { $0.ruleID == "tap-gesture-missing-button-trait" }
         XCTAssertGreaterThanOrEqual(tapGesture.count, 1, "Should flag onTapGesture without .isButton")
     }
+
+    // MARK: - Xcode Formatter
+
+    func testXcodeFormatter_emitsCorrectFormat() {
+        let diag = A11yDiagnostic(
+            ruleID: "test-rule",
+            severity: .warning,
+            message: "Test message",
+            filePath: "/path/to/File.swift",
+            line: 10,
+            column: 5,
+            wcagCriteria: ["1.1.1"]
+        )
+        let formatter = XcodeFormatter()
+        let output = formatter.format([diag])
+        XCTAssertEqual(output, "/path/to/File.swift:10:5: warning: [test-rule] Test message [WCAG 1.1.1]\n")
+    }
+
+    func testXcodeFormatter_mapsInfoToNote() {
+        let diag = A11yDiagnostic(
+            ruleID: "test-rule",
+            severity: .info,
+            message: "Info message",
+            filePath: "/path/File.swift",
+            line: 1,
+            column: 1
+        )
+        let formatter = XcodeFormatter()
+        let output = formatter.format([diag])
+        XCTAssertTrue(output.contains(": note:"))
+    }
+
+    // MARK: - Inline Suppression
+
+    func testInlineSuppression_disableSameLine() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Image(systemName: "star") // a11y-check:disable image-missing-label
+            }
+        }
+        """
+        let diags = analyze(source)
+        let imageRuleDiags = diags.filter { $0.ruleID == "image-missing-label" }
+        XCTAssertEqual(imageRuleDiags.count, 0)
+    }
+
+    func testInlineSuppression_disableNextLine() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                // a11y-check:disable-next-line image-missing-label
+                Image(systemName: "star")
+            }
+        }
+        """
+        let diags = analyze(source)
+        let imageRuleDiags = diags.filter { $0.ruleID == "image-missing-label" }
+        XCTAssertEqual(imageRuleDiags.count, 0)
+    }
+
+    func testInlineSuppression_disableAllRulesOnLine() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Image(systemName: "star") // a11y-check:disable
+            }
+        }
+        """
+        let diags = analyze(source)
+        let line4Diags = diags.filter { $0.line == 4 }
+        XCTAssertEqual(line4Diags.count, 0)
+    }
+
+    func testInlineSuppression_doesNotAffectOtherLines() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Image(systemName: "star") // a11y-check:disable image-missing-label
+                Image(systemName: "heart")
+            }
+        }
+        """
+        let diags = analyze(source)
+        let imageRuleDiags = diags.filter { $0.ruleID == "image-missing-label" }
+        XCTAssertEqual(imageRuleDiags.count, 1, "Second Image should still be flagged")
+    }
+
+    // MARK: - Config
+
+    func testConfigParsing_severityOverrides() throws {
+        let yaml = """
+        severity_overrides:
+          image-missing-label: warning
+          hardcoded-color: info
+        disabled_rules:
+          - line-limit-1
+        exclude_paths:
+          - "*/Generated/*"
+        """
+        let config = try ConfigLoader.parse(yaml)
+        XCTAssertEqual(config.severityOverrides["image-missing-label"], .warning)
+        XCTAssertEqual(config.severityOverrides["hardcoded-color"], .info)
+        XCTAssertTrue(config.disabledRules.contains("line-limit-1"))
+        XCTAssertEqual(config.excludePaths, ["*/Generated/*"])
+    }
+
+    func testConfigExcludePaths() throws {
+        let yaml = """
+        exclude_paths:
+          - "*/Generated/*"
+          - "*Tests*"
+        """
+        let config = try ConfigLoader.parse(yaml)
+        XCTAssertTrue(config.shouldExclude(relativePath: "Sources/Generated/Auto.swift"))
+        XCTAssertTrue(config.shouldExclude(relativePath: "MyTests/Test.swift"))
+        XCTAssertFalse(config.shouldExclude(relativePath: "Sources/MyView.swift"))
+    }
+
+    func testConfigSeverityOverrideApplied() throws {
+        let yaml = """
+        severity_overrides:
+          image-missing-label: info
+        """
+        let config = try ConfigLoader.parse(yaml)
+        registry.applyConfig(config)
+
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Image(systemName: "newspaper")
+            }
+        }
+        """
+        let diags = analyze(source)
+        let imageDiags = diags.filter { $0.ruleID == "image-missing-label" }
+        XCTAssertEqual(imageDiags.first?.severity, .info)
+    }
+
+    // MARK: - Color Contrast
+
+    func testContrastCalculator_blackOnWhite() {
+        let black = ContrastCalculator.RGBA(r: 0, g: 0, b: 0)
+        let white = ContrastCalculator.RGBA(r: 1, g: 1, b: 1)
+        let ratio = ContrastCalculator.contrastRatio(black, white)
+        XCTAssertEqual(ratio, 21.0, accuracy: 0.1)
+    }
+
+    func testContrastCalculator_sameColor() {
+        let red = ContrastCalculator.RGBA(r: 1, g: 0, b: 0)
+        let ratio = ContrastCalculator.contrastRatio(red, red)
+        XCTAssertEqual(ratio, 1.0, accuracy: 0.01)
+    }
+
+    func testColorParser_systemColors() {
+        let black = ColorParser.parse(".black")
+        XCTAssertNotNil(black)
+        XCTAssertEqual(black?.r, 0)
+
+        let white = ColorParser.parse(".white")
+        XCTAssertNotNil(white)
+        XCTAssertEqual(white?.r, 1)
+    }
+
+    func testColorParser_rgbLiteral() throws {
+        let color = try XCTUnwrap(ColorParser.parse("Color(red: 0.5, green: 0.3, blue: 0.1)"))
+        XCTAssertEqual(color.r, 0.5, accuracy: 0.01)
+        XCTAssertEqual(color.g, 0.3, accuracy: 0.01)
+        XCTAssertEqual(color.b, 0.1, accuracy: 0.01)
+    }
+
+    func testColorContrastRule_flagsLowContrast() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Hello")
+                    .foregroundColor(.white)
+                    .background(.white)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags.first?.message.contains("Contrast ratio") ?? false)
+    }
+
+    func testColorContrastRule_passesHighContrast() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Hello")
+                    .foregroundColor(.black)
+                    .background(.white)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    // MARK: - Diff Filter
+
+    func testDiffFilterParsesUnifiedDiff() {
+        let diff = """
+        diff --git a/Sources/MyView.swift b/Sources/MyView.swift
+        --- a/Sources/MyView.swift
+        +++ b/Sources/MyView.swift
+        @@ -10,0 +11,3 @@ struct MyView {
+        +    func newMethod() {
+        +        print("hello")
+        +    }
+        """
+        let result = DiffFilter.parseUnifiedDiff(diff, workingDirectory: "/project")
+        let lines = result["/project/Sources/MyView.swift"]
+        XCTAssertNotNil(lines)
+        XCTAssertEqual(lines, [11, 12, 13])
+    }
+
+    func testDiffFilterRemovesUnchangedLines() {
+        let diag1 = A11yDiagnostic(ruleID: "test", severity: .error, message: "msg", filePath: "/project/File.swift", line: 5, column: 1)
+        let diag2 = A11yDiagnostic(ruleID: "test", severity: .error, message: "msg", filePath: "/project/File.swift", line: 10, column: 1)
+        let changedLines: DiffFilter.ChangedLineMap = ["/project/File.swift": [10]]
+        let filtered = DiffFilter.filter([diag1, diag2], changedLines: changedLines)
+        XCTAssertEqual(filtered.count, 1)
+        XCTAssertEqual(filtered.first?.line, 10)
+    }
+
+    // MARK: - HTML Formatter
+
+    func testHTMLFormatterProducesValidHTML() {
+        let diag = A11yDiagnostic(
+            ruleID: "test-rule",
+            severity: .error,
+            message: "Test <message>",
+            filePath: "/path/to/File.swift",
+            line: 10,
+            column: 5,
+            wcagCriteria: ["1.1.1"]
+        )
+        let formatter = HTMLFormatter()
+        let output = formatter.format([diag], allRules: registry.rules)
+        XCTAssertTrue(output.contains("<!DOCTYPE html>"))
+        XCTAssertTrue(output.contains("WCAG 2.2 Conformance"))
+        XCTAssertTrue(output.contains("Test &lt;message&gt;"))
+        XCTAssertTrue(output.contains("Errors</div>"))
+    }
+
+    // MARK: - Fixture Files
 
     func testFixtureFile_misc() throws {
         let fixtureURL = try XCTUnwrap(

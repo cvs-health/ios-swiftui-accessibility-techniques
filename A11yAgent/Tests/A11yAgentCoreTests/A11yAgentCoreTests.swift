@@ -422,6 +422,22 @@ final class A11yAgentCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0)
     }
 
+    func testTextFieldMissingLabel_passesInsideLabeledContent() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var text = ""
+            var body: some View {
+                LabeledContent("First Name") {
+                    TextField("", text: $text)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "textfield-missing-label")
+        XCTAssertEqual(diags.count, 0)
+    }
+
     func testSecureFieldMissingLabel_flagsPlaceholderOnly() {
         let source = """
         import SwiftUI

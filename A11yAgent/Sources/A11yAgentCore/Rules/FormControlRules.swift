@@ -56,6 +56,28 @@ public struct TextFieldMissingLabelRule: A11yRule {
         return true
     }
 
+    /// Walk up the AST to check if this node is inside a LabeledContent call
+    /// with a non-empty string label (e.g. `LabeledContent("First Name") { ... }`).
+    private func isInsideLabeledContent(_ node: some SyntaxProtocol) -> Bool {
+        var current: Syntax? = Syntax(node)
+        while let parent = current?.parent {
+            if let funcCall = parent.as(FunctionCallExprSyntax.self),
+               let callee = funcCall.calledExpression.as(DeclReferenceExprSyntax.self),
+               callee.baseName.text == "LabeledContent" {
+                if let firstArg = funcCall.arguments.first,
+                   firstArg.label == nil,
+                   let str = firstArg.expression.as(StringLiteralExprSyntax.self) {
+                    let text = str.segments.compactMap { $0.as(StringSegmentSyntax.self)?.content.text }.joined()
+                    if !text.trimmingCharacters(in: .whitespaces).isEmpty {
+                        return true
+                    }
+                }
+            }
+            current = parent
+        }
+        return false
+    }
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax)
         var diagnostics: [A11yDiagnostic] = []
@@ -77,6 +99,10 @@ public struct TextFieldMissingLabelRule: A11yRule {
             if hasAccessibilityLabelInSourceAfterView(chainRoot: view.chainRoot, context: context) {
                 continue
             }
+
+            // Inside LabeledContent("Label") { ... } — the LabeledContent provides
+            // both a persistent visible label and the VoiceOver accessible name.
+            if isInsideLabeledContent(view.callExpr) { continue }
 
             let inlineLabel = view.firstStringArgument ?? ""
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {

@@ -43,9 +43,9 @@ summary:hover { background: #f1f3f5; }
 </head>
 <body>
 <h1>a11y-check Accessibility Report</h1>
-<p class="timestamp">Generated: 2026-03-12T21:33:11Z</p><div class="summary">
-  <div class="stat error"><div class="number">205</div><div class="label">Errors</div></div>
-  <div class="stat warning"><div class="number">149</div><div class="label">Warnings</div></div>
+<p class="timestamp">Generated: 2026-03-13T17:02:54Z</p><div class="summary">
+  <div class="stat error"><div class="number">216</div><div class="label">Errors</div></div>
+  <div class="stat warning"><div class="number">161</div><div class="label">Warnings</div></div>
   <div class="stat info"><div class="number">0</div><div class="label">Info</div></div>
   <div class="stat"><div class="number">78</div><div class="label">Files</div></div>
 </div><h2>WCAG 2.2 Conformance</h2>
@@ -53,14 +53,14 @@ summary:hover { background: #f1f3f5; }
 <tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#non-text-content">1.1.1</a></td><td><span class="badge badge-fail">Fail</span></td><td>96</td><td>image-missing-label, image-label-contains-role</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#info-and-relationships">1.3.1</a></td><td><span class="badge badge-fail">Fail</span></td><td>53</td><td>heading-trait-missing, fake-heading-in-label</td></tr>
-<tr><td><a href="https://www.w3.org/TR/WCAG22/#contrast-minimum">1.4.3</a></td><td><span class="badge badge-warning">Review</span></td><td>37</td><td>hardcoded-color, color-contrast-insufficient</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#contrast-minimum">1.4.3</a></td><td><span class="badge badge-warning">Review</span></td><td>49</td><td>hardcoded-color, color-contrast-insufficient</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#resize-text">1.4.4</a></td><td><span class="badge badge-warning">Review</span></td><td>36</td><td>fixed-font-size, line-limit-1</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#no-keyboard-trap">2.1.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>10</td><td>sheet-focus-return</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#page-titled">2.4.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>2</td><td>missing-navigation-title</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#focus-order">2.4.3</a></td><td><span class="badge badge-fail">Fail</span></td><td>10</td><td>sheet-focus-return</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#link-purpose-in-context">2.4.4</a></td><td><span class="badge badge-pass">Pass</span></td><td>0</td><td>generic-link-text</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#target-size-minimum">2.5.8</a></td><td><span class="badge badge-warning">Review</span></td><td>20</td><td>small-touch-target</td></tr>
-<tr><td><a href="https://www.w3.org/TR/WCAG22/#name-role-value">4.1.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>100</td><td>button-label-contains-role, icon-button-missing-label, visually-disabled-not-semantic, tap-gesture-missing-button-trait, toggle-missing-label, button-used-as-link, hidden-parent-with-controls, textfield-missing-label, slider-missing-label, stepper-missing-label, picker-missing-label</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#name-role-value">4.1.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>111</td><td>button-label-contains-role, icon-button-missing-label, visually-disabled-not-semantic, tap-gesture-missing-button-trait, toggle-missing-label, button-used-as-link, hidden-parent-with-controls, textfield-missing-label, slider-missing-label, stepper-missing-label, picker-missing-label</td></tr>
 </table>
 <h2>Issues by File</h2>
 <details>
@@ -139,8 +139,8 @@ summary:hover { background: #f1f3f5; }
 <details>
 <summary>ButtonsView.swift — 4 issues <span class="badge badge-error">3 errors</span> <span class="badge badge-warning">1 warning</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">152:21</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">164:21</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">152:21</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">164:21</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">166:21</span> Button's .accessibilityLabel(&quot;Edit Button&quot;) contains 'button'. Remove it — VoiceOver announces the Button role automatically. <span class="diag-rule">button-label-contains-role</span></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">192:17</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
 </div>
@@ -299,7 +299,7 @@ summary:hover { background: #f1f3f5; }
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">104:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">123:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">123:17</span> .lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value. <span class="diag-rule">line-limit-1</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">125:17</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">125:17</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">139:21</span> .lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value. <span class="diag-rule">line-limit-1</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">139:21</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">181:17</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
@@ -468,51 +468,63 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>ContactAtlanta.swift — 2 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">1 warning</span></summary>
+<summary>ContactAtlanta.swift — 4 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">3 warnings</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">57:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">185:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">204:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">204:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
 </div>
 </details>
 <details>
-<summary>ContactAustin.swift — 2 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">1 warning</span></summary>
+<summary>ContactAustin.swift — 4 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">3 warnings</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">57:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">185:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">204:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">204:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
 </div>
 </details>
 <details>
-<summary>ContactBoston.swift — 2 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">1 warning</span></summary>
+<summary>ContactBoston.swift — 4 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">3 warnings</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">57:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">249:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">268:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">268:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
 </div>
 </details>
 <details>
-<summary>ContactOrlando.swift — 2 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">1 warning</span></summary>
+<summary>ContactOrlando.swift — 4 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">3 warnings</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">57:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">196:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">215:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">215:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
 </div>
 </details>
 <details>
-<summary>ContactReno.swift — 5 issues <span class="badge badge-error">4 errors</span> <span class="badge badge-warning">1 warning</span></summary>
+<summary>ContactReno.swift — 7 issues <span class="badge badge-error">4 errors</span> <span class="badge badge-warning">3 warnings</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">59:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">64:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">88:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">99:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">64:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">88:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">99:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">175:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">192:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">192:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
 </div>
 </details>
 <details>
-<summary>ContactSeattle.swift — 5 issues <span class="badge badge-error">4 errors</span> <span class="badge badge-warning">1 warning</span></summary>
+<summary>ContactSeattle.swift — 7 issues <span class="badge badge-error">4 errors</span> <span class="badge badge-warning">3 warnings</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">59:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">64:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">88:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">99:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">64:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">88:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">99:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">175:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">192:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">192:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
 </div>
 </details>
 <details>
@@ -522,8 +534,9 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>FormViewTest.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<summary>FormViewTest.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
 <div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">54:17</span> TextField uses placeholder text &quot;Name&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">280:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
 </div>
 </details>
@@ -726,13 +739,23 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>TextFieldsView.swift — 5 issues <span class="badge badge-error">5 errors</span></summary>
+<summary>TextFieldsView.swift — 15 issues <span class="badge badge-error">15 errors</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">214:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">222:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">259:17</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">279:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">287:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">214:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">222:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">247:17</span> TextField uses placeholder text &quot;First Name&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">249:17</span> TextField uses placeholder text &quot;Last Name&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">251:17</span> TextField uses placeholder text &quot;Username&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">253:17</span> SecureField uses placeholder text &quot;Password&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">255:17</span> TextField uses placeholder text &quot;Email&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">257:17</span> TextField uses placeholder text &quot;Street Address&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">259:17</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">261:17</span> TextField uses placeholder text &quot;City&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">263:17</span> TextField uses placeholder text &quot;State&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">265:17</span> TextField uses placeholder text &quot;Phone Number&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">268:17</span> TextField uses placeholder text &quot;Website&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">279:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">287:23</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
 </div>
 </details>
 <details>
@@ -812,7 +835,7 @@ summary:hover { background: #f1f3f5; }
 <tr><th>Rule</th><th>Severity</th><th>Count</th><th>WCAG</th></tr>
 <tr><td>button-label-contains-role</td><td><span class="badge badge-warning">warning</span></td><td>2</td><td>4.1.2</td></tr>
 <tr><td>button-used-as-link</td><td><span class="badge badge-warning">warning</span></td><td>0</td><td>4.1.2</td></tr>
-<tr><td>color-contrast-insufficient</td><td><span class="badge badge-warning">warning</span></td><td>0</td><td>1.4.3</td></tr>
+<tr><td>color-contrast-insufficient</td><td><span class="badge badge-warning">warning</span></td><td>12</td><td>1.4.3</td></tr>
 <tr><td>fake-heading-in-label</td><td><span class="badge badge-error">error</span></td><td>1</td><td>1.3.1</td></tr>
 <tr><td>fixed-font-size</td><td><span class="badge badge-warning">warning</span></td><td>29</td><td>1.4.4</td></tr>
 <tr><td>generic-link-text</td><td><span class="badge badge-warning">warning</span></td><td>0</td><td>2.4.4</td></tr>
@@ -830,7 +853,7 @@ summary:hover { background: #f1f3f5; }
 <tr><td>small-touch-target</td><td><span class="badge badge-warning">warning</span></td><td>20</td><td>2.5.8</td></tr>
 <tr><td>stepper-missing-label</td><td><span class="badge badge-error">error</span></td><td>3</td><td>4.1.2</td></tr>
 <tr><td>tap-gesture-missing-button-trait</td><td><span class="badge badge-error">error</span></td><td>11</td><td>4.1.2</td></tr>
-<tr><td>textfield-missing-label</td><td><span class="badge badge-error">error</span></td><td>14</td><td>4.1.2</td></tr>
+<tr><td>textfield-missing-label</td><td><span class="badge badge-error">error</span></td><td>25</td><td>4.1.2</td></tr>
 <tr><td>toggle-missing-label</td><td><span class="badge badge-error">error</span></td><td>1</td><td>4.1.2</td></tr>
 <tr><td>visually-disabled-not-semantic</td><td><span class="badge badge-error">error</span></td><td>17</td><td>4.1.2</td></tr>
 </table>

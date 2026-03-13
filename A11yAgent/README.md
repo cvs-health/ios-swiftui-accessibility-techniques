@@ -364,8 +364,9 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
 - **"List all the a11y rules"** — shows all 23 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
+- **"Generate an HTML accessibility report for this project"** — the AI runs `a11y-check . --format html > accessibility-report.html` in the terminal, then opens the report in your browser. The report includes a WCAG conformance table, per-file breakdown, and per-rule summary — ready to share with your team or compliance reviewers.
 
-The full loop — detect, understand, fix — happens conversationally without leaving the editor.
+The full loop — detect, understand, fix, report — happens conversationally without leaving the editor.
 
 ## Rules
 

@@ -106,8 +106,9 @@ Once the MCP server is configured, you can ask your AI assistant things like:
 | "Which of those are the most critical to fix?" | The AI explains severity levels and WCAG impact based on the results |
 | "Fix the textfield-missing-label issues" | The AI reads the diagnostics, then edits your source code to add the missing labels |
 | "What WCAG criteria does this project fail?" | The AI interprets the results and maps them to compliance requirements |
+| "Generate an HTML accessibility report for this project" | The AI runs `a11y-check --format html` in the terminal and saves a self-contained HTML report with WCAG conformance table, per-file details, and per-rule summary |
 
-The full loop — **detect, understand, fix** — happens conversationally without leaving the editor. The AI doesn't just report problems; it can explain why they matter for users with disabilities and make the code changes to resolve them.
+The full loop — **detect, understand, fix, report** — happens conversationally without leaving the editor. The AI doesn't just report problems; it can explain why they matter for users with disabilities, make the code changes to resolve them, and generate shareable reports for your team.
 
 ### Example conversation
 

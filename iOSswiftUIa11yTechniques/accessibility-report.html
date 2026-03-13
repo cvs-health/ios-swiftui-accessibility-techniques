@@ -50,9 +50,9 @@ summary:hover { background: #f1f3f5; }
 </head>
 <body>
 <h1>a11y-check Accessibility Report</h1>
-<p class="timestamp">Generated: 2026-03-13T17:32:05Z</p><div class="summary">
+<p class="timestamp">Generated: 2026-03-13T17:39:59Z</p><div class="summary">
   <div class="stat error"><div class="number">255</div><div class="label">Errors</div></div>
-  <div class="stat warning"><div class="number">218</div><div class="label">Warnings</div></div>
+  <div class="stat warning"><div class="number">207</div><div class="label">Warnings</div></div>
   <div class="stat info"><div class="number">0</div><div class="label">Info</div></div>
   <div class="stat"><div class="number">90</div><div class="label">Files</div></div>
 </div><h2>WCAG 2.2 Conformance</h2>
@@ -60,7 +60,7 @@ summary:hover { background: #f1f3f5; }
 <tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#non-text-content">1.1.1</a></td><td><span class="badge badge-fail">Fail</span></td><td>115</td><td>image-missing-label, image-label-contains-role</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#info-and-relationships">1.3.1</a></td><td><span class="badge badge-fail">Fail</span></td><td>57</td><td>heading-trait-missing, fake-heading-in-label</td></tr>
-<tr><td><a href="https://www.w3.org/TR/WCAG22/#contrast-minimum">1.4.3</a></td><td><span class="badge badge-warning">Review</span></td><td>85</td><td>hardcoded-color, color-contrast-insufficient</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#contrast-minimum">1.4.3</a></td><td><span class="badge badge-warning">Review</span></td><td>74</td><td>hardcoded-color, color-contrast-insufficient</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#resize-text">1.4.4</a></td><td><span class="badge badge-warning">Review</span></td><td>40</td><td>fixed-font-size, line-limit-1</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#no-keyboard-trap">2.1.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>12</td><td>sheet-focus-return</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#page-titled">2.4.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>2</td><td>missing-navigation-title</td></tr>
@@ -71,12 +71,8 @@ summary:hover { background: #f1f3f5; }
 </table>
 <h2>Issues by File</h2>
 <details>
-<summary>AccessibilitySortPriorityWatch.swift — 3 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">2 warnings</span></summary>
+<summary>AccessibilitySortPriorityWatch.swift — 2 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">1 warning</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">29:13</span> Contrast ratio 1.0:1 between foreground (.orange) and background (.orange) is below the 4.5:1 minimum for normal text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  28 |             Text(&quot;`.accessibilitySortPriority(#)` can be used to control VoiceOver reading order if the default order is not meaningful. Higher numbers are sorted first, e.g. 99 is read before 1. The default sort priority is 0.&quot;)
-<span class="line-bad">&gt; 29 |             Text(&quot;Platform Defect Example&quot;)</span>
-  30 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 4.5:1</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">42:17</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  41 |                 Text(&quot;Birth Date&quot;)
 <span class="line-bad">&gt; 42 |                 Button(action: {</span>
   43 |                      isDatePickerPresented = true
@@ -91,7 +87,7 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>CombiningFocusWatch.swift — 5 issues <span class="badge badge-error">2 errors</span> <span class="badge badge-warning">3 warnings</span></summary>
+<summary>CombiningFocusWatch.swift — 4 issues <span class="badge badge-error">2 errors</span> <span class="badge badge-warning">2 warnings</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">34:12</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  33 |        VStack {
 <span class="line-bad">&gt; 34 |            Image(systemName: user.image)</span>
@@ -107,10 +103,6 @@ summary:hover { background: #f1f3f5; }
   &gt; 48 |             Image(systemName: user.image)
   &gt; 48 |                 .accessibilityLabel(&quot;description&quot;) or use Image(decorative:)
   49 |            Text(user.name)</div></div>
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">68:13</span> Contrast ratio 1.0:1 between foreground (.green) and background (.green) is below the 4.5:1 minimum for normal text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  67 |             Text(&quot;Use `.accessibilityElement(children: .combine)` to combine child views into a parent view focused by VoiceOver as a single element. When combining child elements their accessibility properties may not all transfer into the combined view as expected. If a child `Button` is combined into a parent element the button's accessibility label will not transfer unless the `.isButton` trait is removed. If important traits are removed in the child elements make sure to add them back to the combined accessibility element.&quot;)
-<span class="line-bad">&gt; 68 |             Text(&quot;Good Example&quot;)</span>
-  69 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 4.5:1</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">85:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  84 |             NavigationLink(destination: DetailCombiningFocusGood()) {
 <span class="line-bad">&gt; 85 |                 Text(&quot;Details&quot;)</span>
   86 |                     .frame(maxWidth: .infinity)
@@ -122,12 +114,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>DecorativeImagesWatch.swift — 7 issues <span class="badge badge-error">2 errors</span> <span class="badge badge-warning">5 warnings</span></summary>
+<summary>DecorativeImagesWatch.swift — 6 issues <span class="badge badge-error">2 errors</span> <span class="badge badge-warning">4 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">26:13</span> Contrast ratio 1.0:1 between foreground (.green) and background (.green) is below the 4.5:1 minimum for normal text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  25 |             Text(&quot;Decorative images are used purely for decoration and convey no meaning to sighted users. Decorative images must be hidden from VoiceOver users. Use `Image(decorative:)` or `.accessibilityHidden(true)` to hide decorative images from VoiceOver.&quot;)
-<span class="line-bad">&gt; 26 |             Text(&quot;Good Examples&quot;)</span>
-  27 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 4.5:1</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">50:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  49 |             NavigationLink(destination: DetailDecorativeGood()) {
 <span class="line-bad">&gt; 50 |                 Text(&quot;Details&quot;)</span>
   51 |                     .frame(maxWidth: .infinity)
@@ -161,12 +149,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>FunctionalImagesWatch.swift — 10 issues <span class="badge badge-error">5 errors</span> <span class="badge badge-warning">5 warnings</span></summary>
+<summary>FunctionalImagesWatch.swift — 9 issues <span class="badge badge-error">5 errors</span> <span class="badge badge-warning">4 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">30:13</span> Contrast ratio 1.0:1 between foreground (.green) and background (.green) is below the 4.5:1 minimum for normal text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  29 |             Text(&quot;Functional images are actionable images used as buttons or links. Functional images need accessibility labels that describe their function rather than their appearance. Use an `.accessibilityLabel` if the functional image has no visible text.&quot;)
-<span class="line-bad">&gt; 30 |             Text(&quot;Good Examples&quot;)</span>
-  31 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 4.5:1</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">67:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  66 |             NavigationLink(destination: DetailFunctionalGood()) {
 <span class="line-bad">&gt; 67 |                 Text(&quot;Details&quot;)</span>
   68 |                     .frame(maxWidth: .infinity)
@@ -215,12 +199,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>HeadingsWatch.swift — 8 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">7 warnings</span></summary>
+<summary>HeadingsWatch.swift — 7 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">6 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">26:13</span> Contrast ratio 1.0:1 between foreground (.green) and background (.green) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  25 |             Text(&quot;Headings are used to title sections of content. The header trait must be applied to heading text to enable VoiceOver users to quickly navigate to headings. Use `.accessibilityAddTraits(.isHeader)` to set text as a heading for VoiceOver users. Additionally if you want to provide a level for the heading use `.accessibilityHeading(.h1)` or `(.h2-h6)` with the `.accessibilityAddTraits(.isHeader)`. When using heading levels make sure the headings do not skip a level, e.g., don't skip from a Heading Level 1 to a Heading Level 3.&quot;)
-<span class="line-bad">&gt; 26 |             Text(&quot;Good Examples&quot;)</span>
-  27 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 3.0:1</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">55:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  54 |             NavigationLink(destination: DetailHeadingsGood()) {
 <span class="line-bad">&gt; 55 |                 Text(&quot;Details&quot;)</span>
   56 |                     .frame(maxWidth: .infinity)
@@ -258,12 +238,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>InformativeImagesWatch.swift — 6 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">5 warnings</span></summary>
+<summary>InformativeImagesWatch.swift — 5 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">4 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">26:13</span> Contrast ratio 1.0:1 between foreground (.green) and background (.green) is below the 4.5:1 minimum for normal text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  25 |             Text(&quot;Give informative images accessibility labels using `Label(\&quot;text\&quot;)` or `.accessibilityLabel(\&quot;text\&quot;)`. Use `.accessibilityElement(children: .combine)` to combine an image and text into a single element.&quot;)
-<span class="line-bad">&gt; 26 |             Text(&quot;Good Examples&quot;)</span>
-  27 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 4.5:1</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">50:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  49 |             NavigationLink(destination: DetailInformativeGood()) {
 <span class="line-bad">&gt; 50 |                 Text(&quot;Details&quot;)</span>
   51 |                     .frame(maxWidth: .infinity)
@@ -290,12 +266,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>PickersWatch.swift — 7 issues <span class="badge badge-error">2 errors</span> <span class="badge badge-warning">5 warnings</span></summary>
+<summary>PickersWatch.swift — 6 issues <span class="badge badge-error">2 errors</span> <span class="badge badge-warning">4 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">42:13</span> Contrast ratio 1.0:1 between foreground (.green) and background (.green) is below the 4.5:1 minimum for normal text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  41 |             Text(&quot;Pickers with the default or `.pickerStyle(.navigationLink)` need `Picker(\&quot;Label\&quot;)` text which is spoken to VoiceOver as the accessibility label. Use `AccessibilityFocusState` to send VoiceOver focus back to `.navigationLink` style pickers when the value has been changed.&quot;)
-<span class="line-bad">&gt; 42 |             Text(&quot;Good Examples&quot;)</span>
-  43 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 4.5:1</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">65:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  64 |             NavigationLink(destination: DetailPickersGood()) {
 <span class="line-bad">&gt; 65 |                 Text(&quot;Details&quot;)</span>
   66 |                     .frame(maxWidth: .infinity)
@@ -329,12 +301,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>SheetsWatch.swift — 4 issues <span class="badge badge-warning">4 warnings</span></summary>
+<summary>SheetsWatch.swift — 3 issues <span class="badge badge-warning">3 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">29:13</span> Contrast ratio 1.0:1 between foreground (.green) and background (.green) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  28 |             Text(&quot;VoiceOver focus must move to the sheet when displayed and back to the trigger button when the sheet is closed. Sheet title text must be coded as a Heading for VoiceOver users. Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. Use `AccessibilityFocusState` to send focus back to the trigger button that opened the sheet when the sheet is closed.&quot;)
-<span class="line-bad">&gt; 29 |             Text(&quot;Good Example&quot;)</span>
-  30 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 3.0:1</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">68:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  67 |             NavigationLink(destination: DetailSheetsGood()) {
 <span class="line-bad">&gt; 68 |                 Text(&quot;Details&quot;)</span>
   69 |                     .frame(maxWidth: .infinity)
@@ -353,12 +321,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>TabsWatch.swift — 15 issues <span class="badge badge-error">4 errors</span> <span class="badge badge-warning">11 warnings</span></summary>
+<summary>TabsWatch.swift — 14 issues <span class="badge badge-error">4 errors</span> <span class="badge badge-warning">10 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">30:13</span> Contrast ratio 1.0:1 between foreground (.orange) and background (.orange) is below the 4.5:1 minimum for normal text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  29 |             Text(&quot;Use `TabView` to create native tab controls with selected state. Give each `TabView` a unique and meaningful `.accessibilityLabel`. For custom tabs use `isTabBar` and `isSelected` Traits with `.accessibilityElement(children: .contain)`.&quot;)
-<span class="line-bad">&gt; 30 |             Text(&quot;Platform Defect Examples&quot;)</span>
-  31 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 4.5:1</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">53:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  52 |             NavigationLink(destination: DetailTabsGood()) {
 <span class="line-bad">&gt; 53 |                 Text(&quot;Details&quot;)</span>
   54 |                     .frame(maxWidth: .infinity)
@@ -442,12 +406,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>TargetSizeWatch.swift — 31 issues <span class="badge badge-error">16 errors</span> <span class="badge badge-warning">15 warnings</span></summary>
+<summary>TargetSizeWatch.swift — 30 issues <span class="badge badge-error">16 errors</span> <span class="badge badge-warning">14 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">27:13</span> Contrast ratio 1.0:1 between foreground (.green) and background (.green) is below the 4.5:1 minimum for normal text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  26 |             Text(&quot;WCAG 2.2 requires a minimum touch target size (or spacing) of at least 24 by 24. Inline targets (within a line of text) are exempt from the minimum target size requirements. Use `.frame(minWidth: 24, minHeight: 24)` on icon button `Image` elements to ensure the 24 by 24 target minimum is met.&quot;)
-<span class="line-bad">&gt; 27 |             Text(&quot;Good Example&quot;)</span>
-  28 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 4.5:1</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">39:16</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span><div class="code-block">  38 |             HStack {
 <span class="line-bad">&gt; 39 |                Button(action: {</span>
   40 |                    print(&quot;First button tapped&quot;)
@@ -619,12 +579,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>TextFieldsWatch.swift — 16 issues <span class="badge badge-error">11 errors</span> <span class="badge badge-warning">5 warnings</span></summary>
+<summary>TextFieldsWatch.swift — 15 issues <span class="badge badge-error">11 errors</span> <span class="badge badge-warning">4 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">50:13</span> Contrast ratio 1.0:1 between foreground (.green) and background (.green) is below the 4.5:1 minimum for normal text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span><div class="code-block">  49 |             Text(&quot;Text fields require visible label text next to the field set as the `.accessibilityLabel` of the `TextField`. Or provide visible labels using `LabeledContent` and then an `.accessibilityLabel` is not required. Don't use placeholder text which has insufficient contrast and disappears. Use `.border(.secondary)` to give the border a 3:1 contrast ratio in light and dark mode. Use `.textContentType` to enable form AutoFill for each `TextField`.&quot;)
-<span class="line-bad">&gt; 50 |             Text(&quot;Good Examples&quot;)</span>
-  51 |                 .font(.subheadline)
-</div><div class="suggestion">Choose colors with a contrast ratio of at least 4.5:1</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">149:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  148 |             NavigationLink(destination: DetailGood()) {
 <span class="line-bad">&gt; 149 |                 Text(&quot;Details&quot;)</span>
   150 |                     .frame(maxWidth: .infinity)
@@ -3317,7 +3273,7 @@ summary:hover { background: #f1f3f5; }
 <tr><th>Rule</th><th>Severity</th><th>Count</th><th>WCAG</th></tr>
 <tr><td>button-label-contains-role</td><td><span class="badge badge-warning">warning</span></td><td>2</td><td>4.1.2</td></tr>
 <tr><td>button-used-as-link</td><td><span class="badge badge-warning">warning</span></td><td>0</td><td>4.1.2</td></tr>
-<tr><td>color-contrast-insufficient</td><td><span class="badge badge-warning">warning</span></td><td>11</td><td>1.4.3</td></tr>
+<tr><td>color-contrast-insufficient</td><td><span class="badge badge-warning">warning</span></td><td>0</td><td>1.4.3</td></tr>
 <tr><td>fake-heading-in-label</td><td><span class="badge badge-error">error</span></td><td>2</td><td>1.3.1</td></tr>
 <tr><td>fixed-font-size</td><td><span class="badge badge-warning">warning</span></td><td>33</td><td>1.4.4</td></tr>
 <tr><td>generic-link-text</td><td><span class="badge badge-warning">warning</span></td><td>2</td><td>2.4.4</td></tr>

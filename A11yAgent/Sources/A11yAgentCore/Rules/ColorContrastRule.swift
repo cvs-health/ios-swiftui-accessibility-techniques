@@ -25,6 +25,16 @@ public struct ColorContrastRule: A11yRule {
         "Font.largeTitle", "Font.title", "Font.title2", "Font.title3",
     ]
 
+    /// Views that directly render text. Container/layout views are excluded
+    /// because their ModifierCollector walks closure bodies and would pair
+    /// foreground/background colors from different child views (false positive).
+    private static let textBearingViews: Set<String> = [
+        "Text", "Label", "Button", "Link", "NavigationLink",
+        "TextField", "SecureField", "TextEditor",
+        "Toggle", "Slider", "Stepper", "Picker", "DatePicker", "ColorPicker",
+        "Menu", "DisclosureGroup", "ProgressView", "Gauge",
+    ]
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax)
         var diagnostics: [A11yDiagnostic] = []
@@ -32,14 +42,23 @@ public struct ColorContrastRule: A11yRule {
         let threshold = context.configOptions.contrastRatio ?? ContrastCalculator.aaNormalText
 
         for view in visitor.detectedViews {
+            guard Self.textBearingViews.contains(view.viewType) else { continue }
+
             let mods = view.modifiers
 
-            // Find foreground color
+            // Find foreground color — only from the view's direct modifier chain
             let fgMod = Self.foregroundModifiers.compactMap { mods.modifiers(named: $0).first }.first
-            // Find background color
+            // Find background color — only from the view's direct modifier chain
             let bgMod = Self.backgroundModifiers.compactMap { mods.modifiers(named: $0).first }.first
 
             guard let fg = fgMod, let bg = bgMod else { continue }
+
+            // Both modifiers must be on the same direct chain (not from different
+            // child views inside a closure). Verify neither sits inside a closure
+            // that is a descendant of the view call — that would mean it belongs
+            // to a child view, not this view's own chain.
+            if isInsideClosure(fg.callExpr, relativeTo: view.callExpr) { continue }
+            if isInsideClosure(bg.callExpr, relativeTo: view.callExpr) { continue }
 
             let fgText = fg.arguments.first?.text ?? ""
             let bgText = bg.arguments.first?.text ?? ""
@@ -70,5 +89,22 @@ public struct ColorContrastRule: A11yRule {
         }
 
         return diagnostics
+    }
+
+    /// Returns true when `modifier` lives inside a closure body that is a
+    /// descendant of `viewCall`. This catches modifiers on child views inside
+    /// a container's trailing closure which should not be attributed to the
+    /// container itself.
+    private func isInsideClosure(
+        _ modifier: FunctionCallExprSyntax,
+        relativeTo viewCall: FunctionCallExprSyntax
+    ) -> Bool {
+        var node: Syntax? = Syntax(modifier)
+        while let current = node {
+            if current.id == Syntax(viewCall).id { return false }
+            if current.is(ClosureExprSyntax.self) { return true }
+            node = current.parent
+        }
+        return false
     }
 }

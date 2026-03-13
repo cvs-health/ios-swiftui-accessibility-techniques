@@ -747,6 +747,41 @@ final class A11yAgentCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0)
     }
 
+    func testColorContrastRule_doesNotPairSiblingViewColors() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                ScrollView {
+                    Text("Good Example")
+                        .foregroundColor(.green)
+                    Divider()
+                        .background(.green)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 0, "Should not pair foreground from Text with background from sibling Divider")
+    }
+
+    func testColorContrastRule_skipsContainerViews() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("Hello")
+                        .foregroundColor(.white)
+                }
+                .background(.white)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 0, "VStack is a container; its children's colors should not be paired with its own background")
+    }
+
     // MARK: - Diff Filter
 
     func testDiffFilterParsesUnifiedDiff() {

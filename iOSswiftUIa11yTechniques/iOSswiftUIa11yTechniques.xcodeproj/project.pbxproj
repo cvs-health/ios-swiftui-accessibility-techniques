@@ -798,6 +798,7 @@
 				AABD27B32A9FE69300F718F7 /* Frameworks */,
 				AABD27B42A9FE69300F718F7 /* Resources */,
 				BCE1B4672D5FFE15001F92EF /* Embed Watch Content */,
+				AA569AF52F634BEC0088A349 /* a11y-check */,
 			);
 			buildRules = (
 			);
@@ -1009,6 +1010,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		AA569AF52F634BEC0088A349 /* a11y-check */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "a11y-check";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/opt/homebrew/bin/a11y-check \"${SRCROOT}/iOSswiftUIa11yTechniques/\" --format xcode || true\n";
+		};
 		BCA0FC562EE0AD0A001628CD /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

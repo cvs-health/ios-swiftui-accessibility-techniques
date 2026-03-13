@@ -39,7 +39,9 @@ brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 If the build fails with `cannot find type 'SendableMetatype' in scope`, run:  
 `env -u SDKROOT brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`
 
-Then run `a11y-check` from anywhere.
+Then run `a11y-check` from anywhere. Run `which a11y-check` to confirm the install path (typically `/opt/homebrew/bin/a11y-check`).
+
+> **Note:** If you later build a newer version from source, the Homebrew-installed binary remains at the old version until you reinstall. See [Keeping the binary up to date](#keeping-the-binary-up-to-date) under Xcode integration.
 
 ### Build from source
 
@@ -190,21 +192,89 @@ Image(systemName: "star")
 
 ## Xcode integration
 
-Add a11y-check as a **Run Script** build phase so issues appear inline in Xcode's editor:
+Add a11y-check as a **Run Script** build phase so issues appear inline in Xcode's editor, just like compiler warnings.
+
+### Setup
 
 1. In Xcode, select your target → **Build Phases** → **+** → **New Run Script Phase**.
-2. Add this script:
+2. Name the phase **a11y-check** (double-click the title).
+3. Add this script (use the **full path** to the binary — see note below):
 
    ```bash
-   if command -v a11y-check &> /dev/null; then
-       a11y-check "${SRCROOT}/Sources" --format xcode
-   fi
+   /opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode || true
    ```
 
-3. Build your project. Accessibility issues appear as inline warnings and errors.
+   Replace `YourAppName` with the folder containing your Swift source files. `${SRCROOT}` is the directory containing your `.xcodeproj` file.
 
-The `--format xcode` output uses the format Xcode expects:  
-`file:line:column: warning: [rule-id] message [WCAG criteria]`
+4. **Uncheck** "Based on dependency analysis" — otherwise Xcode may cache old results and skip running the script.
+5. Build your project. Accessibility issues appear as inline errors and warnings in the editor.
+
+### Important: use the full path to the binary
+
+Xcode build scripts run with a minimal `/bin/sh` environment that does **not** inherit your shell's `PATH`. Even if `a11y-check` works fine in Terminal, Xcode won't find it by name alone. Always use the absolute path:
+
+```bash
+# Good — Xcode can find this
+/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode || true
+
+# Bad — Xcode can't find this (not in its PATH)
+a11y-check "${SRCROOT}/Sources" --format xcode || true
+```
+
+Find your binary path by running `which a11y-check` in Terminal. If you built from source instead of Homebrew, use the full path to `.build/debug/a11y-check` or `.build/release/a11y-check`.
+
+### Performance: scope the scan
+
+Scanning your entire source tree can take **30–60+ seconds** on large projects, which slows down every build. To keep builds fast:
+
+```bash
+# Slow — scans everything recursively
+/opt/homebrew/bin/a11y-check "${SRCROOT}" --format xcode || true
+
+# Better — scope to just your source directory
+/opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode || true
+
+# Fastest — scan specific files
+/opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName/Views/ProfileView.swift" --format xcode || true
+```
+
+Exclude generated code and third-party dependencies by scoping the path or using an [`.a11ycheck.yml` config file](#configuration-file) with `exclude_paths`.
+
+### Exit codes and `|| true`
+
+a11y-check exits with code **1** when any error-severity diagnostic is found. Without `|| true`, this causes Xcode to treat the build phase as a failure, which **stops the build**. Add `|| true` to let the build continue while still showing the inline annotations:
+
+```bash
+# Build continues even with errors (recommended during development)
+/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode || true
+
+# Build fails on accessibility errors (recommended for CI or strict enforcement)
+/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode
+```
+
+### Keeping the binary up to date
+
+If you installed via Homebrew and later build a newer version from source, the Homebrew binary at `/opt/homebrew/bin/a11y-check` may be outdated and missing new features like `--format xcode`. To update it:
+
+```bash
+# Option 1: reinstall via Homebrew
+brew reinstall --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
+
+# Option 2: copy the locally built binary over the Homebrew one
+brew unlink a11y-check
+cp A11yAgent/.build/debug/a11y-check /opt/homebrew/bin/a11y-check
+```
+
+### Output format
+
+The `--format xcode` output uses the format Xcode expects for inline annotations:
+
+```
+/path/to/File.swift:42:13: error: [rule-id] Message text [WCAG X.Y.Z]
+/path/to/File.swift:58:9: warning: [rule-id] Message text [WCAG X.Y.Z]
+```
+
+Xcode picks these up automatically and displays them in both the source editor (inline) and the Issue Navigator (left panel). You can filter the Issue Navigator by typing a rule ID (e.g. `textfield-missing-label`) to find a11y-check issues specifically.
 
 ## HTML report
 
@@ -285,6 +355,43 @@ a11y-check includes 23 rules across these categories:
 The **color contrast** rule computes actual WCAG 2.x contrast ratios when both foreground and background colors can be resolved — including SwiftUI system colors (`.black`, `.white`, `.red`, etc.), `Color(red:green:blue:)` literals, hex patterns, and named colors from your `.xcassets` catalogs.
 
 Run `a11y-check --list-rules` for full descriptions and severities.
+
+## Troubleshooting
+
+### "a11y-check: command not found" in Xcode
+
+Xcode build scripts use a minimal PATH that doesn't include `/opt/homebrew/bin`. Use the **full path** to the binary in your Run Script build phase. See [Xcode integration](#xcode-integration).
+
+### No warnings appear in Xcode after building
+
+| Check | Fix |
+|-------|-----|
+| **Old binary** — does `a11y-check --help` show `--format xcode`? | [Update the binary](#keeping-the-binary-up-to-date). Homebrew installs can be outdated. |
+| **"Based on dependency analysis" is checked** | Uncheck it in the build phase settings so Xcode runs the script every build. |
+| **Wrong source path** | `${SRCROOT}` is the folder containing `.xcodeproj`. Print it with `echo "${SRCROOT}" > /tmp/srcroot.txt` in the script to verify. |
+| **Binary not at expected path** | Run `which a11y-check` in Terminal and make sure the path in the script matches. |
+
+**Debug tip:** Temporarily change your build phase script to write output to a file so you can inspect it:
+
+```bash
+echo "SRCROOT=${SRCROOT}" > /tmp/a11y-check-debug.log
+/opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode >> /tmp/a11y-check-debug.log 2>&1
+echo "EXIT CODE: $?" >> /tmp/a11y-check-debug.log
+```
+
+After building, open `/tmp/a11y-check-debug.log` to see what happened.
+
+### Build is slow after adding a11y-check
+
+Scanning a large project can take 30–60+ seconds. Scope the scan to a specific subdirectory or file instead of the project root. See [Performance: scope the scan](#performance-scope-the-scan).
+
+### `cannot find type 'SendableMetatype' in scope` during Homebrew install
+
+Run the install with SDKROOT cleared:
+
+```bash
+env -u SDKROOT brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
+```
 
 ## License
 

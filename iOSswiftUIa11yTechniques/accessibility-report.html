@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>a11y-check Report</title>
+<style>
+:root {
+  --bg: #f8f9fa; --card-bg: #fff; --text: #1a1a2e; --border: #dee2e6;
+  --error: #dc3545; --error-bg: #f8d7da; --warning: #856404; --warning-bg: #fff3cd;
+  --info: #0c5460; --info-bg: #d1ecf1; --pass: #155724; --pass-bg: #d4edda;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+.timestamp { color: #6c757d; font-size: 0.875rem; margin-bottom: 1.5rem; }
+.summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.stat { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; min-width: 120px; text-align: center; }
+.stat .number { font-size: 2rem; font-weight: 700; }
+.stat .label { font-size: 0.875rem; color: #6c757d; }
+.stat.error .number { color: var(--error); }
+.stat.warning .number { color: var(--warning); }
+.stat.info .number { color: var(--info); }
+h2 { font-size: 1.25rem; margin: 2rem 0 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+th, td { padding: 0.625rem 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+th { background: #f1f3f5; font-weight: 600; }
+.badge { display: inline-block; padding: 0.125rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+.badge-pass { background: var(--pass-bg); color: var(--pass); }
+.badge-fail { background: var(--error-bg); color: var(--error); }
+.badge-error { background: var(--error-bg); color: var(--error); }
+.badge-warning { background: var(--warning-bg); color: var(--warning); }
+.badge-info { background: var(--info-bg); color: var(--info); }
+details { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.75rem; }
+summary { padding: 0.75rem 1rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; }
+summary:hover { background: #f1f3f5; }
+.diag-list { padding: 0.5rem 1rem 1rem; }
+.diag { padding: 0.5rem 0; border-bottom: 1px solid #f1f3f5; font-size: 0.8125rem; }
+.diag:last-child { border-bottom: none; }
+.diag-loc { color: #6c757d; font-family: monospace; }
+.diag-rule { color: #6c757d; font-style: italic; }
+</style>
+</head>
+<body>
+<h1>a11y-check Accessibility Report</h1>
+<p class="timestamp">Generated: 2026-03-12T21:34:32Z</p><div class="summary">
+  <div class="stat error"><div class="number">205</div><div class="label">Errors</div></div>
+  <div class="stat warning"><div class="number">161</div><div class="label">Warnings</div></div>
+  <div class="stat info"><div class="number">0</div><div class="label">Info</div></div>
+  <div class="stat"><div class="number">78</div><div class="label">Files</div></div>
+</div><h2>WCAG 2.2 Conformance</h2>
+<table>
+<tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#non-text-content">1.1.1</a></td><td><span class="badge badge-fail">Fail</span></td><td>96</td><td>image-missing-label, image-label-contains-role</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#info-and-relationships">1.3.1</a></td><td><span class="badge badge-fail">Fail</span></td><td>53</td><td>heading-trait-missing, fake-heading-in-label</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#contrast-minimum">1.4.3</a></td><td><span class="badge badge-warning">Review</span></td><td>49</td><td>hardcoded-color, color-contrast-insufficient</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#resize-text">1.4.4</a></td><td><span class="badge badge-warning">Review</span></td><td>36</td><td>fixed-font-size, line-limit-1</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#no-keyboard-trap">2.1.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>10</td><td>sheet-focus-return</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#page-titled">2.4.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>2</td><td>missing-navigation-title</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#focus-order">2.4.3</a></td><td><span class="badge badge-fail">Fail</span></td><td>10</td><td>sheet-focus-return</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#link-purpose-in-context">2.4.4</a></td><td><span class="badge badge-pass">Pass</span></td><td>0</td><td>generic-link-text</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#target-size-minimum">2.5.8</a></td><td><span class="badge badge-warning">Review</span></td><td>20</td><td>small-touch-target</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#name-role-value">4.1.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>100</td><td>button-label-contains-role, icon-button-missing-label, visually-disabled-not-semantic, tap-gesture-missing-button-trait, toggle-missing-label, button-used-as-link, hidden-parent-with-controls, textfield-missing-label, slider-missing-label, stepper-missing-label, picker-missing-label</td></tr>
+</table>
+<h2>Issues by File</h2>
+<details>
+<summary>ATdetectionView.swift — 3 issues <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">54:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">57:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">132:13</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>AccessibilityHidden.swift — 4 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">86:9</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">96:17</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">101:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">113:17</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+</div>
+</details>
+<details>
+<summary>AccessibilityIdentifier.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">63:17</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">66:21</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>AccessibilityRepresentationView.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">138:33</span> Slider has no label. Add label text or .accessibilityLabel() so VoiceOver users know what value they're adjusting. <span class="diag-rule">slider-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>AccessibilityRespondsToUserInteraction.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">26:9</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">26:9</span> alert(…) should return focus when closed. Add @AccessibilityFocusState (or @FocusState) and set it in a button action or in the alert content so VoiceOver/keyboard focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+</div>
+</details>
+<details>
+<summary>AccessibilitySortPriority.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">46:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+</div>
+</details>
+<details>
+<summary>AccessibilityTraitsView.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">95:17</span> alert(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the alert content when closing so focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">121:17</span> alert(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the alert content when closing so focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+</div>
+</details>
+<details>
+<summary>AccordionsView.swift — 3 issues <span class="badge badge-error">3 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">24:9</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">25:13</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">110:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>ActionsView.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">45:13</span> alert(…) should return focus when closed. Add @AccessibilityFocusState (or @FocusState) and set it in a button action or in the alert content so VoiceOver/keyboard focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+</div>
+</details>
+<details>
+<summary>AdjustableActionView.swift — 4 issues <span class="badge badge-error">4 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">22:19</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">23:18</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">52:19</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">53:18</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>ButtonsView.swift — 4 issues <span class="badge badge-error">3 errors</span> <span class="badge badge-warning">1 warning</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">152:21</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">164:21</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">166:21</span> Button's .accessibilityLabel(&quot;Edit Button&quot;) contains 'button'. Remove it — VoiceOver announces the Button role automatically. <span class="diag-rule">button-label-contains-role</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">192:17</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+</div>
+</details>
+<details>
+<summary>CardsView.swift — 12 issues <span class="badge badge-error">5 errors</span> <span class="badge badge-warning">7 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">106:25</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">153:29</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">153:29</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">163:29</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">253:21</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">293:17</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">295:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">295:25</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">305:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">313:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">330:33</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">333:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>CarouselView.swift — 42 issues <span class="badge badge-error">18 errors</span> <span class="badge badge-warning">24 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">66:37</span> Touch target height 10pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">68:37</span> Touch target height 10pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">78:37</span> Touch target height 10pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">80:37</span> Touch target height 10pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">90:37</span> Touch target height 10pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">92:37</span> Touch target height 10pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">117:41</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">117:41</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">117:41</span> Hardcoded color Color.black in .background() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">138:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">146:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">177:41</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">177:41</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">177:41</span> Hardcoded color Color.black in .background() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">198:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">206:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">236:41</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">236:41</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">236:41</span> Hardcoded color Color.black in .background() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">257:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">265:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">335:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">341:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">341:41</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">341:41</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">354:33</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">360:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">368:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">385:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">391:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">391:41</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">391:41</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">404:33</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">410:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">418:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">435:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">441:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">441:41</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">441:41</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">454:33</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">460:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">468:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>CarouselViewBad.swift — 21 issues <span class="badge badge-error">12 errors</span> <span class="badge badge-warning">9 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">76:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">82:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">82:41</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">82:41</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">95:33</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">101:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">109:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">126:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">132:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">132:41</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">132:41</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">145:33</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">151:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">159:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">176:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">182:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">182:41</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">182:41</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">195:33</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">201:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">209:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>CheckboxesView.swift — 4 issues <span class="badge badge-error">4 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">120:37</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">127:37</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">188:5</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">190:9</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>CombiningFocusView.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">34:12</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">48:12</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>ContainersView.swift — 5 issues <span class="badge badge-warning">5 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">26:17</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">40:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">81:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">85:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">90:33</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>ContentView.swift — 2 issues <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">91:22</span> Hardcoded color Color.white in .background() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">94:26</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+</div>
+</details>
+<details>
+<summary>DarkModeView.swift — 3 issues <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">73:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">81:21</span> Hardcoded color .black in .background() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">84:21</span> Hardcoded color .white in .tint() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+</div>
+</details>
+<details>
+<summary>DecorativeView.swift — 3 issues <span class="badge badge-error">3 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">27:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">88:17</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">107:17</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>DimFlashingLightsView.swift — 2 issues <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">92:13</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">139:13</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>DynamicTypeView.swift — 9 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">8 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">48:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">63:21</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">104:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">123:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">123:17</span> .lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value. <span class="diag-rule">line-limit-1</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">125:17</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">139:21</span> .lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value. <span class="diag-rule">line-limit-1</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">139:21</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">181:17</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+</div>
+</details>
+<details>
+<summary>ErrorValidationView.swift — 6 issues <span class="badge badge-warning">6 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">196:17</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">225:13</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">239:13</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">329:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">370:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">465:17</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+</div>
+</details>
+<details>
+<summary>FocusManagementView.swift — 1 issue <span class="badge badge-warning">1 warning</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">128:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>FormA.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">46:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+</div>
+</details>
+<details>
+<summary>FormB.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">46:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+</div>
+</details>
+<details>
+<summary>FunctionalView.swift — 5 issues <span class="badge badge-error">5 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">102:17</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">102:17</span> alert(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the alert content when closing so focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">105:21</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">123:17</span> alert(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the alert content when closing so focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">124:21</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>HeadingsView.swift — 5 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">4 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">99:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">119:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">119:17</span> Accessibility label &quot;Store Hours heading&quot; contains 'heading'. Use .accessibilityAddTraits(.isHeader) instead of faking a heading in the label text. <span class="diag-rule">fake-heading-in-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">150:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">170:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>HomeTabView.swift — 4 issues <span class="badge badge-warning">4 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">25:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">37:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">50:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">63:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>HorizontalScrollView.swift — 1 issue <span class="badge badge-warning">1 warning</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">159:37</span> .lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value. <span class="diag-rule">line-limit-1</span></div>
+</div>
+</details>
+<details>
+<summary>IncreaseContrastView.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">44:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+</div>
+</details>
+<details>
+<summary>InformativeView.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">149:17</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">181:21</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>InputInstructionsView.swift — 2 issues <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">74:17</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">126:17</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+</div>
+</details>
+<details>
+<summary>LargeContentViewerView.swift — 7 issues <span class="badge badge-error">6 errors</span> <span class="badge badge-warning">1 warning</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">27:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">40:17</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">74:33</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">105:21</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">106:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">112:21</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">115:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>MagicTapView.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">28:13</span> alert(…) should return focus when closed. Add @AccessibilityFocusState (or @FocusState) and set it in a button action or in the alert content so VoiceOver/keyboard focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+</div>
+</details>
+<details>
+<summary>MeaningfulAccessibleNamesView.swift — 2 issues <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">69:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">138:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>MenusView.swift — 11 issues <span class="badge badge-error">11 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">67:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">95:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">105:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">115:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">123:26</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">143:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">153:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">162:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">171:37</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">180:37</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">188:37</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>MessagesTabView.swift — 2 issues <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">37:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">39:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>MultiSelectionListView.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">24:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>NavigationLinkView.swift — 4 issues <span class="badge badge-error">4 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">73:24</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">74:28</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">100:21</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">134:17</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+</div>
+</details>
+<details>
+<summary>PickersView.swift — 3 issues <span class="badge badge-error">3 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">170:17</span> Picker has no label. Add label text or .accessibilityLabel(). <span class="diag-rule">picker-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">184:17</span> Picker has no label. Add label text or .accessibilityLabel(). <span class="diag-rule">picker-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">198:17</span> Picker has no label. Add label text or .accessibilityLabel(). <span class="diag-rule">picker-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>PopoversView.swift — 2 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">1 warning</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">44:17</span> popover(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the popover content when closing so focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">85:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>ContactAtlanta.swift — 4 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">57:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">185:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">204:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">204:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+</div>
+</details>
+<details>
+<summary>ContactAustin.swift — 4 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">57:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">185:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">204:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">204:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+</div>
+</details>
+<details>
+<summary>ContactBoston.swift — 4 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">57:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">249:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">268:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">268:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+</div>
+</details>
+<details>
+<summary>ContactOrlando.swift — 4 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">57:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">196:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">215:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">215:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+</div>
+</details>
+<details>
+<summary>ContactReno.swift — 7 issues <span class="badge badge-error">4 errors</span> <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">59:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">64:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">88:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">99:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">175:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">192:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">192:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+</div>
+</details>
+<details>
+<summary>ContactSeattle.swift — 7 issues <span class="badge badge-error">4 errors</span> <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">59:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">64:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">88:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">99:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">175:21</span> Hardcoded color .black in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">192:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">192:17</span> Contrast ratio 1.2:1 between foreground (.gray) and background (Color.blue) is below the 3.0:1 minimum for large text (WCAG 1.4.3). <span class="diag-rule">color-contrast-insufficient</span></div>
+</div>
+</details>
+<details>
+<summary>DOBpicker.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">32:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+</div>
+</details>
+<details>
+<summary>FormViewTest.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">280:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>MarkdownView.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">68:21</span> Slider has no label. Add label text or .accessibilityLabel() so VoiceOver users know what value they're adjusting. <span class="diag-rule">slider-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>SignUp0.swift — 3 issues <span class="badge badge-error">3 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">88:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">298:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">315:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>SignUp1.swift — 8 issues <span class="badge badge-error">8 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">166:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">396:17</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">399:25</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">400:29</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">443:29</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">488:25</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">539:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">557:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>SignUp2.swift — 9 issues <span class="badge badge-error">9 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">143:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">369:17</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">372:25</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">373:29</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">399:25</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">400:29</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">452:29</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">509:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">527:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>SignUpA.swift — 4 issues <span class="badge badge-error">4 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">43:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">161:17</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">165:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">205:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>SignUpB.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">59:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">100:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>SignUpC.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">59:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">102:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>SignUpD.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">71:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>RadioButtonsView.swift — 2 issues <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">107:17</span> Touch target width 15pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">131:17</span> Touch target width 15pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+</div>
+</details>
+<details>
+<summary>ReadingOrderView.swift — 3 issues <span class="badge badge-warning">3 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">103:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">108:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">113:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>ReduceMotionView.swift — 4 issues <span class="badge badge-warning">4 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">55:17</span> Accessibility label &quot;Rotating gear icon that stops moving when reduce motion is enabled.&quot; contains 'icon'. The Image role is announced automatically by VoiceOver — remove the role word from the label. <span class="diag-rule">image-label-contains-role</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">55:17</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">86:17</span> Accessibility label &quot;Rotating gear icon that does not stop moving even when reduce motion is enabled.&quot; contains 'icon'. The Image role is announced automatically by VoiceOver — remove the role word from the label. <span class="diag-rule">image-label-contains-role</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">86:17</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+</div>
+</details>
+<details>
+<summary>ReduceTransparencyView.swift — 3 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">44:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">46:25</span> Inline color definition in .foregroundColor() — consider using a named color from asset catalog with Dark Mode variants to ensure contrast in both modes. <span class="diag-rule">hardcoded-color</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">46:25</span> Inline color definition in .background() — consider using a named color from asset catalog with Dark Mode variants to ensure contrast in both modes. <span class="diag-rule">hardcoded-color</span></div>
+</div>
+</details>
+<details>
+<summary>RedundantEntryView.swift — 8 issues <span class="badge badge-error">2 errors</span> <span class="badge badge-warning">6 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">63:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">118:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">179:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">199:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">228:29</span> alert(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the alert content when closing so focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">246:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">275:29</span> alert(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the alert content when closing so focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">293:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<details>
+<summary>ResponsiveLayoutsView.swift — 7 issues <span class="badge badge-warning">7 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">105:25</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">138:25</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">198:29</span> .lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value. <span class="diag-rule">line-limit-1</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">226:25</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">235:29</span> .lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value. <span class="diag-rule">line-limit-1</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">263:25</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">272:29</span> .lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value. <span class="diag-rule">line-limit-1</span></div>
+</div>
+</details>
+<details>
+<summary>ScrollViews.swift — 1 issue <span class="badge badge-warning">1 warning</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">42:29</span> Button label text &quot;Button 0&quot; contains 'button'. The role is announced automatically by VoiceOver. <span class="diag-rule">button-label-contains-role</span></div>
+</div>
+</details>
+<details>
+<summary>SearchSuggestionsView.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">64:17</span> NavigationStack is missing .navigationTitle(). Set a page title so VoiceOver users know which screen they're on. <span class="diag-rule">missing-navigation-title</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">102:17</span> NavigationStack is missing .navigationTitle(). Set a page title so VoiceOver users know which screen they're on. <span class="diag-rule">missing-navigation-title</span></div>
+</div>
+</details>
+<details>
+<summary>SheetsView.swift — 2 issues <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">137:25</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">165:25</span> .lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value. <span class="diag-rule">line-limit-1</span></div>
+</div>
+</details>
+<details>
+<summary>SlidersView.swift — 3 issues <span class="badge badge-error">3 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">98:17</span> Slider has no label. Add label text or .accessibilityLabel() so VoiceOver users know what value they're adjusting. <span class="diag-rule">slider-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">123:17</span> Slider has no label. Add label text or .accessibilityLabel() so VoiceOver users know what value they're adjusting. <span class="diag-rule">slider-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">134:17</span> Slider has no label. Add label text or .accessibilityLabel() so VoiceOver users know what value they're adjusting. <span class="diag-rule">slider-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>SteppersView.swift — 3 issues <span class="badge badge-error">3 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">49:17</span> Stepper has no label. Add label text or .accessibilityLabel(). <span class="diag-rule">stepper-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">101:21</span> Stepper has no label. Add label text or .accessibilityLabel(). <span class="diag-rule">stepper-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">114:21</span> Stepper has no label. Add label text or .accessibilityLabel(). <span class="diag-rule">stepper-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>SwiftLintView.swift — 7 issues <span class="badge badge-error">7 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">27:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">84:17</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">88:17</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">92:17</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">94:17</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">97:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">99:17</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+</div>
+</details>
+<details>
+<summary>TabsView.swift — 8 issues <span class="badge badge-error">4 errors</span> <span class="badge badge-warning">4 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">95:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">95:29</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">106:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">106:29</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">146:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">146:29</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">156:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">156:29</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+</div>
+</details>
+<details>
+<summary>TextEditorView.swift — 5 issues <span class="badge badge-error">3 errors</span> <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">29:21</span> Slider has no label. Add label text or .accessibilityLabel() so VoiceOver users know what value they're adjusting. <span class="diag-rule">slider-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">33:29</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">35:29</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">41:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">44:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>TextFieldsView.swift — 5 issues <span class="badge badge-error">5 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">214:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">222:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">259:17</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">279:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">287:23</span> TextField has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>TipKitView.swift — 5 issues <span class="badge badge-error">5 errors</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">26:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">31:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">50:13</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">172:21</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">175:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>TogglesView.swift — 11 issues <span class="badge badge-error">7 errors</span> <span class="badge badge-warning">4 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">113:21</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">127:21</span> .onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable. <span class="diag-rule">tap-gesture-missing-button-trait</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">153:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">153:33</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">167:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">167:33</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">215:21</span> Toggle has an empty label. Add meaningful label text or .accessibilityLabel(). <span class="diag-rule">toggle-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">259:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">259:33</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">271:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">271:33</span> Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead. <span class="diag-rule">fixed-font-size</span></div>
+</div>
+</details>
+<details>
+<summary>ToolbarView.swift — 10 issues <span class="badge badge-error">8 errors</span> <span class="badge badge-warning">2 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">26:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">67:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">112:17</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">136:21</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">139:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">141:21</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">144:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">147:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">163:25</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">166:29</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+</div>
+</details>
+<details>
+<summary>TouchTargetSize.swift — 20 issues <span class="badge badge-error">8 errors</span> <span class="badge badge-warning">12 warnings</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">81:25</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">81:25</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">87:25</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">87:25</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">104:20</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">107:24</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">107:24</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">107:24</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">109:20</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">112:24</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">112:24</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">112:24</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">114:20</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">117:24</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">117:24</span> Touch target width 14pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">117:24</span> Touch target width 14pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">119:20</span> Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does. <span class="diag-rule">icon-button-missing-label</span></div>
+<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">122:24</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">122:24</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">122:24</span> Touch target width 18pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span></div>
+</div>
+</details>
+<details>
+<summary>VideoPlayerView.swift — 1 issue <span class="badge badge-warning">1 warning</span></summary>
+<div class="diag-list">
+<div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">13:13</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span></div>
+</div>
+</details>
+<h2>Issues by Rule</h2>
+<table>
+<tr><th>Rule</th><th>Severity</th><th>Count</th><th>WCAG</th></tr>
+<tr><td>button-label-contains-role</td><td><span class="badge badge-warning">warning</span></td><td>2</td><td>4.1.2</td></tr>
+<tr><td>button-used-as-link</td><td><span class="badge badge-warning">warning</span></td><td>0</td><td>4.1.2</td></tr>
+<tr><td>color-contrast-insufficient</td><td><span class="badge badge-warning">warning</span></td><td>12</td><td>1.4.3</td></tr>
+<tr><td>fake-heading-in-label</td><td><span class="badge badge-error">error</span></td><td>1</td><td>1.3.1</td></tr>
+<tr><td>fixed-font-size</td><td><span class="badge badge-warning">warning</span></td><td>29</td><td>1.4.4</td></tr>
+<tr><td>generic-link-text</td><td><span class="badge badge-warning">warning</span></td><td>0</td><td>2.4.4</td></tr>
+<tr><td>hardcoded-color</td><td><span class="badge badge-warning">warning</span></td><td>37</td><td>1.4.3</td></tr>
+<tr><td>heading-trait-missing</td><td><span class="badge badge-warning">warning</span></td><td>52</td><td>1.3.1</td></tr>
+<tr><td>hidden-parent-with-controls</td><td><span class="badge badge-error">error</span></td><td>29</td><td>4.1.2</td></tr>
+<tr><td>icon-button-missing-label</td><td><span class="badge badge-error">error</span></td><td>14</td><td>4.1.2</td></tr>
+<tr><td>image-label-contains-role</td><td><span class="badge badge-warning">warning</span></td><td>2</td><td>1.1.1</td></tr>
+<tr><td>image-missing-label</td><td><span class="badge badge-error">error</span></td><td>94</td><td>1.1.1</td></tr>
+<tr><td>line-limit-1</td><td><span class="badge badge-warning">warning</span></td><td>7</td><td>1.4.4</td></tr>
+<tr><td>missing-navigation-title</td><td><span class="badge badge-error">error</span></td><td>2</td><td>2.4.2</td></tr>
+<tr><td>picker-missing-label</td><td><span class="badge badge-error">error</span></td><td>3</td><td>4.1.2</td></tr>
+<tr><td>sheet-focus-return</td><td><span class="badge badge-error">error</span></td><td>10</td><td>2.4.3, 2.1.2</td></tr>
+<tr><td>slider-missing-label</td><td><span class="badge badge-error">error</span></td><td>6</td><td>4.1.2</td></tr>
+<tr><td>small-touch-target</td><td><span class="badge badge-warning">warning</span></td><td>20</td><td>2.5.8</td></tr>
+<tr><td>stepper-missing-label</td><td><span class="badge badge-error">error</span></td><td>3</td><td>4.1.2</td></tr>
+<tr><td>tap-gesture-missing-button-trait</td><td><span class="badge badge-error">error</span></td><td>11</td><td>4.1.2</td></tr>
+<tr><td>textfield-missing-label</td><td><span class="badge badge-error">error</span></td><td>14</td><td>4.1.2</td></tr>
+<tr><td>toggle-missing-label</td><td><span class="badge badge-error">error</span></td><td>1</td><td>4.1.2</td></tr>
+<tr><td>visually-disabled-not-semantic</td><td><span class="badge badge-error">error</span></td><td>17</td><td>4.1.2</td></tr>
+</table>
+</body>
+</html>

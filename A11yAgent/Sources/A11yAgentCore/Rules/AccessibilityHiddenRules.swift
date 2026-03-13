@@ -53,7 +53,8 @@ public struct HiddenOnParentWithControlsRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: ".accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead.",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Remove .accessibilityHidden(true) from the container and apply it only to decorative children"
                 ))
             }
         }

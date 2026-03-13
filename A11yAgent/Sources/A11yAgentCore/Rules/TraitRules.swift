@@ -28,7 +28,8 @@ public struct TapGestureMissingButtonTraitRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: ".onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable.",
                     node: gesture.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add .accessibilityAddTraits(.isButton)"
                 ))
             }
         }

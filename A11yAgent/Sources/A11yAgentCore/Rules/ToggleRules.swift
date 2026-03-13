@@ -39,13 +39,15 @@ public struct ToggleMissingLabelRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Toggle has an empty label. Add meaningful label text or .accessibilityLabel().",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add label text: Toggle(\"Label\", isOn:) or .accessibilityLabel(\"Label\")"
                 ))
             } else if hasLabelsHidden {
                 diagnostics.append(makeDiagnostic(
                     message: "Toggle uses .labelsHidden() without .accessibilityLabel(). The label is visually hidden but VoiceOver needs it.",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add .accessibilityLabel(\"Label\") when using .labelsHidden()"
                 ))
             }
         }

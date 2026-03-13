@@ -73,7 +73,8 @@ extension A11yRule {
         node: some SyntaxProtocol,
         context: RuleContext,
         severityOverride: A11ySeverity? = nil,
-        fix: A11yFix? = nil
+        fix: A11yFix? = nil,
+        suggestion: String? = nil
     ) -> A11yDiagnostic {
         let effectiveSeverity = severityOverride
             ?? context.severityOverrides[id]
@@ -86,7 +87,8 @@ extension A11yRule {
             line: context.line(for: node.positionAfterSkippingLeadingTrivia),
             column: context.column(for: node.positionAfterSkippingLeadingTrivia),
             wcagCriteria: wcagCriteria,
-            fix: fix
+            fix: fix,
+            suggestion: suggestion
         )
     }
 }

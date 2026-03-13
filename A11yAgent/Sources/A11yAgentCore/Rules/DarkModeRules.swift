@@ -38,7 +38,8 @@ public struct HardcodedColorRule: A11yRule {
                     diagnostics.append(makeDiagnostic(
                         message: "Hardcoded color \(argText) in .\(modName)() may not adapt to Dark Mode. Use semantic colors from asset catalog.",
                         node: mod.callExpr,
-                        context: context
+                        context: context,
+                        suggestion: "Replace \(argText) with a named Color from your asset catalog"
                     ))
                 }
 
@@ -47,7 +48,8 @@ public struct HardcodedColorRule: A11yRule {
                     diagnostics.append(makeDiagnostic(
                         message: "Inline color definition in .\(modName)() — consider using a named color from asset catalog with Dark Mode variants to ensure contrast in both modes.",
                         node: mod.callExpr,
-                        context: context
+                        context: context,
+                        suggestion: "Use a named Color from asset catalog with Dark Mode variants"
                     ))
                 }
             }

@@ -48,6 +48,10 @@ public struct A11yDiagnostic: Sendable {
     public let wcagCriteria: [String]
     /// Optional auto-fix.
     public let fix: A11yFix?
+    /// Short suggestion for how to fix the issue (shown in reports).
+    public let suggestion: String?
+    /// Source lines around the diagnostic (populated after analysis).
+    public var sourceSnippet: String?
 
     public init(
         ruleID: String,
@@ -57,7 +61,9 @@ public struct A11yDiagnostic: Sendable {
         line: Int,
         column: Int,
         wcagCriteria: [String] = [],
-        fix: A11yFix? = nil
+        fix: A11yFix? = nil,
+        suggestion: String? = nil,
+        sourceSnippet: String? = nil
     ) {
         self.ruleID = ruleID
         self.severity = severity
@@ -67,5 +73,7 @@ public struct A11yDiagnostic: Sendable {
         self.column = column
         self.wcagCriteria = wcagCriteria
         self.fix = fix
+        self.suggestion = suggestion
+        self.sourceSnippet = sourceSnippet
     }
 }

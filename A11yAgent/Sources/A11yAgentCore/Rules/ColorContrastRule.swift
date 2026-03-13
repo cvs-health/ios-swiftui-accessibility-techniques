@@ -63,7 +63,8 @@ public struct ColorContrastRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Contrast ratio \(ContrastCalculator.formatRatio(ratio)) between foreground (\(fgText)) and background (\(bgText)) is below the \(ContrastCalculator.formatRatio(requiredRatio)) minimum for \(textSize) text (WCAG 1.4.3).",
                     node: fg.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Choose colors with a contrast ratio of at least \(ContrastCalculator.formatRatio(requiredRatio))"
                 ))
             }
         }

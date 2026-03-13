@@ -36,7 +36,8 @@ public struct ButtonUsedAsLinkRule: A11yRule {
                     diagnostics.append(makeDiagnostic(
                         message: "Button opens a URL — use Link instead so VoiceOver announces the 'Link' role rather than 'Button'.",
                         node: view.callExpr,
-                        context: context
+                        context: context,
+                        suggestion: "Replace Button with Link(destination:)"
                     ))
                     break
                 }
@@ -108,7 +109,8 @@ public struct GenericLinkTextRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Link text \"\(labelText)\" is generic. Use descriptive text that explains where the link goes.",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Replace \"\(labelText)\" with descriptive text like \"Log in to your account\""
                 ))
                 continue
             }
@@ -120,7 +122,8 @@ public struct GenericLinkTextRule: A11yRule {
                     diagnostics.append(makeDiagnostic(
                         message: "Link .accessibilityLabel(\"\(text)\") is generic. Use descriptive text.",
                         node: label.callExpr,
-                        context: context
+                        context: context,
+                        suggestion: "Replace \"\(text)\" with text describing the link destination"
                     ))
                 }
             }

@@ -27,7 +27,8 @@ public struct FixedFontSizeRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead.",
                     node: mod.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Replace .font(.system(size:)) with .font(.body) or another text style"
                 ))
             }
         }
@@ -60,7 +61,8 @@ public struct LineLimit1Rule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: ".lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value.",
                     node: mod.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Remove .lineLimit(1) or increase to .lineLimit(3) or higher"
                 ))
             }
         }

@@ -118,6 +118,20 @@ public final class RuleRegistry {
         // Filter out inline suppressions
         allDiagnostics = InlineSuppressionFilter.filter(allDiagnostics, sourceText: sourceText)
 
+        // Populate source snippets (1 line before through 1 line after)
+        let sourceLines = sourceText.components(separatedBy: "\n")
+        for i in allDiagnostics.indices {
+            let diagLine = allDiagnostics[i].line // 1-based
+            let start = max(0, diagLine - 2)      // 1 line before (0-based)
+            let end = min(sourceLines.count - 1, diagLine) // 1 line after (0-based)
+            let snippet = (start...end).map { idx in
+                let lineNum = idx + 1
+                let marker = (lineNum == diagLine) ? ">" : " "
+                return "\(marker) \(lineNum) | \(sourceLines[idx])"
+            }.joined(separator: "\n")
+            allDiagnostics[i].sourceSnippet = snippet
+        }
+
         // Sort by line, then column
         allDiagnostics.sort { ($0.line, $0.column) < ($1.line, $1.column) }
         return allDiagnostics

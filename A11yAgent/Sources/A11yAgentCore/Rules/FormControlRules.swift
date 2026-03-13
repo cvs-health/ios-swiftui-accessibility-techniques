@@ -109,13 +109,15 @@ public struct TextFieldMissingLabelRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "\(view.viewType) has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter.",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add a Text label above the field and .accessibilityLabel(\"Label\")"
                 ))
             } else {
                 diagnostics.append(makeDiagnostic(
                     message: "\(view.viewType) uses placeholder text \"\(inlineLabel)\" as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel().",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add a visible Text(\"\(inlineLabel)\") label above the field and .accessibilityLabel(\"\(inlineLabel)\")"
                 ))
             }
         }
@@ -155,13 +157,15 @@ public struct SliderMissingLabelRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Slider has no label. Add label text or .accessibilityLabel() so VoiceOver users know what value they're adjusting.",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add .accessibilityLabel(\"description\") to the Slider"
                 ))
             } else if hasLabelsHidden {
                 diagnostics.append(makeDiagnostic(
                     message: "Slider uses .labelsHidden() without .accessibilityLabel(). The label is hidden visually but VoiceOver still needs it.",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add .accessibilityLabel(\"description\") when using .labelsHidden()"
                 ))
             }
         }
@@ -197,7 +201,8 @@ public struct StepperMissingLabelRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Stepper has no label. Add label text or .accessibilityLabel().",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add .accessibilityLabel(\"description\") to the Stepper"
                 ))
             }
         }
@@ -233,7 +238,8 @@ public struct PickerMissingLabelRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Picker has no label. Add label text or .accessibilityLabel().",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add .accessibilityLabel(\"description\") to the Picker"
                 ))
             }
         }

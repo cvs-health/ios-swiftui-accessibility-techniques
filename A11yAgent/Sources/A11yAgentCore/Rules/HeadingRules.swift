@@ -66,7 +66,8 @@ public struct HeadingTraitMissingRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading.",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add .accessibilityAddTraits(.isHeader)"
                 ))
             }
         }
@@ -133,7 +134,8 @@ public struct FakeHeadingInLabelRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Accessibility label \"\(text)\" contains 'heading'. Use .accessibilityAddTraits(.isHeader) instead of faking a heading in the label text.",
                     node: mod.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Remove \"heading\" from label and add .accessibilityAddTraits(.isHeader)"
                 ))
             }
         }

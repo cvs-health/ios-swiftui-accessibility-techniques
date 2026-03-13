@@ -45,7 +45,8 @@ public struct ImageMissingLabelRule: A11yRule {
             diagnostics.append(makeDiagnostic(
                 message: "Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images.",
                 node: view.callExpr,
-                context: context
+                context: context,
+                suggestion: "Add .accessibilityLabel(\"description\") or use Image(decorative:)"
             ))
         }
         return diagnostics
@@ -134,7 +135,8 @@ public struct ImageLabelContainsImageRule: A11yRule {
                         diagnostics.append(makeDiagnostic(
                             message: "Accessibility label \"\(text)\" contains '\(word)'. The Image role is announced automatically by VoiceOver — remove the role word from the label.",
                             node: label.callExpr,
-                            context: context
+                            context: context,
+                            suggestion: "Remove \"\(word)\" from the accessibility label"
                         ))
                         break
                     }

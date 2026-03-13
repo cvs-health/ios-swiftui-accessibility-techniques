@@ -39,7 +39,8 @@ public struct MissingNavigationTitleRule: A11yRule {
                         diagnostics.append(makeDiagnostic(
                             message: "NavigationStack is missing .navigationTitle(). Set a page title so VoiceOver users know which screen they're on.",
                             node: nav.callExpr,
-                            context: context
+                            context: context,
+                            suggestion: "Add .navigationTitle(\"Page Title\") inside the NavigationStack"
                         ))
                     }
                 }

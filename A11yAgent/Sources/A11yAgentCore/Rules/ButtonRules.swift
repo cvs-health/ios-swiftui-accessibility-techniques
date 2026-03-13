@@ -28,7 +28,8 @@ public struct ButtonLabelContainsRoleRule: A11yRule {
                     diagnostics.append(makeDiagnostic(
                         message: "Button's .accessibilityLabel(\"\(text)\") contains 'button'. Remove it — VoiceOver announces the Button role automatically.",
                         node: label.callExpr,
-                        context: context
+                        context: context,
+                        suggestion: "Remove \"button\" from the accessibility label"
                     ))
                 }
             }
@@ -37,7 +38,8 @@ public struct ButtonLabelContainsRoleRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Button label text \"\(labelText)\" contains 'button'. The role is announced automatically by VoiceOver.",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Remove \"button\" from the label text"
                 ))
             }
         }
@@ -100,7 +102,8 @@ public struct IconOnlyButtonMissingLabelRule: A11yRule {
                     diagnostics.append(makeDiagnostic(
                         message: "Icon-only Button is missing .accessibilityLabel(). VoiceOver users won't know what this button does.",
                         node: view.callExpr,
-                        context: context
+                        context: context,
+                        suggestion: "Add .accessibilityLabel(\"action description\") to the Button"
                     ))
                 }
             }
@@ -155,7 +158,8 @@ public struct VisuallyDisabledNotSemanticallyRule: A11yRule {
                 diagnostics.append(makeDiagnostic(
                     message: "Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state.",
                     node: view.callExpr,
-                    context: context
+                    context: context,
+                    suggestion: "Add .disabled(true) to the Button"
                 ))
             }
         }

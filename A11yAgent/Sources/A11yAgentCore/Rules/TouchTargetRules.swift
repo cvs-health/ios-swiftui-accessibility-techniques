@@ -39,13 +39,15 @@ public struct SmallTouchTargetRule: A11yRule {
                     diagnostics.append(makeDiagnostic(
                         message: "Touch target width \(Int(w))pt is below the \(Int(Self.minimumSize))pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt.",
                         node: frameMod.callExpr,
-                        context: context
+                        context: context,
+                        suggestion: "Increase .frame(width:) to at least 44pt"
                     ))
                 } else if let h = height, h < Self.minimumSize {
                     diagnostics.append(makeDiagnostic(
                         message: "Touch target height \(Int(h))pt is below the \(Int(Self.minimumSize))pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt.",
                         node: frameMod.callExpr,
-                        context: context
+                        context: context,
+                        suggestion: "Increase .frame(height:) to at least 44pt"
                     ))
                 }
             }

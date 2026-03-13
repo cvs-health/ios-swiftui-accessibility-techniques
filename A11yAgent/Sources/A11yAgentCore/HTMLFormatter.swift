@@ -71,10 +71,17 @@ public struct HTMLFormatter {
         summary { padding: 0.75rem 1rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; }
         summary:hover { background: #f1f3f5; }
         .diag-list { padding: 0.5rem 1rem 1rem; }
-        .diag { padding: 0.5rem 0; border-bottom: 1px solid #f1f3f5; font-size: 0.8125rem; }
+        .diag { padding: 0.75rem 0; border-bottom: 1px solid #e9ecef; font-size: 0.8125rem; }
         .diag:last-child { border-bottom: none; }
         .diag-loc { color: #6c757d; font-family: monospace; }
         .diag-rule { color: #6c757d; font-style: italic; }
+        .code-block { background: #1e1e2e; color: #cdd6f4; border-radius: 6px; padding: 0.625rem 0.75rem; margin: 0.5rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
+        .code-block .line-bad { color: #f38ba8; }
+        .code-block .line-num { color: #6c7086; user-select: none; }
+        .code-block .line-marker { color: #f38ba8; font-weight: 700; user-select: none; }
+        .suggestion { background: var(--pass-bg); color: var(--pass); border-radius: 4px; padding: 0.375rem 0.625rem; margin: 0.375rem 0; font-size: 0.75rem; display: inline-block; }
+        .suggestion::before { content: "Fix: "; font-weight: 600; }
+        .fix-block { background: #1e3a1e; color: #a6e3a1; border-radius: 6px; padding: 0.625rem 0.75rem; margin: 0.375rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
         </style>
         </head>
         <body>
@@ -134,6 +141,31 @@ public struct HTMLFormatter {
                     html += "<span class=\"diag-loc\">\(diag.line):\(diag.column)</span> "
                     html += "\(escapeHTML(diag.message)) "
                     html += "<span class=\"diag-rule\">\(escapeHTML(diag.ruleID))</span>"
+
+                    if let snippet = diag.sourceSnippet {
+                        html += "<div class=\"code-block\">"
+                        for snippetLine in snippet.components(separatedBy: "\n") {
+                            let escaped = escapeHTML(snippetLine)
+                            if snippetLine.hasPrefix(">") {
+                                html += "<span class=\"line-bad\">\(escaped)</span>\n"
+                            } else {
+                                html += "\(escaped)\n"
+                            }
+                        }
+                        html += "</div>"
+                    }
+
+                    if let suggestion = diag.suggestion {
+                        html += "<div class=\"suggestion\">\(escapeHTML(suggestion))</div>"
+
+                        if let snippet = diag.sourceSnippet {
+                            let corrected = generateCorrectedSnippet(snippet: snippet, suggestion: suggestion)
+                            if let corrected = corrected {
+                                html += "<div class=\"fix-block\">\(escapeHTML(corrected))</div>"
+                            }
+                        }
+                    }
+
                     html += "</div>\n"
                 }
                 html += "</div>\n</details>\n"
@@ -159,6 +191,57 @@ public struct HTMLFormatter {
 
         html += "</body>\n</html>"
         return html
+    }
+
+    /// Attempt to generate a corrected version of the offending line by appending
+    /// the suggestion as a modifier. Returns nil if the suggestion doesn't map to
+    /// a simple modifier append.
+    private func generateCorrectedSnippet(snippet: String, suggestion: String) -> String? {
+        // Extract the modifier from the suggestion (text after "Add " that starts with ".")
+        let addPatterns = ["Add ", "Replace "]
+        var modifier: String? = nil
+
+        for pattern in addPatterns {
+            if suggestion.hasPrefix(pattern) {
+                let rest = String(suggestion.dropFirst(pattern.count))
+                // Look for a modifier like .accessibilityLabel("...") or .disabled(true)
+                if let dotIndex = rest.firstIndex(of: ".") {
+                    let candidate = String(rest[dotIndex...])
+                    // Take up to the end or first space after closing paren
+                    if let parenClose = candidate.lastIndex(of: ")") {
+                        modifier = String(candidate[...parenClose])
+                    }
+                }
+                break
+            }
+        }
+
+        guard let mod = modifier else { return nil }
+
+        // Find the flagged line (the one starting with ">") and append the modifier
+        let lines = snippet.components(separatedBy: "\n")
+        var result: [String] = []
+        for line in lines {
+            if line.hasPrefix(">") {
+                // Extract the code part after "> NNN | "
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                if let pipeIndex = trimmed.firstIndex(of: "|") {
+                    let codeStart = trimmed.index(after: pipeIndex)
+                    let code = String(trimmed[codeStart...])
+                    let stripped = code.trimmingCharacters(in: .whitespaces)
+                    let indent = String(code.prefix(while: { $0 == " " || $0 == "\t" }))
+                    let prefix = String(trimmed[...pipeIndex])
+                    result.append("  \(prefix) \(indent)\(stripped)")
+                    // Add modifier on next line with extra indent
+                    result.append("  \(prefix)     \(indent)\(mod)")
+                } else {
+                    result.append(line)
+                }
+            } else {
+                result.append(line)
+            }
+        }
+        return result.joined(separator: "\n")
     }
 
     private func escapeHTML(_ text: String) -> String {

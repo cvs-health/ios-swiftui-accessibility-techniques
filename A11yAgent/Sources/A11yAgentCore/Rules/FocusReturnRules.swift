@@ -54,7 +54,7 @@ public struct SheetFocusReturnRule: A11yRule {
             if focusStateVars.isEmpty {
                 diagnostics.append(makeDiagnostic(
                     message: "\(modName)(…) has onDismiss but no @FocusState or @AccessibilityFocusState to return focus. Add a focus state and set it in onDismiss so VoiceOver/keyboard focus returns when the \(modName) closes.",
-                    node: mod.callExpr,
+                    node: mod.reportNode,
                     context: context,
                     suggestion: "Add @AccessibilityFocusState var and set it in onDismiss"
                 ))
@@ -63,7 +63,7 @@ public struct SheetFocusReturnRule: A11yRule {
             if !onDismissSetsAnyFocusState(onDismissExpr: onDismissArg.expression, focusVarNames: focusStateVars, in: structDecl) {
                 diagnostics.append(makeDiagnostic(
                     message: "\(modName)(…) has onDismiss but does not set focus in onDismiss. Set your @AccessibilityFocusState (or @FocusState) in onDismiss so focus returns when the \(modName) closes.",
-                    node: mod.callExpr,
+                    node: mod.reportNode,
                     context: context,
                     suggestion: "Set your @AccessibilityFocusState variable in the onDismiss closure"
                 ))
@@ -82,7 +82,7 @@ public struct SheetFocusReturnRule: A11yRule {
             if focusStateVars.isEmpty {
                 diagnostics.append(makeDiagnostic(
                     message: "\(modName)(…) should return focus when closed. Add @AccessibilityFocusState (or @FocusState) and set it in a button action or in the \(modName) content so VoiceOver/keyboard focus returns to the trigger.",
-                    node: mod.callExpr,
+                    node: mod.reportNode,
                     context: context,
                     suggestion: "Add @AccessibilityFocusState var and set it when the \(modName) closes"
                 ))
@@ -91,7 +91,7 @@ public struct SheetFocusReturnRule: A11yRule {
             if !anyClosureInNodeSetsFocus(Syntax(mod.callExpr), focusVarNames: focusStateVars) {
                 diagnostics.append(makeDiagnostic(
                     message: "\(modName)(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the \(modName) content when closing so focus returns to the trigger.",
-                    node: mod.callExpr,
+                    node: mod.reportNode,
                     context: context,
                     suggestion: "Set your @AccessibilityFocusState variable in a button action"
                 ))

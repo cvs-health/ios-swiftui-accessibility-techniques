@@ -121,7 +121,7 @@ public struct GenericLinkTextRule: A11yRule {
                 if Self.genericTexts.contains(text.lowercased().trimmingCharacters(in: .whitespaces)) {
                     diagnostics.append(makeDiagnostic(
                         message: "Link .accessibilityLabel(\"\(text)\") is generic. Use descriptive text.",
-                        node: label.callExpr,
+                        node: label.reportNode,
                         context: context,
                         suggestion: "Replace \"\(text)\" with text describing the link destination"
                     ))

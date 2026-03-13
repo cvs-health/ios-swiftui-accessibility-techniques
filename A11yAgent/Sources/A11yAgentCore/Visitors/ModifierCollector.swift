@@ -16,6 +16,16 @@ public final class ModifierCollector: SyntaxVisitor {
         public let firstStringArgument: String?
         /// All argument labels and their expression text.
         public let arguments: [(label: String?, text: String)]
+
+        /// Node positioned at the modifier itself (the `.` token) rather than
+        /// at the base of the chain. Use this for diagnostic reporting so the
+        /// line/column points to the modifier, not the view it's applied to.
+        public var reportNode: any SyntaxProtocol {
+            if let memberAccess = callExpr.calledExpression.as(MemberAccessExprSyntax.self) {
+                return memberAccess.period
+            }
+            return callExpr
+        }
     }
 
     /// All collected modifiers in order of appearance.

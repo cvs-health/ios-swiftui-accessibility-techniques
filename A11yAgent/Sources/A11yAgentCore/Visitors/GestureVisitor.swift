@@ -16,6 +16,15 @@ public final class GestureVisitor: SyntaxVisitor {
         public let hasButtonTrait: Bool
         /// Whether the chain also contains `.accessibilityLabel(...)`.
         public let hasAccessibilityLabel: Bool
+
+        /// Node positioned at the gesture modifier token rather than the
+        /// base of the chain. Use for diagnostic reporting.
+        public var reportNode: any SyntaxProtocol {
+            if let memberAccess = callExpr.calledExpression.as(MemberAccessExprSyntax.self) {
+                return memberAccess.period
+            }
+            return callExpr
+        }
     }
 
     /// Gestures that imply the element is interactive.

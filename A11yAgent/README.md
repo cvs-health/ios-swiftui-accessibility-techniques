@@ -107,7 +107,7 @@ a11y-check . --format json
 # Xcode (for build phase scripts — shows inline in the editor)
 a11y-check . --format xcode
 
-# HTML report (self-contained page with WCAG conformance summary)
+# HTML report (WCAG summary, code snippets, fix suggestions)
 a11y-check . --format html > report.html
 ```
 
@@ -285,10 +285,29 @@ a11y-check Sources/ --format html > accessibility-report.html
 ```
 
 The report includes:
+
 - **Summary banner** with error, warning, and info counts
 - **WCAG 2.2 conformance table** showing pass/fail for each criterion, linked to the WCAG spec
 - **By-file detail** with expandable sections for each file's issues
 - **By-rule summary** showing issue counts per rule
+
+### Code snippets and fix suggestions
+
+Every diagnostic in the report shows three things to help you understand and fix the issue:
+
+1. **Bad code** — a dark code block showing the offending line (highlighted in red) with one line of context above and below, with line numbers.
+2. **Fix suggestion** — a green "Fix:" badge with a specific action, e.g. *"Add a visible Text("First Name") above the field and .accessibilityLabel("First Name")"*.
+3. **Corrected code** — a green code block showing the suggested fix applied to the original code. For form control labels, this includes both the visible `Text` label inserted above the field and the `.accessibilityLabel()` modifier appended below.
+
+This makes the report actionable — developers can see exactly what's wrong, why, and how to fix it without needing to look anything up.
+
+### Generate via AI (MCP)
+
+If you have the [MCP server](#mcp-cursor--ai-assistants) set up, ask your AI assistant:
+
+> "Generate an HTML accessibility report for this project"
+
+The AI runs `a11y-check . --format html > accessibility-report.html` in the terminal and opens the report in your browser.
 
 ## CI integration
 
@@ -364,7 +383,7 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
 - **"List all the a11y rules"** — shows all 23 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
-- **"Generate an HTML accessibility report for this project"** — the AI runs `a11y-check . --format html > accessibility-report.html` in the terminal, then opens the report in your browser. The report includes a WCAG conformance table, per-file breakdown, and per-rule summary — ready to share with your team or compliance reviewers.
+- **"Generate an HTML accessibility report for this project"** — the AI runs `a11y-check . --format html > accessibility-report.html` in the terminal, then opens the report in your browser. The report includes a WCAG conformance table, per-file breakdown with code snippets and fix suggestions, and per-rule summary — ready to share with your team or compliance reviewers.
 
 The full loop — detect, understand, fix, report — happens conversationally without leaving the editor.
 

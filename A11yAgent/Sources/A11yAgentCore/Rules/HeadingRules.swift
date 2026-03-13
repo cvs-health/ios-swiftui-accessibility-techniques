@@ -133,7 +133,7 @@ public struct FakeHeadingInLabelRule: A11yRule {
             if text.lowercased().contains("heading") {
                 diagnostics.append(makeDiagnostic(
                     message: "Accessibility label \"\(text)\" contains 'heading'. Use .accessibilityAddTraits(.isHeader) instead of faking a heading in the label text.",
-                    node: mod.callExpr,
+                    node: mod.reportNode,
                     context: context,
                     suggestion: "Remove \"heading\" from label and add .accessibilityAddTraits(.isHeader)"
                 ))

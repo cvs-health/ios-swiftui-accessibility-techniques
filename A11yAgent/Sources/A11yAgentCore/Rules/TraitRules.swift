@@ -25,17 +25,9 @@ public struct TapGestureMissingButtonTraitRule: A11yRule {
 
         for gesture in gestureVisitor.detectedGestures {
             if gesture.gestureName == "onTapGesture" && !gesture.hasButtonTrait {
-                // Point the diagnostic at the ".onTapGesture" token, not the
-                // start of the chain (which could be many lines above).
-                let reportNode: any SyntaxProtocol
-                if let memberAccess = gesture.callExpr.calledExpression.as(MemberAccessExprSyntax.self) {
-                    reportNode = memberAccess.period
-                } else {
-                    reportNode = gesture.callExpr
-                }
                 diagnostics.append(makeDiagnostic(
                     message: ".onTapGesture without .accessibilityAddTraits(.isButton). VoiceOver users won't know this element is tappable.",
-                    node: reportNode,
+                    node: gesture.reportNode,
                     context: context,
                     suggestion: "Add .accessibilityAddTraits(.isButton)"
                 ))

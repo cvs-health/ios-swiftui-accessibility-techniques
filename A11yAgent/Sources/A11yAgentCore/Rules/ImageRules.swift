@@ -134,7 +134,7 @@ public struct ImageLabelContainsImageRule: A11yRule {
                     if lower.contains(word) {
                         diagnostics.append(makeDiagnostic(
                             message: "Accessibility label \"\(text)\" contains '\(word)'. The Image role is announced automatically by VoiceOver — remove the role word from the label.",
-                            node: label.callExpr,
+                            node: label.reportNode,
                             context: context,
                             suggestion: "Remove \"\(word)\" from the accessibility label"
                         ))

@@ -110,7 +110,7 @@ public struct TextFieldMissingLabelRule: A11yRule {
                     message: "\(view.viewType) has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter.",
                     node: view.callExpr,
                     context: context,
-                    suggestion: "Add a Text label above the field and .accessibilityLabel(\"Label\")"
+                    suggestion: "Add a visible Text(\"Label\") above the field and .accessibilityLabel(\"Label\")"
                 ))
             } else {
                 diagnostics.append(makeDiagnostic(

@@ -94,6 +94,39 @@ If you build a11y-check from source instead of using Homebrew, set **`A11Y_CHECK
 | **run_a11y_check** | Run a11y-check on given paths. Arguments: `paths` (required), optional `projectRoot`, `only`, `disable`, `maxDiagnostics` (default 100; limits how many diagnostics are returned so output shows in chat; use 0 for full list). |
 | **list_a11y_rules** | List all a11y-check rules (IDs, names, WCAG criteria). No arguments. |
 
+## What you can ask
+
+Once the MCP server is configured, you can ask your AI assistant things like:
+
+| Prompt | What happens |
+|--------|-------------|
+| "Check this project for accessibility issues" | Runs `run_a11y_check` on the project root and returns a summary |
+| "Run a11y-check on TextFieldsView.swift" | Checks a specific file and reports issues with line numbers |
+| "List all the a11y rules" | Calls `list_a11y_rules` and shows all 23 rules with WCAG criteria |
+| "Which of those are the most critical to fix?" | The AI explains severity levels and WCAG impact based on the results |
+| "Fix the textfield-missing-label issues" | The AI reads the diagnostics, then edits your source code to add the missing labels |
+| "What WCAG criteria does this project fail?" | The AI interprets the results and maps them to compliance requirements |
+
+The full loop — **detect, understand, fix** — happens conversationally without leaving the editor. The AI doesn't just report problems; it can explain why they matter for users with disabilities and make the code changes to resolve them.
+
+### Example conversation
+
+```
+You:    Check TextFieldsView.swift for accessibility issues
+
+AI:     I found 5 errors in TextFieldsView.swift:
+        • Line 214: TextField has an empty label...
+        • Line 222: TextField has an empty label...
+        (etc.)
+
+You:    Fix the one on line 259
+
+AI:     [Edits the file to add .accessibilityLabel("Address line 2")]
+        I added an accessibility label to the TextField on line 259.
+        VoiceOver will now announce "Address line 2" when a user
+        focuses this field.
+```
+
 ## Development
 
 ```bash

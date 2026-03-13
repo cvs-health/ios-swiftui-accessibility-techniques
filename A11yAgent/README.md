@@ -330,7 +330,42 @@ The CLI exits with code **1** when any diagnostic has severity **error**, so the
 
 ## MCP (Cursor / AI assistants)
 
-An [MCP server](mcp-server/README.md) is included so AI assistants like Cursor can run a11y-check when you ask (e.g. "check this project for accessibility"). Install a11y-check and Node.js, then add the server to your MCP config and point it at `A11yAgent/mcp-server`.
+An [MCP server](mcp-server/README.md) is included so AI assistants like Cursor can run a11y-check through natural language — no terminal commands needed. The AI calls the tool behind the scenes, explains the results, and can fix the issues for you.
+
+### Quick setup
+
+1. Install a11y-check (Homebrew or build from source).
+2. Install the MCP server dependencies:
+   ```bash
+   cd A11yAgent/mcp-server && npm install && npm run build
+   ```
+3. Add to **Cursor Settings → Features → MCP → Edit config**:
+   ```json
+   {
+     "mcpServers": {
+       "a11y-check": {
+         "command": "node",
+         "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"]
+       }
+     }
+   }
+   ```
+4. Restart Cursor.
+
+See the [MCP server README](mcp-server/README.md) for full setup options including local builds and environment variables.
+
+### What you can ask
+
+Once the MCP server is running, ask your AI assistant things like:
+
+- **"Check this project for accessibility issues"** — scans your source files and returns a summary of all issues found
+- **"Run a11y-check on TextFieldsView.swift"** — check a specific file
+- **"Which of those are the most critical to fix?"** — the AI explains severity and WCAG impact
+- **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
+- **"List all the a11y rules"** — shows all 23 rules with descriptions and WCAG criteria
+- **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
+
+The full loop — detect, understand, fix — happens conversationally without leaving the editor.
 
 ## Rules
 

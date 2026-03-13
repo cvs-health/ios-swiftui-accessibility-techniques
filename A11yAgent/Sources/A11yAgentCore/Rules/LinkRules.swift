@@ -67,13 +67,43 @@ public struct GenericLinkTextRule: A11yRule {
         "tap here", "see more", "view more", "link", "go",
     ]
 
+    /// Extract label text from a Link's label closure, e.g.
+    /// `Link(destination: ..., label: { Text("Click here") })` or
+    /// `Link(destination: ...) { Text("Click here") }`
+    private func extractLabelFromClosure(_ call: FunctionCallExprSyntax) -> String? {
+        let closures: [ClosureExprSyntax] = [
+            call.trailingClosure,
+            call.arguments.first(where: { $0.label?.text == "label" })?
+                .expression.as(ClosureExprSyntax.self),
+        ].compactMap { $0 }
+
+        for closure in closures {
+            for statement in closure.statements {
+                if let funcCall = statement.item.as(FunctionCallExprSyntax.self),
+                   let callee = funcCall.calledExpression.as(DeclReferenceExprSyntax.self),
+                   callee.baseName.text == "Text",
+                   let firstArg = funcCall.arguments.first,
+                   let str = firstArg.expression.as(StringLiteralExprSyntax.self) {
+                    return str.segments.compactMap { $0.as(StringSegmentSyntax.self)?.content.text }.joined()
+                }
+            }
+        }
+        return nil
+    }
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Link") {
-            // Check inline label
-            let labelText = view.firstStringArgument ?? ""
+            // Check inline label: Link("Click here", destination: ...)
+            var labelText = view.firstStringArgument ?? ""
+
+            // Also check label closure: Link(destination: ..., label: { Text("Click here") })
+            if labelText.isEmpty, let closureText = extractLabelFromClosure(view.callExpr) {
+                labelText = closureText
+            }
+
             if Self.genericTexts.contains(labelText.lowercased().trimmingCharacters(in: .whitespaces)) {
                 diagnostics.append(makeDiagnostic(
                     message: "Link text \"\(labelText)\" is generic. Use descriptive text that explains where the link goes.",

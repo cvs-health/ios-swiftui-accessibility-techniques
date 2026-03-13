@@ -40,6 +40,11 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
         public let modifiers: ModifierCollector
         /// The outermost expression in the modifier chain (for getting full chain context).
         public let chainRoot: ExprSyntax
+
+        /// Whether the call site has a named argument with the given label (e.g. `prompt:`).
+        public func hasNamedArgument(_ label: String) -> Bool {
+            callExpr.arguments.contains { $0.label?.text == label }
+        }
     }
 
     /// All detected views in the file.

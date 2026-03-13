@@ -387,6 +387,10 @@ a11y-check includes 23 rules across these categories:
 | **Form controls** | `textfield-missing-label`, `slider-missing-label`, `stepper-missing-label`, `picker-missing-label` | 4.1.2 |
 | **Accessibility hidden** | `hidden-parent-with-controls` | 4.1.2 |
 
+The **textfield-missing-label** rule catches two problems:
+- **Error:** TextField/SecureField with an empty `""` label and no `.accessibilityLabel()` — VoiceOver users won't know what to enter.
+- **Warning:** TextField/SecureField using placeholder text as its label (e.g. `TextField("First Name", text: $name)` without a `prompt:` parameter or `.accessibilityLabel()`). Placeholder text disappears when the user starts typing and renders in low-contrast gray, failing both WCAG 3.3.2 (Labels or Instructions) and 1.4.3 (Contrast). Use a visible `Text` label above the field, or use the `prompt:` parameter to separate the placeholder from the label.
+
 The **color contrast** rule computes actual WCAG 2.x contrast ratios when both foreground and background colors can be resolved — including SwiftUI system colors (`.black`, `.white`, `.red`, etc.), `Color(red:green:blue:)` literals, hex patterns, and named colors from your `.xcassets` catalogs.
 
 Run `a11y-check --list-rules` for full descriptions and severities.

@@ -78,11 +78,16 @@ public struct TextFieldMissingLabelRule: A11yRule {
                 continue
             }
 
-            // Check inline label/placeholder
             let inlineLabel = view.firstStringArgument ?? ""
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
                 diagnostics.append(makeDiagnostic(
-                    message: "\(view.viewType) has an empty label. Add label text or .accessibilityLabel() so VoiceOver users know what to enter.",
+                    message: "\(view.viewType) has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter.",
+                    node: view.callExpr,
+                    context: context
+                ))
+            } else {
+                diagnostics.append(makeDiagnostic(
+                    message: "\(view.viewType) uses placeholder text \"\(inlineLabel)\" as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel().",
                     node: view.callExpr,
                     context: context
                 ))

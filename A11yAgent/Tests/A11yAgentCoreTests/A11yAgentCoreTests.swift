@@ -361,7 +361,7 @@ final class A11yAgentCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 1)
     }
 
-    func testTextFieldMissingLabel_passesWithLabel() {
+    func testTextFieldMissingLabel_flagsPlaceholderOnlyAsError() {
         let source = """
         import SwiftUI
         struct MyView: View {
@@ -372,7 +372,69 @@ final class A11yAgentCoreTests: XCTestCase {
         }
         """
         let diags = analyze(source, ruleID: "textfield-missing-label")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.severity, .error)
+        XCTAssertTrue(diags.first?.message.contains("placeholder text") == true)
+    }
+
+    func testTextFieldMissingLabel_flagsPromptWithoutAccessibilityLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var text = ""
+            var body: some View {
+                TextField("First Name", text: $text, prompt: Text("Enter your first name"))
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "textfield-missing-label")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.severity, .error)
+    }
+
+    func testTextFieldMissingLabel_passesWithPromptAndAccessibilityLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var text = ""
+            var body: some View {
+                TextField("First Name", text: $text, prompt: Text("Enter your first name"))
+                    .accessibilityLabel("First Name")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "textfield-missing-label")
         XCTAssertEqual(diags.count, 0)
+    }
+
+    func testTextFieldMissingLabel_passesWithAccessibilityLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var text = ""
+            var body: some View {
+                TextField("", text: $text)
+                    .accessibilityLabel("First Name")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "textfield-missing-label")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testSecureFieldMissingLabel_flagsPlaceholderOnly() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var text = ""
+            var body: some View {
+                SecureField("Password", text: $text)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "textfield-missing-label")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.severity, .error)
     }
 
     // MARK: - Hardcoded Color Rules

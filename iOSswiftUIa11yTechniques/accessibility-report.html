@@ -51,11 +51,11 @@ summary:hover { background: #f1f3f5; }
 </head>
 <body>
 <h1>a11y-check Accessibility Report</h1>
-<p class="timestamp">Generated: 2026-03-13T17:46:32Z</p><div class="summary">
-  <div class="stat error"><div class="number">255</div><div class="label">Errors</div></div>
+<p class="timestamp">Generated: 2026-03-13T17:54:09Z</p><div class="summary">
+  <div class="stat error"><div class="number">237</div><div class="label">Errors</div></div>
   <div class="stat warning"><div class="number">207</div><div class="label">Warnings</div></div>
   <div class="stat info"><div class="number">0</div><div class="label">Info</div></div>
-  <div class="stat"><div class="number">90</div><div class="label">Files</div></div>
+  <div class="stat"><div class="number">87</div><div class="label">Files</div></div>
 </div><h2>WCAG 2.2 Conformance</h2>
 <table>
 <tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>
@@ -68,20 +68,12 @@ summary:hover { background: #f1f3f5; }
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#focus-order">2.4.3</a></td><td><span class="badge badge-fail">Fail</span></td><td>12</td><td>sheet-focus-return</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#link-purpose-in-context">2.4.4</a></td><td><span class="badge badge-warning">Review</span></td><td>2</td><td>generic-link-text</td></tr>
 <tr><td><a href="https://www.w3.org/TR/WCAG22/#target-size-minimum">2.5.8</a></td><td><span class="badge badge-warning">Review</span></td><td>32</td><td>small-touch-target</td></tr>
-<tr><td><a href="https://www.w3.org/TR/WCAG22/#name-role-value">4.1.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>128</td><td>button-label-contains-role, icon-button-missing-label, visually-disabled-not-semantic, tap-gesture-missing-button-trait, toggle-missing-label, button-used-as-link, hidden-parent-with-controls, textfield-missing-label, slider-missing-label, stepper-missing-label, picker-missing-label</td></tr>
+<tr><td><a href="https://www.w3.org/TR/WCAG22/#name-role-value">4.1.2</a></td><td><span class="badge badge-fail">Fail</span></td><td>110</td><td>button-label-contains-role, icon-button-missing-label, visually-disabled-not-semantic, tap-gesture-missing-button-trait, toggle-missing-label, button-used-as-link, hidden-parent-with-controls, textfield-missing-label, slider-missing-label, stepper-missing-label, picker-missing-label</td></tr>
 </table>
 <h2>Issues by File</h2>
 <details>
-<summary>AccessibilitySortPriorityWatch.swift — 2 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">1 warning</span></summary>
+<summary>AccessibilitySortPriorityWatch.swift — 1 issue <span class="badge badge-warning">1 warning</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">42:17</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  41 |                 Text(&quot;Birth Date&quot;)
-<span class="line-bad">&gt; 42 |                 Button(action: {</span>
-  43 |                      isDatePickerPresented = true
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  41 |                 Text(&quot;Birth Date&quot;)
-<span class="line-good">&gt; &gt; 42 |                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 42 |                      .disabled(true)</span>
-  43 |                      isDatePickerPresented = true
-</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">78:21</span> Hardcoded color .white in .foregroundColor() may not adapt to Dark Mode. Use semantic colors from asset catalog. <span class="diag-rule">hardcoded-color</span><div class="code-block">  77 |                     .background(darkBlue)
 <span class="line-bad">&gt; 78 |                     .foregroundColor(.white)</span>
   79 |                     .cornerRadius(8)
@@ -847,19 +839,6 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>AccessibilitySortPriority.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
-<div class="diag-list">
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">46:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  45 |                     Text(&quot;Birth Date&quot;)
-<span class="line-bad">&gt; 46 |                     Button(action: {</span>
-  47 |                          isDatePickerPresented = true
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  45 |                     Text(&quot;Birth Date&quot;)
-<span class="line-good">&gt; &gt; 46 |                      Button(action: {</span>
-<span class="line-good">&gt; &gt; 46 |                          .disabled(true)</span>
-  47 |                          isDatePickerPresented = true
-</div></div>
-</div>
-</details>
-<details>
 <summary>AccessibilityTraitsView.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">105:17</span> alert(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the alert content when closing so focus returns to the trigger. <span class="diag-rule">sheet-focus-return</span><div class="code-block">  104 |                 }
@@ -948,7 +927,7 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>ButtonsView.swift — 4 issues <span class="badge badge-error">3 errors</span> <span class="badge badge-warning">1 warning</span></summary>
+<summary>ButtonsView.swift — 3 issues <span class="badge badge-error">2 errors</span> <span class="badge badge-warning">1 warning</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">152:21</span> TextField has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter. <span class="diag-rule">textfield-missing-label</span><div class="code-block">  151 |                         .frame(minWidth: 80, alignment: .leading)
 <span class="line-bad">&gt; 152 |                     TextField(&quot;&quot;, text: $username)</span>
@@ -972,14 +951,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-bad">&gt; 166 |                     Button(action: {</span>
   167 |                         // Handle button action
 </div><div class="suggestion">Remove &quot;button&quot; from the accessibility label</div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">192:17</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  191 |                     .accessibilityLabel(&quot;Password&quot;)
-<span class="line-bad">&gt; 192 |                 Button(action: {</span>
-  193 |                     // Handle button action
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  191 |                     .accessibilityLabel(&quot;Password&quot;)
-<span class="line-good">&gt; &gt; 192 |                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 192 |                      .disabled(true)</span>
-  193 |                     // Handle button action
-</div></div>
 </div>
 </details>
 <details>
@@ -1076,7 +1047,7 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>CarouselView.swift — 42 issues <span class="badge badge-error">18 errors</span> <span class="badge badge-warning">24 warnings</span></summary>
+<summary>CarouselView.swift — 36 issues <span class="badge badge-error">12 errors</span> <span class="badge badge-warning">24 warnings</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">66:81</span> Touch target height 10pt is below the 24pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt. <span class="diag-rule">small-touch-target</span><div class="code-block">  65 |                                 if selectedPage == 0 {
 <span class="line-bad">&gt; 66 |                                     Rectangle().fill(Color.primary.opacity(0.8)).frame(maxWidth: .infinity, maxHeight: 10).clipShape(.rect)</span>
@@ -1118,14 +1089,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 121 |                                                  .font(.system(size:)) with .font(.body)</span>
   122 |                                             .frame(width: 70, height: 70)
 </div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">138:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  137 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-bad">&gt; 138 |                                 Button(action: {</span>
-  139 |                                     print(&quot;Read More tapped&quot;)
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  137 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-good">&gt; &gt; 138 |                                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 138 |                                      .disabled(true)</span>
-  139 |                                     print(&quot;Read More tapped&quot;)
-</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">146:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  145 |                                             .bold()
 <span class="line-bad">&gt; 146 |                                         Image(systemName: &quot;chevron.up&quot;)</span>
   147 |                                             .foregroundColor(.primary)
@@ -1150,14 +1113,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 181 |                                                  .font(.system(size:)) with .font(.body)</span>
   182 |                                             .frame(width: 70, height: 70)
 </div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">198:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  197 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-bad">&gt; 198 |                                 Button(action: {</span>
-  199 |                                     print(&quot;Read More tapped&quot;)
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  197 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-good">&gt; &gt; 198 |                                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 198 |                                      .disabled(true)</span>
-  199 |                                     print(&quot;Read More tapped&quot;)
-</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">206:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  205 |                                             .bold()
 <span class="line-bad">&gt; 206 |                                         Image(systemName: &quot;chevron.up&quot;)</span>
   207 |                                             .foregroundColor(.primary)
@@ -1181,14 +1136,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 240 |                                              .font(.system(size: 40))</span>
 <span class="line-good">&gt; &gt; 240 |                                                  .font(.system(size:)) with .font(.body)</span>
   241 |                                             .frame(width: 70, height: 70)
-</div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">257:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  256 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-bad">&gt; 257 |                                 Button(action: {</span>
-  258 |                                     print(&quot;Read More tapped&quot;)
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  256 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-good">&gt; &gt; 257 |                                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 257 |                                      .disabled(true)</span>
-  258 |                                     print(&quot;Read More tapped&quot;)
 </div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">265:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  264 |                                             .bold()
 <span class="line-bad">&gt; 265 |                                         Image(systemName: &quot;chevron.up&quot;)</span>
@@ -1234,14 +1181,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 354 |                                      .accessibilityAddTraits(.isHeader)</span>
   355 |                                     .font(.title)
 </div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">360:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  359 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-bad">&gt; 360 |                                 Button(action: {</span>
-  361 |                                     print(&quot;Read More tapped&quot;)
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  359 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-good">&gt; &gt; 360 |                                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 360 |                                      .disabled(true)</span>
-  361 |                                     print(&quot;Read More tapped&quot;)
-</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">368:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  367 |                                             .bold()
 <span class="line-bad">&gt; 368 |                                         Image(systemName: &quot;chevron.up&quot;)</span>
   369 |                                             .foregroundColor(.primary)
@@ -1285,14 +1224,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 404 |                                  Text(&quot;Stained Glass&quot;)</span>
 <span class="line-good">&gt; &gt; 404 |                                      .accessibilityAddTraits(.isHeader)</span>
   405 |                                     .font(.title)
-</div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">410:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  409 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-bad">&gt; 410 |                                 Button(action: {</span>
-  411 |                                     print(&quot;Read More tapped&quot;)
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  409 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-good">&gt; &gt; 410 |                                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 410 |                                      .disabled(true)</span>
-  411 |                                     print(&quot;Read More tapped&quot;)
 </div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">418:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  417 |                                             .bold()
 <span class="line-bad">&gt; 418 |                                         Image(systemName: &quot;chevron.up&quot;)</span>
@@ -1338,14 +1269,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 454 |                                      .accessibilityAddTraits(.isHeader)</span>
   455 |                                     .font(.title)
 </div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">460:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  459 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-bad">&gt; 460 |                                 Button(action: {</span>
-  461 |                                     print(&quot;Read More tapped&quot;)
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  459 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-good">&gt; &gt; 460 |                                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 460 |                                      .disabled(true)</span>
-  461 |                                     print(&quot;Read More tapped&quot;)
-</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">468:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  467 |                                             .bold()
 <span class="line-bad">&gt; 468 |                                         Image(systemName: &quot;chevron.up&quot;)</span>
   469 |                                             .foregroundColor(.primary)
@@ -1357,7 +1280,7 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>CarouselViewBad.swift — 21 issues <span class="badge badge-error">12 errors</span> <span class="badge badge-warning">9 warnings</span></summary>
+<summary>CarouselViewBad.swift — 18 issues <span class="badge badge-error">9 errors</span> <span class="badge badge-warning">9 warnings</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">76:33</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  75 |                             VStack {
 <span class="line-bad">&gt; 76 |                                 Image(&quot;mardi-gras&quot;)</span>
@@ -1394,14 +1317,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 95 |                                  Text(&quot;Mardi Gras&quot;)</span>
 <span class="line-good">&gt; &gt; 95 |                                      .accessibilityAddTraits(.isHeader)</span>
   96 |                                     .font(.title)
-</div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">101:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  100 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-bad">&gt; 101 |                                 Button(action: {</span>
-  102 |                                     print(&quot;Read More tapped&quot;)
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  100 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-good">&gt; &gt; 101 |                                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 101 |                                      .disabled(true)</span>
-  102 |                                     print(&quot;Read More tapped&quot;)
 </div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">109:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  108 |                                             .bold()
 <span class="line-bad">&gt; 109 |                                         Image(systemName: &quot;chevron.up&quot;)</span>
@@ -1447,14 +1362,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 145 |                                      .accessibilityAddTraits(.isHeader)</span>
   146 |                                     .font(.title)
 </div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">151:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  150 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-bad">&gt; 151 |                                 Button(action: {</span>
-  152 |                                     print(&quot;Read More tapped&quot;)
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  150 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-good">&gt; &gt; 151 |                                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 151 |                                      .disabled(true)</span>
-  152 |                                     print(&quot;Read More tapped&quot;)
-</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">159:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  158 |                                             .bold()
 <span class="line-bad">&gt; 159 |                                         Image(systemName: &quot;chevron.up&quot;)</span>
   160 |                                             .foregroundColor(.primary)
@@ -1498,14 +1405,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 195 |                                  Text(&quot;Carousel&quot;)</span>
 <span class="line-good">&gt; &gt; 195 |                                      .accessibilityAddTraits(.isHeader)</span>
   196 |                                     .font(.title)
-</div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">201:33</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  200 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-bad">&gt; 201 |                                 Button(action: {</span>
-  202 |                                     print(&quot;Read More tapped&quot;)
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  200 |                                     .frame(maxWidth: .infinity, alignment: .leading)
-<span class="line-good">&gt; &gt; 201 |                                  Button(action: {</span>
-<span class="line-good">&gt; &gt; 201 |                                      .disabled(true)</span>
-  202 |                                     print(&quot;Read More tapped&quot;)
 </div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">209:41</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  208 |                                             .bold()
 <span class="line-bad">&gt; 209 |                                         Image(systemName: &quot;chevron.up&quot;)</span>
@@ -1948,19 +1847,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-bad">&gt; 160 |                                         .lineLimit(1)</span>
   161 |                                 }
 </div><div class="suggestion">Remove .lineLimit(1) or increase to .lineLimit(3) or higher</div></div>
-</div>
-</details>
-<details>
-<summary>IncreaseContrastView.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
-<div class="diag-list">
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">44:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  43 |                 VStack(alignment: .leading) {
-<span class="line-bad">&gt; 44 |                     Button(action: {</span>
-  45 |                     }) {
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  43 |                 VStack(alignment: .leading) {
-<span class="line-good">&gt; &gt; 44 |                      Button(action: {</span>
-<span class="line-good">&gt; &gt; 44 |                          .disabled(true)</span>
-  45 |                     }) {
-</div></div>
 </div>
 </details>
 <details>
@@ -2414,19 +2300,6 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>DOBpicker.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
-<div class="diag-list">
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">32:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  31 |                     Spacer()
-<span class="line-bad">&gt; 32 |                     Button(action: {</span>
-  33 |                          isDatePickerPresented = true
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  31 |                     Spacer()
-<span class="line-good">&gt; &gt; 32 |                      Button(action: {</span>
-<span class="line-good">&gt; &gt; 32 |                          .disabled(true)</span>
-  33 |                          isDatePickerPresented = true
-</div></div>
-</div>
-</details>
-<details>
 <summary>FormViewTest.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">54:17</span> TextField uses placeholder text &quot;Name&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span><div class="code-block">  53 |             Section {
@@ -2581,7 +2454,7 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>SignUpA.swift — 4 issues <span class="badge badge-error">4 errors</span></summary>
+<summary>SignUpA.swift — 3 issues <span class="badge badge-error">3 errors</span></summary>
 <div class="diag-list">
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">43:13</span> .accessibilityHidden(true) on a container hides all interactive children from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control. Apply it only to individual decorative elements instead. <span class="diag-rule">hidden-parent-with-controls</span><div class="code-block">  42 |         ScrollView {
 <span class="line-bad">&gt; 43 |             VStack {</span>
@@ -2591,14 +2464,6 @@ summary:hover { background: #f1f3f5; }
 <span class="line-bad">&gt; 161 |                 HStack {</span>
   162 |                     Text(&quot;Birth Date&quot;)
 </div><div class="suggestion">Remove .accessibilityHidden(true) from the container and apply it only to decorative children</div></div>
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">165:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  164 |                     Spacer()
-<span class="line-bad">&gt; 165 |                     Button(action: {</span>
-  166 |                          isDatePickerPresented = true
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  164 |                     Spacer()
-<span class="line-good">&gt; &gt; 165 |                      Button(action: {</span>
-<span class="line-good">&gt; &gt; 165 |                          .disabled(true)</span>
-  166 |                          isDatePickerPresented = true
-</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">205:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  204 |                     HStack {
 <span class="line-bad">&gt; 205 |                         Image(systemName: &quot;smiley&quot;)</span>
   206 |                         Text(&quot;Sign Up&quot;)
@@ -2610,16 +2475,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>SignUpB.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<summary>SignUpB.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">59:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  58 |                     Spacer()
-<span class="line-bad">&gt; 59 |                     Button(action: {</span>
-  60 |                         isDatePickerPresented.toggle()
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  58 |                     Spacer()
-<span class="line-good">&gt; &gt; 59 |                      Button(action: {</span>
-<span class="line-good">&gt; &gt; 59 |                          .disabled(true)</span>
-  60 |                         isDatePickerPresented.toggle()
-</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">100:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  99 |                     HStack {
 <span class="line-bad">&gt; 100 |                         Image(systemName: &quot;smiley&quot;)</span>
   101 |                         Text(&quot;Sign Up&quot;)
@@ -2631,16 +2488,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>SignUpC.swift — 2 issues <span class="badge badge-error">2 errors</span></summary>
+<summary>SignUpC.swift — 1 issue <span class="badge badge-error">1 error</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">59:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  58 |                     Spacer()
-<span class="line-bad">&gt; 59 |                     Button(action: {</span>
-  60 |                          isDatePickerPresented = true
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  58 |                     Spacer()
-<span class="line-good">&gt; &gt; 59 |                      Button(action: {</span>
-<span class="line-good">&gt; &gt; 59 |                          .disabled(true)</span>
-  60 |                          isDatePickerPresented = true
-</div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">102:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span><div class="code-block">  101 |                     HStack {
 <span class="line-bad">&gt; 102 |                         Image(systemName: &quot;smiley&quot;)</span>
   103 |                         Text(&quot;Sign Up&quot;)
@@ -2736,16 +2585,8 @@ summary:hover { background: #f1f3f5; }
 </div>
 </details>
 <details>
-<summary>ReduceTransparencyView.swift — 3 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">2 warnings</span></summary>
+<summary>ReduceTransparencyView.swift — 2 issues <span class="badge badge-warning">2 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">44:21</span> Button appears visually disabled but is missing .disabled(true). VoiceOver won't announce the disabled state. <span class="diag-rule">visually-disabled-not-semantic</span><div class="code-block">  43 |                 VStack(alignment: .leading) {
-<span class="line-bad">&gt; 44 |                     Button(action: {</span>
-  45 |                     }) {
-</div><div class="suggestion">Add .disabled(true) to the Button</div><div class="fix-block">  43 |                 VStack(alignment: .leading) {
-<span class="line-good">&gt; &gt; 44 |                      Button(action: {</span>
-<span class="line-good">&gt; &gt; 44 |                          .disabled(true)</span>
-  45 |                     }) {
-</div></div>
 <div class="diag"><span class="badge badge-warning">warning</span> <span class="diag-loc">48:29</span> Inline color definition in .background() — consider using a named color from asset catalog with Dark Mode variants to ensure contrast in both modes. <span class="diag-rule">hardcoded-color</span><div class="code-block">  47 |                             .padding()
 <span class="line-bad">&gt; 48 |                             .background(reduceTransparency == true ? Color(red: 146 / 255, green: 146 / 255, blue: 146 / 255) : Color.black.opacity(0.05))</span>
   49 |                             .foregroundColor(reduceTransparency == true ? Color.black : Color(red: 108 / 255, green: 108 / 255, blue: 108 / 255))
@@ -3624,7 +3465,7 @@ summary:hover { background: #f1f3f5; }
 <tr><td>tap-gesture-missing-button-trait</td><td><span class="badge badge-error">error</span></td><td>11</td><td>4.1.2</td></tr>
 <tr><td>textfield-missing-label</td><td><span class="badge badge-error">error</span></td><td>30</td><td>4.1.2</td></tr>
 <tr><td>toggle-missing-label</td><td><span class="badge badge-error">error</span></td><td>1</td><td>4.1.2</td></tr>
-<tr><td>visually-disabled-not-semantic</td><td><span class="badge badge-error">error</span></td><td>18</td><td>4.1.2</td></tr>
+<tr><td>visually-disabled-not-semantic</td><td><span class="badge badge-error">error</span></td><td>0</td><td>4.1.2</td></tr>
 </table>
 </body>
 </html>

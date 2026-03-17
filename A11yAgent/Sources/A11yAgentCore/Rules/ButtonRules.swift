@@ -138,11 +138,15 @@ public struct VisuallyDisabledNotSemanticallyRule: A11yRule {
         for view in visitor.views(ofType: "Button") {
             let mods = view.modifiers
 
-            // Check for visual disabled indicators
+            // Only consider modifiers on the Button's direct chain, not those
+            // inside closures or argument expressions (e.g. Color.gray.opacity(0.2)
+            // inside a .background() argument is NOT a view opacity modifier).
             let hasGrayTint = mods.modifiers(named: "tint").contains { mod in
-                Self.grayTints.contains(where: { mod.arguments.first?.text.contains($0) == true })
+                guard !isNested(mod.callExpr, relativeTo: view.callExpr) else { return false }
+                return Self.grayTints.contains(where: { mod.arguments.first?.text.contains($0) == true })
             }
             let hasLowOpacity = mods.modifiers(named: "opacity").contains { mod in
+                guard !isNested(mod.callExpr, relativeTo: view.callExpr) else { return false }
                 guard let text = mod.arguments.first?.text,
                       let value = Double(text) else { return false }
                 return value < 0.5
@@ -164,5 +168,22 @@ public struct VisuallyDisabledNotSemanticallyRule: A11yRule {
             }
         }
         return diagnostics
+    }
+
+    /// Returns true when `modifier` is nested inside a closure body or
+    /// argument list relative to `viewCall`, meaning it's on a child view
+    /// or inside a color/value expression — not on the view's own chain.
+    private func isNested(
+        _ modifier: FunctionCallExprSyntax,
+        relativeTo viewCall: FunctionCallExprSyntax
+    ) -> Bool {
+        var node: Syntax? = Syntax(modifier)
+        while let current = node {
+            if current.id == Syntax(viewCall).id { return false }
+            if current.is(ClosureExprSyntax.self) { return true }
+            if current.is(LabeledExprListSyntax.self) { return true }
+            node = current.parent
+        }
+        return false
     }
 }

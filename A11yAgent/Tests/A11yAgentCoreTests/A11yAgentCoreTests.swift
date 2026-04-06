@@ -845,4 +845,169 @@ final class A11yAgentCoreTests: XCTestCase {
         XCTAssertTrue(diags.contains { $0.ruleID == "line-limit-1" }, "Should flag .lineLimit(1)")
         XCTAssertTrue(diags.contains { $0.ruleID == "textfield-missing-label" }, "Should flag empty TextField")
     }
+
+    // MARK: - Score Calculator
+
+    func testScoreCalculator_perfectScore() {
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: [],
+            rules: registry.enabledRules,
+            filePaths: ["test.swift"]
+        )
+        XCTAssertEqual(score.score, 100.0)
+        XCTAssertEqual(score.grade, "A+")
+        XCTAssertEqual(score.totalErrors, 0)
+        XCTAssertEqual(score.totalWarnings, 0)
+        XCTAssertEqual(score.criteriaFailed, 0)
+    }
+
+    func testScoreCalculator_errorsReduceScore() {
+        let diags = [
+            A11yDiagnostic(ruleID: "image-missing-label", severity: .error, message: "msg",
+                           filePath: "test.swift", line: 1, column: 1, wcagCriteria: ["1.1.1"]),
+            A11yDiagnostic(ruleID: "icon-button-missing-label", severity: .error, message: "msg",
+                           filePath: "test.swift", line: 5, column: 1, wcagCriteria: ["4.1.2"]),
+        ]
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: diags,
+            rules: registry.enabledRules,
+            filePaths: ["test.swift"]
+        )
+        XCTAssertLessThan(score.score, 100.0, "Errors should reduce score below 100")
+        XCTAssertEqual(score.totalErrors, 2)
+        XCTAssertGreaterThan(score.criteriaFailed, 0)
+    }
+
+    func testScoreCalculator_warningsCountAsReview() {
+        let diags = [
+            A11yDiagnostic(ruleID: "heading-trait-missing", severity: .warning, message: "msg",
+                           filePath: "test.swift", line: 1, column: 1, wcagCriteria: ["1.3.1"]),
+        ]
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: diags,
+            rules: registry.enabledRules,
+            filePaths: ["test.swift"]
+        )
+        // Warnings result in "review" status, not "fail"
+        let criterion131 = score.criteriaScores.first { $0.criterion == "1.3.1" }
+        XCTAssertEqual(criterion131?.status, .review)
+        XCTAssertEqual(score.criteriaFailed, 0)
+    }
+
+    func testScoreCalculator_perFileScores() {
+        let diags = [
+            A11yDiagnostic(ruleID: "image-missing-label", severity: .error, message: "msg",
+                           filePath: "bad.swift", line: 1, column: 1, wcagCriteria: ["1.1.1"]),
+        ]
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: diags,
+            rules: registry.enabledRules,
+            filePaths: ["bad.swift", "good.swift"]
+        )
+        XCTAssertEqual(score.fileScores.count, 2)
+        let badFile = score.fileScores.first { $0.filePath == "bad.swift" }
+        let goodFile = score.fileScores.first { $0.filePath == "good.swift" }
+        XCTAssertLessThan(badFile!.score, goodFile!.score)
+        XCTAssertEqual(goodFile!.score, 100.0)
+    }
+
+    func testScoreCalculator_principleScores() {
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: [],
+            rules: registry.enabledRules,
+            filePaths: ["test.swift"]
+        )
+        // With no issues, all principle scores should be 100
+        for (_, pScore) in score.principleScores {
+            XCTAssertEqual(pScore, 100.0)
+        }
+    }
+
+    func testScoreCalculator_criteriaNotChecked() {
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: [],
+            rules: registry.enabledRules,
+            filePaths: ["test.swift"]
+        )
+        // Many WCAG criteria have no rules, so criteriaNotChecked should be > 0
+        XCTAssertGreaterThan(score.criteriaNotChecked, 0)
+        // Checked criteria = passed + failed
+        let totalInCatalog = ScoreCalculator.wcagCatalog.count
+        XCTAssertEqual(score.criteriaPassed + score.criteriaFailed + score.criteriaNotChecked, totalInCatalog)
+    }
+
+    func testLetterGrade_boundaries() {
+        XCTAssertEqual(A11yScore.letterGrade(for: 100), "A+")
+        XCTAssertEqual(A11yScore.letterGrade(for: 97), "A+")
+        XCTAssertEqual(A11yScore.letterGrade(for: 95), "A")
+        XCTAssertEqual(A11yScore.letterGrade(for: 91), "A-")
+        XCTAssertEqual(A11yScore.letterGrade(for: 85), "B")
+        XCTAssertEqual(A11yScore.letterGrade(for: 75), "C")
+        XCTAssertEqual(A11yScore.letterGrade(for: 65), "D")
+        XCTAssertEqual(A11yScore.letterGrade(for: 50), "F")
+        XCTAssertEqual(A11yScore.letterGrade(for: 0), "F")
+    }
+
+    func testFileScore_computation() {
+        // 0 issues = 100
+        XCTAssertEqual(ScoreCalculator.computeFileScore(errors: 0, warnings: 0, info: 0), 100.0)
+        // 1 error = 95 (100 - 5)
+        XCTAssertEqual(ScoreCalculator.computeFileScore(errors: 1, warnings: 0, info: 0), 95.0)
+        // 1 warning = 98 (100 - 2)
+        XCTAssertEqual(ScoreCalculator.computeFileScore(errors: 0, warnings: 1, info: 0), 98.0)
+        // Clamped to 0
+        XCTAssertEqual(ScoreCalculator.computeFileScore(errors: 100, warnings: 0, info: 0), 0.0)
+    }
+
+    func testWCAGPrinciple_mapping() {
+        XCTAssertEqual(WCAGPrinciple.from(criterion: "1.1.1"), .perceivable)
+        XCTAssertEqual(WCAGPrinciple.from(criterion: "2.4.3"), .operable)
+        XCTAssertEqual(WCAGPrinciple.from(criterion: "3.1.1"), .understandable)
+        XCTAssertEqual(WCAGPrinciple.from(criterion: "4.1.2"), .robust)
+    }
+
+    func testScoreCalculator_integrationWithRegistry() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Image(systemName: "newspaper")
+            }
+        }
+        """
+        let diags = registry.analyze(sourceText: source, filePath: "test.swift")
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: diags,
+            rules: registry.enabledRules,
+            filePaths: ["test.swift"]
+        )
+        XCTAssertLessThan(score.score, 100.0, "File with issues should score below 100")
+        XCTAssertGreaterThan(score.score, 0.0, "Score should still be positive")
+        XCTAssertFalse(score.grade.isEmpty)
+    }
+
+    func testScoreJSONFormatter_producesValidJSON() throws {
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: [],
+            rules: registry.enabledRules,
+            filePaths: ["test.swift"]
+        )
+        let formatter = ScoreJSONFormatter()
+        let output = try formatter.format(score)
+        let data = output.data(using: .utf8)!
+        let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+        XCTAssertEqual(json["score"] as? Double, 100.0)
+        XCTAssertEqual(json["grade"] as? String, "A+")
+        XCTAssertNotNil(json["criteria"])
+        XCTAssertNotNil(json["principleScores"])
+        XCTAssertNotNil(json["fileScores"])
+    }
 }

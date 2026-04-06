@@ -9,13 +9,15 @@ struct A11yCheck: ParsableCommand {
         abstract: "SwiftUI Accessibility Checker — static analysis for iOS accessibility issues.",
         discussion: """
         Analyzes Swift/SwiftUI source files for accessibility issues using \
-        SwiftSyntax-based rules mapped to WCAG 2.2 success criteria.
+        SwiftSyntax-based rules mapped to WCAG 2.2 success criteria. \
+        Every run automatically includes a WCAG 2.2 accessibility score.
 
         Examples:
           a11y-check Sources/MyView.swift
           a11y-check Sources/ --format json
           a11y-check . --disable image-missing-label,fixed-font-size
           a11y-check . --only error
+          a11y-check . --min-score 80
         """,
         version: "0.1.0"
     )
@@ -47,20 +49,11 @@ struct A11yCheck: ParsableCommand {
     @Option(name: .long, help: "Git ref to diff against (default: HEAD). Used with --diff.")
     var diffBase: String?
 
+    @Option(name: .long, help: "Minimum passing score (0–100). Exit with error if score is below this threshold.")
+    var minScore: Double?
+
     func run() throws {
         let registry = RuleRegistry()
-
-        // Handle --list-rules
-        if listRules {
-            print("Available rules (\(registry.rules.count)):\n")
-            for rule in registry.rules.sorted(by: { $0.id < $1.id }) {
-                let wcag = rule.wcagCriteria.joined(separator: ", ")
-                print("  \(rule.id)")
-                print("    \(rule.name) [\(rule.severity.rawValue)] WCAG \(wcag)")
-                print("    \(rule.description)\n")
-            }
-            return
-        }
 
         // Load config
         if let configPath = config {
@@ -82,8 +75,21 @@ struct A11yCheck: ParsableCommand {
         let projectRoot = resolvePath(paths.first ?? ".")
         registry.assetColors = AssetCatalogParser.discoverColors(in: projectRoot)
 
+        // Handle --list-rules
+        if listRules {
+            print("Available rules (\(registry.rules.count)):\n")
+            for rule in registry.rules.sorted(by: { $0.id < $1.id }) {
+                let wcag = rule.wcagCriteria.joined(separator: ", ")
+                print("  \(rule.id)")
+                print("    \(rule.name) [\(rule.severity.rawValue)] WCAG \(wcag)")
+                print("    \(rule.description)\n")
+            }
+            return
+        }
+
         // Collect diagnostics
         var allDiagnostics: [A11yDiagnostic] = []
+        var filePaths: [String] = []
 
         for path in paths {
             let resolvedPath = resolvePath(path)
@@ -95,9 +101,12 @@ struct A11yCheck: ParsableCommand {
             }
 
             if isDir.boolValue {
+                let discovered = discoverSwiftFiles(at: resolvedPath, config: registry.config)
+                filePaths.append(contentsOf: discovered)
                 let diagnostics = try registry.analyzeDirectory(at: resolvedPath)
                 allDiagnostics.append(contentsOf: diagnostics)
             } else {
+                filePaths.append(resolvedPath)
                 let diagnostics = try registry.analyzeFile(at: resolvedPath)
                 allDiagnostics.append(contentsOf: diagnostics)
             }
@@ -115,30 +124,44 @@ struct A11yCheck: ParsableCommand {
             allDiagnostics = allDiagnostics.filter { $0.severity >= minSeverity }
         }
 
+        // Compute score
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: allDiagnostics,
+            rules: registry.enabledRules,
+            filePaths: filePaths
+        )
+
         // Output results
         switch format {
         case .terminal:
             let basePath = paths.count == 1 ? resolvePath(paths[0]) : nil
             let formatter = TerminalFormatter()
-            print(formatter.format(allDiagnostics, relativeTo: basePath))
+            print(formatter.format(allDiagnostics, relativeTo: basePath, score: score))
 
         case .json:
             let formatter = JSONFormatter()
-            let output = try formatter.format(allDiagnostics)
+            let output = try formatter.format(allDiagnostics, score: score)
             print(output)
 
         case .xcode:
             let formatter = XcodeFormatter()
-            print(formatter.format(allDiagnostics), terminator: "")
+            print(formatter.format(allDiagnostics, score: score), terminator: "")
 
         case .html:
             let formatter = HTMLFormatter()
-            print(formatter.format(allDiagnostics, allRules: registry.rules))
+            print(formatter.format(allDiagnostics, allRules: registry.rules, score: score))
         }
 
         // Exit with error code if there are errors
         let errorCount = allDiagnostics.filter { $0.severity == .error }.count
         if errorCount > 0 {
+            throw ExitCode(1)
+        }
+
+        // Exit with error if below minimum score
+        if let threshold = minScore, score.score < threshold {
+            printError("Score \(String(format: "%.1f", score.score)) is below minimum threshold \(String(format: "%.1f", threshold))")
             throw ExitCode(1)
         }
     }
@@ -154,6 +177,19 @@ struct A11yCheck: ParsableCommand {
     private func printError(_ message: String) {
         FileHandle.standardError.write(Data("\u{001B}[31merror: \(message)\u{001B}[0m\n".utf8))
     }
+}
+
+/// Discover all .swift file paths in a directory, respecting config exclusions.
+func discoverSwiftFiles(at path: String, config: A11yConfig) -> [String] {
+    let fileManager = FileManager.default
+    var results: [String] = []
+    guard let enumerator = fileManager.enumerator(atPath: path) else { return [] }
+    while let relativePath = enumerator.nextObject() as? String {
+        guard relativePath.hasSuffix(".swift") else { continue }
+        if config.shouldExclude(relativePath: relativePath) { continue }
+        results.append((path as NSString).appendingPathComponent(relativePath))
+    }
+    return results
 }
 
 enum OutputFormat: String, ExpressibleByArgument {

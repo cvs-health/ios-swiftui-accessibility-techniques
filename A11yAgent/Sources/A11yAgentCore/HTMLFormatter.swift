@@ -5,7 +5,7 @@ public struct HTMLFormatter {
 
     public init() {}
 
-    public func format(_ diagnostics: [A11yDiagnostic], allRules: [any A11yRule]) -> String {
+    public func format(_ diagnostics: [A11yDiagnostic], allRules: [any A11yRule], score: A11yScore? = nil) -> String {
         let errorCount = diagnostics.filter { $0.severity == .error }.count
         let warningCount = diagnostics.filter { $0.severity == .warning }.count
         let infoCount = diagnostics.filter { $0.severity == .info }.count
@@ -83,6 +83,28 @@ public struct HTMLFormatter {
         .suggestion::before { content: "Fix: "; font-weight: 600; }
         .fix-block { background: #1e3a1e; color: #a6e3a1; border-radius: 6px; padding: 0.625rem 0.75rem; margin: 0.375rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
         .fix-block .line-good { color: #40e040; font-weight: 600; }
+        .score-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
+        .score-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+        .score-big { font-size: 3rem; font-weight: 800; line-height: 1; }
+        .score-grade { font-size: 2rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 8px; }
+        .grade-a { background: var(--pass-bg); color: var(--pass); }
+        .grade-b { background: #d4edda; color: #155724; }
+        .grade-c { background: var(--warning-bg); color: var(--warning); }
+        .grade-d { background: #ffe0b2; color: #e65100; }
+        .grade-f { background: var(--error-bg); color: var(--error); }
+        .score-subtitle { color: #6c757d; font-size: 0.875rem; }
+        .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+        .principle-card { background: #f8f9fa; border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 1rem; }
+        .principle-name { font-weight: 600; font-size: 0.875rem; margin-bottom: 0.375rem; }
+        .progress-bar { background: #e9ecef; border-radius: 4px; height: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+        .progress-fill.high { background: #28a745; }
+        .progress-fill.medium { background: #ffc107; }
+        .progress-fill.low { background: var(--error); }
+        .principle-pct { font-size: 0.75rem; color: #6c757d; margin-top: 0.25rem; text-align: right; }
+        .score-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.875rem; color: #6c757d; }
+        .score-stats span { white-space: nowrap; }
+        .criteria-table td.status-cell { text-align: center; }
         </style>
         </head>
         <body>
@@ -100,21 +122,92 @@ public struct HTMLFormatter {
         </div>
         """
 
-        // WCAG Conformance Table
-        html += "<h2>WCAG 2.2 Conformance</h2>\n<table>\n<tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>\n"
-        for criterion in allCriteria {
-            let criterionDiags = flatCriterionDiags[criterion] ?? []
-            let hasErrors = criterionDiags.contains { $0.severity == .error }
-            let status = criterionDiags.isEmpty ? "Pass" : (hasErrors ? "Fail" : "Review")
-            let badgeClass = criterionDiags.isEmpty ? "badge-pass" : (hasErrors ? "badge-fail" : "badge-warning")
-            let ruleNames = allRules.filter { $0.wcagCriteria.contains(criterion) }.map(\.id).joined(separator: ", ")
-            let wcagURL = "https://www.w3.org/TR/WCAG22/#" + wcagAnchor(criterion)
-            html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(criterion))</a></td>"
-            html += "<td><span class=\"badge \(badgeClass)\">\(status)</span></td>"
-            html += "<td>\(criterionDiags.count)</td>"
-            html += "<td>\(escapeHTML(ruleNames))</td></tr>\n"
+        // Score Section
+        if let score = score {
+            let gradeClass: String
+            switch score.grade.prefix(1) {
+            case "A": gradeClass = "grade-a"
+            case "B": gradeClass = "grade-b"
+            case "C": gradeClass = "grade-c"
+            case "D": gradeClass = "grade-d"
+            default:  gradeClass = "grade-f"
+            }
+
+            html += """
+            <div class="score-section">
+              <div class="score-header">
+                <div class="score-big">\(String(format: "%.1f", score.score))</div>
+                <div>
+                  <div class="score-grade \(gradeClass)">\(escapeHTML(score.grade))</div>
+                  <div class="score-subtitle">WCAG 2.2 Accessibility Score</div>
+                </div>
+              </div>
+              <div class="principles">
+            """
+
+            let principleOrder: [WCAGPrinciple] = [.perceivable, .operable, .understandable, .robust]
+            for principle in principleOrder {
+                let pScore = score.principleScores[principle] ?? 100.0
+                let fillClass = pScore >= 80 ? "high" : (pScore >= 50 ? "medium" : "low")
+                html += """
+                <div class="principle-card">
+                  <div class="principle-name">\(principle.rawValue)</div>
+                  <div class="progress-bar"><div class="progress-fill \(fillClass)" style="width:\(String(format: "%.1f", pScore))%"></div></div>
+                  <div class="principle-pct">\(String(format: "%.1f", pScore))%</div>
+                </div>
+                """
+            }
+
+            html += """
+              </div>
+              <div class="score-stats">
+                <span>Criteria checked: \(score.criteriaPassed + score.criteriaFailed) / \(ScoreCalculator.wcagCatalog.count)</span>
+                <span>Passed: \(score.criteriaPassed)</span>
+                <span>Failed: \(score.criteriaFailed)</span>
+                <span>Files: \(score.fileScores.count)</span>
+              </div>
+            </div>
+            """
         }
-        html += "</table>\n"
+
+        // WCAG Conformance Table — use score data if available for full 48-criteria view
+        html += "<h2>WCAG 2.2 Conformance</h2>\n"
+        if let score = score {
+            html += "<table class=\"criteria-table\">\n<tr><th>Criterion</th><th>Name</th><th>Level</th><th>Status</th><th>Issues</th></tr>\n"
+            for cs in score.criteriaScores {
+                let statusIcon: String
+                let badgeClass: String
+                switch cs.status {
+                case .pass:       statusIcon = "✓ Pass";   badgeClass = "badge-pass"
+                case .fail:       statusIcon = "✗ Fail";   badgeClass = "badge-fail"
+                case .review:     statusIcon = "⚠ Review"; badgeClass = "badge-warning"
+                case .notChecked: statusIcon = "· N/A";    badgeClass = "badge-info"
+                }
+                let issueText = (cs.errorCount + cs.warningCount) > 0 ? "\(cs.errorCount)E \(cs.warningCount)W" : "—"
+                let wcagURL = "https://www.w3.org/TR/WCAG22/#" + wcagAnchor(cs.criterion)
+                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(cs.criterion))</a></td>"
+                html += "<td>\(escapeHTML(cs.name))</td>"
+                html += "<td>\(cs.level.rawValue)</td>"
+                html += "<td class=\"status-cell\"><span class=\"badge \(badgeClass)\">\(statusIcon)</span></td>"
+                html += "<td>\(issueText)</td></tr>\n"
+            }
+            html += "</table>\n"
+        } else {
+            html += "<table>\n<tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>\n"
+            for criterion in allCriteria {
+                let criterionDiags = flatCriterionDiags[criterion] ?? []
+                let hasErrors = criterionDiags.contains { $0.severity == .error }
+                let status = criterionDiags.isEmpty ? "Pass" : (hasErrors ? "Fail" : "Review")
+                let badgeClass = criterionDiags.isEmpty ? "badge-pass" : (hasErrors ? "badge-fail" : "badge-warning")
+                let ruleNames = allRules.filter { $0.wcagCriteria.contains(criterion) }.map(\.id).joined(separator: ", ")
+                let wcagURL = "https://www.w3.org/TR/WCAG22/#" + wcagAnchor(criterion)
+                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(criterion))</a></td>"
+                html += "<td><span class=\"badge \(badgeClass)\">\(status)</span></td>"
+                html += "<td>\(criterionDiags.count)</td>"
+                html += "<td>\(escapeHTML(ruleNames))</td></tr>\n"
+            }
+            html += "</table>\n"
+        }
 
         // By-file detail
         html += "<h2>Issues by File</h2>\n"

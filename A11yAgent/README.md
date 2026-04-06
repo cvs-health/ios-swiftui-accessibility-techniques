@@ -1,6 +1,6 @@
 # A11y Checker (a11y-check)
 
-Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 23 rules across 10 WCAG criteria.
+Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 23 rules across 10 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
 
 ## Check your own iOS app
 
@@ -22,6 +22,8 @@ a11y-check . --format xcode        # Output for Xcode build phases
 a11y-check . --diff                # Only issues on lines you changed
 a11y-check --list-rules            # List all 23 rules
 ```
+
+Every run automatically includes a **WCAG 2.2 accessibility score** (0–100 with letter grade) after the diagnostics. Use `--min-score 80` to fail CI if the score drops below a threshold.
 
 ## Installation
 
@@ -123,6 +125,66 @@ a11y-check . --diff
 a11y-check . --diff --diff-base main
 ```
 
+## Accessibility scoring
+
+Every `a11y-check` run automatically calculates a **WCAG 2.2 accessibility score** (0–100) with a letter grade and appends it after the diagnostics. No extra commands needed — the score appears in all output formats (terminal, JSON, Xcode, and HTML).
+
+```
+5 errors, 3 warnings in 4 files
+
+Accessibility Score: 62.5 / 100  (D)
+  Perceivable     [██████████████░░░░░░]   73.0%
+  Operable        [███████████████████░]   97.0%
+  Understandable  [████████████████████]  100.0%
+  Robust          [░░░░░░░░░░░░░░░░░░░░]    0.0%
+  Criteria: 8 passed, 2 failed (10 / 48 checked)
+```
+
+Use `--min-score` to enforce a minimum score threshold:
+
+```bash
+# Fail if score drops below 80
+a11y-check . --min-score 80
+```
+
+### What the score includes
+
+- **Overall score** (0–100) with a letter grade (A+ through F)
+- **Per-principle breakdown** — scores for Perceivable, Operable, Understandable, and Robust with progress bars
+- **Criteria summary** — how many WCAG 2.2 criteria passed, failed, and were checked
+- **HTML reports** additionally include a full 48-criteria WCAG 2.2 conformance table with per-criterion pass/fail status
+- **JSON output** includes a `score` object alongside `diagnostics` with grade, principle scores, and criteria counts
+
+### How scoring works
+
+The overall score combines two components equally:
+
+1. **Criteria coverage (50%)** — what percentage of checked WCAG criteria pass. Errors cause a criterion to fail; warnings put it in "review" status (counted as a conditional pass with a small penalty).
+2. **Issue density (50%)** — a deduction based on issue counts normalized across files. Errors deduct 5 points, warnings 2 points, and info 0.5 points.
+
+Per-file scores start at 100 and deduct per issue using the same weights. The letter grade maps the overall score to a traditional A+–F scale.
+
+### Scoring in CI
+
+Use `--min-score` as a quality gate to prevent accessibility regressions:
+
+```yaml
+- name: Accessibility check
+  run: a11y-check Sources/ --min-score 80
+```
+
+Or capture the full output (diagnostics + score) as JSON:
+
+```yaml
+- name: Accessibility check
+  run: a11y-check Sources/ --format json > a11y-results.json
+- name: Upload results
+  uses: actions/upload-artifact@v4
+  with:
+    name: a11y-results
+    path: a11y-results.json
+```
+
 ## Options
 
 | Option | Description |
@@ -136,6 +198,7 @@ a11y-check . --diff --diff-base main
 | `--diff-base` | Git ref to diff against (default: `HEAD`). Use with `--diff` |
 | `--list-rules` | Print all rules and exit |
 | `--compact` | Suppress file path in output |
+| `--min-score` | Minimum passing score (0–100). Exits with error code 1 if below threshold |
 
 ## Configuration file
 
@@ -383,6 +446,8 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
 - **"List all the a11y rules"** — shows all 23 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
+- **"What's the accessibility score for this project?"** — runs `a11y-check .` and explains the WCAG 2.2 score breakdown
+- **"Score ProfileView.swift"** — runs the check on a single file and highlights what to fix based on the score
 - **"Generate an HTML accessibility report for this project"** — the AI runs `a11y-check . --format html > accessibility-report.html` in the terminal, then opens the report in your browser. The report includes a WCAG conformance table, per-file breakdown with code snippets and fix suggestions, and per-rule summary — ready to share with your team or compliance reviewers.
 
 The full loop — detect, understand, fix, report — happens conversationally without leaving the editor.

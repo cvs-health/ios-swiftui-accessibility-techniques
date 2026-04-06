@@ -103,15 +103,19 @@ public struct TerminalFormatter {
         let empty = 20 - filled
         let bar = String(repeating: "\u{2588}", count: filled) + String(repeating: "\u{2591}", count: empty)
         out += "  \(gradeColor)[\(bar)]\(reset)  \(String(format: "%5.1f", score.score))%"
-        out += "  \(dim)\(score.criteriaPassed) criteria passed, \(score.criteriaFailed) failed\(reset)\n"
+        out += "  \(dim)\(score.criteriaPassed) criteria passed, \(score.criteriaFailed) failed"
+        out += " — \(score.totalErrors) errors, \(score.totalWarnings) warnings\(reset)\n"
 
         // Show failed criteria
         let failed = score.criteriaScores.filter { $0.status == .fail }
         if !failed.isEmpty {
             out += "\n\(red)\(bold)Failed WCAG criteria:\(reset)\n"
             for cs in failed {
+                var counts: [String] = []
+                if cs.errorCount > 0 { counts.append("\(cs.errorCount) \(cs.errorCount == 1 ? "error" : "errors")") }
+                if cs.warningCount > 0 { counts.append("\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings")") }
                 out += "  \(red)\u{2717}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
-                out += "  \(dim)(\(cs.errorCount)E \(cs.warningCount)W)\(reset)\n"
+                out += "  \(dim)(\(counts.joined(separator: ", ")))\(reset)\n"
             }
         }
 
@@ -122,7 +126,7 @@ public struct TerminalFormatter {
             out += "\(yellow)\(bold)Needs review:\(reset)\n"
             for cs in review {
                 out += "  \(yellow)\u{26a0}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
-                out += "  \(dim)(\(cs.warningCount)W)\(reset)\n"
+                out += "  \(dim)(\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings"))\(reset)\n"
             }
         }
 

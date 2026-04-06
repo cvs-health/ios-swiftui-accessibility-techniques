@@ -20,6 +20,7 @@ Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](htt
 a11y-check . --only error          # Show only errors
 a11y-check . --format xcode        # Output for Xcode build phases
 a11y-check . --diff                # Only issues on lines you changed
+a11y-check MyView.swift --lines 50-120  # Check only specific lines
 a11y-check --list-rules            # List all 23 rules
 ```
 
@@ -201,6 +202,7 @@ Or capture the full output (diagnostics + score) as JSON:
 | `--list-rules` | Print all rules and exit |
 | `--compact` | Suppress file path in output |
 | `--min-score` | Minimum passing score (0–100). Exits with error code 1 if below threshold |
+| `--lines` | Only check lines in a range, e.g. `50-120`. Comma-separated for multiple ranges: `10-30,80-100` |
 
 ## Configuration file
 

@@ -132,12 +132,14 @@ Every `a11y-check` run automatically calculates a **WCAG 2.2 accessibility score
 ```
 5 errors, 3 warnings in 4 files
 
-Accessibility Score: 62.5 / 100  (D)
-  Perceivable     [██████████████░░░░░░]   73.0%
-  Operable        [███████████████████░]   97.0%
-  Understandable  [████████████████████]  100.0%
-  Robust          [░░░░░░░░░░░░░░░░░░░░]    0.0%
-  Criteria: 8 passed, 2 failed (10 / 48 checked)
+WCAG Score: 62.5 / 100  (D)  8 criteria passed, 2 failed
+
+Failed WCAG criteria:
+  ✗ 1.1.1 Non-text Content  (3E 0W)
+  ✗ 1.3.1 Info and Relationships  (2E 1W)
+
+Needs review:
+  ⚠ 2.4.6 Headings and Labels  (1W)
 ```
 
 Use `--min-score` to enforce a minimum score threshold:
@@ -150,10 +152,10 @@ a11y-check . --min-score 80
 ### What the score includes
 
 - **Overall score** (0–100) with a letter grade (A+ through F)
-- **Per-principle breakdown** — scores for Perceivable, Operable, Understandable, and Robust with progress bars
-- **Criteria summary** — how many WCAG 2.2 criteria passed, failed, and were checked
-- **HTML reports** additionally include a full 48-criteria WCAG 2.2 conformance table with per-criterion pass/fail status
-- **JSON output** includes a `score` object alongside `diagnostics` with grade, principle scores, and criteria counts
+- **Failed WCAG criteria** — lists each failed success criterion with error/warning counts
+- **Needs review** — criteria with warnings but no errors
+- **HTML reports** additionally include a full 48-criteria WCAG 2.2 conformance table with per-criterion status and links to the spec
+- **JSON output** includes a `score` object alongside `diagnostics` with grade, failed criteria, and review criteria
 
 ### How scoring works
 

@@ -86,6 +86,8 @@ public struct TerminalFormatter {
     private func formatScoreSummary(_ score: A11yScore) -> String {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
+        let dim = "\u{001B}[2m"
+        let red = "\u{001B}[31m"
         let gradeColor: String
         switch score.grade.prefix(1) {
         case "A": gradeColor = "\u{001B}[32m" // green
@@ -95,24 +97,34 @@ public struct TerminalFormatter {
         default:  gradeColor = "\u{001B}[31m" // red
         }
 
-        var out = "\n\(bold)Accessibility Score:\(reset) "
+        var out = "\n\(bold)WCAG Score:\(reset) "
         out += "\(gradeColor)\(bold)\(String(format: "%.1f", score.score)) / 100  (\(score.grade))\(reset)\n"
+        let filled = Int(score.score / 5.0)
+        let empty = 20 - filled
+        let bar = String(repeating: "\u{2588}", count: filled) + String(repeating: "\u{2591}", count: empty)
+        out += "  \(gradeColor)[\(bar)]\(reset)  \(String(format: "%5.1f", score.score))%"
+        out += "  \(dim)\(score.criteriaPassed) criteria passed, \(score.criteriaFailed) failed\(reset)\n"
 
-        let principles: [(String, WCAGPrinciple)] = [
-            ("Perceivable", .perceivable), ("Operable", .operable),
-            ("Understandable", .understandable), ("Robust", .robust)
-        ]
-        for (name, principle) in principles {
-            let pScore = score.principleScores[principle] ?? 100.0
-            let pColor = pScore >= 80 ? "\u{001B}[32m" : (pScore >= 50 ? "\u{001B}[33m" : "\u{001B}[31m")
-            let filled = Int(pScore / 5.0)
-            let empty = 20 - filled
-            let bar = String(repeating: "█", count: filled) + String(repeating: "░", count: empty)
-            out += "  \(name.padding(toLength: 16, withPad: " ", startingAt: 0))\(pColor)[\(bar)]\(reset)  \(String(format: "%5.1f", pScore))%\n"
+        // Show failed criteria
+        let failed = score.criteriaScores.filter { $0.status == .fail }
+        if !failed.isEmpty {
+            out += "\n\(red)\(bold)Failed WCAG criteria:\(reset)\n"
+            for cs in failed {
+                out += "  \(red)\u{2717}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
+                out += "  \(dim)(\(cs.errorCount)E \(cs.warningCount)W)\(reset)\n"
+            }
         }
 
-        out += "  Criteria: \(score.criteriaPassed) passed, \(score.criteriaFailed) failed"
-        out += " (\(score.criteriaPassed + score.criteriaFailed) / \(score.criteriaPassed + score.criteriaFailed + score.criteriaNotChecked) checked)\n"
+        // Show review criteria
+        let review = score.criteriaScores.filter { $0.status == .review }
+        if !review.isEmpty {
+            let yellow = "\u{001B}[33m"
+            out += "\(yellow)\(bold)Needs review:\(reset)\n"
+            for cs in review {
+                out += "  \(yellow)\u{26a0}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
+                out += "  \(dim)(\(cs.warningCount)W)\(reset)\n"
+            }
+        }
 
         return out
     }
@@ -139,7 +151,9 @@ public struct XcodeFormatter {
         }
         if let score = score {
             let severity = score.score >= 80 ? "note" : (score.score >= 50 ? "warning" : "error")
-            output += ": \(severity): [a11y-score] Accessibility Score: \(String(format: "%.1f", score.score))/100 (\(score.grade)) — P:\(String(format: "%.0f", score.principleScores[.perceivable] ?? 100))% O:\(String(format: "%.0f", score.principleScores[.operable] ?? 100))% U:\(String(format: "%.0f", score.principleScores[.understandable] ?? 100))% R:\(String(format: "%.0f", score.principleScores[.robust] ?? 100))%\n"
+            let failed = score.criteriaScores.filter { $0.status == .fail }.map { $0.criterion }
+            let failedStr = failed.isEmpty ? "none" : failed.joined(separator: ", ")
+            output += ": \(severity): [a11y-score] WCAG Score: \(String(format: "%.1f", score.score))/100 (\(score.grade)) \u{2014} Failed: \(failedStr)\n"
         }
         return output
     }
@@ -172,9 +186,11 @@ public struct JSONFormatter {
 
         let root: Any
         if let score = score {
-            var principleDict: [String: Double] = [:]
-            for (principle, pScore) in score.principleScores {
-                principleDict[principle.rawValue] = pScore
+            let failed = score.criteriaScores.filter { $0.status == .fail }.map { cs -> [String: Any] in
+                ["criterion": cs.criterion, "name": cs.name, "errors": cs.errorCount, "warnings": cs.warningCount]
+            }
+            let review = score.criteriaScores.filter { $0.status == .review }.map { cs -> [String: Any] in
+                ["criterion": cs.criterion, "name": cs.name, "warnings": cs.warningCount]
             }
             let scoreDict: [String: Any] = [
                 "score": score.score,
@@ -184,8 +200,8 @@ public struct JSONFormatter {
                 "totalInfo": score.totalInfo,
                 "criteriaPassed": score.criteriaPassed,
                 "criteriaFailed": score.criteriaFailed,
-                "criteriaNotChecked": score.criteriaNotChecked,
-                "principleScores": principleDict,
+                "failedCriteria": failed,
+                "reviewCriteria": review,
             ]
             root = [
                 "diagnostics": items,

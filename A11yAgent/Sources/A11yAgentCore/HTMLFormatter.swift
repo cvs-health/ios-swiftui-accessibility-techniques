@@ -84,7 +84,7 @@ public struct HTMLFormatter {
         .fix-block { background: #1e3a1e; color: #a6e3a1; border-radius: 6px; padding: 0.625rem 0.75rem; margin: 0.375rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
         .fix-block .line-good { color: #40e040; font-weight: 600; }
         .score-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
-        .score-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+        .score-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .score-big { font-size: 3rem; font-weight: 800; line-height: 1; }
         .score-grade { font-size: 2rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 8px; }
         .grade-a { background: var(--pass-bg); color: var(--pass); }
@@ -93,17 +93,14 @@ public struct HTMLFormatter {
         .grade-d { background: #ffe0b2; color: #e65100; }
         .grade-f { background: var(--error-bg); color: var(--error); }
         .score-subtitle { color: #6c757d; font-size: 0.875rem; }
-        .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
-        .principle-card { background: #f8f9fa; border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 1rem; }
-        .principle-name { font-weight: 600; font-size: 0.875rem; margin-bottom: 0.375rem; }
-        .progress-bar { background: #e9ecef; border-radius: 4px; height: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
-        .progress-fill.high { background: #28a745; }
-        .progress-fill.medium { background: #ffc107; }
-        .progress-fill.low { background: var(--error); }
-        .principle-pct { font-size: 0.75rem; color: #6c757d; margin-top: 0.25rem; text-align: right; }
-        .score-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.875rem; color: #6c757d; }
+        .score-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.875rem; color: #6c757d; margin-bottom: 1rem; }
         .score-stats span { white-space: nowrap; }
+        .failed-criteria { margin-top: 0.75rem; }
+        .failed-criteria h3 { font-size: 0.9375rem; margin-bottom: 0.5rem; }
+        .failed-criteria ul { list-style: none; padding: 0; }
+        .failed-criteria li { padding: 0.25rem 0; font-size: 0.875rem; }
+        .failed-criteria .criterion-id { font-weight: 600; }
+        .failed-criteria .criterion-counts { color: #6c757d; font-size: 0.75rem; }
         .criteria-table td.status-cell { text-align: center; }
         </style>
         </head>
@@ -142,32 +139,40 @@ public struct HTMLFormatter {
                   <div class="score-subtitle">WCAG 2.2 Accessibility Score</div>
                 </div>
               </div>
-              <div class="principles">
+              <div class="score-stats">
+                <span>\(score.criteriaPassed) criteria passed</span>
+                <span>\(score.criteriaFailed) failed</span>
+                <span>\(score.fileScores.count) files analyzed</span>
+              </div>
             """
 
-            let principleOrder: [WCAGPrinciple] = [.perceivable, .operable, .understandable, .robust]
-            for principle in principleOrder {
-                let pScore = score.principleScores[principle] ?? 100.0
-                let fillClass = pScore >= 80 ? "high" : (pScore >= 50 ? "medium" : "low")
-                html += """
-                <div class="principle-card">
-                  <div class="principle-name">\(principle.rawValue)</div>
-                  <div class="progress-bar"><div class="progress-fill \(fillClass)" style="width:\(String(format: "%.1f", pScore))%"></div></div>
-                  <div class="principle-pct">\(String(format: "%.1f", pScore))%</div>
-                </div>
-                """
+            let failed = score.criteriaScores.filter { $0.status == .fail }
+            if !failed.isEmpty {
+                html += "<div class=\"failed-criteria\"><h3><span class=\"badge badge-fail\">Failed WCAG Criteria</span></h3><ul>\n"
+                for cs in failed {
+                    let wcagURL = "https://www.w3.org/TR/WCAG22/#" + wcagAnchor(cs.criterion)
+                    html += "<li><span class=\"badge badge-fail\">\u{2717}</span> "
+                    html += "<a href=\"\(wcagURL)\"><span class=\"criterion-id\">\(escapeHTML(cs.criterion))</span></a> "
+                    html += "\(escapeHTML(cs.name)) "
+                    html += "<span class=\"criterion-counts\">\(cs.errorCount) errors, \(cs.warningCount) warnings</span></li>\n"
+                }
+                html += "</ul></div>\n"
             }
 
-            html += """
-              </div>
-              <div class="score-stats">
-                <span>Criteria checked: \(score.criteriaPassed + score.criteriaFailed) / \(ScoreCalculator.wcagCatalog.count)</span>
-                <span>Passed: \(score.criteriaPassed)</span>
-                <span>Failed: \(score.criteriaFailed)</span>
-                <span>Files: \(score.fileScores.count)</span>
-              </div>
-            </div>
-            """
+            let review = score.criteriaScores.filter { $0.status == .review }
+            if !review.isEmpty {
+                html += "<div class=\"failed-criteria\"><h3><span class=\"badge badge-warning\">Needs Review</span></h3><ul>\n"
+                for cs in review {
+                    let wcagURL = "https://www.w3.org/TR/WCAG22/#" + wcagAnchor(cs.criterion)
+                    html += "<li><span class=\"badge badge-warning\">\u{26a0}</span> "
+                    html += "<a href=\"\(wcagURL)\"><span class=\"criterion-id\">\(escapeHTML(cs.criterion))</span></a> "
+                    html += "\(escapeHTML(cs.name)) "
+                    html += "<span class=\"criterion-counts\">\(cs.warningCount) warnings</span></li>\n"
+                }
+                html += "</ul></div>\n"
+            }
+
+            html += "</div>\n"
         }
 
         // WCAG Conformance Table — use score data if available for full 48-criteria view

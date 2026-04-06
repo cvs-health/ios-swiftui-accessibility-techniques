@@ -20,6 +20,7 @@ Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](htt
 a11y-check . --only error          # Show only errors
 a11y-check . --format xcode        # Output for Xcode build phases
 a11y-check . --diff                # Only issues on lines you changed
+a11y-check MyView.swift --lines 50-120  # Check only specific lines
 a11y-check --list-rules            # List all 23 rules
 ```
 
@@ -132,14 +133,15 @@ Every `a11y-check` run automatically calculates a **WCAG 2.2 accessibility score
 ```
 5 errors, 3 warnings in 4 files
 
-WCAG Score: 62.5 / 100  (D)  8 criteria passed, 2 failed
+WCAG Score: 62.5 / 100  (D)
+  [████████████░░░░░░░░]   62.5%  8 criteria passed, 2 failed — 5 errors, 3 warnings
 
 Failed WCAG criteria:
-  ✗ 1.1.1 Non-text Content  (3E 0W)
-  ✗ 1.3.1 Info and Relationships  (2E 1W)
+  ✗ 1.1.1 Non-text Content  (3 errors)
+  ✗ 1.3.1 Info and Relationships  (2 errors, 1 warning)
 
 Needs review:
-  ⚠ 2.4.6 Headings and Labels  (1W)
+  ⚠ 2.4.6 Headings and Labels  (1 warning)
 ```
 
 Use `--min-score` to enforce a minimum score threshold:
@@ -201,6 +203,7 @@ Or capture the full output (diagnostics + score) as JSON:
 | `--list-rules` | Print all rules and exit |
 | `--compact` | Suppress file path in output |
 | `--min-score` | Minimum passing score (0–100). Exits with error code 1 if below threshold |
+| `--lines` | Only check lines in a range, e.g. `50-120`. Comma-separated for multiple ranges: `10-30,80-100` |
 
 ## Configuration file
 

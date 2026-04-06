@@ -18,6 +18,7 @@ struct A11yCheck: ParsableCommand {
           a11y-check . --disable image-missing-label,fixed-font-size
           a11y-check . --only error
           a11y-check . --min-score 80
+          a11y-check MyView.swift --lines 50-120
         """,
         version: "0.1.0"
     )
@@ -51,6 +52,9 @@ struct A11yCheck: ParsableCommand {
 
     @Option(name: .long, help: "Minimum passing score (0–100). Exit with error if score is below this threshold.")
     var minScore: Double?
+
+    @Option(name: .long, help: "Only check lines in a range, e.g. 50-120. Can be comma-separated for multiple ranges: 10-30,80-100")
+    var lines: String?
 
     func run() throws {
         let registry = RuleRegistry()
@@ -119,6 +123,16 @@ struct A11yCheck: ParsableCommand {
             allDiagnostics = DiffFilter.filter(allDiagnostics, changedLines: changedLines)
         }
 
+        // Apply --lines filter
+        if let linesSpec = lines {
+            let ranges = parseLineRanges(linesSpec)
+            if !ranges.isEmpty {
+                allDiagnostics = allDiagnostics.filter { diag in
+                    ranges.contains { diag.line >= $0.lowerBound && diag.line <= $0.upperBound }
+                }
+            }
+        }
+
         // Apply --only severity filter
         if let minSeverity = only {
             allDiagnostics = allDiagnostics.filter { $0.severity >= minSeverity }
@@ -177,6 +191,24 @@ struct A11yCheck: ParsableCommand {
     private func printError(_ message: String) {
         FileHandle.standardError.write(Data("\u{001B}[31merror: \(message)\u{001B}[0m\n".utf8))
     }
+}
+
+/// Parse a line range specification like "50-120" or "10-30,80-100" into ClosedRange<Int> array.
+func parseLineRanges(_ spec: String) -> [ClosedRange<Int>] {
+    var ranges: [ClosedRange<Int>] = []
+    for part in spec.split(separator: ",") {
+        let trimmed = part.trimmingCharacters(in: .whitespaces)
+        let components = trimmed.split(separator: "-", maxSplits: 1)
+        if components.count == 2,
+           let start = Int(components[0]),
+           let end = Int(components[1]),
+           start <= end {
+            ranges.append(start...end)
+        } else if components.count == 1, let line = Int(components[0]) {
+            ranges.append(line...line)
+        }
+    }
+    return ranges
 }
 
 /// Discover all .swift file paths in a directory, respecting config exclusions.

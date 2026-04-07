@@ -23,14 +23,18 @@ struct A11yCheck: ParsableCommand {
           a11y-check . --fix --dry-run
           a11y-check . --per-view
           a11y-check . --no-trend
+          a11y-check . --format sarif > results.sarif
+          a11y-check . --badge > badge.svg
+          a11y-check . --watch
+          a11y-check --generate-docs > RULES.md
         """,
-        version: "0.2.0"
+        version: "0.3.0"
     )
 
     @Argument(help: "File or directory paths to analyze.")
     var paths: [String] = ["."]
 
-    @Option(name: .long, help: "Output format: terminal, json, xcode, html")
+    @Option(name: .long, help: "Output format: terminal, json, xcode, html, sarif")
     var format: OutputFormat = .terminal
 
     @Option(name: .long, help: "Comma-separated rule IDs to disable.")
@@ -78,6 +82,18 @@ struct A11yCheck: ParsableCommand {
     @Flag(name: .long, help: "Filter out issues that are in the baseline (.a11y-baseline.json). Only new regressions are reported.")
     var baseline = false
 
+    @Flag(name: .long, help: "Generate an SVG score badge and print to stdout.")
+    var badge = false
+
+    @Flag(name: .long, help: "Watch for file changes and re-run analysis automatically.")
+    var watch = false
+
+    @Option(name: .long, help: "Compare results against a previous JSON report file. Only new issues are shown.")
+    var diffReport: String?
+
+    @Flag(name: .long, help: "Generate Markdown rule documentation to stdout.")
+    var generateDocs = false
+
     func run() throws {
         let registry = RuleRegistry()
 
@@ -110,6 +126,13 @@ struct A11yCheck: ParsableCommand {
                 print("    \(rule.name) [\(rule.severity.rawValue)] WCAG \(wcag)")
                 print("    \(rule.description)\n")
             }
+            return
+        }
+
+        // Handle --generate-docs
+        if generateDocs {
+            let generator = RuleDocsGenerator()
+            print(generator.generate(rules: registry.enabledRules))
             return
         }
 
@@ -185,6 +208,30 @@ struct A11yCheck: ParsableCommand {
                 if suppressed > 0 {
                     printError("Baseline: \(suppressed) known issues suppressed, \(allDiagnostics.count) new issues")
                 }
+            }
+        }
+
+        // Apply --diff-report filter (compare against previous JSON report)
+        if let reportPath = diffReport {
+            let resolvedReportPath = resolvePath(reportPath)
+            if let data = FileManager.default.contents(atPath: resolvedReportPath),
+               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let oldDiags = json["diagnostics"] as? [[String: Any]] {
+                let oldFingerprints = Set(oldDiags.compactMap { d -> String? in
+                    guard let ruleID = d["ruleID"] as? String,
+                          let filePath = d["filePath"] as? String,
+                          let message = d["message"] as? String else { return nil }
+                    return "\(ruleID)|\(filePath)|\(message)"
+                })
+                let before = allDiagnostics.count
+                allDiagnostics = allDiagnostics.filter { diag in
+                    let fp = "\(diag.ruleID)|\(diag.filePath)|\(diag.message)"
+                    return !oldFingerprints.contains(fp)
+                }
+                let suppressed = before - allDiagnostics.count
+                printError("Diff report: \(suppressed) existing issues filtered, \(allDiagnostics.count) new issues")
+            } else {
+                printError("Could not load previous report at \(resolvedReportPath)")
             }
         }
 
@@ -278,6 +325,18 @@ struct A11yCheck: ParsableCommand {
         case .html:
             let formatter = HTMLFormatter()
             print(formatter.format(allDiagnostics, allRules: registry.rules, score: score, trendEntries: trendEntries))
+
+        case .sarif:
+            let formatter = SARIFFormatter()
+            let output = try formatter.format(allDiagnostics, rules: registry.enabledRules, score: score)
+            print(output)
+        }
+
+        // Generate badge if requested
+        if badge {
+            let generator = BadgeGenerator()
+            print(generator.generate(score: score))
+            return
         }
 
         // Per-view scoring
@@ -297,16 +356,38 @@ struct A11yCheck: ParsableCommand {
             tracker.record(score: score)
         }
 
-        // Exit with error code if there are errors
+        // Exit with error code if there are errors (skip in watch mode)
         let errorCount = allDiagnostics.filter { $0.severity == .error }.count
-        if errorCount > 0 {
+        if errorCount > 0 && !watch {
             throw ExitCode(1)
         }
 
         // Exit with error if below minimum score
         if let threshold = minScore, score.score < threshold {
             printError("Score \(String(format: "%.1f", score.score)) is below minimum threshold \(String(format: "%.1f", threshold))")
-            throw ExitCode(1)
+            if !watch { throw ExitCode(1) }
+        }
+
+        // Watch mode — poll for changes and re-run
+        if watch {
+            printError("Watching for changes... (press Ctrl+C to stop)")
+            var lastModified = latestModificationDate(filePaths: filePaths)
+            while true {
+                Thread.sleep(forTimeInterval: 1.0)
+                let current = latestModificationDate(filePaths: filePaths)
+                if current > lastModified {
+                    lastModified = current
+                    printError("\n--- File change detected, re-running... ---\n")
+                    // Re-execute: create a new process with same arguments minus --watch
+                    let execPath = ProcessInfo.processInfo.arguments[0]
+                    let args = ProcessInfo.processInfo.arguments.dropFirst().filter { $0 != "--watch" }
+                    let process = Process()
+                    process.executableURL = URL(fileURLWithPath: execPath)
+                    process.arguments = Array(args)
+                    try? process.run()
+                    process.waitUntilExit()
+                }
+            }
         }
     }
 
@@ -354,11 +435,26 @@ func discoverSwiftFiles(at path: String, config: A11yConfig) -> [String] {
     return results
 }
 
+/// Get the latest modification date among the given file paths.
+func latestModificationDate(filePaths: [String]) -> Date {
+    let fm = FileManager.default
+    var latest = Date.distantPast
+    for path in filePaths {
+        if let attrs = try? fm.attributesOfItem(atPath: path),
+           let modified = attrs[.modificationDate] as? Date,
+           modified > latest {
+            latest = modified
+        }
+    }
+    return latest
+}
+
 enum OutputFormat: String, ExpressibleByArgument {
     case terminal
     case json
     case xcode
     case html
+    case sarif
 }
 
 // Make A11ySeverity conform to ExpressibleByArgument for CLI parsing

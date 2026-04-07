@@ -84,6 +84,21 @@ public final class RuleRegistry {
 
         // Tab Views (WCAG 4.1.2, 2.4.2)
         register(TabViewMissingLabelRule())
+
+        // Input Purpose (WCAG 1.3.5)
+        register(InputPurposeRule())
+
+        // Gesture Alternatives (WCAG 2.1.1, 2.5.1)
+        register(CustomGestureMissingAlternativeRule())
+
+        // Grouping (WCAG 1.3.1)
+        register(AccessibilityGroupingRule())
+
+        // Meaningful Sequence (WCAG 1.3.2)
+        register(ZStackSequenceRule())
+
+        // Timing (WCAG 2.2.1)
+        register(TimingAdjustableRule())
     }
 
     /// Apply a config: merge disabled rules and enabled-only from config with CLI overrides.

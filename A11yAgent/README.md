@@ -1,6 +1,6 @@
 # A11y Checker (a11y-check)
 
-Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 25 rules across 12 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
+Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 30 rules across 16 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
 
 ## Check your own iOS app
 
@@ -27,7 +27,11 @@ a11y-check . --per-view            # Score each SwiftUI View separately
 a11y-check . --no-trend            # Disable automatic trend tracking
 a11y-check --baseline-save         # Save current issues as baseline
 a11y-check . --baseline            # Only report new issues (not in baseline)
-a11y-check --list-rules            # List all 25 rules
+a11y-check . --format sarif > results.sarif  # SARIF for GitHub code scanning
+a11y-check . --badge > badge.svg   # Score badge for README
+a11y-check . --watch               # Re-run on file changes
+a11y-check --generate-docs > RULES.md  # Generate rule docs
+a11y-check --list-rules            # List all 30 rules
 ```
 
 Every run automatically includes a **WCAG 2.2 accessibility score** (0–100 with letter grade) after the diagnostics. Use `--min-score 80` to fail CI if the score drops below a threshold.
@@ -118,6 +122,9 @@ a11y-check . --format xcode
 
 # HTML report (WCAG summary, code snippets, fix suggestions)
 a11y-check . --format html > report.html
+
+# SARIF (for GitHub code scanning)
+a11y-check . --format sarif > results.sarif
 ```
 
 ### Diff-only mode
@@ -258,6 +265,74 @@ Per-View Scores:
   [████████████████████]  100.0 (A+) HomeView  Views/HomeView.swift:1-80
 ```
 
+## SARIF output (GitHub Code Scanning)
+
+Generate [SARIF](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html) output for GitHub code scanning. Issues appear as annotations directly on PR diffs:
+
+```bash
+a11y-check Sources/ --format sarif > results.sarif
+```
+
+Upload to GitHub in your workflow:
+
+```yaml
+- name: Run a11y-check
+  run: a11y-check Sources/ --format sarif > results.sarif
+- name: Upload SARIF
+  uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: results.sarif
+```
+
+## Score badge
+
+Generate an SVG badge showing your project's accessibility score:
+
+```bash
+# SVG badge file
+a11y-check Sources/ --badge > a11y-badge.svg
+
+# Or use a shields.io URL in your README (run a11y-check to get the score first)
+```
+
+Add to your README:
+
+```markdown
+![a11y score](a11y-badge.svg)
+```
+
+## Watch mode
+
+Re-run analysis automatically when files change — useful during development:
+
+```bash
+a11y-check Sources/ --watch
+```
+
+Press `Ctrl+C` to stop. Each time a `.swift` file is modified, a11y-check re-runs and prints updated results.
+
+## Report diff
+
+Compare current results against a previous JSON report to see only **new** issues:
+
+```bash
+# Save a report
+a11y-check Sources/ --format json > baseline-report.json
+
+# Later, compare against it
+a11y-check Sources/ --diff-report baseline-report.json
+```
+
+## Rule documentation generator
+
+Generate a complete Markdown reference for all rules:
+
+```bash
+a11y-check --generate-docs > RULES.md
+```
+
+The generated document includes a summary table, grouping by WCAG criterion, and grouping by severity.
+
 ## Xcode build plugin
 
 a11y-check includes two Swift Package Plugins:
@@ -304,6 +379,10 @@ Accessibility errors and warnings will appear inline in Xcode's Issue Navigator 
 | `--per-view` | Show per-SwiftUI-View scores in addition to the overall score |
 | `--baseline-save` | Save current issues as baseline (`.a11y-baseline.json`). Future `--baseline` runs only report new issues |
 | `--baseline` | Filter out issues in the baseline — only new regressions are shown |
+| `--badge` | Generate an SVG score badge to stdout |
+| `--watch` | Watch for file changes and re-run analysis automatically |
+| `--diff-report` | Compare against a previous JSON report — only new issues shown |
+| `--generate-docs` | Generate Markdown rule documentation to stdout |
 
 ## Configuration file
 
@@ -572,7 +651,7 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Run a11y-check on TextFieldsView.swift"** — check a specific file
 - **"Which of those are the most critical to fix?"** — the AI explains severity and WCAG impact
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
-- **"List all the a11y rules"** — shows all 25 rules with descriptions and WCAG criteria
+- **"List all the a11y rules"** — shows all 30 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
 - **"What's the accessibility score for this project?"** — runs `a11y-check .` and explains the WCAG 2.2 score breakdown
 - **"Score ProfileView.swift"** — runs the check on a single file and highlights what to fix based on the score
@@ -582,7 +661,7 @@ The full loop — detect, understand, fix, report — happens conversationally w
 
 ## Rules
 
-a11y-check includes 25 rules across these categories:
+a11y-check includes 30 rules across these categories:
 
 | Category | Rules | WCAG |
 |----------|-------|------|
@@ -601,6 +680,11 @@ a11y-check includes 25 rules across these categories:
 | **Accessibility hidden** | `hidden-parent-with-controls` | 4.1.2 |
 | **Animation** | `animation-missing-reduce-motion` | 2.3.1 |
 | **Tab views** | `tabview-missing-label` | 4.1.2, 2.4.2 |
+| **Input purpose** | `input-missing-purpose` | 1.3.5 |
+| **Gestures** | `gesture-missing-alternative` | 2.1.1, 2.5.1 |
+| **Grouping** | `missing-accessibility-grouping` | 1.3.1 |
+| **Sequence** | `zstack-order-confusing` | 1.3.2 |
+| **Timing** | `auto-dismiss-no-control` | 2.2.1 |
 
 The **textfield-missing-label** rule catches two problems:
 - **Error:** TextField/SecureField with an empty `""` label and no `.accessibilityLabel()` — VoiceOver users won't know what to enter.

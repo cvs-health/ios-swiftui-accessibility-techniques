@@ -155,12 +155,25 @@ jobs:
               });
             }
 
+      - name: Generate SARIF
+        if: always()
+        run: a11y-check ${{ env.PATHS }} --format sarif > a11y-results.sarif 2>/dev/null || true
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: a11y-results.sarif
+        continue-on-error: true
+
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: a11y-results
-          path: a11y-results.json
+          path: |
+            a11y-results.json
+            a11y-results.sarif
 
       - name: Check minimum score
         run: |

@@ -8,6 +8,7 @@ let package = Package(
         .executable(name: "a11y-check", targets: ["A11yAgentCLI"]),
         .library(name: "A11yAgentCore", targets: ["A11yAgentCore"]),
         .plugin(name: "A11yCheckPlugin", targets: ["A11yCheckPlugin"]),
+        .plugin(name: "A11yCheckBuildPlugin", targets: ["A11yCheckBuildPlugin"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax.git", from: "510.0.0"),
@@ -41,6 +42,13 @@ let package = Package(
                 intent: .custom(verb: "a11y-check", description: "Run SwiftUI accessibility checks on source files"),
                 permissions: [.writeToPackageDirectory(reason: "Write HTML report files when using --format html")]
             ),
+            dependencies: [
+                .target(name: "A11yAgentCLI"),
+            ]
+        ),
+        .plugin(
+            name: "A11yCheckBuildPlugin",
+            capability: .buildTool(),
             dependencies: [
                 .target(name: "A11yAgentCLI"),
             ]

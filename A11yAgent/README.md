@@ -21,6 +21,10 @@ a11y-check . --only error          # Show only errors
 a11y-check . --format xcode        # Output for Xcode build phases
 a11y-check . --diff                # Only issues on lines you changed
 a11y-check MyView.swift --lines 50-120  # Check only specific lines
+a11y-check . --fix                 # Auto-fix issues where possible
+a11y-check . --fix --dry-run       # Preview fixes without applying
+a11y-check . --trend               # Track score over time
+a11y-check . --per-view            # Score each SwiftUI View separately
 a11y-check --list-rules            # List all 23 rules
 ```
 
@@ -189,6 +193,100 @@ Or capture the full output (diagnostics + score) as JSON:
     path: a11y-results.json
 ```
 
+## Auto-fix
+
+Use `--fix` to automatically apply available fixes to your source files:
+
+```bash
+a11y-check . --fix
+```
+
+Preview what would change without modifying files:
+
+```bash
+a11y-check . --fix --dry-run
+```
+
+Example output:
+
+```
+Auto-fix: fixed 3 issues in 2 files
+
+  MyView.swift — 2 fixes
+    ✓ Add .accessibilityLabel("Profile") to Image
+    ✓ Add .accessibilityLabel("Search") to Button
+
+  FormView.swift — 1 fix
+    ✓ Add .accessibilityLabel("Email") to TextField
+```
+
+After applying fixes, `a11y-check` re-analyzes and shows the updated score.
+
+## Trend tracking
+
+Track your accessibility score over time with `--trend`:
+
+```bash
+a11y-check . --trend
+```
+
+Each run records the score, grade, error count, and git commit hash to `.a11y-scores.json` in the project directory. The output shows a sparkline, delta from the last run, and a history table:
+
+```
+Score Trend:
+  Change from last run: +4.2
+  History: ▃▄▅▅▆▇
+
+  Date                          Score  Grade  Errors  Δ
+  2025-04-01T10:00:00Z          72.5   C      12      —
+  2025-04-03T14:30:00Z          76.8   C      8       +4.3
+  → now                          81.0   B-     5       +4.2
+```
+
+Use `--trend --format json` for machine-readable trend data.
+
+## Per-view scoring
+
+Use `--per-view` to score each SwiftUI `View` struct independently:
+
+```bash
+a11y-check . --per-view
+```
+
+This detects all `struct X: View` declarations and shows a score for each, sorted worst-first:
+
+```
+Per-View Scores:
+  [███████░░░░░░░░░░░░░]  37.5 (F)  BadFormView  Views/FormView.swift:45-120  (11 errors)
+  [████████████████████]  100.0 (A+) GoodFormView  Views/FormView.swift:5-43
+  [████████████████████]  100.0 (A+) HomeView  Views/HomeView.swift:1-80
+```
+
+## Xcode build plugin
+
+a11y-check includes two Swift Package Plugins:
+
+- **Command plugin** (`A11yCheckPlugin`) — run manually via `swift package a11y-check`
+- **Build tool plugin** (`A11yCheckBuildPlugin`) — runs automatically on every build, showing accessibility issues inline in Xcode
+
+To use the build tool plugin, add `a11y-check` as a dependency in your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git", from: "0.2.0"),
+],
+targets: [
+    .target(
+        name: "MyApp",
+        plugins: [
+            .plugin(name: "A11yCheckBuildPlugin", package: "A11yAgent"),
+        ]
+    ),
+]
+```
+
+Accessibility errors and warnings will appear inline in Xcode's Issue Navigator on every build.
+
 ## Options
 
 | Option | Description |
@@ -204,6 +302,10 @@ Or capture the full output (diagnostics + score) as JSON:
 | `--compact` | Suppress file path in output |
 | `--min-score` | Minimum passing score (0–100). Exits with error code 1 if below threshold |
 | `--lines` | Only check lines in a range, e.g. `50-120`. Comma-separated for multiple ranges: `10-30,80-100` |
+| `--fix` | Automatically apply available fixes to source files |
+| `--dry-run` | Show what `--fix` would change without modifying files |
+| `--trend` | Track score over time. Records each run to `.a11y-scores.json` and shows history |
+| `--per-view` | Show per-SwiftUI-View scores in addition to the overall score |
 
 ## Configuration file
 

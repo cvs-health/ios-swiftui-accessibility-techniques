@@ -19,8 +19,12 @@ struct A11yCheck: ParsableCommand {
           a11y-check . --only error
           a11y-check . --min-score 80
           a11y-check MyView.swift --lines 50-120
+          a11y-check . --fix
+          a11y-check . --fix --dry-run
+          a11y-check . --trend
+          a11y-check . --per-view
         """,
-        version: "0.1.0"
+        version: "0.2.0"
     )
 
     @Argument(help: "File or directory paths to analyze.")
@@ -55,6 +59,18 @@ struct A11yCheck: ParsableCommand {
 
     @Option(name: .long, help: "Only check lines in a range, e.g. 50-120. Can be comma-separated for multiple ranges: 10-30,80-100")
     var lines: String?
+
+    @Flag(name: .long, help: "Automatically apply available fixes to source files.")
+    var fix = false
+
+    @Flag(name: .long, help: "Show what --fix would change without modifying files.")
+    var dryRun = false
+
+    @Flag(name: .long, help: "Track score over time. Records each run and shows trend history.")
+    var trend = false
+
+    @Flag(name: .long, help: "Show per-SwiftUI-View scores in addition to the overall score.")
+    var perView = false
 
     func run() throws {
         let registry = RuleRegistry()
@@ -146,6 +162,49 @@ struct A11yCheck: ParsableCommand {
             filePaths: filePaths
         )
 
+        // Apply --fix
+        if fix || dryRun {
+            let fixer = AutoFixer()
+            let result = fixer.applyFixes(diagnostics: allDiagnostics, dryRun: dryRun)
+            print(fixer.formatResult(result, dryRun: dryRun))
+
+            if fix && !dryRun && result.totalFixesApplied > 0 {
+                // Re-analyze after fixes to get updated diagnostics and score
+                allDiagnostics = []
+                for path in filePaths {
+                    let diagnostics = try registry.analyzeFile(at: path)
+                    allDiagnostics.append(contentsOf: diagnostics)
+                }
+                if let minSeverity = only {
+                    allDiagnostics = allDiagnostics.filter { $0.severity >= minSeverity }
+                }
+                let updatedScore = calculator.calculate(
+                    diagnostics: allDiagnostics,
+                    rules: registry.enabledRules,
+                    filePaths: filePaths
+                )
+                // Show updated results
+                let basePath = paths.count == 1 ? resolvePath(paths[0]) : nil
+                let formatter = TerminalFormatter()
+                print(formatter.format(allDiagnostics, relativeTo: basePath, score: updatedScore))
+
+                // Record trend after fix
+                if trend {
+                    let tracker = TrendTracker(directory: resolvePath(paths.first ?? "."))
+                    tracker.record(score: updatedScore)
+                    print(tracker.formatTrend(currentScore: updatedScore))
+                }
+
+                let errorCount = allDiagnostics.filter { $0.severity == .error }.count
+                if errorCount > 0 { throw ExitCode(1) }
+                if let threshold = minScore, updatedScore.score < threshold {
+                    printError("Score \(String(format: "%.1f", updatedScore.score)) is below minimum threshold \(String(format: "%.1f", threshold))")
+                    throw ExitCode(1)
+                }
+                return
+            }
+        }
+
         // Output results
         switch format {
         case .terminal:
@@ -165,6 +224,28 @@ struct A11yCheck: ParsableCommand {
         case .html:
             let formatter = HTMLFormatter()
             print(formatter.format(allDiagnostics, allRules: registry.rules, score: score))
+        }
+
+        // Per-view scoring
+        if perView {
+            let viewScorer = ViewScorer()
+            let views = viewScorer.detectViews(filePaths: filePaths)
+            let viewScores = viewScorer.scoreViews(views: views, diagnostics: allDiagnostics, rules: registry.enabledRules)
+            let basePath = paths.count == 1 ? resolvePath(paths[0]) : nil
+            print(viewScorer.formatViewScores(viewScores, relativeTo: basePath))
+        }
+
+        // Trend tracking
+        if trend {
+            let tracker = TrendTracker(directory: resolvePath(paths.first ?? "."))
+            switch format {
+            case .json:
+                let output = try tracker.formatTrendJSON(currentScore: score)
+                print(output)
+            default:
+                print(tracker.formatTrend(currentScore: score))
+            }
+            tracker.record(score: score)
         }
 
         // Exit with error code if there are errors

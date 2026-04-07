@@ -21,8 +21,8 @@ struct A11yCheck: ParsableCommand {
           a11y-check MyView.swift --lines 50-120
           a11y-check . --fix
           a11y-check . --fix --dry-run
-          a11y-check . --trend
           a11y-check . --per-view
+          a11y-check . --no-trend
         """,
         version: "0.2.0"
     )
@@ -66,8 +66,8 @@ struct A11yCheck: ParsableCommand {
     @Flag(name: .long, help: "Show what --fix would change without modifying files.")
     var dryRun = false
 
-    @Flag(name: .long, help: "Track score over time. Records each run and shows trend history.")
-    var trend = false
+    @Flag(name: .long, inversion: .prefixedNo, help: "Track score over time. Enabled by default; use --no-trend to disable.")
+    var trend = true
 
     @Flag(name: .long, help: "Show per-SwiftUI-View scores in addition to the overall score.")
     var perView = false
@@ -190,9 +190,15 @@ struct A11yCheck: ParsableCommand {
 
                 // Record trend after fix
                 if trend {
-                    let tracker = TrendTracker(directory: resolvePath(paths.first ?? "."))
+                    var trendDir = resolvePath(paths.first ?? ".")
+                    var isDirFlag: ObjCBool = false
+                    if FileManager.default.fileExists(atPath: trendDir, isDirectory: &isDirFlag), !isDirFlag.boolValue {
+                        trendDir = (trendDir as NSString).deletingLastPathComponent
+                    }
+                    let tracker = TrendTracker(directory: trendDir)
+                    let trendOutput = tracker.formatTrend(currentScore: updatedScore)
                     tracker.record(score: updatedScore)
-                    print(tracker.formatTrend(currentScore: updatedScore))
+                    print(trendOutput)
                 }
 
                 let errorCount = allDiagnostics.filter { $0.severity == .error }.count
@@ -205,6 +211,20 @@ struct A11yCheck: ParsableCommand {
             }
         }
 
+        // Load trend history (before output so formatters can use it)
+        var trendEntries: [TrendTracker.Entry] = []
+        var tracker: TrendTracker? = nil
+        if trend {
+            var trendDir = resolvePath(paths.first ?? ".")
+            var isDir: ObjCBool = false
+            if FileManager.default.fileExists(atPath: trendDir, isDirectory: &isDir), !isDir.boolValue {
+                trendDir = (trendDir as NSString).deletingLastPathComponent
+            }
+            let t = TrendTracker(directory: trendDir)
+            tracker = t
+            trendEntries = t.load().entries
+        }
+
         // Output results
         switch format {
         case .terminal:
@@ -214,7 +234,7 @@ struct A11yCheck: ParsableCommand {
 
         case .json:
             let formatter = JSONFormatter()
-            let output = try formatter.format(allDiagnostics, score: score)
+            let output = try formatter.format(allDiagnostics, score: score, trendEntries: trendEntries)
             print(output)
 
         case .xcode:
@@ -223,7 +243,7 @@ struct A11yCheck: ParsableCommand {
 
         case .html:
             let formatter = HTMLFormatter()
-            print(formatter.format(allDiagnostics, allRules: registry.rules, score: score))
+            print(formatter.format(allDiagnostics, allRules: registry.rules, score: score, trendEntries: trendEntries))
         }
 
         // Per-view scoring
@@ -235,14 +255,9 @@ struct A11yCheck: ParsableCommand {
             print(viewScorer.formatViewScores(viewScores, relativeTo: basePath))
         }
 
-        // Trend tracking
-        if trend {
-            let tracker = TrendTracker(directory: resolvePath(paths.first ?? "."))
-            switch format {
-            case .json:
-                let output = try tracker.formatTrendJSON(currentScore: score)
-                print(output)
-            default:
+        // Trend: show terminal output + record
+        if let tracker = tracker {
+            if format == .terminal && !trendEntries.isEmpty {
                 print(tracker.formatTrend(currentScore: score))
             }
             tracker.record(score: score)

@@ -168,7 +168,7 @@ public struct JSONFormatter {
 
     public init() {}
 
-    public func format(_ diagnostics: [A11yDiagnostic], score: A11yScore? = nil) throws -> String {
+    public func format(_ diagnostics: [A11yDiagnostic], score: A11yScore? = nil, trendEntries: [TrendTracker.Entry] = []) throws -> String {
         let items = diagnostics.map { diag -> [String: Any] in
             var dict: [String: Any] = [
                 "ruleID": diag.ruleID,
@@ -207,10 +207,32 @@ public struct JSONFormatter {
                 "failedCriteria": failed,
                 "reviewCriteria": review,
             ]
-            root = [
+            var rootDict: [String: Any] = [
                 "diagnostics": items,
                 "score": scoreDict,
-            ] as [String: Any]
+            ]
+            if !trendEntries.isEmpty {
+                let trendItems = trendEntries.map { entry -> [String: Any] in
+                    var d: [String: Any] = [
+                        "date": entry.date,
+                        "score": entry.score,
+                        "grade": entry.grade,
+                        "errors": entry.errors,
+                        "warnings": entry.warnings,
+                        "criteriaPassed": entry.criteriaPassed,
+                        "criteriaFailed": entry.criteriaFailed,
+                        "filesAnalyzed": entry.filesAnalyzed,
+                    ]
+                    if let commit = entry.gitCommit { d["gitCommit"] = commit }
+                    return d
+                }
+                let delta = score.score - (trendEntries.last?.score ?? score.score)
+                rootDict["trend"] = [
+                    "entries": trendItems,
+                    "delta": delta,
+                ] as [String: Any]
+            }
+            root = rootDict
         } else {
             root = items
         }

@@ -5,7 +5,7 @@ public struct HTMLFormatter {
 
     public init() {}
 
-    public func format(_ diagnostics: [A11yDiagnostic], allRules: [any A11yRule], score: A11yScore? = nil) -> String {
+    public func format(_ diagnostics: [A11yDiagnostic], allRules: [any A11yRule], score: A11yScore? = nil, trendEntries: [TrendTracker.Entry] = []) -> String {
         let errorCount = diagnostics.filter { $0.severity == .error }.count
         let warningCount = diagnostics.filter { $0.severity == .warning }.count
         let infoCount = diagnostics.filter { $0.severity == .info }.count
@@ -102,6 +102,22 @@ public struct HTMLFormatter {
         .failed-criteria .criterion-id { font-weight: 600; }
         .failed-criteria .criterion-counts { color: #6c757d; font-size: 0.75rem; }
         .criteria-table td.status-cell { text-align: center; }
+        .trend-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
+        .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; }
+        .trend-chart { margin: 1rem 0; }
+        .trend-chart svg { width: 100%; max-width: 700px; }
+        .trend-chart .chart-line { fill: none; stroke: #0d6efd; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .trend-chart .chart-area { fill: rgba(13, 110, 253, 0.1); }
+        .trend-chart .chart-dot { fill: #0d6efd; }
+        .trend-chart .chart-dot-current { fill: #198754; stroke: #fff; stroke-width: 2; }
+        .trend-chart .chart-grid { stroke: #e9ecef; stroke-width: 1; }
+        .trend-chart .chart-label { fill: #6c757d; font-size: 11px; font-family: -apple-system, sans-serif; }
+        .trend-delta { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .trend-delta.positive { color: var(--pass); }
+        .trend-delta.negative { color: var(--error); }
+        .trend-delta.neutral { color: #6c757d; }
+        .trend-table { width: 100%; max-width: 700px; }
+        .trend-table th { background: #f1f3f5; }
         </style>
         </head>
         <body>
@@ -172,6 +188,121 @@ public struct HTMLFormatter {
                 html += "</ul></div>\n"
             }
 
+            html += "</div>\n"
+        }
+
+        // Trend Section — SVG chart + history table
+        if !trendEntries.isEmpty, let currentScore = score {
+            // Build data points: historical + current
+            var allPoints: [(label: String, score: Double, errors: Int, grade: String)] = trendEntries.map { entry in
+                let shortDate = String(entry.date.prefix(10))
+                return (label: shortDate, score: entry.score, errors: entry.errors, grade: entry.grade)
+            }
+            allPoints.append((label: "Now", score: currentScore.score, errors: currentScore.totalErrors, grade: currentScore.grade))
+
+            // Delta
+            let delta = currentScore.score - trendEntries.last!.score
+            let deltaClass: String
+            let deltaStr: String
+            if delta > 0 {
+                deltaClass = "positive"
+                deltaStr = "+\(String(format: "%.1f", delta))"
+            } else if delta < 0 {
+                deltaClass = "negative"
+                deltaStr = String(format: "%.1f", delta)
+            } else {
+                deltaClass = "neutral"
+                deltaStr = "±0.0"
+            }
+
+            html += "<div class=\"trend-section\">\n"
+            html += "<h2>Score Trend</h2>\n"
+            html += "<div class=\"trend-delta \(deltaClass)\">Change from last run: \(deltaStr)</div>\n"
+
+            // SVG Line Chart
+            let chartW = 680.0
+            let chartH = 200.0
+            let padL = 40.0
+            let padR = 20.0
+            let padT = 20.0
+            let padB = 40.0
+            let plotW = chartW - padL - padR
+            let plotH = chartH - padT - padB
+
+            let scores = allPoints.map(\.score)
+            let minScore = max(0, (scores.min() ?? 0) - 10)
+            let maxScore = min(100, (scores.max() ?? 100) + 10)
+            let scoreRange = max(maxScore - minScore, 1)
+
+            func xPos(_ i: Int) -> Double {
+                let count = allPoints.count
+                if count <= 1 { return padL + plotW / 2 }
+                return padL + (Double(i) / Double(count - 1)) * plotW
+            }
+            func yPos(_ val: Double) -> Double {
+                return padT + plotH - ((val - minScore) / scoreRange) * plotH
+            }
+
+            html += "<div class=\"trend-chart\">\n"
+            html += "<svg viewBox=\"0 0 \(Int(chartW)) \(Int(chartH))\" xmlns=\"http://www.w3.org/2000/svg\">\n"
+
+            // Grid lines
+            let gridSteps = [0.0, 25.0, 50.0, 75.0, 100.0].filter { $0 >= minScore && $0 <= maxScore }
+            for step in gridSteps {
+                let y = yPos(step)
+                html += "<line x1=\"\(Int(padL))\" y1=\"\(Int(y))\" x2=\"\(Int(chartW - padR))\" y2=\"\(Int(y))\" class=\"chart-grid\"/>\n"
+                html += "<text x=\"\(Int(padL - 5))\" y=\"\(Int(y + 4))\" class=\"chart-label\" text-anchor=\"end\">\(Int(step))</text>\n"
+            }
+
+            // Area fill
+            var areaPath = "M \(Int(xPos(0))) \(Int(yPos(allPoints[0].score)))"
+            for i in 1..<allPoints.count {
+                areaPath += " L \(Int(xPos(i))) \(Int(yPos(allPoints[i].score)))"
+            }
+            areaPath += " L \(Int(xPos(allPoints.count - 1))) \(Int(padT + plotH))"
+            areaPath += " L \(Int(xPos(0))) \(Int(padT + plotH)) Z"
+            html += "<path d=\"\(areaPath)\" class=\"chart-area\"/>\n"
+
+            // Line
+            var linePath = "M \(Int(xPos(0))) \(Int(yPos(allPoints[0].score)))"
+            for i in 1..<allPoints.count {
+                linePath += " L \(Int(xPos(i))) \(Int(yPos(allPoints[i].score)))"
+            }
+            html += "<path d=\"\(linePath)\" class=\"chart-line\"/>\n"
+
+            // Dots + labels
+            for (i, pt) in allPoints.enumerated() {
+                let cx = Int(xPos(i))
+                let cy = Int(yPos(pt.score))
+                let dotClass = i == allPoints.count - 1 ? "chart-dot-current" : "chart-dot"
+                let r = i == allPoints.count - 1 ? 5 : 4
+                html += "<circle cx=\"\(cx)\" cy=\"\(cy)\" r=\"\(r)\" class=\"\(dotClass)\"/>\n"
+                html += "<text x=\"\(cx)\" y=\"\(Int(padT + plotH + 20))\" class=\"chart-label\" text-anchor=\"middle\">\(escapeHTML(pt.label))</text>\n"
+                html += "<text x=\"\(cx)\" y=\"\(cy - 10)\" class=\"chart-label\" text-anchor=\"middle\">\(String(format: "%.0f", pt.score))</text>\n"
+            }
+
+            html += "</svg>\n</div>\n"
+
+            // History table
+            html += "<table class=\"trend-table\">\n"
+            html += "<tr><th>Date</th><th>Score</th><th>Grade</th><th>Errors</th><th>Change</th></tr>\n"
+            var prevScore: Double? = nil
+            for pt in allPoints {
+                let changeStr: String
+                if let prev = prevScore {
+                    let d = pt.score - prev
+                    if d > 0 { changeStr = "<span style=\"color:var(--pass)\">+\(String(format: "%.1f", d))</span>" }
+                    else if d < 0 { changeStr = "<span style=\"color:var(--error)\">\(String(format: "%.1f", d))</span>" }
+                    else { changeStr = "±0.0" }
+                } else {
+                    changeStr = "—"
+                }
+                let isCurrent = pt.label == "Now"
+                let rowStyle = isCurrent ? " style=\"font-weight:700\"" : ""
+                html += "<tr\(rowStyle)><td>\(escapeHTML(pt.label))</td><td>\(String(format: "%.1f", pt.score))</td><td>\(escapeHTML(pt.grade))</td><td>\(pt.errors)</td><td>\(changeStr)</td></tr>\n"
+                prevScore = pt.score
+            }
+            html += "</table>\n"
             html += "</div>\n"
         }
 
@@ -397,6 +528,7 @@ public struct HTMLFormatter {
             "2.4.3": "focus-order",
             "2.4.4": "link-purpose-in-context",
             "2.5.8": "target-size-minimum",
+            "3.3.2": "labels-or-instructions",
             "4.1.2": "name-role-value",
         ]
         return map[criterion] ?? criterion.replacingOccurrences(of: ".", with: "-")

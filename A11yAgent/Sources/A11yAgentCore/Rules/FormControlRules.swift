@@ -5,14 +5,15 @@ import SwiftSyntax
 /// Flags `TextField("", text:)` with an empty placeholder or
 /// TextFields that rely only on placeholder text as the accessible name.
 ///
-/// WCAG 4.1.2 Name, Role, Value
+/// WCAG 3.3.2 Labels or Instructions — visible label must persist
+/// WCAG 4.1.2 Name, Role, Value — accessible name must be provided
 /// Reference: TextFieldsView.swift — bad examples have empty or missing labels
 public struct TextFieldMissingLabelRule: A11yRule {
     public let id = "textfield-missing-label"
     public let name = "TextField Missing Label"
     public let severity = A11ySeverity.error
-    public let wcagCriteria = ["4.1.2"]
-    public let description = "TextFields must have a non-empty label or .accessibilityLabel(). Placeholder text alone is insufficient as it disappears when the user starts typing."
+    public let wcagCriteria = ["3.3.2", "4.1.2"]
+    public let description = "TextFields must have a persistent visible label (3.3.2) and an accessible name via .accessibilityLabel() (4.1.2). Placeholder text alone is insufficient."
 
     public init() {}
 
@@ -107,16 +108,18 @@ public struct TextFieldMissingLabelRule: A11yRule {
             let inlineLabel = view.firstStringArgument ?? ""
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
                 diagnostics.append(makeDiagnostic(
-                    message: "\(view.viewType) has an empty label and no .accessibilityLabel(). Add a visible Text label and .accessibilityLabel() so VoiceOver users know what to enter.",
+                    message: "\(view.viewType) has an empty label and no .accessibilityLabel(). Add a visible Text label (WCAG 3.3.2) and .accessibilityLabel() (WCAG 4.1.2) so VoiceOver users know what to enter.",
                     node: view.callExpr,
                     context: context,
+                    wcagCriteriaOverride: ["3.3.2", "4.1.2"],
                     suggestion: "Add a visible Text(\"Label\") above the field and .accessibilityLabel(\"Label\")"
                 ))
             } else {
                 diagnostics.append(makeDiagnostic(
-                    message: "\(view.viewType) uses placeholder text \"\(inlineLabel)\" as its only label. Placeholder text disappears when the user starts typing, leaving no label for VoiceOver, and has insufficient contrast. Add a persistent visible label (e.g. a Text view above the field) and .accessibilityLabel().",
+                    message: "\(view.viewType) uses placeholder text \"\(inlineLabel)\" as its only label. Placeholder text disappears when the user starts typing, leaving no persistent visible label (WCAG 3.3.2). Add a visible Text label above the field and .accessibilityLabel().",
                     node: view.callExpr,
                     context: context,
+                    wcagCriteriaOverride: ["3.3.2"],
                     suggestion: "Add a visible Text(\"\(inlineLabel)\") label above the field and .accessibilityLabel(\"\(inlineLabel)\")"
                 ))
             }
@@ -129,14 +132,15 @@ public struct TextFieldMissingLabelRule: A11yRule {
 
 /// Flags `Slider` without a visible label or `.accessibilityLabel()`.
 ///
-/// WCAG 4.1.2 Name, Role, Value
+/// WCAG 3.3.2 Labels or Instructions — visible label must persist
+/// WCAG 4.1.2 Name, Role, Value — accessible name must be provided
 /// Reference: SlidersView.swift — bad example has Slider without label
 public struct SliderMissingLabelRule: A11yRule {
     public let id = "slider-missing-label"
     public let name = "Slider Missing Label"
     public let severity = A11ySeverity.error
-    public let wcagCriteria = ["4.1.2"]
-    public let description = "Sliders must have a label or .accessibilityLabel() so VoiceOver users know what value they're adjusting."
+    public let wcagCriteria = ["3.3.2", "4.1.2"]
+    public let description = "Sliders must have a persistent visible label (3.3.2) and an accessible name (4.1.2)."
 
     public init() {}
 
@@ -155,16 +159,18 @@ public struct SliderMissingLabelRule: A11yRule {
 
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
                 diagnostics.append(makeDiagnostic(
-                    message: "Slider has no label. Add label text or .accessibilityLabel() so VoiceOver users know what value they're adjusting.",
+                    message: "Slider has no visible label (WCAG 3.3.2) and no accessible name (WCAG 4.1.2). Add label text and .accessibilityLabel().",
                     node: view.callExpr,
                     context: context,
+                    wcagCriteriaOverride: ["3.3.2", "4.1.2"],
                     suggestion: "Add .accessibilityLabel(\"description\") to the Slider"
                 ))
             } else if hasLabelsHidden {
                 diagnostics.append(makeDiagnostic(
-                    message: "Slider uses .labelsHidden() without .accessibilityLabel(). The label is hidden visually but VoiceOver still needs it.",
+                    message: "Slider uses .labelsHidden() without .accessibilityLabel(). The visible label is hidden but VoiceOver still needs an accessible name (WCAG 4.1.2).",
                     node: view.callExpr,
                     context: context,
+                    wcagCriteriaOverride: ["4.1.2"],
                     suggestion: "Add .accessibilityLabel(\"description\") when using .labelsHidden()"
                 ))
             }
@@ -177,14 +183,15 @@ public struct SliderMissingLabelRule: A11yRule {
 
 /// Flags `Stepper` without a visible label or `.accessibilityLabel()`.
 ///
-/// WCAG 4.1.2 Name, Role, Value
+/// WCAG 3.3.2 Labels or Instructions — visible label must persist
+/// WCAG 4.1.2 Name, Role, Value — accessible name must be provided
 /// Reference: SteppersView.swift
 public struct StepperMissingLabelRule: A11yRule {
     public let id = "stepper-missing-label"
     public let name = "Stepper Missing Label"
     public let severity = A11ySeverity.error
-    public let wcagCriteria = ["4.1.2"]
-    public let description = "Steppers must have a label or .accessibilityLabel()."
+    public let wcagCriteria = ["3.3.2", "4.1.2"]
+    public let description = "Steppers must have a persistent visible label (3.3.2) and an accessible name (4.1.2)."
 
     public init() {}
 
@@ -199,9 +206,10 @@ public struct StepperMissingLabelRule: A11yRule {
             let inlineLabel = view.firstStringArgument ?? ""
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
                 diagnostics.append(makeDiagnostic(
-                    message: "Stepper has no label. Add label text or .accessibilityLabel().",
+                    message: "Stepper has no visible label (WCAG 3.3.2) and no accessible name (WCAG 4.1.2). Add label text and .accessibilityLabel().",
                     node: view.callExpr,
                     context: context,
+                    wcagCriteriaOverride: ["3.3.2", "4.1.2"],
                     suggestion: "Add .accessibilityLabel(\"description\") to the Stepper"
                 ))
             }
@@ -214,14 +222,15 @@ public struct StepperMissingLabelRule: A11yRule {
 
 /// Flags `Picker` without a visible label or `.accessibilityLabel()`.
 ///
-/// WCAG 4.1.2 Name, Role, Value
+/// WCAG 3.3.2 Labels or Instructions — visible label must persist
+/// WCAG 4.1.2 Name, Role, Value — accessible name must be provided
 /// Reference: PickersView.swift
 public struct PickerMissingLabelRule: A11yRule {
     public let id = "picker-missing-label"
     public let name = "Picker Missing Label"
     public let severity = A11ySeverity.error
-    public let wcagCriteria = ["4.1.2"]
-    public let description = "Pickers must have a label or .accessibilityLabel()."
+    public let wcagCriteria = ["3.3.2", "4.1.2"]
+    public let description = "Pickers must have a persistent visible label (3.3.2) and an accessible name (4.1.2)."
 
     public init() {}
 
@@ -236,9 +245,10 @@ public struct PickerMissingLabelRule: A11yRule {
             let inlineLabel = view.firstStringArgument ?? ""
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
                 diagnostics.append(makeDiagnostic(
-                    message: "Picker has no label. Add label text or .accessibilityLabel().",
+                    message: "Picker has no visible label (WCAG 3.3.2) and no accessible name (WCAG 4.1.2). Add label text and .accessibilityLabel().",
                     node: view.callExpr,
                     context: context,
+                    wcagCriteriaOverride: ["3.3.2", "4.1.2"],
                     suggestion: "Add .accessibilityLabel(\"description\") to the Picker"
                 ))
             }

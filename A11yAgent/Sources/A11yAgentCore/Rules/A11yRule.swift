@@ -73,6 +73,7 @@ extension A11yRule {
         node: some SyntaxProtocol,
         context: RuleContext,
         severityOverride: A11ySeverity? = nil,
+        wcagCriteriaOverride: [String]? = nil,
         fix: A11yFix? = nil,
         suggestion: String? = nil
     ) -> A11yDiagnostic {
@@ -86,7 +87,7 @@ extension A11yRule {
             filePath: context.filePath,
             line: context.line(for: node.positionAfterSkippingLeadingTrivia),
             column: context.column(for: node.positionAfterSkippingLeadingTrivia),
-            wcagCriteria: wcagCriteria,
+            wcagCriteria: wcagCriteriaOverride ?? wcagCriteria,
             fix: fix,
             suggestion: suggestion
         )

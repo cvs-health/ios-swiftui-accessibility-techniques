@@ -6,14 +6,15 @@ import SwiftSyntax
 /// the toggle has no meaningful label for VoiceOver.
 /// Skips `Toggle(isOn:) { Text(...) }` or `Toggle(isOn:) { Image(...) }` — the trailing closure provides the label.
 ///
-/// WCAG 4.1.2 Name, Role, Value
+/// WCAG 3.3.2 Labels or Instructions — visible label must persist
+/// WCAG 4.1.2 Name, Role, Value — accessible name must be provided
 /// Reference: TogglesView.swift — bad example uses Toggle("").labelsHidden() with separate Text
 public struct ToggleMissingLabelRule: A11yRule {
     public let id = "toggle-missing-label"
     public let name = "Toggle Missing Label"
     public let severity = A11ySeverity.error
-    public let wcagCriteria = ["4.1.2"]
-    public let description = "Toggles must have a meaningful label — either inline text, view-builder content, or .accessibilityLabel()."
+    public let wcagCriteria = ["3.3.2", "4.1.2"]
+    public let description = "Toggles must have a persistent visible label (3.3.2) and an accessible name (4.1.2)."
 
     public init() {}
 
@@ -37,16 +38,18 @@ public struct ToggleMissingLabelRule: A11yRule {
             // Bad: empty inline label, or labelsHidden() with no a11y label
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
                 diagnostics.append(makeDiagnostic(
-                    message: "Toggle has an empty label. Add meaningful label text or .accessibilityLabel().",
+                    message: "Toggle has an empty label. No visible label (WCAG 3.3.2) and no accessible name (WCAG 4.1.2). Add meaningful label text and .accessibilityLabel().",
                     node: view.callExpr,
                     context: context,
+                    wcagCriteriaOverride: ["3.3.2", "4.1.2"],
                     suggestion: "Add label text: Toggle(\"Label\", isOn:) or .accessibilityLabel(\"Label\")"
                 ))
             } else if hasLabelsHidden {
                 diagnostics.append(makeDiagnostic(
-                    message: "Toggle uses .labelsHidden() without .accessibilityLabel(). The label is visually hidden but VoiceOver needs it.",
+                    message: "Toggle uses .labelsHidden() without .accessibilityLabel(). The visible label is hidden but VoiceOver still needs an accessible name (WCAG 4.1.2).",
                     node: view.callExpr,
                     context: context,
+                    wcagCriteriaOverride: ["4.1.2"],
                     suggestion: "Add .accessibilityLabel(\"Label\") when using .labelsHidden()"
                 ))
             }

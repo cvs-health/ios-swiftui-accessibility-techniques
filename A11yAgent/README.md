@@ -23,8 +23,8 @@ a11y-check . --diff                # Only issues on lines you changed
 a11y-check MyView.swift --lines 50-120  # Check only specific lines
 a11y-check . --fix                 # Auto-fix issues where possible
 a11y-check . --fix --dry-run       # Preview fixes without applying
-a11y-check . --trend               # Track score over time
 a11y-check . --per-view            # Score each SwiftUI View separately
+a11y-check . --no-trend            # Disable automatic trend tracking
 a11y-check --list-rules            # List all 23 rules
 ```
 
@@ -224,13 +224,7 @@ After applying fixes, `a11y-check` re-analyzes and shows the updated score.
 
 ## Trend tracking
 
-Track your accessibility score over time with `--trend`:
-
-```bash
-a11y-check . --trend
-```
-
-Each run records the score, grade, error count, and git commit hash to `.a11y-scores.json` in the project directory. The output shows a sparkline, delta from the last run, and a history table:
+Score tracking is **automatic** — every run records the score, grade, error count, and git commit hash to `.a11y-scores.json` in the project directory. Once you have history from previous runs, the output automatically shows a sparkline, delta from the last run, and a history table:
 
 ```
 Score Trend:
@@ -243,7 +237,7 @@ Score Trend:
   → now                          81.0   B-     5       +4.2
 ```
 
-Use `--trend --format json` for machine-readable trend data.
+Use `--format json` to get machine-readable trend data. Use `--no-trend` to disable tracking.
 
 ## Per-view scoring
 
@@ -304,7 +298,7 @@ Accessibility errors and warnings will appear inline in Xcode's Issue Navigator 
 | `--lines` | Only check lines in a range, e.g. `50-120`. Comma-separated for multiple ranges: `10-30,80-100` |
 | `--fix` | Automatically apply available fixes to source files |
 | `--dry-run` | Show what `--fix` would change without modifying files |
-| `--trend` | Track score over time. Records each run to `.a11y-scores.json` and shows history |
+| `--trend` / `--no-trend` | Score trend tracking (enabled by default). Use `--no-trend` to disable |
 | `--per-view` | Show per-SwiftUI-View scores in addition to the overall score |
 
 ## Configuration file

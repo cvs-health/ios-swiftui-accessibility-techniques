@@ -142,8 +142,43 @@ Set `A11Y_CHECK_PATH` to the absolute path of that binary in your MCP config. Th
 
 | Tool | Description |
 |------|-------------|
-| **run_a11y_check** | Run a11y-check on given paths. Returns score (0–100), WCAG criteria pass/fail, trend delta, and diagnostics. Arguments: `paths` (required), optional `projectRoot`, `only`, `disable`, `maxDiagnostics` (default 25; use 0 for full list). |
+| **run_a11y_check** | Run a11y-check on given paths. Returns score (0–100), WCAG criteria pass/fail, trend delta, and diagnostics with per-issue WCAG mappings. Arguments: `paths` (required), optional `projectRoot`, `only`, `disable`, `maxDiagnostics` (default 25; use 0 for full list). |
 | **list_a11y_rules** | List all a11y-check rules (IDs, names, WCAG criteria). No arguments. |
+
+## Scoring
+
+Every `run_a11y_check` call returns a **WCAG 2.2 accessibility score** (0–100 with a letter grade A–F). The score is based on:
+
+- **WCAG criteria pass/fail** — which of the 40+ Level A and AA success criteria have errors
+- **Issue penalties** — errors (−5), warnings (−2), info (−0.5) per finding
+- **Failed criteria list** — e.g. 3.3.2 Labels or Instructions, 4.1.2 Name Role Value
+
+Example MCP output:
+
+```
+Score: 25/100 (F) — 9 passed, 2 failed
+
+Failed WCAG criteria:
+  ✗ 3.3.2 Labels or Instructions (11 errors, 0 warnings)
+  ✗ 4.1.2 Name, Role, Value (1 errors, 0 warnings)
+```
+
+## Trend Tracking
+
+Scores are **automatically recorded** on every run to a `.a11y-scores.json` file in the analyzed directory. When history exists, the MCP output includes a **trend delta** showing how the score changed:
+
+```
+Score: 75.0/100 (C) — 12 passed, 1 failed
+Trend: +12.5 from last run
+```
+
+This lets you track progress over time — fix issues, re-run, and see the score improve. The trend data also appears in:
+
+- **HTML reports** — SVG line chart with score history and a data table
+- **JSON output** — `trend` object with historical entries and delta
+- **Terminal output** — sparkline chart and history table
+
+Use `--no-trend` on the CLI to disable tracking if needed.
 
 ## What you can ask
 
@@ -151,32 +186,45 @@ Once the MCP server is configured, you can ask your AI assistant things like:
 
 | Prompt | What happens |
 |--------|-------------|
-| "Check this project for accessibility issues" | Runs `run_a11y_check` on the project root and returns a summary |
-| "Run a11y-check on TextFieldsView.swift" | Checks a specific file and reports issues with line numbers |
-| "List all the a11y rules" | Calls `list_a11y_rules` and shows all 23 rules with WCAG criteria |
-| "Which of those are the most critical to fix?" | The AI explains severity levels and WCAG impact based on the results |
+| "Check this project for accessibility issues" | Runs `run_a11y_check` on the project root and returns score, failed WCAG criteria, and diagnostics |
+| "Run a11y-check on TextFieldsView.swift" | Checks a specific file and reports score and issues with line numbers |
+| "What's my accessibility score?" | Runs the check and highlights the score, grade, and trend delta |
+| "How has the score changed?" | The AI reads the trend data and explains whether things are improving |
+| "List all the a11y rules" | Calls `list_a11y_rules` and shows all rules with WCAG criteria |
+| "Which WCAG criteria are we failing?" | The AI interprets the failed criteria list from the score output |
 | "Fix the textfield-missing-label issues" | The AI reads the diagnostics, then edits your source code to add the missing labels |
-| "What WCAG criteria does this project fail?" | The AI interprets the results and maps them to compliance requirements |
-| "Generate an HTML accessibility report for this project" | The AI runs `a11y-check --format html` in the terminal and saves a self-contained HTML report with WCAG conformance table, per-file details, and per-rule summary |
+| "Generate an HTML accessibility report" | The AI runs `a11y-check --format html` in the terminal and saves a report with score trend chart, WCAG conformance table, and per-file details |
 
-The full loop — **detect, understand, fix, report** — happens conversationally without leaving the editor. The AI doesn't just report problems; it can explain why they matter for users with disabilities, make the code changes to resolve them, and generate shareable reports for your team.
+The full loop — **detect, score, understand, fix, track** — happens conversationally without leaving the editor. The AI reports your score, explains which WCAG criteria fail and why they matter for users with disabilities, makes the code changes, and tracks your improvement over time.
 
 ### Example conversation
 
 ```
 You:    Check TextFieldsView.swift for accessibility issues
 
-AI:     I found 5 errors in TextFieldsView.swift:
-        • Line 214: TextField has an empty label...
-        • Line 222: TextField has an empty label...
+AI:     Score: 25/100 (F) — 9 passed, 2 failed
+
+        Failed WCAG criteria:
+          ✗ 3.3.2 Labels or Instructions (11 errors)
+          ✗ 4.1.2 Name, Role, Value (1 error)
+
+        11 issues found. Top issues:
+        • Line 247: TextField uses placeholder "First Name" as its
+          only label — missing persistent visible label (WCAG 3.3.2)
+        • Line 255: TextField has empty label and no
+          .accessibilityLabel() (WCAG 3.3.2 + 4.1.2)
         (etc.)
 
-You:    Fix the one on line 259
+You:    Fix them
 
-AI:     [Edits the file to add .accessibilityLabel("Address line 2")]
-        I added an accessibility label to the TextField on line 259.
-        VoiceOver will now announce "Address line 2" when a user
-        focuses this field.
+AI:     [Adds Text labels and .accessibilityLabel() modifiers]
+        Fixed 11 issues across the file.
+
+You:    Run the check again
+
+AI:     Score: 100/100 (A) — 11 passed, 0 failed
+        Trend: +75.0 from last run ✅
+        No accessibility issues found.
 ```
 
 ## Development

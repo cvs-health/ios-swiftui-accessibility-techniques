@@ -1,11 +1,11 @@
 # MCP Server for a11y-check
 
-Model Context Protocol (MCP) server that exposes the SwiftUI **a11y-check** tool to AI assistants (e.g. [Cursor](https://cursor.com)). Lets you ask things like “check this project for accessibility” in chat; the AI runs the checker and can suggest or apply fixes.
+Model Context Protocol (MCP) server that exposes the SwiftUI **a11y-check** tool to AI assistants. Works with **Cursor**, **Windsurf**, **Claude Desktop**, **VS Code (Copilot)**, and any MCP-compatible client. Ask "check this project for accessibility" in chat — the AI runs the checker, reports scores and WCAG failures, and can suggest or apply fixes.
 
 ## Prerequisites
 
 - **Node.js** 18+
-- **a11y-check** binary: either install via Homebrew (see below) or **build from source** and point the MCP server at it (see [Using a local build](#using-a-local-build)).
+- **a11y-check** binary — either install via Homebrew or build from source (see [Using a local build](#using-a-local-build))
 
 ## Install and run
 
@@ -13,85 +13,136 @@ Model Context Protocol (MCP) server that exposes the SwiftUI **a11y-check** tool
 cd A11yAgent/mcp-server
 npm install
 npm run build
-npm start
 ```
 
-The server uses **stdio** transport: it reads JSON-RPC from stdin and writes to stdout. Cursor (or another MCP client) spawns this process and communicates over stdio.
+The server uses **stdio** transport: the AI tool spawns this process and communicates over JSON-RPC via stdin/stdout.
 
-## Cursor setup
+## Setup by AI Tool
 
-1. Install or build **a11y-check** (see Prerequisites and [Using a local build](#using-a-local-build)).
-2. Add the MCP server to Cursor’s config.
+All tools use the same MCP server — only the config file location differs. Replace `/path/to/` with your actual repo path in every example below.
 
-   **Cursor Settings → Features → MCP → Edit config** (or edit the config file directly).
+### Environment variables
 
-3. Add an entry for this server. Use the **path** to the repo and run the Node script:
+| Variable | Description |
+|---|---|
+| `A11Y_CHECK_PATH` | Absolute path to the `a11y-check` binary. Set this if the binary isn't on your PATH (e.g. local build or Homebrew on macOS). |
+| `A11Y_PROJECT_ROOT` | Project root directory. Relative paths in `paths` resolve against this. |
 
-   **Option A – use `npx` (run from repo root):**
+---
 
-   ```json
-   {
-     "mcpServers": {
-       "a11y-check": {
-         "command": "node",
-         "args": [
-           "/path/to/ios-swiftui-accessibility-techniques/A11yAgent/mcp-server/dist/index.js"
-         ]
-       }
-     }
-   }
-   ```
+### Cursor
 
-   Replace `/path/to/ios-swiftui-accessibility-techniques` with your actual repo path. See [cursor-mcp-example.json](cursor-mcp-example.json) for a copy-paste template.
+**Config file:** Cursor Settings → Features → MCP → Edit config
 
-   **Option B – use `npm run start` in the mcp-server directory:**
+```json
+{
+  "mcpServers": {
+    "a11y-check": {
+      "command": "node",
+      "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"],
+      "env": {
+        "A11Y_CHECK_PATH": "/path/to/a11y-check",
+        "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
+      }
+    }
+  }
+}
+```
 
-   ```json
-   {
-     "mcpServers": {
-       "a11y-check": {
-         "command": "npm",
-         "args": ["run", "start"],
-         "cwd": "/path/to/ios-swiftui-accessibility-techniques/A11yAgent/mcp-server"
-       }
-     }
-   }
-   ```
+See [cursor-mcp-example.json](cursor-mcp-example.json) for a copy-paste template.
 
-4. Restart Cursor (or reload MCP servers) so it picks up the new server.
+---
+
+### Windsurf
+
+**Config file:** `~/.codeium/windsurf/mcp_config.json`  
+(or click the **hammer icon** at the top of the Cascade panel → Configure)
+
+```json
+{
+  "mcpServers": {
+    "a11y-check": {
+      "command": "node",
+      "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"],
+      "env": {
+        "A11Y_CHECK_PATH": "/path/to/a11y-check",
+        "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
+      }
+    }
+  }
+}
+```
+
+After saving, refresh MCP servers from the hammer icon or restart Windsurf. See [windsurf-mcp-example.json](windsurf-mcp-example.json).
+
+---
+
+### Claude Desktop
+
+**Config file:**
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "a11y-check": {
+      "command": "node",
+      "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"],
+      "env": {
+        "A11Y_CHECK_PATH": "/path/to/a11y-check",
+        "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
+      }
+    }
+  }
+}
+```
+
+Restart Claude Desktop after saving. See [claude-desktop-mcp-example.json](claude-desktop-mcp-example.json).
+
+---
+
+### VS Code (GitHub Copilot)
+
+**Config file:** `.vscode/settings.json` in your workspace, or VS Code User Settings (JSON)
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "a11y-check": {
+        "command": "node",
+        "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"],
+        "env": {
+          "A11Y_CHECK_PATH": "/path/to/a11y-check",
+          "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
+        }
+      }
+    }
+  }
+}
+```
+
+Reload VS Code after saving. Copilot Chat will discover the MCP tools automatically. See [vscode-mcp-example.json](vscode-mcp-example.json).
+
+---
 
 ### Using a local build
 
-If you build a11y-check from source instead of using Homebrew, set **`A11Y_CHECK_PATH`** so the MCP server can find the binary (Cursor often doesn’t inherit your shell PATH).
+If you build a11y-check from source instead of Homebrew, point `A11Y_CHECK_PATH` at the binary:
 
-1. Build the CLI:
-   ```bash
-   cd A11yAgent && swift build
-   ```
-2. In Cursor’s MCP config, add `env` with the **absolute path** to the binary:
+```bash
+cd A11yAgent && swift build -c release
+# Binary is at: A11yAgent/.build/release/a11y-check
+```
 
-   ```json
-   {
-     "mcpServers": {
-       "a11y-check": {
-         "command": "node",
-         "args": ["/path/to/ios-swiftui-accessibility-techniques/A11yAgent/mcp-server/dist/index.js"],
-         "env": {
-           "A11Y_CHECK_PATH": "/path/to/ios-swiftui-accessibility-techniques/A11yAgent/.build/debug/a11y-check",
-           "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
-         }
-       }
-     }
-   }
-   ```
-
-   Replace both paths with your real repo path. **A11Y_PROJECT_ROOT** makes relative paths (e.g. `["iOSswiftUIa11yTechniques"]`) resolve correctly. See [cursor-mcp-example.json](cursor-mcp-example.json).
+Set `A11Y_CHECK_PATH` to the absolute path of that binary in your MCP config. This is needed because AI tools often don't inherit your shell PATH.
 
 ## Tools exposed
 
 | Tool | Description |
 |------|-------------|
-| **run_a11y_check** | Run a11y-check on given paths. Arguments: `paths` (required), optional `projectRoot`, `only`, `disable`, `maxDiagnostics` (default 100; limits how many diagnostics are returned so output shows in chat; use 0 for full list). |
+| **run_a11y_check** | Run a11y-check on given paths. Returns score (0–100), WCAG criteria pass/fail, trend delta, and diagnostics. Arguments: `paths` (required), optional `projectRoot`, `only`, `disable`, `maxDiagnostics` (default 25; use 0 for full list). |
 | **list_a11y_rules** | List all a11y-check rules (IDs, names, WCAG criteria). No arguments. |
 
 ## What you can ask

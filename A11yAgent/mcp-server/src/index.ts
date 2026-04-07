@@ -130,7 +130,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     let text = stdout?.trim() ?? "[]";
     try {
-      const diagnostics = JSON.parse(text) as Array<{
+      const parsed = JSON.parse(text);
+
+      // Handle new format: { diagnostics: [...], score: {...}, trend?: {...} }
+      // or legacy format: [...]
+      const diagnostics: Array<{
         ruleID?: string;
         severity?: string;
         message?: string;
@@ -138,10 +142,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         line?: number;
         column?: number;
         wcagCriteria?: string[];
-      }>;
+      }> = Array.isArray(parsed) ? parsed : (parsed.diagnostics ?? []);
+      const score = Array.isArray(parsed) ? null : parsed.score;
+      const trend = Array.isArray(parsed) ? null : parsed.trend;
+
       const count = diagnostics.length;
       if (count === 0) {
-        text = "No accessibility issues found.";
+        const scoreLine = score ? `\n\n**Score:** ${score.score}/100 (${score.grade}) — ${score.criteriaPassed} criteria passed, ${score.criteriaFailed} failed` : "";
+        text = `No accessibility issues found.${scoreLine}`;
       } else {
         const summary = diagnostics.reduce(
           (acc, d) => {
@@ -152,10 +160,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         );
         const limit = maxDiagnostics > 0 ? Math.min(maxDiagnostics, count) : count;
         const shown = diagnostics.slice(0, limit);
-        const limitNote =
-          limit < count
-            ? `\n(Showing first ${limit} of ${count}. Pass maxDiagnostics: 0 for full list.)\n\n`
-            : "\n\n";
 
         // Group by file; use compact list format (no tables) for easy reading in scroll view
         const byFile = new Map<string, typeof shown>();
@@ -168,8 +172,28 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const lines: string[] = [];
         const err = summary.error ?? 0;
         const warn = summary.warning ?? 0;
+
+        // Score header
+        if (score) {
+          lines.push(`**Score:** ${score.score}/100 (${score.grade}) — ${score.criteriaPassed} passed, ${score.criteriaFailed} failed`);
+          if (trend && typeof trend.delta === "number" && trend.delta !== 0) {
+            const sign = trend.delta > 0 ? "+" : "";
+            lines.push(`**Trend:** ${sign}${trend.delta.toFixed(1)} from last run`);
+          }
+          lines.push("");
+        }
+
         lines.push(`**A11y check:** ${count} issues (${err} errors, ${warn} warnings).${limit < count ? ` Showing first ${limit} of ${count}. Say "full list" for all.` : ""}`);
         lines.push("");
+
+        // Failed criteria
+        if (score?.failedCriteria?.length > 0) {
+          lines.push("**Failed WCAG criteria:**");
+          for (const fc of score.failedCriteria) {
+            lines.push(`  ✗ ${fc.criterion} ${fc.name} (${fc.errors} errors, ${fc.warnings} warnings)`);
+          }
+          lines.push("");
+        }
 
         for (const [filePath, list] of byFile) {
           const parts = filePath.split("/").filter(Boolean);
@@ -179,8 +203,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             const ln = String(d.line ?? "?");
             const sev = d.severity ?? "info";
             const rule = d.ruleID ?? "";
+            const wcag = d.wcagCriteria?.length ? ` [WCAG ${d.wcagCriteria.join(", ")}]` : "";
             const msg = (d.message ?? "").replace(/\n/g, " ").trim();
-            lines.push(`  • ${ln} · ${sev} · ${rule} — ${msg}`);
+            lines.push(`  • ${ln} · ${sev} · ${rule}${wcag} — ${msg}`);
           }
           lines.push("");
         }

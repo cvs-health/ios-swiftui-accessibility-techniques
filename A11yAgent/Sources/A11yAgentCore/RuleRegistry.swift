@@ -78,6 +78,12 @@ public final class RuleRegistry {
 
         // Focus return (WCAG 2.4.3, 2.1.2)
         register(SheetFocusReturnRule())
+
+        // Animation / Motion (WCAG 2.3.1)
+        register(ReduceMotionRule())
+
+        // Tab Views (WCAG 4.1.2, 2.4.2)
+        register(TabViewMissingLabelRule())
     }
 
     /// Apply a config: merge disabled rules and enabled-only from config with CLI overrides.

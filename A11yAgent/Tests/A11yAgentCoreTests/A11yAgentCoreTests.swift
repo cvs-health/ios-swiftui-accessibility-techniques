@@ -472,7 +472,7 @@ final class A11yAgentCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 23)
+        XCTAssertEqual(registry.rules.count, 25)
     }
 
     func testDisableRule() {

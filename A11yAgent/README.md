@@ -1,6 +1,6 @@
 # A11y Checker (a11y-check)
 
-Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 23 rules across 10 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
+Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 25 rules across 12 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
 
 ## Check your own iOS app
 
@@ -25,7 +25,9 @@ a11y-check . --fix                 # Auto-fix issues where possible
 a11y-check . --fix --dry-run       # Preview fixes without applying
 a11y-check . --per-view            # Score each SwiftUI View separately
 a11y-check . --no-trend            # Disable automatic trend tracking
-a11y-check --list-rules            # List all 23 rules
+a11y-check --baseline-save         # Save current issues as baseline
+a11y-check . --baseline            # Only report new issues (not in baseline)
+a11y-check --list-rules            # List all 25 rules
 ```
 
 Every run automatically includes a **WCAG 2.2 accessibility score** (0–100 with letter grade) after the diagnostics. Use `--min-score 80` to fail CI if the score drops below a threshold.
@@ -300,6 +302,8 @@ Accessibility errors and warnings will appear inline in Xcode's Issue Navigator 
 | `--dry-run` | Show what `--fix` would change without modifying files |
 | `--trend` / `--no-trend` | Score trend tracking (enabled by default). Use `--no-trend` to disable |
 | `--per-view` | Show per-SwiftUI-View scores in addition to the overall score |
+| `--baseline-save` | Save current issues as baseline (`.a11y-baseline.json`). Future `--baseline` runs only report new issues |
+| `--baseline` | Filter out issues in the baseline — only new regressions are shown |
 
 ## Configuration file
 
@@ -477,14 +481,25 @@ The AI runs `a11y-check . --format html > accessibility-report.html` in the term
 
 ### GitHub Actions
 
+A ready-to-use workflow is included at [`A11yAgent/.github/workflows/a11y-check.yml`](.github/workflows/a11y-check.yml). It:
+
+1. Builds a11y-check from source
+2. Runs the accessibility check
+3. Posts the score as a **PR comment** with WCAG criteria pass/fail
+4. Uploads JSON results as an artifact
+5. Fails the job if the score is below the configurable threshold
+
+Copy it to your repo's `.github/workflows/` directory. Set the `MIN_SCORE` and `PATHS` environment variables at the top of the file.
+
+Alternatively, use a simpler inline step:
+
 ```yaml
 - name: Checkout repo
   uses: actions/checkout@v4
+- name: Build a11y-check
+  run: cd A11yAgent && swift build -c release && echo "$(pwd)/.build/release" >> $GITHUB_PATH
 - name: Accessibility check
-  run: |
-    brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
-    brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
-    a11y-check Sources/ --format json --only error
+  run: a11y-check Sources/ --min-score 70
 ```
 
 ### Diff-only in CI (no new issues)
@@ -495,6 +510,18 @@ Only fail the build if the PR introduces new accessibility errors:
 - name: Accessibility check (changed files only)
   run: |
     a11y-check Sources/ --diff --diff-base origin/main --only error
+```
+
+### Baseline mode in CI
+
+Save a baseline of known issues then only fail on **new regressions**:
+
+```bash
+# Once: save the current state as baseline (commit this file)
+a11y-check Sources/ --baseline-save
+
+# In CI: only new issues fail the build
+a11y-check Sources/ --baseline
 ```
 
 ### HTML report as artifact
@@ -545,7 +572,7 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Run a11y-check on TextFieldsView.swift"** — check a specific file
 - **"Which of those are the most critical to fix?"** — the AI explains severity and WCAG impact
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
-- **"List all the a11y rules"** — shows all 23 rules with descriptions and WCAG criteria
+- **"List all the a11y rules"** — shows all 25 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
 - **"What's the accessibility score for this project?"** — runs `a11y-check .` and explains the WCAG 2.2 score breakdown
 - **"Score ProfileView.swift"** — runs the check on a single file and highlights what to fix based on the score
@@ -555,7 +582,7 @@ The full loop — detect, understand, fix, report — happens conversationally w
 
 ## Rules
 
-a11y-check includes 23 rules across these categories:
+a11y-check includes 25 rules across these categories:
 
 | Category | Rules | WCAG |
 |----------|-------|------|
@@ -572,6 +599,8 @@ a11y-check includes 23 rules across these categories:
 | **Toggles** | `toggle-missing-label` | 4.1.2 |
 | **Form controls** | `textfield-missing-label`, `slider-missing-label`, `stepper-missing-label`, `picker-missing-label` | 4.1.2 |
 | **Accessibility hidden** | `hidden-parent-with-controls` | 4.1.2 |
+| **Animation** | `animation-missing-reduce-motion` | 2.3.1 |
+| **Tab views** | `tabview-missing-label` | 4.1.2, 2.4.2 |
 
 The **textfield-missing-label** rule catches two problems:
 - **Error:** TextField/SecureField with an empty `""` label and no `.accessibilityLabel()` — VoiceOver users won't know what to enter.

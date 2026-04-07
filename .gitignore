@@ -91,3 +91,7 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+# a11y-check
+.a11y-scores.json
+.a11y-baseline.json

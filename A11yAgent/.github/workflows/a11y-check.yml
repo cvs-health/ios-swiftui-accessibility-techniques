@@ -1,0 +1,173 @@
+# GitHub Actions workflow for a11y-check
+# Runs accessibility checks on PRs and posts score as a comment.
+#
+# Usage: Copy this file to your repo's .github/workflows/ directory.
+# Requires: macOS runner (for Swift/SwiftUI analysis)
+#
+# Configuration:
+#   MIN_SCORE: Minimum passing score (0-100). PR fails if below this.
+#   PATHS: Space-separated paths to check (default: ".")
+
+name: Accessibility Check
+
+on:
+  pull_request:
+    paths:
+      - '**/*.swift'
+  push:
+    branches: [main]
+    paths:
+      - '**/*.swift'
+
+env:
+  MIN_SCORE: 70
+  PATHS: "."
+
+jobs:
+  a11y-check:
+    name: SwiftUI Accessibility Check
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build a11y-check
+        run: |
+          cd A11yAgent
+          swift build -c release
+          echo "$(pwd)/.build/release" >> $GITHUB_PATH
+
+      - name: Run accessibility check
+        id: check
+        run: |
+          set +e
+          OUTPUT=$(a11y-check ${{ env.PATHS }} --format json 2>&1)
+          EXIT_CODE=$?
+          set -e
+
+          # Extract score from JSON
+          SCORE=$(echo "$OUTPUT" | python3 -c "
+          import json, sys
+          try:
+              data = json.load(sys.stdin)
+              score = data.get('score', {})
+              print(f\"{score.get('score', 0):.1f}\")
+          except:
+              print('0.0')
+          ")
+
+          GRADE=$(echo "$OUTPUT" | python3 -c "
+          import json, sys
+          try:
+              data = json.load(sys.stdin)
+              print(data.get('score', {}).get('grade', 'F'))
+          except:
+              print('F')
+          ")
+
+          ERRORS=$(echo "$OUTPUT" | python3 -c "
+          import json, sys
+          try:
+              data = json.load(sys.stdin)
+              diags = data.get('diagnostics', [])
+              errors = len([d for d in diags if d.get('severity') == 'error'])
+              warnings = len([d for d in diags if d.get('severity') == 'warning'])
+              print(f'{errors} errors, {warnings} warnings')
+          except:
+              print('unknown')
+          ")
+
+          FAILED_CRITERIA=$(echo "$OUTPUT" | python3 -c "
+          import json, sys
+          try:
+              data = json.load(sys.stdin)
+              failed = data.get('score', {}).get('failedCriteria', [])
+              for fc in failed:
+                  print(f\"  ✗ {fc['criterion']} {fc['name']} ({fc['errors']} errors, {fc['warnings']} warnings)\")
+              if not failed:
+                  print('  ✓ All criteria passed')
+          except:
+              print('  Could not parse results')
+          ")
+
+          echo "score=$SCORE" >> $GITHUB_OUTPUT
+          echo "grade=$GRADE" >> $GITHUB_OUTPUT
+          echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+
+          # Save full JSON for artifact
+          echo "$OUTPUT" > a11y-results.json
+
+          # Save failed criteria for comment
+          echo "FAILED_CRITERIA<<EOF" >> $GITHUB_ENV
+          echo "$FAILED_CRITERIA" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const score = '${{ steps.check.outputs.score }}';
+            const grade = '${{ steps.check.outputs.grade }}';
+            const errors = '${{ steps.check.outputs.errors }}';
+            const minScore = ${{ env.MIN_SCORE }};
+            const passed = parseFloat(score) >= minScore;
+            const emoji = passed ? '✅' : '❌';
+            const failedCriteria = process.env.FAILED_CRITERIA || '';
+
+            const body = [
+              `## ${emoji} Accessibility Score: ${score}/100 (${grade})`,
+              '',
+              `**Issues:** ${errors}`,
+              `**Minimum required:** ${minScore}`,
+              '',
+              '### WCAG Criteria',
+              failedCriteria,
+              '',
+              '---',
+              `*Checked by [a11y-check](https://github.com/cvs-health/ios-swiftui-accessibility-techniques/tree/main/A11yAgent)*`,
+            ].join('\n');
+
+            // Find existing comment to update
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('Accessibility Score:')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-results
+          path: a11y-results.json
+
+      - name: Check minimum score
+        run: |
+          SCORE=${{ steps.check.outputs.score }}
+          MIN=${{ env.MIN_SCORE }}
+          echo "Score: $SCORE / Minimum: $MIN"
+          if (( $(echo "$SCORE < $MIN" | bc -l) )); then
+            echo "::error::Accessibility score $SCORE is below minimum threshold $MIN"
+            exit 1
+          fi

@@ -72,6 +72,12 @@ struct A11yCheck: ParsableCommand {
     @Flag(name: .long, help: "Show per-SwiftUI-View scores in addition to the overall score.")
     var perView = false
 
+    @Flag(name: .long, help: "Save current issues as the baseline. Future runs with --baseline will only show new issues.")
+    var baselineSave = false
+
+    @Flag(name: .long, help: "Filter out issues that are in the baseline (.a11y-baseline.json). Only new regressions are reported.")
+    var baseline = false
+
     func run() throws {
         let registry = RuleRegistry()
 
@@ -152,6 +158,34 @@ struct A11yCheck: ParsableCommand {
         // Apply --only severity filter
         if let minSeverity = only {
             allDiagnostics = allDiagnostics.filter { $0.severity >= minSeverity }
+        }
+
+        // Save baseline if requested
+        if baselineSave {
+            let calculator = ScoreCalculator()
+            let preScore = calculator.calculate(
+                diagnostics: allDiagnostics,
+                rules: registry.enabledRules,
+                filePaths: filePaths
+            )
+            let baselineData = Baseline.from(diagnostics: allDiagnostics, score: preScore.score)
+            try baselineData.save(to: resolvePath(paths.first ?? "."))
+            print("Baseline saved with \(allDiagnostics.count) issues (score: \(String(format: "%.1f", preScore.score)))")
+            print("Future runs with --baseline will only report new issues.")
+            return
+        }
+
+        // Apply baseline filter
+        if baseline {
+            let searchDir = resolvePath(paths.first ?? ".")
+            if let baselineData = Baseline.load(from: searchDir) {
+                let before = allDiagnostics.count
+                allDiagnostics = baselineData.filterNew(diagnostics: allDiagnostics)
+                let suppressed = before - allDiagnostics.count
+                if suppressed > 0 {
+                    printError("Baseline: \(suppressed) known issues suppressed, \(allDiagnostics.count) new issues")
+                }
+            }
         }
 
         // Compute score

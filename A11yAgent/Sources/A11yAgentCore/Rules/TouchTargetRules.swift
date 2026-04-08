@@ -4,8 +4,9 @@ import SwiftSyntax
 
 /// Flags interactive elements with `.frame(width:, height:)` below 24x24 points
 /// (WCAG 2.2 Level AA minimum). Accounts for `.padding()` adding to the
-/// effective touch target. Skips when only one dimension is small and the other
-/// is undefined or `.infinity` — the element likely has adequate spacing.
+/// effective touch target. Only flags when BOTH dimensions are explicitly
+/// constrained below 24pt — if either dimension is undefined or `.infinity`,
+/// spacing in that direction counts toward the target size per WCAG 2.5.8.
 ///
 /// WCAG 2.5.8 Target Size (Minimum)
 /// Reference: TouchTargetSize.swift — bad example uses .frame(width: 18, height: 18)
@@ -15,11 +16,11 @@ public struct SmallTouchTargetRule: A11yRule {
     public let severity = A11ySeverity.error
     public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.5.8"]
-    public let description = "Interactive elements should have a minimum touch target size of 24x24 points (WCAG 2.2 AA). Padding and spacing count toward the target size."
+    public let description = "Interactive elements should have a minimum touch target size of 24x24 points (WCAG 2.5.8 Level AA). Padding and spacing count toward the target size. Only flags when both dimensions are explicitly constrained below 24pt."
 
     public init() {}
 
-    /// The minimum dimension in points (WCAG 2.2 Level AA is 24; Apple HIG recommends 44).
+    /// The minimum dimension in points per WCAG 2.5.8 Level AA.
     public static let minimumSize: Double = 24.0
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
@@ -60,28 +61,15 @@ public struct SmallTouchTargetRule: A11yRule {
                 let widthConstrained = !widthIsInfinity && rawWidth != nil
                 let heightConstrained = !heightIsInfinity && rawHeight != nil
 
-                // Only flag if both dimensions are explicitly small,
-                // or one is explicitly small and the other is also constrained small
+                // Only flag when BOTH dimensions are explicitly constrained below minimum.
+                // If one dimension is .infinity or undefined, spacing in that direction
+                // counts toward the target size per WCAG 2.5.8.
                 if widthConstrained && widthTooSmall && heightConstrained && heightTooSmall {
                     diagnostics.append(makeDiagnostic(
-                        message: "Touch target \(Int(rawWidth!))x\(Int(rawHeight!))pt is below the \(Int(Self.minimumSize))x\(Int(Self.minimumSize))pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt.",
+                        message: "Touch target \(Int(rawWidth!))x\(Int(rawHeight!))pt is below the \(Int(Self.minimumSize))x\(Int(Self.minimumSize))pt minimum (WCAG 2.5.8).",
                         node: frameMod.reportNode,
                         context: context,
-                        suggestion: "Increase .frame(width:height:) to at least 44x44pt, or add .padding() for spacing"
-                    ))
-                } else if widthConstrained && widthTooSmall && !heightConstrained {
-                    diagnostics.append(makeDiagnostic(
-                        message: "Touch target width \(Int(rawWidth!))pt is below the \(Int(Self.minimumSize))pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt.",
-                        node: frameMod.reportNode,
-                        context: context,
-                        suggestion: "Increase .frame(width:) to at least 44pt, or add horizontal .padding() for spacing"
-                    ))
-                } else if heightConstrained && heightTooSmall && !widthConstrained {
-                    diagnostics.append(makeDiagnostic(
-                        message: "Touch target height \(Int(rawHeight!))pt is below the \(Int(Self.minimumSize))pt minimum (WCAG 2.5.8). Use at least 24pt, ideally 44pt.",
-                        node: frameMod.reportNode,
-                        context: context,
-                        suggestion: "Increase .frame(height:) to at least 44pt, or add vertical .padding() for spacing"
+                        suggestion: "Increase .frame(width:height:) to at least 24x24pt, or add .padding() for spacing"
                     ))
                 }
             }

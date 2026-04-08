@@ -150,8 +150,10 @@ Set `A11Y_CHECK_PATH` to the absolute path of that binary in your MCP config. Th
 Every `run_a11y_check` call returns a **WCAG 2.2 accessibility score** (0–100 with a letter grade A–F). The score is based on:
 
 - **WCAG criteria pass/fail** — which of the 40+ Level A and AA success criteria have errors
-- **Issue penalties** — errors (−5), warnings (−2), info (−0.5) per finding
+- **Issue penalties weighted by impact** — base penalties (errors −5, warnings −2, info −0.5) are multiplied by an impact weight: critical 2.0x, serious 1.5x, moderate 1.0x, minor 0.5x
 - **Failed criteria list** — e.g. 3.3.2 Labels or Instructions, 4.1.2 Name Role Value
+
+Each rule also has an **impact** level (critical, serious, moderate, minor) describing the real-world effect on users with disabilities, independent of WCAG pass/fail status. Impact appears in all output formats.
 
 Example MCP output:
 

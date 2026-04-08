@@ -174,14 +174,31 @@ a11y-check . --min-score 80
 - **HTML reports** additionally include a full 48-criteria WCAG 2.2 conformance table with per-criterion status and links to the spec
 - **JSON output** includes a `score` object alongside `diagnostics` with grade, failed criteria, and review criteria
 
+### Impact levels
+
+Every rule has an **impact** level that describes how much a violation affects users with disabilities, independent of WCAG conformance status:
+
+| Impact | Meaning | Example rules |
+|--------|---------|---------------|
+| **Critical** | Content completely inaccessible | `image-missing-label`, `textfield-missing-label`, `hidden-parent-with-controls` |
+| **Serious** | Major barrier, workaround may exist | `color-contrast-insufficient`, `small-touch-target`, `heading-trait-missing` |
+| **Moderate** | Inconvenient but usable | `input-missing-purpose`, `button-label-contains-role` |
+| **Minor** | Annoyance, best-practice | `image-label-contains-role`, `hardcoded-color` |
+
+Impact appears as a badge in HTML reports, as a label in terminal/Xcode output, and as a field in JSON and SARIF output.
+
 ### How scoring works
 
 The overall score combines two components equally:
 
 1. **Criteria coverage (50%)** — what percentage of checked WCAG criteria pass. Errors cause a criterion to fail; warnings put it in "review" status (counted as a conditional pass with a small penalty).
-2. **Issue density (50%)** — a deduction based on issue counts normalized across files. Errors deduct 5 points, warnings 2 points, and info 0.5 points.
+2. **Issue density (50%)** — a deduction based on issue counts normalized across files, **weighted by impact**. Base penalties are: errors −5, warnings −2, info −0.5. These are then multiplied by an impact weight:
+   - Critical: **2.0x** (a critical error deducts 10 points)
+   - Serious: **1.5x** (a serious error deducts 7.5 points)
+   - Moderate: **1.0x** (unchanged)
+   - Minor: **0.5x** (a minor warning deducts only 1 point)
 
-Per-file scores start at 100 and deduct per issue using the same weights. The letter grade maps the overall score to a traditional A+–F scale.
+Per-file scores start at 100 and deduct per issue using the same severity weights. The letter grade maps the overall score to a traditional A+–F scale.
 
 ### Scoring in CI
 
@@ -665,28 +682,29 @@ The full loop — detect, understand, fix, report — happens conversationally w
 
 a11y-check includes 30 rules across these categories:
 
-| Category | Rules | WCAG |
-|----------|-------|------|
-| **Images** | `image-missing-label`, `image-label-contains-role` | 1.1.1 |
-| **Headings** | `heading-trait-missing`, `fake-heading-in-label` | 1.3.1 |
-| **Color & contrast** | `hardcoded-color`, `color-contrast-insufficient` | 1.4.3 |
-| **Dynamic type** | `fixed-font-size`, `line-limit-1` | 1.4.4 |
-| **Focus** | `sheet-focus-return` | 2.4.3, 2.1.2 |
-| **Page titles** | `missing-navigation-title` | 2.4.2 |
-| **Links** | `generic-link-text`, `button-used-as-link` | 2.4.4, 4.1.2 |
-| **Touch targets** | `small-touch-target` | 2.5.8 |
-| **Buttons** | `button-label-contains-role`, `icon-button-missing-label`, `visually-disabled-not-semantic` | 4.1.2 |
-| **Traits** | `tap-gesture-missing-button-trait` | 4.1.2 |
-| **Toggles** | `toggle-missing-label` | 4.1.2 |
-| **Form controls** | `textfield-missing-label`, `slider-missing-label`, `stepper-missing-label`, `picker-missing-label` | 4.1.2 |
-| **Accessibility hidden** | `hidden-parent-with-controls` | 4.1.2 |
-| **Animation** | `animation-missing-reduce-motion` | 2.3.1 |
-| **Tab views** | `tabview-missing-label` | 4.1.2, 2.4.2 |
-| **Input purpose** | `input-missing-purpose` | 1.3.5 |
-| **Gestures** | `gesture-missing-alternative` | 2.1.1, 2.5.1 |
-| **Grouping** | `missing-accessibility-grouping` | 1.3.1 |
-| **Sequence** | `zstack-order-confusing` | 1.3.2 |
-| **Timing** | `auto-dismiss-no-control` | 2.2.1 |
+| Category | Rules | WCAG | Impact |
+|----------|-------|------|--------|
+| **Images** | `image-missing-label`, `image-label-contains-role` | 1.1.1 | Critical, Minor |
+| **Headings** | `heading-trait-missing`, `fake-heading-in-label` | 2.4.6, 1.3.1 | Serious, Serious |
+| **Color & contrast** | `hardcoded-color`, `color-contrast-insufficient` | 1.4.3 | Minor, Serious |
+| **Dynamic type** | `fixed-font-size`, `line-limit-1` | 1.4.4 | Serious, Serious |
+| **Focus** | `sheet-focus-return` | 2.4.3, 2.1.2 | Serious |
+| **Page titles** | `missing-navigation-title` | 2.4.2 | Serious |
+| **Links** | `generic-link-text`, `button-used-as-link` | 2.4.4, 4.1.2 | Serious, Serious |
+| **Touch targets** | `small-touch-target` | 2.5.8 | Serious |
+| **Buttons** | `button-label-contains-role`, `icon-button-missing-label`, `visually-disabled-not-semantic` | 4.1.2 | Moderate, Critical, Serious |
+| **Traits** | `tap-gesture-missing-button-trait` | 4.1.2 | Critical |
+| **Toggles** | `toggle-missing-label` | 4.1.2 | Critical |
+| **Form controls** | `textfield-missing-label`, `slider-missing-label`, `stepper-missing-label`, `picker-missing-label` | 4.1.2 | Critical |
+| **Accessibility hidden** | `hidden-parent-with-controls` | 4.1.2 | Critical |
+| **Animation** | `animation-missing-reduce-motion` | 2.3.1 | Serious |
+| **Tab views** | `tabview-missing-label` | 4.1.2, 2.4.2 | Serious |
+| **Input purpose** | `input-missing-purpose` | 1.3.5 | Moderate |
+| **Gestures** | `gesture-missing-alternative` | 2.1.1, 2.5.1 | Serious |
+| **Grouping** | `missing-accessibility-grouping` | 1.3.1 | Minor |
+| **Sequence** | `zstack-order-confusing` | 1.3.2 | Minor |
+| **Timing** | `auto-dismiss-no-control` | 2.2.1 | Moderate |
+| **Dark mode** | `hardcoded-color` | 1.4.3 | Minor |
 
 The **textfield-missing-label** rule catches two problems:
 - **Error:** TextField/SecureField with an empty `""` label and no `.accessibilityLabel()` — VoiceOver users won't know what to enter.

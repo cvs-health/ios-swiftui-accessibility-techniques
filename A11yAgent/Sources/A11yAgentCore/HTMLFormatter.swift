@@ -507,9 +507,9 @@ public struct HTMLFormatter {
             }
         }
 
-        // Also handle suggestions that start with "Choose " or "Use " and contain a modifier
+        // Also handle suggestions that start with "Choose ", "Use ", or "Remove " and contain a modifier
         if modifier == nil {
-            for kw in ["Choose ", "Use "] where suggestion.hasPrefix(kw) {
+            for kw in ["Choose ", "Use ", "Remove "] where suggestion.hasPrefix(kw) {
                 let rest = String(suggestion.dropFirst(kw.count))
                 if let dotIndex = rest.firstIndex(of: ".") {
                     let candidate = String(rest[dotIndex...])
@@ -531,8 +531,21 @@ public struct HTMLFormatter {
                     let codeStart = trimmed.index(after: pipeIndex)
                     let code = String(trimmed[codeStart...])
                     let indent = String(code.prefix(while: { $0 == " " || $0 == "\t" }))
-                    let stripped = code.trimmingCharacters(in: .whitespaces)
+                    var stripped = code.trimmingCharacters(in: .whitespaces)
                     let prefix = String(trimmed[...pipeIndex])
+
+                    // If the modifier already exists on this line, replace it in-place
+                    // e.g. .frame(width:18, height:18) → .frame(width: 24, height: 24)
+                    if let mod = modifier {
+                        let modName = String(mod.prefix(while: { $0 != "(" }))
+                        if !modName.isEmpty, stripped.contains(modName + "(") {
+                            if let existingRange = stripped.range(of: #"\#(NSRegularExpression.escapedPattern(for: modName))\([^)]*\)"#, options: .regularExpression) {
+                                stripped = stripped.replacingCharacters(in: existingRange, with: mod)
+                                result.append("> \(prefix) \(indent)\(stripped)")
+                                continue
+                            }
+                        }
+                    }
 
                     // Insert a Text label on the line above if the suggestion calls for it
                     if let view = viewToInsertAbove {

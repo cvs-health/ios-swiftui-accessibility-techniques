@@ -69,7 +69,7 @@ public struct SmallTouchTargetRule: A11yRule {
                         message: "Touch target \(Int(rawWidth!))x\(Int(rawHeight!))pt is below the \(Int(Self.minimumSize))x\(Int(Self.minimumSize))pt minimum (WCAG 2.5.8).",
                         node: frameMod.reportNode,
                         context: context,
-                        suggestion: "Increase .frame(width:height:) to at least 24x24pt, or add .padding() for spacing"
+                        suggestion: "Use .frame(width: 24, height: 24) or add padding for spacing"
                     ))
                 }
             }

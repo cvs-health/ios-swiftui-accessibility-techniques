@@ -14,7 +14,7 @@ import SwiftSyntax
 public struct HeadingTraitMissingRule: A11yRule {
     public let id = "heading-trait-missing"
     public let name = "Heading Trait Missing"
-    public let severity = A11ySeverity.warning
+    public let severity = A11ySeverity.info
     public let wcagCriteria = ["1.3.1"]
     public let description = "Text styled with heading fonts should use .accessibilityAddTraits(.isHeader) so VoiceOver users can navigate by headings."
 

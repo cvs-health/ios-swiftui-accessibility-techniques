@@ -10,7 +10,7 @@ import SwiftSyntax
 public struct ButtonUsedAsLinkRule: A11yRule {
     public let id = "button-used-as-link"
     public let name = "Button Used Instead of Link"
-    public let severity = A11ySeverity.warning
+    public let severity = A11ySeverity.error
     public let wcagCriteria = ["4.1.2"]
     public let description = "Use Link instead of Button when navigating to a URL. VoiceOver announces Links differently than Buttons."
 
@@ -56,7 +56,7 @@ public struct ButtonUsedAsLinkRule: A11yRule {
 public struct GenericLinkTextRule: A11yRule {
     public let id = "generic-link-text"
     public let name = "Generic Link Text"
-    public let severity = A11ySeverity.warning
+    public let severity = A11ySeverity.error
     public let wcagCriteria = ["2.4.4"]
     public let description = "Link text should describe the destination, not use generic phrases like 'Click here' or 'Read more'."
 

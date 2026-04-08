@@ -10,7 +10,7 @@ import SwiftSyntax
 public struct ButtonLabelContainsRoleRule: A11yRule {
     public let id = "button-label-contains-role"
     public let name = "Button Label Contains 'Button'"
-    public let severity = A11ySeverity.warning
+    public let severity = A11ySeverity.error
     public let wcagCriteria = ["4.1.2"]
     public let description = "Don't include 'button' in .accessibilityLabel() — the Button role is announced automatically by VoiceOver."
 

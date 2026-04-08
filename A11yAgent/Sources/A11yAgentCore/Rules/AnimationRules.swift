@@ -11,7 +11,7 @@ import SwiftSyntax
 public struct ReduceMotionRule: A11yRule {
     public let id = "animation-missing-reduce-motion"
     public let name = "Animation Without Reduce Motion Check"
-    public let severity = A11ySeverity.warning
+    public let severity = A11ySeverity.error
     public let wcagCriteria = ["2.3.1"]
     public let description = "Animations should respect the user's Reduce Motion preference. Check @Environment(\\.accessibilityReduceMotion) or use .animation(.default, value:) which automatically respects the setting."
 

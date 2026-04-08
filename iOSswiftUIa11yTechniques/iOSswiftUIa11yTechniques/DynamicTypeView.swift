@@ -1,5 +1,5 @@
 /*
-   Copyright 2023 CVS Health and/or one of its affiliates
+   Copyright 2023-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -105,6 +105,24 @@ struct DynamicTypeView: View {
                 DisclosureGroup("Details") {
                     Text("The third good dynamic type example uses `.font(.largeTitle)` which resizes when the user adjusts their system text size settings.")
                 }.padding(.bottom).accessibilityHint("Good Example `Text().font(.largeTitle)`")
+                Text("Good Example `.dynamicTypeSize(...DynamicTypeSize.xxxLarge)` capped heading")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Welcome Back")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("This heading scales up to the xxxLarge Dynamic Type size (approximately 200% larger) but does not grow beyond that to prevent truncation or layout issues.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 4)
+                DisclosureGroup("Details") {
+                    Text("The fourth good dynamic type example uses `.dynamicTypeSize(...DynamicTypeSize.xxxLarge)` to cap the maximum text size of a large heading. The heading still scales up to approximately 200% larger which meets the WCAG 1.4.4 Resize Text requirement. This prevents very large headings from growing excessively at accessibility text sizes where they could truncate or break the layout. Use this technique only on already large text styles like `.largeTitle` or `.title` that would otherwise become excessively large. Never restrict the range on body text or small text styles.")
+                }.padding(.bottom).accessibilityHint("Good Example .dynamicTypeSize capped heading")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)

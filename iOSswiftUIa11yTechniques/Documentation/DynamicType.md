@@ -13,9 +13,12 @@ Put `Text` inside a `ScrollView` so that it does not truncate when the size is i
 
 Avoid using `HStack` with multiple links at large text sizes. 
 
+Use `.dynamicTypeSize(...DynamicTypeSize.xxxLarge)` to cap the maximum size of already large text styles like `.largeTitle` or `.title` that would otherwise grow excessively at accessibility text sizes and truncate or break the layout. The `xxxLarge` size is approximately 200% larger which meets the WCAG 1.4.4 Resize Text minimum requirement. Never restrict the Dynamic Type range on body text or small text styles.
+
 Notes:
 
 - Use `axis: .vertical` to enable `TextField` value text to expand vertically rather than truncate.
+- The `.dynamicTypeSize()` modifier accepts a range (e.g., `DynamicTypeSize.xSmall...DynamicTypeSize.xxxLarge`) or a partial range (e.g., `...DynamicTypeSize.xxxLarge`) to set bounds on text scaling.
 
 ## Applicable WCAG Success Criteria
 - [1.4.4: Resize Text](https://www.w3.org/WAI/WCAG21/Understanding/resize-text)
@@ -25,7 +28,7 @@ Notes:
 
 ----
 
-Copyright 2023-2025 CVS Health and/or one of its affiliates
+Copyright 2023-2026 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

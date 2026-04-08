@@ -13,11 +13,12 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 1200px; margin: 0 auto; }
 h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
-.timestamp { color: #6c757d; font-size: 0.875rem; margin-bottom: 1.5rem; }
+a { text-decoration: underline; }
+.timestamp { color: #595f64; font-size: 0.875rem; margin-bottom: 1.5rem; }
 .summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
 .stat { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; min-width: 120px; text-align: center; }
 .stat .number { font-size: 2rem; font-weight: 700; }
-.stat .label { font-size: 0.875rem; color: #6c757d; }
+.stat .label { font-size: 0.875rem; color: #595f64; }
 .stat.error .number { color: var(--error); }
 .stat.warning .number { color: var(--warning); }
 .stat.info .number { color: var(--info); }
@@ -37,11 +38,14 @@ summary:hover { background: #f1f3f5; }
 .diag-list { padding: 0.5rem 1rem 1rem; }
 .diag { padding: 0.75rem 0; border-bottom: 1px solid #e9ecef; font-size: 0.8125rem; }
 .diag:last-child { border-bottom: none; }
-.diag-loc { color: #6c757d; font-family: monospace; }
-.diag-rule { color: #6c757d; font-style: italic; }
+.diag-loc { color: #595f64; font-family: monospace; }
+.diag-rule { color: #595f64; font-style: italic; }
 .diag-wcag { font-size: 0.75rem; font-weight: 600; color: #495057; }
-.diag-wcag a { color: #0d6efd; text-decoration: none; }
-.diag-wcag a:hover { text-decoration: underline; }
+.diag-wcag a { color: #0b5ed7; }
+.badge-critical { background: #f8d7da; color: #6b1520; }
+.badge-serious { background: #ffe0b2; color: #bf4400; }
+.badge-moderate { background: #fff3cd; color: #664d03; }
+.badge-minor { background: #e2e3e5; color: #2b2f33; }
 .badge-critical { background: #f8d7da; color: #721c24; }
 .badge-serious { background: #ffe0b2; color: #e65100; }
 .badge-moderate { background: #fff3cd; color: #856404; }
@@ -63,15 +67,15 @@ summary:hover { background: #f1f3f5; }
 .grade-c { background: var(--warning-bg); color: var(--warning); }
 .grade-d { background: #ffe0b2; color: #e65100; }
 .grade-f { background: var(--error-bg); color: var(--error); }
-.score-subtitle { color: #6c757d; font-size: 0.875rem; }
-.score-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.875rem; color: #6c757d; margin-bottom: 1rem; }
+.score-subtitle { color: #595f64; font-size: 0.875rem; }
+.score-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.875rem; color: #595f64; margin-bottom: 1rem; }
 .score-stats span { white-space: nowrap; }
 .failed-criteria { margin-top: 0.75rem; }
 .failed-criteria h3 { font-size: 0.9375rem; margin-bottom: 0.5rem; }
 .failed-criteria ul { list-style: none; padding: 0; }
 .failed-criteria li { padding: 0.25rem 0; font-size: 0.875rem; }
 .failed-criteria .criterion-id { font-weight: 600; }
-.failed-criteria .criterion-counts { color: #6c757d; font-size: 0.75rem; }
+.failed-criteria .criterion-counts { color: #595f64; font-size: 0.75rem; }
 .criteria-table td.status-cell { text-align: center; }
 .trend-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
 .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; }
@@ -82,18 +86,18 @@ summary:hover { background: #f1f3f5; }
 .trend-chart .chart-dot { fill: #0d6efd; }
 .trend-chart .chart-dot-current { fill: #198754; stroke: #fff; stroke-width: 2; }
 .trend-chart .chart-grid { stroke: #e9ecef; stroke-width: 1; }
-.trend-chart .chart-label { fill: #6c757d; font-size: 11px; font-family: -apple-system, sans-serif; }
+.trend-chart .chart-label { fill: #595f64; font-size: 11px; font-family: -apple-system, sans-serif; }
 .trend-delta { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
 .trend-delta.positive { color: var(--pass); }
 .trend-delta.negative { color: var(--error); }
-.trend-delta.neutral { color: #6c757d; }
+.trend-delta.neutral { color: #595f64; }
 .trend-table { width: 100%; max-width: 700px; }
 .trend-table th { background: #f1f3f5; }
 </style>
 </head>
 <body>
 <h1>a11y-check Accessibility Report</h1>
-<p class="timestamp">Generated: 2026-04-08T20:59:01Z</p><div class="summary">
+<p class="timestamp">Generated: 2026-04-08T21:07:13Z</p><div class="summary">
   <div class="stat error"><div class="number">496</div><div class="label">Errors</div></div>
   <div class="stat warning"><div class="number">60</div><div class="label">Warnings</div></div>
   <div class="stat info"><div class="number">123</div><div class="label">Info</div></div>
@@ -132,48 +136,51 @@ summary:hover { background: #f1f3f5; }
 </div>
 <div class="trend-section">
 <h2>Score Trend</h2>
-<div class="trend-delta negative">Change from last run: -10.1</div>
+<div class="trend-delta neutral">Change from last run: ±0.0</div>
 <div class="trend-chart">
 <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
 <line x1="40" y1="128" x2="660" y2="128" class="chart-grid"/>
 <text x="35" y="132" class="chart-label" text-anchor="end">25</text>
 <line x1="40" y1="24" x2="660" y2="24" class="chart-grid"/>
 <text x="35" y="28" class="chart-label" text-anchor="end">50</text>
-<path d="M 40 61 L 96 61 L 152 61 L 209 61 L 265 61 L 321 61 L 378 61 L 434 87 L 490 80 L 547 76 L 603 76 L 660 118 L 660 160 L 40 160 Z" class="chart-area"/>
-<path d="M 40 61 L 96 61 L 152 61 L 209 61 L 265 61 L 321 61 L 378 61 L 434 87 L 490 80 L 547 76 L 603 76 L 660 118" class="chart-line"/>
+<path d="M 40 61 L 91 61 L 143 61 L 195 61 L 246 61 L 298 61 L 350 61 L 401 87 L 453 80 L 505 76 L 556 76 L 608 118 L 660 118 L 660 160 L 40 160 Z" class="chart-area"/>
+<path d="M 40 61 L 91 61 L 143 61 L 195 61 L 246 61 L 298 61 L 350 61 L 401 87 L 453 80 L 505 76 L 556 76 L 608 118 L 660 118" class="chart-line"/>
 <circle cx="40" cy="61" r="4" class="chart-dot"/>
 <text x="40" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
 <text x="40" y="51" class="chart-label" text-anchor="middle">41</text>
-<circle cx="96" cy="61" r="4" class="chart-dot"/>
-<text x="96" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="96" y="51" class="chart-label" text-anchor="middle">41</text>
-<circle cx="152" cy="61" r="4" class="chart-dot"/>
-<text x="152" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="152" y="51" class="chart-label" text-anchor="middle">41</text>
-<circle cx="209" cy="61" r="4" class="chart-dot"/>
-<text x="209" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="209" y="51" class="chart-label" text-anchor="middle">41</text>
-<circle cx="265" cy="61" r="4" class="chart-dot"/>
-<text x="265" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="265" y="51" class="chart-label" text-anchor="middle">41</text>
-<circle cx="321" cy="61" r="4" class="chart-dot"/>
-<text x="321" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="321" y="51" class="chart-label" text-anchor="middle">41</text>
-<circle cx="378" cy="61" r="4" class="chart-dot"/>
-<text x="378" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="378" y="51" class="chart-label" text-anchor="middle">41</text>
-<circle cx="434" cy="87" r="4" class="chart-dot"/>
-<text x="434" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="434" y="77" class="chart-label" text-anchor="middle">35</text>
-<circle cx="490" cy="80" r="4" class="chart-dot"/>
-<text x="490" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="490" y="70" class="chart-label" text-anchor="middle">37</text>
-<circle cx="547" cy="76" r="4" class="chart-dot"/>
-<text x="547" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="547" y="66" class="chart-label" text-anchor="middle">37</text>
-<circle cx="603" cy="76" r="4" class="chart-dot"/>
-<text x="603" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="603" y="66" class="chart-label" text-anchor="middle">37</text>
+<circle cx="91" cy="61" r="4" class="chart-dot"/>
+<text x="91" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="91" y="51" class="chart-label" text-anchor="middle">41</text>
+<circle cx="143" cy="61" r="4" class="chart-dot"/>
+<text x="143" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="143" y="51" class="chart-label" text-anchor="middle">41</text>
+<circle cx="195" cy="61" r="4" class="chart-dot"/>
+<text x="195" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="195" y="51" class="chart-label" text-anchor="middle">41</text>
+<circle cx="246" cy="61" r="4" class="chart-dot"/>
+<text x="246" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="246" y="51" class="chart-label" text-anchor="middle">41</text>
+<circle cx="298" cy="61" r="4" class="chart-dot"/>
+<text x="298" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="298" y="51" class="chart-label" text-anchor="middle">41</text>
+<circle cx="350" cy="61" r="4" class="chart-dot"/>
+<text x="350" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="350" y="51" class="chart-label" text-anchor="middle">41</text>
+<circle cx="401" cy="87" r="4" class="chart-dot"/>
+<text x="401" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="401" y="77" class="chart-label" text-anchor="middle">35</text>
+<circle cx="453" cy="80" r="4" class="chart-dot"/>
+<text x="453" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="453" y="70" class="chart-label" text-anchor="middle">37</text>
+<circle cx="505" cy="76" r="4" class="chart-dot"/>
+<text x="505" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="505" y="66" class="chart-label" text-anchor="middle">37</text>
+<circle cx="556" cy="76" r="4" class="chart-dot"/>
+<text x="556" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="556" y="66" class="chart-label" text-anchor="middle">37</text>
+<circle cx="608" cy="118" r="4" class="chart-dot"/>
+<text x="608" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="608" y="108" class="chart-label" text-anchor="middle">27</text>
 <circle cx="660" cy="118" r="5" class="chart-dot-current"/>
 <text x="660" y="180" class="chart-label" text-anchor="middle">Now</text>
 <text x="660" y="108" class="chart-label" text-anchor="middle">27</text>
@@ -192,7 +199,8 @@ summary:hover { background: #f1f3f5; }
 <tr><td>2026-04-08</td><td>36.6</td><td>F</td><td>496</td><td><span style="color:var(--pass)">+1.7</span></td></tr>
 <tr><td>2026-04-08</td><td>37.4</td><td>F</td><td>496</td><td><span style="color:var(--pass)">+0.8</span></td></tr>
 <tr><td>2026-04-08</td><td>37.4</td><td>F</td><td>496</td><td>±0.0</td></tr>
-<tr style="font-weight:700"><td>Now</td><td>27.3</td><td>F</td><td>496</td><td><span style="color:var(--error)">-10.1</span></td></tr>
+<tr><td>2026-04-08</td><td>27.3</td><td>F</td><td>496</td><td><span style="color:var(--error)">-10.1</span></td></tr>
+<tr style="font-weight:700"><td>Now</td><td>27.3</td><td>F</td><td>496</td><td>±0.0</td></tr>
 </table>
 </div>
 <h2>WCAG 2.2 Conformance</h2>

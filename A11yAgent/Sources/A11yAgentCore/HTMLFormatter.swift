@@ -49,11 +49,12 @@ public struct HTMLFormatter {
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 1200px; margin: 0 auto; }
         h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
-        .timestamp { color: #6c757d; font-size: 0.875rem; margin-bottom: 1.5rem; }
+        a { text-decoration: underline; }
+        .timestamp { color: #595f64; font-size: 0.875rem; margin-bottom: 1.5rem; }
         .summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
         .stat { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; min-width: 120px; text-align: center; }
         .stat .number { font-size: 2rem; font-weight: 700; }
-        .stat .label { font-size: 0.875rem; color: #6c757d; }
+        .stat .label { font-size: 0.875rem; color: #595f64; }
         .stat.error .number { color: var(--error); }
         .stat.warning .number { color: var(--warning); }
         .stat.info .number { color: var(--info); }
@@ -73,11 +74,14 @@ public struct HTMLFormatter {
         .diag-list { padding: 0.5rem 1rem 1rem; }
         .diag { padding: 0.75rem 0; border-bottom: 1px solid #e9ecef; font-size: 0.8125rem; }
         .diag:last-child { border-bottom: none; }
-        .diag-loc { color: #6c757d; font-family: monospace; }
-        .diag-rule { color: #6c757d; font-style: italic; }
+        .diag-loc { color: #595f64; font-family: monospace; }
+        .diag-rule { color: #595f64; font-style: italic; }
         .diag-wcag { font-size: 0.75rem; font-weight: 600; color: #495057; }
-        .diag-wcag a { color: #0d6efd; text-decoration: none; }
-        .diag-wcag a:hover { text-decoration: underline; }
+        .diag-wcag a { color: #0b5ed7; }
+        .badge-critical { background: #f8d7da; color: #6b1520; }
+        .badge-serious { background: #ffe0b2; color: #bf4400; }
+        .badge-moderate { background: #fff3cd; color: #664d03; }
+        .badge-minor { background: #e2e3e5; color: #2b2f33; }
         .badge-critical { background: #f8d7da; color: #721c24; }
         .badge-serious { background: #ffe0b2; color: #e65100; }
         .badge-moderate { background: #fff3cd; color: #856404; }
@@ -99,15 +103,15 @@ public struct HTMLFormatter {
         .grade-c { background: var(--warning-bg); color: var(--warning); }
         .grade-d { background: #ffe0b2; color: #e65100; }
         .grade-f { background: var(--error-bg); color: var(--error); }
-        .score-subtitle { color: #6c757d; font-size: 0.875rem; }
-        .score-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.875rem; color: #6c757d; margin-bottom: 1rem; }
+        .score-subtitle { color: #595f64; font-size: 0.875rem; }
+        .score-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.875rem; color: #595f64; margin-bottom: 1rem; }
         .score-stats span { white-space: nowrap; }
         .failed-criteria { margin-top: 0.75rem; }
         .failed-criteria h3 { font-size: 0.9375rem; margin-bottom: 0.5rem; }
         .failed-criteria ul { list-style: none; padding: 0; }
         .failed-criteria li { padding: 0.25rem 0; font-size: 0.875rem; }
         .failed-criteria .criterion-id { font-weight: 600; }
-        .failed-criteria .criterion-counts { color: #6c757d; font-size: 0.75rem; }
+        .failed-criteria .criterion-counts { color: #595f64; font-size: 0.75rem; }
         .criteria-table td.status-cell { text-align: center; }
         .trend-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
         .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; }
@@ -118,11 +122,11 @@ public struct HTMLFormatter {
         .trend-chart .chart-dot { fill: #0d6efd; }
         .trend-chart .chart-dot-current { fill: #198754; stroke: #fff; stroke-width: 2; }
         .trend-chart .chart-grid { stroke: #e9ecef; stroke-width: 1; }
-        .trend-chart .chart-label { fill: #6c757d; font-size: 11px; font-family: -apple-system, sans-serif; }
+        .trend-chart .chart-label { fill: #595f64; font-size: 11px; font-family: -apple-system, sans-serif; }
         .trend-delta { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
         .trend-delta.positive { color: var(--pass); }
         .trend-delta.negative { color: var(--error); }
-        .trend-delta.neutral { color: #6c757d; }
+        .trend-delta.neutral { color: #595f64; }
         .trend-table { width: 100%; max-width: 700px; }
         .trend-table th { background: #f1f3f5; }
         </style>

@@ -166,7 +166,7 @@ public struct HTMLFormatter {
             if !failed.isEmpty {
                 html += "<div class=\"failed-criteria\"><h3><span class=\"badge badge-fail\">Failed WCAG Criteria</span></h3><ul>\n"
                 for cs in failed {
-                    let wcagURL = "https://www.w3.org/TR/WCAG22/#" + wcagAnchor(cs.criterion)
+                    let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(cs.criterion)
                     html += "<li><span class=\"badge badge-fail\">\u{2717}</span> "
                     html += "<a href=\"\(wcagURL)\"><span class=\"criterion-id\">\(escapeHTML(cs.criterion))</span></a> "
                     html += "\(escapeHTML(cs.name)) "
@@ -179,7 +179,7 @@ public struct HTMLFormatter {
             if !review.isEmpty {
                 html += "<div class=\"failed-criteria\"><h3><span class=\"badge badge-warning\">Needs Review</span></h3><ul>\n"
                 for cs in review {
-                    let wcagURL = "https://www.w3.org/TR/WCAG22/#" + wcagAnchor(cs.criterion)
+                    let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(cs.criterion)
                     html += "<li><span class=\"badge badge-warning\">\u{26a0}</span> "
                     html += "<a href=\"\(wcagURL)\"><span class=\"criterion-id\">\(escapeHTML(cs.criterion))</span></a> "
                     html += "\(escapeHTML(cs.name)) "
@@ -320,7 +320,7 @@ public struct HTMLFormatter {
                 case .notChecked: statusIcon = "· N/A";    badgeClass = "badge-info"
                 }
                 let issueText = (cs.errorCount + cs.warningCount) > 0 ? "\(cs.errorCount)E \(cs.warningCount)W" : "—"
-                let wcagURL = "https://www.w3.org/TR/WCAG22/#" + wcagAnchor(cs.criterion)
+                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(cs.criterion)
                 html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(cs.criterion))</a></td>"
                 html += "<td>\(escapeHTML(cs.name))</td>"
                 html += "<td>\(cs.level.rawValue)</td>"
@@ -336,7 +336,7 @@ public struct HTMLFormatter {
                 let status = criterionDiags.isEmpty ? "Pass" : (hasErrors ? "Fail" : "Review")
                 let badgeClass = criterionDiags.isEmpty ? "badge-pass" : (hasErrors ? "badge-fail" : "badge-warning")
                 let ruleNames = allRules.filter { $0.wcagCriteria.contains(criterion) }.map(\.id).joined(separator: ", ")
-                let wcagURL = "https://www.w3.org/TR/WCAG22/#" + wcagAnchor(criterion)
+                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(criterion)
                 html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(criterion))</a></td>"
                 html += "<td><span class=\"badge \(badgeClass)\">\(status)</span></td>"
                 html += "<td>\(criterionDiags.count)</td>"
@@ -516,20 +516,62 @@ public struct HTMLFormatter {
             .replacingOccurrences(of: "\"", with: "&quot;")
     }
 
-    /// Map WCAG criterion numbers to their spec anchor IDs.
+    /// Map WCAG criterion numbers to their Understanding page slugs.
     private func wcagAnchor(_ criterion: String) -> String {
         let map: [String: String] = [
             "1.1.1": "non-text-content",
+            "1.2.1": "audio-only-and-video-only-prerecorded",
+            "1.2.2": "captions-prerecorded",
+            "1.2.3": "audio-description-or-media-alternative-prerecorded",
+            "1.2.4": "captions-live",
+            "1.2.5": "audio-description-prerecorded",
             "1.3.1": "info-and-relationships",
+            "1.3.2": "meaningful-sequence",
+            "1.3.3": "sensory-characteristics",
+            "1.3.4": "orientation",
+            "1.3.5": "identify-input-purpose",
+            "1.4.1": "use-of-color",
+            "1.4.2": "audio-control",
             "1.4.3": "contrast-minimum",
             "1.4.4": "resize-text",
+            "1.4.5": "images-of-text",
+            "1.4.10": "reflow",
+            "1.4.11": "non-text-contrast",
+            "1.4.12": "text-spacing",
+            "1.4.13": "content-on-hover-or-focus",
+            "2.1.1": "keyboard",
             "2.1.2": "no-keyboard-trap",
+            "2.1.4": "character-key-shortcuts",
+            "2.2.1": "timing-adjustable",
+            "2.2.2": "pause-stop-hide",
+            "2.3.1": "three-flashes-or-below-threshold",
+            "2.4.1": "bypass-blocks",
             "2.4.2": "page-titled",
             "2.4.3": "focus-order",
             "2.4.4": "link-purpose-in-context",
+            "2.4.5": "multiple-ways",
+            "2.4.6": "headings-and-labels",
+            "2.4.7": "focus-visible",
+            "2.4.11": "focus-not-obscured-minimum",
+            "2.5.1": "pointer-gestures",
+            "2.5.2": "pointer-cancellation",
+            "2.5.3": "label-in-name",
+            "2.5.4": "motion-actuation",
+            "2.5.7": "dragging-movements",
             "2.5.8": "target-size-minimum",
+            "3.1.1": "language-of-page",
+            "3.1.2": "language-of-parts",
+            "3.2.1": "on-focus",
+            "3.2.2": "on-input",
+            "3.2.6": "consistent-help",
+            "3.3.1": "error-identification",
             "3.3.2": "labels-or-instructions",
+            "3.3.3": "error-suggestion",
+            "3.3.4": "error-prevention-legal-financial-data",
+            "3.3.7": "redundant-entry",
+            "3.3.8": "accessible-authentication-minimum",
             "4.1.2": "name-role-value",
+            "4.1.3": "status-messages",
         ]
         return map[criterion] ?? criterion.replacingOccurrences(of: ".", with: "-")
     }

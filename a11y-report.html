@@ -86,7 +86,7 @@ summary:hover { background: #f1f3f5; }
 </head>
 <body>
 <h1>a11y-check Accessibility Report</h1>
-<p class="timestamp">Generated: 2026-04-08T19:19:10Z</p><div class="summary">
+<p class="timestamp">Generated: 2026-04-08T19:24:18Z</p><div class="summary">
   <div class="stat error"><div class="number">268</div><div class="label">Errors</div></div>
   <div class="stat warning"><div class="number">220</div><div class="label">Warnings</div></div>
   <div class="stat info"><div class="number">191</div><div class="label">Info</div></div>
@@ -127,20 +127,23 @@ summary:hover { background: #f1f3f5; }
 <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
 <line x1="40" y1="27" x2="660" y2="27" class="chart-grid"/>
 <text x="35" y="31" class="chart-label" text-anchor="end">50</text>
-<path d="M 40 90 L 195 90 L 350 90 L 505 90 L 660 90 L 660 160 L 40 160 Z" class="chart-area"/>
-<path d="M 40 90 L 195 90 L 350 90 L 505 90 L 660 90" class="chart-line"/>
+<path d="M 40 90 L 164 90 L 288 90 L 412 90 L 536 90 L 660 90 L 660 160 L 40 160 Z" class="chart-area"/>
+<path d="M 40 90 L 164 90 L 288 90 L 412 90 L 536 90 L 660 90" class="chart-line"/>
 <circle cx="40" cy="90" r="4" class="chart-dot"/>
 <text x="40" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
 <text x="40" y="80" class="chart-label" text-anchor="middle">41</text>
-<circle cx="195" cy="90" r="4" class="chart-dot"/>
-<text x="195" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="195" y="80" class="chart-label" text-anchor="middle">41</text>
-<circle cx="350" cy="90" r="4" class="chart-dot"/>
-<text x="350" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="350" y="80" class="chart-label" text-anchor="middle">41</text>
-<circle cx="505" cy="90" r="4" class="chart-dot"/>
-<text x="505" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
-<text x="505" y="80" class="chart-label" text-anchor="middle">41</text>
+<circle cx="164" cy="90" r="4" class="chart-dot"/>
+<text x="164" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="164" y="80" class="chart-label" text-anchor="middle">41</text>
+<circle cx="288" cy="90" r="4" class="chart-dot"/>
+<text x="288" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="288" y="80" class="chart-label" text-anchor="middle">41</text>
+<circle cx="412" cy="90" r="4" class="chart-dot"/>
+<text x="412" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="412" y="80" class="chart-label" text-anchor="middle">41</text>
+<circle cx="536" cy="90" r="4" class="chart-dot"/>
+<text x="536" y="180" class="chart-label" text-anchor="middle">2026-04-08</text>
+<text x="536" y="80" class="chart-label" text-anchor="middle">41</text>
 <circle cx="660" cy="90" r="5" class="chart-dot-current"/>
 <text x="660" y="180" class="chart-label" text-anchor="middle">Now</text>
 <text x="660" y="80" class="chart-label" text-anchor="middle">41</text>
@@ -149,6 +152,7 @@ summary:hover { background: #f1f3f5; }
 <table class="trend-table">
 <tr><th>Date</th><th>Score</th><th>Grade</th><th>Errors</th><th>Change</th></tr>
 <tr><td>2026-04-08</td><td>41.1</td><td>F</td><td>268</td><td>—</td></tr>
+<tr><td>2026-04-08</td><td>41.1</td><td>F</td><td>268</td><td>±0.0</td></tr>
 <tr><td>2026-04-08</td><td>41.1</td><td>F</td><td>268</td><td>±0.0</td></tr>
 <tr><td>2026-04-08</td><td>41.1</td><td>F</td><td>268</td><td>±0.0</td></tr>
 <tr><td>2026-04-08</td><td>41.1</td><td>F</td><td>268</td><td>±0.0</td></tr>
@@ -941,12 +945,12 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 107 |                  .textContentType(.streetAddressLine1)</span>
   108 |                 .autocorrectionDisabled(true)
 </div></div>
-<div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">115:13</span> TextField without .textContentType(). Consider adding .textContentType(.streetAddressLine1) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  114 |                 .frame(maxWidth: .infinity, alignment: .leading)
+<div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">115:13</span> TextField without .textContentType(). Consider adding .textContentType(.streetAddressLine2) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  114 |                 .frame(maxWidth: .infinity, alignment: .leading)
 <span class="line-bad">&gt; 115 |             TextField(&quot;&quot;, text: $address2, axis: .vertical)</span>
   116 |                 .autocorrectionDisabled(true)
-</div><div class="suggestion">Add .textContentType(.streetAddressLine1)</div><div class="fix-block">  114 |                 .frame(maxWidth: .infinity, alignment: .leading)
+</div><div class="suggestion">Add .textContentType(.streetAddressLine2)</div><div class="fix-block">  114 |                 .frame(maxWidth: .infinity, alignment: .leading)
 <span class="line-good">&gt; &gt; 115 |              TextField(&quot;&quot;, text: $address2, axis: .vertical)</span>
-<span class="line-good">&gt; &gt; 115 |                  .textContentType(.streetAddressLine1)</span>
+<span class="line-good">&gt; &gt; 115 |                  .textContentType(.streetAddressLine2)</span>
   116 |                 .autocorrectionDisabled(true)
 </div></div>
 <div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">123:13</span> TextField without .textContentType(). Consider adding .textContentType(.addressCity) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  122 |                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -1136,12 +1140,12 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 244 |                  .accessibilityLabel(&quot;Label&quot;)</span>
   245 |             TextField(&quot;City&quot;, text: $cityBad)
 </div></div>
-<div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">244:13</span> TextField without .textContentType(). Consider adding .textContentType(.streetAddressLine1) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  243 |             TextField(&quot;Street Address&quot;, text: $addressBad)
+<div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">244:13</span> TextField without .textContentType(). Consider adding .textContentType(.streetAddressLine2) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  243 |             TextField(&quot;Street Address&quot;, text: $addressBad)
 <span class="line-bad">&gt; 244 |             TextField(&quot;&quot;, text: $address2Bad)</span>
   245 |             TextField(&quot;City&quot;, text: $cityBad)
-</div><div class="suggestion">Add .textContentType(.streetAddressLine1)</div><div class="fix-block">  243 |             TextField(&quot;Street Address&quot;, text: $addressBad)
+</div><div class="suggestion">Add .textContentType(.streetAddressLine2)</div><div class="fix-block">  243 |             TextField(&quot;Street Address&quot;, text: $addressBad)
 <span class="line-good">&gt; &gt; 244 |              TextField(&quot;&quot;, text: $address2Bad)</span>
-<span class="line-good">&gt; &gt; 244 |                  .textContentType(.streetAddressLine1)</span>
+<span class="line-good">&gt; &gt; 244 |                  .textContentType(.streetAddressLine2)</span>
   245 |             TextField(&quot;City&quot;, text: $cityBad)
 </div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">245:13</span> TextField uses placeholder text &quot;City&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no persistent visible label (WCAG 3.3.2). Add a visible Text label above the field and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span><div class="code-block">  244 |             TextField(&quot;&quot;, text: $address2Bad)
@@ -4782,12 +4786,12 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 120 |                      .textContentType(.streetAddressLine1)</span>
   121 |                     .autocorrectionDisabled(true)
 </div></div>
-<div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">129:17</span> TextField without .textContentType(). Consider adding .textContentType(.streetAddressLine1) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  128 |                     .frame(maxWidth: .infinity, alignment: .leading)
+<div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">129:17</span> TextField without .textContentType(). Consider adding .textContentType(.streetAddressLine2) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  128 |                     .frame(maxWidth: .infinity, alignment: .leading)
 <span class="line-bad">&gt; 129 |                 TextField(&quot;&quot;, text: $address2, axis: .vertical)</span>
   130 |                     .autocorrectionDisabled(true)
-</div><div class="suggestion">Add .textContentType(.streetAddressLine1)</div><div class="fix-block">  128 |                     .frame(maxWidth: .infinity, alignment: .leading)
+</div><div class="suggestion">Add .textContentType(.streetAddressLine2)</div><div class="fix-block">  128 |                     .frame(maxWidth: .infinity, alignment: .leading)
 <span class="line-good">&gt; &gt; 129 |                  TextField(&quot;&quot;, text: $address2, axis: .vertical)</span>
-<span class="line-good">&gt; &gt; 129 |                      .textContentType(.streetAddressLine1)</span>
+<span class="line-good">&gt; &gt; 129 |                      .textContentType(.streetAddressLine2)</span>
   130 |                     .autocorrectionDisabled(true)
 </div></div>
 <div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">138:17</span> TextField without .textContentType(). Consider adding .textContentType(.addressCity) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  137 |                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -4981,12 +4985,12 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; &gt; 259 |                      .accessibilityLabel(&quot;Label&quot;)</span>
   260 |                     .textFieldStyle(.roundedBorder)
 </div></div>
-<div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">259:17</span> TextField without .textContentType(). Consider adding .textContentType(.streetAddressLine1) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  258 |                     .textFieldStyle(.roundedBorder)
+<div class="diag"><span class="badge badge-info">info</span> <span class="diag-loc">259:17</span> TextField without .textContentType(). Consider adding .textContentType(.streetAddressLine2) so iOS can offer autofill and assistive technologies know the input purpose. <span class="diag-rule">input-missing-purpose</span><div class="code-block">  258 |                     .textFieldStyle(.roundedBorder)
 <span class="line-bad">&gt; 259 |                 TextField(&quot;&quot;, text: $address2Bad)</span>
   260 |                     .textFieldStyle(.roundedBorder)
-</div><div class="suggestion">Add .textContentType(.streetAddressLine1)</div><div class="fix-block">  258 |                     .textFieldStyle(.roundedBorder)
+</div><div class="suggestion">Add .textContentType(.streetAddressLine2)</div><div class="fix-block">  258 |                     .textFieldStyle(.roundedBorder)
 <span class="line-good">&gt; &gt; 259 |                  TextField(&quot;&quot;, text: $address2Bad)</span>
-<span class="line-good">&gt; &gt; 259 |                      .textContentType(.streetAddressLine1)</span>
+<span class="line-good">&gt; &gt; 259 |                      .textContentType(.streetAddressLine2)</span>
   260 |                     .textFieldStyle(.roundedBorder)
 </div></div>
 <div class="diag"><span class="badge badge-error">error</span> <span class="diag-loc">261:17</span> TextField uses placeholder text &quot;City&quot; as its only label. Placeholder text disappears when the user starts typing, leaving no persistent visible label (WCAG 3.3.2). Add a visible Text label above the field and .accessibilityLabel(). <span class="diag-rule">textfield-missing-label</span><div class="code-block">  260 |                     .textFieldStyle(.roundedBorder)

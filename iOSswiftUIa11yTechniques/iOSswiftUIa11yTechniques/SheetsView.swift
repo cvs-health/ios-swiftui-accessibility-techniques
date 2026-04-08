@@ -25,8 +25,15 @@ struct SheetsView: View {
     @State private var isShowingSheet = false
     @State private var isShowingSheet2 = false
     @State private var isShowingBadSheet = false
+    #if os(iOS)
+    @State private var isShowingFullScreen = false
+    @State private var isShowingBadFullScreen = false
+    #endif
     @AccessibilityFocusState private var isTriggerFocused: Bool
     @AccessibilityFocusState private var isTriggerFocused2: Bool
+    #if os(iOS)
+    @AccessibilityFocusState private var isFullScreenTriggerFocused: Bool
+    #endif
 
     @State private var isShowingDynamicSheets = Array(repeating: false, count: 8)
     @AccessibilityFocusState private var dynamicTriggerFocus: DynamicTriggerFocus?
@@ -40,7 +47,7 @@ struct SheetsView: View {
             VStack {
                 Text("VoiceOver focus must move to the sheet when displayed and back to the trigger button when the sheet is closed. Sheet title text must be coded as a Heading for VoiceOver users. Use `.sheet()` to code a native SwiftUI sheet that receives VoiceOver focus when opened. Use `AccessibilityFocusState` to send focus back to the trigger button that opened the sheet when the sheet is closed. Place the sheet's content inside a `ScrollView` or else the text will truncate when enlarged.")
                     .padding(.bottom)
-                Text("Good Example")
+                Text("Good Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -50,6 +57,11 @@ struct SheetsView: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                Text("Good Example `.sheet`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 Button(action: {
                     isShowingSheet.toggle()
                 }) {
@@ -107,10 +119,51 @@ struct SheetsView: View {
                         }
                     }
                 }
-                
                 DisclosureGroup("Details") {
                     Text("The good sheet example uses `.sheet()` to create a native SwiftUI sheet that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the sheet when the sheet is closed. The sheet title is correctly coded as a heading.")
-                }.padding(.bottom).accessibilityHint("Good Example")
+                }.padding(.bottom).accessibilityHint("Good Example .sheet")
+                #if os(iOS)
+                Text("Good Example `.fullScreenCover`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button(action: {
+                    isShowingFullScreen.toggle()
+                }) {
+                    Text("Show Terms of Service")
+                }
+                    .accessibilityFocused($isFullScreenTriggerFocused)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                .fullScreenCover(isPresented: $isShowingFullScreen, onDismiss: {
+                    isFullScreenTriggerFocused = true
+                }) {
+                    NavigationStack {
+                        ScrollView {
+                            VStack {
+                                Text("Terms of Service")
+                                    .font(.title)
+                                    .accessibilityAddTraits(.isHeader)
+                                Text("""
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    """)
+                                    .padding(20)
+                            }
+                            .padding()
+                        }
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Done") {
+                                    isShowingFullScreen = false
+                                }
+                            }
+                        }
+                    }
+                }
+                DisclosureGroup("Details") {
+                    Text("The good `.fullScreenCover` example uses `.fullScreenCover()` which presents a full screen modal. Since full screen covers have no swipe-to-dismiss gesture, an explicit \"Done\" button is provided in the toolbar. `AccessibilityFocusState` returns VoiceOver focus to the trigger button on dismiss. The title is coded as a heading and content is inside a `ScrollView`.")
+                }.padding(.bottom).accessibilityHint("Good Example .fullScreenCover")
+                #endif
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -146,7 +199,7 @@ struct SheetsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad sheet example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed. The sheet title is not coded as a heading.")
-                }.accessibilityHint("Bad Example Custom View")
+                }.padding(.bottom).accessibilityHint("Bad Example Custom View")
                 Text("Bad Example `.sheet` no `ScrollView`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -180,7 +233,34 @@ struct SheetsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad `.sheet` example that has no `ScrollView` shows how the text truncates when it is larger than the visible area.")
-                }.accessibilityHint("Bad Example .sheet no ScrollView")
+                }.padding(.bottom).accessibilityHint("Bad Example .sheet no ScrollView")
+                #if os(iOS)
+                Text("Bad Example `.fullScreenCover`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button(action: {
+                    isShowingBadFullScreen.toggle()
+                }) {
+                    Text("Show Terms of Service")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fullScreenCover(isPresented: $isShowingBadFullScreen) {
+                    VStack {
+                        Text("Terms of Service")
+                            .font(.title)
+                        Text("""
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            """)
+                            .padding(20)
+                    }
+                    .padding()
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad `.fullScreenCover` example has no close button so users are trapped with no way to dismiss. It does not return VoiceOver focus on dismiss. The title is not coded as a heading. The content is not in a `ScrollView` so text truncates when enlarged.")
+                }.padding(.bottom).accessibilityHint("Bad Example .fullScreenCover")
+                #endif
             }
             .navigationTitle("Sheets")
             .padding()

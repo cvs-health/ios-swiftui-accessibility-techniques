@@ -62,7 +62,7 @@ struct PopoversView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The good alert example uses `.popover()` to create a native SwiftUI popover that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the popover when the popover is closed. The popover title is correctly coded as a heading.")
+                    Text("The good popover example uses `.popover()` to create a native SwiftUI popover that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the popover when the popover is closed. The popover title is correctly coded as a heading.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)

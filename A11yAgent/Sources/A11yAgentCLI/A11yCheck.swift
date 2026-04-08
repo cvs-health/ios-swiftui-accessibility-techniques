@@ -306,6 +306,13 @@ struct A11yCheck: ParsableCommand {
             trendEntries = t.load().entries
         }
 
+        // Generate badge if requested (early return — no other output)
+        if badge {
+            let generator = BadgeGenerator()
+            print(generator.generate(score: score))
+            return
+        }
+
         // Output results
         switch format {
         case .terminal:
@@ -330,13 +337,6 @@ struct A11yCheck: ParsableCommand {
             let formatter = SARIFFormatter()
             let output = try formatter.format(allDiagnostics, rules: registry.enabledRules, score: score)
             print(output)
-        }
-
-        // Generate badge if requested
-        if badge {
-            let generator = BadgeGenerator()
-            print(generator.generate(score: score))
-            return
         }
 
         // Per-view scoring

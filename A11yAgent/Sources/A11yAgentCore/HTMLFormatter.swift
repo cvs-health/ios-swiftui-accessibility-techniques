@@ -183,7 +183,10 @@ public struct HTMLFormatter {
                     html += "<li><span class=\"badge badge-warning\">\u{26a0}</span> "
                     html += "<a href=\"\(wcagURL)\"><span class=\"criterion-id\">\(escapeHTML(cs.criterion))</span></a> "
                     html += "\(escapeHTML(cs.name)) "
-                    html += "<span class=\"criterion-counts\">\(cs.warningCount) warnings</span></li>\n"
+                    var counts: [String] = []
+                    if cs.warningCount > 0 { counts.append("\(cs.warningCount) warnings") }
+                    if cs.infoCount > 0 { counts.append("\(cs.infoCount) info") }
+                    html += "<span class=\"criterion-counts\">\(counts.joined(separator: ", "))</span></li>\n"
                 }
                 html += "</ul></div>\n"
             }
@@ -319,7 +322,16 @@ public struct HTMLFormatter {
                 case .review:     statusIcon = "⚠ Review"; badgeClass = "badge-warning"
                 case .notChecked: statusIcon = "· N/A";    badgeClass = "badge-info"
                 }
-                let issueText = (cs.errorCount + cs.warningCount) > 0 ? "\(cs.errorCount)E \(cs.warningCount)W" : "—"
+                let issueText: String
+                if cs.errorCount + cs.warningCount + cs.infoCount > 0 {
+                    var parts: [String] = []
+                    if cs.errorCount > 0 { parts.append("\(cs.errorCount)E") }
+                    if cs.warningCount > 0 { parts.append("\(cs.warningCount)W") }
+                    if cs.infoCount > 0 { parts.append("\(cs.infoCount)I") }
+                    issueText = parts.joined(separator: " ")
+                } else {
+                    issueText = "—"
+                }
                 let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(cs.criterion)
                 html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(cs.criterion))</a></td>"
                 html += "<td>\(escapeHTML(cs.name))</td>"

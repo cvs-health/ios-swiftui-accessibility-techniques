@@ -111,6 +111,7 @@ public struct ScoreCalculator {
             let diags = diagsByCriterion[criterion] ?? []
             let errors = diags.filter { $0.severity == .error }.count
             let warnings = diags.filter { $0.severity == .warning }.count
+            let infos = diags.filter { $0.severity == .info }.count
 
             let status: CriterionStatus
             if !isChecked {
@@ -122,6 +123,9 @@ public struct ScoreCalculator {
             } else if warnings > 0 {
                 status = .review
                 passCount += 1 // warnings count as conditional pass
+            } else if infos > 0 {
+                status = .review
+                passCount += 1 // info issues count as conditional pass (needs review)
             } else {
                 status = .pass
                 passCount += 1
@@ -135,6 +139,7 @@ public struct ScoreCalculator {
                 status: status,
                 errorCount: errors,
                 warningCount: warnings,
+                infoCount: infos,
                 ruleIDs: rulesByCriterion[criterion] ?? []
             ))
         }

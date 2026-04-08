@@ -51,6 +51,8 @@ public struct CriterionScore: Sendable {
     public let errorCount: Int
     /// Number of warnings found for this criterion.
     public let warningCount: Int
+    /// Number of info diagnostics found for this criterion.
+    public let infoCount: Int
     /// Rule IDs that checked this criterion.
     public let ruleIDs: [String]
 
@@ -62,6 +64,7 @@ public struct CriterionScore: Sendable {
         status: CriterionStatus,
         errorCount: Int,
         warningCount: Int,
+        infoCount: Int = 0,
         ruleIDs: [String]
     ) {
         self.criterion = criterion
@@ -71,6 +74,7 @@ public struct CriterionScore: Sendable {
         self.status = status
         self.errorCount = errorCount
         self.warningCount = warningCount
+        self.infoCount = infoCount
         self.ruleIDs = ruleIDs
     }
 }

@@ -116,8 +116,6 @@ struct DynamicTypeView: View {
                     .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text("This heading scales up to the xxxLarge Dynamic Type size (approximately 200% larger) but does not grow beyond that to prevent truncation or layout issues.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 4)
                 DisclosureGroup("Details") {
@@ -200,6 +198,18 @@ struct DynamicTypeView: View {
                 DisclosureGroup("Details") {
                     Text("The third bad dynamic type example uses a fixed sized font `.font(.system(size: 30))` which does not resize when the user adjusts their system text size settings.")
                 }.padding(.bottom).accessibilityHint("Bad Example `Text().font(.system(size: 30))`")
+                Text("Bad Example uncapped `.largeTitle` heading")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Welcome Back")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The fourth bad dynamic type example uses `.font(.largeTitle)` without `.dynamicTypeSize(...DynamicTypeSize.xxxLarge)` to cap the maximum size. At accessibility text sizes the heading grows excessively large and may truncate or break the layout. Use `.dynamicTypeSize(...DynamicTypeSize.xxxLarge)` on large heading styles to cap them at approximately 200% which meets the WCAG 1.4.4 Resize Text requirement.")
+                }.padding(.bottom).accessibilityHint("Bad Example uncapped .largeTitle heading")
             }
             .padding()
             .navigationTitle("Dynamic Type")

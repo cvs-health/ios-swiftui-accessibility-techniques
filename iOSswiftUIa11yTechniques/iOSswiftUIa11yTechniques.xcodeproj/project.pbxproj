@@ -33,7 +33,6 @@
 		AABD27CA2A9FF0E700F718F7 /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27C92A9FF0E700F718F7 /* ImagesView.swift */; };
 		AABD27CC2A9FF0F000F718F7 /* UIControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27CB2A9FF0F000F718F7 /* UIControlsView.swift */; };
 		AABD27CE2A9FF10700F718F7 /* A11yEnhancementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27CD2A9FF10700F718F7 /* A11yEnhancementsView.swift */; };
-		AABD27D02A9FF11400F718F7 /* AnnouncementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27CF2A9FF11400F718F7 /* AnnouncementsView.swift */; };
 		AABD27D22A9FF11F00F718F7 /* FunctionalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D12A9FF11F00F718F7 /* FunctionalView.swift */; };
 		AABD27D42A9FF12400F718F7 /* DecorativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D32A9FF12400F718F7 /* DecorativeView.swift */; };
 		AABD27D62A9FF12A00F718F7 /* InformativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27D52A9FF12A00F718F7 /* InformativeView.swift */; };
@@ -113,7 +112,6 @@
 		BCA3DD112B7302E700033712 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD102B7302E700033712 /* RadioButtonsView.swift */; };
 		BCA3DD142B741FDB00033712 /* SearchSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */; };
 		BCA5BDEC2B61E633007823A6 /* ReduceMotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */; };
-		BCAD630E2BF512EE004AD305 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD630D2BF512EE004AD305 /* ActivityIndicatorView.swift */; };
 		BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */; };
 		BCB059552CAB371C00C670B8 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB059542CAB371C00C670B8 /* VideoPlayerView.swift */; };
 		BCB059572CAB5F9C00C670B8 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB059562CAB5F9C00C670B8 /* TableView.swift */; };
@@ -121,7 +119,6 @@
 		BCB60D602E720E3B00ED2D51 /* MultiSelectionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
 		BCCDED8E2D5C5F5500B8DB6E /* Techniques.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */; };
-		BCCDED902D5C649500B8DB6E /* ContentViewOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */; };
 		BCD1CF952B574C8800A26ED3 /* VoiceOverPronunciationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */; };
 		BCD1CF982B57670D00A26ED3 /* EscapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF972B57670D00A26ED3 /* EscapeView.swift */; };
 		BCD1CF9C2B577C5A00A26ED3 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */; };
@@ -252,7 +249,6 @@
 		AABD27C92A9FF0E700F718F7 /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
 		AABD27CB2A9FF0F000F718F7 /* UIControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControlsView.swift; sourceTree = "<group>"; };
 		AABD27CD2A9FF10700F718F7 /* A11yEnhancementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A11yEnhancementsView.swift; sourceTree = "<group>"; };
-		AABD27CF2A9FF11400F718F7 /* AnnouncementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementsView.swift; sourceTree = "<group>"; };
 		AABD27D12A9FF11F00F718F7 /* FunctionalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalView.swift; sourceTree = "<group>"; };
 		AABD27D32A9FF12400F718F7 /* DecorativeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorativeView.swift; sourceTree = "<group>"; };
 		AABD27D52A9FF12A00F718F7 /* InformativeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformativeView.swift; sourceTree = "<group>"; };
@@ -373,7 +369,6 @@
 		BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestionsView.swift; sourceTree = "<group>"; };
 		BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduceMotionView.swift; sourceTree = "<group>"; };
 		BCA5BDED2B61E641007823A6 /* ReduceMotion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReduceMotion.md; sourceTree = "<group>"; };
-		BCAD630D2BF512EE004AD305 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeContentViewerView.swift; sourceTree = "<group>"; };
 		BCB059542CAB371C00C670B8 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		BCB059562CAB5F9C00C670B8 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
@@ -384,7 +379,6 @@
 		BCC4F1822B3F8757004AAB65 /* AccessibilityInputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityInputLabels.md; sourceTree = "<group>"; };
 		BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusManagementView.swift; sourceTree = "<group>"; };
 		BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Techniques.swift; sourceTree = "<group>"; };
-		BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewOld.swift; sourceTree = "<group>"; };
 		BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceOverPronunciationView.swift; sourceTree = "<group>"; };
 		BCD1CF962B5760E200A26ED3 /* VoiceOverPronunciation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = VoiceOverPronunciation.md; sourceTree = "<group>"; };
 		BCD1CF972B57670D00A26ED3 /* EscapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EscapeView.swift; sourceTree = "<group>"; };
@@ -611,10 +605,8 @@
 				BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */,
 				AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */,
 				BCD1CF9B2B577C5A00A26ED3 /* ActionsView.swift */,
-				BCAD630D2BF512EE004AD305 /* ActivityIndicatorView.swift */,
 				BC8C92152B327D93006DAC20 /* AdjustableActionView.swift */,
 				BC715B622B449F0500C77B57 /* AlertsView.swift */,
-				AABD27CF2A9FF11400F718F7 /* AnnouncementsView.swift */,
 				AABD27BD2A9FE69500F718F7 /* Assets.xcassets */,
 				BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */,
 				BC1B59CA2B508BDD00E8F782 /* ATdetectionView.swift */,
@@ -629,7 +621,6 @@
 				BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */,
 				BCE15EF52E4D5B45001A8997 /* ContainersView.swift */,
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
-				BCCDED8F2D5C649500B8DB6E /* ContentViewOld.swift */,
 				BCE205222B58D0BE000DF400 /* DarkModeView.swift */,
 				BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */,
 				BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */,
@@ -908,7 +899,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					AA7367442AA24F810008F9DC = {
 						CreatedOnToolsVersion = 15.0;
@@ -1031,6 +1022,7 @@
 		};
 		BCA0FC562EE0AD0A001628CD /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1085,7 +1077,6 @@
 				AABD27C82A9FF0D800F718F7 /* HeadingsView.swift in Sources */,
 				BC163FC92B6C1585009E3A83 /* AccessibilityRepresentationView.swift in Sources */,
 				BCE2052E2B5A1C50000DF400 /* ContactSeattle.swift in Sources */,
-				BCAD630E2BF512EE004AD305 /* ActivityIndicatorView.swift in Sources */,
 				BC6D39552CDA896F00876212 /* CarouselViewBad.swift in Sources */,
 				BC6C39C22C2E054600AA842A /* Prototype1.swift in Sources */,
 				BCA3DD142B741FDB00033712 /* SearchSuggestionsView.swift in Sources */,
@@ -1093,7 +1084,6 @@
 				BCE205232B58D0BE000DF400 /* DarkModeView.swift in Sources */,
 				AA636C8A2ADD7FD900014BAF /* ProgressIndicatorsView.swift in Sources */,
 				BC2133A32B713B1100753693 /* MeaningfulAccessibleNamesView.swift in Sources */,
-				AABD27D02A9FF11400F718F7 /* AnnouncementsView.swift in Sources */,
 				BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */,
 				BC6CAA022C5D8F0A00138BA3 /* Prototype3.swift in Sources */,
 				AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */,
@@ -1125,7 +1115,6 @@
 				BCF615B72D35AE58006AEA80 /* VoiceOverAnnouncementDelayView.swift in Sources */,
 				BCF615B92D36F2D3006AEA80 /* SignUp0.swift in Sources */,
 				BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */,
-				BCCDED902D5C649500B8DB6E /* ContentViewOld.swift in Sources */,
 				BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */,
 				BC7D81842ECE889F00F98333 /* SwiftLintView.swift in Sources */,
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
@@ -1268,7 +1257,6 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 78;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1291,7 +1279,6 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 78;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1342,6 +1329,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1363,6 +1351,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1403,6 +1392,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1417,6 +1407,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -1432,7 +1423,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iOSswiftUIa11yTechniques/Info.plist;
@@ -1467,7 +1457,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOSswiftUIa11yTechniques/Preview Content\"";
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iOSswiftUIa11yTechniques/Info.plist;
@@ -1502,7 +1491,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"a11yTechniques Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -1538,7 +1526,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"a11yTechniques Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -1570,7 +1557,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1594,7 +1580,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1616,7 +1601,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1639,7 +1623,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1663,7 +1646,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1692,7 +1674,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VJ8862HM4M;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;

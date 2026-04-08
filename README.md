@@ -1,15 +1,17 @@
 # iOS SwiftUI Accessibility Techniques
-iOS SwiftUI sample code demonstrating a variety of good and bad accessibility techniques. Learn how to apply WCAG to iOS SwiftUI apps. Good and Bad examples can be tested with VoiceOver and other iOS accessibility features.
+iOS and watchOS SwiftUI sample code demonstrating a variety of good and bad accessibility techniques. Learn how to apply WCAG 2.2 to iOS SwiftUI apps. Good and bad examples can be tested with VoiceOver and other iOS accessibility features.
 
-[Download iOS app from the AppStore.](https://apps.apple.com/app/accessibility-techniques/id6474141089)
+This repo also includes **[a11y-check](#a11y-checker-a11y-check)**, a static analysis tool that scans your Swift/SwiftUI source code for accessibility issues — 30 rules across 16 WCAG 2.2 criteria, with scoring, auto-fix, and CI integration.
+
+[Download the iOS app from the App Store.](https://apps.apple.com/app/accessibility-techniques/id6474141089)
 
 Read the blog post, [Announcing the iOS SwiftUI Accessibility Techniques Open Source Project](https://www.linkedin.com/pulse/announcing-ios-swiftui-accessibility-techniques-open-source-adam-ldahc/).
 
-Review project source code to learn how to apply the accessibility techniques in working SwiftUI code examples.
+Review project source code to learn how to apply the accessibility techniques in working SwiftUI code examples. A companion **watchOS app** is also included in the `a11yTechniques Watch App/` directory.
 
 ## A11y Checker (a11y-check)
 
-Static analysis for SwiftUI accessibility issues, aligned with WCAG 2.2. Run it on your Swift sources to find missing labels, incorrect traits, touch target size, and more.
+Static analysis for SwiftUI accessibility issues, mapped to WCAG 2.2 success criteria. **30 rules** across **16 WCAG criteria** with a **0–100 scoring system**. Run it on your Swift sources to find missing labels, incorrect traits, touch target size, and more. Supports auto-fix (`--fix`), SARIF output for GitHub code scanning, trend tracking, and per-view scoring.
 
 ### Check your own iOS app
 
@@ -57,7 +59,7 @@ To run the checker on your app: from anywhere use the full path to the binary, w
 
 See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and CI integration.
 
-**Use in Cursor (MCP):** An [MCP server](A11yAgent/mcp-server/README.md) is included so you can run a11y-check from Cursor chat (e.g. “check this project for accessibility”). Install a11y-check first, then add the MCP server to Cursor and point it at `A11yAgent/mcp-server`.
+**Use with AI editors (MCP):** An [MCP server](A11yAgent/mcp-server/README.md) is included so you can run a11y-check from any MCP-compatible editor like Windsurf or Cursor (e.g. "check this project for accessibility"). Install a11y-check first, then add the MCP server config pointing at `A11yAgent/mcp-server`.
 
 ## Accessibility Techniques Documentation
 - [x] = Completed
@@ -149,7 +151,7 @@ See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and 
 ## License
 iOS SwiftUI Accessibility Techniques is licensed under under the Apache License, Version 2.0.  See LICENSE file for more information.
 
-Copyright 2023-2025 CVS Health and/or one of its affiliates
+Copyright 2023-2026 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

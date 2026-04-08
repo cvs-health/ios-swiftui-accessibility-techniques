@@ -52,7 +52,8 @@ public struct TerminalFormatter {
 
             let wcag = diag.wcagCriteria.isEmpty ? "" : " [WCAG \(diag.wcagCriteria.joined(separator: ", "))]"
             output += "  \(severityColor)\(severityIcon) \(diag.line):\(diag.column)\(reset) "
-            output += "\(severityColor)\(diag.severity.rawValue)\(reset): "
+            output += "\(severityColor)\(diag.severity.rawValue)\(reset) "
+            output += "\u{001B}[2m[\(diag.impact.rawValue)]\(reset): "
             output += "\(diag.message)"
             output += "\u{001B}[2m\(wcag) (\(diag.ruleID))\(reset)\n"
         }
@@ -151,7 +152,7 @@ public struct XcodeFormatter {
             case .info:    xcodeSeverity = "note"
             }
             let wcag = diag.wcagCriteria.isEmpty ? "" : " [WCAG \(diag.wcagCriteria.joined(separator: ", "))]"
-            output += "\(diag.filePath):\(diag.line):\(diag.column): \(xcodeSeverity): [\(diag.ruleID)] \(diag.message)\(wcag)\n"
+            output += "\(diag.filePath):\(diag.line):\(diag.column): \(xcodeSeverity): [\(diag.ruleID)] [\(diag.impact.rawValue)] \(diag.message)\(wcag)\n"
         }
         if let score = score {
             let severity = score.score >= 80 ? "note" : (score.score >= 50 ? "warning" : "error")
@@ -173,6 +174,7 @@ public struct JSONFormatter {
             var dict: [String: Any] = [
                 "ruleID": diag.ruleID,
                 "severity": diag.severity.rawValue,
+                "impact": diag.impact.rawValue,
                 "message": diag.message,
                 "filePath": diag.filePath,
                 "line": diag.line,

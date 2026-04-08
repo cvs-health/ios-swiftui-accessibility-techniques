@@ -11,7 +11,8 @@ import SwiftSyntax
 public struct HardcodedColorRule: A11yRule {
     public let id = "hardcoded-color"
     public let name = "Hardcoded Color (No Dark Mode Support)"
-    public let severity = A11ySeverity.warning
+    public let severity = A11ySeverity.info
+    public let impact = A11yImpact.minor
     public let wcagCriteria = ["1.4.3"]
     public let description = "Hardcoded colors may not meet contrast requirements in both light and dark mode. Use semantic colors from an asset catalog with dark mode variants."
 

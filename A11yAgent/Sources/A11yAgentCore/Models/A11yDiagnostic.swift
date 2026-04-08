@@ -12,6 +12,21 @@ public enum A11ySeverity: String, Codable, Comparable, Sendable {
     }
 }
 
+/// Impact level describing the negative effect on users.
+/// Orthogonal to severity — severity maps to WCAG pass/fail,
+/// impact describes how badly users are affected.
+public enum A11yImpact: String, Codable, Comparable, Sendable {
+    case minor
+    case moderate
+    case serious
+    case critical
+
+    public static func < (lhs: A11yImpact, rhs: A11yImpact) -> Bool {
+        let order: [A11yImpact] = [.minor, .moderate, .serious, .critical]
+        return order.firstIndex(of: lhs)! < order.firstIndex(of: rhs)!
+    }
+}
+
 /// A suggested fix for an accessibility issue.
 public struct A11yFix: Sendable {
     /// Human-readable description of the fix.
@@ -36,6 +51,8 @@ public struct A11yDiagnostic: Sendable {
     public let ruleID: String
     /// Severity of the issue.
     public let severity: A11ySeverity
+    /// Impact on users (critical/serious/moderate/minor).
+    public let impact: A11yImpact
     /// Human-readable message describing the issue.
     public let message: String
     /// Path to the source file.
@@ -56,6 +73,7 @@ public struct A11yDiagnostic: Sendable {
     public init(
         ruleID: String,
         severity: A11ySeverity,
+        impact: A11yImpact = .moderate,
         message: String,
         filePath: String,
         line: Int,
@@ -67,6 +85,7 @@ public struct A11yDiagnostic: Sendable {
     ) {
         self.ruleID = ruleID
         self.severity = severity
+        self.impact = impact
         self.message = message
         self.filePath = filePath
         self.line = line

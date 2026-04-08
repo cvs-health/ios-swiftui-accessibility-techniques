@@ -13,6 +13,7 @@ public struct ToggleMissingLabelRule: A11yRule {
     public let id = "toggle-missing-label"
     public let name = "Toggle Missing Label"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
     public let wcagCriteria = ["3.3.2", "4.1.2"]
     public let description = "Toggles must have a persistent visible label (3.3.2) and an accessible name (4.1.2)."
 

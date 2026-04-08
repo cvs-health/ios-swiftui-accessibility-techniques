@@ -12,6 +12,7 @@ public struct TextFieldMissingLabelRule: A11yRule {
     public let id = "textfield-missing-label"
     public let name = "TextField Missing Label"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
     public let wcagCriteria = ["3.3.2", "4.1.2"]
     public let description = "TextFields must have a persistent visible label (3.3.2) and an accessible name via .accessibilityLabel() (4.1.2). Placeholder text alone is insufficient."
 
@@ -139,6 +140,7 @@ public struct SliderMissingLabelRule: A11yRule {
     public let id = "slider-missing-label"
     public let name = "Slider Missing Label"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
     public let wcagCriteria = ["3.3.2", "4.1.2"]
     public let description = "Sliders must have a persistent visible label (3.3.2) and an accessible name (4.1.2)."
 
@@ -190,6 +192,7 @@ public struct StepperMissingLabelRule: A11yRule {
     public let id = "stepper-missing-label"
     public let name = "Stepper Missing Label"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
     public let wcagCriteria = ["3.3.2", "4.1.2"]
     public let description = "Steppers must have a persistent visible label (3.3.2) and an accessible name (4.1.2)."
 
@@ -229,6 +232,7 @@ public struct PickerMissingLabelRule: A11yRule {
     public let id = "picker-missing-label"
     public let name = "Picker Missing Label"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
     public let wcagCriteria = ["3.3.2", "4.1.2"]
     public let description = "Pickers must have a persistent visible label (3.3.2) and an accessible name (4.1.2)."
 

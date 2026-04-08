@@ -13,6 +13,7 @@ public struct MissingNavigationTitleRule: A11yRule {
     public let id = "missing-navigation-title"
     public let name = "Missing .navigationTitle()"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.4.2"]
     public let description = "Views inside NavigationStack should set .navigationTitle() so VoiceOver can announce the page title."
 

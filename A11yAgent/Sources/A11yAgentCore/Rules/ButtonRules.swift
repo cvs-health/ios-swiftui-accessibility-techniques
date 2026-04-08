@@ -11,6 +11,7 @@ public struct ButtonLabelContainsRoleRule: A11yRule {
     public let id = "button-label-contains-role"
     public let name = "Button Label Contains 'Button'"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.moderate
     public let wcagCriteria = ["4.1.2"]
     public let description = "Don't include 'button' in .accessibilityLabel() — the Button role is announced automatically by VoiceOver."
 
@@ -57,6 +58,7 @@ public struct IconOnlyButtonMissingLabelRule: A11yRule {
     public let id = "icon-button-missing-label"
     public let name = "Icon-Only Button Missing Label"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
     public let wcagCriteria = ["4.1.2"]
     public let description = "Buttons containing only an Image must have .accessibilityLabel() to describe their action."
 
@@ -123,6 +125,7 @@ public struct VisuallyDisabledNotSemanticallyRule: A11yRule {
     public let id = "visually-disabled-not-semantic"
     public let name = "Visually Disabled But Not .disabled(true)"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["4.1.2"]
     public let description = "Buttons that appear visually disabled must also use .disabled(true) so assistive technology knows they are disabled."
 

@@ -11,6 +11,7 @@ public struct AccessibilityGroupingRule: A11yRule {
     public let id = "missing-accessibility-grouping"
     public let name = "Related Elements Missing Accessibility Grouping"
     public let severity = A11ySeverity.info
+    public let impact = A11yImpact.minor
     public let wcagCriteria = ["1.3.1"]
     public let description = "Adjacent Image + Text pairs in HStack/VStack should be grouped with .accessibilityElement(children: .combine) so VoiceOver reads them as a single element."
 
@@ -72,6 +73,7 @@ public struct ZStackSequenceRule: A11yRule {
     public let id = "zstack-order-confusing"
     public let name = "ZStack May Have Confusing VoiceOver Order"
     public let severity = A11ySeverity.info
+    public let impact = A11yImpact.minor
     public let wcagCriteria = ["1.3.2"]
     public let description = "ZStack children are read by VoiceOver in source order (back-to-front), which may not match the visual order. Use .accessibilityHidden(true) on decorative layers or .accessibilitySortPriority() to fix reading order."
 

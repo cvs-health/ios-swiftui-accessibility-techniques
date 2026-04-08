@@ -13,6 +13,7 @@ public struct HiddenOnParentWithControlsRule: A11yRule {
     public let id = "hidden-parent-with-controls"
     public let name = "accessibilityHidden on Parent with Controls"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
     public let wcagCriteria = ["4.1.2"]
     public let description = "Don't use .accessibilityHidden(true) on containers that have interactive children — it hides all controls from assistive technology."
 

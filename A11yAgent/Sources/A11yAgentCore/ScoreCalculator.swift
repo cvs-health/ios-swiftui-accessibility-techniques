@@ -69,6 +69,16 @@ public struct ScoreCalculator {
     private static let warningPenalty: Double = 2.0
     private static let infoPenalty: Double = 0.5
 
+    /// Impact multipliers — scale severity penalties by user impact.
+    private static func impactMultiplier(for impact: A11yImpact) -> Double {
+        switch impact {
+        case .critical: return 2.0
+        case .serious:  return 1.5
+        case .moderate: return 1.0
+        case .minor:    return 0.5
+        }
+    }
+
     // MARK: - Public API
 
     /// Calculate the accessibility score for a set of diagnostics produced by the given rules.
@@ -191,9 +201,15 @@ public struct ScoreCalculator {
             principleAvg = checkedPrinciples.reduce(0, +) / Double(checkedPrinciples.count)
         }
 
-        let issuePenalty = Double(totalErrors) * Self.errorPenalty
-            + Double(totalWarnings) * Self.warningPenalty
-            + Double(totalInfo) * Self.infoPenalty
+        let issuePenalty = diagnostics.reduce(0.0) { total, diag in
+            let basePenalty: Double
+            switch diag.severity {
+            case .error:   basePenalty = Self.errorPenalty
+            case .warning: basePenalty = Self.warningPenalty
+            case .info:    basePenalty = Self.infoPenalty
+            }
+            return total + basePenalty * Self.impactMultiplier(for: diag.impact)
+        }
         let filesCount = max(1, filePaths.count)
         // Normalize penalty per file, cap deduction at 100
         let normalizedPenalty = min(100.0, issuePenalty / Double(filesCount) * 2.0)

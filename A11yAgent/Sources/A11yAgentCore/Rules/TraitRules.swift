@@ -12,6 +12,7 @@ public struct TapGestureMissingButtonTraitRule: A11yRule {
     public let id = "tap-gesture-missing-button-trait"
     public let name = "Tap Gesture Missing .isButton Trait"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
     public let wcagCriteria = ["4.1.2"]
     public let description = "Views with .onTapGesture must have .accessibilityAddTraits(.isButton) so VoiceOver announces them as interactive."
 

@@ -75,6 +75,13 @@ public struct HTMLFormatter {
         .diag:last-child { border-bottom: none; }
         .diag-loc { color: #6c757d; font-family: monospace; }
         .diag-rule { color: #6c757d; font-style: italic; }
+        .diag-wcag { font-size: 0.75rem; font-weight: 600; color: #495057; }
+        .diag-wcag a { color: #0d6efd; text-decoration: none; }
+        .diag-wcag a:hover { text-decoration: underline; }
+        .badge-critical { background: #f8d7da; color: #721c24; }
+        .badge-serious { background: #ffe0b2; color: #e65100; }
+        .badge-moderate { background: #fff3cd; color: #856404; }
+        .badge-minor { background: #e2e3e5; color: #383d41; }
         .code-block { background: #1e1e2e; color: #cdd6f4; border-radius: 6px; padding: 0.625rem 0.75rem; margin: 0.5rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
         .code-block .line-bad { color: #f38ba8; }
         .code-block .line-num { color: #6c7086; user-select: none; }
@@ -378,11 +385,26 @@ public struct HTMLFormatter {
                     case .warning: badgeClass = "badge-warning"
                     case .info: badgeClass = "badge-info"
                     }
+                    let impactBadgeClass: String
+                    switch diag.impact {
+                    case .critical: impactBadgeClass = "badge-critical"
+                    case .serious: impactBadgeClass = "badge-serious"
+                    case .moderate: impactBadgeClass = "badge-moderate"
+                    case .minor: impactBadgeClass = "badge-minor"
+                    }
                     html += "<div class=\"diag\">"
                     html += "<span class=\"badge \(badgeClass)\">\(diag.severity.rawValue)</span> "
+                    html += "<span class=\"badge \(impactBadgeClass)\">\(diag.impact.rawValue)</span> "
                     html += "<span class=\"diag-loc\">\(diag.line):\(diag.column)</span> "
                     html += "\(escapeHTML(diag.message)) "
                     html += "<span class=\"diag-rule\">\(escapeHTML(diag.ruleID))</span>"
+                    if !diag.wcagCriteria.isEmpty {
+                        let wcagLinks = diag.wcagCriteria.map { c in
+                            let url = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(c)
+                            return "<a href=\"\(url)\">\(escapeHTML(c))</a>"
+                        }.joined(separator: ", ")
+                        html += " <span class=\"diag-wcag\">WCAG \(wcagLinks)</span>"
+                    }
 
                     if let snippet = diag.sourceSnippet {
                         html += "<div class=\"code-block\">"
@@ -424,7 +446,7 @@ public struct HTMLFormatter {
         }
 
         // By-rule summary
-        html += "<h2>Issues by Rule</h2>\n<table>\n<tr><th>Rule</th><th>Severity</th><th>Count</th><th>WCAG</th></tr>\n"
+        html += "<h2>Issues by Rule</h2>\n<table>\n<tr><th>Rule</th><th>Severity</th><th>Impact</th><th>Count</th><th>WCAG</th></tr>\n"
         for rule in allRules.sorted(by: { $0.id < $1.id }) {
             let count = diagsByRule[rule.id]?.count ?? 0
             let badgeClass: String
@@ -433,8 +455,16 @@ public struct HTMLFormatter {
             case .warning: badgeClass = "badge-warning"
             case .info: badgeClass = "badge-info"
             }
+            let impactBadge: String
+            switch rule.impact {
+            case .critical: impactBadge = "badge-critical"
+            case .serious: impactBadge = "badge-serious"
+            case .moderate: impactBadge = "badge-moderate"
+            case .minor: impactBadge = "badge-minor"
+            }
             html += "<tr><td>\(escapeHTML(rule.id))</td>"
             html += "<td><span class=\"badge \(badgeClass)\">\(rule.severity.rawValue)</span></td>"
+            html += "<td><span class=\"badge \(impactBadge)\">\(rule.impact.rawValue)</span></td>"
             html += "<td>\(count)</td>"
             html += "<td>\(escapeHTML(rule.wcagCriteria.joined(separator: ", ")))</td></tr>\n"
         }

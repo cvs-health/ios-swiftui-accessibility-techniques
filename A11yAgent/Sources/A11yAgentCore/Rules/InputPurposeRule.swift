@@ -12,6 +12,7 @@ public struct InputPurposeRule: A11yRule {
     public let id = "input-missing-purpose"
     public let name = "Text Input Missing Content Type"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.moderate
     public let wcagCriteria = ["1.3.5"]
     public let description = "TextFields and SecureFields should have .textContentType() so iOS can offer autofill and assistive technologies can identify the input purpose."
 

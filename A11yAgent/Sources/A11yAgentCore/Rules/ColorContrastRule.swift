@@ -13,6 +13,7 @@ public struct ColorContrastRule: A11yRule {
     public let id = "color-contrast-insufficient"
     public let name = "Insufficient Color Contrast"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["1.4.3"]
     public let description = "Foreground and background color pair does not meet the WCAG 1.4.3 minimum contrast ratio."
 

@@ -22,12 +22,11 @@ public struct SARIFFormatter {
                 "defaultConfiguration": ["level": sarifLevel(for: rule.severity)],
                 "helpUri": wcagHelpUri(for: rule.wcagCriteria.first ?? ""),
             ]
-            if !rule.wcagCriteria.isEmpty {
-                entry["properties"] = [
-                    "wcagCriteria": rule.wcagCriteria,
-                    "tags": ["accessibility", "wcag"] + rule.wcagCriteria.map { "wcag-\($0)" },
-                ]
-            }
+            entry["properties"] = [
+                "impact": rule.impact.rawValue,
+                "wcagCriteria": rule.wcagCriteria,
+                "tags": ["accessibility", "wcag"] + rule.wcagCriteria.map { "wcag-\($0)" },
+            ] as [String: Any]
             return entry
         }
 
@@ -59,9 +58,10 @@ public struct SARIFFormatter {
                     ] as [String: Any],
                 ]
             }
-            if !diag.wcagCriteria.isEmpty {
-                result["properties"] = ["wcagCriteria": diag.wcagCriteria]
-            }
+            result["properties"] = [
+                "impact": diag.impact.rawValue,
+                "wcagCriteria": diag.wcagCriteria,
+            ] as [String: Any]
             return result
         }
 

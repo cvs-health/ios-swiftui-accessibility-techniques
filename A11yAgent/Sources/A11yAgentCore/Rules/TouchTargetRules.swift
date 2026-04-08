@@ -11,6 +11,7 @@ public struct SmallTouchTargetRule: A11yRule {
     public let id = "small-touch-target"
     public let name = "Touch Target Below Minimum Size"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.5.8"]
     public let description = "Interactive elements should have a minimum touch target size of 24x24 points (WCAG 2.2 AA)."
 

@@ -9,13 +9,14 @@ import SwiftSyntax
 /// Skips long or multi-line text (paragraphs) — only suggests the trait for short,
 /// single-line text that is likely a structural heading.
 ///
-/// WCAG 1.3.1 Info and Relationships
+/// WCAG 2.4.6 Headings and Labels
 /// Reference: HeadingsView.swift
 public struct HeadingTraitMissingRule: A11yRule {
     public let id = "heading-trait-missing"
     public let name = "Heading Trait Missing"
-    public let severity = A11ySeverity.info
-    public let wcagCriteria = ["1.3.1"]
+    public let severity = A11ySeverity.warning
+    public let impact = A11yImpact.serious
+    public let wcagCriteria = ["2.4.6"]
     public let description = "Text styled with heading fonts should use .accessibilityAddTraits(.isHeader) so VoiceOver users can navigate by headings."
 
     public init() {}
@@ -119,6 +120,7 @@ public struct FakeHeadingInLabelRule: A11yRule {
     public let id = "fake-heading-in-label"
     public let name = "Fake Heading in Accessibility Label"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["1.3.1"]
     public let description = "Don't include 'heading' in .accessibilityLabel(). Use .accessibilityAddTraits(.isHeader) instead."
 

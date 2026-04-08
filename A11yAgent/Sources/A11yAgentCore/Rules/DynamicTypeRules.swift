@@ -11,6 +11,7 @@ public struct FixedFontSizeRule: A11yRule {
     public let id = "fixed-font-size"
     public let name = "Fixed Font Size (No Dynamic Type)"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["1.4.4"]
     public let description = "Use Dynamic Type text styles (.font(.body), .font(.title), etc.) instead of fixed font sizes so text scales with user preferences."
 
@@ -46,6 +47,7 @@ public struct LineLimit1Rule: A11yRule {
     public let id = "line-limit-1"
     public let name = "lineLimit(1) Truncates Text"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["1.4.4"]
     public let description = ".lineLimit(1) truncates text at larger Dynamic Type sizes. Remove it or use a higher limit."
 

@@ -555,7 +555,7 @@ final class A11yAgentCoreTests: XCTestCase {
         )
         let formatter = XcodeFormatter()
         let output = formatter.format([diag])
-        XCTAssertEqual(output, "/path/to/File.swift:10:5: warning: [test-rule] Test message [WCAG 1.1.1]\n")
+        XCTAssertEqual(output, "/path/to/File.swift:10:5: warning: [test-rule] [moderate] Test message [WCAG 1.1.1]\n")
     }
 
     func testXcodeFormatter_mapsInfoToNote() {

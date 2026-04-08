@@ -17,6 +17,7 @@ public struct SheetFocusReturnRule: A11yRule {
     public let id = "sheet-focus-return"
     public let name = "Return Focus When Sheet/Dialog Dismisses"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.4.3", "2.1.2"]
     public let description = "When using .sheet(), .fullScreenCover(), .popover(), .alert(), or .confirmationDialog(), return focus by setting @AccessibilityFocusState (or @FocusState) when the presentation closes so VoiceOver/keyboard focus returns to the trigger."
 

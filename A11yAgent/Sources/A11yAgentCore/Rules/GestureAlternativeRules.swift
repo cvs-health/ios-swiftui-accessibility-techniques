@@ -12,6 +12,7 @@ public struct CustomGestureMissingAlternativeRule: A11yRule {
     public let id = "gesture-missing-alternative"
     public let name = "Complex Gesture Missing Accessibility Alternative"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.1.1", "2.5.1"]
     public let description = "Complex gestures (long press, drag, rotation, magnification) need an .accessibilityAction() alternative so VoiceOver and Switch Control users can perform the same action."
 

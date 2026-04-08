@@ -12,6 +12,7 @@ public struct ImageMissingLabelRule: A11yRule {
     public let id = "image-missing-label"
     public let name = "Image Missing Accessibility Label"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
     public let wcagCriteria = ["1.1.1"]
     public let description = "Non-decorative images must have an .accessibilityLabel() or use Image(decorative:)."
 
@@ -113,6 +114,7 @@ public struct ImageLabelContainsImageRule: A11yRule {
     public let id = "image-label-contains-role"
     public let name = "Image Label Contains Role Word"
     public let severity = A11ySeverity.warning
+    public let impact = A11yImpact.minor
     public let wcagCriteria = ["1.1.1"]
     public let description = "Accessibility labels should not contain the word 'image', 'icon', 'picture', or 'graphic' — the role is announced automatically."
 

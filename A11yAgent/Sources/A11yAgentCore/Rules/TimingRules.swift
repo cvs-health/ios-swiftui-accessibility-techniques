@@ -11,6 +11,7 @@ public struct TimingAdjustableRule: A11yRule {
     public let id = "auto-dismiss-no-control"
     public let name = "Auto-Dismiss Without User Control"
     public let severity = A11ySeverity.error
+    public let impact = A11yImpact.moderate
     public let wcagCriteria = ["2.2.1"]
     public let description = "Auto-dismissing content (toasts, banners, alerts) should give users control over timing. Users with cognitive or motor disabilities may need more time."
 

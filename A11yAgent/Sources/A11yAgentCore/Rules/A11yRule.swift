@@ -57,6 +57,8 @@ public protocol A11yRule {
     var name: String { get }
     /// Default severity.
     var severity: A11ySeverity { get }
+    /// Impact on users (critical/serious/moderate/minor).
+    var impact: A11yImpact { get }
     /// WCAG 2.2 success criteria this rule checks.
     var wcagCriteria: [String] { get }
     /// One-line description of what the rule checks.
@@ -83,6 +85,7 @@ extension A11yRule {
         return A11yDiagnostic(
             ruleID: id,
             severity: effectiveSeverity,
+            impact: impact,
             message: message,
             filePath: context.filePath,
             line: context.line(for: node.positionAfterSkippingLeadingTrivia),

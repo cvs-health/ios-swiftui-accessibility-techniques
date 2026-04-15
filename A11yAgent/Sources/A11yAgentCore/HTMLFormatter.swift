@@ -73,6 +73,7 @@ public struct HTMLFormatter {
         summary:hover { background: #f1f3f5; }
         .diag-list { padding: 0.5rem 1rem 1rem; }
         .diag { padding: 0.75rem 0; border-bottom: 1px solid #e9ecef; font-size: 0.8125rem; }
+        .diag-title { font-size: 0.9375rem; font-weight: 700; margin: 0 0 0.375rem 0; color: #212529; }
         .diag:last-child { border-bottom: none; }
         .diag-loc { color: #595f64; font-family: monospace; }
         .diag-rule { color: #595f64; font-style: italic; }
@@ -86,13 +87,16 @@ public struct HTMLFormatter {
         .badge-serious { background: #ffe0b2; color: #e65100; }
         .badge-moderate { background: #fff3cd; color: #856404; }
         .badge-minor { background: #e2e3e5; color: #383d41; }
-        .code-block { background: #1e1e2e; color: #cdd6f4; border-radius: 6px; padding: 0.625rem 0.75rem; margin: 0.5rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
+        .code-label { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0.5rem; padding: 0.15rem 0.5rem; border-radius: 3px 3px 0 0; display: block; width: fit-content; }
+        .bad-label { background: var(--error); color: white; }
+        .good-label { background: #28a745; color: white; }
+        .code-block { background: #1e1e2e; color: #cdd6f4; border-radius: 0 6px 6px 6px; padding: 0.625rem 0.75rem; margin: 0 0 0.375rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
         .code-block .line-bad { color: #f38ba8; }
         .code-block .line-num { color: #6c7086; user-select: none; }
         .code-block .line-marker { color: #f38ba8; font-weight: 700; user-select: none; }
         .suggestion { background: var(--pass-bg); color: var(--pass); border-radius: 4px; padding: 0.375rem 0.625rem; margin: 0.375rem 0; font-size: 0.75rem; display: inline-block; }
         .suggestion::before { content: "Fix: "; font-weight: 600; }
-        .fix-block { background: #1e3a1e; color: #a6e3a1; border-radius: 6px; padding: 0.625rem 0.75rem; margin: 0.375rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
+        .fix-block { background: #1e3a1e; color: #a6e3a1; border-radius: 0 6px 6px 6px; padding: 0.625rem 0.75rem; margin: 0 0 0.375rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
         .fix-block .line-good { color: #40e040; font-weight: 600; }
         .score-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
         .score-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
@@ -396,7 +400,9 @@ public struct HTMLFormatter {
                     case .moderate: impactBadgeClass = "badge-moderate"
                     case .minor: impactBadgeClass = "badge-minor"
                     }
+                    let ruleName = allRules.first(where: { $0.id == diag.ruleID })?.name ?? diag.ruleID
                     html += "<div class=\"diag\">"
+                    html += "<div class=\"diag-title\">\(escapeHTML(ruleName))</div>"
                     html += "<span class=\"badge \(badgeClass)\">\(diag.severity.rawValue)</span> "
                     html += "<span class=\"badge \(impactBadgeClass)\">\(diag.impact.rawValue)</span> "
                     html += "<span class=\"diag-loc\">\(diag.line):\(diag.column)</span> "
@@ -411,7 +417,8 @@ public struct HTMLFormatter {
                     }
 
                     if let snippet = diag.sourceSnippet {
-                        html += "<div class=\"code-block\">"
+                        html += "\n<div class=\"code-label bad-label\">Current code</div>"
+                        html += "\n<div class=\"code-block\">"
                         for snippetLine in snippet.components(separatedBy: "\n") {
                             let escaped = escapeHTML(snippetLine)
                             if snippetLine.hasPrefix(">") {
@@ -429,7 +436,8 @@ public struct HTMLFormatter {
                         if let snippet = diag.sourceSnippet {
                             let corrected = generateCorrectedSnippet(snippet: snippet, suggestion: suggestion)
                             if let corrected = corrected {
-                                html += "<div class=\"fix-block\">"
+                                html += "\n<div class=\"code-label good-label\">Fixed code</div>"
+                                html += "\n<div class=\"fix-block\">"
                                 for fixLine in corrected.components(separatedBy: "\n") {
                                     let escaped = escapeHTML(fixLine)
                                     if fixLine.hasPrefix(">") {

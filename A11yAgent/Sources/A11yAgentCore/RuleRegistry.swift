@@ -99,6 +99,9 @@ public final class RuleRegistry {
 
         // Timing (WCAG 2.2.1)
         register(TimingAdjustableRule())
+
+        // Label in Name (WCAG 2.5.3)
+        register(LabelInNameRule())
     }
 
     /// Apply a config: merge disabled rules and enabled-only from config with CLI overrides.

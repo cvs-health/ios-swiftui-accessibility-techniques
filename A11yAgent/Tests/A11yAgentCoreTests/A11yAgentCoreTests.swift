@@ -472,7 +472,7 @@ final class A11yAgentCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 30)
+        XCTAssertEqual(registry.rules.count, 31)
     }
 
     func testDisableRule() {
@@ -1009,5 +1009,128 @@ final class A11yAgentCoreTests: XCTestCase {
         XCTAssertNotNil(json["criteria"])
         XCTAssertNotNil(json["principleScores"])
         XCTAssertNotNil(json["fileScores"])
+    }
+
+    // MARK: - Label in Name Rule
+
+    func testLabelInName_flagsMismatchedButton() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Save") { }.accessibilityLabel("Submit form")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags[0].severity, .error)
+    }
+
+    func testLabelInName_flagsMismatchedText() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Visible").accessibilityLabel("Something else")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags[0].severity, .error)
+    }
+
+    func testLabelInName_flagsMismatchedLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Label("Edit", systemImage: "pencil").accessibilityLabel("Modify item")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags[0].severity, .error)
+    }
+
+    func testLabelInName_flagsSuffixOnly() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Save").accessibilityLabel("Quick Save")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags[0].severity, .warning)
+    }
+
+    func testLabelInName_passesExactMatch() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Save").accessibilityLabel("Save")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testLabelInName_passesStartsWith() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Save").accessibilityLabel("Save document")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testLabelInName_passesCaseInsensitive() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("SAVE").accessibilityLabel("save document")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testLabelInName_passesNoAccessibilityLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Save") { }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testLabelInName_passesNoVisibleText() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button { Image(systemName: "pencil") }.accessibilityLabel("Edit")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 0)
     }
 }

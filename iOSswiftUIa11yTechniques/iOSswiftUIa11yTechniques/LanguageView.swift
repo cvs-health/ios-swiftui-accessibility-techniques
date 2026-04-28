@@ -24,7 +24,7 @@ struct LanguageView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Parts of the app or page that are in a different language than the main language must be spoken to VoiceOver users in the correct speech synthesizer, i.e., Spanish text must be spoken in a Spanish synthesizer with the correct accent and pronunciations. Use `.accessibilityLanguage(\"es\")` on a container to set the language for an entire page or section. Use an `AttributedString` with `attributes: AttributeContainer().languageIdentifier()` on individual text elements in a different language so VoiceOver speaks them correctly.")
+                Text("Parts of the app or page that are in a different language than the main language must be spoken to VoiceOver users in the correct speech synthesizer, i.e., Spanish text must be spoken in a Spanish synthesizer with the correct accent and pronunciations. Use an `AttributedString` with `attributes: AttributeContainer().languageIdentifier()` on text in a different language so VoiceOver speaks it correctly. When the entire page is in a different language, every text element needs the `.languageIdentifier` attribute.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -41,15 +41,29 @@ struct LanguageView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                VStack(alignment: .leading) {
-                    Text("Bienvenido a nuestra aplicación.")
-                    Text("Estamos encantados de tenerte aquí.")
-                    Text("Explora nuestras funciones de accesibilidad.")
-                }
+                Text(
+                    AttributedString(
+                        "Bienvenido a nuestra aplicación.",
+                        attributes: AttributeContainer().languageIdentifier("es")
+                    )
+                )
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityLanguage("es")
+                Text(
+                    AttributedString(
+                        "Estamos encantados de tenerte aquí.",
+                        attributes: AttributeContainer().languageIdentifier("es")
+                    )
+                )
+                .frame(maxWidth: .infinity, alignment: .leading)
+                Text(
+                    AttributedString(
+                        "Explora nuestras funciones de accesibilidad.",
+                        attributes: AttributeContainer().languageIdentifier("es")
+                    )
+                )
+                .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The good Language of Page example uses `.accessibilityLanguage(\"es\")` on the `VStack` container so VoiceOver speaks all of the Spanish text inside with a Spanish speech synthesizer. Note: `.environment(\\.locale)` and `Locale` control formatting and localization but do not affect VoiceOver's speech language.")
+                    Text("The good Language of Page example uses `AttributedString` with `attributes: AttributeContainer().languageIdentifier(\"es\")` on every Spanish text element so VoiceOver speaks all of the content with a Spanish speech synthesizer. When the entire page is in a different language, every text element needs the `.languageIdentifier` attribute.")
                 }.padding(.bottom).accessibilityHint("Good Example Language of Page")
                 Text("Good Example Language of Parts")
                     .font(.subheadline)
@@ -90,7 +104,7 @@ struct LanguageView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The bad Language of Page example has Spanish text with no `.accessibilityLanguage` modifier on the container so VoiceOver speaks it incorrectly without a Spanish accent, using the default English speech synthesizer.")
+                    Text("The bad Language of Page example has Spanish text with no `.languageIdentifier` `AttributedString` `attributes:` so VoiceOver speaks it incorrectly without a Spanish accent, using the default English speech synthesizer.")
                 }.padding(.bottom).accessibilityHint("Bad Example Language of Page")
                 Text("Bad Example Language of Parts")
                     .font(.subheadline)

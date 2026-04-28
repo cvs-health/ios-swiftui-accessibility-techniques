@@ -41,15 +41,12 @@ struct LanguageView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                VStack(alignment: .leading) {
-                    Text("Bienvenido a nuestra aplicación.")
-                    Text("Estamos encantados de tenerte aquí.")
-                    Text("Explora nuestras funciones de accesibilidad.")
+                NavigationLink("Open Good Language of Page Example") {
+                    LanguageOfPageGoodView()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .environment(\.locale, Locale(identifier: "es"))
                 DisclosureGroup("Details") {
-                    Text("The good Language of Page example uses `.environment(\\.locale, Locale(identifier: \"es\"))` on the `VStack` container to set the locale to Spanish for the entire section so VoiceOver speaks all of the Spanish text inside with a Spanish speech synthesizer.")
+                    Text("The good Language of Page example opens a full page of Spanish content with `.environment(\\.locale, Locale(identifier: \"es\"))` applied to the entire page so VoiceOver speaks all of the Spanish text with a Spanish speech synthesizer.")
                 }.padding(.bottom).accessibilityHint("Good Example Language of Page")
                 Text("Good Example Language of Parts")
                     .font(.subheadline)
@@ -83,14 +80,12 @@ struct LanguageView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                VStack(alignment: .leading) {
-                    Text("Bienvenido a nuestra aplicación.")
-                    Text("Estamos encantados de tenerte aquí.")
-                    Text("Explora nuestras funciones de accesibilidad.")
+                NavigationLink("Open Bad Language of Page Example") {
+                    LanguageOfPageBadView()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The bad Language of Page example has Spanish text with no `.environment(\\.locale, Locale(identifier: \"es\"))` on the container so VoiceOver speaks it incorrectly without a Spanish accent, using the default English speech synthesizer.")
+                    Text("The bad Language of Page example opens a full page of Spanish content with no `.environment(\\.locale, Locale(identifier: \"es\"))` so VoiceOver speaks the Spanish text incorrectly without a Spanish accent, using the default English speech synthesizer.")
                 }.padding(.bottom).accessibilityHint("Bad Example Language of Page")
                 Text("Bad Example Language of Parts")
                     .font(.subheadline)

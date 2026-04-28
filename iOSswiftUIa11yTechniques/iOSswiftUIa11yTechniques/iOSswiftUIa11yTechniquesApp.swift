@@ -22,7 +22,6 @@ struct iOSswiftUIa11yTechniquesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.locale, Locale(identifier: "es"))
         }
     }
     

@@ -5,7 +5,7 @@ Full Keyboard Access users can press `Tab + z` to open Actions menu.
 
 Voice Control users can say "Show actions for" and the name or number of the element to open its Actions menu.
 
-Include a label with an icon for the action when using multiple accessibility actions, e.g., `.accessibilityAction { } label: { Label("Delete", systemImage: "trash") }` and `.accessibilityAction { } label: { Label("Mark Unread", systemImage: "envelope.open") }`.
+Include a label with an icon for the action when using multiple accessibility actions, e.g., `.accessibilityAction { } label: { Label("Delete", systemImage: "trash") }` and `.accessibilityAction { } label: { Label("Mark Unread", systemImage: "envelope.open") }`. The `Label` with `systemImage` displays an icon next to the action name in the Switch Control Actions menu.
 
 Additionally make sure there are single tap alternatives to gesture functions.
 

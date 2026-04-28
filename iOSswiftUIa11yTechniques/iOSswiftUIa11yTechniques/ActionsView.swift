@@ -34,6 +34,10 @@ struct ActionsView: View {
     @State private var msg2hiddenBad = false
     @State private var msg1offsetBad: CGFloat = 0
     @State private var msg2offsetBad: CGFloat = 0
+    @State private var msg1boldBadNoIcon = true
+    @State private var msg1hiddenBadNoIcon = false
+    @State private var msg2boldBadNoIcon = true
+    @State private var msg2hiddenBadNoIcon = false
 
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
@@ -43,7 +47,7 @@ struct ActionsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use `accessibilityAction()` to provide actions that can be activated by iOS accessibility features like VoiceOver. Full Keyboard Access users can press `Tab + z` to open Actions menu. Voice Control users can say \"Show actions for\" and the name or number of the element to open its Actions menu. With \"Show numbers\" Voice Control users will see a right arrow next to elements with actions. Additionally make sure there are single tap alternatives to gesture functions.")
+                Text("Use `accessibilityAction()` to provide actions that can be activated by iOS accessibility features like VoiceOver. Use the `accessibilityAction { } label: { Label(\"Action Name\", systemImage: \"icon\") }` syntax to display an icon with the action name in the Switch Control Actions menu. Full Keyboard Access users can press `Tab + z` to open Actions menu. Voice Control users can say \"Show actions for\" and the name or number of the element to open its Actions menu. With \"Show numbers\" Voice Control users will see a right arrow next to elements with actions. Additionally make sure there are single tap alternatives to gesture functions.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)
@@ -201,9 +205,9 @@ struct ActionsView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The good actions example uses `.accessibilityAction { } label: { Label(\"Delete\", systemImage: \"trash\") }` and `.accessibilityAction { } label: { Label(\"Mark as Read\", systemImage: \"envelope.open\") }` to provide assistive technology users accessibility actions with label icons as alternatives to the swipe to delete and long press to mark as read gestures. There is an Edit mode which provides single tap button alternatives to the swipe to delete and long press gestures.")
+                    Text("The good actions example uses `.accessibilityAction { } label: { Label(\"Delete\", systemImage: \"trash\") }` and `.accessibilityAction { } label: { Label(\"Mark as Read\", systemImage: \"envelope.open\") }` to provide assistive technology users accessibility actions with label icons as alternatives to the swipe to delete and long press to mark as read gestures. The `Label` with `systemImage` displays an icon next to the action name in the Switch Control Actions menu. There is an Edit mode which provides single tap button alternatives to the swipe to delete and long press gestures.")
                 }.padding(.bottom).accessibilityHint("Good Example")
-                Text("Bad Example")
+                Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -213,10 +217,60 @@ struct ActionsView: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
+                Text("Bad Example Actions Without Label Icons")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                if !msg1hiddenBadNoIcon {
+                    Button("Your order has shipped!") {
+
+                    }.padding(.init(top: 10, leading: 40, bottom: 10, trailing: 40)).tint(Color(colorScheme == .dark ? .black : .white)).bold(msg1boldBadNoIcon)
+                        .accessibilityAction(named: "Delete") {
+                            showingAlert = true
+                            actionTitle = "Delete"
+                            msg1hiddenBadNoIcon = true
+                        }
+                        .accessibilityAction(named: "Mark as Read") {
+                            showingAlert = true
+                            actionTitle = "Mark as Read"
+                            msg1boldBadNoIcon = false
+                        }
+                        .frame(maxWidth: .infinity)
+                        .background(Color(colorScheme == .dark ? .white : .black))
+                        .cornerRadius(10)
+                }
+                if !msg2hiddenBadNoIcon {
+                    Button("Your order was received!") {
+
+                    }.padding(.init(top: 10, leading: 40, bottom: 10, trailing: 40)).tint(Color(colorScheme == .dark ? .black : .white)).bold(msg2boldBadNoIcon)
+                        .lineLimit(.none)
+                        .accessibilityAction(named: "Delete") {
+                            showingAlert = true
+                            actionTitle = "Delete"
+                            msg2hiddenBadNoIcon = true
+                        }
+                        .accessibilityAction(named: "Mark as Read") {
+                            showingAlert = true
+                            actionTitle = "Mark as Read"
+                            msg2boldBadNoIcon = false
+                        }
+                        .frame(maxWidth: .infinity)
+                        .background(Color(colorScheme == .dark ? .white : .black))
+                        .cornerRadius(10)
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad actions without label icons example uses `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark as Read\")` which provide accessibility actions but without icons. The Switch Control Actions menu will not display icons next to the action names. Use the `Label` with `systemImage` syntax instead to display icons in the Switch Control Actions menu.")
+                }.padding(.bottom).accessibilityHint("Bad Example Actions Without Label Icons")
+                Text("Bad Example No Actions")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 Text("Secure Messages").frame(maxWidth: .infinity, alignment: .leading).padding(.bottom).bold()
                 if !msg1hiddenBad {
                     Button("Your order has shipped!") {
-                        
+
                     }.padding(.init(top: 10, leading: 40, bottom: 10, trailing: 40)).tint(Color(colorScheme == .dark ? .black : .white)).bold(msg1boldBad)
                         .simultaneousGesture(
                              LongPressGesture()
@@ -271,10 +325,9 @@ struct ActionsView: View {
                            }
                         )
                 }
-
                 DisclosureGroup("Details") {
-                    Text("The bad actions example does not use `.accessibilityAction { } label: { Label(\"Delete\", systemImage: \"trash\") }` and `.accessibilityAction { } label: { Label(\"Mark as Read\", systemImage: \"envelope.open\") }` to provide assistive technology users accessibility actions with label icons as alternatives to the swipe to delete and long press to mark as read gestures. VoiceOver does not speak that there is a swipe to delete or long press gesture on the buttons. There is no Edit mode to provide single tap button alternatives to the swipe to delete and long press gestures.")
-                }.accessibilityHint("Bad Example")
+                    Text("The bad no actions example does not use any `.accessibilityAction` to provide assistive technology users accessibility actions as alternatives to the swipe to delete and long press to mark as read gestures. VoiceOver does not speak that there is a swipe to delete or long press gesture on the buttons. There is no Edit mode to provide single tap button alternatives to the swipe to delete and long press gestures.")
+                }.accessibilityHint("Bad Example No Actions")
 
             }
             .navigationTitle("Accessibility Actions")

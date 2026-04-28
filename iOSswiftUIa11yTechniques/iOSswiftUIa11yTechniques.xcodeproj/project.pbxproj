@@ -46,6 +46,8 @@
 		BC046F2B2BEDC83800E498E1 /* ReduceTransparencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC046F2A2BEDC83800E498E1 /* ReduceTransparencyView.swift */; };
 		BC046F2D2BEE547900E498E1 /* IncreaseContrastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC046F2C2BEE547900E498E1 /* IncreaseContrastView.swift */; };
 		BC07D1932D3760600076F496 /* SignUp1.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC07D1922D3760600076F496 /* SignUp1.swift */; };
+		BC0BBAF72FA0442A00870252 /* LanguageOfPageBadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0BBAF52FA0442A00870252 /* LanguageOfPageBadView.swift */; };
+		BC0BBAF82FA0442A00870252 /* LanguageOfPageGoodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0BBAF62FA0442A00870252 /* LanguageOfPageGoodView.swift */; };
 		BC0C846F2CC811E900B3DB52 /* DragDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0C846E2CC811E900B3DB52 /* DragDropView.swift */; };
 		BC163FC22B6AD3F3009E3A83 /* ContactBoston.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */; };
 		BC163FC42B6AD3FB009E3A83 /* ContactOrlando.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */; };
@@ -267,6 +269,8 @@
 		BC046F2E2BEE822A00E498E1 /* IncreaseContrast.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = IncreaseContrast.md; sourceTree = "<group>"; };
 		BC046F2F2BEE823800E498E1 /* ReduceTransparency.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReduceTransparency.md; sourceTree = "<group>"; };
 		BC07D1922D3760600076F496 /* SignUp1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp1.swift; sourceTree = "<group>"; };
+		BC0BBAF52FA0442A00870252 /* LanguageOfPageBadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageOfPageBadView.swift; sourceTree = "<group>"; };
+		BC0BBAF62FA0442A00870252 /* LanguageOfPageGoodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageOfPageGoodView.swift; sourceTree = "<group>"; };
 		BC0C846E2CC811E900B3DB52 /* DragDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropView.swift; sourceTree = "<group>"; };
 		BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactBoston.swift; sourceTree = "<group>"; };
 		BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactOrlando.swift; sourceTree = "<group>"; };
@@ -650,6 +654,8 @@
 				BC81290B2B3F7BBE00CB19D2 /* InputLabelsView.swift */,
 				AABD27B92A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift */,
 				BC8129082B3F5FAB00CB19D2 /* LanguageView.swift */,
+				BC0BBAF52FA0442A00870252 /* LanguageOfPageBadView.swift */,
+				BC0BBAF62FA0442A00870252 /* LanguageOfPageGoodView.swift */,
 				BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */,
 				AA0F3EF32AB26D930062E7BC /* LinksView.swift */,
 				BC8C92082B2A94B2006DAC20 /* ListsView.swift */,
@@ -1144,6 +1150,8 @@
 				BC877B892CE543C200B127F1 /* SignUpA.swift in Sources */,
 				BC82DF6F2C60F46200680BC7 /* PrototypeHeadings2.swift in Sources */,
 				BC1B59CD2B519AF700E8F782 /* ContactFormView.swift in Sources */,
+				BC0BBAF72FA0442A00870252 /* LanguageOfPageBadView.swift in Sources */,
+				BC0BBAF82FA0442A00870252 /* LanguageOfPageGoodView.swift in Sources */,
 				BCE15EF62E4D5B45001A8997 /* ContainersView.swift in Sources */,
 				BCE2052C2B5A1C38000DF400 /* ContactAustin.swift in Sources */,
 				BC17B6132C9B212700403544 /* RedundantEntryView.swift in Sources */,

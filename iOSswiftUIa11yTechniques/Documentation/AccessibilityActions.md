@@ -5,7 +5,7 @@ Full Keyboard Access users can press `Tab + z` to open Actions menu.
 
 Voice Control users can say "Show actions for" and the name or number of the element to open its Actions menu.
 
-Include a name for the action when using multiple accessibility actions, e.g., `.accessibilityAction(named: "Delete")` and `.accessibilityAction(named: "Mark Unread")`.
+Include a label with an icon for the action when using multiple accessibility actions, e.g., `.accessibilityAction { } label: { Label("Delete", systemImage: "trash") }` and `.accessibilityAction { } label: { Label("Mark Unread", systemImage: "envelope.open") }`.
 
 Additionally make sure there are single tap alternatives to gesture functions.
 
@@ -17,7 +17,7 @@ Additionally make sure there are single tap alternatives to gesture functions.
 
 ----
 
-Copyright 2024-2025 CVS Health and/or one of its affiliates
+Copyright 2024-2026 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

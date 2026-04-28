@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; if [ -n \"$f\" ] && [ -f \"$f\" ]; then sed -i '' -E -e 's/Copyright ([0-9]{4})(-[0-9]{4})? CVS Health/Copyright \\1-2026 CVS Health/g' -e 's/Copyright 2026-2026 CVS Health/Copyright 2026 CVS Health/g' \"$f\"; fi; }",
+            "timeout": 10,
+            "statusMessage": "Updating copyright year..."
+          }
+        ]
+      }
+    ]
+  }
+}

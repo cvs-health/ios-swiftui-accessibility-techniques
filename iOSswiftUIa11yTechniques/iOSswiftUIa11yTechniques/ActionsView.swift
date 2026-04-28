@@ -1,5 +1,5 @@
 /*
-   Copyright 2024 CVS Health and/or one of its affiliates
+   Copyright 2024-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -74,15 +74,19 @@ struct ActionsView: View {
                                        msg1bold = false
                                    }
                               )
-                            .accessibilityAction(named: "Delete") {
+                            .accessibilityAction {
                                 showingAlert = true
                                 actionTitle = "Delete"
                                 msg1hidden = true
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
-                            .accessibilityAction(named: "Mark as Read") {
+                            .accessibilityAction {
                                 showingAlert = true
                                 actionTitle = "Mark as Read"
                                 msg1bold = false
+                            } label: {
+                                Label("Mark as Read", systemImage: "envelope.open")
                             }
                             .frame(maxWidth: .infinity)
                             .background(Color(colorScheme == .dark ? .white : .black))
@@ -139,15 +143,19 @@ struct ActionsView: View {
                                    }
                               )
                             .lineLimit(.none)
-                            .accessibilityAction(named: "Delete") {
+                            .accessibilityAction {
                                 showingAlert = true
                                 actionTitle = "Delete"
                                 msg2hidden = true
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
-                            .accessibilityAction(named: "Mark as Read") {
+                            .accessibilityAction {
                                 showingAlert = true
                                 actionTitle = "Mark as Read"
                                 msg2bold = false
+                            } label: {
+                                Label("Mark as Read", systemImage: "envelope.open")
                             }
                             .frame(maxWidth: .infinity)
                             .background(Color(colorScheme == .dark ? .white : .black))
@@ -193,7 +201,7 @@ struct ActionsView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The good actions example uses `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark as Read\")` to provide assistive technology users accessibility actions as alternatives to the swipe to delete and long press to mark as read gestures. There is an Edit mode which provides single tap button alternatives to the swipe to delete and long press gestures.")
+                    Text("The good actions example uses `.accessibilityAction { } label: { Label(\"Delete\", systemImage: \"trash\") }` and `.accessibilityAction { } label: { Label(\"Mark as Read\", systemImage: \"envelope.open\") }` to provide assistive technology users accessibility actions with label icons as alternatives to the swipe to delete and long press to mark as read gestures. There is an Edit mode which provides single tap button alternatives to the swipe to delete and long press gestures.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -265,7 +273,7 @@ struct ActionsView: View {
                 }
 
                 DisclosureGroup("Details") {
-                    Text("The bad actions example does not use `.accessibilityAction(named: \"Delete\")` and `.accessibilityAction(named: \"Mark as Read\")` to provide assistive technology users accessibility actions as alternatives to the swipe to delete and long press to mark as read gestures. VoiceOver does not speak that there is a swipe to delete or long press gesture on the buttons. There is no Edit mode to provide single tap button alternatives to the swipe to delete and long press gestures.")
+                    Text("The bad actions example does not use `.accessibilityAction { } label: { Label(\"Delete\", systemImage: \"trash\") }` and `.accessibilityAction { } label: { Label(\"Mark as Read\", systemImage: \"envelope.open\") }` to provide assistive technology users accessibility actions with label icons as alternatives to the swipe to delete and long press to mark as read gestures. VoiceOver does not speak that there is a swipe to delete or long press gesture on the buttons. There is no Edit mode to provide single tap button alternatives to the swipe to delete and long press gestures.")
                 }.accessibilityHint("Bad Example")
 
             }

@@ -2,7 +2,7 @@
 Parts of the app or page that are in a different language than the main language must be spoken to VoiceOver users in the correct speech synthesizer, i.e., Spanish text must be spoken in a Spanish synthesizer with the correct accent and pronunciations.
 
 ## Language of Page
-When the entire page or section is in a different language, use an `AttributedString` with `attributes: AttributeContainer().languageIdentifier()` on every text element so VoiceOver speaks all content with the correct speech synthesizer.
+When the entire page or section is in a different language, use `.environment(\.locale, Locale(identifier: "es"))` on the container view to set the locale so VoiceOver speaks all content with the correct speech synthesizer.
 
 ## Language of Parts
 When only some text on a page is in a different language, use an `AttributedString` with `attributes: AttributeContainer().languageIdentifier()` on the individual foreign-language text elements so VoiceOver speaks them correctly with a proper accent for that language.

@@ -16,30 +16,43 @@
 
 import SwiftUI
 
+private let headingWelcome = "Bienvenido a nuestra aplicación."
+private let introParagraph = "Estamos encantados de tenerte aquí. Esta página demuestra cómo configurar el idioma de una página completa para que VoiceOver utilice el sintetizador de voz correcto."
+private let sectionHeading = "Funciones de accesibilidad"
+private let featuresIntro = "Nuestra aplicación incluye las siguientes funciones de accesibilidad:"
+private let feature1 = "• Compatibilidad con VoiceOver"
+private let feature2 = "• Texto dinámico"
+private let feature3 = "• Alto contraste"
+private let feature4 = "• Reducir movimiento"
+private let pageTitle = "Bienvenido"
+
 struct LanguageOfPageGoodView: View {
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Text("Bienvenido a nuestra aplicación.")
+                Text(headingWelcome)
                     .font(.title)
                     .padding(.bottom, 4)
-                Text("Estamos encantados de tenerte aquí. Esta página demuestra cómo configurar el idioma de una página completa para que VoiceOver utilice el sintetizador de voz correcto.")
+                    .accessibilityAddTraits(.isHeader)
+                Text(introParagraph)
                     .padding(.bottom)
-                Text("Funciones de accesibilidad")
+                Text(sectionHeading)
                     .font(.headline)
                     .accessibilityAddTraits(.isHeader)
+                    .accessibilityHeading(.h2)
                     .padding(.bottom, 4)
-                Text("Nuestra aplicación incluye las siguientes funciones de accesibilidad:")
+                Text(featuresIntro)
                     .padding(.bottom, 4)
-                Text("• Compatibilidad con VoiceOver")
-                Text("• Texto dinámico")
-                Text("• Alto contraste")
-                Text("• Reducir movimiento")
+                Text(feature1)
+                Text(feature2)
+                Text(feature3)
+                Text(feature4)
             }
             .padding()
         }
+        .navigationTitle(pageTitle)
         .environment(\.locale, Locale(identifier: "es"))
-        .navigationTitle("Bienvenido")
     }
 }
 

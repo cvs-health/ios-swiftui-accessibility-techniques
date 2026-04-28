@@ -41,7 +41,7 @@ struct LanguageView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                NavigationLink("Open Good Language of Page Example") {
+                NavigationLink("Good Language of Page Example") {
                     LanguageOfPageGoodView()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -80,7 +80,7 @@ struct LanguageView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                NavigationLink("Open Bad Language of Page Example") {
+                NavigationLink("Bad Language of Page Example") {
                     LanguageOfPageBadView()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -103,7 +103,6 @@ struct LanguageView: View {
             .navigationTitle("Language")
             .padding()
         }
-
     }
 }
 

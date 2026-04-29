@@ -20,6 +20,8 @@ struct DragDropView: View {
     @State private var goodItems = ["Apples", "Bananas", "Cherries", "Dates", "Elderberries"]
     @State private var badItems = ["Apples", "Bananas", "Cherries", "Dates", "Elderberries"]
     @State private var goodSelectedItem: String?
+    @State private var goodDraggingItem: String?
+    @State private var badDraggingItem: String?
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -46,14 +48,14 @@ struct DragDropView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 ForEach(goodItems, id: \.self) { item in
-                    reorderableRow(item: item, items: $goodItems, selectedItem: $goodSelectedItem, accessible: true)
+                    reorderableRow(item: item, items: $goodItems, draggingItem: $goodDraggingItem, selectedItem: $goodSelectedItem, accessible: true)
                 }
                 if let selected = goodSelectedItem, let index = goodItems.firstIndex(of: selected) {
                     HStack(spacing: 16) {
                         Button {
                             guard index > 0 else { return }
                             withAnimation {
-                                goodItems.move(fromOffsets: IndexSet(integer: index), toOffset: index)
+                                goodItems.move(fromOffsets: IndexSet(integer: index), toOffset: index - 1)
                             }
                         } label: {
                             Label("Move Up", systemImage: "arrow.up")
@@ -97,7 +99,7 @@ struct DragDropView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 ForEach(badItems, id: \.self) { item in
-                    reorderableRow(item: item, items: $badItems, selectedItem: .constant(nil), accessible: false)
+                    reorderableRow(item: item, items: $badItems, draggingItem: $badDraggingItem, selectedItem: .constant(nil), accessible: false)
                 }
                 DisclosureGroup("Details") {
                     Text("The bad drag and drop example only supports touch-based drag and drop. There are no visible move buttons for single-pointer-tap users, and no custom accessibility actions for VoiceOver, Switch Control, or Full Keyboard Access users. Users who cannot perform drag gestures have no way to reorder items.")
@@ -110,7 +112,7 @@ struct DragDropView: View {
     }
 
     @ViewBuilder
-    private func reorderableRow(item: String, items: Binding<[String]>, selectedItem: Binding<String?>, accessible: Bool) -> some View {
+    private func reorderableRow(item: String, items: Binding<[String]>, draggingItem: Binding<String?>, selectedItem: Binding<String?>, accessible: Bool) -> some View {
         let index = items.wrappedValue.firstIndex(of: item)!
         let isFirst = index == 0
         let isLast = index == items.wrappedValue.count - 1
@@ -148,11 +150,13 @@ struct DragDropView: View {
                 .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 3)
         )
         .onDrag {
+            draggingItem.wrappedValue = item
             return NSItemProvider(object: item as NSString)
         }
         .onDrop(of: [.text], delegate: ReorderDropDelegate(
             item: item,
-            items: items
+            items: items,
+            draggingItem: draggingItem
         ))
         .if(accessible) { view in
             view
@@ -160,7 +164,7 @@ struct DragDropView: View {
                 .accessibilityAction(named: "Move Up") {
                     if !isFirst {
                         withAnimation {
-                            items.wrappedValue.move(fromOffsets: IndexSet(integer: index), toOffset: index)
+                            items.wrappedValue.move(fromOffsets: IndexSet(integer: index), toOffset: index - 1)
                         }
                     }
                 }
@@ -189,24 +193,21 @@ extension View {
 struct ReorderDropDelegate: DropDelegate {
     let item: String
     @Binding var items: [String]
+    @Binding var draggingItem: String?
 
     func performDrop(info: DropInfo) -> Bool {
-        true
+        draggingItem = nil
+        return true
     }
 
     func dropEntered(info: DropInfo) {
-        guard let provider = info.itemProviders(for: [.text]).first else { return }
-        provider.loadObject(ofClass: NSString.self) { reading, _ in
-            guard let draggedItem = reading as? String,
-                  draggedItem != item,
-                  let fromIndex = items.firstIndex(of: draggedItem),
-                  let toIndex = items.firstIndex(of: item)
-            else { return }
-            DispatchQueue.main.async {
-                withAnimation {
-                    items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
-                }
-            }
+        guard let draggingItem,
+              draggingItem != item,
+              let fromIndex = items.firstIndex(of: draggingItem),
+              let toIndex = items.firstIndex(of: item)
+        else { return }
+        withAnimation {
+            items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
         }
     }
 

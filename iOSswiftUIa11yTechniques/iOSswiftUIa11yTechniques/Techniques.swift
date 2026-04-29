@@ -34,6 +34,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Decorative Images"),
     Techniques(name: "Device Orientation"),
     Techniques(name: "Dim Flashing Lights"),
+    Techniques(name: "Drag & Drop"),
     Techniques(name: "Dynamic Type"),
     Techniques(name: "Error Validation"),
     Techniques(name: "Escape Action"),

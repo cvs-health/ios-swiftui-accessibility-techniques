@@ -80,7 +80,7 @@ struct DragDropView: View {
                     .padding(.top, 8)
                 }
                 DisclosureGroup("Details") {
-                    Text("The good drag and drop example provides visible \"Move Up\" and \"Move Down\" buttons on each row so single-pointer-tap users can reorder without dragging. It also uses `.accessibilityAction` to add \"Move Up\" and \"Move Down\" custom actions. VoiceOver users can swipe up or down to access these actions, and Switch Control or Full Keyboard Access users can open the Actions menu. Each item also has an `.accessibilityHint` telling users they can reorder it using actions.")
+                    Text("The good drag and drop example lets users tap a row to select it, then use visible \"Move Up\" and \"Move Down\" buttons below the list to reorder. This provides a single-tap alternative to drag gestures. It also uses `.accessibilityAction` to add \"Move Up\" and \"Move Down\" custom actions for each item. VoiceOver users can swipe up or down to access these actions, and Switch Control or Full Keyboard Access users can open the Actions menu. Each item has an `.accessibilityHint` telling users they can reorder it using actions.")
                 }
                 .padding(.bottom).accessibilityHint("Good Example Reorderable List")
                 Text("Bad Example")
@@ -102,7 +102,7 @@ struct DragDropView: View {
                     reorderableRow(item: item, items: $badItems, draggingItem: $badDraggingItem, selectedItem: .constant(nil), accessible: false)
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad drag and drop example only supports touch-based drag and drop. There are no visible move buttons for single-pointer-tap users, and no custom accessibility actions for VoiceOver, Switch Control, or Full Keyboard Access users. Users who cannot perform drag gestures have no way to reorder items.")
+                    Text("The bad drag and drop example only supports touch-based drag and drop with no single-tap alternative. There are no visible move buttons for users who cannot perform drag gestures, and no `.accessibilityAction` custom actions for VoiceOver, Switch Control, or Full Keyboard Access users to reorder items.")
                 }
                 .padding(.bottom).accessibilityHint("Bad Example Reorderable List")
             }

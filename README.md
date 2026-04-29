@@ -92,6 +92,7 @@ See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and 
 - [x] [Decorative Images](iOSswiftUIa11yTechniques/Documentation/DecorativeImages.md)
 - [x] [Device Orientation](iOSswiftUIa11yTechniques/Documentation/DeviceOrientation.md)
 - [x] [Dim Flashing Lights](iOSswiftUIa11yTechniques/Documentation/DimFlashingLights.md)
+- [x] [Drag & Drop](iOSswiftUIa11yTechniques/Documentation/DragDrop.md)
 - [x] [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)
 - [x] [Error Validation](iOSswiftUIa11yTechniques/Documentation/ErrorValidation.md)
 - [x] [Escape Action](iOSswiftUIa11yTechniques/Documentation/EscapeAction.md)

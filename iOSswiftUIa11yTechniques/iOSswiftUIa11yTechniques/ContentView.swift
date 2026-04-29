@@ -143,6 +143,7 @@ struct ContentView: View {
         case "decorative images": DecorativeView()
         case "device orientation": DeviceOrientationView()
         case "dim flashing lights": DimFlashingLightsView()
+        case "drag & drop": DragDropView()
         case "dynamic type": DynamicTypeView()
         case "error validation": ErrorValidationView()
         case "escape action": EscapeView()

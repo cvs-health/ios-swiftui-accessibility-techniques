@@ -1,5 +1,5 @@
 /*
-   Copyright 2024 CVS Health and/or one of its affiliates
+   Copyright 2024-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -62,10 +62,7 @@ struct PrototypesView: View {
             NavigationLink(destination: VideoPlayerView()) {
                 Text("Video Player View Test")
             }
-            NavigationLink(destination: DragDropView()) {
-                Text("Drag & Drop Test")
-            }
-            NavigationLink(destination: WebView()) {
+NavigationLink(destination: WebView()) {
                 Text("Web View Apple System CSS Font Test")
             }
             NavigationLink(destination: FormViewTest()) {

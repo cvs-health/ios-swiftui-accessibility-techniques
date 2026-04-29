@@ -1,5 +1,5 @@
 /*
-   Copyright 2024 CVS Health and/or one of its affiliates
+   Copyright 2024-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,40 +17,182 @@
 import SwiftUI
 
 struct DragDropView: View {
-    @State private var selection: String?
+    @State private var goodItems = ["Apples", "Bananas", "Cherries", "Dates", "Elderberries"]
+    @State private var badItems = ["Apples", "Bananas", "Cherries", "Dates", "Elderberries"]
+    @State private var goodDraggingItem: String?
+    @State private var badDraggingItem: String?
 
-    var names = [
-        "Cyril",
-        "Lana",
-        "Mallory",
-        "Sterling"
-    ]
-
-   
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
-    
+
     var body: some View {
-            List(names, id: \.self, selection: $selection) { name in
-                Text(name)
-            }
-            .navigationTitle("Countries")
-            if (selection != nil) {
-                HStack {
-                    Button("Up", action: {
-                        
-                    })
-                    Button("Down", action: {
-                        
-                    })
+        ScrollView {
+            VStack {
+                Text("Drag and drop allows users to reorder items by dragging them to a new position. Provide visible single-tap move buttons so users who cannot perform drag gestures can still reorder items. Additionally, use `accessibilityAction`s for \"Move Up\" and \"Move Down\" so VoiceOver and Switch Control users can reorder items without gestures. Use `.accessibilityHint` to communicate that items are reorderable.")
+                    .padding(.bottom)
+                Text("Good Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.bottom)
+                Text("Good Example Reorderable List")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                ForEach(goodItems, id: \.self) { item in
+                    reorderableRow(item: item, items: $goodItems, draggingItem: $goodDraggingItem, accessible: true)
                 }
+                DisclosureGroup("Details") {
+                    Text("The good drag and drop example provides visible \"Move Up\" and \"Move Down\" buttons on each row so single-pointer-tap users can reorder without dragging. It also uses `.accessibilityAction` to add \"Move Up\" and \"Move Down\" custom actions. VoiceOver users can swipe up or down to access these actions, and Switch Control or Full Keyboard Access users can open the Actions menu. Each item also has an `.accessibilityHint` telling users they can reorder it using actions.")
+                }
+                .padding(.bottom).accessibilityHint("Good Example Reorderable List")
+                Text("Bad Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.bottom)
+                Text("Bad Example Reorderable List")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                ForEach(badItems, id: \.self) { item in
+                    reorderableRow(item: item, items: $badItems, draggingItem: $badDraggingItem, accessible: false)
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad drag and drop example only supports touch-based drag and drop. There are no visible move buttons for single-pointer-tap users, and no custom accessibility actions for VoiceOver, Switch Control, or Full Keyboard Access users. Users who cannot perform drag gestures have no way to reorder items.")
+                }
+                .padding(.bottom).accessibilityHint("Bad Example Reorderable List")
             }
+            .padding()
+            .navigationTitle("Drag & Drop")
+        }
     }
-    
+
+    @ViewBuilder
+    private func reorderableRow(item: String, items: Binding<[String]>, draggingItem: Binding<String?>, accessible: Bool) -> some View {
+        let index = items.wrappedValue.firstIndex(of: item)!
+        let isFirst = index == 0
+        let isLast = index == items.wrappedValue.count - 1
+
+        HStack {
+            if accessible {
+                Button {
+                    guard !isFirst else { return }
+                    withAnimation {
+                        items.wrappedValue.move(fromOffsets: IndexSet(integer: index), toOffset: index)
+                    }
+                } label: {
+                    Image(systemName: "arrow.up")
+                }
+                .disabled(isFirst)
+                .accessibilityLabel("Move \(item) up")
+                Button {
+                    guard !isLast else { return }
+                    withAnimation {
+                        items.wrappedValue.move(fromOffsets: IndexSet(integer: index), toOffset: index + 2)
+                    }
+                } label: {
+                    Image(systemName: "arrow.down")
+                }
+                .disabled(isLast)
+                .accessibilityLabel("Move \(item) down")
+            }
+            Image(systemName: "line.3.horizontal")
+                .foregroundColor(.secondary)
+                .accessibilityHidden(true)
+            Text(item)
+            Spacer()
+            Text("\(index + 1) of \(items.wrappedValue.count)")
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .accessibilityHidden(true)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(.secondarySystemBackground))
+        )
+        .opacity(draggingItem.wrappedValue == item ? 0.5 : 1.0)
+        .onDrag {
+            draggingItem.wrappedValue = item
+            return NSItemProvider(object: item as NSString)
+        }
+        .onDrop(of: [.text], delegate: ReorderDropDelegate(
+            item: item,
+            items: items,
+            draggingItem: draggingItem
+        ))
+        .if(accessible) { view in
+            view
+                .accessibilityHint("Reorderable. Use actions to move.")
+                .accessibilityAction(named: "Move Up") {
+                    if !isFirst {
+                        withAnimation {
+                            items.wrappedValue.move(fromOffsets: IndexSet(integer: index), toOffset: index)
+                        }
+                    }
+                }
+                .accessibilityAction(named: "Move Down") {
+                    if !isLast {
+                        withAnimation {
+                            items.wrappedValue.move(fromOffsets: IndexSet(integer: index), toOffset: index + 2)
+                        }
+                    }
+                }
+        }
+    }
 }
 
- 
+extension View {
+    @ViewBuilder
+    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
+}
+
+struct ReorderDropDelegate: DropDelegate {
+    let item: String
+    @Binding var items: [String]
+    @Binding var draggingItem: String?
+
+    func performDrop(info: DropInfo) -> Bool {
+        draggingItem = nil
+        return true
+    }
+
+    func dropEntered(info: DropInfo) {
+        guard let draggingItem,
+              draggingItem != item,
+              let fromIndex = items.firstIndex(of: draggingItem),
+              let toIndex = items.firstIndex(of: item)
+        else { return }
+        withAnimation {
+            items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
+        }
+    }
+
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        DropProposal(operation: .move)
+    }
+}
+
 struct DragDropView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {

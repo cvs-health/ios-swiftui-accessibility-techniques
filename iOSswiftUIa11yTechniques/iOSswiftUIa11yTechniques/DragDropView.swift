@@ -19,8 +19,6 @@ import SwiftUI
 struct DragDropView: View {
     @State private var goodItems = ["Apples", "Bananas", "Cherries", "Dates", "Elderberries"]
     @State private var badItems = ["Apples", "Bananas", "Cherries", "Dates", "Elderberries"]
-    @State private var goodDraggingItem: String?
-    @State private var badDraggingItem: String?
     @State private var goodSelectedItem: String?
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
@@ -48,32 +46,36 @@ struct DragDropView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 ForEach(goodItems, id: \.self) { item in
-                    reorderableRow(item: item, items: $goodItems, draggingItem: $goodDraggingItem, selectedItem: $goodSelectedItem, accessible: true)
+                    reorderableRow(item: item, items: $goodItems, selectedItem: $goodSelectedItem, accessible: true)
                 }
                 if let selected = goodSelectedItem, let index = goodItems.firstIndex(of: selected) {
-                    HStack {
+                    HStack(spacing: 16) {
                         Button {
                             guard index > 0 else { return }
                             withAnimation {
                                 goodItems.move(fromOffsets: IndexSet(integer: index), toOffset: index)
                             }
                         } label: {
-                            Image(systemName: "arrow.up")
+                            Label("Move Up", systemImage: "arrow.up")
+                                .frame(maxWidth: .infinity)
                         }
                         .disabled(index == 0)
-                        .accessibilityLabel("Move \(selected) up")
+                        .buttonStyle(.bordered)
+                        .controlSize(.large)
                         Button {
                             guard index < goodItems.count - 1 else { return }
                             withAnimation {
                                 goodItems.move(fromOffsets: IndexSet(integer: index), toOffset: index + 2)
                             }
                         } label: {
-                            Image(systemName: "arrow.down")
+                            Label("Move Down", systemImage: "arrow.down")
+                                .frame(maxWidth: .infinity)
                         }
                         .disabled(index == goodItems.count - 1)
-                        .accessibilityLabel("Move \(selected) down")
+                        .buttonStyle(.bordered)
+                        .controlSize(.large)
                     }
-                    .padding(.top, 4)
+                    .padding(.top, 8)
                 }
                 DisclosureGroup("Details") {
                     Text("The good drag and drop example provides visible \"Move Up\" and \"Move Down\" buttons on each row so single-pointer-tap users can reorder without dragging. It also uses `.accessibilityAction` to add \"Move Up\" and \"Move Down\" custom actions. VoiceOver users can swipe up or down to access these actions, and Switch Control or Full Keyboard Access users can open the Actions menu. Each item also has an `.accessibilityHint` telling users they can reorder it using actions.")
@@ -95,7 +97,7 @@ struct DragDropView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 ForEach(badItems, id: \.self) { item in
-                    reorderableRow(item: item, items: $badItems, draggingItem: $badDraggingItem, selectedItem: .constant(nil), accessible: false)
+                    reorderableRow(item: item, items: $badItems, selectedItem: .constant(nil), accessible: false)
                 }
                 DisclosureGroup("Details") {
                     Text("The bad drag and drop example only supports touch-based drag and drop. There are no visible move buttons for single-pointer-tap users, and no custom accessibility actions for VoiceOver, Switch Control, or Full Keyboard Access users. Users who cannot perform drag gestures have no way to reorder items.")
@@ -108,10 +110,12 @@ struct DragDropView: View {
     }
 
     @ViewBuilder
-    private func reorderableRow(item: String, items: Binding<[String]>, draggingItem: Binding<String?>, selectedItem: Binding<String?>, accessible: Bool) -> some View {
+    private func reorderableRow(item: String, items: Binding<[String]>, selectedItem: Binding<String?>, accessible: Bool) -> some View {
         let index = items.wrappedValue.firstIndex(of: item)!
         let isFirst = index == 0
         let isLast = index == items.wrappedValue.count - 1
+
+        let isSelected = accessible && selectedItem.wrappedValue == item
 
         HStack {
             Image(systemName: "line.3.horizontal")
@@ -119,6 +123,12 @@ struct DragDropView: View {
                 .accessibilityHidden(true)
             Text(item)
             Spacer()
+            if isSelected {
+                Image(systemName: "checkmark")
+                    .foregroundColor(.accentColor)
+                    .fontWeight(.bold)
+                    .accessibilityHidden(true)
+            }
         }
         .contentShape(Rectangle())
         .onTapGesture {
@@ -128,24 +138,21 @@ struct DragDropView: View {
                 }
             }
         }
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(accessible && selectedItem.wrappedValue == item ? Color.accentColor : Color.clear, lineWidth: 2)
-        )
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemBackground))
+            RoundedRectangle(cornerRadius: 10)
+                .fill(isSelected ? Color.accentColor.opacity(0.12) : Color(.secondarySystemBackground))
         )
-        .opacity(draggingItem.wrappedValue == item ? 0.5 : 1.0)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 3)
+        )
         .onDrag {
-            draggingItem.wrappedValue = item
             return NSItemProvider(object: item as NSString)
         }
         .onDrop(of: [.text], delegate: ReorderDropDelegate(
             item: item,
-            items: items,
-            draggingItem: draggingItem
+            items: items
         ))
         .if(accessible) { view in
             view
@@ -182,21 +189,24 @@ extension View {
 struct ReorderDropDelegate: DropDelegate {
     let item: String
     @Binding var items: [String]
-    @Binding var draggingItem: String?
 
     func performDrop(info: DropInfo) -> Bool {
-        draggingItem = nil
-        return true
+        true
     }
 
     func dropEntered(info: DropInfo) {
-        guard let draggingItem,
-              draggingItem != item,
-              let fromIndex = items.firstIndex(of: draggingItem),
-              let toIndex = items.firstIndex(of: item)
-        else { return }
-        withAnimation {
-            items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
+        guard let provider = info.itemProviders(for: [.text]).first else { return }
+        provider.loadObject(ofClass: NSString.self) { reading, _ in
+            guard let draggedItem = reading as? String,
+                  draggedItem != item,
+                  let fromIndex = items.firstIndex(of: draggedItem),
+                  let toIndex = items.firstIndex(of: item)
+            else { return }
+            DispatchQueue.main.async {
+                withAnimation {
+                    items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
+                }
+            }
         }
     }
 

@@ -6,11 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [26.4] - 2026-04-29
+
 ### iOS App
 
 #### Added
 
 - Drag & Drop technique with accessible reorder controls (tap-to-select, Move Up/Down buttons, accessibility actions)
+
+### Documentation
+
+- Drag & Drop documentation page with WCAG 2.1.1 and 2.5.7 references
+
+## [26.3] - 2026-04-29
+
+### iOS App
+
+#### Added
+
 - Language of Page technique with good and bad examples using `.environment` locale
 - Switch Control action icon bad example
 - Accessibility action label icons
@@ -72,7 +85,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Documentation
 
-- Drag & Drop documentation page with WCAG 2.1.1 and 2.5.7 references
 - 5 missing technique documentation pages added
 - Main README rewritten with improved intro, `a11y-check` stats, MCP wording
 - Updated READMEs for 31 rules and 17 WCAG criteria

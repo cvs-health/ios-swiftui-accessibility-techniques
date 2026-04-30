@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### iOS App
+
+#### Added
+
+- Multi-Selection Lists technique with good and bad examples using `.accessibilityAddTraits(.isSelected)` and `.accessibilityValue`
+
+### Documentation
+
+- Multi-Selection Lists documentation page with WCAG 1.3.1 and 4.1.2 references
+
 ## [26.4] - 2026-04-29
 
 ### iOS App

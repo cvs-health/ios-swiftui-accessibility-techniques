@@ -113,6 +113,7 @@ See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and 
 - [x] [Meaningful Accessible Names](iOSswiftUIa11yTechniques/Documentation/MeaningfulAccessibleNames.md)
 - [x] [Maps](iOSswiftUIa11yTechniques/Documentation/Maps.md)
 - [x] [Menus](iOSswiftUIa11yTechniques/Documentation/Menus.md)
+- [x] [Multi-Selection Lists](iOSswiftUIa11yTechniques/Documentation/MultiSelectionLists.md)
 - [x] [Navigation](iOSswiftUIa11yTechniques/Documentation/Navigation.md)
 - [x] [Page Titles](iOSswiftUIa11yTechniques/Documentation/PageTitles.md)
 - [x] [Pickers](iOSswiftUIa11yTechniques/Documentation/Pickers.md)

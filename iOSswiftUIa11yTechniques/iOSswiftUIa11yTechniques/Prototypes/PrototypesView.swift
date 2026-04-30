@@ -47,11 +47,11 @@ struct PrototypesView: View {
             NavigationLink(destination: MarkdownView()) {
                 Text("Markdown View Test")
             }
-NavigationLink(destination: WebView()) {
+            NavigationLink(destination: WebView()) {
                 Text("Web View Apple System CSS Font Test")
             }
-            NavigationLink(destination: MultiSelectionListView()) {
-                Text("Multi Selection List View Test")
+            NavigationLink(destination: FormViewTest()) {
+                Text("Form View Test")
             }
         }
         .navigationTitle("Prototypes")

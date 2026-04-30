@@ -30,7 +30,7 @@ struct MultiSelectionListView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Multi-selection lists allow users to select multiple items from a list. Native `List` views automatically provide the selected trait to VoiceOver. When building custom list views with `ForEach`, use `.accessibilityAddTraits(.isSelected)` to communicate the selected state to VoiceOver. Use `.accessibilityValue(\"Not Selected\")` only when unselected, since there is no \"not selected\" trait. Use `.accessibilityRemoveTraits(.isButton)` on the row `Button` so VoiceOver does not speak the redundant \"Button\" trait.")
+                Text("Multi-selection lists allow users to select multiple items from a list. Native `List` views automatically provide the selected trait to VoiceOver. When building custom list views with `ForEach`, use `.accessibilityAddTraits(.isSelected)` to communicate the selected state to VoiceOver. Use `.accessibilityValue(\"Not Selected\")` only when unselected, since there is no \"not selected\" trait. Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel()` on the list container so VoiceOver users hear the group label when first moving focus into the list.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -67,13 +67,14 @@ struct MultiSelectionListView: View {
                             }
                         }
                     }
-                    .accessibilityRemoveTraits(.isButton)
                     .accessibilityValue(isSelected ? "" : "Not Selected")
                 }
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Favorite Fruits")
                 .listStyle(.insetGrouped)
                 .frame(height: 280)
                 DisclosureGroup("Details") {
-                    Text("The good native list example uses a `List` with `Button` rows and `.listStyle(.insetGrouped)` for a native iOS look. The native `List` automatically provides the selected trait to VoiceOver so no `.accessibilityAddTraits(.isSelected)` is needed. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityRemoveTraits(.isButton)` removes the redundant \"Button\" trait.")
+                    Text("The good native list example uses a `List` with `Button` rows and `.listStyle(.insetGrouped)` for a native iOS look. The native `List` automatically provides the selected trait to VoiceOver so no `.accessibilityAddTraits(.isSelected)` is needed. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Favorite Fruits\")` on the `List` container lets VoiceOver users hear the group label when first moving focus into the list.")
                 }
                 .padding(.bottom).accessibilityHint("Good Example Native List")
                 Text("Good Example Custom List View")
@@ -86,37 +87,40 @@ struct MultiSelectionListView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 4)
                     .accessibilityAddTraits(.isHeader)
-                ForEach(fruits, id: \.self) { fruit in
-                    let isSelected = goodCustomSelection.contains(fruit)
-                    Button {
-                        toggleSelection(fruit, in: &goodCustomSelection)
-                    } label: {
-                        HStack {
-                            Text(fruit)
-                                .foregroundColor(.primary)
-                            Spacer()
-                            if isSelected {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.accentColor)
-                                    .fontWeight(.bold)
+                VStack {
+                    ForEach(fruits, id: \.self) { fruit in
+                        let isSelected = goodCustomSelection.contains(fruit)
+                        Button {
+                            toggleSelection(fruit, in: &goodCustomSelection)
+                        } label: {
+                            HStack {
+                                Text(fruit)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                if isSelected {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.accentColor)
+                                        .fontWeight(.bold)
+                                }
                             }
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(isSelected ? Color.accentColor.opacity(0.12) : Color(.secondarySystemBackground))
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+                            )
                         }
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(isSelected ? Color.accentColor.opacity(0.12) : Color(.secondarySystemBackground))
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
-                        )
+                        .accessibilityAddTraits(isSelected ? .isSelected : [])
+                        .accessibilityValue(isSelected ? "" : "Not Selected")
                     }
-                    .accessibilityRemoveTraits(.isButton)
-                    .accessibilityAddTraits(isSelected ? .isSelected : [])
-                    .accessibilityValue(isSelected ? "" : "Not Selected")
                 }
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Favorite Fruits")
                 DisclosureGroup("Details") {
-                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. `.accessibilityAddTraits(.isSelected)` is used to communicate the selected state since `ForEach` does not provide it automatically. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityRemoveTraits(.isButton)` removes the redundant \"Button\" trait.")
+                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. `.accessibilityAddTraits(.isSelected)` is used to communicate the selected state since `ForEach` does not provide it automatically. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Favorite Fruits\")` on the `VStack` container lets VoiceOver users hear the group label when first moving focus into the list.")
                 }
                 .padding(.bottom).accessibilityHint("Good Example Custom List View")
                 Text("Bad Example")
@@ -166,7 +170,7 @@ struct MultiSelectionListView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad custom list view example uses `ForEach` with `Button` rows but has no `.accessibilityAddTraits(.isSelected)` so VoiceOver does not announce the selected state. There is no `.accessibilityValue(\"Not Selected\")` to communicate unselected state. VoiceOver speaks the redundant \"Button\" trait because `.accessibilityRemoveTraits(.isButton)` is not used. VoiceOver users have no way to know which items are currently selected.")
+                    Text("The bad custom list view example uses `ForEach` with `Button` rows but has no `.accessibilityAddTraits(.isSelected)` so VoiceOver does not announce the selected state. There is no `.accessibilityValue(\"Not Selected\")` to communicate unselected state. There is no `.accessibilityElement(children: .contain)` or `.accessibilityLabel()` group container so VoiceOver users do not hear a group label. VoiceOver users have no way to know which items are currently selected.")
                 }
                 .padding(.bottom).accessibilityHint("Bad Example Custom List View")
             }

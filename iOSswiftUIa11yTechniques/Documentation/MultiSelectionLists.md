@@ -1,11 +1,11 @@
 # Multi-Selection Lists
-Multi-selection lists allow users to select multiple items from a list. Use `.accessibilityAddTraits(.isSelected)` on selected items so VoiceOver announces the selected state.
+Multi-selection lists allow users to select multiple items from a list. Native `List` views automatically provide the selected trait to VoiceOver.
 
-Use `.accessibilityRemoveTraits(.isButton)` on the row `Button` so VoiceOver does not speak the redundant "Button" trait when each row is already clearly tappable.
+When building custom list views with `ForEach`, use `.accessibilityAddTraits(.isSelected)` on selected items so VoiceOver announces the selected state.
 
-Use `.accessibilityValue(isSelected ? "Selected" : "Not Selected")` to provide clear state information to VoiceOver users.
+Use `.accessibilityValue("Not Selected")` only when unselected, since there is no "not selected" trait.
 
-Provide a visible checkmark and highlighted background to indicate the selected state visually.
+Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("Group Label")` on the list container so VoiceOver users hear the group label when first moving focus into the list.
 
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)

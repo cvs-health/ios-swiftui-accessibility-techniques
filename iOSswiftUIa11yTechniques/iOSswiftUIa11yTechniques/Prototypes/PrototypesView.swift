@@ -44,26 +44,11 @@ struct PrototypesView: View {
             NavigationLink(destination: DOBpicker()) {
                 Text("Date of Birth Picker")
             }
-            NavigationLink(destination: Prototype1()) {
-                Text("Prototype 1")
-            }
-            NavigationLink(destination: Prototype2()) {
-                Text("Prototype 2")
-            }
-            NavigationLink(destination: Prototype3()) {
-                Text("Prototype 3")
-            }
-            NavigationLink(destination: Prototype4()) {
-                Text("Prototype 4")
-            }
             NavigationLink(destination: MarkdownView()) {
                 Text("Markdown View Test")
             }
 NavigationLink(destination: WebView()) {
                 Text("Web View Apple System CSS Font Test")
-            }
-            NavigationLink(destination: FormViewTest()) {
-                Text("Form View Test")
             }
             NavigationLink(destination: MultiSelectionListView()) {
                 Text("Multi Selection List View Test")

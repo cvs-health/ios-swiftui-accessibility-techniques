@@ -168,7 +168,7 @@ struct MultiSelectionListView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad custom list view example uses `ForEach` with `Button` rows but has no `.accessibilityAddTraits(.isSelected)` so VoiceOver does not announce the selected state. There is no `.accessibilityValue(\"Not Selected\")` to communicate unselected state. There is no `.accessibilityElement(children: .contain)` or `.accessibilityLabel()` group container so VoiceOver users do not hear a group label. VoiceOver users have no way to know which items are currently selected.")
+                    Text("The bad custom list view example uses `ForEach` with `Button` rows but has no `.accessibilityAddTraits(.isSelected)` to provide the selected trait and no `.accessibilityValue(\"Not Selected\")` to communicate unselected state. VoiceOver may still guess the selected state by reading the checkmark image, but this is not a reliable or proper way to communicate selection. There is no `.accessibilityElement(children: .contain)` or `.accessibilityLabel()` group container so VoiceOver users do not hear a group label.")
                 }
                 .padding(.bottom).accessibilityHint("Bad Example Custom List View")
             }

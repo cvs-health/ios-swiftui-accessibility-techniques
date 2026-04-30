@@ -20,6 +20,7 @@ struct MultiSelectionListView: View {
     @State private var goodSelection: Set<String> = []
     @State private var goodCustomSelection: Set<String> = []
     @State private var badSelection: Set<String> = []
+    @AccessibilityFocusState private var focusedCustomFruit: String?
 
     private let fruits = ["Apple", "Banana", "Cherry", "Grape", "Mango"]
 
@@ -87,36 +88,42 @@ struct MultiSelectionListView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 4)
                     .accessibilityAddTraits(.isHeader)
-                ForEach(fruits, id: \.self) { fruit in
-                    let isSelected = goodCustomSelection.contains(fruit)
-                    Button {
-                        toggleSelection(fruit, in: &goodCustomSelection)
-                    } label: {
-                        HStack {
-                            Text(fruit)
-                                .foregroundColor(.primary)
-                            Spacer()
-                            if isSelected {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.accentColor)
-                                    .fontWeight(.bold)
+                VStack {
+                    ForEach(fruits, id: \.self) { fruit in
+                        let isSelected = goodCustomSelection.contains(fruit)
+                        Button {
+                            toggleSelection(fruit, in: &goodCustomSelection)
+                            focusedCustomFruit = fruit
+                        } label: {
+                            HStack {
+                                Text(fruit)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                if isSelected {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.accentColor)
+                                        .fontWeight(.bold)
+                                }
                             }
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(isSelected ? Color.accentColor.opacity(0.12) : Color(.secondarySystemBackground))
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+                            )
                         }
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(isSelected ? Color.accentColor.opacity(0.12) : Color(.secondarySystemBackground))
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
-                        )
+                        .accessibilityAddTraits(isSelected ? .isSelected : [])
+                        .accessibilityValue(isSelected ? "" : "Not Selected")
+                        .accessibilityFocused($focusedCustomFruit, equals: fruit)
                     }
-                    .accessibilityAddTraits(isSelected ? .isSelected : [])
-                    .accessibilityValue(isSelected ? "" : "Not Selected")
                 }
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Favorite Fruits")
                 DisclosureGroup("Details") {
-                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. `.accessibilityAddTraits(.isSelected)` is used to communicate the selected state since `ForEach` does not provide it automatically. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. The visible \"Favorite Fruits\" heading above provides the group context.")
+                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. `.accessibilityAddTraits(.isSelected)` is used to communicate the selected state since `ForEach` does not provide it automatically. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Favorite Fruits\")` on the container lets VoiceOver users hear the group label. `.accessibilityFocused()` restores VoiceOver focus to the activated item after selection changes.")
                 }
                 .padding(.bottom).accessibilityHint("Good Example Custom List View")
                 Text("Bad Example")

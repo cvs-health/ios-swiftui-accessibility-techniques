@@ -50,9 +50,6 @@ struct PrototypesView: View {
             NavigationLink(destination: WebView()) {
                 Text("Web View Apple System CSS Font Test")
             }
-            NavigationLink(destination: FormViewTest()) {
-                Text("Form View Test")
-            }
         }
         .navigationTitle("Prototypes")
     }

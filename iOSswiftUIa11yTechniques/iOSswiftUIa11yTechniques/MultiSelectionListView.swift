@@ -20,8 +20,6 @@ struct MultiSelectionListView: View {
     @State private var goodSelection: Set<String> = []
     @State private var goodCustomSelection: Set<String> = []
     @State private var badSelection: Set<String> = []
-    @AccessibilityFocusState private var focusedCustomFruit: String?
-
     private let fruits = ["Apple", "Banana", "Cherry", "Grape", "Mango"]
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
@@ -93,17 +91,16 @@ struct MultiSelectionListView: View {
                         let isSelected = goodCustomSelection.contains(fruit)
                         Button {
                             toggleSelection(fruit, in: &goodCustomSelection)
-                            focusedCustomFruit = fruit
                         } label: {
                             HStack {
                                 Text(fruit)
                                     .foregroundColor(.primary)
                                 Spacer()
-                                if isSelected {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.accentColor)
-                                        .fontWeight(.bold)
-                                }
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.accentColor)
+                                    .fontWeight(.bold)
+                                    .opacity(isSelected ? 1 : 0)
+                                    .accessibilityHidden(true)
                             }
                             .padding()
                             .background(
@@ -117,13 +114,12 @@ struct MultiSelectionListView: View {
                         }
                         .accessibilityAddTraits(isSelected ? .isSelected : [])
                         .accessibilityValue(isSelected ? "" : "Not Selected")
-                        .accessibilityFocused($focusedCustomFruit, equals: fruit)
                     }
                 }
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Favorite Fruits")
                 DisclosureGroup("Details") {
-                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. `.accessibilityAddTraits(.isSelected)` is used to communicate the selected state since `ForEach` does not provide it automatically. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Favorite Fruits\")` on the container lets VoiceOver users hear the group label. `.accessibilityFocused()` restores VoiceOver focus to the activated item after selection changes.")
+                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. `.accessibilityAddTraits(.isSelected)` is used to communicate the selected state since `ForEach` does not provide it automatically. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Favorite Fruits\")` on the container lets VoiceOver users hear the group label. The checkmark uses `.opacity()` instead of a conditional `if` so the view tree stays stable and VoiceOver does not lose its focus position after selection changes.")
                 }
                 .padding(.bottom).accessibilityHint("Good Example Custom List View")
                 Text("Bad Example")
@@ -155,11 +151,10 @@ struct MultiSelectionListView: View {
                             Text(fruit)
                                 .foregroundColor(.primary)
                             Spacer()
-                            if isSelected {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.accentColor)
-                                    .fontWeight(.bold)
-                            }
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.accentColor)
+                                .fontWeight(.bold)
+                                .opacity(isSelected ? 1 : 0)
                         }
                         .padding()
                         .background(

@@ -59,9 +59,6 @@ struct PrototypesView: View {
             NavigationLink(destination: MarkdownView()) {
                 Text("Markdown View Test")
             }
-            NavigationLink(destination: VideoPlayerView()) {
-                Text("Video Player View Test")
-            }
 NavigationLink(destination: WebView()) {
                 Text("Web View Apple System CSS Font Test")
             }

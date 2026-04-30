@@ -115,7 +115,6 @@
 		BCA3DD142B741FDB00033712 /* SearchSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DD132B741FDB00033712 /* SearchSuggestionsView.swift */; };
 		BCA5BDEC2B61E633007823A6 /* ReduceMotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */; };
 		BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */; };
-		BCB059552CAB371C00C670B8 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB059542CAB371C00C670B8 /* VideoPlayerView.swift */; };
 		BCB059572CAB5F9C00C670B8 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB059562CAB5F9C00C670B8 /* TableView.swift */; };
 		BCB086F42D1D982600623141 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB086F32D1D982600623141 /* MarkdownView.swift */; };
 		BCB60D602E720E3B00ED2D51 /* MultiSelectionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */; };
@@ -374,7 +373,6 @@
 		BCA5BDEB2B61E633007823A6 /* ReduceMotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduceMotionView.swift; sourceTree = "<group>"; };
 		BCA5BDED2B61E641007823A6 /* ReduceMotion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReduceMotion.md; sourceTree = "<group>"; };
 		BCAD88CA2B5F5B3B0011DFF0 /* LargeContentViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeContentViewerView.swift; sourceTree = "<group>"; };
-		BCB059542CAB371C00C670B8 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		BCB059562CAB5F9C00C670B8 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		BCB086F32D1D982600623141 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
 		BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSelectionListView.swift; sourceTree = "<group>"; };
@@ -702,7 +700,6 @@
 				BC1B59C72B5064BE00E8F782 /* TouchTargetSize.swift */,
 				AABD27CB2A9FF0F000F718F7 /* UIControlsView.swift */,
 				BCE205242B58D50D000DF400 /* UserPreferencesView.swift */,
-				BCB059542CAB371C00C670B8 /* VideoPlayerView.swift */,
 				BC3951F72D67C45E00D26DBB /* VideosView.swift */,
 				BCF615B62D35AE58006AEA80 /* VoiceOverAnnouncementDelayView.swift */,
 				BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */,
@@ -1142,7 +1139,6 @@
 				BC8C92092B2A94B2006DAC20 /* ListsView.swift in Sources */,
 				AA9FCA2E2AB4D50400DF93A5 /* AccordionsView.swift in Sources */,
 				BCDF3F562D4AE1D000A13D09 /* SignUp2.swift in Sources */,
-				BCB059552CAB371C00C670B8 /* VideoPlayerView.swift in Sources */,
 				BC8CD0E52B4D06FD00B9A28A /* MagicTapView.swift in Sources */,
 				AA59CDCC2ABA20920004908F /* HomeTabView.swift in Sources */,
 				AA59CDCA2ABA1F4E0004908F /* TabsGoodView.swift in Sources */,

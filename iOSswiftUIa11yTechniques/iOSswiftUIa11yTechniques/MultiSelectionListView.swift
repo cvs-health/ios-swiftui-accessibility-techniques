@@ -87,40 +87,36 @@ struct MultiSelectionListView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 4)
                     .accessibilityAddTraits(.isHeader)
-                VStack {
-                    ForEach(fruits, id: \.self) { fruit in
-                        let isSelected = goodCustomSelection.contains(fruit)
-                        Button {
-                            toggleSelection(fruit, in: &goodCustomSelection)
-                        } label: {
-                            HStack {
-                                Text(fruit)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                                if isSelected {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.accentColor)
-                                        .fontWeight(.bold)
-                                }
+                ForEach(fruits, id: \.self) { fruit in
+                    let isSelected = goodCustomSelection.contains(fruit)
+                    Button {
+                        toggleSelection(fruit, in: &goodCustomSelection)
+                    } label: {
+                        HStack {
+                            Text(fruit)
+                                .foregroundColor(.primary)
+                            Spacer()
+                            if isSelected {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.accentColor)
+                                    .fontWeight(.bold)
                             }
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(isSelected ? Color.accentColor.opacity(0.12) : Color(.secondarySystemBackground))
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
-                            )
                         }
-                        .accessibilityAddTraits(isSelected ? .isSelected : [])
-                        .accessibilityValue(isSelected ? "" : "Not Selected")
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(isSelected ? Color.accentColor.opacity(0.12) : Color(.secondarySystemBackground))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+                        )
                     }
+                    .accessibilityAddTraits(isSelected ? .isSelected : [])
+                    .accessibilityValue(isSelected ? "" : "Not Selected")
                 }
-                .accessibilityElement(children: .contain)
-                .accessibilityLabel("Favorite Fruits")
                 DisclosureGroup("Details") {
-                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. `.accessibilityAddTraits(.isSelected)` is used to communicate the selected state since `ForEach` does not provide it automatically. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Favorite Fruits\")` on the `VStack` container lets VoiceOver users hear the group label when first moving focus into the list.")
+                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. `.accessibilityAddTraits(.isSelected)` is used to communicate the selected state since `ForEach` does not provide it automatically. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. The visible \"Favorite Fruits\" heading above provides the group context.")
                 }
                 .padding(.bottom).accessibilityHint("Good Example Custom List View")
                 Text("Bad Example")

@@ -30,7 +30,7 @@ struct MultiSelectionListView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Multi-selection lists allow users to select multiple items from a list. Use `.accessibilityAddTraits(.isSelected)` to communicate the selected state to VoiceOver. Use `.accessibilityRemoveTraits(.isButton)` on the row `Button` so VoiceOver does not speak the redundant \"Button\" trait. Use `.accessibilityValue()` with \"Selected\" or \"Not Selected\" to provide clear state information.")
+                Text("Multi-selection lists allow users to select multiple items from a list. Native `List` views automatically provide the selected trait to VoiceOver. When building custom list views with `ForEach`, use `.accessibilityAddTraits(.isSelected)` to communicate the selected state to VoiceOver. Use `.accessibilityValue(\"Not Selected\")` only when unselected, since there is no \"not selected\" trait. Use `.accessibilityRemoveTraits(.isButton)` on the row `Button` so VoiceOver does not speak the redundant \"Button\" trait.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -68,13 +68,12 @@ struct MultiSelectionListView: View {
                         }
                     }
                     .accessibilityRemoveTraits(.isButton)
-                    .accessibilityAddTraits(isSelected ? .isSelected : [])
-                    .accessibilityValue(isSelected ? "Selected" : "Not Selected")
+                    .accessibilityValue(isSelected ? "" : "Not Selected")
                 }
                 .listStyle(.insetGrouped)
                 .frame(height: 280)
                 DisclosureGroup("Details") {
-                    Text("The good native list example uses a `List` with `Button` rows and `.listStyle(.insetGrouped)` for a native iOS look. `.accessibilityAddTraits(.isSelected)` is applied when the item is selected so VoiceOver announces the selected state. `.accessibilityRemoveTraits(.isButton)` removes the redundant \"Button\" trait. `.accessibilityValue()` provides \"Selected\" or \"Not Selected\" value text.")
+                    Text("The good native list example uses a `List` with `Button` rows and `.listStyle(.insetGrouped)` for a native iOS look. The native `List` automatically provides the selected trait to VoiceOver so no `.accessibilityAddTraits(.isSelected)` is needed. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityRemoveTraits(.isButton)` removes the redundant \"Button\" trait.")
                 }
                 .padding(.bottom).accessibilityHint("Good Example Native List")
                 Text("Good Example Custom List View")
@@ -114,10 +113,10 @@ struct MultiSelectionListView: View {
                     }
                     .accessibilityRemoveTraits(.isButton)
                     .accessibilityAddTraits(isSelected ? .isSelected : [])
-                    .accessibilityValue(isSelected ? "Selected" : "Not Selected")
+                    .accessibilityValue(isSelected ? "" : "Not Selected")
                 }
                 DisclosureGroup("Details") {
-                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. The same accessibility modifiers are applied: `.accessibilityAddTraits(.isSelected)`, `.accessibilityRemoveTraits(.isButton)`, and `.accessibilityValue()` with \"Selected\" or \"Not Selected\".")
+                    Text("The good custom list view example uses `ForEach` with `Button` rows and custom rounded rectangle styling instead of a native `List`. `.accessibilityAddTraits(.isSelected)` is used to communicate the selected state since `ForEach` does not provide it automatically. `.accessibilityValue(\"Not Selected\")` is used only when unselected since there is no \"not selected\" trait. `.accessibilityRemoveTraits(.isButton)` removes the redundant \"Button\" trait.")
                 }
                 .padding(.bottom).accessibilityHint("Good Example Custom List View")
                 Text("Bad Example")
@@ -130,7 +129,7 @@ struct MultiSelectionListView: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example Multi-Selection List")
+                Text("Bad Example Custom List View")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -140,7 +139,7 @@ struct MultiSelectionListView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 4)
                     .accessibilityAddTraits(.isHeader)
-                List(fruits, id: \.self) { fruit in
+                ForEach(fruits, id: \.self) { fruit in
                     let isSelected = badSelection.contains(fruit)
                     Button {
                         toggleSelection(fruit, in: &badSelection)
@@ -152,16 +151,24 @@ struct MultiSelectionListView: View {
                             if isSelected {
                                 Image(systemName: "checkmark")
                                     .foregroundColor(.accentColor)
+                                    .fontWeight(.bold)
                             }
                         }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(isSelected ? Color.accentColor.opacity(0.12) : Color(.secondarySystemBackground))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+                        )
                     }
                 }
-                .listStyle(.insetGrouped)
-                .frame(height: 280)
                 DisclosureGroup("Details") {
-                    Text("The bad multi-selection list example has no `.accessibilityAddTraits(.isSelected)` so VoiceOver does not announce the selected state. There is no `.accessibilityValue()` to communicate whether an item is selected. VoiceOver speaks the redundant \"Button\" trait because `.accessibilityRemoveTraits(.isButton)` is not used. VoiceOver users have no way to know which items are currently selected.")
+                    Text("The bad custom list view example uses `ForEach` with `Button` rows but has no `.accessibilityAddTraits(.isSelected)` so VoiceOver does not announce the selected state. There is no `.accessibilityValue(\"Not Selected\")` to communicate unselected state. VoiceOver speaks the redundant \"Button\" trait because `.accessibilityRemoveTraits(.isButton)` is not used. VoiceOver users have no way to know which items are currently selected.")
                 }
-                .padding(.bottom).accessibilityHint("Bad Example Multi-Selection List")
+                .padding(.bottom).accessibilityHint("Bad Example Custom List View")
             }
             .padding()
             .navigationTitle("Multi-Selection Lists")

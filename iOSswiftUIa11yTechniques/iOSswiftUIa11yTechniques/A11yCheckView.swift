@@ -441,9 +441,10 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("Wi-Fi")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Toggle("", isOn: $toggleBad)
+                HStack {
+                    Text("Wi-Fi")
+                    Toggle("", isOn: $toggleBad)
+                }
                 DisclosureGroup("Details") {
                     Text("The bad toggle example has a visible \"Wi-Fi\" text label but it is a separate `Text` element not connected to the `Toggle`. The `Toggle(\"\", isOn:)` has an empty label string and no `.accessibilityLabel`, failing the `toggle-missing-label` rule. VoiceOver users will not know what this toggle controls because the visible text is not programmatically associated with it.")
                 }.padding(.bottom).accessibilityHint("Bad Example Toggles")

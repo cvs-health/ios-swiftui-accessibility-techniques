@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Accessibility Label documentation page with WCAG 1.1.1 and 4.1.2 references
 - Accessibility Value documentation page with WCAG 4.1.2 reference
 - Accessibility Hint documentation page with WCAG 3.3.2 reference
+- Added Apple Developer Documentation links to all 83 technique documentation pages
+- Added A-Z section headings to README technique index
 
 ## [26.5] - 2026-05-01
 

@@ -68,6 +68,7 @@ struct ContentView: View {
                     }
                 }
             }
+            .listStyle(.plain)
             .navigationTitle("SwiftUI A11y Techniques")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

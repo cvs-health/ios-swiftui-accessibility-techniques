@@ -28,6 +28,7 @@ struct TabsGoodView: View {
                     Label("Messages", systemImage: "envelope")
                 }
                 .badge(3)
+                .accessibilityValue("3 notifications")
         }.accessibilityLabel("Navigation")
         .modifier(TabBarMinimizeBehaviorIfAvailable())
     }

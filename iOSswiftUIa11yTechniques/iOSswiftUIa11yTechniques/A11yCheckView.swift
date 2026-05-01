@@ -232,6 +232,8 @@ struct A11yCheckView: View {
                     Text("Volume")
                 }
                 Stepper("Quantity: \(stepperGood)", value: $stepperGood, in: 0...10)
+                Text("Fruit")
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 Picker("Fruit", selection: $pickerGood) {
                     Text("Apple").tag("Apple")
                     Text("Banana").tag("Banana")

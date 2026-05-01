@@ -215,28 +215,40 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("Search")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                TextField("", text: $textFieldGood)
-                    .accessibilityLabel("Search")
-                    .textFieldStyle(.roundedBorder)
-                Text("Email")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                TextField("", text: $emailFieldGood)
-                    .accessibilityLabel("Email")
-                    .textContentType(.emailAddress)
-                    .textFieldStyle(.roundedBorder)
-                Text("Volume")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Slider(value: $sliderGood, in: 0...100) {
-                    Text("Volume")
+                VStack(spacing: 2) {
+                    Text("Search")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    TextField("", text: $textFieldGood)
+                        .accessibilityLabel("Search")
+                        .textFieldStyle(.roundedBorder)
                 }
+                .padding(.bottom, 8)
+                VStack(spacing: 2) {
+                    Text("Email")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    TextField("", text: $emailFieldGood)
+                        .accessibilityLabel("Email")
+                        .textContentType(.emailAddress)
+                        .textFieldStyle(.roundedBorder)
+                }
+                .padding(.bottom, 8)
+                VStack(spacing: 2) {
+                    Text("Volume")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Slider(value: $sliderGood, in: 0...100) {
+                        Text("Volume")
+                    }
+                }
+                .padding(.bottom, 8)
                 Stepper("Quantity: \(stepperGood)", value: $stepperGood, in: 0...10)
-                Text("Fruit")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Picker("Fruit", selection: $pickerGood) {
-                    Text("Apple").tag("Apple")
-                    Text("Banana").tag("Banana")
+                    .padding(.bottom, 8)
+                VStack(spacing: 2) {
+                    Text("Fruit")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Picker("Fruit", selection: $pickerGood) {
+                        Text("Apple").tag("Apple")
+                        Text("Banana").tag("Banana")
+                    }
                 }
                 DisclosureGroup("Details") {
                     Text("The good form control examples pass four rules. The `TextField` has `.accessibilityLabel(\"Search\")`, passing `textfield-missing-label`. The email field has `.textContentType(.emailAddress)`, passing `input-missing-purpose`. The `Slider` has a \"Volume\" label, passing `slider-missing-label`. The `Stepper` has a \"Quantity\" label, passing `stepper-missing-label`. The `Picker` has a \"Fruit\" label, passing `picker-missing-label`.")

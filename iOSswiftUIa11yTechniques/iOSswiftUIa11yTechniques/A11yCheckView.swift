@@ -441,9 +441,11 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
+                Text("Wi-Fi")
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 Toggle("", isOn: $toggleBad)
                 DisclosureGroup("Details") {
-                    Text("The bad toggle example uses `Toggle(\"\", isOn:)` with an empty label string and no `.accessibilityLabel`, failing the `toggle-missing-label` rule. VoiceOver users will not know what this toggle controls.")
+                    Text("The bad toggle example has a visible \"Wi-Fi\" text label but it is a separate `Text` element not connected to the `Toggle`. The `Toggle(\"\", isOn:)` has an empty label string and no `.accessibilityLabel`, failing the `toggle-missing-label` rule. VoiceOver users will not know what this toggle controls because the visible text is not programmatically associated with it.")
                 }.padding(.bottom).accessibilityHint("Bad Example Toggles")
                 // MARK: Bad Links
                 Text("Bad Example Links")
@@ -580,13 +582,14 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("Long press for options")
+                Text("Swipe left to delete")
                     .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color(.secondarySystemBackground))
                     .cornerRadius(8)
-                    .onLongPressGesture {}
+                    .gesture(DragGesture())
                 DisclosureGroup("Details") {
-                    Text("The bad gestures example uses `.onLongPressGesture` with no `.accessibilityAction` alternative, failing the `gesture-missing-alternative` rule. VoiceOver and Switch Control users cannot perform a long press gesture, so the functionality is inaccessible without an alternative action.")
+                    Text("The bad gestures example uses `.gesture(DragGesture())` with no `.accessibilityAction` alternative and no single-tap button, failing the `gesture-missing-alternative` rule. VoiceOver and Switch Control users cannot perform a swipe gesture, and single-pointer users who cannot drag have no way to trigger the delete action.")
                 }.padding(.bottom).accessibilityHint("Bad Example Gestures")
                 // MARK: Bad Grouping
                 Text("Bad Example Grouping")

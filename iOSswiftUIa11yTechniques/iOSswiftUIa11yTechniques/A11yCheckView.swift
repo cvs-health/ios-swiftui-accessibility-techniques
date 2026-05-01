@@ -37,6 +37,8 @@ struct A11yCheckView: View {
     @State private var animationOffset: CGFloat = 0
     @State private var swipeOffset: CGFloat = 0
     @State private var swipeDeleted = false
+    @State private var badSwipeOffset: CGFloat = 0
+    @State private var badSwipeDeleted = false
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -598,12 +600,32 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("Swipe left to delete")
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(8)
-                    .gesture(DragGesture())
+                if badSwipeDeleted {
+                    Text("Item deleted")
+                        .foregroundColor(.secondary)
+                        .padding()
+                } else {
+                    Text("Swipe left to delete")
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(8)
+                        .offset(x: badSwipeOffset)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    if value.translation.width < 0 {
+                                        badSwipeOffset = value.translation.width
+                                    }
+                                }
+                                .onEnded { value in
+                                    if value.translation.width < -100 {
+                                        badSwipeDeleted = true
+                                    }
+                                    badSwipeOffset = 0
+                                }
+                        )
+                }
                 DisclosureGroup("Details") {
                     Text("The bad gestures example uses `.gesture(DragGesture())` with no `.accessibilityAction` alternative and no single-tap button, failing the `gesture-missing-alternative` rule. VoiceOver and Switch Control users cannot perform a swipe gesture, and single-pointer users who cannot drag have no way to trigger the delete action.")
                 }.padding(.bottom).accessibilityHint("Bad Example Gestures")

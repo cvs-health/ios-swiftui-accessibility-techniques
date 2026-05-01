@@ -1,11 +1,80 @@
-# a11y-check
+# A11y-check
 `a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 31 rules across 17 WCAG 2.2 success criteria, with a 0–100 scoring system.
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 
-Rules cover images, headings, buttons, traits, toggles, links, touch targets, dynamic type, page titles, accessibility hidden, color contrast, form controls, focus management, animation, input purpose, gestures, grouping, timing, and label in name.
-
 See the full [A11yAgent README](../../A11yAgent/README.md) for installation, CLI options, CI integration, and MCP server setup.
+
+## Rules
+
+### Images
+- **`image-missing-label`** (error, WCAG 1.1.1) — `Image(systemName:)` or `Image("name")` missing `.accessibilityLabel()` and not using `Image(decorative:)` or `.accessibilityHidden(true)`.
+- **`image-label-contains-role`** (warning, WCAG 1.1.1) — `.accessibilityLabel()` on an Image contains words like "image", "icon", "picture", or "photo". VoiceOver already announces the image role.
+
+### Headings
+- **`heading-trait-missing`** (warning, WCAG 2.4.6) — `Text` with a heading font style (`.title`, `.headline`, etc.) missing `.accessibilityAddTraits(.isHeader)`.
+- **`fake-heading-in-label`** (error, WCAG 1.3.1) — `.accessibilityLabel()` contains the word "heading" to fake the announcement instead of using `.accessibilityAddTraits(.isHeader)`.
+
+### Buttons
+- **`button-label-contains-role`** (error, WCAG 4.1.2) — `Button` whose label contains the word "button". VoiceOver already announces the button role.
+- **`icon-button-missing-label`** (error, WCAG 4.1.2) — `Button` containing only an `Image` with no `.accessibilityLabel()`.
+- **`visually-disabled-not-semantic`** (error, WCAG 4.1.2) — `Button` with `.opacity()` or `.tint(.gray)` but no `.disabled(true)`. Appears disabled visually but assistive tech does not know it.
+
+### Traits
+- **`tap-gesture-missing-button-trait`** (error, WCAG 4.1.2) — View with `.onTapGesture` missing `.accessibilityAddTraits(.isButton)`. VoiceOver won't announce it as interactive.
+
+### Toggles
+- **`toggle-missing-label`** (error, WCAG 3.3.2, 4.1.2) — `Toggle` with an empty label or `.labelsHidden()` and no `.accessibilityLabel()`.
+
+### Links
+- **`button-used-as-link`** (error, WCAG 4.1.2) — `Button` whose action contains URL navigation (`openURL`, `UIApplication.shared.open`, etc.). Use `Link` instead.
+- **`generic-link-text`** (error, WCAG 2.4.4) — `Link` with text like "Click here", "Read more", "Learn more", or "Tap here".
+
+### Touch Targets
+- **`small-touch-target`** (error, WCAG 2.5.8) — `Button` or `Image` with `.frame(width:height:)` where both dimensions are below 24pt.
+
+### Dynamic Type
+- **`fixed-font-size`** (error, WCAG 1.4.4) — `.font(.system(size: N))` uses a fixed size that does not scale with Dynamic Type.
+- **`line-limit-1`** (error, WCAG 1.4.4) — `.lineLimit(1)` truncates text at larger Dynamic Type sizes.
+
+### Page Titles
+- **`missing-navigation-title`** (error, WCAG 2.4.2) — `NavigationStack` or `NavigationView` with no `.navigationTitle()` in its view hierarchy.
+
+### Accessibility Hidden
+- **`hidden-parent-with-controls`** (error, WCAG 4.1.2) — `.accessibilityHidden(true)` on a container view that has interactive children (`Button`, `Toggle`, `TextField`, etc.).
+
+### Color Contrast
+- **`color-contrast-insufficient`** (error, WCAG 1.4.3) — Computed contrast ratio below 4.5:1 for normal text or 3.0:1 for large text when both foreground and background colors are resolvable.
+- **`hardcoded-color`** (info, WCAG 1.4.3) — `.foregroundColor(.black)`, `.foregroundColor(.white)`, or inline `Color(red:...)` that may not adapt to Dark Mode.
+
+### Form Controls
+- **`textfield-missing-label`** (error, WCAG 3.3.2, 4.1.2) — `TextField` or `SecureField` with an empty placeholder or relying only on placeholder text as the accessible name.
+- **`slider-missing-label`** (error, WCAG 3.3.2, 4.1.2) — `Slider` with no label and no `.accessibilityLabel()`.
+- **`stepper-missing-label`** (error, WCAG 3.3.2, 4.1.2) — `Stepper` with an empty label and no `.accessibilityLabel()`.
+- **`picker-missing-label`** (error, WCAG 3.3.2, 4.1.2) — `Picker` with an empty label and no `.accessibilityLabel()`.
+
+### Focus
+- **`sheet-focus-return`** (error, WCAG 2.4.3, 2.1.2) — `.sheet()`, `.fullScreenCover()`, `.alert()`, or `.popover()` with no focus state management on dismiss. VoiceOver focus is lost after dismissal.
+
+### Animation
+- **`animation-missing-reduce-motion`** (error, WCAG 2.3.1) — `.animation()` or `withAnimation` in a file that does not check `accessibilityReduceMotion` or `UIAccessibility.isReduceMotionEnabled`.
+- **`tabview-missing-label`** (error, WCAG 4.1.2, 2.4.2) — Views inside a `TabView` that lack a `.tabItem` modifier.
+
+### Input Purpose
+- **`input-missing-purpose`** (error, WCAG 1.3.5) — `TextField` or `SecureField` without `.textContentType()`. Infers the expected content type from variable name, label, or placeholder.
+
+### Gestures
+- **`gesture-missing-alternative`** (error, WCAG 2.1.1, 2.5.1) — `.onLongPressGesture` or `.gesture(DragGesture() / RotationGesture() / etc.)` without an `.accessibilityAction()` alternative.
+
+### Grouping
+- **`missing-accessibility-grouping`** (info, WCAG 1.3.1) — `HStack` or `VStack` containing both `Image` and `Text` without `.accessibilityElement(children: .combine)`.
+- **`zstack-order-confusing`** (info, WCAG 1.3.2) — `ZStack` with multiple interactive elements and no `accessibilitySortPriority` or `accessibilityElement` to control VoiceOver reading order.
+
+### Timing
+- **`auto-dismiss-no-control`** (error, WCAG 2.2.1) — `.task` or `.onAppear` containing `Task.sleep` or `asyncAfter` with a dismiss, without giving the user control to extend or pause.
+
+### Label in Name
+- **`label-in-name`** (error, WCAG 2.5.3) — `.accessibilityLabel()` does not contain the visible text. Speech input users who say what they see cannot activate the control.
 
 ## Applicable WCAG Success Criteria
 - [1.1.1: Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content)

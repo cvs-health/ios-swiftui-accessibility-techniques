@@ -63,7 +63,7 @@ See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and 
 
 ## Accessibility Techniques Documentation
 - [x] = Completed
-- [x] [a11y-check](iOSswiftUIa11yTechniques/Documentation/A11yCheck.md)
+- [x] [A11y-check](iOSswiftUIa11yTechniques/Documentation/A11yCheck.md)
 - [x] [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md)
 - [x] [Accessibility Detection](iOSswiftUIa11yTechniques/Documentation/AccessibilityDetection.md)
 - [x] [Accessibility Hidden](iOSswiftUIa11yTechniques/Documentation/AccessibilityHidden.md)

@@ -86,5 +86,5 @@ let techniques: [Techniques] = [
     Techniques(name: "Touch Target Size"),
     Techniques(name: "VoiceOver Announcement Delay"),
     Techniques(name: "VoiceOver Pronunciation"),
-    Techniques(name: "a11y-check")
+    Techniques(name: "A11y-check")
 ]

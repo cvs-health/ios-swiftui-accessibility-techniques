@@ -588,7 +588,7 @@ struct A11yCheckView: View {
                 }.accessibilityHint("Bad Example Label in Name")
             }
             .padding()
-            .navigationTitle("a11y-check")
+            .navigationTitle("A11y-check")
         }
     }
 }

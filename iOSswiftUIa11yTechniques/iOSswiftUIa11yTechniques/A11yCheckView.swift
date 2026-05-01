@@ -35,6 +35,8 @@ struct A11yCheckView: View {
     @State private var showToastBad = false
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @State private var animationOffset: CGFloat = 0
+    @State private var swipeOffset: CGFloat = 0
+    @State private var swipeDeleted = false
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -289,13 +291,36 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("Swipe to delete")
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(8)
-                    .gesture(DragGesture())
-                    .accessibilityAction(named: "Delete") {}
-                    .accessibilityAddTraits(.isButton)
+                if swipeDeleted {
+                    Text("Item deleted")
+                        .foregroundColor(.secondary)
+                        .padding()
+                } else {
+                    Text("Swipe left to delete")
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(8)
+                        .offset(x: swipeOffset)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    if value.translation.width < 0 {
+                                        swipeOffset = value.translation.width
+                                    }
+                                }
+                                .onEnded { value in
+                                    if value.translation.width < -100 {
+                                        swipeDeleted = true
+                                    }
+                                    swipeOffset = 0
+                                }
+                        )
+                        .accessibilityAction(named: "Delete") {
+                            swipeDeleted = true
+                        }
+                        .accessibilityAddTraits(.isButton)
+                }
                 DisclosureGroup("Details") {
                     Text("The good gestures example uses `.gesture(DragGesture())` with an `.accessibilityAction(named: \"Delete\")` alternative so VoiceOver and Switch Control users can trigger the action without a swipe gesture, passing the `gesture-missing-alternative` rule.")
                 }.padding(.bottom).accessibilityHint("Good Example Gestures")

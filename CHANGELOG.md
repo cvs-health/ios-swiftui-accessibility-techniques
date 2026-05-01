@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Accessibility Hint documentation page with WCAG 3.3.2 reference
 - Added Apple Developer Documentation links to all 83 technique documentation pages
 - Added A-Z section headings to README technique index
+- Added SKILL.md AI coding skill for SwiftUI accessibility with all 31 a11y-check rules as coding guidelines
 
 ## [26.5] - 2026-05-01
 

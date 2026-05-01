@@ -61,6 +61,8 @@ See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and 
 
 **Use with AI editors (MCP):** An [MCP server](A11yAgent/mcp-server/README.md) is included so you can run a11y-check from any MCP-compatible editor like Windsurf or Cursor (e.g. "check this project for accessibility"). Install a11y-check first, then add the MCP server config pointing at `A11yAgent/mcp-server`.
 
+**AI coding skill:** A [SKILL.md](SKILL.md) file is included that teaches AI coding assistants (Claude Code, CVS Code, Cursor, etc.) how to write accessible SwiftUI code. Copy it to your `~/.claude/skills/` directory or your editor's skills folder and it will automatically enforce WCAG 2.2 accessible coding patterns — labels, traits, Dynamic Type, contrast, touch targets, focus management, and more.
+
 ## Accessibility Techniques Documentation
 - [x] = Completed
 

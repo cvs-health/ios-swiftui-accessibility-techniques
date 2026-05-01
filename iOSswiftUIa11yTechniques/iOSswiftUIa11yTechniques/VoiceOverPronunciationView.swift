@@ -84,10 +84,8 @@ struct VoiceOverPronunciationView: View {
     }
 }
  
-struct VoiceOverPronunciationView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            VoiceOverPronunciationView()
-        }
+#Preview {
+    NavigationStack {
+        VoiceOverPronunciationView()
     }
 }

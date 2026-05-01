@@ -137,10 +137,8 @@ struct SettingRow: View {
 }
 
  
-struct ATdetectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ATdetectionView()
-        }
+#Preview {
+    NavigationStack {
+        ATdetectionView()
     }
 }

@@ -341,10 +341,8 @@ struct ActionsView: View {
     }
 }
  
-struct ActionsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ActionsView()
-        }
+#Preview {
+    NavigationStack {
+        ActionsView()
     }
 }

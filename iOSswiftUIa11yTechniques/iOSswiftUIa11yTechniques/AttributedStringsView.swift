@@ -83,10 +83,8 @@ struct AttributedStringsView: View {
     }
 }
  
-struct AttributedStringsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            AttributedStringsView()
-        }
+#Preview {
+    NavigationStack {
+        AttributedStringsView()
     }
 }

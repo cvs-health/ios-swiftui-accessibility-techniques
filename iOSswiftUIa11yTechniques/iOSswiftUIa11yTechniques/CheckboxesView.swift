@@ -174,11 +174,9 @@ struct CheckboxesView: View {
     }
 }
  
-struct CheckboxesView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            CheckboxesView()
-        }
+#Preview {
+    NavigationStack {
+        CheckboxesView()
     }
 }
 

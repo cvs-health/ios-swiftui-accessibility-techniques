@@ -278,10 +278,8 @@ struct SheetsView: View {
 
 }
 
-struct SheetsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SheetsView()
-        }
+#Preview {
+    NavigationStack {
+        SheetsView()
     }
 }

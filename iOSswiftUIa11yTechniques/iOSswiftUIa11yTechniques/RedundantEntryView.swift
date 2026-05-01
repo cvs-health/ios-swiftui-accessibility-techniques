@@ -307,11 +307,9 @@ struct RedundantEntryView: View {
 }
 
  
-struct RedundantEntryView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            RedundantEntryView()
-        }
+#Preview {
+    NavigationStack {
+        RedundantEntryView()
     }
 }
 

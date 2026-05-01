@@ -102,10 +102,8 @@ struct IncreaseContrastView: View {
       }
 }
  
-struct IncreaseContrastView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            IncreaseContrastView()
-        }
+#Preview {
+    NavigationStack {
+        IncreaseContrastView()
     }
 }

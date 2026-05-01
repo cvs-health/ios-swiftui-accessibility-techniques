@@ -209,11 +209,9 @@ struct InformativeView: View {
      }
 }
  
-struct InformativeView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            InformativeView()
-        }
+#Preview {
+    NavigationStack {
+        InformativeView()
     }
 }
 

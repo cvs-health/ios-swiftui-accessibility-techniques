@@ -67,10 +67,8 @@ struct DeviceOrientationView: View {
     }
 }
  
-struct DeviceOrientationView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            DeviceOrientationView()
-        }
+#Preview {
+    NavigationStack {
+        DeviceOrientationView()
     }
 }

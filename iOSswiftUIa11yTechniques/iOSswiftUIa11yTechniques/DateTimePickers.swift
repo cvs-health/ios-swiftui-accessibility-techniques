@@ -182,10 +182,8 @@ struct DateTimePickersView: View {
     }
 }
  
-struct DateTimePickersView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            DateTimePickersView()
-        }
+#Preview {
+    NavigationStack {
+        DateTimePickersView()
     }
 }

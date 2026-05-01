@@ -150,10 +150,8 @@ struct AdjustableActionView: View {
     }
 }
  
-struct AdjustableActionView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            AdjustableActionView()
-        }
+#Preview {
+    NavigationStack {
+        AdjustableActionView()
     }
 }

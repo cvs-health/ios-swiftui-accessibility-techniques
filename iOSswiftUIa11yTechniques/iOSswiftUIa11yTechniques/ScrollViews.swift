@@ -73,10 +73,8 @@ struct ScrollViews: View {
     }
 }
  
-struct ScrollViews_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ScrollViews()
-        }
+#Preview {
+    NavigationStack {
+        ScrollViews()
     }
 }

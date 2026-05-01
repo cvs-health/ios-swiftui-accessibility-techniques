@@ -133,10 +133,8 @@ struct TouchTargetSize: View {
     }
 }
  
-struct TouchTargetSize_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            TouchTargetSize()
-        }
+#Preview {
+    NavigationStack {
+        TouchTargetSize()
     }
 }

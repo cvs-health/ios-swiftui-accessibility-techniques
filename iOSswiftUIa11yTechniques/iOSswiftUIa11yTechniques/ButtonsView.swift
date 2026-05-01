@@ -210,10 +210,8 @@ struct ButtonsView: View {
     }
 }
  
-struct ButtonsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ButtonsView()
-        }
+#Preview {
+    NavigationStack {
+        ButtonsView()
     }
 }

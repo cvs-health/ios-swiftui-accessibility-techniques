@@ -81,10 +81,8 @@ struct SegmentedControlsView: View {
     }
 }
  
-struct SegmentedControlsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SegmentedControlsView()
-        }
+#Preview {
+    NavigationStack {
+        SegmentedControlsView()
     }
 }

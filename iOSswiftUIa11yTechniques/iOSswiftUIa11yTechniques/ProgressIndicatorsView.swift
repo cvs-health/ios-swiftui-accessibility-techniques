@@ -131,10 +131,8 @@ struct ProgressIndicatorsView: View {
     }
 }
  
-struct ProgressIndicatorsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ProgressIndicatorsView()
-        }
+#Preview {
+    NavigationStack {
+        ProgressIndicatorsView()
     }
 }

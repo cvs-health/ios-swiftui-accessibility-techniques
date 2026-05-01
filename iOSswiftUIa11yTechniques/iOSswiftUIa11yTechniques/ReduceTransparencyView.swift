@@ -79,10 +79,8 @@ struct ReduceTransparencyView: View {
       }
 }
  
-struct ReduceTransparencyView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ReduceTransparencyView()
-        }
+#Preview {
+    NavigationStack {
+        ReduceTransparencyView()
     }
 }

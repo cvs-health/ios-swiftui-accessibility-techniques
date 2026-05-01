@@ -125,10 +125,8 @@ struct SmartInvertView: View {
     }
 }
  
-struct SmartInvertView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SmartInvertView()
-        }
+#Preview {
+    NavigationStack {
+        SmartInvertView()
     }
 }

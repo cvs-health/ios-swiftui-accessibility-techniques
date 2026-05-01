@@ -672,10 +672,8 @@ struct A11yCheckView: View {
     }
 }
 
-struct A11yCheckView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            A11yCheckView()
-        }
+#Preview {
+    NavigationStack {
+        A11yCheckView()
     }
 }

@@ -112,10 +112,8 @@ struct PopoversView: View {
 
 }
  
-struct PopoversView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            PopoversView()
-        }
+#Preview {
+    NavigationStack {
+        PopoversView()
     }
 }

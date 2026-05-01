@@ -216,10 +216,8 @@ struct ReorderDropDelegate: DropDelegate {
     }
 }
 
-struct DragDropView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            DragDropView()
-        }
+#Preview {
+    NavigationStack {
+        DragDropView()
     }
 }

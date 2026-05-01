@@ -199,8 +199,6 @@ struct ContactReno: View {
     }
 }
  
-struct ContactReno_Previews: PreviewProvider {
-    static var previews: some View {
-        ContactReno()
-    }
+#Preview {
+    ContactReno()
 }

@@ -114,11 +114,9 @@ struct CombiningFocusView: View {
     }
 }
  
-struct CombiningFocusView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            CombiningFocusView()
-        }
+#Preview {
+    NavigationStack {
+        CombiningFocusView()
     }
 }
 

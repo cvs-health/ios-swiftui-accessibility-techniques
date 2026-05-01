@@ -85,10 +85,8 @@ struct RotorView: View {
     }
 }
  
-struct RotorView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            RotorView()
-        }
+#Preview {
+    NavigationStack {
+        RotorView()
     }
 }

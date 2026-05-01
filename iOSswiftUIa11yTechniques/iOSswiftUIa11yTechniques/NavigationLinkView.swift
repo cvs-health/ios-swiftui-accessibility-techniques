@@ -1,5 +1,5 @@
 /*
-   Copyright 2024 CVS Health and/or one of its affiliates
+   Copyright 2024-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -117,13 +117,7 @@ struct NavigationLinkView: View {
         }
     }
     
-    struct NavigationLinkView_Previews: PreviewProvider {
-        static var previews: some View {
-            NavigationStack {
-                NavigationLinkView()
-            }
-        }
-    }
+}
     
     
     struct FullScreen: View {
@@ -145,4 +139,10 @@ struct NavigationLinkView: View {
             }.padding()
         }
     }
+
+#Preview {
+    NavigationStack {
+        NavigationLinkView()
+    }
+}
 

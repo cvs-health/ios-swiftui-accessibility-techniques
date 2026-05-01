@@ -126,10 +126,8 @@ struct SteppersView: View {
     }
 }
  
-struct SteppersView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SteppersView()
-        }
+#Preview {
+    NavigationStack {
+        SteppersView()
     }
 }

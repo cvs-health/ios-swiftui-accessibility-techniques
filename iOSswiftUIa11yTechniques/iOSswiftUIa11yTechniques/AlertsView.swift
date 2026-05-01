@@ -107,10 +107,8 @@ struct AlertsView: View {
 
 }
  
-struct AlertsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            AlertsView()
-        }
+#Preview {
+    NavigationStack {
+        AlertsView()
     }
 }

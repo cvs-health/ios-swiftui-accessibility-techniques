@@ -59,10 +59,8 @@ struct AssistiveAccessView: View {
 
 }
  
-struct AssistiveAccessView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            AssistiveAccessView()
-        }
+#Preview {
+    NavigationStack {
+        AssistiveAccessView()
     }
 }

@@ -55,10 +55,8 @@ struct LanguageOfPageBadView: View {
     }
 }
 
-struct LanguageOfPageBadView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            LanguageOfPageBadView()
-        }
+#Preview {
+    NavigationStack {
+        LanguageOfPageBadView()
     }
 }

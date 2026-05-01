@@ -141,10 +141,8 @@ struct RadioButtonBad: View {
     }
 }
 
-struct RadioButtonsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            RadioButtonsView()
-        }
+#Preview {
+    NavigationStack {
+        RadioButtonsView()
     }
 }

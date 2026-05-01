@@ -302,10 +302,8 @@ struct TogglesView: View {
     }
 }
  
-struct TogglesView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            TogglesView()
-        }
+#Preview {
+    NavigationStack {
+        TogglesView()
     }
 }

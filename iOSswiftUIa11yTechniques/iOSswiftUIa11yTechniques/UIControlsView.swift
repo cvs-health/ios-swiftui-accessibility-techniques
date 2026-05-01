@@ -89,10 +89,8 @@ struct UIControlsView: View {
     }
 }
 
-struct UIControlsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            UIControlsView()
-        }
+#Preview {
+    NavigationStack {
+        UIControlsView()
     }
 }

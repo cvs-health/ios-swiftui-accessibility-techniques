@@ -41,11 +41,9 @@ struct WebView: View {
     }
 }
 
-struct WebView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            WebView()
-        }
+#Preview {
+    NavigationStack {
+        WebView()
     }
 }
 

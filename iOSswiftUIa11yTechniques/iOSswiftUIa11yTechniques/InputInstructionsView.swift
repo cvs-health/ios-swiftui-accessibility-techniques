@@ -143,10 +143,8 @@ struct InputInstructionsView: View {
     }
 }
  
-struct InputInstructionsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            InputInstructionsView()
-        }
+#Preview {
+    NavigationStack {
+        InputInstructionsView()
     }
 }

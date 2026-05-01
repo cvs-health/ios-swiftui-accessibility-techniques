@@ -379,10 +379,8 @@ struct CardsView: View {
     }
 }
  
-struct CardsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            CardsView()
-        }
+#Preview {
+    NavigationStack {
+        CardsView()
     }
 }

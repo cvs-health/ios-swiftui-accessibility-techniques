@@ -44,8 +44,6 @@ struct ContactFormView: View {
     }
 }
 
-struct ContactFormView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContactFormView()
-    }
+#Preview {
+    ContactFormView()
 }

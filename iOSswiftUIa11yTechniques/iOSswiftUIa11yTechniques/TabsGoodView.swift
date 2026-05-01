@@ -42,8 +42,6 @@ struct TabBarMinimizeBehaviorIfAvailable: ViewModifier {
     }
 }
 
-struct TabsGoodView_Previews: PreviewProvider {
-    static var previews: some View {
-        TabsGoodView()
-    }
+#Preview {
+    TabsGoodView()
 }

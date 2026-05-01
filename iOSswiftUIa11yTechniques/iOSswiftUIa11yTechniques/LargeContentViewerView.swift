@@ -136,10 +136,8 @@ struct LargeContentViewerView: View {
 
 }
  
-struct LargeContentViewerView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            LargeContentViewerView()
-        }
+#Preview {
+    NavigationStack {
+        LargeContentViewerView()
     }
 }

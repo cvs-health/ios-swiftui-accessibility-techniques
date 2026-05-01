@@ -35,10 +35,8 @@ struct ImagesView: View {
     }
 }
 
-struct ImagesView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ImagesView()
-        }
+#Preview {
+    NavigationStack {
+        ImagesView()
     }
 }

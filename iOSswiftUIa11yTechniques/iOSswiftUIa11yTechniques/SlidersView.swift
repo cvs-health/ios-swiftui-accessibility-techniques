@@ -150,10 +150,8 @@ struct SlidersView: View {
     }
 }
  
-struct SlidersView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SlidersView()
-        }
+#Preview {
+    NavigationStack {
+        SlidersView()
     }
 }

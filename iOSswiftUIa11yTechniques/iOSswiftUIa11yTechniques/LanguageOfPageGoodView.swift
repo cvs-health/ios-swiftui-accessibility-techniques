@@ -56,10 +56,8 @@ struct LanguageOfPageGoodView: View {
     }
 }
 
-struct LanguageOfPageGoodView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            LanguageOfPageGoodView()
-        }
+#Preview {
+    NavigationStack {
+        LanguageOfPageGoodView()
     }
 }

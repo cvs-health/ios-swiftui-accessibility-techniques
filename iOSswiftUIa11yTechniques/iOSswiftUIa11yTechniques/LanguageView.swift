@@ -106,10 +106,8 @@ struct LanguageView: View {
     }
 }
 
-struct LanguageView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            LanguageView()
-        }
+#Preview {
+    NavigationStack {
+        LanguageView()
     }
 }

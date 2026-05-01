@@ -174,10 +174,8 @@ struct MeaningfulAccessibleNamesView: View {
     }
 }
  
-struct MeaningfulAccessibleNamesView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MeaningfulAccessibleNamesView()
-        }
+#Preview {
+    NavigationStack {
+        MeaningfulAccessibleNamesView()
     }
 }

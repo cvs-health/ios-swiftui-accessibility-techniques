@@ -119,10 +119,8 @@ struct DecorativeView: View {
     }
 }
  
-struct DecorativeView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            DecorativeView()
-        }
+#Preview {
+    NavigationStack {
+        DecorativeView()
     }
 }

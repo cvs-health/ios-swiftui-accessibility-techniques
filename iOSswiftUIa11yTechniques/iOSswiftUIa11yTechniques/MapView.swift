@@ -187,10 +187,8 @@ struct MapView: View {
 
 }
  
-struct MapView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MapView()
-        }
+#Preview {
+    NavigationStack {
+        MapView()
     }
 }

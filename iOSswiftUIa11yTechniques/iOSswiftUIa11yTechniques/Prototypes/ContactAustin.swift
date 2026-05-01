@@ -210,8 +210,6 @@ struct ContactAustin: View {
     }
 }
  
-struct ContactAustin_Previews: PreviewProvider {
-    static var previews: some View {
-        ContactAustin()
-    }
+#Preview {
+    ContactAustin()
 }

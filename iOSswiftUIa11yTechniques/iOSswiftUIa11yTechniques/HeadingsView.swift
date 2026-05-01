@@ -189,10 +189,8 @@ struct HeadingsView: View {
     }
 }
  
-struct HeadingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            HeadingsView()
-        }
+#Preview {
+    NavigationStack {
+        HeadingsView()
     }
 }

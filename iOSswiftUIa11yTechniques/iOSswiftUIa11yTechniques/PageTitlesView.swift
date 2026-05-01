@@ -90,10 +90,8 @@ struct PageTitlesView: View {
     }
 }
  
-struct PageTitlesView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            PageTitlesView()
-        }
+#Preview {
+    NavigationStack {
+        PageTitlesView()
     }
 }

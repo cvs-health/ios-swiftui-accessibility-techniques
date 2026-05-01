@@ -101,10 +101,8 @@ struct InputLabelsView: View {
     }
 }
  
-struct InputLabelsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            InputLabelsView()
-        }
+#Preview {
+    NavigationStack {
+        InputLabelsView()
     }
 }

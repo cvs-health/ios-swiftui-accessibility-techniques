@@ -154,11 +154,9 @@ struct TextFieldsFocusManagement: View {
     }
 }
  
-struct TextFieldsFocusManagement_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            TextFieldsFocusManagement()
-        }
+#Preview {
+    NavigationStack {
+        TextFieldsFocusManagement()
     }
 }
 

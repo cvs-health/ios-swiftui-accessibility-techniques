@@ -199,8 +199,6 @@ struct ContactSeattle: View {
     }
 }
  
-struct ContactSeattle_Previews: PreviewProvider {
-    static var previews: some View {
-        ContactSeattle()
-    }
+#Preview {
+    ContactSeattle()
 }

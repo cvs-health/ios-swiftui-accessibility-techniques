@@ -212,11 +212,9 @@ struct PickersView: View {
     }
 }
  
-struct PickersView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            PickersView()
-        }
+#Preview {
+    NavigationStack {
+        PickersView()
     }
 }
 

@@ -158,10 +158,8 @@ struct SearchSuggestionsView: View {
 
     
 
-struct SearchSuggestionsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SearchSuggestionsView()
-        }
+#Preview {
+    NavigationStack {
+        SearchSuggestionsView()
     }
 }

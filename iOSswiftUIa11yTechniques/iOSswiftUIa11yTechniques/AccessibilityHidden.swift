@@ -67,11 +67,9 @@ struct AccessibilityHidden: View {
     }
 }
  
-struct AccessibilityHidden_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            AccessibilityHidden()
-        }
+#Preview {
+    NavigationStack {
+        AccessibilityHidden()
     }
 }
 

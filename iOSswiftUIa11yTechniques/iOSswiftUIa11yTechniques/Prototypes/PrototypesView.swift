@@ -55,10 +55,8 @@ struct PrototypesView: View {
     }
 }
 
-struct PrototypesView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            PrototypesView()
-        }
+#Preview {
+    NavigationStack {
+        PrototypesView()
     }
 }

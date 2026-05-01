@@ -30,10 +30,8 @@ struct PageTitleGood: View {
     }
 }
  
-struct PageTitleGood_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            PageTitleGood()
-        }
+#Preview {
+    NavigationStack {
+        PageTitleGood()
     }
 }

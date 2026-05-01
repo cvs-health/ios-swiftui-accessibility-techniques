@@ -303,11 +303,9 @@ struct TextFieldsView: View {
     }
 }
  
-struct TextFieldsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            TextFieldsView()
-        }
+#Preview {
+    NavigationStack {
+        TextFieldsView()
     }
 }
 

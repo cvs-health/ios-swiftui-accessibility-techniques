@@ -186,10 +186,8 @@ struct MultiSelectionListView: View {
     }
 }
 
-struct MultiSelectionListView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MultiSelectionListView()
-        }
+#Preview {
+    NavigationStack {
+        MultiSelectionListView()
     }
 }

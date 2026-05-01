@@ -57,10 +57,8 @@ struct MagicTapView: View {
     }
 }
  
-struct MagicTapView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MagicTapView()
-        }
+#Preview {
+    NavigationStack {
+        MagicTapView()
     }
 }

@@ -142,10 +142,8 @@ struct FunctionalView: View {
     }
 }
  
-struct FunctionalView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            FunctionalView()
-        }
+#Preview {
+    NavigationStack {
+        FunctionalView()
     }
 }

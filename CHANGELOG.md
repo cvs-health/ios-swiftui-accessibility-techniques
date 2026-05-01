@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [26.5] - 2026-05-01
+## [26.4] - 2026-04-29
 
 ### iOS App
 
@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - a11y-check technique page with good and bad examples for all 31 static analysis rules
 - Alphabetical section headings on technique index for VoiceOver rotor navigation (issue #14)
+- Drag & Drop technique with accessible reorder controls (tap-to-select, Move Up/Down buttons, accessibility actions)
+- Multi-Selection Lists technique with good and bad examples using `.accessibilityAddTraits(.isSelected)` and `.accessibilityValue`
 
 #### Changed
 
@@ -23,18 +25,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Documentation
 
 - a11y-check documentation page with all 17 WCAG success criteria references
-
-## [26.4] - 2026-04-29
-
-### iOS App
-
-#### Added
-
-- Drag & Drop technique with accessible reorder controls (tap-to-select, Move Up/Down buttons, accessibility actions)
-- Multi-Selection Lists technique with good and bad examples using `.accessibilityAddTraits(.isSelected)` and `.accessibilityValue`
-
-### Documentation
-
 - Drag & Drop documentation page with WCAG 2.1.1 and 2.5.7 references
 - Multi-Selection Lists documentation page with WCAG 1.3.1 and 4.1.2 references
 

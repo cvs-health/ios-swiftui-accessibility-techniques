@@ -6,6 +6,10 @@ Use `.accessibilityAction(.escape)` to close a custom dialog or view and return 
 ## Applicable WCAG Success Criteria
 - N/A
 
+
+## Apple Developer Documentation
+- [View/accessibilityAction(.escape)](https://developer.apple.com/documentation/swiftui/view/accessibilityaction(_:_:))
+
 ## Swift Technique Source Code
 [EscapeView.swift](../iOSswiftUIa11yTechniques/EscapeView.swift)
 

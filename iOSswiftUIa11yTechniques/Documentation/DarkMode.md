@@ -11,6 +11,11 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [1.4.3 Contrast (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum)
 
+
+## Apple Developer Documentation
+- [EnvironmentValues/colorScheme](https://developer.apple.com/documentation/swiftui/environmentvalues/colorscheme)
+- [ColorScheme](https://developer.apple.com/documentation/swiftui/colorscheme)
+
 ## Swift Technique Source Code
 [DarkModeView.swift](../iOSswiftUIa11yTechniques/DarkModeView.swift)
 

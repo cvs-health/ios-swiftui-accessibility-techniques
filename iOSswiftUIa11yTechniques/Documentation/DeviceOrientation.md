@@ -6,6 +6,11 @@ Don't use `AppDelegate.orientationLock = .portrait` to lock the screen orientati
 ## Applicable WCAG Success Criteria
 - [1.3.4 Orientation](https://www.w3.org/WAI/WCAG22/Understanding/orientation)
 
+
+## Apple Developer Documentation
+- [EnvironmentValues/horizontalSizeClass](https://developer.apple.com/documentation/swiftui/environmentvalues/horizontalsizeclass)
+- [EnvironmentValues/verticalSizeClass](https://developer.apple.com/documentation/swiftui/environmentvalues/verticalsizeclass)
+
 ## Swift Technique Source Code
 [DeviceOrientationView.swift](../iOSswiftUIa11yTechniques/DeviceOrientationView.swift)
 

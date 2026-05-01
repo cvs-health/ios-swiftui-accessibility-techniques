@@ -8,6 +8,10 @@ Use `.accessibilityShowsLargeContentViewer{}` to display a button's `Label` and 
 ## Applicable WCAG Success Criteria
 - [1.4.4: Resize Text](https://www.w3.org/WAI/WCAG21/Understanding/resize-text)
 
+
+## Apple Developer Documentation
+- [View/accessibilityShowsLargeContentViewer(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityshowslargecontentviewer(_:))
+
 ## Swift Technique Source Code
 [LargeContentViewerView.swift](../iOSswiftUIa11yTechniques/LargeContentViewerView.swift)
 

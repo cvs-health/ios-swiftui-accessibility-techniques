@@ -14,6 +14,11 @@ Notes:
 - [2.5.3: Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [View/accessibilityLabel(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilitylabel(_:)-1d7jv)
+- [View/accessibilityInputLabels(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityinputlabels(_:))
+
 ## Swift Technique Source Code
 [MeaningfulAccessibleNamesView.swift](../iOSswiftUIa11yTechniques/MeaningfulAccessibleNamesView.swift)
 

@@ -13,6 +13,10 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [2.5.8 Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum)
 
+
+## Apple Developer Documentation
+- [View/frame(minWidth:idealWidth:maxWidth:minHeight:idealHeight:maxHeight:alignment:)](https://developer.apple.com/documentation/swiftui/view/frame(minwidth:idealwidth:maxwidth:minheight:idealheight:maxheight:alignment:))
+
 ## Swift Technique Source Code
 [TouchTargetSize.swift](../iOSswiftUIa11yTechniques/TouchTargetSize.swift)
 

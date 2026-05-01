@@ -22,6 +22,11 @@ VoiceOver Bugs:
 - [3.3.2: Labels or Instructions](https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions)
 - [1.3.5: Identify Input Purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose)
 
+
+## Apple Developer Documentation
+- [TextField](https://developer.apple.com/documentation/swiftui/textfield)
+- [SecureField](https://developer.apple.com/documentation/swiftui/securefield)
+
 ## Swift Technique Source Code
 [TextFieldsView.swift](../iOSswiftUIa11yTechniques/TextFieldsView.swift)
 

@@ -9,6 +9,11 @@ Apple chooses how to handle focus management when using a `NavigationLink` and y
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
 
+
+## Apple Developer Documentation
+- [NavigationStack](https://developer.apple.com/documentation/swiftui/navigationstack)
+- [NavigationLink](https://developer.apple.com/documentation/swiftui/navigationlink)
+
 ## Swift Technique Source Code
 [NavigationLinkView.swift](../iOSswiftUIa11yTechniques/NavigationLinkView.swift)
 

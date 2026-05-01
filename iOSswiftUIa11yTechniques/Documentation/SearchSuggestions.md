@@ -7,6 +7,10 @@ Post an `AccessibilityNotification.Announcement` to announce the number of sugge
 ## Applicable WCAG Success Criteria
 - [4.1.3: Status Messages](https://www.w3.org/WAI/WCAG22/Understanding/status-messages)
 
+
+## Apple Developer Documentation
+- [View/searchable(text:placement:prompt:)](https://developer.apple.com/documentation/swiftui/view/searchable(text:placement:prompt:)-18a8f)
+
 ## Swift Technique Source Code
 [SearchSuggestionsView.swift](../iOSswiftUIa11yTechniques/SearchSuggestionsView.swift)
 

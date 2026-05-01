@@ -10,6 +10,10 @@ Cards with many actions can be combined as one focusable element by wrapping the
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 - [2.4.6: Headings and Labels](https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels)
 
+
+## Apple Developer Documentation
+- [View/accessibilityElement(children:)](https://developer.apple.com/documentation/swiftui/view/accessibilityelement(children:))
+
 ## Swift Technique Source Code
 [CardsView.swift](../iOSswiftUIa11yTechniques/CardsView.swift)
 

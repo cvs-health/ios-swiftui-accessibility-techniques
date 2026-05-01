@@ -13,6 +13,10 @@ Notes:
 ## Applicable WCAG Success Criteria
 - N/A
 
+
+## Apple Developer Documentation
+- [Assistive Access](https://developer.apple.com/documentation/accessibility)
+
 ## Swift Technique Source Code
 [AssistiveAccessView.swift](../iOSswiftUIa11yTechniques/AssistiveAccessView.swift)
 

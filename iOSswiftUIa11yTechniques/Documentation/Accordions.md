@@ -15,6 +15,10 @@ Platform Defects:
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [DisclosureGroup](https://developer.apple.com/documentation/swiftui/disclosuregroup)
+
 ## Swift Technique Source Code
 [AccordionsView.swift](../iOSswiftUIa11yTechniques/AccordionsView.swift)
 

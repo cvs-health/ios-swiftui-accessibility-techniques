@@ -21,6 +21,10 @@ Platform Defects:
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
 
+
+## Apple Developer Documentation
+- [AccessibilityFocusState](https://developer.apple.com/documentation/swiftui/accessibilityfocusstate)
+
 ## Swift Technique Source Code
 [FocusManagementView.swift](../iOSswiftUIa11yTechniques/FocusManagementView.swift)
 

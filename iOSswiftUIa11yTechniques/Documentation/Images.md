@@ -15,6 +15,10 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [1.1.1: Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content)
 
+
+## Apple Developer Documentation
+- [Image](https://developer.apple.com/documentation/swiftui/image)
+
 ## Swift Technique Source Code
 [ImagesView.swift](../iOSswiftUIa11yTechniques/ImagesView.swift)
 

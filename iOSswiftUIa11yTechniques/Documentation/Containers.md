@@ -8,6 +8,10 @@ Use `.accessibilityElement(children: .contain)` on the group container element a
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 - [2.4.1: Bypass Blocks](https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html)
 
+
+## Apple Developer Documentation
+- [View/accessibilityElement(children:)](https://developer.apple.com/documentation/swiftui/view/accessibilityelement(children:))
+
 ## Swift Technique Source Code
 [ContainersView.swift](../iOSswiftUIa11yTechniques/ContainersView.swift)
 

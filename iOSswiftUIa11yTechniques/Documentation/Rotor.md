@@ -8,6 +8,10 @@ Use `.accessibilityRotor()` with the rotor name and element entries it will navi
 ## Applicable WCAG Success Criteria
 - N/A
 
+
+## Apple Developer Documentation
+- [View/accessibilityRotor(_:entries:)](https://developer.apple.com/documentation/swiftui/view/accessibilityrotor(_:entries:)-4adi5)
+
 ## Swift Technique Source Code
 [RotorView.swift](../iOSswiftUIa11yTechniques/RotorView.swift)
 

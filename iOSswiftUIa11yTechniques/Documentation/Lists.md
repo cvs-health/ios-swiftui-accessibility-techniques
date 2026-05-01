@@ -11,6 +11,10 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 
+
+## Apple Developer Documentation
+- [List](https://developer.apple.com/documentation/swiftui/list)
+
 ## Swift Technique Source Code
 [ListsView.swift](../iOSswiftUIa11yTechniques/ListsView.swift)
 

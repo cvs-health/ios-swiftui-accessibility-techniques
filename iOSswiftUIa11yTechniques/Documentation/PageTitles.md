@@ -8,6 +8,10 @@ VoiceOver will speak the page title as a Heading.
 ## Applicable WCAG Success Criteria
 - [2.4.2: Page Titled](https://www.w3.org/WAI/WCAG22/Understanding/page-titled)
 
+
+## Apple Developer Documentation
+- [View/navigationTitle(_:)](https://developer.apple.com/documentation/swiftui/view/navigationtitle(_:)-avgj)
+
 ## Swift Technique Source Code
 [PageTitlesView.swift](../iOSswiftUIa11yTechniques/PageTitlesView.swift)
 

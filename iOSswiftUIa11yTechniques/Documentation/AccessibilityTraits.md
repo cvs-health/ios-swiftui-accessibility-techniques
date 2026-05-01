@@ -8,6 +8,11 @@ Use `.accessibilityAddTraits()` to add custom traits matching the roles and func
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [View/accessibilityAddTraits(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityaddtraits(_:))
+- [AccessibilityTraits](https://developer.apple.com/documentation/swiftui/accessibilitytraits)
+
 ## Swift Technique Source Code
 [AccessibilityTraitsView.swift](../iOSswiftUIa11yTechniques/AccessibilityTraitsView.swift)
 

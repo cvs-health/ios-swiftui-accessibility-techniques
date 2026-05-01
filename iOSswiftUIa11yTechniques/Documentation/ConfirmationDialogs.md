@@ -14,6 +14,10 @@ Platform Defects:
 ## Applicable WCAG Success Criteria
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
 
+
+## Apple Developer Documentation
+- [View/confirmationDialog(_:isPresented:titleVisibility:actions:)](https://developer.apple.com/documentation/swiftui/view/confirmationdialog(_:ispresented:titlevisibility:actions:)-46zbb)
+
 ## Swift Technique Source Code
 [ConfirmationDialogsView.swift](../iOSswiftUIa11yTechniques/ConfirmationDialogsView.swift)
 

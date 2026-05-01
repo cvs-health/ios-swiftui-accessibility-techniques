@@ -14,6 +14,10 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [1.3.2 Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
 
+
+## Apple Developer Documentation
+- [View/accessibilitySortPriority(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilitysortpriority(_:))
+
 ## Swift Technique Source Code
 [ReadingOrderView.swift](../iOSswiftUIa11yTechniques/ReadingOrderView.swift)
 

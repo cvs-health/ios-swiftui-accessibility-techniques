@@ -14,6 +14,10 @@ Use a `ScrollView` on carousel slides to support Dynamic Type without truncation
 ## WCAG Sufficient Techniques
 - [G215: Providing controls to achieve the same result as path based or multipoint gestures](https://www.w3.org/WAI/WCAG21/Techniques/general/G215)
 
+
+## Apple Developer Documentation
+- [TabView](https://developer.apple.com/documentation/swiftui/tabview)
+
 ## Swift Technique Source Code
 [CarouselView.swift](../iOSswiftUIa11yTechniques/CarouselView.swift)
 

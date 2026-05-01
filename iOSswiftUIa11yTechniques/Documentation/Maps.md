@@ -7,6 +7,10 @@ Use `.accessibilityLabel()` on each map control button to describe its function.
 - [2.1.1: Keyboard](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)
 - [2.5.1: Pointer Gestures](https://www.w3.org/WAI/WCAG22/Understanding/pointer-gestures)
 
+
+## Apple Developer Documentation
+- [Map](https://developer.apple.com/documentation/mapkit/map)
+
 ## Swift Technique Source Code
 [MapView.swift](../iOSswiftUIa11yTechniques/MapView.swift)
 

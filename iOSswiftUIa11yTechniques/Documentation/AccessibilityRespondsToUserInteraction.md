@@ -7,6 +7,10 @@ Don't use this property unless you need to make an element focusable that is not
 - [2.1.1: Keyboard](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)
 - [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
 
+
+## Apple Developer Documentation
+- [View/accessibilityRespondsToUserInteraction(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityrespondstouserinteraction(_:))
+
 ## Swift Technique Source Code
 [AccessibilityRespondsToUserInteraction.swift](../iOSswiftUIa11yTechniques/AccessibilityRespondsToUserInteraction.swift)
 

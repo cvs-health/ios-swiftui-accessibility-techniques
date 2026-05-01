@@ -87,6 +87,7 @@ See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and 
 - [x] [Combining Focus](iOSswiftUIa11yTechniques/Documentation/CombiningFocus.md)
 - [x] [Confirmation Dialogs](iOSswiftUIa11yTechniques/Documentation/ConfirmationDialogs.md)
 - [x] [Containers](iOSswiftUIa11yTechniques/Documentation/Containers.md)
+- [x] [Contrast](iOSswiftUIa11yTechniques/Documentation/Contrast.md)
 - [x] [Dark Mode](iOSswiftUIa11yTechniques/Documentation/DarkMode.md)
 - [x] [Data Tables](iOSswiftUIa11yTechniques/Documentation/DataTables.md)
 - [x] [Date & Time Pickers](iOSswiftUIa11yTechniques/Documentation/DateTimePickers.md)

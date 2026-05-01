@@ -25,6 +25,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Charts"),
     Techniques(name: "Carousels"),
     Techniques(name: "Containers"),
+    Techniques(name: "Contrast"),
     Techniques(name: "Checkboxes"),
     Techniques(name: "Combining Focus"),
     Techniques(name: "Confirmation Dialogs"),

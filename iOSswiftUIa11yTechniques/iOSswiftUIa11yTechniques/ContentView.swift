@@ -149,6 +149,7 @@ struct ContentView: View {
         case "charts": ChartsView()
         case "carousels": CarouselView()
         case "containers": ContainersView()
+        case "contrast": ContrastView()
         case "checkboxes": CheckboxesView()
         case "combining focus": CombiningFocusView()
         case "confirmation dialogs": ConfirmationDialogsView()

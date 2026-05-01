@@ -105,10 +105,22 @@ struct TabsView: View {
                         VStack {
                             Image(systemName: "envelope")
                                 .font(.system(size: 24))
+                                .overlay(alignment: .topTrailing) {
+                                    Text("3")
+                                        .font(.caption2)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                        .frame(width: 16, height: 16)
+                                        .background(Color.red)
+                                        .clipShape(Circle())
+                                        .offset(x: 8, y: -4)
+                                        .accessibilityHidden(true)
+                                }
                             Text("Messages").underline(tab2Visible ? true : false)
                         }
                     }.padding()
                         .accessibilityAddTraits(tab2Visible ? [.isSelected] : [])
+                        .accessibilityLabel("Messages, 3 notifications")
                 }
                 .accessibilityElement(children: .contain)
                 .accessibilityAddTraits(.isTabBar)
@@ -120,7 +132,7 @@ struct TabsView: View {
                     Text("Messages tab panel text.")
                 }
                 DisclosureGroup("Details") {
-                    Text("The custom tabs good example uses `isTabBar` and `isSelected` traits with `.accessibilityElement(children: .contain)`. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number. The custom selected Tab has an underline to show selected state without using color alone.")
+                    Text("The custom tabs good example uses `isTabBar` and `isSelected` traits with `.accessibilityElement(children: .contain)`. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number. The custom selected Tab has an underline to show selected state without using color alone. The Messages tab has a badge overlay with `.accessibilityLabel(\"Messages, 3 notifications\")` so VoiceOver announces the badge count. The badge circle uses `.accessibilityHidden(true)` to avoid double-reading.")
                 }.padding(.bottom).accessibilityHint("Good Example Custom Tabs using `isTabBar` and `isSelected` Traits with `.accessibilityElement(children: .contain)`")
                 Text("Bad Examples")
                     .font(.subheadline)
@@ -155,6 +167,16 @@ struct TabsView: View {
                         VStack {
                             Image(systemName: "envelope")
                                 .font(.system(size: 24))
+                                .overlay(alignment: .topTrailing) {
+                                    Text("3")
+                                        .font(.caption2)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                        .frame(width: 16, height: 16)
+                                        .background(Color.red)
+                                        .clipShape(Circle())
+                                        .offset(x: 8, y: -4)
+                                }
                             Text("Messages")
                         }
                     }.padding()
@@ -166,7 +188,7 @@ struct TabsView: View {
                     Text("Messages tab panel text.")
                 }
                 DisclosureGroup("Details") {
-                    Text("The first bad tabs example is coded as buttons that show and hide text. VoiceOver does not hear a selected state or tab trait for the tabs. The custom selected Tab has no underline to show selected state.")
+                    Text("The first bad tabs example is coded as buttons that show and hide text. VoiceOver does not hear a selected state or tab trait for the tabs. The custom selected Tab has no underline to show selected state. The Messages tab has a visual badge but no `.accessibilityLabel` including the badge count, so VoiceOver users do not know there are notifications.")
                 }.padding(.bottom).accessibilityHint("Bad Example custom tabs as buttons that show and hide text")
                 Text("Bad Example `.tabViewStyle(.page)` with no `.accessibilityLabel` and no `backgroundDisplayMode: .always`")
                     .font(.subheadline)

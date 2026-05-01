@@ -11,7 +11,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 #### Added
 
 - a11y-check technique page with good and bad examples for all 31 static analysis rules
+- Contrast technique page with good and bad examples for text contrast (WCAG 1.4.3) and non-text contrast (WCAG 1.4.11)
 - Alphabetical section headings on technique index for VoiceOver rotor navigation (issue #14)
+- Badge accessibility examples for custom tab bars (good and bad) in Tabs technique
 - Drag & Drop technique with accessible reorder controls (tap-to-select, Move Up/Down buttons, accessibility actions)
 - Multi-Selection Lists technique with good and bad examples using `.accessibilityAddTraits(.isSelected)` and `.accessibilityValue`
 
@@ -24,6 +26,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Documentation
 
+- Contrast documentation page with WCAG 1.4.3 and 1.4.11 references
+- XCTest Accessibility Testing documentation page with `performAccessibilityAudit()` and manual assertions guide
 - a11y-check documentation page with all 17 WCAG success criteria references
 - Drag & Drop documentation page with WCAG 2.1.1 and 2.5.7 references
 - Multi-Selection Lists documentation page with WCAG 1.3.1 and 4.1.2 references

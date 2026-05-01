@@ -7,8 +7,11 @@ struct Techniques: Identifiable {
 
 let techniques: [Techniques] = [
     Techniques(name: "Accessibility Hidden"),
+    Techniques(name: "Accessibility Hint"),
+    Techniques(name: "Accessibility Label"),
     Techniques(name: "Accessibility Notifications"),
     Techniques(name: "Accessibility Identifier"),
+    Techniques(name: "Accessibility Value"),
     Techniques(name: "Accessibility Representation"),
     Techniques(name: "Accessibility Responds To User Interaction"),
     Techniques(name: "Accessibility Sort Priority"),

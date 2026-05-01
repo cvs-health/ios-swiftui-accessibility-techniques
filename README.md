@@ -69,13 +69,16 @@ See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and 
 - [x] [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md)
 - [x] [Accessibility Detection](iOSswiftUIa11yTechniques/Documentation/AccessibilityDetection.md)
 - [x] [Accessibility Hidden](iOSswiftUIa11yTechniques/Documentation/AccessibilityHidden.md)
+- [x] [Accessibility Hint](iOSswiftUIa11yTechniques/Documentation/AccessibilityHint.md)
 - [x] [Accessibility Identifier](iOSswiftUIa11yTechniques/Documentation/AccessibilityIdentifier.md)
 - [x] [Accessibility Input Labels](iOSswiftUIa11yTechniques/Documentation/AccessibilityInputLabels.md)
+- [x] [Accessibility Label](iOSswiftUIa11yTechniques/Documentation/AccessibilityLabel.md)
 - [x] [Accessibility Notifications](iOSswiftUIa11yTechniques/Documentation/AccessibilityNotifications.md)
 - [x] [Accessibility Representation](iOSswiftUIa11yTechniques/Documentation/AccessibilityRepresentation.md)
 - [x] [Accessibility Responds To User Interaction](iOSswiftUIa11yTechniques/Documentation/AccessibilityRespondsToUserInteraction.md)
 - [x] [Accessibility Sort Priority](iOSswiftUIa11yTechniques/Documentation/AccessibilitySortPriority.md)
 - [x] [Accessibility Traits](iOSswiftUIa11yTechniques/Documentation/AccessibilityTraits.md)
+- [x] [Accessibility Value](iOSswiftUIa11yTechniques/Documentation/AccessibilityValue.md)
 - [x] [Accordions](iOSswiftUIa11yTechniques/Documentation/Accordions.md)
 - [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
 - [x] [Alerts](iOSswiftUIa11yTechniques/Documentation/Alerts.md)
@@ -179,6 +182,9 @@ See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and 
 ### V
 - [x] [Videos](iOSswiftUIa11yTechniques/Documentation/Videos.md)
 - [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
+
+### X
+- [x] [XCTest Accessibility Testing](iOSswiftUIa11yTechniques/Documentation/XCTestAccessibility.md)
 
 
 ## Contributor Guide

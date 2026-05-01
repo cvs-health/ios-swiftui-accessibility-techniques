@@ -31,36 +31,6 @@ struct WebViewDocs: UIViewRepresentable {
 }
 
 
-struct SectionIndexView: View {
-    let letters: [String]
-    let onSelect: (String) -> Void
-    @GestureState private var isDragging = false
-
-    var body: some View {
-        VStack(spacing: 0) {
-            ForEach(letters, id: \.self) { letter in
-                Text(letter)
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundColor(.accentColor)
-                    .frame(width: 20, height: 16)
-            }
-        }
-        .padding(.trailing, 4)
-        .contentShape(Rectangle())
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .updating($isDragging) { _, state, _ in state = true }
-                .onChanged { value in
-                    let index = Int(value.location.y / 16)
-                    if index >= 0 && index < letters.count {
-                        onSelect(letters[index])
-                    }
-                }
-        )
-        .accessibilityHidden(true)
-    }
-}
-
 struct ContentView: View {
     @State private var searchKeyword = ""
     @State private var selection: UUID?
@@ -83,36 +53,22 @@ struct ContentView: View {
         return dict.sorted { $0.key < $1.key }
     }
 
-    var sectionLetters: [String] {
-        groupedItems.map { $0.0 }
-    }
-
     var body: some View {
         NavigationStack {
-            ScrollViewReader { proxy in
-                List {
-                    ForEach(groupedItems, id: \.0) { letter, items in
-                        Section {
-                            ForEach(items) { technique in
-                                NavigationLink(value: technique.id) {
-                                    Text(technique.name)
-                                }
+            List {
+                ForEach(groupedItems, id: \.0) { letter, items in
+                    Section {
+                        ForEach(items) { technique in
+                            NavigationLink(value: technique.id) {
+                                Text(technique.name)
                             }
-                        } header: {
-                            Text(letter)
                         }
-                        .id(letter)
-                    }
-                }
-                .listStyle(.plain)
-                .overlay(alignment: .trailing) {
-                    SectionIndexView(letters: sectionLetters) { letter in
-                        withAnimation {
-                            proxy.scrollTo(letter, anchor: .top)
-                        }
+                    } header: {
+                        Text(letter)
                     }
                 }
             }
+            .listStyle(.plain)
             .navigationTitle("SwiftUI A11y Techniques")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

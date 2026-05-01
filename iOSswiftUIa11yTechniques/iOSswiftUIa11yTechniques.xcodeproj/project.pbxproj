@@ -112,7 +112,6 @@
 		BCD814062C3858D600124B7C /* TextFieldsFocusManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD814052C3858D600124B7C /* TextFieldsFocusManagement.swift */; };
 		BCDE3B312EF0B53E00FE8212 /* DimFlashingLightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDE3B302EF0B53E00FE8212 /* DimFlashingLightsView.swift */; };
 		BCDF3F562D4AE1D000A13D09 /* SignUp2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */; };
-		DDB3FAE61AB5AA9CB0708B34 /* ContrastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3FAE51AB5AA9CB0708B34 /* ContrastView.swift */; };
 		BCE15EF62E4D5B45001A8997 /* ContainersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE15EF52E4D5B45001A8997 /* ContainersView.swift */; };
 		BCE15EF82E4D7B8A001A8997 /* AccessibilityTraitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */; };
 		BCE1B4662D5FFE15001F92EF /* a11yTechniques Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = BCE1B4432D5FFE13001F92EF /* a11yTechniques Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -137,6 +136,7 @@
 		C0A11E001122334455667809 /* AccessibilitySnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A11E001122334455667808 /* AccessibilitySnapshotTests.swift */; };
 		C0A11E00112233445566780D /* AccessibilitySnapshot in Frameworks */ = {isa = PBXBuildFile; productRef = C0A11E001122334455667790 /* AccessibilitySnapshot */; };
 		C0A11E00112233445566780E /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = C0A11E001122334455667791 /* SnapshotTesting */; };
+		DDB3FAE61AB5AA9CB0708B34 /* ContrastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3FAE51AB5AA9CB0708B34 /* ContrastView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -364,7 +364,6 @@
 		BCDE3B302EF0B53E00FE8212 /* DimFlashingLightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimFlashingLightsView.swift; sourceTree = "<group>"; };
 		BCDF3F552D4AE1D000A13D09 /* SignUp2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp2.swift; sourceTree = "<group>"; };
 		BCE15EF52E4D5B45001A8997 /* ContainersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersView.swift; sourceTree = "<group>"; };
-		DDB3FAE51AB5AA9CB0708B34 /* ContrastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContrastView.swift; sourceTree = "<group>"; };
 		BCE15EF72E4D7B8A001A8997 /* AccessibilityTraitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityTraitsView.swift; sourceTree = "<group>"; };
 		BCE1B4432D5FFE13001F92EF /* a11yTechniques Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a11yTechniques Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE1B4522D5FFE15001F92EF /* a11yTechniques Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "a11yTechniques Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -397,6 +396,7 @@
 		BCFBBE4C2CD93FCA006831D9 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 		C0A11E001122334455667807 /* iOSswiftUIa11yTechniquesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSswiftUIa11yTechniquesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0A11E001122334455667808 /* AccessibilitySnapshotTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilitySnapshotTests.swift; sourceTree = "<group>"; };
+		DDB3FAE51AB5AA9CB0708B34 /* ContrastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContrastView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -597,8 +597,8 @@
 				BCEDB9102B49C74B00B4D85D /* CombiningFocusView.swift */,
 				BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */,
 				BCE15EF52E4D5B45001A8997 /* ContainersView.swift */,
-				DDB3FAE51AB5AA9CB0708B34 /* ContrastView.swift */,
 				AAF127C32B23EDCB00D5313D /* ContentView.swift */,
+				DDB3FAE51AB5AA9CB0708B34 /* ContrastView.swift */,
 				BCE205222B58D0BE000DF400 /* DarkModeView.swift */,
 				BC8129052B3D36CF00CB19D2 /* DataTablesView.swift */,
 				BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */,

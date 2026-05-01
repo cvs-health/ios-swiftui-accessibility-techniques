@@ -400,7 +400,7 @@ struct A11yCheckView: View {
                         .accessibilityLabel("Heart icon")
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad image examples fail two rules. The first image has no `.accessibilityLabel` or `.accessibilityHidden(true)`, failing the `image-missing-label` rule. VoiceOver reads the raw SF Symbol name which is not meaningful. The second image label says \"Heart icon\" which includes the word \"icon\", failing the `image-label-contains-role` rule since VoiceOver already announces the image role.")
+                    Text("The bad image examples fail two rules. The first image has no `.accessibilityLabel` or `.accessibilityHidden(true)`, failing the `image-missing-label` rule. VoiceOver reads the raw SF Symbol name which is not meaningful. The second image label says \"Heart icon\" which includes the word \"icon\", failing the `image-label-contains-role` rule since VoiceOver already announces the image role. Note: words like \"photo\" and \"picture\" are valid descriptive terms and are not flagged by this rule.")
                 }.padding(.bottom).accessibilityHint("Bad Example Images")
                 // MARK: Bad Headings
                 Text("Bad Example Headings")

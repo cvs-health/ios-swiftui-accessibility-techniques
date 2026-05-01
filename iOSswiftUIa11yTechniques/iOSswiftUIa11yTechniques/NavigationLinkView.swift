@@ -15,7 +15,7 @@
  */
 
 import SwiftUI
- 
+
 struct NavigationLinkView: View {
     @State private var isFullScreen = false
     @State private var isFullScreenBad = false
@@ -23,7 +23,7 @@ struct NavigationLinkView: View {
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
-    
+
     var body: some View {
         ScrollView {
             VStack {
@@ -113,36 +113,32 @@ struct NavigationLinkView: View {
                 .padding()
                 .navigationTitle("Navigation")
             }
-            
+
         }
     }
-    
+
+struct FullScreen: View {
+    @Binding var isFullScreen: Bool
+
+    var body: some View {
+        VStack {
+            Text("Back")
+                .onTapGesture {
+                    self.isFullScreen.toggle()
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text("About the Company")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityAddTraits(.isHeader)
+            Text("Our company was founded in 1992. We sell widgets and gadgets. We give back 10% of all profits to the fight to eliminate plastics from the ocean. All products we sell have a lifetime warranty. Money-back guarantee if you're not satisfied we'll give you a full refund. This page has a title at the top and is clearly fake.")
+        }.padding()
+    }
 }
-    
-    
-    struct FullScreen: View {
-        @Binding var isFullScreen: Bool
-        
-        var body: some View {
-            VStack {
-                Text("Back")
-                    .onTapGesture {
-                        self.isFullScreen.toggle()
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Text("About the Company")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                Text("Our company was founded in 1992. We sell widgets and gadgets. We give back 10% of all profits to the fight to eliminate plastics from the ocean. All products we sell have a lifetime warranty. Money-back guarantee if you're not satisfied we'll give you a full refund. This page has a title at the top and is clearly fake.")
-            }.padding()
-        }
-    }
 
 #Preview {
     NavigationStack {
         NavigationLinkView()
     }
 }
-

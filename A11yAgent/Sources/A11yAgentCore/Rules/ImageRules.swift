@@ -105,8 +105,9 @@ public struct ImageMissingLabelRule: A11yRule {
 
 // MARK: - Image Label Contains "Image" Rule
 
-/// Flags `.accessibilityLabel()` values that contain words like "image", "icon", "picture",
-/// "graphic" — the accessibility trait already conveys this.
+/// Flags `.accessibilityLabel()` values that contain words like "image", "icon",
+/// or "graphic" — the accessibility trait already conveys this.
+/// Words like "photo" and "picture" are valid descriptive terms, not roles.
 ///
 /// WCAG 1.1.1 Non-text Content
 /// Reference: InformativeImages.md — "Don't include 'Image' in label"
@@ -116,12 +117,12 @@ public struct ImageLabelContainsImageRule: A11yRule {
     public let severity = A11ySeverity.warning
     public let impact = A11yImpact.minor
     public let wcagCriteria = ["1.1.1"]
-    public let description = "Accessibility labels should not contain the word 'image', 'icon', 'picture', or 'graphic' — the role is announced automatically."
+    public let description = "Accessibility labels should not contain the word 'image', 'icon', or 'graphic' — the role is announced automatically."
 
     public init() {}
 
-    /// Words that should not appear in image accessibility labels.
-    private static let roleWords = ["image", "icon", "picture", "graphic", "photo"]
+    /// Role words that VoiceOver announces automatically and should not appear in labels.
+    private static let roleWords = ["image", "icon", "graphic"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax)

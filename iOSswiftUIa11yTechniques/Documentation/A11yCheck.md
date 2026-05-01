@@ -9,7 +9,7 @@ See the full [A11yAgent README](../../A11yAgent/README.md) for installation, CLI
 
 ### Images
 - **`image-missing-label`** (error, WCAG 1.1.1) — `Image(systemName:)` or `Image("name")` missing `.accessibilityLabel()` and not using `Image(decorative:)` or `.accessibilityHidden(true)`.
-- **`image-label-contains-role`** (warning, WCAG 1.1.1) — `.accessibilityLabel()` on an Image contains words like "image", "icon", "picture", or "photo". VoiceOver already announces the image role.
+- **`image-label-contains-role`** (warning, WCAG 1.1.1) — `.accessibilityLabel()` on an Image contains words like "image", "icon", or "graphic". VoiceOver already announces the image role. Words like "photo" and "picture" are valid descriptive terms and are not flagged.
 
 ### Headings
 - **`heading-trait-missing`** (warning, WCAG 2.4.6) — `Text` with a heading font style (`.title`, `.headline`, etc.) missing `.accessibilityAddTraits(.isHeader)`.

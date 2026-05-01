@@ -263,6 +263,9 @@
 		BC07D1922D3760600076F496 /* SignUp1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp1.swift; sourceTree = "<group>"; };
 		BC0BBAF52FA0442A00870252 /* LanguageOfPageBadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageOfPageBadView.swift; sourceTree = "<group>"; };
 		BC0BBAF62FA0442A00870252 /* LanguageOfPageGoodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageOfPageGoodView.swift; sourceTree = "<group>"; };
+		BC0BBBBC2FA51F9F00870252 /* AccessibilityHint.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityHint.md; sourceTree = "<group>"; };
+		BC0BBBBD2FA51F9F00870252 /* AccessibilityLabel.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityLabel.md; sourceTree = "<group>"; };
+		BC0BBBBE2FA51F9F00870252 /* AccessibilityValue.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityValue.md; sourceTree = "<group>"; };
 		BC0C846E2CC811E900B3DB52 /* DragDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropView.swift; sourceTree = "<group>"; };
 		BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactBoston.swift; sourceTree = "<group>"; };
 		BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactOrlando.swift; sourceTree = "<group>"; };
@@ -474,11 +477,14 @@
 				BCD1CF9A2B577C5300A26ED3 /* AccessibilityActions.md */,
 				BCE205212B579FC3000DF400 /* AccessibilityDetection.md */,
 				BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */,
+				BC0BBBBC2FA51F9F00870252 /* AccessibilityHint.md */,
 				BCC4F1822B3F8757004AAB65 /* AccessibilityInputLabels.md */,
+				BC0BBBBD2FA51F9F00870252 /* AccessibilityLabel.md */,
 				AAF127BD2B23ED8600D5313D /* AccessibilityNotifications.md */,
 				BC163FCA2B6C1598009E3A83 /* AccessibilityRepresentation.md */,
 				BC4F17962D7B743000BB509B /* AccessibilityRespondsToUserInteraction.md */,
 				BC3AF60D2E622B0B00FE7346 /* AccessibilityTraits.md */,
+				BC0BBBBE2FA51F9F00870252 /* AccessibilityValue.md */,
 				AA23F04F2AB501DA00E1EB26 /* Accordions.md */,
 				BC00300A2B332C020063EAD5 /* AdjustableAction.md */,
 				BC715B642B44C81A00C77B57 /* Alerts.md */,

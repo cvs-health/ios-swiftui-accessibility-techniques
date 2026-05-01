@@ -4,7 +4,6 @@ Use `.accessibilityValue` to convey the current value or state of a control to V
 Use `.accessibilityValue` for custom controls that have a changeable state or value that SwiftUI does not automatically communicate to VoiceOver. Native controls like `Slider`, `Toggle`, and `Stepper` provide their own values automatically.
 
 Notes:
-- Group related visual elements with `.accessibilityElement(children: .ignore)` and provide a single `.accessibilityLabel` and `.accessibilityValue` for the group.
 - Update the value dynamically as the state changes so VoiceOver always reflects the current state.
 - For adjustable controls, combine `.accessibilityValue` with `.accessibilityAdjustableAction` to allow VoiceOver users to change the value by swiping up and down.
 

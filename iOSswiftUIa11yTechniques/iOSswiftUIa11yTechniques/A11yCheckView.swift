@@ -37,6 +37,7 @@ struct A11yCheckView: View {
     @State private var animationOffset: CGFloat = 0
     @State private var swipeOffset: CGFloat = 0
     @State private var swipeDeleted = false
+    @AccessibilityFocusState private var isDeletedTextFocused: Bool
     @State private var badSwipeOffset: CGFloat = 0
     @State private var badSwipeDeleted = false
 
@@ -311,6 +312,7 @@ struct A11yCheckView: View {
                     Text("Item deleted")
                         .foregroundColor(.secondary)
                         .padding()
+                        .accessibilityFocused($isDeletedTextFocused)
                 } else {
                     HStack {
                         Text("Swipe left or tap Delete")
@@ -329,15 +331,18 @@ struct A11yCheckView: View {
                                     .onEnded { value in
                                         if value.translation.width < -100 {
                                             swipeDeleted = true
+                                            isDeletedTextFocused = true
                                         }
                                         swipeOffset = 0
                                     }
                             )
                             .accessibilityAction(named: "Delete") {
                                 swipeDeleted = true
+                                isDeletedTextFocused = true
                             }
                         Button("Delete") {
                             swipeDeleted = true
+                            isDeletedTextFocused = true
                         }
                         .foregroundColor(.red)
                     }
@@ -388,14 +393,14 @@ struct A11yCheckView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 HStack {
-                    Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
-                    Image(systemName: "heart.fill")
+                    Image(systemName: "square.and.arrow.up.trianglebadge.exclamationmark")
+                        .foregroundColor(.orange)
+                    Image(systemName: "arrow.up.heart.fill")
                         .foregroundColor(.red)
                         .accessibilityLabel("Heart icon")
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad image examples fail two rules. The star image has no `.accessibilityLabel` or `.accessibilityHidden(true)`, failing the `image-missing-label` rule. The heart image label says \"Heart icon\" which includes the word \"icon\", failing the `image-label-contains-role` rule since VoiceOver already announces the image role.")
+                    Text("The bad image examples fail two rules. The first image has no `.accessibilityLabel` or `.accessibilityHidden(true)`, failing the `image-missing-label` rule. VoiceOver reads the raw SF Symbol name which is not meaningful. The second image label says \"Heart icon\" which includes the word \"icon\", failing the `image-label-contains-role` rule since VoiceOver already announces the image role.")
                 }.padding(.bottom).accessibilityHint("Bad Example Images")
                 // MARK: Bad Headings
                 Text("Bad Example Headings")

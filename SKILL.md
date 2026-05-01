@@ -79,7 +79,6 @@ Button("Add to cart") {}
 
 - Use `.accessibilityValue` on custom controls to convey their current state or value (e.g., "3 out of 5", "Step 2 of 4", "enabled"/"disabled").
 - Pair adjustable custom controls with `.accessibilityAdjustableAction` so VoiceOver users can swipe up/down to change the value.
-- Group related visual elements (e.g., star icons in a rating) with `.accessibilityElement(children: .ignore)` and provide a single label + value.
 - Use `.accessibilityValue` on tab bar items to convey badge notification counts (e.g., "3 notifications").
 
 ```swift

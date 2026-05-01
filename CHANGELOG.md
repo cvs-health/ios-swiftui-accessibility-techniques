@@ -4,13 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [26.5] - 2026-05-01
 
 ### iOS App
 
 #### Added
 
 - a11y-check technique page with good and bad examples for all 31 static analysis rules
+- Alphabetical section headings on technique index for VoiceOver rotor navigation (issue #14)
+
+#### Changed
+
+- Converted all PreviewProvider structs to #Preview macro
+- `image-label-contains-role` rule no longer flags "photo" and "picture" (valid descriptive terms)
+- `gesture-missing-alternative` rule now requires visible single-tap Button alternative for touch users
+- `tabview-missing-label` moved from Animation to its own Tab Bars category
 
 ### Documentation
 

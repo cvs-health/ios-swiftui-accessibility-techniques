@@ -10,6 +10,10 @@ You can also enhance the contrast of the UI if the user enables Reduce Transpare
 - [1.4.6 Contrast (Enhanced)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-enhanced)
 - [1.4.11 Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast)
 
+
+## Apple Developer Documentation
+- [EnvironmentValues/accessibilityReduceTransparency](https://developer.apple.com/documentation/swiftui/environmentvalues/accessibilityreducetransparency)
+
 ## Swift Technique Source Code
 [ReduceTransparencyView.swift](../iOSswiftUIa11yTechniques/ReduceTransparencyView.swift)
 

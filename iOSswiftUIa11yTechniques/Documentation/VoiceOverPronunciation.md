@@ -11,6 +11,11 @@ Follow Chicago Manual of Style for all abbreviations and VoiceOver reads them co
 ## Applicable WCAG Success Criteria
 - N/A
 
+
+## Apple Developer Documentation
+- [AttributedString](https://developer.apple.com/documentation/foundation/attributedstring)
+- [AccessibilitySpeechAttributeKey](https://developer.apple.com/documentation/swiftui/accessibilityspeechattributekey)
+
 ## Swift Technique Source Code
 [VoiceOverPronunciationView.swift](../iOSswiftUIa11yTechniques/VoiceOverPronunciationView.swift)
 

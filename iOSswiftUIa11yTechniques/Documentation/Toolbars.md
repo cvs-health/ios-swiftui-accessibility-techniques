@@ -9,6 +9,10 @@ An `.accessibilityHint` text can be added if necessary to describe what happens 
 - [1.4.4: Resize Text](https://www.w3.org/WAI/WCAG21/Understanding/resize-text)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [View/toolbar(content:)](https://developer.apple.com/documentation/swiftui/view/toolbar(content:)-5w0tj)
+
 ## Swift Technique Source Code
 [ToolbarView.swift](../iOSswiftUIa11yTechniques/ToolbarView.swift)
 

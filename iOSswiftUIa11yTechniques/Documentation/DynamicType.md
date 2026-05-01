@@ -23,6 +23,11 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [1.4.4: Resize Text](https://www.w3.org/WAI/WCAG21/Understanding/resize-text)
 
+
+## Apple Developer Documentation
+- [DynamicTypeSize](https://developer.apple.com/documentation/swiftui/dynamictypesize)
+- [ScaledMetric](https://developer.apple.com/documentation/swiftui/scaledmetric)
+
 ## Swift Technique Source Code
 [DynamicTypeView.swift](../iOSswiftUIa11yTechniques/DynamicTypeView.swift)
 

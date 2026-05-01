@@ -6,6 +6,10 @@ Save user-entered data between steps so that users don't have to retype informat
 ## Applicable WCAG Success Criteria
 - [3.3.7: Redundant Entry](https://www.w3.org/WAI/WCAG22/Understanding/redundant-entry)
 
+
+## Apple Developer Documentation
+- [TextField](https://developer.apple.com/documentation/swiftui/textfield)
+
 ## Swift Technique Source Code
 [RedundantEntryView.swift](../iOSswiftUIa11yTechniques/RedundantEntryView.swift)
 

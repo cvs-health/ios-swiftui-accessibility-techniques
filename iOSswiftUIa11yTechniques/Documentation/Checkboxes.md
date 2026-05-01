@@ -17,6 +17,10 @@ Notes:
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [Toggle](https://developer.apple.com/documentation/swiftui/toggle)
+
 ## Swift Technique Source Code
 [CheckboxesView.swift](../iOSswiftUIa11yTechniques/CheckboxesView.swift)
 

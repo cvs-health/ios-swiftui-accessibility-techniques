@@ -13,6 +13,10 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [ProgressView](https://developer.apple.com/documentation/swiftui/progressview)
+
 ## Swift Technique Source Code
 [ProgressIndicatorsView.swift](../iOSswiftUIa11yTechniques/ProgressIndicatorsView.swift)
 

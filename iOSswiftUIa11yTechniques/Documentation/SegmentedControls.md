@@ -10,6 +10,10 @@ Limitations:
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
 
+
+## Apple Developer Documentation
+- [Picker](https://developer.apple.com/documentation/swiftui/picker)
+
 ## Swift Technique Source Code
 [SegmentedControlsView.swift](../iOSswiftUIa11yTechniques/SegmentedControlsView.swift)
 

@@ -9,6 +9,10 @@ Use an `.accessibilityHint` matching the visible instruction text for each input
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
 - [3.3.2: Labels or Instructions](https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions)
 
+
+## Apple Developer Documentation
+- [View/accessibilityHint(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityhint(_:))
+
 ## Swift Technique Source Code
 [InputInstructionsView.swift](../iOSswiftUIa11yTechniques/InputInstructionsView.swift)
 

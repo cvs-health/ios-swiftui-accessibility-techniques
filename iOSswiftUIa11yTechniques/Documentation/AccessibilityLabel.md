@@ -12,8 +12,12 @@ Notes:
 - [1.1.1 Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content)
 - [4.1.2 Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [View/accessibilityLabel(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilitylabel(_:)-1d7jv)
+
 ## Swift Technique Source Code
-[AccessibilityLabelView2.swift](../iOSswiftUIa11yTechniques/AccessibilityLabelView2.swift)
+[AccessibilityLabelView.swift](../iOSswiftUIa11yTechniques/AccessibilityLabelView.swift)
 
 ----
 

@@ -9,6 +9,11 @@ Use `.accessibilityHint` to communicate to VoiceOver users that items are reorde
 - [2.1.1 Keyboard](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)
 - [2.5.7 Dragging Movements](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements)
 
+
+## Apple Developer Documentation
+- [View/draggable(_:)](https://developer.apple.com/documentation/swiftui/view/draggable(_:))
+- [View/dropDestination(for:action:isTargeted:)](https://developer.apple.com/documentation/swiftui/view/dropdestination(for:action:istargeted:))
+
 ## Swift Technique Source Code
 [DragDropView.swift](../iOSswiftUIa11yTechniques/DragDropView.swift)
 

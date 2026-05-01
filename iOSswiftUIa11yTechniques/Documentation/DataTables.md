@@ -16,6 +16,11 @@ Platform Defects:
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 
+
+## Apple Developer Documentation
+- [List](https://developer.apple.com/documentation/swiftui/list)
+- [View/accessibilityLabel(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilitylabel(_:)-1d7jv)
+
 ## Swift Technique Source Code
 [DataTablesView.swift](../iOSswiftUIa11yTechniques/DataTablesView.swift)
 

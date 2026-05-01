@@ -8,6 +8,10 @@ When horizontal scrolling is used then it must have single tap alternatives to t
 - [1.4.10: Reflow](https://www.w3.org/WAI/WCAG22/Understanding/reflow)
 - [2.5.1: Pointer Gestures](https://www.w3.org/WAI/WCAG22/Understanding/pointer-gestures)
 
+
+## Apple Developer Documentation
+- [ScrollView](https://developer.apple.com/documentation/swiftui/scrollview)
+
 ## Swift Technique Source Code
 [HorizontalScrollView.swift](../iOSswiftUIa11yTechniques/HorizontalScrollView.swift)
 

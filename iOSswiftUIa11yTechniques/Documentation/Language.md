@@ -11,6 +11,10 @@ When only some text on a page is in a different language, use an `AttributedStri
 - [3.1.1 Language of Page](https://www.w3.org/WAI/WCAG22/Understanding/language-of-page)
 - [3.1.2 Language of Parts](https://www.w3.org/WAI/WCAG22/Understanding/language-of-parts)
 
+
+## Apple Developer Documentation
+- [View/environment(_:_:)](https://developer.apple.com/documentation/swiftui/view/environment(_:_:))
+
 ## Swift Technique Source Code
 [LanguageView.swift](../iOSswiftUIa11yTechniques/LanguageView.swift)
 

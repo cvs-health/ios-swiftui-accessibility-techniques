@@ -20,6 +20,11 @@ Platform Defects:
 ## Applicable WCAG Success Criteria
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 
+
+## Apple Developer Documentation
+- [AccessibilityTraits/isHeader](https://developer.apple.com/documentation/swiftui/accessibilitytraits/isheader)
+- [View/accessibilityAddTraits(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityaddtraits(_:))
+
 ## Swift Technique Source Code
 [HeadingsView.swift](../iOSswiftUIa11yTechniques/HeadingsView.swift)
 

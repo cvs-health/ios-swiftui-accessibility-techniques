@@ -22,6 +22,10 @@ Platform Defects:
 - [2.1.1: Keyboard](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [VideoPlayer](https://developer.apple.com/documentation/avkit/videoplayer)
+
 ## Swift Technique Source Code
 [VideosView.swift](../iOSswiftUIa11yTechniques/VideosView.swift)
 

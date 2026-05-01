@@ -6,6 +6,10 @@ Don't use `.accessibilityIdentifier()` to try to label elements for assistive te
 ## Applicable WCAG Success Criteria
 N/A - This is a UI Testing technique, not an accessibility requirement.
 
+
+## Apple Developer Documentation
+- [View/accessibilityIdentifier(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityidentifier(_:))
+
 ## Swift Technique Source Code
 [AccessibilityIdentifier.swift](../iOSswiftUIa11yTechniques/AccessibilityIdentifier.swift)
 

@@ -7,6 +7,10 @@ Use `.accessibilitySortPriority()` to ensure VoiceOver focuses on the most impor
 - [1.3.2: Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
 - [2.4.3: Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
 
+
+## Apple Developer Documentation
+- [View/accessibilitySortPriority(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilitysortpriority(_:))
+
 ## Swift Technique Source Code
 [AccessibilitySortPriority.swift](../iOSswiftUIa11yTechniques/AccessibilitySortPriority.swift)
 

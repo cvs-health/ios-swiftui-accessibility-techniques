@@ -9,6 +9,10 @@ Use the `@Environment(\.accessibilityDimFlashingLights)` variable to stop flashi
 ## Applicable WCAG Success Criteria
 - [2.3.1 Three Flashes or Below Threshold](https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold)
 
+
+## Apple Developer Documentation
+- [EnvironmentValues/accessibilityDimFlashingLights](https://developer.apple.com/documentation/swiftui/environmentvalues/accessibilitydimflashinglights)
+
 ## Swift Technique Source Code
 [DimFlashingLightsView.swift](../iOSswiftUIa11yTechniques/DimFlashingLightsView.swift)
 

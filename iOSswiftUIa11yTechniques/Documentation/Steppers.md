@@ -15,6 +15,10 @@ Platform Defects:
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [Stepper](https://developer.apple.com/documentation/swiftui/stepper)
+
 ## Swift Technique Source Code
 [SteppersView.swift](../iOSswiftUIa11yTechniques/SteppersView.swift)
 

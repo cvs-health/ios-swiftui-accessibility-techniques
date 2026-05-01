@@ -11,6 +11,11 @@ Notes:
 - [1.1.1: Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [Image](https://developer.apple.com/documentation/swiftui/image)
+- [View/accessibilityLabel(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilitylabel(_:)-1d7jv)
+
 ## Swift Technique Source Code
 [FunctionalView.swift](../iOSswiftUIa11yTechniques/FunctionalView.swift)
 

@@ -12,6 +12,10 @@ Warning:
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
 - [2.5.3: Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name)
 
+
+## Apple Developer Documentation
+- [View/accessibilityElement(children:)](https://developer.apple.com/documentation/swiftui/view/accessibilityelement(children:))
+
 ## Swift Technique Source Code
 [GroupingControlsView.swift](../iOSswiftUIa11yTechniques/GroupingControlsView.swift)
 

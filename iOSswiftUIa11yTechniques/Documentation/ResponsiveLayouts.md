@@ -8,6 +8,11 @@ Use `horizontalSizeClass` and `verticalSizeClass` environment values to switch b
 - [1.4.4: Resize Text](https://www.w3.org/WAI/WCAG22/Understanding/resize-text)
 - [1.4.10: Reflow](https://www.w3.org/WAI/WCAG22/Understanding/reflow)
 
+
+## Apple Developer Documentation
+- [ViewThatFits](https://developer.apple.com/documentation/swiftui/viewthatfits)
+- [GeometryReader](https://developer.apple.com/documentation/swiftui/geometryreader)
+
 ## Swift Technique Source Code
 [ResponsiveLayoutsView.swift](../iOSswiftUIa11yTechniques/ResponsiveLayoutsView.swift)
 

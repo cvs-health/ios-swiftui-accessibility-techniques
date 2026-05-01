@@ -8,6 +8,10 @@ Magic Tap is activated when VoiceOver users double tap with 2 fingers anywhere o
 ## Applicable WCAG Success Criteria
 - N/A
 
+
+## Apple Developer Documentation
+- [View/accessibilityAction(.magicTap)](https://developer.apple.com/documentation/swiftui/view/accessibilityaction(_:_:))
+
 ## Swift Technique Source Code
 [MagicTapView.swift](../iOSswiftUIa11yTechniques/MagicTapView.swift)
 

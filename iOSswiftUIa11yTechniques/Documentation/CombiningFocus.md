@@ -12,6 +12,10 @@ If important traits are removed in the child elements make sure to add them back
 - [1.3.2 Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [View/accessibilityElement(children:)](https://developer.apple.com/documentation/swiftui/view/accessibilityelement(children:))
+
 ## Swift Technique Source Code
 [CombiningFocusView.swift](../iOSswiftUIa11yTechniques/CombiningFocusView.swift)
 

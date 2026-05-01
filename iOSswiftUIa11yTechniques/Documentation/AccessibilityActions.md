@@ -12,6 +12,10 @@ Additionally make sure there are single tap alternatives to gesture functions.
 ## Applicable WCAG Success Criteria
 - N/A
 
+
+## Apple Developer Documentation
+- [View/accessibilityAction(_:_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityaction(_:_:))
+
 ## Swift Technique Source Code
 [ActionsView.swift](../iOSswiftUIa11yTechniques/ActionsView.swift)
 

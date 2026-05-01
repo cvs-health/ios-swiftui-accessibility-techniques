@@ -14,6 +14,11 @@ Notes:
 - [1.4.3 Contrast (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum)
 - [1.4.11 Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast)
 
+
+## Apple Developer Documentation
+- [Color](https://developer.apple.com/documentation/swiftui/color)
+- [ShapeStyle](https://developer.apple.com/documentation/swiftui/shapestyle)
+
 ## Swift Technique Source Code
 [ContrastView.swift](../iOSswiftUIa11yTechniques/ContrastView.swift)
 

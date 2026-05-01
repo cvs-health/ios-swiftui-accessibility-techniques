@@ -9,6 +9,10 @@ Use the `@Environment(\.accessibilityReduceMotion)` variable to stop moving cont
 ## Applicable WCAG Success Criteria
 - [2.2.2 Pause, Stop, Hide](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide)
 
+
+## Apple Developer Documentation
+- [EnvironmentValues/accessibilityReduceMotion](https://developer.apple.com/documentation/swiftui/environmentvalues/accessibilityreducemotion)
+
 ## Swift Technique Source Code
 [ReduceMotionView.swift](../iOSswiftUIa11yTechniques/ReduceMotionView.swift)
 

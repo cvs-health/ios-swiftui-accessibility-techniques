@@ -96,6 +96,10 @@ func testMyView() throws {
 }
 ```
 
+## Apple Developer Documentation
+- [performAccessibilityAudit(for:_:)](https://developer.apple.com/documentation/xctest/xcuiapplication/4190847-performaccessibilityaudit)
+- [XCUIElement](https://developer.apple.com/documentation/xctest/xcuielement)
+
 ## Related Resources
 
 - [WWDC 2023: Perform accessibility audits for your app](https://developer.apple.com/videos/play/wwdc2023/10035/)

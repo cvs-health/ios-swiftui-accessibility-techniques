@@ -16,6 +16,10 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [3.3.2 Labels or Instructions](https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions)
 
+
+## Apple Developer Documentation
+- [View/accessibilityHint(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityhint(_:))
+
 ## Swift Technique Source Code
 [AccessibilityHintView.swift](../iOSswiftUIa11yTechniques/AccessibilityHintView.swift)
 

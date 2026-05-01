@@ -12,6 +12,10 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [4.1.2 Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value)
 
+
+## Apple Developer Documentation
+- [View/accessibilityAdjustableAction(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityadjustableaction(_:))
+
 ## Swift Technique Source Code
 [AdjustableActionView.swift](../iOSswiftUIa11yTechniques/AdjustableActionView.swift)
 

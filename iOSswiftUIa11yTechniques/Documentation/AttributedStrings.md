@@ -9,6 +9,11 @@ When using attributed strings to visually convey meaning to sighted users there 
 ## Applicable WCAG Success Criteria
 - [1.1.1: Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content)
 
+
+## Apple Developer Documentation
+- [AttributedString](https://developer.apple.com/documentation/foundation/attributedstring)
+- [Text](https://developer.apple.com/documentation/swiftui/text)
+
 ## Swift Technique Source Code
 [AttributedStringsView.swift](../iOSswiftUIa11yTechniques/AttributedStringsView.swift)
 

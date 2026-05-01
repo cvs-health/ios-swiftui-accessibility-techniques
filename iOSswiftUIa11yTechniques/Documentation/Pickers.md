@@ -20,6 +20,10 @@ Platform Defects:
 - [3.3.2: Labels or Instructions](https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [Picker](https://developer.apple.com/documentation/swiftui/picker)
+
 ## Swift Technique Source Code
 [PickersView.swift](../iOSswiftUIa11yTechniques/PickersView.swift)
 

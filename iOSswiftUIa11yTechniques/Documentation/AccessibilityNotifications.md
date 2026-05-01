@@ -10,6 +10,11 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [4.1.3: Status Messages](https://www.w3.org/WAI/WCAG22/Understanding/status-messages)
 
+
+## Apple Developer Documentation
+- [UIAccessibility.post(notification:argument:)](https://developer.apple.com/documentation/uikit/uiaccessibility/1615194-post)
+- [AccessibilityNotification](https://developer.apple.com/documentation/swiftui/accessibilitynotification)
+
 ## Swift Technique Source Code
 [AccessibilityNotificationsView.swift](../iOSswiftUIa11yTechniques/AccessibilityNotificationsView.swift)
 

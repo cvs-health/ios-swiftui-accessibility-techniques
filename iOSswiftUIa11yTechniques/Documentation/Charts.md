@@ -8,6 +8,11 @@ Use `.accessibilityLabel` and `.accessibilityValue` to provide meaningful labels
 - [1.1.1: Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content)
 - [1.4.1: Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color)
 
+
+## Apple Developer Documentation
+- [Swift Charts](https://developer.apple.com/documentation/charts)
+- [View/accessibilityLabel(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilitylabel(_:)-1d7jv)
+
 ## Swift Technique Source Code
 [ChartsView.swift](../iOSswiftUIa11yTechniques/ChartsView.swift)
 

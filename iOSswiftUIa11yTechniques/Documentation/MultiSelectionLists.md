@@ -11,6 +11,11 @@ Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("Group 
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [List](https://developer.apple.com/documentation/swiftui/list)
+- [View/accessibilityAddTraits(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityaddtraits(_:))
+
 ## Swift Technique Source Code
 [MultiSelectionListView.swift](../iOSswiftUIa11yTechniques/MultiSelectionListView.swift)
 

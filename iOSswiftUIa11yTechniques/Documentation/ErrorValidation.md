@@ -16,6 +16,11 @@ Notes:
 - [3.3.1: Error Identification](https://www.w3.org/WAI/WCAG22/Understanding/error-identification)
 - [3.3.3: Error Suggestion](https://www.w3.org/WAI/WCAG22/Understanding/error-suggestion)
 
+
+## Apple Developer Documentation
+- [View/accessibilityLabel(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilitylabel(_:)-1d7jv)
+- [AccessibilityNotification](https://developer.apple.com/documentation/swiftui/accessibilitynotification)
+
 ## Swift Technique Source Code
 [ErrorValidationView.swift](../iOSswiftUIa11yTechniques/ErrorValidationView.swift)
 

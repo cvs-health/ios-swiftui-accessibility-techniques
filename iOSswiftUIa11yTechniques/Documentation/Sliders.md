@@ -18,6 +18,10 @@ Notes:
 ## WCAG Sufficient Techniques
 - [G216: Providing single point activation for a control slider](https://www.w3.org/WAI/WCAG21/Techniques/general/G216)
 
+
+## Apple Developer Documentation
+- [Slider](https://developer.apple.com/documentation/swiftui/slider)
+
 ## Swift Technique Source Code
 [SlidersView.swift](../iOSswiftUIa11yTechniques/SlidersView.swift)
 

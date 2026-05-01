@@ -14,6 +14,10 @@ Notes:
 ## Applicable WCAG Success Criteria
 - [2.5.3 Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name)
 
+
+## Apple Developer Documentation
+- [View/accessibilityInputLabels(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityinputlabels(_:))
+
 ## Swift Technique Source Code
 [InputLabelsView.swift](../iOSswiftUIa11yTechniques/InputLabelsView.swift)
 

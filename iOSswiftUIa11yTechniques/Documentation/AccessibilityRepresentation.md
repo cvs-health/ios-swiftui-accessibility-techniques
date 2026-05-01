@@ -7,6 +7,10 @@ Use `.accessibilityRepresentation` to provide a hidden native control representa
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [View/accessibilityRepresentation(representation:)](https://developer.apple.com/documentation/swiftui/view/accessibilityrepresentation(representation:))
+
 ## Swift Technique Source Code
 [AccessibilityRepresentationView.swift](../iOSswiftUIa11yTechniques/AccessibilityRepresentationView.swift)
 

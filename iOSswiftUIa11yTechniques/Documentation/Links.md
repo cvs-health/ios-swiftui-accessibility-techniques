@@ -20,6 +20,10 @@ Platform Defects:
 - [2.4.4: Link Purpose (In Context)](https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
 
+
+## Apple Developer Documentation
+- [Link](https://developer.apple.com/documentation/swiftui/link)
+
 ## Swift Technique Source Code
 [LinksView.swift](../iOSswiftUIa11yTechniques/LinksView.swift)
 

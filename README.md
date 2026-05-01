@@ -180,6 +180,9 @@ See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and 
 - [x] [Videos](iOSswiftUIa11yTechniques/Documentation/Videos.md)
 - [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
 
+### X
+- [x] [XCTest Accessibility Testing](iOSswiftUIa11yTechniques/Documentation/XCTestAccessibility.md)
+
 
 ## Contributor Guide
 

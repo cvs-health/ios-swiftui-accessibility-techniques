@@ -207,7 +207,8 @@ Button(action: {}) {
 - Add `.textContentType(.emailAddress)`, `.textContentType(.password)`, etc. to text fields so autofill works correctly.
 
 ```swift
-// Good
+// Good — visible label above the text field
+Text("Email")
 TextField("Email", text: $email)
     .textContentType(.emailAddress)
 

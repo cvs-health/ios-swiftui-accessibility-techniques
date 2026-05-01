@@ -69,16 +69,16 @@ struct A11yCheckView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 HStack {
-                    Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
-                        .accessibilityLabel("Favorite")
-                    Image(systemName: "heart.fill")
+                    Image(systemName: "square.and.arrow.up.trianglebadge.exclamationmark")
+                        .foregroundColor(.orange)
+                        .accessibilityLabel("Upload warning")
+                    Image(systemName: "arrow.up.heart.fill")
                         .foregroundColor(.red)
                         .accessibilityHidden(true)
                     Text("Liked")
                 }
                 DisclosureGroup("Details") {
-                    Text("The good image example uses `.accessibilityLabel(\"Favorite\")` on the star image, passing the `image-missing-label` rule. The label says \"Favorite\" not \"Favorite icon\", passing the `image-label-contains-role` rule. The decorative heart image uses `.accessibilityHidden(true)` since the adjacent text already conveys the meaning.")
+                    Text("The good image example uses `.accessibilityLabel(\"Upload warning\")` on the first image, passing the `image-missing-label` rule. The label says \"Upload warning\" not \"Upload warning icon\", passing the `image-label-contains-role` rule. The decorative heart image uses `.accessibilityHidden(true)` since the adjacent text already conveys the meaning.")
                 }.padding(.bottom).accessibilityHint("Good Example Images")
                 // MARK: Good Headings
                 Text("Good Example Headings")

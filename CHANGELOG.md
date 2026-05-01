@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [26.6] - 2026-05-01
+
+### iOS App
+
+#### Added
+
+- Accessibility Label technique page with good and bad examples
+- Accessibility Value technique page with good and bad examples for custom controls
+- Accessibility Hint technique page with good and bad examples following Apple's hint guidelines
+
+### Documentation
+
+- Accessibility Label documentation page with WCAG 1.1.1 and 4.1.2 references
+- Accessibility Value documentation page with WCAG 4.1.2 reference
+- Accessibility Hint documentation page with WCAG 3.3.2 reference
+
 ## [26.5] - 2026-05-01
 
 ### iOS App

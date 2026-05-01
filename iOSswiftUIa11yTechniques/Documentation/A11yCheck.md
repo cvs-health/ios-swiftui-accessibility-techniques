@@ -60,7 +60,7 @@ See the full [A11yAgent README](../../A11yAgent/README.md) for installation, CLI
 - **`animation-missing-reduce-motion`** (error, WCAG 2.3.1) — `.animation()` or `withAnimation` in a file that does not check `accessibilityReduceMotion` or `UIAccessibility.isReduceMotionEnabled`.
 
 ### Tab Bars
-- **`tabview-missing-label`** (error, WCAG 4.1.2, 2.4.2) — Views inside a `TabView` that lack a `.tabItem` modifier. The `TabView` container should also have an `.accessibilityLabel()` so VoiceOver users hear the tab bar name when entering it.
+- **`tabview-missing-label`** (error, WCAG 4.1.2, 2.4.2) — Views inside a `TabView` that lack a `.tabItem` modifier. Also flags custom tab bar containers using `.accessibilityAddTraits(.isTabBar)` that are missing an `.accessibilityLabel()` group label. VoiceOver users need to hear the tab bar name when entering it.
 
 ### Input Purpose
 - **`input-missing-purpose`** (error, WCAG 1.3.5) — `TextField` or `SecureField` without `.textContentType()`. Infers the expected content type from variable name, label, or placeholder.

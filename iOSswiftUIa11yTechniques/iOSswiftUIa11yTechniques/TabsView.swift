@@ -1,5 +1,5 @@
 /*
-   Copyright 2023 CVS Health and/or one of its affiliates
+   Copyright 2023-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ struct TabsView: View {
                     Text("Tabs Good Example")
                 }.padding()
                 DisclosureGroup("Details") {
-                    Text("The first good tabs example uses a native `TabView` with default functionality. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number.")
+                    Text("The first good tabs example uses a native `TabView` with default functionality. VoiceOver reads the tab trait and selected state as well as the number of tabs and current tab number. The Messages tab uses `.badge(3)` to display a notification count — VoiceOver automatically announces the badge value.")
                 }.padding(.bottom).accessibilityHint("Good Example native `TabView`")
                 Text("Good Example `.tabViewStyle(.page)` with `.accessibilityLabel` and `backgroundDisplayMode: .always`")
                     .font(.subheadline)

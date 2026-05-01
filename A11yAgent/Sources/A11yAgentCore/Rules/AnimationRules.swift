@@ -72,18 +72,19 @@ private class WithAnimationVisitor: SyntaxVisitor {
 
 // MARK: - Tab View Missing Label Rule
 
-/// Flags TabView items that lack a .tabItem { } modifier, which means
-/// the tab has no label for VoiceOver or visual identification.
+/// Flags TabView items that lack a .tabItem { } modifier and custom tab bar
+/// containers (using `.accessibilityAddTraits(.isTabBar)`) that lack an
+/// `.accessibilityLabel()` group label.
 ///
 /// WCAG 4.1.2 Name, Role, Value
 /// WCAG 2.4.2 Page Titled — tabs serve as navigation landmarks
 public struct TabViewMissingLabelRule: A11yRule {
     public let id = "tabview-missing-label"
-    public let name = "TabView Item Missing Label"
+    public let name = "TabView or Custom Tab Bar Missing Label"
     public let severity = A11ySeverity.error
     public let impact = A11yImpact.serious
     public let wcagCriteria = ["4.1.2", "2.4.2"]
-    public let description = "Every view inside a TabView must have a .tabItem { } modifier with a label so VoiceOver can identify each tab."
+    public let description = "Every view inside a TabView must have a .tabItem { } modifier. Custom tab bars using .accessibilityAddTraits(.isTabBar) must have an .accessibilityLabel() so VoiceOver users hear the tab bar name."
 
     public init() {}
 
@@ -91,10 +92,10 @@ public struct TabViewMissingLabelRule: A11yRule {
         let visitor = ViewHierarchyVisitor.analyze(syntax)
         var diagnostics: [A11yDiagnostic] = []
 
+        // Check native TabView children for missing .tabItem
         for view in visitor.views(ofType: "TabView") {
             guard let trailingClosure = view.callExpr.trailingClosure else { continue }
 
-            // Each direct child view in the TabView's trailing closure should have .tabItem
             let childVisitor = DirectChildViewVisitor(viewMode: .sourceAccurate)
             childVisitor.walk(trailingClosure)
 
@@ -111,7 +112,56 @@ public struct TabViewMissingLabelRule: A11yRule {
             }
         }
 
+        // Check custom tab bars: containers with .isTabBar trait but no .accessibilityLabel
+        let tabBarVisitor = TabBarTraitVisitor(viewMode: .sourceAccurate)
+        tabBarVisitor.walk(syntax)
+        for container in tabBarVisitor.containers {
+            let chainText = container.trimmedDescription
+            if !chainText.contains("accessibilityLabel") {
+                diagnostics.append(makeDiagnostic(
+                    message: "Custom tab bar with .accessibilityAddTraits(.isTabBar) is missing .accessibilityLabel(). VoiceOver users won't hear the tab bar name when entering it.",
+                    node: container,
+                    context: context,
+                    suggestion: "Add .accessibilityLabel(\"Tab Bar Name\") to the container with .isTabBar trait"
+                ))
+            }
+        }
+
         return diagnostics
+    }
+}
+
+/// Finds views that have `.accessibilityAddTraits(.isTabBar)`.
+private class TabBarTraitVisitor: SyntaxVisitor {
+    var containers: [FunctionCallExprSyntax] = []
+
+    override func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
+        if let member = node.calledExpression.as(MemberAccessExprSyntax.self),
+           member.declName.baseName.text == "accessibilityAddTraits" {
+            let argText = node.arguments.description
+            if argText.contains("isTabBar") {
+                // Walk up to find the root of the modifier chain
+                var root: ExprSyntax = ExprSyntax(node)
+                while let parent = root.parent {
+                    if let funcCall = parent.as(FunctionCallExprSyntax.self),
+                       let memberAccess = funcCall.calledExpression.as(MemberAccessExprSyntax.self),
+                       memberAccess.base?.id == root.id {
+                        root = ExprSyntax(funcCall)
+                        continue
+                    }
+                    if let memberAccess = parent.as(MemberAccessExprSyntax.self),
+                       let grandparent = memberAccess.parent?.as(FunctionCallExprSyntax.self) {
+                        root = ExprSyntax(grandparent)
+                        continue
+                    }
+                    break
+                }
+                if let rootCall = root.as(FunctionCallExprSyntax.self) {
+                    containers.append(rootCall)
+                }
+            }
+        }
+        return .visitChildren
     }
 }
 

@@ -308,10 +308,10 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("The `tabview-missing-label` rule flags views inside a `TabView` that lack a `.tabItem` modifier. Every tab must have `.tabItem { Label(\"Name\", systemImage: \"icon\") }` so VoiceOver users can identify each tab. The `TabView` container should also have an `.accessibilityLabel()` group label so VoiceOver users hear the tab bar name when first moving focus into it.")
+                Text("The `tabview-missing-label` rule flags views inside a `TabView` that lack a `.tabItem` modifier, and custom tab bar containers using `.accessibilityAddTraits(.isTabBar)` that are missing an `.accessibilityLabel()`. Every tab must have `.tabItem { Label(\"Name\", systemImage: \"icon\") }` so VoiceOver users can identify each tab. Custom tab bars must use `.accessibilityElement(children: .contain)`, `.accessibilityAddTraits(.isTabBar)`, and `.accessibilityLabel()` so VoiceOver users hear the tab bar name and tab count.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The `tabview-missing-label` rule maps to WCAG 4.1.2 Name, Role, Value and WCAG 2.4.2 Page Titled. Without `.tabItem` labels, tabs have no accessible name. Without a group label on the `TabView` container, VoiceOver users don't hear the context of the tab bar when entering it.")
+                    Text("The `tabview-missing-label` rule maps to WCAG 4.1.2 Name, Role, Value and WCAG 2.4.2 Page Titled. Without `.tabItem` labels, tabs have no accessible name. Custom tab bars using `.accessibilityAddTraits(.isTabBar)` without `.accessibilityLabel()` leave VoiceOver users without context about what the tab bar is for. See the Tabs technique page for full custom tab bar examples.")
                 }.padding(.bottom).accessibilityHint("Good Example Tab Bars")
                 // MARK: Good Gestures
                 Text("Good Example Gestures")

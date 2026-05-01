@@ -46,12 +46,25 @@ struct ContentView: View {
         return filtered.sorted { $0.name < $1.name }
     }
 
+    var groupedItems: [(String, [Techniques])] {
+        let dict = Dictionary(grouping: filteredAndSortedItems) { technique in
+            String(technique.name.prefix(1)).uppercased()
+        }
+        return dict.sorted { $0.key < $1.key }
+    }
+
     var body: some View {
         NavigationStack {
             List {
-                ForEach(filteredAndSortedItems) { technique in
-                    NavigationLink(value: technique.id) {
-                        Text(technique.name)
+                ForEach(groupedItems, id: \.0) { letter, items in
+                    Section {
+                        ForEach(items) { technique in
+                            NavigationLink(value: technique.id) {
+                                Text(technique.name)
+                            }
+                        }
+                    } header: {
+                        Text(letter)
                     }
                 }
             }

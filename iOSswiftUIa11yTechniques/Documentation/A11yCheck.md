@@ -58,13 +58,15 @@ See the full [A11yAgent README](../../A11yAgent/README.md) for installation, CLI
 
 ### Animation
 - **`animation-missing-reduce-motion`** (error, WCAG 2.3.1) — `.animation()` or `withAnimation` in a file that does not check `accessibilityReduceMotion` or `UIAccessibility.isReduceMotionEnabled`.
-- **`tabview-missing-label`** (error, WCAG 4.1.2, 2.4.2) — Views inside a `TabView` that lack a `.tabItem` modifier.
+
+### Tab Bars
+- **`tabview-missing-label`** (error, WCAG 4.1.2, 2.4.2) — Views inside a `TabView` that lack a `.tabItem` modifier. The `TabView` container should also have an `.accessibilityLabel()` so VoiceOver users hear the tab bar name when entering it.
 
 ### Input Purpose
 - **`input-missing-purpose`** (error, WCAG 1.3.5) — `TextField` or `SecureField` without `.textContentType()`. Infers the expected content type from variable name, label, or placeholder.
 
 ### Gestures
-- **`gesture-missing-alternative`** (error, WCAG 2.1.1, 2.5.1) — `.onLongPressGesture` or `.gesture(DragGesture() / RotationGesture() / etc.)` without an `.accessibilityAction()` alternative.
+- **`gesture-missing-alternative`** (error, WCAG 2.1.1, 2.5.1) — `.onLongPressGesture` or `.gesture(DragGesture() / RotationGesture() / etc.)` without an `.accessibilityAction()` alternative for VoiceOver users and a visible single-tap Button alternative for touch users who cannot perform the gesture.
 
 ### Grouping
 - **`missing-accessibility-grouping`** (info, WCAG 1.3.1) — `HStack` or `VStack` containing both `Image` and `Text` without `.accessibilityElement(children: .combine)`.

@@ -5,16 +5,18 @@ import SwiftSyntax
 /// Flags complex gestures (long press, drag, rotation, magnification) that
 /// don't have an `.accessibilityAction` alternative. These gestures are
 /// inaccessible to VoiceOver, Switch Control, and Voice Control users.
+/// A visible single-tap alternative (e.g. a Button) should also be provided
+/// so that touch users who cannot perform the gesture can still trigger the action.
 ///
 /// WCAG 2.1.1 Keyboard (all functionality must be operable via keyboard/assistive tech)
-/// WCAG 2.5.1 Pointer Gestures (multipoint or path-based gestures need alternatives)
+/// WCAG 2.5.1 Pointer Gestures (multipoint or path-based gestures need single-pointer alternatives)
 public struct CustomGestureMissingAlternativeRule: A11yRule {
     public let id = "gesture-missing-alternative"
     public let name = "Complex Gesture Missing Accessibility Alternative"
     public let severity = A11ySeverity.error
     public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.1.1", "2.5.1"]
-    public let description = "Complex gestures (long press, drag, rotation, magnification) need an .accessibilityAction() alternative so VoiceOver and Switch Control users can perform the same action."
+    public let description = "Complex gestures (long press, drag, rotation, magnification) need an .accessibilityAction() alternative for VoiceOver users and a visible single-tap alternative (e.g. a Button) so touch users who cannot perform the gesture can still trigger the action."
 
     public init() {}
 
@@ -48,10 +50,10 @@ public struct CustomGestureMissingAlternativeRule: A11yRule {
                 let chainText = findChainText(for: gesture.callExpr)
                 if !chainText.contains("accessibilityAction") {
                     diagnostics.append(makeDiagnostic(
-                        message: ".onLongPressGesture without .accessibilityAction() alternative. VoiceOver users cannot perform long press gestures.",
+                        message: ".onLongPressGesture without .accessibilityAction() alternative. Provide .accessibilityAction() for VoiceOver users and a visible single-tap Button alternative for touch users who cannot perform the gesture.",
                         node: gesture.reportNode,
                         context: context,
-                        suggestion: "Add .accessibilityAction(named: \"Long Press\") { /* action */ }"
+                        suggestion: "Add .accessibilityAction(named: \"Long Press\") { /* action */ } and a visible Button alternative"
                     ))
                 }
             }
@@ -69,10 +71,10 @@ public struct CustomGestureMissingAlternativeRule: A11yRule {
                !chainText.contains("accessibilityAdjustableAction") {
                 let gestureType = Self.complexGestureTypes.first { argText.contains($0) } ?? "custom gesture"
                 diagnostics.append(makeDiagnostic(
-                    message: ".gesture(\(gestureType)()) without .accessibilityAction() alternative. VoiceOver and Switch Control users cannot perform this gesture.",
+                    message: ".gesture(\(gestureType)()) without .accessibilityAction() alternative. Provide .accessibilityAction() for VoiceOver users and a visible single-tap Button alternative for touch users who cannot perform this gesture.",
                     node: mod.reportNode,
                     context: context,
-                    suggestion: "Add .accessibilityAction(named: \"Perform Action\") { /* action */ }"
+                    suggestion: "Add .accessibilityAction(named: \"Perform Action\") { /* action */ } and a visible Button alternative"
                 ))
             }
         }

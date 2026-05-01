@@ -302,6 +302,17 @@ struct A11yCheckView: View {
                 DisclosureGroup("Details") {
                     Text("The good animation example checks `@Environment(\\.accessibilityReduceMotion)` before using `withAnimation`, passing the `animation-missing-reduce-motion` rule. When Reduce Motion is enabled the position changes instantly without animation.")
                 }.padding(.bottom).accessibilityHint("Good Example Animation")
+                // MARK: Good Tab Bars
+                Text("Good Example Tab Bars")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("The `tabview-missing-label` rule flags views inside a `TabView` that lack a `.tabItem` modifier. Every tab must have `.tabItem { Label(\"Name\", systemImage: \"icon\") }` so VoiceOver users can identify each tab. The `TabView` container should also have an `.accessibilityLabel()` group label so VoiceOver users hear the tab bar name when first moving focus into it.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The `tabview-missing-label` rule maps to WCAG 4.1.2 Name, Role, Value and WCAG 2.4.2 Page Titled. Without `.tabItem` labels, tabs have no accessible name. Without a group label on the `TabView` container, VoiceOver users don't hear the context of the tab bar when entering it.")
+                }.padding(.bottom).accessibilityHint("Good Example Tab Bars")
                 // MARK: Good Gestures
                 Text("Good Example Gestures")
                     .font(.subheadline)
@@ -348,7 +359,7 @@ struct A11yCheckView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The good gestures example uses `.gesture(DragGesture())` with a single-tap `Button(\"Delete\")` alternative and an `.accessibilityAction(named: \"Delete\")` for VoiceOver users, passing the `gesture-missing-alternative` rule. Providing a tap alternative ensures single-pointer users who cannot perform a swipe gesture can still delete the item.")
+                    Text("The good gestures example uses `.gesture(DragGesture())` with both a visible single-tap `Button(\"Delete\")` alternative for touch users who cannot perform a swipe gesture, and an `.accessibilityAction(named: \"Delete\")` for VoiceOver users, passing the `gesture-missing-alternative` rule. WCAG 2.5.1 requires that path-based gestures have a single-pointer alternative so all touch users can perform the action.")
                 }.padding(.bottom).accessibilityHint("Good Example Gestures")
                 // MARK: Good Grouping
                 Text("Good Example Grouping")
@@ -594,10 +605,10 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("The `animation-missing-reduce-motion` rule flags files that use `.animation()` or `withAnimation` without checking `@Environment(\\.accessibilityReduceMotion)` or `UIAccessibility.isReduceMotionEnabled`. The `tabview-missing-label` rule flags views inside a `TabView` that lack a `.tabItem` modifier.")
+                Text("The `animation-missing-reduce-motion` rule flags files that use `.animation()` or `withAnimation` without checking `@Environment(\\.accessibilityReduceMotion)` or `UIAccessibility.isReduceMotionEnabled`.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The `animation-missing-reduce-motion` rule ensures animations respect the user's Reduce Motion preference. The `tabview-missing-label` rule ensures every tab has a `.tabItem` with a label so VoiceOver users can identify each tab.")
+                    Text("The `animation-missing-reduce-motion` rule ensures animations respect the user's Reduce Motion preference. Users with vestibular disorders may experience discomfort from animations that cannot be disabled.")
                 }.padding(.bottom).accessibilityHint("Bad Example Animation")
                 // MARK: Bad Gestures
                 Text("Bad Example Gestures")
@@ -632,7 +643,7 @@ struct A11yCheckView: View {
                         )
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad gestures example uses `.gesture(DragGesture())` with no `.accessibilityAction` alternative and no single-tap button, failing the `gesture-missing-alternative` rule. VoiceOver and Switch Control users cannot perform a swipe gesture, and single-pointer users who cannot drag have no way to trigger the delete action.")
+                    Text("The bad gestures example uses `.gesture(DragGesture())` with no `.accessibilityAction` alternative and no visible single-tap button, failing the `gesture-missing-alternative` rule. VoiceOver and Switch Control users cannot perform a swipe gesture, and touch users who cannot drag have no visible single-pointer alternative to trigger the delete action. WCAG 2.5.1 requires single-pointer alternatives for path-based gestures.")
                 }.padding(.bottom).accessibilityHint("Bad Example Gestures")
                 // MARK: Bad Grouping
                 Text("Bad Example Grouping")

@@ -17,7 +17,7 @@ Notes:
 - [View/accessibilityLabel(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilitylabel(_:)-1d7jv)
 
 ## Swift Technique Source Code
-[AccessibilityLabelView2.swift](../iOSswiftUIa11yTechniques/AccessibilityLabelView2.swift)
+[AccessibilityLabelView.swift](../iOSswiftUIa11yTechniques/AccessibilityLabelView.swift)
 
 ----
 

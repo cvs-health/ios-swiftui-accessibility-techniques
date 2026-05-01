@@ -132,7 +132,7 @@ struct ContentView: View {
         case "functional": FunctionalView()
         case "accessibility hidden": AccessibilityHidden()
         case "accessibility hint": AccessibilityHintView()
-        case "accessibility label": AccessibilityLabelView2()
+        case "accessibility label": AccessibilityLabelView()
         case "accessibility value": AccessibilityValueView()
         case "accessibility notifications": AccessibilityNotificationsView()
         case "accessibility sort priority": AccessibilitySortPriority()

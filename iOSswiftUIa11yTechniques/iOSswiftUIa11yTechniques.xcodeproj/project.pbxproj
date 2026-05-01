@@ -139,7 +139,7 @@
 		C0A11E00112233445566780D /* AccessibilitySnapshot in Frameworks */ = {isa = PBXBuildFile; productRef = C0A11E001122334455667790 /* AccessibilitySnapshot */; };
 		C0A11E00112233445566780E /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = C0A11E001122334455667791 /* SnapshotTesting */; };
 		DDB3FAE61AB5AA9CB0708B34 /* ContrastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3FAE51AB5AA9CB0708B34 /* ContrastView.swift */; };
-		FB32BC6A09DE90F5CFD0D0D9 /* AccessibilityLabelView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43FD8BDD5D0872DDA3400FA /* AccessibilityLabelView2.swift */; };
+		FB32BC6A09DE90F5CFD0D0D9 /* AccessibilityLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43FD8BDD5D0872DDA3400FA /* AccessibilityLabelView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -402,7 +402,7 @@
 		C0A11E001122334455667807 /* iOSswiftUIa11yTechniquesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSswiftUIa11yTechniquesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0A11E001122334455667808 /* AccessibilitySnapshotTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilitySnapshotTests.swift; sourceTree = "<group>"; };
 		DDB3FAE51AB5AA9CB0708B34 /* ContrastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContrastView.swift; sourceTree = "<group>"; };
-		F43FD8BDD5D0872DDA3400FA /* AccessibilityLabelView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityLabelView2.swift; sourceTree = "<group>"; };
+		F43FD8BDD5D0872DDA3400FA /* AccessibilityLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityLabelView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -581,7 +581,7 @@
 				AABD27CD2A9FF10700F718F7 /* A11yEnhancementsView.swift */,
 				BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */,
 				5B033E4EAFAF40009797BD1C /* AccessibilityHintView.swift */,
-				F43FD8BDD5D0872DDA3400FA /* AccessibilityLabelView2.swift */,
+				F43FD8BDD5D0872DDA3400FA /* AccessibilityLabelView.swift */,
 				7C53247916BBCA5DA8E9DF36 /* AccessibilityValueView.swift */,
 				BC3951EE2D64EB4200D26DBB /* AccessibilityIdentifier.swift */,
 				AAF127C12B23EDB500D5313D /* AccessibilityNotificationsView.swift */,
@@ -1121,7 +1121,7 @@
 				AA74DD5D2AFDCCFA00348078 /* PageTitleGood.swift in Sources */,
 				BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */,
 				85631A7D74186404AD9BCCD8 /* AccessibilityHintView.swift in Sources */,
-				FB32BC6A09DE90F5CFD0D0D9 /* AccessibilityLabelView2.swift in Sources */,
+				FB32BC6A09DE90F5CFD0D0D9 /* AccessibilityLabelView.swift in Sources */,
 				2818D1AB2D68060AC74FE0CE /* AccessibilityValueView.swift in Sources */,
 				AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */,
 				BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */,

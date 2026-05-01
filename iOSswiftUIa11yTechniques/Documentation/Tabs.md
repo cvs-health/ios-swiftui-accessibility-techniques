@@ -8,6 +8,8 @@ For custom tabs use `isTabBar` and `isSelected` Traits with `.accessibilityEleme
 Notes:
 
 * When using `.tabViewStyle(.page)` to create a `TabView` with page indicator dots make sure to add `.indexViewStyle(.page(backgroundDisplayMode: .always))` to display the page indicator dots with a background othwerwise they will be invisible in light mode.
+* Use `.badge()` to display notification counts on tab items. `.badge(3)` shows the count visually but VoiceOver may not announce it automatically. Add `.accessibilityValue("3 notifications")` to the tab content view to ensure VoiceOver speaks the badge count. Note: `.accessibilityValue` must be placed on the tab content view (e.g., `MessagesTabView`), not on the `.tabItem` label, for VoiceOver to read it correctly.
+* For custom tab bars with badge overlays, use `.accessibilityHidden(true)` on the visual badge element to prevent VoiceOver from reading the raw number, and add `.accessibilityValue("3 notifications")` on the tab button so VoiceOver announces the count meaningfully.
 
 Platform Defects:
 
@@ -21,7 +23,7 @@ Platform Defects:
 
 ----
 
-Copyright 2023-2025 CVS Health and/or one of its affiliates
+Copyright 2023-2026 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

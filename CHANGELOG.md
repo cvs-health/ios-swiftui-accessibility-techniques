@@ -10,11 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Added
 
-- Multi-Selection Lists technique with good and bad examples using `.accessibilityAddTraits(.isSelected)` and `.accessibilityValue`
+- a11y-check technique page with good and bad examples for all 31 static analysis rules
 
 ### Documentation
 
-- Multi-Selection Lists documentation page with WCAG 1.3.1 and 4.1.2 references
+- a11y-check documentation page with all 17 WCAG success criteria references
 
 ## [26.4] - 2026-04-29
 
@@ -23,10 +23,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 #### Added
 
 - Drag & Drop technique with accessible reorder controls (tap-to-select, Move Up/Down buttons, accessibility actions)
+- Multi-Selection Lists technique with good and bad examples using `.accessibilityAddTraits(.isSelected)` and `.accessibilityValue`
 
 ### Documentation
 
 - Drag & Drop documentation page with WCAG 2.1.1 and 2.5.7 references
+- Multi-Selection Lists documentation page with WCAG 1.3.1 and 4.1.2 references
 
 ## [26.3] - 2026-04-29
 

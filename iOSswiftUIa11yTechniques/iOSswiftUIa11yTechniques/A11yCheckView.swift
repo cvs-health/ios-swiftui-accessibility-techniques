@@ -1,0 +1,602 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
+import SwiftUI
+
+struct A11yCheckView: View {
+    @State private var toggleGood = true
+    @State private var toggleBad = true
+    @State private var textFieldGood = ""
+    @State private var textFieldBad = ""
+    @State private var emailFieldGood = ""
+    @State private var emailFieldBad = ""
+    @State private var sliderGood: Double = 50
+    @State private var sliderBad: Double = 50
+    @State private var stepperGood: Int = 5
+    @State private var stepperBad: Int = 5
+    @State private var pickerGood = "Apple"
+    @State private var pickerBad = "Apple"
+    @State private var showSheetGood = false
+    @State private var showSheetBad = false
+    @AccessibilityFocusState private var isSheetTriggerFocused: Bool
+    @State private var showToastBad = false
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    @State private var animationOffset: CGFloat = 0
+
+    private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
+    private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.openURL) var openURL
+
+    var body: some View {
+        ScrollView {
+            VStack {
+                Text("`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 31 rules across 17 WCAG 2.2 success criteria. The good examples below pass the `a11y-check` rules. The bad examples trigger `a11y-check` violations. Run `a11y-check .` in your project folder to scan your own code.")
+                    .padding(.bottom)
+                // MARK: - Good Examples
+                Text("Good Examples")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.bottom)
+                // MARK: Good Images
+                Text("Good Example Images")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Image(systemName: "star.fill")
+                        .foregroundColor(.yellow)
+                        .accessibilityLabel("Favorite")
+                    Image(systemName: "heart.fill")
+                        .foregroundColor(.red)
+                        .accessibilityHidden(true)
+                    Text("Liked")
+                }
+                DisclosureGroup("Details") {
+                    Text("The good image example uses `.accessibilityLabel(\"Favorite\")` on the star image, passing the `image-missing-label` rule. The label says \"Favorite\" not \"Favorite icon\", passing the `image-label-contains-role` rule. The decorative heart image uses `.accessibilityHidden(true)` since the adjacent text already conveys the meaning.")
+                }.padding(.bottom).accessibilityHint("Good Example Images")
+                // MARK: Good Headings
+                Text("Good Example Headings")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Account Settings")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Manage your account preferences below.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The good heading example uses `.font(.headline)` with `.accessibilityAddTraits(.isHeader)`, passing the `heading-trait-missing` rule. The heading trait is applied using the proper API rather than faking it in the accessibility label, passing the `fake-heading-in-label` rule.")
+                }.padding(.bottom).accessibilityHint("Good Example Headings")
+                // MARK: Good Buttons
+                Text("Good Example Buttons")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Button {} label: {
+                        Image(systemName: "trash")
+                    }
+                    .accessibilityLabel("Delete")
+                    Button {} label: {
+                        Text("Save")
+                    }
+                    .disabled(true)
+                }
+                DisclosureGroup("Details") {
+                    Text("The good button examples pass three rules. The icon-only trash button has `.accessibilityLabel(\"Delete\")`, passing `icon-button-missing-label`. The label says \"Delete\" not \"Delete button\", passing `button-label-contains-role`. The disabled Save button uses `.disabled(true)` rather than just visual opacity, passing `visually-disabled-not-semantic`.")
+                }.padding(.bottom).accessibilityHint("Good Example Buttons")
+                // MARK: Good Traits
+                Text("Good Example Traits")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Circle()
+                    .fill(Color.blue)
+                    .frame(width: 50, height: 50)
+                    .onTapGesture {}
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityLabel("Blue Circle")
+                DisclosureGroup("Details") {
+                    Text("The good traits example uses `.onTapGesture` with `.accessibilityAddTraits(.isButton)` so VoiceOver announces the element as interactive, passing the `tap-gesture-missing-button-trait` rule.")
+                }.padding(.bottom).accessibilityHint("Good Example Traits")
+                // MARK: Good Toggles
+                Text("Good Example Toggles")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Toggle("Wi-Fi", isOn: $toggleGood)
+                DisclosureGroup("Details") {
+                    Text("The good toggle example uses `Toggle(\"Wi-Fi\", isOn:)` with a visible label, passing the `toggle-missing-label` rule.")
+                }.padding(.bottom).accessibilityHint("Good Example Toggles")
+                // MARK: Good Links
+                Text("Good Example Links")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Link("CVS Health Website", destination: URL(string: "https://www.cvshealth.com")!)
+                    .accessibilityRemoveTraits(.isButton)
+                DisclosureGroup("Details") {
+                    Text("The good link example uses a `Link` view instead of a `Button` with `openURL`, passing the `button-used-as-link` rule. The link text says \"CVS Health Website\" rather than \"Click here\", passing the `generic-link-text` rule.")
+                }.padding(.bottom).accessibilityHint("Good Example Links")
+                // MARK: Good Touch Targets
+                Text("Good Example Touch Targets")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button {} label: {
+                    Image(systemName: "plus")
+                }
+                .frame(minWidth: 44, minHeight: 44)
+                .accessibilityLabel("Add")
+                DisclosureGroup("Details") {
+                    Text("The good touch target example uses `.frame(minWidth: 44, minHeight: 44)` ensuring the button meets the minimum touch target size, passing the `small-touch-target` rule.")
+                }.padding(.bottom).accessibilityHint("Good Example Touch Targets")
+                // MARK: Good Dynamic Type
+                Text("Good Example Dynamic Type")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("This text scales with Dynamic Type.")
+                    .font(.body)
+                DisclosureGroup("Details") {
+                    Text("The good Dynamic Type example uses `.font(.body)` which scales with the user's preferred text size, passing the `fixed-font-size` rule. No `.lineLimit(1)` is used so the text wraps rather than truncating, passing the `line-limit-1` rule.")
+                }.padding(.bottom).accessibilityHint("Good Example Dynamic Type")
+                // MARK: Good Page Titles
+                Text("Good Example Page Titles")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("This page uses `.navigationTitle(\"a11y-check\")` on the scroll view container.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The good page title example uses `.navigationTitle()` on the view inside a `NavigationStack`, passing the `missing-navigation-title` rule. Every screen should have a navigation title so VoiceOver users know which page they are on.")
+                }.padding(.bottom).accessibilityHint("Good Example Page Titles")
+                // MARK: Good Accessibility Hidden
+                Text("Good Example Accessibility Hidden")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                VStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                        .accessibilityHidden(true)
+                    Button("Continue") {}
+                }
+                DisclosureGroup("Details") {
+                    Text("The good accessibility hidden example only hides the decorative checkmark image, not the interactive Button. This passes the `hidden-parent-with-controls` rule because `.accessibilityHidden(true)` is not applied to a container that has interactive children.")
+                }.padding(.bottom).accessibilityHint("Good Example Accessibility Hidden")
+                // MARK: Good Color Contrast
+                Text("Good Example Color Contrast")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("This text uses adaptive colors.")
+                    .foregroundColor(.primary)
+                DisclosureGroup("Details") {
+                    Text("The good color contrast example uses `.foregroundColor(.primary)` which adapts to both light and dark mode, passing the `hardcoded-color` rule. Adaptive colors like `.primary`, `.secondary`, and semantic system colors automatically provide sufficient contrast in all appearances.")
+                }.padding(.bottom).accessibilityHint("Good Example Color Contrast")
+                // MARK: Good Form Controls
+                Text("Good Example Form Controls")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                TextField("Search", text: $textFieldGood)
+                    .accessibilityLabel("Search")
+                    .textFieldStyle(.roundedBorder)
+                TextField("Email", text: $emailFieldGood)
+                    .accessibilityLabel("Email")
+                    .textContentType(.emailAddress)
+                    .textFieldStyle(.roundedBorder)
+                Slider(value: $sliderGood, in: 0...100) {
+                    Text("Volume")
+                }
+                Stepper("Quantity: \(stepperGood)", value: $stepperGood, in: 0...10)
+                Picker("Fruit", selection: $pickerGood) {
+                    Text("Apple").tag("Apple")
+                    Text("Banana").tag("Banana")
+                }
+                DisclosureGroup("Details") {
+                    Text("The good form control examples pass four rules. The `TextField` has `.accessibilityLabel(\"Search\")`, passing `textfield-missing-label`. The email field has `.textContentType(.emailAddress)`, passing `input-missing-purpose`. The `Slider` has a \"Volume\" label, passing `slider-missing-label`. The `Stepper` has a \"Quantity\" label, passing `stepper-missing-label`. The `Picker` has a \"Fruit\" label, passing `picker-missing-label`.")
+                }.padding(.bottom).accessibilityHint("Good Example Form Controls")
+                // MARK: Good Focus
+                Text("Good Example Focus")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button("Show Sheet") {
+                    showSheetGood = true
+                }
+                .accessibilityFocused($isSheetTriggerFocused)
+                .sheet(isPresented: $showSheetGood, onDismiss: {
+                    isSheetTriggerFocused = true
+                }) {
+                    VStack {
+                        Text("Sheet Content")
+                        Button("Dismiss") {
+                            showSheetGood = false
+                        }
+                    }
+                    .presentationDetents([.medium])
+                }
+                DisclosureGroup("Details") {
+                    Text("The good focus example uses `@AccessibilityFocusState` to return VoiceOver focus to the trigger button when the sheet is dismissed, passing the `sheet-focus-return` rule.")
+                }.padding(.bottom).accessibilityHint("Good Example Focus")
+                // MARK: Good Animation
+                Text("Good Example Animation")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Circle()
+                    .fill(Color.purple)
+                    .frame(width: 30, height: 30)
+                    .offset(x: animationOffset)
+                Button("Animate") {
+                    if reduceMotion {
+                        animationOffset = animationOffset == 0 ? 50 : 0
+                    } else {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            animationOffset = animationOffset == 0 ? 50 : 0
+                        }
+                    }
+                }
+                DisclosureGroup("Details") {
+                    Text("The good animation example checks `@Environment(\\.accessibilityReduceMotion)` before using `withAnimation`, passing the `animation-missing-reduce-motion` rule. When Reduce Motion is enabled the position changes instantly without animation.")
+                }.padding(.bottom).accessibilityHint("Good Example Animation")
+                // MARK: Good Gestures
+                Text("Good Example Gestures")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Long press for options")
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(8)
+                    .onLongPressGesture {}
+                    .accessibilityAction(named: "Options") {}
+                    .accessibilityAddTraits(.isButton)
+                DisclosureGroup("Details") {
+                    Text("The good gestures example uses `.onLongPressGesture` with an `.accessibilityAction(named: \"Options\")` alternative so VoiceOver and Switch Control users can trigger the action without a long press, passing the `gesture-missing-alternative` rule.")
+                }.padding(.bottom).accessibilityHint("Good Example Gestures")
+                // MARK: Good Grouping
+                Text("Good Example Grouping")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Image(systemName: "person.fill")
+                    Text("John Doe")
+                }
+                .accessibilityElement(children: .combine)
+                DisclosureGroup("Details") {
+                    Text("The good grouping example uses `.accessibilityElement(children: .combine)` on an `HStack` containing an `Image` and `Text`, passing the `missing-accessibility-grouping` rule. VoiceOver reads the combined content as a single element.")
+                }.padding(.bottom).accessibilityHint("Good Example Grouping")
+                // MARK: Good Label in Name
+                Text("Good Example Label in Name")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button("Save Changes") {}
+                    .accessibilityLabel("Save Changes")
+                DisclosureGroup("Details") {
+                    Text("The good label in name example has a `.accessibilityLabel` that matches the visible text \"Save Changes\", passing the `label-in-name` rule. Speech input users can activate the button by saying what they see on screen.")
+                }.padding(.bottom).accessibilityHint("Good Example Label in Name")
+                // MARK: - Bad Examples
+                Text("Bad Examples")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.bottom)
+                // MARK: Bad Images
+                Text("Bad Example Images")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Image(systemName: "star.fill")
+                        .foregroundColor(.yellow)
+                    Image(systemName: "heart.fill")
+                        .foregroundColor(.red)
+                        .accessibilityLabel("Heart icon")
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad image examples fail two rules. The star image has no `.accessibilityLabel` or `.accessibilityHidden(true)`, failing the `image-missing-label` rule. The heart image label says \"Heart icon\" which includes the word \"icon\", failing the `image-label-contains-role` rule since VoiceOver already announces the image role.")
+                }.padding(.bottom).accessibilityHint("Bad Example Images")
+                // MARK: Bad Headings
+                Text("Bad Example Headings")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Account Settings")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("Profile Options")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityLabel("heading Profile Options")
+                DisclosureGroup("Details") {
+                    Text("The bad heading examples fail two rules. \"Account Settings\" uses `.font(.headline)` but has no `.accessibilityAddTraits(.isHeader)`, failing the `heading-trait-missing` rule. \"Profile Options\" fakes the heading announcement by putting the word \"heading\" in its `.accessibilityLabel`, failing the `fake-heading-in-label` rule. Use `.accessibilityAddTraits(.isHeader)` instead.")
+                }.padding(.bottom).accessibilityHint("Bad Example Headings")
+                // MARK: Bad Buttons
+                Text("Bad Example Buttons")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Button {} label: {
+                        Image(systemName: "trash")
+                    }
+                    Button {} label: {
+                        Image(systemName: "pencil")
+                    }
+                    .accessibilityLabel("Edit button")
+                    Button {} label: {
+                        Text("Submit")
+                    }
+                    .opacity(0.4)
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad button examples fail three rules. The trash button has no `.accessibilityLabel`, failing `icon-button-missing-label`. The pencil button label says \"Edit button\" which includes the word \"button\", failing `button-label-contains-role`. The Submit button uses `.opacity(0.4)` to appear disabled but has no `.disabled(true)`, failing `visually-disabled-not-semantic`.")
+                }.padding(.bottom).accessibilityHint("Bad Example Buttons")
+                // MARK: Bad Traits
+                Text("Bad Example Traits")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Circle()
+                    .fill(Color.orange)
+                    .frame(width: 50, height: 50)
+                    .onTapGesture {}
+                    .accessibilityLabel("Orange Circle")
+                DisclosureGroup("Details") {
+                    Text("The bad traits example uses `.onTapGesture` but has no `.accessibilityAddTraits(.isButton)`, failing the `tap-gesture-missing-button-trait` rule. VoiceOver will not announce this element as interactive.")
+                }.padding(.bottom).accessibilityHint("Bad Example Traits")
+                // MARK: Bad Toggles
+                Text("Bad Example Toggles")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Toggle("", isOn: $toggleBad)
+                DisclosureGroup("Details") {
+                    Text("The bad toggle example uses `Toggle(\"\", isOn:)` with an empty label string and no `.accessibilityLabel`, failing the `toggle-missing-label` rule. VoiceOver users will not know what this toggle controls.")
+                }.padding(.bottom).accessibilityHint("Bad Example Toggles")
+                // MARK: Bad Links
+                Text("Bad Example Links")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button("Click here") {
+                    openURL(URL(string: "https://www.cvshealth.com")!)
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad link example fails two rules. A `Button` is used with `openURL` to navigate to a URL, failing the `button-used-as-link` rule — use `Link` instead. The text says \"Click here\" which is generic and non-descriptive, failing the `generic-link-text` rule.")
+                }.padding(.bottom).accessibilityHint("Bad Example Links")
+                // MARK: Bad Touch Targets
+                Text("Bad Example Touch Targets")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button {} label: {
+                    Image(systemName: "plus")
+                        .font(.caption2)
+                }
+                .frame(width: 20, height: 20)
+                .accessibilityLabel("Add")
+                DisclosureGroup("Details") {
+                    Text("The bad touch target example uses `.frame(width: 20, height: 20)` which is below the minimum 24pt touch target size, failing the `small-touch-target` rule. Small targets are hard to tap for users with motor impairments.")
+                }.padding(.bottom).accessibilityHint("Bad Example Touch Targets")
+                // MARK: Bad Dynamic Type
+                Text("Bad Example Dynamic Type")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("This text does not scale.")
+                    .font(.system(size: 14))
+                    .lineLimit(1)
+                DisclosureGroup("Details") {
+                    Text("The bad Dynamic Type example fails two rules. `.font(.system(size: 14))` uses a fixed font size that does not scale with Dynamic Type, failing the `fixed-font-size` rule. `.lineLimit(1)` truncates text at larger sizes, failing the `line-limit-1` rule.")
+                }.padding(.bottom).accessibilityHint("Bad Example Dynamic Type")
+                // MARK: Bad Page Titles
+                Text("Bad Example Page Titles")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("A `NavigationStack` with no `.navigationTitle()` fails the `missing-navigation-title` rule. VoiceOver users will not hear a page title when the screen loads.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The `missing-navigation-title` rule checks that every `NavigationStack` or `NavigationView` has a `.navigationTitle()` somewhere in its view hierarchy. Without a title, VoiceOver users cannot identify which screen they are on.")
+                }.padding(.bottom).accessibilityHint("Bad Example Page Titles")
+                // MARK: Bad Accessibility Hidden
+                Text("Bad Example Accessibility Hidden")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                VStack {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.red)
+                        .accessibilityHidden(true)
+                    Button("Cancel") {}
+                        .accessibilityHidden(true)
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad accessibility hidden example uses `.accessibilityHidden(true)` on the Cancel button, hiding an interactive control from VoiceOver. The `hidden-parent-with-controls` rule flags when `.accessibilityHidden(true)` is applied to a container with interactive children, or when interactive controls themselves are hidden. VoiceOver users will not be able to activate the Cancel button.")
+                }.padding(.bottom).accessibilityHint("Bad Example Accessibility Hidden")
+                // MARK: Bad Color Contrast
+                Text("Bad Example Color Contrast")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("This text uses hardcoded colors.")
+                    .foregroundColor(.black)
+                DisclosureGroup("Details") {
+                    Text("The bad color contrast example uses `.foregroundColor(.black)` which is a hardcoded color that does not adapt to Dark Mode, failing the `hardcoded-color` rule. In Dark Mode, black text on a dark background will have insufficient contrast. The `color-contrast-insufficient` rule checks computed contrast ratios against WCAG requirements (4.5:1 for normal text).")
+                }.padding(.bottom).accessibilityHint("Bad Example Color Contrast")
+                // MARK: Bad Form Controls
+                Text("Bad Example Form Controls")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                TextField("", text: $textFieldBad)
+                    .textFieldStyle(.roundedBorder)
+                TextField("Email", text: $emailFieldBad)
+                    .textFieldStyle(.roundedBorder)
+                Slider(value: $sliderBad, in: 0...100)
+                    .labelsHidden()
+                Stepper("", value: $stepperBad, in: 0...10)
+                Picker("", selection: $pickerBad) {
+                    Text("Apple").tag("Apple")
+                    Text("Banana").tag("Banana")
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad form control examples fail five rules. The first `TextField` has an empty placeholder and no `.accessibilityLabel`, failing `textfield-missing-label`. The email `TextField` has no `.textContentType(.emailAddress)`, failing `input-missing-purpose`. The `Slider` uses `.labelsHidden()` with no `.accessibilityLabel`, failing `slider-missing-label`. The `Stepper` has an empty label, failing `stepper-missing-label`. The `Picker` has an empty label, failing `picker-missing-label`.")
+                }.padding(.bottom).accessibilityHint("Bad Example Form Controls")
+                // MARK: Bad Focus
+                Text("Bad Example Focus")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button("Show Sheet") {
+                    showSheetBad = true
+                }
+                .sheet(isPresented: $showSheetBad) {
+                    VStack {
+                        Text("Sheet Content")
+                        Button("Dismiss") {
+                            showSheetBad = false
+                        }
+                    }
+                    .presentationDetents([.medium])
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad focus example uses `.sheet(isPresented:)` with no `onDismiss` handler to return VoiceOver focus to the trigger button, failing the `sheet-focus-return` rule. After the sheet is dismissed, VoiceOver focus is lost and may jump to an unexpected location.")
+                }.padding(.bottom).accessibilityHint("Bad Example Focus")
+                // MARK: Bad Animation
+                Text("Bad Example Animation")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("The `animation-missing-reduce-motion` rule flags files that use `.animation()` or `withAnimation` without checking `@Environment(\\.accessibilityReduceMotion)` or `UIAccessibility.isReduceMotionEnabled`. The `tabview-missing-label` rule flags views inside a `TabView` that lack a `.tabItem` modifier.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The `animation-missing-reduce-motion` rule ensures animations respect the user's Reduce Motion preference. The `tabview-missing-label` rule ensures every tab has a `.tabItem` with a label so VoiceOver users can identify each tab.")
+                }.padding(.bottom).accessibilityHint("Bad Example Animation")
+                // MARK: Bad Gestures
+                Text("Bad Example Gestures")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Long press for options")
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(8)
+                    .onLongPressGesture {}
+                DisclosureGroup("Details") {
+                    Text("The bad gestures example uses `.onLongPressGesture` with no `.accessibilityAction` alternative, failing the `gesture-missing-alternative` rule. VoiceOver and Switch Control users cannot perform a long press gesture, so the functionality is inaccessible without an alternative action.")
+                }.padding(.bottom).accessibilityHint("Bad Example Gestures")
+                // MARK: Bad Grouping
+                Text("Bad Example Grouping")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                HStack {
+                    Image(systemName: "person.fill")
+                        .accessibilityLabel("Person")
+                    Text("Jane Doe")
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad grouping example has an `HStack` containing an `Image` and `Text` without `.accessibilityElement(children: .combine)`, failing the `missing-accessibility-grouping` rule. VoiceOver reads the image and text as separate elements instead of a single combined element. The `zstack-order-confusing` rule flags `ZStack` views with multiple interactive elements that lack `accessibilitySortPriority` to control VoiceOver reading order.")
+                }.padding(.bottom).accessibilityHint("Bad Example Grouping")
+                // MARK: Bad Timing
+                Text("Bad Example Timing")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Text("The `auto-dismiss-no-control` rule flags views that auto-dismiss using `Task.sleep` or `asyncAfter` inside `.task` or `.onAppear` closures without giving the user control to extend or stop the timer. Toast messages and auto-closing alerts should let users pause or dismiss them manually.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                DisclosureGroup("Details") {
+                    Text("The `auto-dismiss-no-control` rule maps to WCAG 2.2.1 Timing Adjustable. Content that auto-disappears can be missed by users who need more time to read, including screen reader users and people with cognitive disabilities.")
+                }.padding(.bottom).accessibilityHint("Bad Example Timing")
+                // MARK: Bad Label in Name
+                Text("Bad Example Label in Name")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                Button("Save Changes") {}
+                    .accessibilityLabel("Submit form data")
+                DisclosureGroup("Details") {
+                    Text("The bad label in name example has visible text \"Save Changes\" but the `.accessibilityLabel` is \"Submit form data\" which does not contain the visible text, failing the `label-in-name` rule. Speech input users who say \"tap Save Changes\" will not be able to activate this button because VoiceOver uses a different name.")
+                }.accessibilityHint("Bad Example Label in Name")
+            }
+            .padding()
+            .navigationTitle("a11y-check")
+        }
+    }
+}
+
+struct A11yCheckView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            A11yCheckView()
+        }
+    }
+}

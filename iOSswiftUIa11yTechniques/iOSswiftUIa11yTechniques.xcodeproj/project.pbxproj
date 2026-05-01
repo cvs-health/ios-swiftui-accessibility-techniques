@@ -103,6 +103,7 @@
 		BCB059572CAB5F9C00C670B8 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB059562CAB5F9C00C670B8 /* TableView.swift */; };
 		BCB086F42D1D982600623141 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB086F32D1D982600623141 /* MarkdownView.swift */; };
 		BCB60D602E720E3B00ED2D51 /* MultiSelectionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */; };
+		B90AF253F93B45BDB1D086BD /* A11yCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4179635AFDB741DF84FB673B /* A11yCheckView.swift */; };
 		BCC4F1842B4119A0004AAB65 /* FocusManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */; };
 		BCCDED8E2D5C5F5500B8DB6E /* Techniques.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCDED8D2D5C5F5500B8DB6E /* Techniques.swift */; };
 		BCD1CF952B574C8800A26ED3 /* VoiceOverPronunciationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */; };
@@ -346,6 +347,7 @@
 		BCB059562CAB5F9C00C670B8 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		BCB086F32D1D982600623141 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
 		BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSelectionListView.swift; sourceTree = "<group>"; };
+		4179635AFDB741DF84FB673B /* A11yCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A11yCheckView.swift; sourceTree = "<group>"; };
 		BCBAFAB42EF36B1300D5E700 /* DimFlashingLights.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DimFlashingLights.md; sourceTree = "<group>"; };
 		BCBAFAB52EF3727300D5E700 /* SwiftLint.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SwiftLint.md; sourceTree = "<group>"; };
 		BCC4F1822B3F8757004AAB65 /* AccessibilityInputLabels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityInputLabels.md; sourceTree = "<group>"; };
@@ -631,6 +633,7 @@
 				BC1B59C22B4E664700E8F782 /* MenusView.swift */,
 				AA59CDCD2ABA209D0004908F /* MessagesTabView.swift */,
 				BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */,
+				4179635AFDB741DF84FB673B /* A11yCheckView.swift */,
 				BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */,
 				AA74DD5C2AFDCCFA00348078 /* PageTitleBad.swift */,
 				AA74DD5B2AFDCCF900348078 /* PageTitleGood.swift */,
@@ -1077,6 +1080,7 @@
 				BC0C846F2CC811E900B3DB52 /* DragDropView.swift in Sources */,
 				AA59CDC82ABA1F3B0004908F /* TabsView.swift in Sources */,
 				BCB60D602E720E3B00ED2D51 /* MultiSelectionListView.swift in Sources */,
+				B90AF253F93B45BDB1D086BD /* A11yCheckView.swift in Sources */,
 				AA74DD542AFD8D0000348078 /* TextFieldsView.swift in Sources */,
 				BCA5BDEC2B61E633007823A6 /* ReduceMotionView.swift in Sources */,
 				BC1A5FA22B6079080008513C /* AttributedStringsView.swift in Sources */,

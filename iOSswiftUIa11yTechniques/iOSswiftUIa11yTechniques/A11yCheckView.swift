@@ -531,19 +531,22 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                TextField("", text: $textFieldBad)
+                TextField("Search", text: $textFieldBad)
                     .textFieldStyle(.roundedBorder)
                 TextField("Email", text: $emailFieldBad)
                     .textFieldStyle(.roundedBorder)
                 Slider(value: $sliderBad, in: 0...100)
                     .labelsHidden()
-                Stepper("", value: $stepperBad, in: 0...10)
+                HStack {
+                    Text("Quantity")
+                    Stepper("", value: $stepperBad, in: 0...10)
+                }
                 Picker("", selection: $pickerBad) {
                     Text("Apple").tag("Apple")
                     Text("Banana").tag("Banana")
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad form control examples fail five rules. The first `TextField` has an empty placeholder and no `.accessibilityLabel`, failing `textfield-missing-label`. The email `TextField` has no `.textContentType(.emailAddress)`, failing `input-missing-purpose`. The `Slider` uses `.labelsHidden()` with no `.accessibilityLabel`, failing `slider-missing-label`. The `Stepper` has an empty label, failing `stepper-missing-label`. The `Picker` has an empty label, failing `picker-missing-label`.")
+                    Text("The bad form control examples fail five rules. The `TextField` fields use placeholder text which has insufficient contrast and disappears when typing, and have no `.accessibilityLabel`, failing `textfield-missing-label`. The email `TextField` has no `.textContentType(.emailAddress)`, failing `input-missing-purpose`. The `Slider` uses `.labelsHidden()` with no `.accessibilityLabel`, failing `slider-missing-label`. The `Stepper` has a visible \"Quantity\" text next to it but it is a separate `Text` element not programmatically associated with the `Stepper`, which has an empty label, failing `stepper-missing-label`. The `Picker` has an empty label, failing `picker-missing-label`.")
                 }.padding(.bottom).accessibilityHint("Bad Example Form Controls")
                 // MARK: Bad Focus
                 Text("Bad Example Focus")

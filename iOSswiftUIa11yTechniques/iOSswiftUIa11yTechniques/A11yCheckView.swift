@@ -298,33 +298,38 @@ struct A11yCheckView: View {
                         .foregroundColor(.secondary)
                         .padding()
                 } else {
-                    Text("Swipe left to delete")
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(8)
-                        .offset(x: swipeOffset)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    if value.translation.width < 0 {
-                                        swipeOffset = value.translation.width
+                    HStack {
+                        Text("Swipe left or tap Delete")
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(8)
+                            .offset(x: swipeOffset)
+                            .gesture(
+                                DragGesture()
+                                    .onChanged { value in
+                                        if value.translation.width < 0 {
+                                            swipeOffset = value.translation.width
+                                        }
                                     }
-                                }
-                                .onEnded { value in
-                                    if value.translation.width < -100 {
-                                        swipeDeleted = true
+                                    .onEnded { value in
+                                        if value.translation.width < -100 {
+                                            swipeDeleted = true
+                                        }
+                                        swipeOffset = 0
                                     }
-                                    swipeOffset = 0
-                                }
-                        )
-                        .accessibilityAction(named: "Delete") {
+                            )
+                            .accessibilityAction(named: "Delete") {
+                                swipeDeleted = true
+                            }
+                        Button("Delete") {
                             swipeDeleted = true
                         }
-                        .accessibilityAddTraits(.isButton)
+                        .foregroundColor(.red)
+                    }
                 }
                 DisclosureGroup("Details") {
-                    Text("The good gestures example uses `.gesture(DragGesture())` with an `.accessibilityAction(named: \"Delete\")` alternative so VoiceOver and Switch Control users can trigger the action without a swipe gesture, passing the `gesture-missing-alternative` rule.")
+                    Text("The good gestures example uses `.gesture(DragGesture())` with a single-tap `Button(\"Delete\")` alternative and an `.accessibilityAction(named: \"Delete\")` for VoiceOver users, passing the `gesture-missing-alternative` rule. Providing a tap alternative ensures single-pointer users who cannot perform a swipe gesture can still delete the item.")
                 }.padding(.bottom).accessibilityHint("Good Example Gestures")
                 // MARK: Good Grouping
                 Text("Good Example Grouping")

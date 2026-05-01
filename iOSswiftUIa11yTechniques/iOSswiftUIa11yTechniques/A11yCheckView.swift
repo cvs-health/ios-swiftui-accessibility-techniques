@@ -287,15 +287,15 @@ struct A11yCheckView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("Long press for options")
+                Text("Swipe to delete")
                     .padding()
                     .background(Color(.secondarySystemBackground))
                     .cornerRadius(8)
-                    .onLongPressGesture {}
-                    .accessibilityAction(named: "Options") {}
+                    .gesture(DragGesture())
+                    .accessibilityAction(named: "Delete") {}
                     .accessibilityAddTraits(.isButton)
                 DisclosureGroup("Details") {
-                    Text("The good gestures example uses `.onLongPressGesture` with an `.accessibilityAction(named: \"Options\")` alternative so VoiceOver and Switch Control users can trigger the action without a long press, passing the `gesture-missing-alternative` rule.")
+                    Text("The good gestures example uses `.gesture(DragGesture())` with an `.accessibilityAction(named: \"Delete\")` alternative so VoiceOver and Switch Control users can trigger the action without a swipe gesture, passing the `gesture-missing-alternative` rule.")
                 }.padding(.bottom).accessibilityHint("Good Example Gestures")
                 // MARK: Good Grouping
                 Text("Good Example Grouping")

@@ -224,6 +224,8 @@ struct A11yCheckView: View {
                     .accessibilityLabel("Email")
                     .textContentType(.emailAddress)
                     .textFieldStyle(.roundedBorder)
+                Text("Volume")
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 Slider(value: $sliderGood, in: 0...100) {
                     Text("Volume")
                 }

@@ -63,6 +63,7 @@ Then run `a11y-check` from anywhere. Run `which a11y-check` to confirm the insta
 ```bash
 git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
 cd ios-swiftui-accessibility-techniques/A11yAgent
+./generate-build-info.sh   # optional: embeds git commit in --version output
 swift build
 ```
 
@@ -523,13 +524,22 @@ a11y-check exits with code **1** when any error-severity diagnostic is found. Wi
 If you installed via Homebrew and later build a newer version from source, the Homebrew binary at `/opt/homebrew/bin/a11y-check` may be outdated and missing new features like `--format xcode`. To update it:
 
 ```bash
-# Option 1: reinstall via Homebrew
+# Option 1: reinstall via Homebrew (pulls latest from GitHub and rebuilds)
 brew reinstall --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 
 # Option 2: copy the locally built binary over the Homebrew one
 brew unlink a11y-check
 cp A11yAgent/.build/debug/a11y-check /opt/homebrew/bin/a11y-check
 ```
+
+To check which version you have installed, run:
+
+```bash
+a11y-check --version
+# Example output: 0.3.0 (abc1234 2026-05-04)
+```
+
+The commit hash in parentheses lets you verify the binary matches the latest source.
 
 ### Output format
 

@@ -10,6 +10,12 @@ class A11yCheck < Formula
 
   def install
     cd "A11yAgent" do
+      # Embed the git commit hash in the version string
+      commit = `git rev-parse --short HEAD`.strip
+      build_date = Time.now.strftime("%Y-%m-%d")
+      File.write("Sources/A11yAgentCLI/BuildInfo.swift",
+                 "let buildCommit = \"#{commit}\"\nlet buildDate = \"#{build_date}\"\n")
+
       # Swift 6.2 + swift-argument-parser need a toolchain SDK that provides
       # SendableMetatype. Homebrew often sets SDKROOT to an older SDK, which
       # causes "cannot find type 'SendableMetatype' in scope". Unset so the

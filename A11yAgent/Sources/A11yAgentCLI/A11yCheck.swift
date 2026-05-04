@@ -28,7 +28,7 @@ struct A11yCheck: ParsableCommand {
           a11y-check . --watch
           a11y-check --generate-docs > RULES.md
         """,
-        version: "0.3.0"
+        version: "0.3.0 (\(buildCommit) \(buildDate))"
     )
 
     @Argument(help: "File or directory paths to analyze.")

@@ -20,7 +20,7 @@ brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 
 Without this step the project still builds and runs, but the a11y-check build phase is silently skipped.
 
-To verify it installed correctly, run `a11y-check --version`. To update later, run `brew reinstall --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`.
+To verify it installed correctly, run `a11y-check --version`. To update later, run `brew uninstall a11y-check && brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`.
 
 ## A11y Checker (a11y-check)
 
@@ -51,7 +51,7 @@ brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 Then from your app folder: `a11y-check .`
 
 To verify it installed: `a11y-check --version`  
-To update later: `brew reinstall --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`
+To update later: `brew uninstall a11y-check && brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`
 
 **Or build from source:**  
 Requires **Swift 5.9+** and **macOS 13+** (Xcode or [Swift.org](https://swift.org) toolchain). From a terminal:

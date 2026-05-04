@@ -14,13 +14,13 @@ Review project source code to learn how to apply the accessibility techniques in
 To see **a11y-check** accessibility warnings and errors inline in Xcode when you build, install the tool first:
 
 ```bash
-git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
-cd ios-swiftui-accessibility-techniques
-brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
+brew tap cvs-health/ios-swiftui-accessibility-techniques https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
 brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 ```
 
 Without this step the project still builds and runs, but the a11y-check build phase is silently skipped.
+
+To verify it installed correctly, run `a11y-check --version`. To update later, run `brew reinstall --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`.
 
 ## A11y Checker (a11y-check)
 
@@ -41,17 +41,17 @@ Static analysis for SwiftUI accessibility issues, mapped to WCAG 2.2 success cri
 
 ---
 
-**Install via Homebrew (easiest on any Mac):**  
-Clone this repo, then from **this repo’s root** (not from your app):
+**Install via Homebrew (easiest on any Mac):**
 
 ```bash
-git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
-cd ios-swiftui-accessibility-techniques
-brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
+brew tap cvs-health/ios-swiftui-accessibility-techniques https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
 brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 ```
 
 Then from your app folder: `a11y-check .`
+
+To verify it installed: `a11y-check --version`  
+To update later: `brew reinstall --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`
 
 **Or build from source:**  
 Requires **Swift 5.9+** and **macOS 13+** (Xcode or [Swift.org](https://swift.org) toolchain). From a terminal:

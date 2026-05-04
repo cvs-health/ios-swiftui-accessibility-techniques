@@ -536,7 +536,10 @@ public struct HTMLFormatter {
                     let code = String(trimmed[codeStart...])
                     let indent = String(code.prefix(while: { $0 == " " || $0 == "\t" }))
                     var stripped = code.trimmingCharacters(in: .whitespaces)
-                    let prefix = String(trimmed[...pipeIndex])
+                    var prefix = String(trimmed[...pipeIndex])
+                    if prefix.hasPrefix(">") {
+                        prefix = String(prefix.dropFirst())
+                    }
 
                     // If the modifier already exists on this line, replace it in-place
                     // e.g. .frame(width:18, height:18) → .frame(width: 24, height: 24)
@@ -545,7 +548,7 @@ public struct HTMLFormatter {
                         if !modName.isEmpty, stripped.contains(modName + "(") {
                             if let existingRange = stripped.range(of: #"\#(NSRegularExpression.escapedPattern(for: modName))\([^)]*\)"#, options: .regularExpression) {
                                 stripped = stripped.replacingCharacters(in: existingRange, with: mod)
-                                result.append("> \(prefix) \(indent)\(stripped)")
+                                result.append(">\(prefix) \(indent)\(stripped)")
                                 continue
                             }
                         }
@@ -553,14 +556,14 @@ public struct HTMLFormatter {
 
                     // Insert a Text label on the line above if the suggestion calls for it
                     if let view = viewToInsertAbove {
-                        result.append("> \(prefix) \(indent)\(view)")
+                        result.append(">\(prefix) \(indent)\(view)")
                     }
 
-                    result.append("> \(prefix) \(indent)\(stripped)")
+                    result.append(">\(prefix) \(indent)\(stripped)")
 
                     // Append modifier on the line below
                     if let mod = modifier {
-                        result.append("> \(prefix)     \(indent)\(mod)")
+                        result.append(">\(prefix)     \(indent)\(mod)")
                     }
                 } else {
                     result.append(line)

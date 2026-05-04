@@ -31,30 +31,34 @@ public struct AccessibilityGroupingRule: A11yRule {
 
             // Check if the container's trailing closure has both Image and Text as direct children
             guard let trailingClosure = view.callExpr.trailingClosure else { continue }
-            let closureText = trailingClosure.trimmedDescription
 
-            let hasImage = closureText.contains("Image(") || closureText.contains("Image(systemName:")
-            let hasText = closureText.contains("Text(")
+            // Analyze only the immediate children of this container
+            let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure)
+            let directChildren = innerVisitor.detectedViews
 
-            // Only flag simple Image + Text pairs (not deeply nested ones)
-            if hasImage && hasText {
-                // Don't flag if the container has interactive children (Button, NavigationLink, etc.)
-                let hasInteractive = closureText.contains("Button(") ||
-                    closureText.contains("NavigationLink(") ||
-                    closureText.contains("Toggle(") ||
-                    closureText.contains(".onTapGesture")
-                if hasInteractive { continue }
+            // Only flag small containers (2-3 children) that look like an
+            // icon+label or image+caption pair, not page-level layout containers.
+            guard directChildren.count >= 2, directChildren.count <= 3 else { continue }
 
-                // Don't flag if there's a Label (Label already combines icon + text)
-                if closureText.contains("Label(") { continue }
+            let hasImage = directChildren.contains { $0.viewType == "Image" }
+            let hasText = directChildren.contains { $0.viewType == "Text" }
+            guard hasImage && hasText else { continue }
 
-                diagnostics.append(makeDiagnostic(
-                    message: "Image and Text in \(view.viewType) are separate elements for VoiceOver. Consider adding .accessibilityElement(children: .combine) to the \(view.viewType) so they're read as one item.",
-                    node: view.callExpr,
-                    context: context,
-                    suggestion: "Add .accessibilityElement(children: .combine) to the \(view.viewType)"
-                ))
+            // Don't flag if the container has interactive children
+            let hasInteractive = directChildren.contains {
+                ["Button", "NavigationLink", "Toggle", "Link"].contains($0.viewType)
             }
+            if hasInteractive { continue }
+
+            // Don't flag if there's a Label (Label already combines icon + text)
+            if directChildren.contains(where: { $0.viewType == "Label" }) { continue }
+
+            diagnostics.append(makeDiagnostic(
+                message: "Image and Text in \(view.viewType) are separate elements for VoiceOver. Consider adding .accessibilityElement(children: .combine) to the \(view.viewType) so they're read as one item.",
+                node: view.callExpr,
+                context: context,
+                suggestion: "Add .accessibilityElement(children: .combine) to the \(view.viewType)"
+            ))
         }
 
         return diagnostics

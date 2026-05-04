@@ -20,6 +20,8 @@ public struct InputPurposeRule: A11yRule {
 
     private static let inputViews: Set<String> = ["TextField", "SecureField"]
 
+    private static let searchKeywords: Set<String> = ["search", "query", "filter", "find"]
+
     /// Map of lowercase keywords to their UITextContentType values.
     private static let contentTypeKeywords: [(keywords: [String], contentType: String)] = [
         (["password", "passwd", "pwd"],          ".password"),
@@ -44,9 +46,8 @@ public struct InputPurposeRule: A11yRule {
         (["creditcard", "credit_card", "cardnumber", "card_number"], ".creditCardNumber"),
     ]
 
-    /// Infer the best `.textContentType()` from binding name, label, or placeholder text.
-    private static func inferContentType(from view: ViewHierarchyVisitor.DetectedView) -> String? {
-        // Collect hints from the binding variable name and string arguments
+    /// Collect hint strings from binding variable name and string arguments.
+    private static func collectHints(from view: ViewHierarchyVisitor.DetectedView) -> [String] {
         var hints: [String] = []
 
         // Extract binding variable name from `text: $varName`
@@ -66,6 +67,37 @@ public struct InputPurposeRule: A11yRule {
                 }
             }
         }
+
+        return hints
+    }
+
+    /// Returns true if the field appears to be a search field (no standard textContentType exists).
+    private static func isSearchField(_ view: ViewHierarchyVisitor.DetectedView) -> Bool {
+        var hints = collectHints(from: view)
+
+        // Also check .accessibilityLabel value
+        if let labelMod = view.modifiers.modifiers(named: "accessibilityLabel").first,
+           let labelText = labelMod.firstStringArgument {
+            hints.append(labelText.lowercased())
+        }
+
+        for hint in hints {
+            let normalized = hint.replacingOccurrences(of: " ", with: "")
+                .replacingOccurrences(of: "-", with: "")
+                .replacingOccurrences(of: "_", with: "")
+                .lowercased()
+            for keyword in searchKeywords {
+                if normalized == keyword || normalized.contains(keyword) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    /// Infer the best `.textContentType()` from binding name, label, or placeholder text.
+    private static func inferContentType(from view: ViewHierarchyVisitor.DetectedView) -> String? {
+        let hints = collectHints(from: view)
 
         // Match against known keywords
         for hint in hints {
@@ -114,8 +146,8 @@ public struct InputPurposeRule: A11yRule {
                 continue
             }
 
-            // TextField without textContentType — info-level suggestion
-            if view.viewType == "TextField" && !hasContentType && !hasKeyboardType {
+            // TextField without textContentType — skip search fields (no standard content type)
+            if view.viewType == "TextField" && !hasContentType && !hasKeyboardType && !Self.isSearchField(view) {
                 let inferred = Self.inferContentType(from: view)
                 let suggestionType = inferred ?? ".name"
                 let message: String

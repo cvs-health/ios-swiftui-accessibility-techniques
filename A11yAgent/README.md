@@ -45,16 +45,14 @@ Requires Swift 5.9+ and macOS 13+.
 ### Homebrew (easiest)
 
 ```bash
-git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
-cd ios-swiftui-accessibility-techniques
-brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
+brew tap cvs-health/ios-swiftui-accessibility-techniques https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
 brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 ```
 
 If the build fails with `cannot find type 'SendableMetatype' in scope`, run:  
 `env -u SDKROOT brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check`
 
-Then run `a11y-check` from anywhere. Run `which a11y-check` to confirm the install path (typically `/opt/homebrew/bin/a11y-check`).
+Then run `a11y-check` from anywhere. Run `a11y-check --version` to verify the install. Run `which a11y-check` to confirm the install path (typically `/opt/homebrew/bin/a11y-check`).
 
 > **Note:** If you later build a newer version from source, the Homebrew-installed binary remains at the old version until you reinstall. See [Keeping the binary up to date](#keeping-the-binary-up-to-date) under Xcode integration.
 
@@ -540,6 +538,25 @@ a11y-check --version
 ```
 
 The commit hash in parentheses lets you verify the binary matches the latest source.
+
+### Troubleshooting
+
+**"Tap remote mismatch" error:**  
+If you previously installed with `file://$PWD` and now see `file:///... != https://...`, fix it with:
+
+```bash
+brew tap --force cvs-health/ios-swiftui-accessibility-techniques https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
+```
+
+**"already installed, it's just not linked":**  
+Run `brew link cvs-health/ios-swiftui-accessibility-techniques/a11y-check` to link the binary so `a11y-check` works from Terminal.
+
+**Old version after update:**  
+If `a11y-check --version` shows an old version (e.g. `0.1.0` without a commit hash), reinstall:
+
+```bash
+brew reinstall --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
+```
 
 ### Output format
 

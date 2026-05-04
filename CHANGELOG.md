@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Accessibility Label technique page with good and bad examples
 - Accessibility Value technique page with good and bad examples for custom controls
 - Accessibility Hint technique page with good and bad examples following Apple's hint guidelines
+- Custom choice buttons good and bad examples added to Radio Buttons technique
 
 ### Documentation
 

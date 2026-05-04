@@ -94,6 +94,10 @@ public struct TabViewMissingLabelRule: A11yRule {
 
         // Check native TabView children for missing .tabItem
         for view in visitor.views(ofType: "TabView") {
+            // Skip page-style TabViews (carousels/pagers) — they use .tag(), not .tabItem
+            let chainText = view.chainRoot.trimmedDescription
+            if chainText.contains("PageTabViewStyle") || chainText.contains(".page") { continue }
+
             guard let trailingClosure = view.callExpr.trailingClosure else { continue }
 
             let childVisitor = DirectChildViewVisitor(viewMode: .sourceAccurate)

@@ -165,7 +165,7 @@ public struct SliderMissingLabelRule: A11yRule {
                     node: view.callExpr,
                     context: context,
                     wcagCriteriaOverride: ["3.3.2", "4.1.2"],
-                    suggestion: "Add .accessibilityLabel(\"description\") to the Slider"
+                    suggestion: "Add a visible Text(\"Label\") above the Slider and .accessibilityLabel(\"Label\")"
                 ))
             } else if hasLabelsHidden {
                 diagnostics.append(makeDiagnostic(
@@ -213,7 +213,7 @@ public struct StepperMissingLabelRule: A11yRule {
                     node: view.callExpr,
                     context: context,
                     wcagCriteriaOverride: ["3.3.2", "4.1.2"],
-                    suggestion: "Add .accessibilityLabel(\"description\") to the Stepper"
+                    suggestion: "Add a visible Text(\"Label\") above the Stepper and .accessibilityLabel(\"Label\")"
                 ))
             }
         }
@@ -253,7 +253,7 @@ public struct PickerMissingLabelRule: A11yRule {
                     node: view.callExpr,
                     context: context,
                     wcagCriteriaOverride: ["3.3.2", "4.1.2"],
-                    suggestion: "Add .accessibilityLabel(\"description\") to the Picker"
+                    suggestion: "Add a visible Text(\"Label\") above the Picker and .accessibilityLabel(\"Label\")"
                 ))
             }
         }

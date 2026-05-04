@@ -9,6 +9,19 @@ Read the blog post, [Announcing the iOS SwiftUI Accessibility Techniques Open So
 
 Review project source code to learn how to apply the accessibility techniques in working SwiftUI code examples. A companion **watchOS app** is also included in the `a11yTechniques Watch App/` directory.
 
+### Building this project
+
+To see **a11y-check** accessibility warnings and errors inline in Xcode when you build, install the tool first:
+
+```bash
+git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
+cd ios-swiftui-accessibility-techniques
+brew tap cvs-health/ios-swiftui-accessibility-techniques file://$PWD
+brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
+```
+
+Without this step the project still builds and runs, but the a11y-check build phase is silently skipped.
+
 ## A11y Checker (a11y-check)
 
 Static analysis for SwiftUI accessibility issues, mapped to WCAG 2.2 success criteria. **31 rules** across **17 WCAG criteria** with a **0–100 scoring system**. Run it on your Swift sources to find missing labels, incorrect traits, touch target size, and more. Supports auto-fix (`--fix`), SARIF output for GitHub code scanning, trend tracking, and per-view scoring.

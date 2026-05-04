@@ -99,10 +99,16 @@ public struct InputPurposeRule: A11yRule {
             // SecureField almost always needs .textContentType(.password) or .textContentType(.newPassword)
             if view.viewType == "SecureField" && !hasContentType {
                 let inferred = Self.inferContentType(from: view) ?? ".password"
+                let fix = Self.makeModifierFix(
+                    chainRoot: view.chainRoot,
+                    modifier: ".textContentType(\(inferred))",
+                    sourceFile: syntax
+                )
                 diagnostics.append(makeDiagnostic(
                     message: "SecureField without .textContentType(). Add .textContentType(\(inferred)) or .textContentType(.newPassword) so iOS offers password autofill.",
                     node: view.callExpr,
                     context: context,
+                    fix: fix,
                     suggestion: "Add .textContentType(\(inferred))"
                 ))
                 continue
@@ -114,22 +120,59 @@ public struct InputPurposeRule: A11yRule {
                 let suggestionType = inferred ?? ".name"
                 let message: String
                 let suggestion: String
+                let fix: A11yFix?
                 if let inferred = inferred {
                     message = "TextField without .textContentType(). Consider adding .textContentType(\(inferred)) so iOS can offer autofill and assistive technologies know the input purpose."
                     suggestion = "Add .textContentType(\(inferred))"
+                    fix = Self.makeModifierFix(
+                        chainRoot: view.chainRoot,
+                        modifier: ".textContentType(\(inferred))",
+                        sourceFile: syntax
+                    )
                 } else {
                     message = "TextField without .textContentType(). Consider adding .textContentType(.name), .textContentType(.emailAddress), etc. so iOS can offer autofill and assistive technologies know the input purpose."
                     suggestion = "Add .textContentType(\(suggestionType)) or appropriate content type"
+                    fix = nil
                 }
                 diagnostics.append(makeDiagnostic(
                     message: message,
                     node: view.callExpr,
                     context: context,
+                    fix: fix,
                     suggestion: suggestion
                 ))
             }
         }
 
         return diagnostics
+    }
+
+    /// Build an A11yFix that appends a modifier at the end of the view's chain.
+    private static func makeModifierFix(
+        chainRoot: ExprSyntax,
+        modifier: String,
+        sourceFile: SourceFileSyntax
+    ) -> A11yFix? {
+        let endPosition = chainRoot.endPositionBeforeTrailingTrivia
+        let offset = sourceFile.position.utf8Offset
+        let insertOffset = endPosition.utf8Offset - offset
+
+        let indentEnd = chainRoot.positionAfterSkippingLeadingTrivia
+        let lineStart = chainRoot.position
+        let leadingTrivia = sourceFile.description[
+            sourceFile.description.utf8.index(sourceFile.description.utf8.startIndex, offsetBy: lineStart.utf8Offset - offset)
+            ..<
+            sourceFile.description.utf8.index(sourceFile.description.utf8.startIndex, offsetBy: indentEnd.utf8Offset - offset)
+        ]
+        let indent = leadingTrivia.filter { $0 == " " || $0 == "\t" }
+
+        let replacement = "\n\(indent)    \(modifier)"
+
+        return A11yFix(
+            description: "Add \(modifier)",
+            replacementText: replacement,
+            startOffset: insertOffset,
+            endOffset: insertOffset
+        )
     }
 }

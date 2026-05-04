@@ -146,6 +146,12 @@ public struct SliderMissingLabelRule: A11yRule {
 
     public init() {}
 
+    private func hasLabelInTrailingClosure(_ callExpr: FunctionCallExprSyntax) -> Bool {
+        guard let closure = callExpr.trailingClosure else { return false }
+        let text = closure.statements.description
+        return text.contains("Text(") || text.contains("Label(")
+    }
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax)
         var diagnostics: [A11yDiagnostic] = []
@@ -155,11 +161,14 @@ public struct SliderMissingLabelRule: A11yRule {
 
             if mods.hasModifier("accessibilityLabel") { continue }
 
-            // Slider's first string argument is its label
+            // Slider's label can be a string argument or a trailing closure with Text/Label
             let inlineLabel = view.firstStringArgument ?? ""
             let hasLabelsHidden = mods.hasModifier("labelsHidden")
+            let hasClosureLabel = hasLabelInTrailingClosure(view.callExpr)
 
-            if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
+            if hasClosureLabel && !hasLabelsHidden { continue }
+
+            if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty && !hasClosureLabel {
                 diagnostics.append(makeDiagnostic(
                     message: "Slider has no visible label (WCAG 3.3.2) and no accessible name (WCAG 4.1.2). Add label text and .accessibilityLabel().",
                     node: view.callExpr,
@@ -208,6 +217,10 @@ public struct StepperMissingLabelRule: A11yRule {
 
             let inlineLabel = view.firstStringArgument ?? ""
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
+                if let closure = view.callExpr.trailingClosure {
+                    let text = closure.statements.description
+                    if text.contains("Text(") || text.contains("Label(") { continue }
+                }
                 diagnostics.append(makeDiagnostic(
                     message: "Stepper has no visible label (WCAG 3.3.2) and no accessible name (WCAG 4.1.2). Add label text and .accessibilityLabel().",
                     node: view.callExpr,

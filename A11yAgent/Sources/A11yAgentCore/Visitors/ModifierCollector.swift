@@ -65,6 +65,9 @@ public final class ModifierCollector: SyntaxVisitor {
         "opacity",
         "labelsHidden",
         "underline",
+        "textContentType",
+        "keyboardType",
+        "textFieldStyle",
         // Interactions
         "onTapGesture",
         "sheet",

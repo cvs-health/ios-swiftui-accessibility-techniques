@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI, Automation, and Shifting Left: Innovations in Accessible Software Development</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+<style>
+  /* Sidebar + main layout */
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+  #sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 180px;
+    background: #0d1117;
+    overflow-y: auto;
+    z-index: 100;
+    padding: 6px 0;
+    border-right: 1px solid #30363d;
+    scrollbar-width: thin;
+    scrollbar-color: #484f58 #0d1117;
+  }
+  #sidebar::-webkit-scrollbar { width: 5px; }
+  #sidebar::-webkit-scrollbar-track { background: #0d1117; }
+  #sidebar::-webkit-scrollbar-thumb { background: #484f58; border-radius: 3px; }
+
+  .thumb {
+    margin: 3px 6px;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .thumb:hover { border-color: #58a6ff; }
+  .thumb.active { border-color: #ff79c6; }
+
+  .thumb-preview {
+    width: 166px;
+    height: 94px;
+    background: #161b22;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    box-sizing: border-box;
+  }
+  .thumb-preview-text {
+    font-size: 8px;
+    color: #c9d1d9;
+    text-align: center;
+    line-height: 1.3;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    overflow: hidden;
+  }
+  .thumb-preview-text .tp-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .thumb-preview-text .tp-accent { color: #ff79c6; }
+  .thumb-preview-text .tp-green { color: #50fa7b; }
+  .thumb-preview-text .tp-red { color: #ff5555; }
+  .thumb-preview-text .tp-blue { color: #8be9fd; }
+  .thumb-preview-text .tp-sub {
+    font-size: 7px;
+    color: #8b949e;
+  }
+
+  .thumb-label {
+    font-size: 10px;
+    color: #8b949e;
+    padding: 3px 6px 4px;
+    background: #0d1117;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .thumb.active .thumb-label { color: #ff79c6; font-weight: 600; }
+
+  /* Push reveal.js to the right of the sidebar */
+  .reveal { margin-left: 180px !important; width: calc(100% - 180px) !important; }
+
+  /* Reveal typography */
+  .reveal h1, .reveal h2, .reveal h3 {
+    text-transform: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  }
+  .reveal h1 { font-size: 2.2em; font-weight: 700; }
+  .reveal h2 { font-size: 1.5em; font-weight: 700; }
+  .reveal h3 { font-size: 1.1em; color: #8be9fd; font-weight: 600; }
+  .reveal p, .reveal li, .reveal td, .reveal th, .reveal code, .reveal pre {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  }
+  .reveal ul, .reveal ol { text-align: left; }
+  .reveal li { margin-bottom: 0.4em; font-size: 0.78em; }
+  .reveal pre { width: 100%; font-size: 0.52em; box-shadow: none; }
+  .reveal pre code {
+    font-family: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+    color: #50fa7b;
+    padding: 1em;
+    border-radius: 8px;
+    background: #161b22;
+  }
+  .reveal code {
+    font-family: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+    color: #50fa7b;
+  }
+  .reveal table { font-size: 0.62em; margin: 0 auto; border-collapse: collapse; }
+  .reveal th { background: #21262d; color: #8be9fd; font-weight: 600; }
+  .reveal td, .reveal th { padding: 0.4em 0.8em; border: 1px solid #30363d; }
+  .reveal td { background: #0d1117; }
+  .accent { color: #ff79c6; }
+  .green { color: #50fa7b; }
+  .yellow { color: #f1fa8c; }
+  .red { color: #ff5555; }
+  .reveal .slide-number { font-size: 14px; right: 12px; }
+  .two-col { display: flex; gap: 2em; }
+  .two-col > div { flex: 1; }
+  .reveal a { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div id="sidebar"></div>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- SLIDE 1: Title -->
+<section>
+  <h1 style="font-size:1.8em;">AI, Automation, and Shifting iOS Accessibility Left</h1>
+  <p style="font-size:0.7em; color:#ccc;">Finding and fixing accessibility defects before testers do</p>
+</section>
+
+<!-- SLIDE 2: The Problem -->
+<section>
+  <h2>The Problem: <span class="red">Found Too Late</span></h2>
+  <ul>
+    <li>A11y defects found by testers at end of SDLC are <strong>expensive to fix</strong> &mdash; context is lost, rework costs high, releases delayed</li>
+    <li>Developers don't get feedback until QA, sometimes <strong>weeks later</strong></li>
+    <li>A missing <code>.accessibilityLabel</code> takes <strong>30 seconds</strong> to fix while coding&hellip;</li>
+    <li>&hellip;but becomes a JIRA ticket, a sprint item, and a code review cycle when found in QA</li>
+  </ul>
+  <p style="margin-top:1em; font-size:0.9em;">Goal: give developers the same accessibility checks <span class="green"><strong>while they code</strong></span></p>
+</section>
+
+<!-- SLIDE 3: What is a11y-check? -->
+<section>
+  <h2>What is <span class="accent">a11y-check</span>?</h2>
+  <ul>
+    <li>Static analysis tool for SwiftUI &mdash; like <strong>axe-core for HTML</strong></li>
+    <li><strong>31 rules</strong> mapped to <strong>17 WCAG 2.2</strong> success criteria</li>
+    <li>4 impact levels: <span class="red">Critical</span>, Serious, Moderate, Minor</li>
+    <li>WCAG scoring: <strong>0&ndash;100</strong> with letter grade (A+ through F)</li>
+    <li>Auto-fix for common issues (<code>--fix</code>)</li>
+    <li>Open source, built by CVS Health</li>
+  </ul>
+</section>
+
+<!-- SLIDE 4: The Shift-Left Stack -->
+<section>
+  <h2>The Shift-Left Stack</h2>
+  <p style="font-size:0.8em;">a11y-check catches defects at <strong>every stage</strong>, earliest to latest:</p>
+  <table>
+    <thead>
+      <tr><th>Stage</th><th>Integration</th><th>When it runs</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Code</td><td>CLI directly (+ watch mode)</td><td>On demand / every file save</td></tr>
+      <tr><td>Code</td><td>AI + MCP server</td><td>Real-time in editor</td></tr>
+
+      <tr><td>Build</td><td>Xcode Run Script / SPM Plugin</td><td>Every Cmd+B</td></tr>
+      <tr><td>PR</td><td>GitHub Actions</td><td>Every pull request</td></tr>
+      <tr><td>PR</td><td>SARIF + Code Scanning</td><td>Inline on PR diffs</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SLIDE 5: CLI Directly -->
+<section>
+  <h2>Without AI: <span class="green">CLI Directly</span></h2>
+  <h3>No tokens, no API costs, runs offline</h3>
+  <pre><code># Install
+brew install a11y-check
+
+# Scan all Swift files
+a11y-check .
+
+# Show only errors
+a11y-check . --only error
+
+# Scan a single file
+a11y-check MyView.swift
+
+# Auto-fix issues
+a11y-check . --fix
+
+# Preview fixes before applying
+a11y-check . --fix --dry-run
+
+# Generate HTML report
+a11y-check . --format html > report.html
+
+# Watch mode — re-runs on every file save
+a11y-check . --watch
+
+# See all 31 rules
+a11y-check --list-rules</code></pre>
+  <p style="font-size:0.7em;">All features &mdash; scanning, <strong>auto-fix</strong>, scoring, HTML reports, Xcode &amp; CI integration &mdash; work <strong>without AI</strong><br>The AI integrations are <strong>optional enhancements</strong></p>
+</section>
+
+<!-- SLIDE 6: AI + MCP -->
+<section>
+  <h2>AI + MCP: <span class="accent">Real-time in Editor</span></h2>
+  <p style="font-size:0.7em;">MCP server connects a11y-check to Cursor, Windsurf, VS Code/Copilot, Claude Desktop</p>
+  <pre><code>You:  Check TextFieldsView.swift for accessibility issues
+
+AI:   Score: 25/100 (F) &mdash; 9 passed, 2 failed
+      Failed WCAG criteria:
+        ✗ 3.3.2 Labels or Instructions (11 errors)
+        ✗ 4.1.2 Name, Role, Value (1 error)
+
+You:  Fix them
+
+AI:   [Adds Text labels and .accessibilityLabel() modifiers]
+      Fixed 11 issues.
+
+You:  Run the check again
+
+AI:   Score: 100/100 (A) &mdash; 11 passed, 0 failed
+      Trend: +75.0 from last run</code></pre>
+  <p style="font-size:0.7em;">Full loop: <span class="green">detect &rarr; score &rarr; understand &rarr; fix &rarr; re-score</span></p>
+</section>
+
+<!-- SLIDE 8: Xcode Integration -->
+<section>
+  <h2>In Xcode: <span class="accent">Every Build</span></h2>
+  <ul>
+    <li><strong>Run Script build phase</strong> &mdash; add a11y-check as a build step in your Xcode project; works with any project type</li>
+    <li><strong>SPM Build Plugin</strong> &mdash; add as a Swift Package Manager dependency; runs automatically with zero config</li>
+    <li>Issues appear <strong>inline in the editor</strong>, just like compiler warnings</li>
+  </ul>
+  <img src="xcode-a11y-check.jpg" alt="a11y-check warnings shown inline in Xcode editor" style="max-width:75%; border-radius:8px; border:1px solid #30363d; margin-top:0.5em;">
+</section>
+
+<!-- SLIDE 10: GitHub Actions -->
+<section>
+  <h2>CI/CD: <span class="accent">Pull Requests</span></h2>
+  <ul>
+    <li>a11y-check <strong>GitHub Actions workflow</strong>: builds tool, runs scan, posts score as PR comment, fails if below threshold</li>
+    <li><strong>SARIF output</strong> &rarr; GitHub Code Scanning: issues appear as annotations directly on PR diffs</li>
+  </ul>
+  <h3>Adopting on existing codebases</h3>
+  <pre><code># Only flag NEW issues, not legacy debt
+a11y-check Sources/ --diff --diff-base main --only error
+
+# Save baseline, only fail on regressions
+a11y-check Sources/ --baseline</code></pre>
+  <p style="font-size:0.7em;">HTML report uploaded as artifact for compliance review</p>
+</section>
+
+<!-- SLIDE 11: Scoring & Trends -->
+<section>
+  <h2>Scoring, Trends &amp; Reporting</h2>
+  <pre><code>WCAG Score: 81.0 / 100  (B-)
+  [████████████████░░░░]   81.0%
+
+Score Trend:
+  Change from last run: +4.2
+  History: ▃▄▅▅▆▇</code></pre>
+  <ul>
+    <li>WCAG 2.2 score (0&ndash;100) combining criteria coverage + impact-weighted issue density</li>
+    <li><strong>Trend tracking</strong>: automatic sparkline charts and deltas</li>
+    <li><strong>Per-view scoring</strong> (<code>--per-view</code>): score each SwiftUI View individually</li>
+    <li><strong>HTML reports</strong>: WCAG conformance table, per-file breakdown, fix suggestions</li>
+    <li><strong>Score badge</strong> (<code>--badge</code>) &nbsp;&middot;&nbsp; <strong>CI quality gate</strong> (<code>--min-score 80</code>)</li>
+  </ul>
+  <p style="font-size:0.7em;"><a href="a11y-check-report.html" target="_blank" style="color:#8be9fd;">View sample HTML report &rarr;</a></p>
+</section>
+
+<!-- SLIDE 12: Demo Flow -->
+<section>
+  <h2>Demo</h2>
+  <div class="two-col">
+    <div>
+      <h3>Without AI</h3>
+      <ol style="font-size:0.75em;">
+        <li>Run <code>a11y-check .</code> &rarr; see score (<span class="red">F</span>)</li>
+        <li>Run <code>a11y-check . --fix</code> &rarr; auto-fix issues</li>
+        <li>Run <code>a11y-check .</code> again &rarr; score jumps to <span class="green">A</span></li>
+        <li>Build in Xcode &rarr; inline warnings</li>
+        <li>Push to GitHub &rarr; PR comment + SARIF annotations</li>
+        <li>View <a href="a11y-check-report.html" target="_blank" style="color:#8be9fd;">HTML report</a></li>
+      </ol>
+    </div>
+    <div>
+      <h3>With AI + MCP</h3>
+      <ol style="font-size:0.75em;">
+        <li><em>"Check this file for accessibility"</em> &rarr; score (<span class="red">F</span>)</li>
+        <li><em>"Fix them"</em> &rarr; AI adds labels, traits, etc.</li>
+        <li><em>"Check again"</em> &rarr; score jumps to <span class="green">A</span></li>
+        <li>AI explains each issue and why the fix works</li>
+        <li>Same Xcode, GitHub, and report integrations</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 14: Key Takeaway -->
+<section>
+  <h2>Key Takeaway</h2>
+  <p style="font-size:1em;">Every developer touchpoint &mdash; <span class="accent">editor</span>, <span class="accent">build</span>, <span class="accent">PR</span> &mdash; has accessibility checking built in.</p>
+  <p style="font-size:0.9em;">The same <strong>31 rules</strong> run at every stage.</p>
+  <p style="font-size:0.9em;">Defects are found and fixed <span class="green"><strong>minutes</strong></span> after they're written,<br>not <span class="red">weeks later</span> by a tester.</p>
+  <p style="font-size:0.9em; margin-top:1.5em;">AI is optional &mdash; the core tool works <strong>without tokens or API costs</strong>.</p>
+</section>
+
+<!-- SLIDE 15: Get Started -->
+<section>
+  <h2>Get Started</h2>
+  <pre><code>brew install a11y-check
+cd /path/to/YourApp
+a11y-check .</code></pre>
+  <ul>
+    <li>31 rules, 17 WCAG 2.2 criteria, 85+ technique examples</li>
+    <li>Auto-fix, scoring, CI integration, MCP server</li>
+  </ul>
+  <p style="margin-top:1em; font-size:0.7em; line-height:2;">
+    <a href="https://github.com/cvs-health/ios-swiftui-accessibility-techniques" target="_blank" style="color:#8be9fd;">GitHub Repo</a> &nbsp;&middot;&nbsp;
+    <a href="a11y-check-report.html" target="_blank" style="color:#8be9fd;">Sample HTML Report</a> &nbsp;&middot;&nbsp;
+    <a href="A11yAgent/README.md" target="_blank" style="color:#8be9fd;">a11y-check Docs</a> &nbsp;&middot;&nbsp;
+    <a href="A11yAgent/mcp-server/README.md" target="_blank" style="color:#8be9fd;">MCP Server Setup</a><br>
+    <a href="https://apps.apple.com/app/accessibility-techniques/id6474141089" target="_blank" style="color:#8be9fd;">iOS App Store</a>
+  </p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: true,
+  transition: 'fade',
+  transitionSpeed: 'slow',
+  center: true
+});
+
+// Thumbnail preview content for each slide
+const thumbData = [
+  { title: 'AI, Automation & Shifting Left', sub: 'Accessible Software Dev', color: '#ff79c6' },
+  { title: 'The Problem', sub: 'Found Too Late', color: '#ff5555' },
+  { title: 'What is a11y-check?', sub: '31 rules · 17 WCAG criteria', color: '#ff79c6' },
+  { title: 'The Shift-Left Stack', sub: '5 integration points', color: '#8be9fd' },
+  { title: 'CLI Directly', sub: 'No AI · No tokens · Offline', color: '#50fa7b' },
+  { title: 'AI + MCP', sub: 'Real-time in editor', color: '#ff79c6' },
+  { title: 'Xcode Integration', sub: 'Build phase · SPM plugin', color: '#8be9fd' },
+  { title: 'CI/CD', sub: 'GitHub Actions · SARIF', color: '#ff79c6' },
+  { title: 'Scoring & Trends', sub: 'WCAG 0–100 · Sparklines', color: '#f1fa8c' },
+  { title: 'Demo', sub: 'Live walkthrough', color: '#50fa7b' },
+  { title: 'Key Takeaway', sub: 'Every touchpoint covered', color: '#ff79c6' },
+  { title: 'Get Started', sub: 'brew install a11y-check', color: '#8be9fd' }
+];
+
+function buildSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.innerHTML = '';
+  thumbData.forEach((data, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+
+    const preview = document.createElement('div');
+    preview.className = 'thumb-preview';
+    preview.style.borderTop = '3px solid ' + data.color;
+    preview.innerHTML =
+      '<div class="thumb-preview-text">' +
+        '<div class="tp-title">' + data.title + '</div>' +
+        '<div class="tp-sub">' + data.sub + '</div>' +
+      '</div>';
+
+    const label = document.createElement('div');
+    label.className = 'thumb-label';
+    label.textContent = (i + 1) + '. ' + data.title;
+
+    thumb.appendChild(preview);
+    thumb.appendChild(label);
+    thumb.addEventListener('click', function() { Reveal.slide(i); });
+    sidebar.appendChild(thumb);
+  });
+}
+
+function updateActive() {
+  var current = Reveal.getState().indexh;
+  var thumbs = document.querySelectorAll('.thumb');
+  for (var i = 0; i < thumbs.length; i++) {
+    if (i === current) {
+      thumbs[i].classList.add('active');
+      thumbs[i].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    } else {
+      thumbs[i].classList.remove('active');
+    }
+  }
+}
+
+Reveal.on('ready', buildSidebar);
+Reveal.on('slidechanged', updateActive);
+</script>
+</body>
+</html>

@@ -39,8 +39,10 @@ public struct HiddenOnParentWithControlsRule: A11yRule {
         for view in visitor.detectedViews {
             guard Self.containerViewTypes.contains(view.viewType) else { continue }
 
-            // Check if this container has .accessibilityHidden(true)
-            guard hasAccessibilityHidden(view.modifiers) else { continue }
+            // Collect modifiers only from the direct chain on this container,
+            // NOT from children inside the trailing closure.
+            let directModifiers = ModifierCollector.collectChainOnly(from: view.chainRoot, callExpr: view.callExpr)
+            guard hasAccessibilityHidden(directModifiers) else { continue }
 
             // Check if the container's body has interactive children
             guard let body = view.callExpr.trailingClosure else { continue }

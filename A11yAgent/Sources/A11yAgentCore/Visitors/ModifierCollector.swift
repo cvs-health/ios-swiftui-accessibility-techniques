@@ -132,4 +132,36 @@ extension ModifierCollector {
         collector.walk(node)
         return collector
     }
+
+    /// Collect modifiers only from the direct modifier chain above a view call,
+    /// without descending into trailing closures or child views.
+    public static func collectChainOnly(from chainRoot: ExprSyntax, callExpr: FunctionCallExprSyntax) -> ModifierCollector {
+        let collector = ModifierCollector()
+        var current: ExprSyntax? = chainRoot
+
+        while let expr = current {
+            guard let funcCall = expr.as(FunctionCallExprSyntax.self) else { break }
+            if funcCall.id == callExpr.id { break }
+
+            guard let memberAccess = funcCall.calledExpression.as(MemberAccessExprSyntax.self) else { break }
+
+            let name = memberAccess.declName.baseName.text
+            if trackedModifiers.contains(name) {
+                let args: [(label: String?, text: String)] = funcCall.arguments.map { arg in
+                    (label: arg.label?.text, text: arg.expression.trimmedDescription)
+                }
+                let firstString = collector.extractStringLiteral(from: funcCall.arguments.first?.expression)
+                collector.allModifiers.append(CollectedModifier(
+                    name: name,
+                    callExpr: funcCall,
+                    firstStringArgument: firstString,
+                    arguments: args
+                ))
+            }
+
+            current = memberAccess.base
+        }
+
+        return collector
+    }
 }

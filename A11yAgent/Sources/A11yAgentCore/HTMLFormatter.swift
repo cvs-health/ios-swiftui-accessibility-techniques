@@ -43,7 +43,7 @@ public struct HTMLFormatter {
         <style>
         :root {
           --bg: #f8f9fa; --card-bg: #fff; --text: #1a1a2e; --border: #dee2e6;
-          --error: #dc3545; --error-bg: #f8d7da; --warning: #856404; --warning-bg: #fff3cd;
+          --error: #b02a37; --error-bg: #f8d7da; --warning: #856404; --warning-bg: #fff3cd;
           --info: #0c5460; --info-bg: #d1ecf1; --pass: #155724; --pass-bg: #d4edda;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -80,16 +80,12 @@ public struct HTMLFormatter {
         .diag-wcag { font-size: 0.75rem; font-weight: 600; color: #495057; }
         .diag-wcag a { color: #0b5ed7; }
         .badge-critical { background: #f8d7da; color: #6b1520; }
-        .badge-serious { background: #ffe0b2; color: #bf4400; }
+        .badge-serious { background: #ffe0b2; color: #8a4000; }
         .badge-moderate { background: #fff3cd; color: #664d03; }
         .badge-minor { background: #e2e3e5; color: #2b2f33; }
-        .badge-critical { background: #f8d7da; color: #721c24; }
-        .badge-serious { background: #ffe0b2; color: #e65100; }
-        .badge-moderate { background: #fff3cd; color: #856404; }
-        .badge-minor { background: #e2e3e5; color: #383d41; }
         .code-label { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0.5rem; padding: 0.15rem 0.5rem; border-radius: 3px 3px 0 0; display: block; width: fit-content; }
         .bad-label { background: var(--error); color: white; }
-        .good-label { background: #28a745; color: white; }
+        .good-label { background: #1a7e34; color: white; }
         .code-block { background: #1e1e2e; color: #cdd6f4; border-radius: 0 6px 6px 6px; padding: 0.625rem 0.75rem; margin: 0 0 0.375rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
         .code-block .line-bad { color: #f38ba8; }
         .code-block .line-num { color: #6c7086; user-select: none; }
@@ -105,7 +101,7 @@ public struct HTMLFormatter {
         .grade-a { background: var(--pass-bg); color: var(--pass); }
         .grade-b { background: #d4edda; color: #155724; }
         .grade-c { background: var(--warning-bg); color: var(--warning); }
-        .grade-d { background: #ffe0b2; color: #e65100; }
+        .grade-d { background: #ffe0b2; color: #8a4000; }
         .grade-f { background: var(--error-bg); color: var(--error); }
         .score-subtitle { color: #595f64; font-size: 0.875rem; }
         .score-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.875rem; color: #595f64; margin-bottom: 1rem; }

@@ -523,7 +523,7 @@ If you installed via Homebrew and later build a newer version from source, the H
 
 ```bash
 # Option 1: reinstall via Homebrew (pulls latest from GitHub and rebuilds)
-brew reinstall --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
+brew uninstall a11y-check && brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 
 # Option 2: copy the locally built binary over the Homebrew one
 brew unlink a11y-check
@@ -551,11 +551,19 @@ brew tap --force cvs-health/ios-swiftui-accessibility-techniques https://github.
 **"already installed, it's just not linked":**  
 Run `brew link cvs-health/ios-swiftui-accessibility-techniques/a11y-check` to link the binary so `a11y-check` works from Terminal.
 
-**Old version after update:**  
-If `a11y-check --version` shows an old version (e.g. `0.1.0` without a commit hash), reinstall:
+**"Error: invalid option: --HEAD":**  
+`brew reinstall` does not support `--HEAD`. Uninstall first, then install:
 
 ```bash
-brew reinstall --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
+brew uninstall a11y-check
+brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
+```
+
+**Old version after update:**  
+If `a11y-check --version` shows an old version (e.g. `0.1.0` without a commit hash), uninstall and reinstall:
+
+```bash
+brew uninstall a11y-check && brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 ```
 
 ### Output format

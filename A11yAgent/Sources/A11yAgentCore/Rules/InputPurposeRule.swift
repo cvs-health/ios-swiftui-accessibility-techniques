@@ -32,7 +32,7 @@ public struct InputPurposeRule: A11yRule {
         (["lastname", "last_name", "lname", "surname", "familyname", "family_name"], ".familyName"),
         (["middlename", "middle_name", "mname"], ".middleName"),
         (["fullname", "full_name"],              ".name"),
-        (["name", "username", "user_name"],      ".name"),
+        (["username", "user_name"],              ".name"),
         (["address2", "addressline2", "street2", "streetaddress2", "street_address2", "address_line2", "address_line_2", "addresslinetwo"], ".streetAddressLine2"),
         (["street", "streetaddress", "street_address", "address1", "addressline1", "address", "addressline"], ".streetAddressLine1"),
         (["city"],                               ".addressCity"),

@@ -17,7 +17,7 @@ struct A11yCheckBuildPlugin: BuildToolPlugin {
             .prebuildCommand(
                 displayName: "a11y-check: \(target.name)",
                 executable: tool.path,
-                arguments: [sourcePath, "--format", "xcode"],
+                arguments: [sourcePath, "--format", "xcode", "--no-fail"],
                 outputFilesDirectory: context.pluginWorkDirectory
             )
         ]
@@ -45,7 +45,7 @@ extension A11yCheckBuildPlugin: XcodeBuildToolPlugin {
             .prebuildCommand(
                 displayName: "a11y-check: \(target.displayName)",
                 executable: toolPath,
-                arguments: [sourcePath, "--format", "xcode"],
+                arguments: [sourcePath, "--format", "xcode", "--no-fail"],
                 outputFilesDirectory: context.pluginWorkDirectory
             )
         ]

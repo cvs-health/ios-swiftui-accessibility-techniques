@@ -91,6 +91,9 @@ struct A11yCheck: ParsableCommand {
     @Option(name: .long, help: "Compare results against a previous JSON report file. Only new issues are shown.")
     var diffReport: String?
 
+    @Flag(name: .long, help: "Always exit 0 even when errors are found. Issues still appear in output but don't fail the build.")
+    var noFail = false
+
     @Flag(name: .long, help: "Generate Markdown rule documentation to stdout.")
     var generateDocs = false
 
@@ -283,10 +286,10 @@ struct A11yCheck: ParsableCommand {
                 }
 
                 let errorCount = allDiagnostics.filter { $0.severity == .error }.count
-                if errorCount > 0 { throw ExitCode(1) }
+                if errorCount > 0 && !noFail { throw ExitCode(1) }
                 if let threshold = minScore, updatedScore.score < threshold {
                     printError("Score \(String(format: "%.1f", updatedScore.score)) is below minimum threshold \(String(format: "%.1f", threshold))")
-                    throw ExitCode(1)
+                    if !noFail { throw ExitCode(1) }
                 }
                 return
             }
@@ -356,16 +359,16 @@ struct A11yCheck: ParsableCommand {
             tracker.record(score: score)
         }
 
-        // Exit with error code if there are errors (skip in watch mode)
+        // Exit with error code if there are errors (skip in watch mode and --no-fail)
         let errorCount = allDiagnostics.filter { $0.severity == .error }.count
-        if errorCount > 0 && !watch {
+        if errorCount > 0 && !watch && !noFail {
             throw ExitCode(1)
         }
 
         // Exit with error if below minimum score
         if let threshold = minScore, score.score < threshold {
             printError("Score \(String(format: "%.1f", score.score)) is below minimum threshold \(String(format: "%.1f", threshold))")
-            if !watch { throw ExitCode(1) }
+            if !watch && !noFail { throw ExitCode(1) }
         }
 
         // Watch mode — poll for changes and re-run

@@ -137,12 +137,15 @@ public struct HTMLFormatter {
         .bar-label a:hover { text-decoration: underline; }
         .bar-track { flex: 1; height: 22px; background: #f1f3f5; border-radius: 4px; overflow: hidden; position: relative; }
         .bar-fill-error { height: 100%; background: var(--error); border-radius: 4px 0 0 4px; position: absolute; left: 0; top: 0; }
-        .bar-fill-warning { height: 100%; background: #e6a817; position: absolute; top: 0; }
-        .bar-fill-info { height: 100%; background: #0c8599; position: absolute; top: 0; border-radius: 0 4px 4px 0; }
+        .bar-fill-warning { height: 100%; position: absolute; top: 0; background: repeating-linear-gradient(135deg, #e6a817, #e6a817 4px, #d4960a 4px, #d4960a 8px); }
+        .bar-fill-info { height: 100%; position: absolute; top: 0; border-radius: 0 4px 4px 0; background: #0c8599; background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1.5px, transparent 1.5px); background-size: 6px 6px; }
         .bar-count { min-width: 40px; font-size: 0.8125rem; font-weight: 600; color: #595f64; }
         .bar-legend { display: flex; gap: 1.25rem; margin-bottom: 1rem; font-size: 0.75rem; color: #595f64; }
         .bar-legend-item { display: flex; align-items: center; gap: 0.375rem; }
-        .bar-legend-swatch { width: 12px; height: 12px; border-radius: 2px; }
+        .bar-legend-swatch { width: 14px; height: 14px; border-radius: 2px; }
+        .bar-legend-swatch.swatch-error { background: var(--error); }
+        .bar-legend-swatch.swatch-warning { background: repeating-linear-gradient(135deg, #e6a817, #e6a817 3px, #d4960a 3px, #d4960a 6px); }
+        .bar-legend-swatch.swatch-info { background: #0c8599; background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px); background-size: 4px 4px; }
         </style>
         </head>
         <body>
@@ -249,9 +252,9 @@ public struct HTMLFormatter {
                 html += "<div class=\"bar-chart\">\n"
                 html += "<h2>Issues by WCAG Criterion</h2>\n"
                 html += "<div class=\"bar-legend\">"
-                html += "<div class=\"bar-legend-item\"><div class=\"bar-legend-swatch\" style=\"background:var(--error)\"></div> Errors</div>"
-                html += "<div class=\"bar-legend-item\"><div class=\"bar-legend-swatch\" style=\"background:#e6a817\"></div> Warnings</div>"
-                html += "<div class=\"bar-legend-item\"><div class=\"bar-legend-swatch\" style=\"background:#0c8599\"></div> Info</div>"
+                html += "<div class=\"bar-legend-item\"><div class=\"bar-legend-swatch swatch-error\"></div> Errors</div>"
+                html += "<div class=\"bar-legend-item\"><div class=\"bar-legend-swatch swatch-warning\"></div> Warnings</div>"
+                html += "<div class=\"bar-legend-item\"><div class=\"bar-legend-swatch swatch-info\"></div> Info</div>"
                 html += "</div>\n"
 
                 for c in criteriaWithIssues {

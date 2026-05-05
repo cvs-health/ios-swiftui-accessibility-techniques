@@ -41,7 +41,7 @@ public struct InputPurposeRule: A11yRule {
         (["country"],                            ".countryName"),
         (["url", "website", "webpage", "homepage"], ".URL"),
         (["organization", "organisation", "company", "org"], ".organizationName"),
-        (["jobtitle", "job_title", "title"],     ".jobTitle"),
+        (["jobtitle", "job_title"],              ".jobTitle"),
         (["nickname", "nick_name"],              ".nickname"),
         (["creditcard", "credit_card", "cardnumber", "card_number"], ".creditCardNumber"),
     ]

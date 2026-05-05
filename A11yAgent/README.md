@@ -71,10 +71,15 @@ The binary is at `.build/debug/a11y-check` (or `.build/release/a11y-check` after
 
 Add a11y-check as a package dependency and run it without installing anything:
 
+**In Xcode:** File > Add Package Dependencies > paste:
+```
+https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
+```
+
+**Or in your Package.swift:**
 ```swift
-// In your app's Package.swift
 dependencies: [
-    .package(url: "https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git", from: "0.1.0"),
+    .package(url: "https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git", branch: "main"),
 ]
 ```
 

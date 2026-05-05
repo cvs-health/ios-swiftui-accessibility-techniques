@@ -356,31 +356,6 @@ a11y-check --generate-docs > RULES.md
 
 The generated document includes a summary table, grouping by WCAG criterion, and grouping by severity.
 
-## Xcode build plugin
-
-a11y-check includes two Swift Package Plugins:
-
-- **Command plugin** (`A11yCheckPlugin`) — run manually via `swift package a11y-check`
-- **Build tool plugin** (`A11yCheckBuildPlugin`) — runs automatically on every build, showing accessibility issues inline in Xcode
-
-To use the build tool plugin, add `a11y-check` as a dependency in your `Package.swift`:
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git", from: "0.2.0"),
-],
-targets: [
-    .target(
-        name: "MyApp",
-        plugins: [
-            .plugin(name: "A11yCheckBuildPlugin", package: "A11yAgent"),
-        ]
-    ),
-]
-```
-
-Accessibility errors and warnings will appear inline in Xcode's Issue Navigator on every build.
-
 ## Options
 
 | Option | Description |
@@ -462,87 +437,105 @@ Image(systemName: "star")
 
 ## Xcode integration
 
-Add a11y-check as a **Run Script** build phase so issues appear inline in Xcode's editor, just like compiler warnings.
+There are two ways to run a11y-check in Xcode. Pick whichever fits your project:
 
-### Setup
+| | **Build Plugin (SPM)** | **Run Script** |
+|---|---|---|
+| **How it works** | Add the package as an SPM dependency — the plugin runs automatically | Add a shell script build phase that calls the Homebrew binary |
+| **Requires Homebrew** | No — SPM builds the tool from source | Yes |
+| **Errors fail the build** | Yes — errors block the build | No — `|| true` lets the build continue |
+| **Best for** | Strict enforcement, CI pipelines | Development, gradual adoption |
 
-1. In Xcode, select your target → **Build Phases** → **+** → **New Run Script Phase**.
-2. Name the phase **a11y-check** (double-click the title).
-3. Add this script (use the **full path** to the binary — see note below):
+Both approaches show accessibility issues inline in Xcode's editor and Issue Navigator.
+
+### Option A: Build Plugin (SPM)
+
+Add `a11y-check` as a package dependency and attach the build plugin to your target.
+
+**In `Package.swift`:**
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git", branch: "main"),
+],
+targets: [
+    .target(
+        name: "MyApp",
+        plugins: [
+            .plugin(name: "A11yCheckBuildPlugin", package: "A11yAgent"),
+        ]
+    ),
+]
+```
+
+**In Xcode (without `Package.swift`):**
+
+1. File → Add Package Dependencies
+2. Enter `https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git`, set branch to `main`
+3. Select your target → Build Phases → the `A11yCheckBuildPlugin` should appear automatically
+
+Build your project. Accessibility errors and warnings appear inline. **Errors will fail the build** — fix them or use [inline suppression](#inline-suppression) to silence specific diagnostics. To downgrade a rule from error to warning, use a [`.a11ycheck.yml` config file](#configuration-file) with `severity_overrides`.
+
+### Option B: Run Script
+
+Install via Homebrew, then add a Run Script build phase. Errors appear inline but **don't block the build**.
+
+**1. Install a11y-check:**
+
+```bash
+brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
+```
+
+**2. Add the Run Script build phase:**
+
+1. In Xcode, select your target → **Build Phases** → **+** → **New Run Script Phase**
+2. Name the phase **a11y-check** (double-click the title)
+3. Add this script:
 
    ```bash
    /opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode || true
    ```
 
-   Replace `YourAppName` with the folder containing your Swift source files. `${SRCROOT}` is the directory containing your `.xcodeproj` file.
+   Replace `YourAppName` with the folder containing your Swift source files. `${SRCROOT}` is the directory containing your `.xcodeproj`.
 
-4. **Uncheck** "Based on dependency analysis" — otherwise Xcode may cache old results and skip running the script.
-5. Build your project. Accessibility issues appear as inline errors and warnings in the editor.
+4. **Uncheck** "Based on dependency analysis" — otherwise Xcode may cache old results
+5. Build your project
 
-### Important: use the full path to the binary
+The `|| true` at the end means accessibility errors show inline but don't stop the build. Remove `|| true` if you want errors to fail the build.
 
-Xcode build scripts run with a minimal `/bin/sh` environment that does **not** inherit your shell's `PATH`. Even if `a11y-check` works fine in Terminal, Xcode won't find it by name alone. Always use the absolute path:
-
-```bash
-# Good — Xcode can find this
-/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode || true
-
-# Bad — Xcode can't find this (not in its PATH)
-a11y-check "${SRCROOT}/Sources" --format xcode || true
-```
-
-Find your binary path by running `which a11y-check` in Terminal. If you built from source instead of Homebrew, use the full path to `.build/debug/a11y-check` or `.build/release/a11y-check`.
+> **Important: use the full path to the binary.** Xcode build scripts run with a minimal `PATH` that won't find `a11y-check` by name alone. Always use `/opt/homebrew/bin/a11y-check` (or run `which a11y-check` to find your path).
 
 ### Performance: scope the scan
 
-Scanning your entire source tree can take **30–60+ seconds** on large projects, which slows down every build. To keep builds fast:
+Scanning your entire source tree can take **30–60+ seconds** on large projects. Scope the path to keep builds fast:
 
 ```bash
-# Slow — scans everything recursively
+# Slow — scans everything
 /opt/homebrew/bin/a11y-check "${SRCROOT}" --format xcode || true
 
-# Better — scope to just your source directory
+# Better — scope to your source directory
 /opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode || true
 
 # Fastest — scan specific files
 /opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName/Views/ProfileView.swift" --format xcode || true
 ```
 
-Exclude generated code and third-party dependencies by scoping the path or using an [`.a11ycheck.yml` config file](#configuration-file) with `exclude_paths`.
-
-### Exit codes and `|| true`
-
-a11y-check exits with code **1** when any error-severity diagnostic is found. Without `|| true`, this causes Xcode to treat the build phase as a failure, which **stops the build**. Add `|| true` to let the build continue while still showing the inline annotations:
-
-```bash
-# Build continues even with errors (recommended during development)
-/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode || true
-
-# Build fails on accessibility errors (recommended for CI or strict enforcement)
-/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode
-```
+You can also exclude paths using an [`.a11ycheck.yml` config file](#configuration-file) with `exclude_paths`.
 
 ### Keeping the binary up to date
 
-If you installed via Homebrew and later build a newer version from source, the Homebrew binary at `/opt/homebrew/bin/a11y-check` may be outdated and missing new features like `--format xcode`. To update it:
+If you use the Run Script approach, the Homebrew binary may become outdated. To update:
 
 ```bash
-# Option 1: reinstall via Homebrew (pulls latest from GitHub and rebuilds)
 brew uninstall a11y-check && brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
-
-# Option 2: copy the locally built binary over the Homebrew one
-brew unlink a11y-check
-cp A11yAgent/.build/debug/a11y-check /opt/homebrew/bin/a11y-check
 ```
 
-To check which version you have installed, run:
+Check your version with:
 
 ```bash
 a11y-check --version
 # Example output: 0.3.0 (abc1234 2026-05-04)
 ```
-
-The commit hash in parentheses lets you verify the binary matches the latest source.
 
 ### Troubleshooting
 
@@ -554,7 +547,7 @@ brew tap --force cvs-health/ios-swiftui-accessibility-techniques https://github.
 ```
 
 **"already installed, it's just not linked":**  
-Run `brew link cvs-health/ios-swiftui-accessibility-techniques/a11y-check` to link the binary so `a11y-check` works from Terminal.
+Run `brew link cvs-health/ios-swiftui-accessibility-techniques/a11y-check` to link the binary.
 
 **"Error: invalid option: --HEAD":**  
 `brew reinstall` does not support `--HEAD`. Uninstall first, then install:
@@ -571,6 +564,17 @@ If `a11y-check --version` shows an old version (e.g. `0.1.0` without a commit ha
 brew uninstall a11y-check && brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 ```
 
+**No annotations in Xcode (Run Script):**  
+Debug by writing output to a file:
+
+```bash
+echo "SRCROOT=${SRCROOT}" > /tmp/a11y-check-debug.log
+/opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode >> /tmp/a11y-check-debug.log 2>&1
+echo "EXIT CODE: $?" >> /tmp/a11y-check-debug.log
+```
+
+After building, check `/tmp/a11y-check-debug.log`.
+
 ### Output format
 
 The `--format xcode` output uses the format Xcode expects for inline annotations:
@@ -580,7 +584,7 @@ The `--format xcode` output uses the format Xcode expects for inline annotations
 /path/to/File.swift:58:9: warning: [rule-id] Message text [WCAG X.Y.Z]
 ```
 
-Xcode picks these up automatically and displays them in both the source editor (inline) and the Issue Navigator (left panel). You can filter the Issue Navigator by typing a rule ID (e.g. `textfield-missing-label`) to find a11y-check issues specifically.
+Xcode picks these up automatically and displays them in both the source editor (inline) and the Issue Navigator (left panel).
 
 ## HTML report
 

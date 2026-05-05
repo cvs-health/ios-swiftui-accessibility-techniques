@@ -23,3 +23,23 @@ struct A11yCheckBuildPlugin: BuildToolPlugin {
         ]
     }
 }
+
+#if canImport(XcodeProjectPlugin)
+import XcodeProjectPlugin
+
+extension A11yCheckBuildPlugin: XcodeBuildToolPlugin {
+    func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
+        let tool = try context.tool(named: "a11y-check")
+        let sourcePath = context.xcodeProject.directory.string
+
+        return [
+            .prebuildCommand(
+                displayName: "a11y-check: \(target.displayName)",
+                executable: tool.path,
+                arguments: [sourcePath, "--format", "xcode"],
+                outputFilesDirectory: context.pluginWorkDirectory
+            )
+        ]
+    }
+}
+#endif

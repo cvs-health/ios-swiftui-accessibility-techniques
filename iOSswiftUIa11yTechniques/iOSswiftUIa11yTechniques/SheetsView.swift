@@ -87,6 +87,7 @@ struct SheetsView: View {
                         }
                         .padding()
                     }
+                    .scrollBounceBehavior(.basedOnSize)
                     //.presentationDetents([.medium, .large]) // Supports medium and large sizes
                     //.presentationDragIndicator(.hidden) // Optionally hides the drag indicator
 
@@ -117,6 +118,7 @@ struct SheetsView: View {
                             }
                             .padding()
                         }
+                        .scrollBounceBehavior(.basedOnSize)
                     }
                 }
                 DisclosureGroup("Details") {
@@ -151,6 +153,7 @@ struct SheetsView: View {
                             }
                             .padding()
                         }
+                        .scrollBounceBehavior(.basedOnSize)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Done") {

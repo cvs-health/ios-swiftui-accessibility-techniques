@@ -108,6 +108,7 @@ public final class RuleRegistry {
 
         // Accessibility Hints (WCAG 3.3.2)
         register(MissingAccessibilityHintRule())
+        register(BadHintContentRule())
     }
 
     /// Apply a config: merge disabled rules and enabled-only from config with CLI overrides.

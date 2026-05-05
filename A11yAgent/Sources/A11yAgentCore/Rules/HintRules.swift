@@ -18,7 +18,7 @@ import SwiftSyntax
 
 /// Flags interactive elements with complex or non-obvious actions that lack
 /// an `.accessibilityHint()`. Hints tell VoiceOver users what will happen
-/// when they activate the element (e.g. "Double tap to add to cart").
+/// when they activate the element (e.g. "Adds item to cart").
 ///
 /// WCAG 3.3.2 Labels or Instructions (Level A)
 public struct MissingAccessibilityHintRule: A11yRule {
@@ -58,10 +58,10 @@ public struct MissingAccessibilityHintRule: A11yRule {
 
         for node in visitor.elementsNeedingHint {
             diagnostics.append(makeDiagnostic(
-                message: "Interactive element with a complex gesture is missing .accessibilityHint(). VoiceOver users won't know what action is available. Add .accessibilityHint(\"...\") to describe what happens (e.g. \"Double tap and hold to reorder\").",
+                message: "Interactive element with a complex gesture is missing .accessibilityHint(). VoiceOver users won't know what action is available. Add .accessibilityHint(\"...\") describing what happens, not how to interact (e.g. \"Reorders the item\" not \"Double tap and hold to reorder\").",
                 node: node,
                 context: context,
-                suggestion: "Add .accessibilityHint(\"Describe the action\")"
+                suggestion: "Add .accessibilityHint(\"Describes what happens\")"
             ))
         }
 
@@ -142,5 +142,80 @@ private class HintCheckVisitor: SyntaxVisitor {
         }
 
         return .visitChildren
+    }
+}
+
+// MARK: - Bad Hint Content Rule
+
+/// Flags `.accessibilityHint()` values that describe HOW to interact
+/// instead of WHAT happens. VoiceOver already announces the interaction
+/// method (e.g. "double tap to activate"), so hints like "Double tap to
+/// add to cart" are redundant. Hints should use third-person declarative
+/// form: "Adds item to cart", "Opens settings", "Deletes the message".
+///
+/// Apple HIG: "Don't include the action type... describe only the result."
+public struct BadHintContentRule: A11yRule {
+    public let id = "hint-describes-action-method"
+    public let name = "Accessibility Hint Describes Interaction Method"
+    public let severity = A11ySeverity.warning
+    public let impact = A11yImpact.minor
+    public let wcagCriteria = ["3.3.2"]
+    public let description = "Accessibility hints should describe what happens, not how to interact. VoiceOver already tells users the gesture (e.g. \"double tap to activate\"). Use third-person form like \"Adds item to cart\" instead of \"Double tap to add to cart\"."
+
+    public init() {}
+
+    private static let badPrefixes: [String] = [
+        "double tap",
+        "double-tap",
+        "tap to",
+        "tap and hold",
+        "press to",
+        "press and hold",
+        "long press",
+        "long-press",
+        "click to",
+        "click and",
+        "swipe to",
+        "swipe left",
+        "swipe right",
+        "swipe up",
+        "swipe down",
+        "drag to",
+        "drag and",
+        "pinch to",
+        "rotate to",
+        "shake to",
+        "triple tap",
+        "triple-tap",
+        "two finger",
+        "two-finger",
+        "three finger",
+        "three-finger",
+    ]
+
+    public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
+        guard context.sourceText.contains("accessibilityHint") else { return [] }
+
+        var diagnostics: [A11yDiagnostic] = []
+        let collector = ModifierCollector.collect(from: syntax)
+
+        for mod in collector.modifiers(named: "accessibilityHint") {
+            guard let hintText = mod.firstStringArgument else { continue }
+            let lower = hintText.lowercased().trimmingCharacters(in: .whitespaces)
+
+            for prefix in Self.badPrefixes {
+                if lower.hasPrefix(prefix) {
+                    diagnostics.append(makeDiagnostic(
+                        message: "Accessibility hint \"\(hintText)\" describes how to interact, not what happens. VoiceOver already announces the gesture. Rewrite in third-person declarative form (e.g. \"Adds item to cart\" instead of \"Double tap to add to cart\").",
+                        node: mod.reportNode,
+                        context: context,
+                        suggestion: "Rewrite hint to describe the result, not the gesture"
+                    ))
+                    break
+                }
+            }
+        }
+
+        return diagnostics
     }
 }

@@ -102,6 +102,12 @@ public final class RuleRegistry {
 
         // Label in Name (WCAG 2.5.3)
         register(LabelInNameRule())
+
+        // Orientation (WCAG 1.3.4)
+        register(OrientationLockRule())
+
+        // Accessibility Hints (WCAG 3.3.2)
+        register(MissingAccessibilityHintRule())
     }
 
     /// Apply a config: merge disabled rules and enabled-only from config with CLI overrides.

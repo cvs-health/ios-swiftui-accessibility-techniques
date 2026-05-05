@@ -755,6 +755,8 @@ The **input-missing-purpose** rule only flags TextFields when it can infer a spe
 | **Grouping** | `missing-accessibility-grouping` | 1.3.1 | Minor |
 | **Sequence** | `zstack-order-confusing` | 1.3.2 | Minor |
 | **Timing** | `auto-dismiss-no-control` | 2.2.1 | Moderate |
+| **Orientation** | `orientation-lock` | 1.3.4 | Serious |
+| **Hints** | `missing-accessibility-hint` | 3.3.2 | Moderate |
 | **Dark mode** | `hardcoded-color` | 1.4.3 | Minor |
 
 The **textfield-missing-label** rule catches two problems:
@@ -762,6 +764,10 @@ The **textfield-missing-label** rule catches two problems:
 - **Warning:** TextField/SecureField using placeholder text as its label (e.g. `TextField("First Name", text: $name)` without a `prompt:` parameter or `.accessibilityLabel()`). Placeholder text disappears when the user starts typing and renders in low-contrast gray, failing both WCAG 3.3.2 (Labels or Instructions) and 1.4.3 (Contrast). Use a visible `Text` label above the field, or use the `prompt:` parameter to separate the placeholder from the label.
 
 The **color contrast** rule computes actual WCAG 2.x contrast ratios when both foreground and background colors can be resolved — including SwiftUI system colors (`.black`, `.white`, `.red`, etc.), `Color(red:green:blue:)` literals, hex patterns, and named colors from your `.xcassets` catalogs.
+
+The **orientation-lock** rule flags code that restricts the app to a single orientation (portrait-only or landscape-only). Users with mounted devices (e.g. wheelchair mounts) may not be able to rotate their device. The rule checks `supportedInterfaceOrientations` overrides and `requestGeometryUpdate` calls. It does not flag code that returns `.all` or `.allButUpsideDown`.
+
+The **missing-accessibility-hint** rule flags interactive elements with complex gestures (`onLongPressGesture`, `onDrag`, `onDrop`, `contextMenu`, `swipeActions`, `DragGesture`, `LongPressGesture`) that lack an `.accessibilityHint()`. Hints tell VoiceOver users what will happen when they activate the element — for example, "Double tap and hold to reorder" or "Swipe left to delete". Standard tap actions and buttons don't need hints since their behavior is obvious from the label.
 
 Run `a11y-check --list-rules` for full descriptions and severities.
 

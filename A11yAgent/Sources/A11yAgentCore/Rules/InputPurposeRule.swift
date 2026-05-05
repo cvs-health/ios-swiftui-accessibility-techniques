@@ -146,33 +146,24 @@ public struct InputPurposeRule: A11yRule {
                 continue
             }
 
-            // TextField without textContentType — skip search fields (no standard content type)
+            // TextField without textContentType — only flag when we can infer a specific content type.
+            // Generic input fields (task names, folder names, notes, etc.) have no standard
+            // UITextContentType and would be false positives.
             if view.viewType == "TextField" && !hasContentType && !hasKeyboardType && !Self.isSearchField(view) {
-                let inferred = Self.inferContentType(from: view)
-                let suggestionType = inferred ?? ".name"
-                let message: String
-                let suggestion: String
-                let fix: A11yFix?
-                if let inferred = inferred {
-                    message = "TextField without .textContentType(). Consider adding .textContentType(\(inferred)) so iOS can offer autofill and assistive technologies know the input purpose."
-                    suggestion = "Add .textContentType(\(inferred))"
-                    fix = Self.makeModifierFix(
+                if let inferred = Self.inferContentType(from: view) {
+                    let fix = Self.makeModifierFix(
                         chainRoot: view.chainRoot,
                         modifier: ".textContentType(\(inferred))",
                         sourceFile: syntax
                     )
-                } else {
-                    message = "TextField without .textContentType(). Consider adding .textContentType(.name), .textContentType(.emailAddress), etc. so iOS can offer autofill and assistive technologies know the input purpose."
-                    suggestion = "Add .textContentType(\(suggestionType)) or appropriate content type"
-                    fix = nil
+                    diagnostics.append(makeDiagnostic(
+                        message: "TextField without .textContentType(). Consider adding .textContentType(\(inferred)) so iOS can offer autofill and assistive technologies know the input purpose.",
+                        node: view.callExpr,
+                        context: context,
+                        fix: fix,
+                        suggestion: "Add .textContentType(\(inferred))"
+                    ))
                 }
-                diagnostics.append(makeDiagnostic(
-                    message: message,
-                    node: view.callExpr,
-                    context: context,
-                    fix: fix,
-                    suggestion: suggestion
-                ))
             }
         }
 

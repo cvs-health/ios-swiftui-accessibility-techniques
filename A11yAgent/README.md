@@ -750,6 +750,8 @@ a11y-check includes 31 rules across these categories:
 | **Tab views** | `tabview-missing-label` | 4.1.2, 2.4.2 | Serious |
 | **Input purpose** | `input-missing-purpose` | 1.3.5 | Moderate |
 | **Gestures** | `gesture-missing-alternative` | 2.1.1, 2.5.1 | Serious |
+
+The **input-missing-purpose** rule only flags TextFields when it can infer a specific `UITextContentType` from the field's label, placeholder, or binding name — for example, a field labeled "Email" gets flagged with a suggestion to add `.textContentType(.emailAddress)`. TextFields for generic input (task names, folder names, notes, search queries, etc.) are silently skipped because there is no standard content type for them and flagging them would be a false positive. SecureFields are always flagged since they almost always need `.textContentType(.password)` or `.textContentType(.newPassword)`.
 | **Grouping** | `missing-accessibility-grouping` | 1.3.1 | Minor |
 | **Sequence** | `zstack-order-confusing` | 1.3.2 | Minor |
 | **Timing** | `auto-dismiss-no-control` | 2.2.1 | Moderate |

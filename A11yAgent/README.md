@@ -379,7 +379,7 @@ targets: [
 ]
 ```
 
-Accessibility errors and warnings will appear inline in Xcode's Issue Navigator on every build. The build plugin passes `--no-fail` by default, so accessibility issues show as warnings but never block the build.
+Accessibility errors and warnings will appear inline in Xcode's Issue Navigator on every build.
 
 ## Options
 
@@ -405,7 +405,6 @@ Accessibility errors and warnings will appear inline in Xcode's Issue Navigator 
 | `--badge` | Generate an SVG score badge to stdout |
 | `--watch` | Watch for file changes and re-run analysis automatically |
 | `--diff-report` | Compare against a previous JSON report — only new issues shown |
-| `--no-fail` | Always exit 0 even when errors are found. Issues still appear in output but don't fail the build |
 | `--generate-docs` | Generate Markdown rule documentation to stdout |
 
 ## Configuration file
@@ -472,7 +471,7 @@ Add a11y-check as a **Run Script** build phase so issues appear inline in Xcode'
 3. Add this script (use the **full path** to the binary — see note below):
 
    ```bash
-   /opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode --no-fail
+   /opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode || true
    ```
 
    Replace `YourAppName` with the folder containing your Swift source files. `${SRCROOT}` is the directory containing your `.xcodeproj` file.
@@ -486,10 +485,10 @@ Xcode build scripts run with a minimal `/bin/sh` environment that does **not** i
 
 ```bash
 # Good — Xcode can find this
-/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode --no-fail
+/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode || true
 
 # Bad — Xcode can't find this (not in its PATH)
-a11y-check "${SRCROOT}/Sources" --format xcode --no-fail
+a11y-check "${SRCROOT}/Sources" --format xcode || true
 ```
 
 Find your binary path by running `which a11y-check` in Terminal. If you built from source instead of Homebrew, use the full path to `.build/debug/a11y-check` or `.build/release/a11y-check`.
@@ -500,30 +499,28 @@ Scanning your entire source tree can take **30–60+ seconds** on large projects
 
 ```bash
 # Slow — scans everything recursively
-/opt/homebrew/bin/a11y-check "${SRCROOT}" --format xcode --no-fail
+/opt/homebrew/bin/a11y-check "${SRCROOT}" --format xcode || true
 
 # Better — scope to just your source directory
-/opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode --no-fail
+/opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode || true
 
 # Fastest — scan specific files
-/opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName/Views/ProfileView.swift" --format xcode --no-fail
+/opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName/Views/ProfileView.swift" --format xcode || true
 ```
 
 Exclude generated code and third-party dependencies by scoping the path or using an [`.a11ycheck.yml` config file](#configuration-file) with `exclude_paths`.
 
-### Exit codes and `--no-fail`
+### Exit codes and `|| true`
 
-a11y-check exits with code **1** when any error-severity diagnostic is found. This causes Xcode to treat the build phase as a failure, which **stops the build**. Use `--no-fail` to let the build continue while still showing the inline annotations:
+a11y-check exits with code **1** when any error-severity diagnostic is found. Without `|| true`, this causes Xcode to treat the build phase as a failure, which **stops the build**. Add `|| true` to let the build continue while still showing the inline annotations:
 
 ```bash
 # Build continues even with errors (recommended during development)
-/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode --no-fail
+/opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode || true
 
 # Build fails on accessibility errors (recommended for CI or strict enforcement)
 /opt/homebrew/bin/a11y-check "${SRCROOT}/Sources" --format xcode
 ```
-
-> **Note:** The build plugin (`A11yCheckBuildPlugin`) passes `--no-fail` by default, so if you're using the SPM plugin you don't need to set this manually. The `|| true` approach also works but `--no-fail` is preferred because it still reports the correct exit code to CI systems while preventing build failures.
 
 ### Keeping the binary up to date
 

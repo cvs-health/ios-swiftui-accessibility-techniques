@@ -88,11 +88,11 @@ struct SheetsView: View {
                         .padding()
                     }
                     .scrollBounceBehavior(.basedOnSize)
-                    //.presentationDetents([.medium, .large]) // Supports medium and large sizes
+                    .presentationDetents([.medium, .large]) // Supports medium and large sizes
                     //.presentationDragIndicator(.hidden) // Optionally hides the drag indicator
 
                 }
-                ForEach(0..<8) { index in
+                ForEach(0..<3) { index in
                     Button(action: {
                         isShowingDynamicSheets[index].toggle()
                     }) {

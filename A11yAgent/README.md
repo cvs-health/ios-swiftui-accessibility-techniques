@@ -499,7 +499,8 @@ brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
    Replace `YourAppName` with the folder containing your Swift source files. `${SRCROOT}` is the directory containing your `.xcodeproj`.
 
 4. **Uncheck** "Based on dependency analysis" — otherwise Xcode may cache old results
-5. Build your project
+5. In Build Settings, search for **"User Script Sandboxing"** and set it to **No** — otherwise Xcode blocks the script from reading your source files
+6. Build your project
 
 The `|| true` at the end means accessibility errors show inline but don't stop the build. Remove `|| true` if you want errors to fail the build.
 
@@ -565,15 +566,18 @@ brew uninstall a11y-check && brew install --HEAD cvs-health/ios-swiftui-accessib
 ```
 
 **No annotations in Xcode (Run Script):**  
-Debug by writing output to a file:
+Most likely **User Script Sandboxing** is enabled, which blocks the script from reading your source files. Go to Build Settings → search "User Script Sandboxing" → set to **No**.
+
+If that doesn't fix it, debug by temporarily changing the Run Script to write output to a file:
 
 ```bash
 echo "SRCROOT=${SRCROOT}" > /tmp/a11y-check-debug.log
+ls "${SRCROOT}/YourAppName" >> /tmp/a11y-check-debug.log 2>&1
 /opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName" --format xcode >> /tmp/a11y-check-debug.log 2>&1
 echo "EXIT CODE: $?" >> /tmp/a11y-check-debug.log
 ```
 
-After building, check `/tmp/a11y-check-debug.log`.
+After building, run `cat /tmp/a11y-check-debug.log` in Terminal. If you see "Operation not permitted", User Script Sandboxing is still on. Once it's working, switch the Run Script back to the normal command so Xcode can see the output.
 
 ### Output format
 

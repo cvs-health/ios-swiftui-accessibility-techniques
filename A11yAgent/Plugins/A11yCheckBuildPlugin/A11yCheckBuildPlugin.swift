@@ -29,17 +29,41 @@ import XcodeProjectPlugin
 
 extension A11yCheckBuildPlugin: XcodeBuildToolPlugin {
     func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
-        let tool = try context.tool(named: "a11y-check")
+        let toolPath: Path
+        if let tool = try? context.tool(named: "a11y-check") {
+            toolPath = tool.path
+        } else if let found = findToolInPath("a11y-check") {
+            toolPath = found
+        } else {
+            Diagnostics.warning("a11y-check not found. Install via: brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check")
+            return []
+        }
+
         let sourcePath = context.xcodeProject.directory.string
 
         return [
             .prebuildCommand(
                 displayName: "a11y-check: \(target.displayName)",
-                executable: tool.path,
+                executable: toolPath,
                 arguments: [sourcePath, "--format", "xcode"],
                 outputFilesDirectory: context.pluginWorkDirectory
             )
         ]
+    }
+
+    private func findToolInPath(_ name: String) -> Path? {
+        let searchPaths = [
+            "/opt/homebrew/bin",
+            "/usr/local/bin",
+            "/usr/bin",
+        ]
+        for dir in searchPaths {
+            let path = "\(dir)/\(name)"
+            if FileManager.default.isExecutableFile(atPath: path) {
+                return Path(path)
+            }
+        }
+        return nil
     }
 }
 #endif

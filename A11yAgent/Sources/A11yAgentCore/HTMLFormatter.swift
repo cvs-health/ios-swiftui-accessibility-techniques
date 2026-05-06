@@ -118,21 +118,25 @@ public struct HTMLFormatter {
         .failed-criteria .criterion-counts { color: #595f64; font-size: 0.75rem; }
         .criteria-table td.status-cell { text-align: center; }
         .trend-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
-        .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; }
-        .trend-chart { margin: 1rem 0; }
-        .trend-chart svg { width: 100%; max-width: 700px; }
+        .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; font-size: 1.125rem; margin-bottom: 0.75rem; }
+        .trend-content { display: flex; gap: 1.5rem; align-items: flex-start; }
+        .trend-chart { flex: 1; min-width: 0; }
+        .trend-chart svg { width: 100%; }
         .trend-chart .chart-line { fill: none; stroke: #0d6efd; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
         .trend-chart .chart-area { fill: rgba(13, 110, 253, 0.1); }
         .trend-chart .chart-dot { fill: #0d6efd; }
         .trend-chart .chart-dot-current { fill: #198754; stroke: #fff; stroke-width: 2; }
         .trend-chart .chart-grid { stroke: #e9ecef; stroke-width: 1; }
         .trend-chart .chart-label { fill: #595f64; font-size: 11px; font-family: -apple-system, sans-serif; }
-        .trend-delta { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .trend-meta { flex: 0 0 auto; min-width: 200px; }
+        .trend-delta { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.75rem; }
         .trend-delta.positive { color: var(--pass); }
         .trend-delta.negative { color: var(--error); }
         .trend-delta.neutral { color: #595f64; }
-        .trend-table { width: 100%; max-width: 700px; }
+        .trend-table { width: 100%; font-size: 0.8125rem; }
         .trend-table th { background: #f1f3f5; }
+        .trend-table th, .trend-table td { padding: 0.375rem 0.625rem; }
+        @media (max-width: 900px) { .trend-content { flex-direction: column; } .trend-meta { min-width: unset; } }
         .bar-chart { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
         .bar-chart h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; margin-bottom: 1rem; }
         .bar-row { display: flex; align-items: center; margin-bottom: 0.5rem; gap: 0.5rem; }
@@ -318,11 +322,11 @@ public struct HTMLFormatter {
 
             html += "<div class=\"trend-section\">\n"
             html += "<h2>Score Trend</h2>\n"
-            html += "<div class=\"trend-delta \(deltaClass)\">Change from last run: \(deltaStr)</div>\n"
+            html += "<div class=\"trend-content\">\n"
 
             // SVG Line Chart
-            let chartW = 680.0
-            let chartH = 200.0
+            let chartW = 500.0
+            let chartH = 180.0
             let padL = 40.0
             let padR = 20.0
             let padT = 20.0
@@ -384,7 +388,9 @@ public struct HTMLFormatter {
 
             html += "</svg>\n</div>\n"
 
-            // History table
+            // Meta: delta + history table
+            html += "<div class=\"trend-meta\">\n"
+            html += "<div class=\"trend-delta \(deltaClass)\">Change: \(deltaStr)</div>\n"
             html += "<table class=\"trend-table\">\n"
             html += "<tr><th>Date</th><th>Score</th><th>Grade</th><th>Errors</th><th>Change</th></tr>\n"
             var prevScore: Double? = nil
@@ -404,7 +410,9 @@ public struct HTMLFormatter {
                 prevScore = pt.score
             }
             html += "</table>\n"
-            html += "</div>\n"
+            html += "</div>\n" // close trend-meta
+            html += "</div>\n" // close trend-content
+            html += "</div>\n" // close trend-section
         }
 
         // By-file detail
@@ -492,6 +500,31 @@ public struct HTMLFormatter {
             }
         }
 
+        // By-rule summary
+        html += "<h2>Issues by Rule</h2>\n<table>\n<tr><th>Rule</th><th>Severity</th><th>Impact</th><th>Count</th><th>WCAG</th></tr>\n"
+        for rule in allRules.sorted(by: { $0.id < $1.id }) {
+            let count = diagsByRule[rule.id]?.count ?? 0
+            let badgeClass: String
+            switch rule.severity {
+            case .error: badgeClass = "badge-error"
+            case .warning: badgeClass = "badge-warning"
+            case .info: badgeClass = "badge-info"
+            }
+            let impactBadge: String
+            switch rule.impact {
+            case .critical: impactBadge = "badge-critical"
+            case .serious: impactBadge = "badge-serious"
+            case .moderate: impactBadge = "badge-moderate"
+            case .minor: impactBadge = "badge-minor"
+            }
+            html += "<tr><td>\(escapeHTML(rule.id))</td>"
+            html += "<td><span class=\"badge \(badgeClass)\">\(rule.severity.rawValue)</span></td>"
+            html += "<td><span class=\"badge \(impactBadge)\">\(rule.impact.rawValue)</span></td>"
+            html += "<td>\(count)</td>"
+            html += "<td>\(escapeHTML(rule.wcagCriteria.joined(separator: ", ")))</td></tr>\n"
+        }
+        html += "</table>\n"
+
         // WCAG Conformance Table — use score data if available for full 48-criteria view
         html += "<h2>WCAG 2.2 Conformance</h2>\n"
         if let score = score {
@@ -539,31 +572,6 @@ public struct HTMLFormatter {
             }
             html += "</table>\n"
         }
-
-        // By-rule summary
-        html += "<h2>Issues by Rule</h2>\n<table>\n<tr><th>Rule</th><th>Severity</th><th>Impact</th><th>Count</th><th>WCAG</th></tr>\n"
-        for rule in allRules.sorted(by: { $0.id < $1.id }) {
-            let count = diagsByRule[rule.id]?.count ?? 0
-            let badgeClass: String
-            switch rule.severity {
-            case .error: badgeClass = "badge-error"
-            case .warning: badgeClass = "badge-warning"
-            case .info: badgeClass = "badge-info"
-            }
-            let impactBadge: String
-            switch rule.impact {
-            case .critical: impactBadge = "badge-critical"
-            case .serious: impactBadge = "badge-serious"
-            case .moderate: impactBadge = "badge-moderate"
-            case .minor: impactBadge = "badge-minor"
-            }
-            html += "<tr><td>\(escapeHTML(rule.id))</td>"
-            html += "<td><span class=\"badge \(badgeClass)\">\(rule.severity.rawValue)</span></td>"
-            html += "<td><span class=\"badge \(impactBadge)\">\(rule.impact.rawValue)</span></td>"
-            html += "<td>\(count)</td>"
-            html += "<td>\(escapeHTML(rule.wcagCriteria.joined(separator: ", ")))</td></tr>\n"
-        }
-        html += "</table>\n"
 
         html += "</body>\n</html>"
         return html

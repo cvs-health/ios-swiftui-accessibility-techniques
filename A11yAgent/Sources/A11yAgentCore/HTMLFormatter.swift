@@ -345,10 +345,9 @@ public struct HTMLFormatter {
             let plotW = chartW - padL - padR
             let plotH = chartH - padT - padB
 
-            let scores = allPoints.map(\.score)
-            let minScore = max(0, (scores.min() ?? 0) - 10)
-            let maxScore = min(100, (scores.max() ?? 100) + 10)
-            let scoreRange = max(maxScore - minScore, 1)
+            let minScore = 0.0
+            let maxScore = 100.0
+            let scoreRange = 100.0
 
             func xPos(_ i: Int) -> Double {
                 let count = allPoints.count

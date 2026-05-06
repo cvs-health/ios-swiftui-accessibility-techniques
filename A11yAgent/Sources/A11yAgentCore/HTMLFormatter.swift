@@ -98,7 +98,8 @@ public struct HTMLFormatter {
         .fix-block .line-good { color: #40e040; font-weight: 600; }
         .score-bar-row { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: flex-start; }
         .score-bar-row > .score-section { flex: 0 0 auto; min-width: 320px; margin-bottom: 0; }
-        .score-bar-row > .bar-chart { flex: 1 1 0; margin-bottom: 0; min-width: 0; }
+        .score-bar-row .bar-chart { margin-bottom: 0; }
+        .score-bar-row .summary { margin-bottom: 1rem; }
         @media (max-width: 900px) { .score-bar-row { flex-direction: column; } .score-bar-row > .score-section { min-width: unset; } }
         .score-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
         .score-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
@@ -163,16 +164,6 @@ public struct HTMLFormatter {
         <p class="timestamp">Generated: \(escapeHTML(timestamp))</p>
         """
 
-        // Summary
-        html += """
-        <div class="summary">
-          <div class="stat error"><div class="number">\(errorCount)</div><div class="label">Errors</div></div>
-          <div class="stat warning"><div class="number">\(warningCount)</div><div class="label">Warnings</div></div>
-          <div class="stat info"><div class="number">\(infoCount)</div><div class="label">Info</div></div>
-          <div class="stat"><div class="number">\(fileCount)</div><div class="label">Files</div></div>
-        </div>
-        """
-
         // Score Section + Bar Chart side by side
         html += "<div class=\"score-bar-row\">\n"
         if let score = score {
@@ -232,6 +223,17 @@ public struct HTMLFormatter {
 
             html += "</div>\n"
         }
+
+        // Right column: summary stats + bar chart
+        html += "<div style=\"flex:1 1 0;min-width:0\">\n"
+        html += """
+        <div class="summary">
+          <div class="stat error"><div class="number">\(errorCount)</div><div class="label">Errors</div></div>
+          <div class="stat warning"><div class="number">\(warningCount)</div><div class="label">Warnings</div></div>
+          <div class="stat info"><div class="number">\(infoCount)</div><div class="label">Info</div></div>
+          <div class="stat"><div class="number">\(fileCount)</div><div class="label">Files</div></div>
+        </div>
+        """
 
         // Bar Chart — issues by WCAG criterion, sorted by total count
         do {
@@ -296,6 +298,7 @@ public struct HTMLFormatter {
                 html += "</div>\n"
             }
         }
+        html += "</div>\n" // close right column wrapper
         html += "</div>\n" // close score-bar-row
 
         // Trend Section — SVG chart + history table

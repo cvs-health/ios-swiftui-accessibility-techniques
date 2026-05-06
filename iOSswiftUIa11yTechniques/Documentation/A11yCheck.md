@@ -1,5 +1,5 @@
 # A11y-check
-`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 31 rules across 17 WCAG 2.2 success criteria, with a 0–100 scoring system.
+`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 34 rules across 19 WCAG 2.2 success criteria, with a 0–100 scoring system.
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 
@@ -78,10 +78,18 @@ See the full [A11yAgent README](../../A11yAgent/README.md) for installation, CLI
 ### Label in Name
 - **`label-in-name`** (error, WCAG 2.5.3) — `.accessibilityLabel()` does not contain the visible text. Speech input users who say what they see cannot activate the control.
 
+### Orientation
+- **`orientation-lock`** (warning, WCAG 1.3.4) — `supportedInterfaceOrientations` restricts the app to portrait-only or landscape-only. Users with mounted devices (e.g. wheelchair mounts) may not be able to rotate their device. Does not flag `.all` or `.allButUpsideDown`.
+
+### Hints
+- **`missing-accessibility-hint`** (warning, WCAG 3.3.2) — Interactive element with a complex gesture (`onLongPressGesture`, `onDrag`, `onDrop`, `contextMenu`, `swipeActions`, `DragGesture`, `LongPressGesture`) without `.accessibilityHint()`. Standard taps and buttons are not flagged.
+- **`hint-describes-action-method`** (warning, WCAG 3.3.2) — `.accessibilityHint()` describes how to interact (e.g. "Double tap to purchase") instead of what happens. VoiceOver already announces the gesture. Use third-person form: "Purchases this item".
+
 ## Applicable WCAG Success Criteria
 - [1.1.1: Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content)
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
 - [1.3.2: Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
+- [1.3.4: Orientation](https://www.w3.org/WAI/WCAG22/Understanding/orientation)
 - [1.3.5: Identify Input Purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose)
 - [1.4.3: Contrast (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum)
 - [1.4.4: Resize Text](https://www.w3.org/WAI/WCAG22/Understanding/resize-text)

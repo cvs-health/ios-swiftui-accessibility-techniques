@@ -129,6 +129,23 @@ public struct HTMLFormatter {
         .trend-delta.neutral { color: #595f64; }
         .trend-table { width: 100%; max-width: 700px; }
         .trend-table th { background: #f1f3f5; }
+        .bar-chart { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
+        .bar-chart h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; margin-bottom: 1rem; }
+        .bar-row { display: flex; align-items: center; margin-bottom: 0.5rem; gap: 0.5rem; }
+        .bar-label { min-width: 220px; font-size: 0.8125rem; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bar-label a { color: var(--text); text-decoration: none; }
+        .bar-label a:hover { text-decoration: underline; }
+        .bar-track { flex: 1; height: 22px; background: #f1f3f5; border-radius: 4px; overflow: hidden; position: relative; }
+        .bar-fill-error { height: 100%; background: var(--error); border-radius: 4px 0 0 4px; position: absolute; left: 0; top: 0; }
+        .bar-fill-warning { height: 100%; position: absolute; top: 0; background: repeating-linear-gradient(135deg, #e6a817, #e6a817 4px, #d4960a 4px, #d4960a 8px); }
+        .bar-fill-info { height: 100%; position: absolute; top: 0; border-radius: 0 4px 4px 0; background: #0c8599; background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1.5px, transparent 1.5px); background-size: 6px 6px; }
+        .bar-count { min-width: 40px; font-size: 0.8125rem; font-weight: 600; color: #595f64; }
+        .bar-legend { display: flex; gap: 1.25rem; margin-bottom: 1rem; font-size: 0.75rem; color: #595f64; }
+        .bar-legend-item { display: flex; align-items: center; gap: 0.375rem; }
+        .bar-legend-swatch { width: 14px; height: 14px; border-radius: 2px; }
+        .bar-legend-swatch.swatch-error { background: var(--error); }
+        .bar-legend-swatch.swatch-warning { background: repeating-linear-gradient(135deg, #e6a817, #e6a817 3px, #d4960a 3px, #d4960a 6px); }
+        .bar-legend-swatch.swatch-info { background: #0c8599; background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px); background-size: 4px 4px; }
         </style>
         </head>
         <body>
@@ -203,6 +220,70 @@ public struct HTMLFormatter {
             }
 
             html += "</div>\n"
+        }
+
+        // Bar Chart — issues by WCAG criterion, sorted by total count
+        do {
+            let criteriaWithIssues = flatCriterionDiags
+                .map { criterion, diags -> (id: String, errors: Int, warnings: Int, infos: Int, total: Int) in
+                    let e = diags.filter { $0.severity == .error }.count
+                    let w = diags.filter { $0.severity == .warning }.count
+                    let i = diags.filter { $0.severity == .info }.count
+                    return (id: criterion, errors: e, warnings: w, infos: i, total: e + w + i)
+                }
+                .sorted { $0.total > $1.total }
+
+            if !criteriaWithIssues.isEmpty {
+                let maxCount = criteriaWithIssues.first?.total ?? 1
+
+                let criterionNames: [String: String] = [
+                    "1.1.1": "Non-text Content", "1.3.1": "Info and Relationships",
+                    "1.3.2": "Meaningful Sequence", "1.3.4": "Orientation",
+                    "1.3.5": "Identify Input Purpose", "1.4.3": "Contrast (Minimum)",
+                    "1.4.4": "Resize Text", "2.1.1": "Keyboard", "2.1.2": "No Keyboard Trap",
+                    "2.2.1": "Timing Adjustable", "2.3.1": "Three Flashes",
+                    "2.4.2": "Page Titled", "2.4.3": "Focus Order",
+                    "2.4.4": "Link Purpose", "2.4.6": "Headings and Labels",
+                    "2.5.1": "Pointer Gestures", "2.5.3": "Label in Name",
+                    "2.5.8": "Target Size", "3.3.2": "Labels or Instructions",
+                    "4.1.2": "Name, Role, Value",
+                ]
+
+                html += "<div class=\"bar-chart\">\n"
+                html += "<h2>Issues by WCAG Criterion</h2>\n"
+                html += "<div class=\"bar-legend\">"
+                html += "<div class=\"bar-legend-item\"><div class=\"bar-legend-swatch swatch-error\"></div> Errors</div>"
+                html += "<div class=\"bar-legend-item\"><div class=\"bar-legend-swatch swatch-warning\"></div> Warnings</div>"
+                html += "<div class=\"bar-legend-item\"><div class=\"bar-legend-swatch swatch-info\"></div> Info</div>"
+                html += "</div>\n"
+
+                for c in criteriaWithIssues {
+                    let name = criterionNames[c.id] ?? c.id
+                    let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(c.id)
+                    let errPct = Double(c.errors) / Double(maxCount) * 100.0
+                    let warnPct = Double(c.warnings) / Double(maxCount) * 100.0
+                    let infoPct = Double(c.infos) / Double(maxCount) * 100.0
+                    let warnLeft = errPct
+
+                    html += "<div class=\"bar-row\">"
+                    html += "<div class=\"bar-label\"><a href=\"\(wcagURL)\">\(escapeHTML(c.id)) \(escapeHTML(name))</a></div>"
+                    html += "<div class=\"bar-track\">"
+                    if c.errors > 0 {
+                        html += "<div class=\"bar-fill-error\" style=\"width:\(String(format: "%.1f", errPct))%\"></div>"
+                    }
+                    if c.warnings > 0 {
+                        html += "<div class=\"bar-fill-warning\" style=\"left:\(String(format: "%.1f", warnLeft))%;width:\(String(format: "%.1f", warnPct))%\"></div>"
+                    }
+                    if c.infos > 0 {
+                        let infoLeft = warnLeft + warnPct
+                        html += "<div class=\"bar-fill-info\" style=\"left:\(String(format: "%.1f", infoLeft))%;width:\(String(format: "%.1f", infoPct))%\"></div>"
+                    }
+                    html += "</div>"
+                    html += "<div class=\"bar-count\">\(c.total)</div>"
+                    html += "</div>\n"
+                }
+                html += "</div>\n"
+            }
         }
 
         // Trend Section — SVG chart + history table

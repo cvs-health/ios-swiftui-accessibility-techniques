@@ -407,54 +407,6 @@ public struct HTMLFormatter {
             html += "</div>\n"
         }
 
-        // WCAG Conformance Table — use score data if available for full 48-criteria view
-        html += "<h2>WCAG 2.2 Conformance</h2>\n"
-        if let score = score {
-            html += "<table class=\"criteria-table\">\n<tr><th>Criterion</th><th>Name</th><th>Level</th><th>Status</th><th>Issues</th></tr>\n"
-            for cs in score.criteriaScores {
-                let statusIcon: String
-                let badgeClass: String
-                switch cs.status {
-                case .pass:       statusIcon = "✓ Pass";   badgeClass = "badge-pass"
-                case .fail:       statusIcon = "✗ Fail";   badgeClass = "badge-fail"
-                case .review:     statusIcon = "⚠ Review"; badgeClass = "badge-warning"
-                case .notChecked: statusIcon = "· N/A";    badgeClass = "badge-info"
-                }
-                let issueText: String
-                if cs.errorCount + cs.warningCount + cs.infoCount > 0 {
-                    var parts: [String] = []
-                    if cs.errorCount > 0 { parts.append("\(cs.errorCount)E") }
-                    if cs.warningCount > 0 { parts.append("\(cs.warningCount)W") }
-                    if cs.infoCount > 0 { parts.append("\(cs.infoCount)I") }
-                    issueText = parts.joined(separator: " ")
-                } else {
-                    issueText = "—"
-                }
-                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(cs.criterion)
-                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(cs.criterion))</a></td>"
-                html += "<td>\(escapeHTML(cs.name))</td>"
-                html += "<td>\(cs.level.rawValue)</td>"
-                html += "<td class=\"status-cell\"><span class=\"badge \(badgeClass)\">\(statusIcon)</span></td>"
-                html += "<td>\(issueText)</td></tr>\n"
-            }
-            html += "</table>\n"
-        } else {
-            html += "<table>\n<tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>\n"
-            for criterion in allCriteria {
-                let criterionDiags = flatCriterionDiags[criterion] ?? []
-                let hasErrors = criterionDiags.contains { $0.severity == .error }
-                let status = criterionDiags.isEmpty ? "Pass" : (hasErrors ? "Fail" : "Review")
-                let badgeClass = criterionDiags.isEmpty ? "badge-pass" : (hasErrors ? "badge-fail" : "badge-warning")
-                let ruleNames = allRules.filter { $0.wcagCriteria.contains(criterion) }.map(\.id).joined(separator: ", ")
-                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(criterion)
-                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(criterion))</a></td>"
-                html += "<td><span class=\"badge \(badgeClass)\">\(status)</span></td>"
-                html += "<td>\(criterionDiags.count)</td>"
-                html += "<td>\(escapeHTML(ruleNames))</td></tr>\n"
-            }
-            html += "</table>\n"
-        }
-
         // By-file detail
         html += "<h2>Issues by File</h2>\n"
         if diagnostics.isEmpty {
@@ -538,6 +490,54 @@ public struct HTMLFormatter {
                 }
                 html += "</div>\n</details>\n"
             }
+        }
+
+        // WCAG Conformance Table — use score data if available for full 48-criteria view
+        html += "<h2>WCAG 2.2 Conformance</h2>\n"
+        if let score = score {
+            html += "<table class=\"criteria-table\">\n<tr><th>Criterion</th><th>Name</th><th>Level</th><th>Status</th><th>Issues</th></tr>\n"
+            for cs in score.criteriaScores {
+                let statusIcon: String
+                let badgeClass: String
+                switch cs.status {
+                case .pass:       statusIcon = "✓ Pass";   badgeClass = "badge-pass"
+                case .fail:       statusIcon = "✗ Fail";   badgeClass = "badge-fail"
+                case .review:     statusIcon = "⚠ Review"; badgeClass = "badge-warning"
+                case .notChecked: statusIcon = "· N/A";    badgeClass = "badge-info"
+                }
+                let issueText: String
+                if cs.errorCount + cs.warningCount + cs.infoCount > 0 {
+                    var parts: [String] = []
+                    if cs.errorCount > 0 { parts.append("\(cs.errorCount)E") }
+                    if cs.warningCount > 0 { parts.append("\(cs.warningCount)W") }
+                    if cs.infoCount > 0 { parts.append("\(cs.infoCount)I") }
+                    issueText = parts.joined(separator: " ")
+                } else {
+                    issueText = "—"
+                }
+                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(cs.criterion)
+                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(cs.criterion))</a></td>"
+                html += "<td>\(escapeHTML(cs.name))</td>"
+                html += "<td>\(cs.level.rawValue)</td>"
+                html += "<td class=\"status-cell\"><span class=\"badge \(badgeClass)\">\(statusIcon)</span></td>"
+                html += "<td>\(issueText)</td></tr>\n"
+            }
+            html += "</table>\n"
+        } else {
+            html += "<table>\n<tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>\n"
+            for criterion in allCriteria {
+                let criterionDiags = flatCriterionDiags[criterion] ?? []
+                let hasErrors = criterionDiags.contains { $0.severity == .error }
+                let status = criterionDiags.isEmpty ? "Pass" : (hasErrors ? "Fail" : "Review")
+                let badgeClass = criterionDiags.isEmpty ? "badge-pass" : (hasErrors ? "badge-fail" : "badge-warning")
+                let ruleNames = allRules.filter { $0.wcagCriteria.contains(criterion) }.map(\.id).joined(separator: ", ")
+                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(criterion)
+                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(criterion))</a></td>"
+                html += "<td><span class=\"badge \(badgeClass)\">\(status)</span></td>"
+                html += "<td>\(criterionDiags.count)</td>"
+                html += "<td>\(escapeHTML(ruleNames))</td></tr>\n"
+            }
+            html += "</table>\n"
         }
 
         // By-rule summary

@@ -94,6 +94,10 @@ public struct HTMLFormatter {
         .suggestion::before { content: "Fix: "; font-weight: 600; }
         .fix-block { background: #1e3a1e; color: #a6e3a1; border-radius: 0 6px 6px 6px; padding: 0.625rem 0.75rem; margin: 0 0 0.375rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
         .fix-block .line-good { color: #40e040; font-weight: 600; }
+        .score-bar-row { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: flex-start; }
+        .score-bar-row > .score-section { flex: 0 0 auto; min-width: 320px; margin-bottom: 0; }
+        .score-bar-row > .bar-chart { flex: 1 1 0; margin-bottom: 0; min-width: 0; }
+        @media (max-width: 900px) { .score-bar-row { flex-direction: column; } .score-bar-row > .score-section { min-width: unset; } }
         .score-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
         .score-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .score-big { font-size: 3rem; font-weight: 800; line-height: 1; }
@@ -163,7 +167,8 @@ public struct HTMLFormatter {
         </div>
         """
 
-        // Score Section
+        // Score Section + Bar Chart side by side
+        html += "<div class=\"score-bar-row\">\n"
         if let score = score {
             let gradeClass: String
             switch score.grade.prefix(1) {
@@ -285,6 +290,7 @@ public struct HTMLFormatter {
                 html += "</div>\n"
             }
         }
+        html += "</div>\n" // close score-bar-row
 
         // Trend Section — SVG chart + history table
         if !trendEntries.isEmpty, let currentScore = score {

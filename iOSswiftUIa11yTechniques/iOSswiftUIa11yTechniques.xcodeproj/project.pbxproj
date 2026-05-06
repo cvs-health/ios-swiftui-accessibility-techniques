@@ -318,6 +318,7 @@
 		BC715B642B44C81A00C77B57 /* Alerts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Alerts.md; sourceTree = "<group>"; };
 		BC715B652B44D01200C77B57 /* FocusManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FocusManagement.md; sourceTree = "<group>"; };
 		BC715B662B465B9F00C77B57 /* CheckboxesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxesView.swift; sourceTree = "<group>"; };
+		BC7932A52FAA689B00A6E20E /* A11yCheck.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = A11yCheck.md; sourceTree = "<group>"; };
 		BC7D81832ECE889F00F98333 /* SwiftLintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLintView.swift; sourceTree = "<group>"; };
 		BC8129012B3CCF4F00CB19D2 /* Sheets.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Sheets.md; sourceTree = "<group>"; };
 		BC8129022B3CDA4F00CB19D2 /* ConfirmationDialogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialogsView.swift; sourceTree = "<group>"; };
@@ -474,6 +475,7 @@
 		AA9B134C2AA923CB009A3D84 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				BC7932A52FAA689B00A6E20E /* A11yCheck.md */,
 				BCD1CF9A2B577C5300A26ED3 /* AccessibilityActions.md */,
 				BCE205212B579FC3000DF400 /* AccessibilityDetection.md */,
 				BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */,

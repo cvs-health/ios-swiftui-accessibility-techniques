@@ -10,7 +10,9 @@ public struct HTMLFormatter {
         let warningCount = diagnostics.filter { $0.severity == .warning }.count
         let infoCount = diagnostics.filter { $0.severity == .info }.count
         let fileCount = Set(diagnostics.map(\.filePath)).count
-        let timestamp = ISO8601DateFormatter().string(from: Date())
+        let dateFmt = DateFormatter()
+        dateFmt.dateFormat = "M/d/yy h:mm a"
+        let timestamp = dateFmt.string(from: Date())
 
         // Group by WCAG criteria
         let allCriteria = Set(allRules.flatMap(\.wcagCriteria)).sorted()
@@ -299,8 +301,17 @@ public struct HTMLFormatter {
         // Trend Section — SVG chart + history table
         if !trendEntries.isEmpty, let currentScore = score {
             // Build data points: historical + current
+            let trendDateFmt = DateFormatter()
+            trendDateFmt.dateFormat = "yyyy-MM-dd"
+            let trendShortFmt = DateFormatter()
+            trendShortFmt.dateFormat = "M/d/yy"
             var allPoints: [(label: String, score: Double, errors: Int, grade: String)] = trendEntries.map { entry in
-                let shortDate = String(entry.date.prefix(10))
+                let shortDate: String
+                if let parsed = trendDateFmt.date(from: String(entry.date.prefix(10))) {
+                    shortDate = trendShortFmt.string(from: parsed)
+                } else {
+                    shortDate = String(entry.date.prefix(10))
+                }
                 return (label: shortDate, score: entry.score, errors: entry.errors, grade: entry.grade)
             }
             allPoints.append((label: "Now", score: currentScore.score, errors: currentScore.totalErrors, grade: currentScore.grade))

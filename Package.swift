@@ -2,8 +2,8 @@
 import PackageDescription
 
 let package = Package(
-    name: "A11yAgent",
-    platforms: [.macOS(.v13)],
+    name: "ios-swiftui-accessibility-techniques",
+    platforms: [.macOS(.v13), .iOS(.v16), .watchOS(.v9)],
     products: [
         .library(name: "A11yAgentCore", targets: ["A11yAgentCore"]),
         .plugin(name: "A11yCheckBuildPlugin", targets: ["A11yCheckBuildPlugin"]),

@@ -251,8 +251,10 @@ a11y-check . --fix --dry-run
 | `line-limit-1` | Removes `.lineLimit(1)` entirely |
 | `hardcoded-color` | Removes the hardcoded color modifier (`.foregroundColor(.black)`, etc.) to restore SwiftUI's adaptive defaults |
 | `input-missing-purpose` | Appends `.textContentType(...)` with the inferred content type |
+| `button-label-contains-role` | Removes the word "button" from the `.accessibilityLabel()` string |
+| `small-touch-target` | Increases `.frame(width:height:)` to the 24×24pt minimum |
 
-After applying fixes, review the changes — some fixes use placeholder values (like `Color("foreground")`) that you should rename to match your asset catalog. The `--dry-run` flag previews all fixes without modifying files.
+Use `--dry-run` to preview all fixes without modifying files.
 
 After applying fixes, `a11y-check` re-analyzes and shows the updated score.
 

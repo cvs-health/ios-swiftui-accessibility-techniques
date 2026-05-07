@@ -26,10 +26,17 @@ public struct ButtonLabelContainsRoleRule: A11yRule {
             for label in view.modifiers.modifiers(named: "accessibilityLabel") {
                 guard let text = label.firstStringArgument else { continue }
                 if text.lowercased().contains("button") {
+                    let fix = makeStringReplacementFix(
+                        callExpr: label.callExpr,
+                        originalText: text,
+                        word: "button",
+                        sourceFile: syntax
+                    )
                     diagnostics.append(makeDiagnostic(
                         message: "Button's .accessibilityLabel(\"\(text)\") contains 'button'. Remove it — VoiceOver announces the Button role automatically.",
                         node: label.callExpr,
                         context: context,
+                        fix: fix,
                         suggestion: "Remove \"button\" from the accessibility label"
                     ))
                 }

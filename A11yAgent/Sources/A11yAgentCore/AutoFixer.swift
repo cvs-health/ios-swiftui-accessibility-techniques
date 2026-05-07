@@ -116,14 +116,14 @@ public struct AutoFixer {
     public func formatResult(_ result: Result, dryRun: Bool) -> String {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
-        let green = "\u{001B}[32m"
+        let blue = "\u{001B}[34m"
 
         if result.totalFixesApplied == 0 {
             return "No auto-fixes available for the reported issues.\n"
         }
 
         let verb = dryRun ? "would fix" : "fixed"
-        var out = "\n\(green)\(bold)Auto-fix: \(verb) \(result.totalFixesApplied) \(result.totalFixesApplied == 1 ? "issue" : "issues") in \(result.totalFilesModified) \(result.totalFilesModified == 1 ? "file" : "files")\(reset)\n"
+        var out = "\n\(blue)\(bold)Auto-fix: \(verb) \(result.totalFixesApplied) \(result.totalFixesApplied == 1 ? "issue" : "issues") in \(result.totalFilesModified) \(result.totalFilesModified == 1 ? "file" : "files")\(reset)\n"
 
         if dryRun {
             out += "  (dry run — no files modified. Remove --dry-run to apply.)\n"
@@ -132,7 +132,7 @@ public struct AutoFixer {
         for fr in result.fileResults {
             out += "\n  \(bold)\(fr.filePath)\(reset) — \(fr.fixesApplied) \(fr.fixesApplied == 1 ? "fix" : "fixes")\n"
             for desc in fr.fixDescriptions {
-                out += "    \(green)✓\(reset) \(desc)\n"
+                out += "    \(blue)✓\(reset) \(desc)\n"
             }
         }
 

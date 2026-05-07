@@ -92,8 +92,7 @@ public struct ViewScorer {
     public func formatViewScores(_ viewScores: [ViewScore], relativeTo basePath: String? = nil) -> String {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
-        let green = "\u{001B}[32m"
-        let magenta = "\u{001B}[35m"
+        let blue = "\u{001B}[34m"
         let red = "\u{001B}[31m"
 
         guard !viewScores.isEmpty else {
@@ -105,10 +104,10 @@ public struct ViewScorer {
         for vs in viewScores {
             let gradeColor: String
             switch vs.grade.prefix(1) {
-            case "A": gradeColor = green
-            case "B": gradeColor = green
-            case "C": gradeColor = magenta
-            case "D": gradeColor = magenta
+            case "A": gradeColor = blue
+            case "B": gradeColor = blue
+            case "C": gradeColor = bold
+            case "D": gradeColor = bold
             default:  gradeColor = red
             }
 

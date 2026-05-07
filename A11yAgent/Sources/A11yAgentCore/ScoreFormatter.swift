@@ -32,10 +32,10 @@ public struct ScoreTerminalFormatter {
         output += "\u{001B}[1m  Summary:\u{001B}[0m\n"
         output += "    Files analyzed:     \(score.filesAnalyzed)\n"
         output += "    Criteria checked:   \(score.criteriaPassed + score.criteriaFailed) / \(score.criteriaPassed + score.criteriaFailed + score.criteriaNotChecked)\n"
-        output += "    Criteria passed:    \u{001B}[32m\(score.criteriaPassed)\u{001B}[0m\n"
+        output += "    Criteria passed:    \u{001B}[34m\(score.criteriaPassed)\u{001B}[0m\n"
         output += "    Criteria failed:    \u{001B}[31m\(score.criteriaFailed)\u{001B}[0m\n"
         output += "    Total errors:       \u{001B}[31m\(score.totalErrors)\u{001B}[0m\n"
-        output += "    Total warnings:     \u{001B}[35m\(score.totalWarnings)\u{001B}[0m\n"
+        output += "    Total warnings:     \u{001B}[1m\(score.totalWarnings)\u{001B}[0m\n"
         output += "    Total info:         \u{001B}[34m\(score.totalInfo)\u{001B}[0m\n\n"
 
         // WCAG criteria breakdown
@@ -52,13 +52,13 @@ public struct ScoreTerminalFormatter {
             switch cs.status {
             case .pass:
                 statusIcon = "✓"
-                statusColor = "\u{001B}[32m"
+                statusColor = "\u{001B}[34m"
             case .fail:
                 statusIcon = "✗"
                 statusColor = "\u{001B}[31m"
             case .review:
                 statusIcon = "⚠"
-                statusColor = "\u{001B}[35m"
+                statusColor = "\u{001B}[1m"
             case .notChecked:
                 statusIcon = "·"
                 statusColor = "\u{001B}[0m"
@@ -73,7 +73,7 @@ public struct ScoreTerminalFormatter {
                 output += " \u{001B}[31m\(cs.errorCount)E\u{001B}[0m"
             }
             if cs.warningCount > 0 {
-                output += " \u{001B}[35m\(cs.warningCount)W\u{001B}[0m"
+                output += " \u{001B}[1m\(cs.warningCount)W\u{001B}[0m"
             }
             output += "\n"
         }
@@ -96,7 +96,7 @@ public struct ScoreTerminalFormatter {
                     let fColor = colorForScore(fs.score)
                     output += "    \(fColor)\(String(format: "%5.1f", fs.score))\u{001B}[0m  \(displayPath)"
                     if fs.errorCount > 0 { output += " \u{001B}[31m(\(fs.errorCount)E)\u{001B}[0m" }
-                    if fs.warningCount > 0 { output += " \u{001B}[35m(\(fs.warningCount)W)\u{001B}[0m" }
+                    if fs.warningCount > 0 { output += " \u{001B}[1m(\(fs.warningCount)W)\u{001B}[0m" }
                     output += "\n"
                 }
                 output += "\n"
@@ -119,9 +119,8 @@ public struct ScoreTerminalFormatter {
 
     private func colorForScore(_ score: Double) -> String {
         switch score {
-        case 90...100: return "\u{001B}[32m"  // green
-        case 70..<90:  return "\u{001B}[35m"  // magenta
-        case 50..<70:  return "\u{001B}[38;5;208m" // orange
+        case 90...100: return "\u{001B}[34m"  // blue
+        case 70..<90:  return "\u{001B}[1m"   // bold
         default:       return "\u{001B}[31m"  // red
         }
     }

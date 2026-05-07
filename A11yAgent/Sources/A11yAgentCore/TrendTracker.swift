@@ -89,9 +89,8 @@ public struct TrendTracker {
         let history = load()
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
-        let green = "\u{001B}[32m"
+        let blue = "\u{001B}[34m"
         let red = "\u{001B}[31m"
-        let magenta = "\u{001B}[35m"
 
         var out = "\n\(bold)Score Trend:\(reset)\n"
 
@@ -107,7 +106,7 @@ public struct TrendTracker {
             let delta = currentScore.score - last.score
             let deltaStr: String
             if delta > 0 {
-                deltaStr = "\(green)+\(String(format: "%.1f", delta))\(reset)"
+                deltaStr = "\(blue)+\(String(format: "%.1f", delta))\(reset)"
             } else if delta < 0 {
                 deltaStr = "\(red)\(String(format: "%.1f", delta))\(reset)"
             } else {
@@ -127,7 +126,7 @@ public struct TrendTracker {
             let delta: String
             if let prev = prevScore {
                 let d = entry.score - prev
-                if d > 0 { delta = "\(green)+\(String(format: "%.1f", d))\(reset)" }
+                if d > 0 { delta = "\(blue)+\(String(format: "%.1f", d))\(reset)" }
                 else if d < 0 { delta = "\(red)\(String(format: "%.1f", d))\(reset)" }
                 else { delta = "\(reset) 0.0\(reset)" }
             } else {
@@ -136,8 +135,8 @@ public struct TrendTracker {
 
             let gradeColor: String
             switch entry.grade.prefix(1) {
-            case "A", "B": gradeColor = green
-            case "C", "D": gradeColor = magenta
+            case "A", "B": gradeColor = blue
+            case "C", "D": gradeColor = bold
             default: gradeColor = red
             }
 
@@ -155,7 +154,7 @@ public struct TrendTracker {
         let currentDelta: String
         if let prev = prevScore {
             let d = currentScore.score - prev
-            if d > 0 { currentDelta = "\(green)+\(String(format: "%.1f", d))\(reset)" }
+            if d > 0 { currentDelta = "\(blue)+\(String(format: "%.1f", d))\(reset)" }
             else if d < 0 { currentDelta = "\(red)\(String(format: "%.1f", d))\(reset)" }
             else { currentDelta = "\(reset) 0.0\(reset)" }
         } else {
@@ -163,8 +162,8 @@ public struct TrendTracker {
         }
         let gradeColor: String
         switch currentScore.grade.prefix(1) {
-        case "A", "B": gradeColor = green
-        case "C", "D": gradeColor = magenta
+        case "A", "B": gradeColor = blue
+        case "C", "D": gradeColor = bold
         default: gradeColor = red
         }
         out += "  \(bold)→ now".padding(toLength: 36, withPad: " ", startingAt: 0)

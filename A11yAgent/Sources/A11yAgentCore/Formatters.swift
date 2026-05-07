@@ -8,12 +8,12 @@ public struct TerminalFormatter {
     /// Format a list of diagnostics for colored terminal output.
     public func format(_ diagnostics: [A11yDiagnostic], relativeTo basePath: String? = nil, score: A11yScore? = nil) -> String {
         if diagnostics.isEmpty, let score = score {
-            var output = "\u{001B}[32m✓ No accessibility issues found.\u{001B}[0m\n"
+            var output = "\u{001B}[34m✓ No accessibility issues found.\u{001B}[0m\n"
             output += formatScoreSummary(score)
             return output
         }
         guard !diagnostics.isEmpty else {
-            return "\u{001B}[32m✓ No accessibility issues found.\u{001B}[0m\n"
+            return "\u{001B}[34m✓ No accessibility issues found.\u{001B}[0m\n"
         }
 
         var output = ""
@@ -42,7 +42,7 @@ public struct TerminalFormatter {
                 severityColor = "\u{001B}[31m" // red
                 severityIcon = "✗"
             case .warning:
-                severityColor = "\u{001B}[35m" // magenta
+                severityColor = "\u{001B}[1m" // bold
                 severityIcon = "⚠"
             case .info:
                 severityColor = "\u{001B}[34m" // blue
@@ -69,7 +69,7 @@ public struct TerminalFormatter {
         }
         if warningCount > 0 {
             if errorCount > 0 { output += ", " }
-            output += "\u{001B}[35m\(warningCount) warning\(warningCount == 1 ? "" : "s")\u{001B}[0m"
+            output += "\u{001B}[1m\(warningCount) warning\(warningCount == 1 ? "" : "s")\u{001B}[0m"
         }
         if infoCount > 0 {
             if errorCount > 0 || warningCount > 0 { output += ", " }
@@ -90,10 +90,10 @@ public struct TerminalFormatter {
         let red = "\u{001B}[31m"
         let gradeColor: String
         switch score.grade.prefix(1) {
-        case "A": gradeColor = "\u{001B}[32m" // green
-        case "B": gradeColor = "\u{001B}[32m"
-        case "C": gradeColor = "\u{001B}[35m" // magenta
-        case "D": gradeColor = "\u{001B}[35m"
+        case "A": gradeColor = "\u{001B}[34m" // blue
+        case "B": gradeColor = "\u{001B}[34m"
+        case "C": gradeColor = "\u{001B}[1m" // bold
+        case "D": gradeColor = "\u{001B}[1m"
         default:  gradeColor = "\u{001B}[31m" // red
         }
 
@@ -122,10 +122,9 @@ public struct TerminalFormatter {
         // Show review criteria
         let review = score.criteriaScores.filter { $0.status == .review }
         if !review.isEmpty {
-            let magenta = "\u{001B}[35m"
-            out += "\(magenta)\(bold)Needs review:\(reset)\n"
+            out += "\(bold)Needs review:\(reset)\n"
             for cs in review {
-                out += "  \(magenta)\u{26a0}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
+                out += "  \(bold)\u{26a0}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
                 out += "  \(reset)(\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings"))\(reset)\n"
             }
         }

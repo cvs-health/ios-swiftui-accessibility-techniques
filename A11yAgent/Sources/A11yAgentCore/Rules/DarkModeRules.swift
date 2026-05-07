@@ -36,22 +36,24 @@ public struct HardcodedColorRule: A11yRule {
 
                 // Flag hardcoded .black / .white
                 if Self.hardcodedColors.contains(argText) {
-                    let replacement = argText.contains("black") ? "Color(\"foreground\")" : "Color(\"background\")"
                     var fix: A11yFix? = nil
-                    if let argExpr = mod.callExpr.arguments.first?.expression {
-                        fix = makeReplacementFix(
-                            node: argExpr,
-                            replacementText: replacement,
-                            description: "Replace \(argText) with \(replacement) (rename as needed)",
-                            sourceFile: syntax
+                    if let memberAccess = mod.callExpr.calledExpression.as(MemberAccessExprSyntax.self) {
+                        let offset = syntax.position.utf8Offset
+                        let startOffset = memberAccess.period.positionAfterSkippingLeadingTrivia.utf8Offset - offset
+                        let endOffset = mod.callExpr.endPositionBeforeTrailingTrivia.utf8Offset - offset
+                        fix = A11yFix(
+                            description: "Remove .\(modName)(\(argText))",
+                            replacementText: "",
+                            startOffset: startOffset,
+                            endOffset: endOffset
                         )
                     }
                     diagnostics.append(makeDiagnostic(
-                        message: "Hardcoded color \(argText) in .\(modName)() may not adapt to Dark Mode. Use semantic colors from asset catalog.",
+                        message: "Hardcoded color \(argText) in .\(modName)() may not adapt to Dark Mode. Remove the modifier to use SwiftUI's adaptive default, or use a named Color from your asset catalog.",
                         node: mod.reportNode,
                         context: context,
                         fix: fix,
-                        suggestion: "Replace \(argText) with a named Color from your asset catalog"
+                        suggestion: "Remove .\(modName)(\(argText)) to use adaptive default colors"
                     ))
                 }
 

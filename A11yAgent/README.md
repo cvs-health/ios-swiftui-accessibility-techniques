@@ -249,7 +249,7 @@ a11y-check . --fix --dry-run
 | `missing-accessibility-grouping` | Appends `.accessibilityElement(children: .combine)` to the HStack/VStack |
 | `fixed-font-size` | Replaces `.font(.system(size: N))` with `.font(.body)` |
 | `line-limit-1` | Removes `.lineLimit(1)` entirely |
-| `hardcoded-color` | Replaces `.black`/`.white` with `Color("foreground")`/`Color("background")` placeholder names |
+| `hardcoded-color` | Removes the hardcoded color modifier (`.foregroundColor(.black)`, etc.) to restore SwiftUI's adaptive defaults |
 | `input-missing-purpose` | Appends `.textContentType(...)` with the inferred content type |
 
 After applying fixes, review the changes — some fixes use placeholder values (like `Color("foreground")`) that you should rename to match your asset catalog. The `--dry-run` flag previews all fixes without modifying files.

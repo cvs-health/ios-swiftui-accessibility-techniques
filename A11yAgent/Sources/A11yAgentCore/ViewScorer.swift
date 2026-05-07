@@ -93,7 +93,7 @@ public struct ViewScorer {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
         let green = "\u{001B}[32m"
-        let yellow = "\u{001B}[33m"
+        let magenta = "\u{001B}[35m"
         let red = "\u{001B}[31m"
 
         guard !viewScores.isEmpty else {
@@ -107,8 +107,8 @@ public struct ViewScorer {
             switch vs.grade.prefix(1) {
             case "A": gradeColor = green
             case "B": gradeColor = green
-            case "C": gradeColor = yellow
-            case "D": gradeColor = yellow
+            case "C": gradeColor = magenta
+            case "D": gradeColor = magenta
             default:  gradeColor = red
             }
 

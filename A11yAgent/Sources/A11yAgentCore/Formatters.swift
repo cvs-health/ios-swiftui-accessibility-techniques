@@ -42,10 +42,10 @@ public struct TerminalFormatter {
                 severityColor = "\u{001B}[31m" // red
                 severityIcon = "✗"
             case .warning:
-                severityColor = "\u{001B}[33m" // yellow
+                severityColor = "\u{001B}[35m" // magenta
                 severityIcon = "⚠"
             case .info:
-                severityColor = "\u{001B}[36m" // cyan
+                severityColor = "\u{001B}[34m" // blue
                 severityIcon = "ℹ"
             }
             let reset = "\u{001B}[0m"
@@ -69,11 +69,11 @@ public struct TerminalFormatter {
         }
         if warningCount > 0 {
             if errorCount > 0 { output += ", " }
-            output += "\u{001B}[33m\(warningCount) warning\(warningCount == 1 ? "" : "s")\u{001B}[0m"
+            output += "\u{001B}[35m\(warningCount) warning\(warningCount == 1 ? "" : "s")\u{001B}[0m"
         }
         if infoCount > 0 {
             if errorCount > 0 || warningCount > 0 { output += ", " }
-            output += "\u{001B}[36m\(infoCount) info\u{001B}[0m"
+            output += "\u{001B}[34m\(infoCount) info\u{001B}[0m"
         }
         output += " in \(Set(diagnostics.map(\.filePath)).count) file\(Set(diagnostics.map(\.filePath)).count == 1 ? "" : "s")\n"
 
@@ -92,8 +92,8 @@ public struct TerminalFormatter {
         switch score.grade.prefix(1) {
         case "A": gradeColor = "\u{001B}[32m" // green
         case "B": gradeColor = "\u{001B}[32m"
-        case "C": gradeColor = "\u{001B}[33m" // yellow
-        case "D": gradeColor = "\u{001B}[33m"
+        case "C": gradeColor = "\u{001B}[35m" // magenta
+        case "D": gradeColor = "\u{001B}[35m"
         default:  gradeColor = "\u{001B}[31m" // red
         }
 
@@ -122,10 +122,10 @@ public struct TerminalFormatter {
         // Show review criteria
         let review = score.criteriaScores.filter { $0.status == .review }
         if !review.isEmpty {
-            let yellow = "\u{001B}[33m"
-            out += "\(yellow)\(bold)Needs review:\(reset)\n"
+            let magenta = "\u{001B}[35m"
+            out += "\(magenta)\(bold)Needs review:\(reset)\n"
             for cs in review {
-                out += "  \(yellow)\u{26a0}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
+                out += "  \(magenta)\u{26a0}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
                 out += "  \(reset)(\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings"))\(reset)\n"
             }
         }

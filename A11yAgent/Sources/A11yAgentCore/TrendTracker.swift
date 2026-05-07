@@ -91,7 +91,7 @@ public struct TrendTracker {
         let bold = "\u{001B}[1m"
         let green = "\u{001B}[32m"
         let red = "\u{001B}[31m"
-        let yellow = "\u{001B}[33m"
+        let magenta = "\u{001B}[35m"
 
         var out = "\n\(bold)Score Trend:\(reset)\n"
 
@@ -137,7 +137,7 @@ public struct TrendTracker {
             let gradeColor: String
             switch entry.grade.prefix(1) {
             case "A", "B": gradeColor = green
-            case "C", "D": gradeColor = yellow
+            case "C", "D": gradeColor = magenta
             default: gradeColor = red
             }
 
@@ -164,7 +164,7 @@ public struct TrendTracker {
         let gradeColor: String
         switch currentScore.grade.prefix(1) {
         case "A", "B": gradeColor = green
-        case "C", "D": gradeColor = yellow
+        case "C", "D": gradeColor = magenta
         default: gradeColor = red
         }
         out += "  \(bold)→ now".padding(toLength: 36, withPad: " ", startingAt: 0)

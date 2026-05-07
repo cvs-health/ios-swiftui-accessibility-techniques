@@ -89,7 +89,6 @@ public struct TrendTracker {
         let history = load()
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
-        let dim = "\u{001B}[90m"
         let green = "\u{001B}[32m"
         let red = "\u{001B}[31m"
         let yellow = "\u{001B}[33m"
@@ -97,7 +96,7 @@ public struct TrendTracker {
         var out = "\n\(bold)Score Trend:\(reset)\n"
 
         if history.entries.isEmpty {
-            out += "  \(dim)No previous scores recorded. Run with --trend again to start tracking.\(reset)\n"
+            out += "  \(reset)No previous scores recorded. Run with --trend again to start tracking.\(reset)\n"
             return out
         }
 
@@ -112,7 +111,7 @@ public struct TrendTracker {
             } else if delta < 0 {
                 deltaStr = "\(red)\(String(format: "%.1f", delta))\(reset)"
             } else {
-                deltaStr = "\(dim)±0.0\(reset)"
+                deltaStr = "\(reset)±0.0\(reset)"
             }
             out += "  Change from last run: \(deltaStr)\n"
         }
@@ -122,7 +121,7 @@ public struct TrendTracker {
         out += "  \(bold)History:\(reset) \(formatSparkline(allScores))\n"
 
         // Table of recent entries
-        out += "\n  \(dim)Date                          Score  Grade  Errors  Δ\(reset)\n"
+        out += "\n  \(reset)Date                          Score  Grade  Errors  Δ\(reset)\n"
         var prevScore: Double? = nil
         for entry in recent {
             let delta: String
@@ -130,9 +129,9 @@ public struct TrendTracker {
                 let d = entry.score - prev
                 if d > 0 { delta = "\(green)+\(String(format: "%.1f", d))\(reset)" }
                 else if d < 0 { delta = "\(red)\(String(format: "%.1f", d))\(reset)" }
-                else { delta = "\(dim) 0.0\(reset)" }
+                else { delta = "\(reset) 0.0\(reset)" }
             } else {
-                delta = "\(dim)  —\(reset)"
+                delta = "\(reset)  —\(reset)"
             }
 
             let gradeColor: String
@@ -146,7 +145,7 @@ public struct TrendTracker {
             out += "  \(dateShort.padding(toLength: 30, withPad: " ", startingAt: 0))"
             out += "\(String(format: "%5.1f", entry.score))  "
             out += "\(gradeColor)\(entry.grade.padding(toLength: 5, withPad: " ", startingAt: 0))\(reset)  "
-            out += "\(entry.errors > 0 ? red : dim)\(String(entry.errors).padding(toLength: 6, withPad: " ", startingAt: 0))\(reset)  "
+            out += "\(entry.errors > 0 ? red : reset)\(String(entry.errors).padding(toLength: 6, withPad: " ", startingAt: 0))\(reset)  "
             out += delta
             out += "\n"
             prevScore = entry.score
@@ -158,9 +157,9 @@ public struct TrendTracker {
             let d = currentScore.score - prev
             if d > 0 { currentDelta = "\(green)+\(String(format: "%.1f", d))\(reset)" }
             else if d < 0 { currentDelta = "\(red)\(String(format: "%.1f", d))\(reset)" }
-            else { currentDelta = "\(dim) 0.0\(reset)" }
+            else { currentDelta = "\(reset) 0.0\(reset)" }
         } else {
-            currentDelta = "\(dim)  —\(reset)"
+            currentDelta = "\(reset)  —\(reset)"
         }
         let gradeColor: String
         switch currentScore.grade.prefix(1) {
@@ -171,7 +170,7 @@ public struct TrendTracker {
         out += "  \(bold)→ now".padding(toLength: 36, withPad: " ", startingAt: 0)
         out += "\(String(format: "%5.1f", currentScore.score))  "
         out += "\(gradeColor)\(currentScore.grade.padding(toLength: 5, withPad: " ", startingAt: 0))\(reset)  "
-        out += "\(currentScore.totalErrors > 0 ? red : dim)\(String(currentScore.totalErrors).padding(toLength: 6, withPad: " ", startingAt: 0))\(reset)  "
+        out += "\(currentScore.totalErrors > 0 ? red : reset)\(String(currentScore.totalErrors).padding(toLength: 6, withPad: " ", startingAt: 0))\(reset)  "
         out += currentDelta
         out += "\(reset)\n"
 

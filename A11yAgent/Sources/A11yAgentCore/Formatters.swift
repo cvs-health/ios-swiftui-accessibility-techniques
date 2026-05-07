@@ -53,9 +53,9 @@ public struct TerminalFormatter {
             let wcag = diag.wcagCriteria.isEmpty ? "" : " [WCAG \(diag.wcagCriteria.joined(separator: ", "))]"
             output += "  \(severityColor)\(severityIcon) \(diag.line):\(diag.column)\(reset) "
             output += "\(severityColor)\(diag.severity.rawValue)\(reset) "
-            output += "\u{001B}[90m[\(diag.impact.rawValue)]\(reset): "
+            output += "\u{001B}[0m[\(diag.impact.rawValue)]\(reset): "
             output += "\(diag.message)"
-            output += "\u{001B}[90m\(wcag) (\(diag.ruleID))\(reset)\n"
+            output += "\u{001B}[0m\(wcag) (\(diag.ruleID))\(reset)\n"
         }
 
         // Summary
@@ -87,7 +87,6 @@ public struct TerminalFormatter {
     private func formatScoreSummary(_ score: A11yScore) -> String {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
-        let dim = "\u{001B}[90m"
         let red = "\u{001B}[31m"
         let gradeColor: String
         switch score.grade.prefix(1) {
@@ -104,8 +103,8 @@ public struct TerminalFormatter {
         let empty = 20 - filled
         let bar = String(repeating: "\u{2588}", count: filled) + String(repeating: "\u{2591}", count: empty)
         out += "  \(gradeColor)[\(bar)]\(reset)  \(String(format: "%5.1f", score.score))%"
-        out += "  \(dim)\(score.criteriaPassed) criteria passed, \(score.criteriaFailed) failed"
-        out += " — \(score.totalErrors) errors, \(score.totalWarnings) warnings\(reset)\n"
+        out += "  \(score.criteriaPassed) criteria passed, \(score.criteriaFailed) failed"
+        out += " — \(score.totalErrors) errors, \(score.totalWarnings) warnings\n"
 
         // Show failed criteria
         let failed = score.criteriaScores.filter { $0.status == .fail }
@@ -116,7 +115,7 @@ public struct TerminalFormatter {
                 if cs.errorCount > 0 { counts.append("\(cs.errorCount) \(cs.errorCount == 1 ? "error" : "errors")") }
                 if cs.warningCount > 0 { counts.append("\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings")") }
                 out += "  \(red)\u{2717}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
-                out += "  \(dim)(\(counts.joined(separator: ", ")))\(reset)\n"
+                out += "  \(reset)(\(counts.joined(separator: ", ")))\(reset)\n"
             }
         }
 
@@ -127,7 +126,7 @@ public struct TerminalFormatter {
             out += "\(yellow)\(bold)Needs review:\(reset)\n"
             for cs in review {
                 out += "  \(yellow)\u{26a0}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
-                out += "  \(dim)(\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings"))\(reset)\n"
+                out += "  \(reset)(\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings"))\(reset)\n"
             }
         }
 

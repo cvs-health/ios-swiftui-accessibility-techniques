@@ -92,13 +92,12 @@ public struct ViewScorer {
     public func formatViewScores(_ viewScores: [ViewScore], relativeTo basePath: String? = nil) -> String {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
-        let dim = "\u{001B}[90m"
         let green = "\u{001B}[32m"
         let yellow = "\u{001B}[33m"
         let red = "\u{001B}[31m"
 
         guard !viewScores.isEmpty else {
-            return "\(dim)No SwiftUI views detected.\(reset)\n"
+            return "\(reset)No SwiftUI views detected.\(reset)\n"
         }
 
         var out = "\n\(bold)Per-View Scores:\(reset)\n"
@@ -126,13 +125,13 @@ public struct ViewScorer {
             out += "\(gradeColor)\(bold)\(String(format: "%5.1f", vs.score))\(reset) "
             out += "\(gradeColor)(\(vs.grade))\(reset) "
             out += "\(bold)\(vs.view.name)\(reset)"
-            out += "  \(dim)\(displayPath):\(vs.view.startLine)-\(vs.view.endLine)\(reset)"
+            out += "  \(reset)\(displayPath):\(vs.view.startLine)-\(vs.view.endLine)\(reset)"
 
             if vs.errorCount > 0 || vs.warningCount > 0 {
                 var counts: [String] = []
                 if vs.errorCount > 0 { counts.append("\(vs.errorCount) \(vs.errorCount == 1 ? "error" : "errors")") }
                 if vs.warningCount > 0 { counts.append("\(vs.warningCount) \(vs.warningCount == 1 ? "warning" : "warnings")") }
-                out += "  \(dim)(\(counts.joined(separator: ", ")))\(reset)"
+                out += "  \(reset)(\(counts.joined(separator: ", ")))\(reset)"
             }
             out += "\n"
         }

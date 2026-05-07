@@ -117,17 +117,16 @@ public struct AutoFixer {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
         let green = "\u{001B}[32m"
-        let dim = "\u{001B}[90m"
 
         if result.totalFixesApplied == 0 {
-            return "\(dim)No auto-fixes available for the reported issues.\(reset)\n"
+            return "No auto-fixes available for the reported issues.\n"
         }
 
         let verb = dryRun ? "would fix" : "fixed"
         var out = "\n\(green)\(bold)Auto-fix: \(verb) \(result.totalFixesApplied) \(result.totalFixesApplied == 1 ? "issue" : "issues") in \(result.totalFilesModified) \(result.totalFilesModified == 1 ? "file" : "files")\(reset)\n"
 
         if dryRun {
-            out += "\(dim)  (dry run — no files modified. Remove --dry-run to apply.)\(reset)\n"
+            out += "  (dry run — no files modified. Remove --dry-run to apply.)\n"
         }
 
         for fr in result.fileResults {

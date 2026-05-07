@@ -18,7 +18,7 @@ public struct ImageMissingLabelRule: A11yRule {
 
     public init() {}
 
-    private static let labelConsumerViews: Set<String> = ["Button", "Link", "NavigationLink", "ShareLink", "ToolbarItem", "Menu"]
+    private static let labelConsumerViews: Set<String> = ["Button", "Link", "NavigationLink", "ShareLink", "ToolbarItem", "Menu", "PhotosPicker"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax)

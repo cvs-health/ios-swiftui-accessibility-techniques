@@ -53,10 +53,16 @@ public struct AccessibilityGroupingRule: A11yRule {
             // Don't flag if there's a Label (Label already combines icon + text)
             if directChildren.contains(where: { $0.viewType == "Label" }) { continue }
 
+            let fix = makeModifierFix(
+                chainRoot: view.chainRoot,
+                modifier: ".accessibilityElement(children: .combine)",
+                sourceFile: syntax
+            )
             diagnostics.append(makeDiagnostic(
                 message: "Image and Text in \(view.viewType) are separate elements for VoiceOver. Consider adding .accessibilityElement(children: .combine) to the \(view.viewType) so they're read as one item.",
                 node: view.callExpr,
                 context: context,
+                fix: fix,
                 suggestion: "Add .accessibilityElement(children: .combine) to the \(view.viewType)"
             ))
         }

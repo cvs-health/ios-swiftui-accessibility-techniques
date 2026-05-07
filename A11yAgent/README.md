@@ -239,18 +239,20 @@ Preview what would change without modifying files:
 a11y-check . --fix --dry-run
 ```
 
-Example output:
+### Rules with auto-fix
 
-```
-Auto-fix: fixed 3 issues in 2 files
+| Rule | Fix applied |
+|---|---|
+| `heading-trait-missing` | Appends `.accessibilityAddTraits(.isHeader)` to the view's modifier chain |
+| `fake-heading-in-label` | Removes the word "heading" from the `.accessibilityLabel()` string |
+| `image-label-contains-role` | Removes role words ("image", "icon", "graphic") from the label string |
+| `missing-accessibility-grouping` | Appends `.accessibilityElement(children: .combine)` to the HStack/VStack |
+| `fixed-font-size` | Replaces `.font(.system(size: N))` with `.font(.body)` |
+| `line-limit-1` | Removes `.lineLimit(1)` entirely |
+| `hardcoded-color` | Replaces `.black`/`.white` with `Color("foreground")`/`Color("background")` placeholder names |
+| `input-missing-purpose` | Appends `.textContentType(...)` with the inferred content type |
 
-  MyView.swift — 2 fixes
-    ✓ Add .accessibilityLabel("Profile") to Image
-    ✓ Add .accessibilityLabel("Search") to Button
-
-  FormView.swift — 1 fix
-    ✓ Add .accessibilityLabel("Email") to TextField
-```
+After applying fixes, review the changes — some fixes use placeholder values (like `Color("foreground")`) that you should rename to match your asset catalog. The `--dry-run` flag previews all fixes without modifying files.
 
 After applying fixes, `a11y-check` re-analyzes and shows the updated score.
 

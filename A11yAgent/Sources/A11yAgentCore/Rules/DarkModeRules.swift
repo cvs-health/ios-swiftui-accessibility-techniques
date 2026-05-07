@@ -36,10 +36,21 @@ public struct HardcodedColorRule: A11yRule {
 
                 // Flag hardcoded .black / .white
                 if Self.hardcodedColors.contains(argText) {
+                    let replacement = argText.contains("black") ? "Color(\"foreground\")" : "Color(\"background\")"
+                    var fix: A11yFix? = nil
+                    if let argExpr = mod.callExpr.arguments.first?.expression {
+                        fix = makeReplacementFix(
+                            node: argExpr,
+                            replacementText: replacement,
+                            description: "Replace \(argText) with \(replacement) (rename as needed)",
+                            sourceFile: syntax
+                        )
+                    }
                     diagnostics.append(makeDiagnostic(
                         message: "Hardcoded color \(argText) in .\(modName)() may not adapt to Dark Mode. Use semantic colors from asset catalog.",
                         node: mod.reportNode,
                         context: context,
+                        fix: fix,
                         suggestion: "Replace \(argText) with a named Color from your asset catalog"
                     ))
                 }

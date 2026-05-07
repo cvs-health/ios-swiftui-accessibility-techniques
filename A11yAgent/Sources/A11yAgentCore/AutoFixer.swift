@@ -117,7 +117,7 @@ public struct AutoFixer {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
         let green = "\u{001B}[32m"
-        let dim = "\u{001B}[2m"
+        let dim = "\u{001B}[90m"
 
         if result.totalFixesApplied == 0 {
             return "\(dim)No auto-fixes available for the reported issues.\(reset)\n"

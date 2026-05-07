@@ -61,7 +61,7 @@ public struct ScoreTerminalFormatter {
                 statusColor = "\u{001B}[33m"
             case .notChecked:
                 statusIcon = "·"
-                statusColor = "\u{001B}[2m"
+                statusColor = "\u{001B}[90m"
             }
 
             let criterion = cs.criterion.padding(toLength: 7, withPad: " ", startingAt: 0)
@@ -104,7 +104,7 @@ public struct ScoreTerminalFormatter {
         }
 
         // Legend
-        output += "\u{001B}[2m  Legend: ✓ Pass  ✗ Fail  ⚠ Review  · Not Checked\u{001B}[0m\n"
+        output += "\u{001B}[90m  Legend: ✓ Pass  ✗ Fail  ⚠ Review  · Not Checked\u{001B}[0m\n"
 
         return output
     }

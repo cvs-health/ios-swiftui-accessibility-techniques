@@ -92,7 +92,7 @@ public struct ViewScorer {
     public func formatViewScores(_ viewScores: [ViewScore], relativeTo basePath: String? = nil) -> String {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
-        let dim = "\u{001B}[2m"
+        let dim = "\u{001B}[90m"
         let green = "\u{001B}[32m"
         let yellow = "\u{001B}[33m"
         let red = "\u{001B}[31m"

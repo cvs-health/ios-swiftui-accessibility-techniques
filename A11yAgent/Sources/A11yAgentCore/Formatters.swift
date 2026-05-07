@@ -53,9 +53,9 @@ public struct TerminalFormatter {
             let wcag = diag.wcagCriteria.isEmpty ? "" : " [WCAG \(diag.wcagCriteria.joined(separator: ", "))]"
             output += "  \(severityColor)\(severityIcon) \(diag.line):\(diag.column)\(reset) "
             output += "\(severityColor)\(diag.severity.rawValue)\(reset) "
-            output += "\u{001B}[2m[\(diag.impact.rawValue)]\(reset): "
+            output += "\u{001B}[90m[\(diag.impact.rawValue)]\(reset): "
             output += "\(diag.message)"
-            output += "\u{001B}[2m\(wcag) (\(diag.ruleID))\(reset)\n"
+            output += "\u{001B}[90m\(wcag) (\(diag.ruleID))\(reset)\n"
         }
 
         // Summary
@@ -87,7 +87,7 @@ public struct TerminalFormatter {
     private func formatScoreSummary(_ score: A11yScore) -> String {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
-        let dim = "\u{001B}[2m"
+        let dim = "\u{001B}[90m"
         let red = "\u{001B}[31m"
         let gradeColor: String
         switch score.grade.prefix(1) {

@@ -135,10 +135,17 @@ public struct ImageLabelContainsImageRule: A11yRule {
                 let lower = text.lowercased()
                 for word in Self.roleWords {
                     if lower.contains(word) {
+                        let fix = makeStringReplacementFix(
+                            callExpr: label.callExpr,
+                            originalText: text,
+                            word: word,
+                            sourceFile: syntax
+                        )
                         diagnostics.append(makeDiagnostic(
                             message: "Accessibility label \"\(text)\" contains '\(word)'. The Image role is announced automatically by VoiceOver — remove the role word from the label.",
                             node: label.reportNode,
                             context: context,
+                            fix: fix,
                             suggestion: "Remove \"\(word)\" from the accessibility label"
                         ))
                         break

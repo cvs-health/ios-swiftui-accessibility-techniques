@@ -5,9 +5,7 @@ let package = Package(
     name: "A11yAgent",
     platforms: [.macOS(.v13)],
     products: [
-        .executable(name: "a11y-check", targets: ["A11yAgentCLI"]),
         .library(name: "A11yAgentCore", targets: ["A11yAgentCore"]),
-        .plugin(name: "A11yCheckPlugin", targets: ["A11yCheckPlugin"]),
         .plugin(name: "A11yCheckBuildPlugin", targets: ["A11yCheckBuildPlugin"]),
     ],
     dependencies: [

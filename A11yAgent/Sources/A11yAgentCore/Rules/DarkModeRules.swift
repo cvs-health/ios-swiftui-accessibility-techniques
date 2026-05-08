@@ -39,7 +39,7 @@ public struct HardcodedColorRule: A11yRule {
                     var fix: A11yFix? = nil
                     if let memberAccess = mod.callExpr.calledExpression.as(MemberAccessExprSyntax.self) {
                         let offset = syntax.position.utf8Offset
-                        let startOffset = memberAccess.period.positionAfterSkippingLeadingTrivia.utf8Offset - offset
+                        let startOffset = memberAccess.period.position.utf8Offset - offset
                         let endOffset = mod.callExpr.endPositionBeforeTrailingTrivia.utf8Offset - offset
                         fix = A11yFix(
                             description: "Remove .\(modName)(\(argText))",

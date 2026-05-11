@@ -14,6 +14,8 @@ Notes:
 Platform Defects:
 
 - `TabView` using `.tabViewStyle(.page)` has page indicator dots which are not focusable using direct touch exploration with VoiceOver. In past versions of iOS these dots were accessible to VoiceOver. In latest versions the VoiceOver focus appears to move to the page indicator dots as the very last elements on the page in the incorrect swipe order. 
+- `TabView` using `.tabViewStyle(.page)` page indicator dots are also not accessible to Voice Control as they do not display a Name or Number on the pagination dots. 
+
 
 ## Applicable WCAG Success Criteria
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)

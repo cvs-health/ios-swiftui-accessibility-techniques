@@ -10,7 +10,9 @@ public struct HTMLFormatter {
         let warningCount = diagnostics.filter { $0.severity == .warning }.count
         let infoCount = diagnostics.filter { $0.severity == .info }.count
         let fileCount = Set(diagnostics.map(\.filePath)).count
-        let timestamp = ISO8601DateFormatter().string(from: Date())
+        let dateFmt = DateFormatter()
+        dateFmt.dateFormat = "M/d/yy h:mm a"
+        let timestamp = dateFmt.string(from: Date())
 
         // Group by WCAG criteria
         let allCriteria = Set(allRules.flatMap(\.wcagCriteria)).sorted()
@@ -94,6 +96,11 @@ public struct HTMLFormatter {
         .suggestion::before { content: "Fix: "; font-weight: 600; }
         .fix-block { background: #1e3a1e; color: #a6e3a1; border-radius: 0 6px 6px 6px; padding: 0.625rem 0.75rem; margin: 0 0 0.375rem 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.75rem; overflow-x: auto; line-height: 1.5; white-space: pre; }
         .fix-block .line-good { color: #40e040; font-weight: 600; }
+        .score-bar-row { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: flex-start; }
+        .score-bar-row > .score-section { flex: 0 0 auto; min-width: 320px; margin-bottom: 0; }
+        .score-bar-row .bar-chart { margin-bottom: 0; }
+        .score-bar-row .summary { margin-bottom: 1rem; }
+        @media (max-width: 900px) { .score-bar-row { flex-direction: column; } .score-bar-row > .score-section { min-width: unset; } }
         .score-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
         .score-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .score-big { font-size: 3rem; font-weight: 800; line-height: 1; }
@@ -114,21 +121,25 @@ public struct HTMLFormatter {
         .failed-criteria .criterion-counts { color: #595f64; font-size: 0.75rem; }
         .criteria-table td.status-cell { text-align: center; }
         .trend-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
-        .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; }
-        .trend-chart { margin: 1rem 0; }
-        .trend-chart svg { width: 100%; max-width: 700px; }
+        .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; font-size: 1.125rem; margin-bottom: 0.75rem; }
+        .trend-content { display: flex; gap: 1.5rem; align-items: flex-start; }
+        .trend-chart { flex: 1; min-width: 0; }
+        .trend-chart svg { width: 100%; }
         .trend-chart .chart-line { fill: none; stroke: #0d6efd; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
         .trend-chart .chart-area { fill: rgba(13, 110, 253, 0.1); }
         .trend-chart .chart-dot { fill: #0d6efd; }
         .trend-chart .chart-dot-current { fill: #198754; stroke: #fff; stroke-width: 2; }
         .trend-chart .chart-grid { stroke: #e9ecef; stroke-width: 1; }
         .trend-chart .chart-label { fill: #595f64; font-size: 11px; font-family: -apple-system, sans-serif; }
-        .trend-delta { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .trend-meta { flex: 0 0 auto; min-width: 200px; }
+        .trend-delta { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.75rem; }
         .trend-delta.positive { color: var(--pass); }
         .trend-delta.negative { color: var(--error); }
         .trend-delta.neutral { color: #595f64; }
-        .trend-table { width: 100%; max-width: 700px; }
+        .trend-table { width: 100%; font-size: 0.8125rem; }
         .trend-table th { background: #f1f3f5; }
+        .trend-table th, .trend-table td { padding: 0.375rem 0.625rem; }
+        @media (max-width: 900px) { .trend-content { flex-direction: column; } .trend-meta { min-width: unset; } }
         .bar-chart { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
         .bar-chart h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; margin-bottom: 1rem; }
         .bar-row { display: flex; align-items: center; margin-bottom: 0.5rem; gap: 0.5rem; }
@@ -153,17 +164,8 @@ public struct HTMLFormatter {
         <p class="timestamp">Generated: \(escapeHTML(timestamp))</p>
         """
 
-        // Summary
-        html += """
-        <div class="summary">
-          <div class="stat error"><div class="number">\(errorCount)</div><div class="label">Errors</div></div>
-          <div class="stat warning"><div class="number">\(warningCount)</div><div class="label">Warnings</div></div>
-          <div class="stat info"><div class="number">\(infoCount)</div><div class="label">Info</div></div>
-          <div class="stat"><div class="number">\(fileCount)</div><div class="label">Files</div></div>
-        </div>
-        """
-
-        // Score Section
+        // Score Section + Bar Chart side by side
+        html += "<div class=\"score-bar-row\">\n"
         if let score = score {
             let gradeClass: String
             switch score.grade.prefix(1) {
@@ -221,6 +223,17 @@ public struct HTMLFormatter {
 
             html += "</div>\n"
         }
+
+        // Right column: summary stats + bar chart
+        html += "<div style=\"flex:1 1 0;min-width:0\">\n"
+        html += """
+        <div class="summary">
+          <div class="stat error"><div class="number">\(errorCount)</div><div class="label">Errors</div></div>
+          <div class="stat warning"><div class="number">\(warningCount)</div><div class="label">Warnings</div></div>
+          <div class="stat info"><div class="number">\(infoCount)</div><div class="label">Info</div></div>
+          <div class="stat"><div class="number">\(fileCount)</div><div class="label">Files</div></div>
+        </div>
+        """
 
         // Bar Chart — issues by WCAG criterion, sorted by total count
         do {
@@ -285,12 +298,23 @@ public struct HTMLFormatter {
                 html += "</div>\n"
             }
         }
+        html += "</div>\n" // close right column wrapper
+        html += "</div>\n" // close score-bar-row
 
         // Trend Section — SVG chart + history table
         if !trendEntries.isEmpty, let currentScore = score {
             // Build data points: historical + current
+            let trendDateFmt = DateFormatter()
+            trendDateFmt.dateFormat = "yyyy-MM-dd"
+            let trendShortFmt = DateFormatter()
+            trendShortFmt.dateFormat = "M/d/yy"
             var allPoints: [(label: String, score: Double, errors: Int, grade: String)] = trendEntries.map { entry in
-                let shortDate = String(entry.date.prefix(10))
+                let shortDate: String
+                if let parsed = trendDateFmt.date(from: String(entry.date.prefix(10))) {
+                    shortDate = trendShortFmt.string(from: parsed)
+                } else {
+                    shortDate = String(entry.date.prefix(10))
+                }
                 return (label: shortDate, score: entry.score, errors: entry.errors, grade: entry.grade)
             }
             allPoints.append((label: "Now", score: currentScore.score, errors: currentScore.totalErrors, grade: currentScore.grade))
@@ -312,11 +336,11 @@ public struct HTMLFormatter {
 
             html += "<div class=\"trend-section\">\n"
             html += "<h2>Score Trend</h2>\n"
-            html += "<div class=\"trend-delta \(deltaClass)\">Change from last run: \(deltaStr)</div>\n"
+            html += "<div class=\"trend-content\">\n"
 
             // SVG Line Chart
-            let chartW = 680.0
-            let chartH = 200.0
+            let chartW = 500.0
+            let chartH = 180.0
             let padL = 40.0
             let padR = 20.0
             let padT = 20.0
@@ -324,10 +348,9 @@ public struct HTMLFormatter {
             let plotW = chartW - padL - padR
             let plotH = chartH - padT - padB
 
-            let scores = allPoints.map(\.score)
-            let minScore = max(0, (scores.min() ?? 0) - 10)
-            let maxScore = min(100, (scores.max() ?? 100) + 10)
-            let scoreRange = max(maxScore - minScore, 1)
+            let minScore = 0.0
+            let maxScore = 100.0
+            let scoreRange = 100.0
 
             func xPos(_ i: Int) -> Double {
                 let count = allPoints.count
@@ -378,7 +401,9 @@ public struct HTMLFormatter {
 
             html += "</svg>\n</div>\n"
 
-            // History table
+            // Meta: delta + history table
+            html += "<div class=\"trend-meta\">\n"
+            html += "<div class=\"trend-delta \(deltaClass)\">Change: \(deltaStr)</div>\n"
             html += "<table class=\"trend-table\">\n"
             html += "<tr><th>Date</th><th>Score</th><th>Grade</th><th>Errors</th><th>Change</th></tr>\n"
             var prevScore: Double? = nil
@@ -398,55 +423,9 @@ public struct HTMLFormatter {
                 prevScore = pt.score
             }
             html += "</table>\n"
-            html += "</div>\n"
-        }
-
-        // WCAG Conformance Table — use score data if available for full 48-criteria view
-        html += "<h2>WCAG 2.2 Conformance</h2>\n"
-        if let score = score {
-            html += "<table class=\"criteria-table\">\n<tr><th>Criterion</th><th>Name</th><th>Level</th><th>Status</th><th>Issues</th></tr>\n"
-            for cs in score.criteriaScores {
-                let statusIcon: String
-                let badgeClass: String
-                switch cs.status {
-                case .pass:       statusIcon = "✓ Pass";   badgeClass = "badge-pass"
-                case .fail:       statusIcon = "✗ Fail";   badgeClass = "badge-fail"
-                case .review:     statusIcon = "⚠ Review"; badgeClass = "badge-warning"
-                case .notChecked: statusIcon = "· N/A";    badgeClass = "badge-info"
-                }
-                let issueText: String
-                if cs.errorCount + cs.warningCount + cs.infoCount > 0 {
-                    var parts: [String] = []
-                    if cs.errorCount > 0 { parts.append("\(cs.errorCount)E") }
-                    if cs.warningCount > 0 { parts.append("\(cs.warningCount)W") }
-                    if cs.infoCount > 0 { parts.append("\(cs.infoCount)I") }
-                    issueText = parts.joined(separator: " ")
-                } else {
-                    issueText = "—"
-                }
-                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(cs.criterion)
-                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(cs.criterion))</a></td>"
-                html += "<td>\(escapeHTML(cs.name))</td>"
-                html += "<td>\(cs.level.rawValue)</td>"
-                html += "<td class=\"status-cell\"><span class=\"badge \(badgeClass)\">\(statusIcon)</span></td>"
-                html += "<td>\(issueText)</td></tr>\n"
-            }
-            html += "</table>\n"
-        } else {
-            html += "<table>\n<tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>\n"
-            for criterion in allCriteria {
-                let criterionDiags = flatCriterionDiags[criterion] ?? []
-                let hasErrors = criterionDiags.contains { $0.severity == .error }
-                let status = criterionDiags.isEmpty ? "Pass" : (hasErrors ? "Fail" : "Review")
-                let badgeClass = criterionDiags.isEmpty ? "badge-pass" : (hasErrors ? "badge-fail" : "badge-warning")
-                let ruleNames = allRules.filter { $0.wcagCriteria.contains(criterion) }.map(\.id).joined(separator: ", ")
-                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(criterion)
-                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(criterion))</a></td>"
-                html += "<td><span class=\"badge \(badgeClass)\">\(status)</span></td>"
-                html += "<td>\(criterionDiags.count)</td>"
-                html += "<td>\(escapeHTML(ruleNames))</td></tr>\n"
-            }
-            html += "</table>\n"
+            html += "</div>\n" // close trend-meta
+            html += "</div>\n" // close trend-content
+            html += "</div>\n" // close trend-section
         }
 
         // By-file detail
@@ -558,6 +537,54 @@ public struct HTMLFormatter {
             html += "<td>\(escapeHTML(rule.wcagCriteria.joined(separator: ", ")))</td></tr>\n"
         }
         html += "</table>\n"
+
+        // WCAG Conformance Table — use score data if available for full 48-criteria view
+        html += "<h2>WCAG 2.2 Conformance</h2>\n"
+        if let score = score {
+            html += "<table class=\"criteria-table\">\n<tr><th>Criterion</th><th>Name</th><th>Level</th><th>Status</th><th>Issues</th></tr>\n"
+            for cs in score.criteriaScores {
+                let statusIcon: String
+                let badgeClass: String
+                switch cs.status {
+                case .pass:       statusIcon = "✓ Pass";   badgeClass = "badge-pass"
+                case .fail:       statusIcon = "✗ Fail";   badgeClass = "badge-fail"
+                case .review:     statusIcon = "⚠ Review"; badgeClass = "badge-warning"
+                case .notChecked: statusIcon = "· N/A";    badgeClass = "badge-info"
+                }
+                let issueText: String
+                if cs.errorCount + cs.warningCount + cs.infoCount > 0 {
+                    var parts: [String] = []
+                    if cs.errorCount > 0 { parts.append("\(cs.errorCount)E") }
+                    if cs.warningCount > 0 { parts.append("\(cs.warningCount)W") }
+                    if cs.infoCount > 0 { parts.append("\(cs.infoCount)I") }
+                    issueText = parts.joined(separator: " ")
+                } else {
+                    issueText = "—"
+                }
+                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(cs.criterion)
+                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(cs.criterion))</a></td>"
+                html += "<td>\(escapeHTML(cs.name))</td>"
+                html += "<td>\(cs.level.rawValue)</td>"
+                html += "<td class=\"status-cell\"><span class=\"badge \(badgeClass)\">\(statusIcon)</span></td>"
+                html += "<td>\(issueText)</td></tr>\n"
+            }
+            html += "</table>\n"
+        } else {
+            html += "<table>\n<tr><th>Criterion</th><th>Status</th><th>Issues</th><th>Rules</th></tr>\n"
+            for criterion in allCriteria {
+                let criterionDiags = flatCriterionDiags[criterion] ?? []
+                let hasErrors = criterionDiags.contains { $0.severity == .error }
+                let status = criterionDiags.isEmpty ? "Pass" : (hasErrors ? "Fail" : "Review")
+                let badgeClass = criterionDiags.isEmpty ? "badge-pass" : (hasErrors ? "badge-fail" : "badge-warning")
+                let ruleNames = allRules.filter { $0.wcagCriteria.contains(criterion) }.map(\.id).joined(separator: ", ")
+                let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(criterion)
+                html += "<tr><td><a href=\"\(wcagURL)\">\(escapeHTML(criterion))</a></td>"
+                html += "<td><span class=\"badge \(badgeClass)\">\(status)</span></td>"
+                html += "<td>\(criterionDiags.count)</td>"
+                html += "<td>\(escapeHTML(ruleNames))</td></tr>\n"
+            }
+            html += "</table>\n"
+        }
 
         html += "</body>\n</html>"
         return html

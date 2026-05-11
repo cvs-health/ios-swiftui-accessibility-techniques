@@ -65,10 +65,17 @@ public struct SmallTouchTargetRule: A11yRule {
                 // If one dimension is .infinity or undefined, spacing in that direction
                 // counts toward the target size per WCAG 2.5.8.
                 if widthConstrained && widthTooSmall && heightConstrained && heightTooSmall {
+                    let fix = makeReplacementFix(
+                        node: frameMod.callExpr,
+                        replacementText: ".frame(width: \(Int(Self.minimumSize)), height: \(Int(Self.minimumSize)))",
+                        description: "Increase to .frame(width: \(Int(Self.minimumSize)), height: \(Int(Self.minimumSize)))",
+                        sourceFile: syntax
+                    )
                     diagnostics.append(makeDiagnostic(
                         message: "Touch target \(Int(rawWidth!))x\(Int(rawHeight!))pt is below the \(Int(Self.minimumSize))x\(Int(Self.minimumSize))pt minimum (WCAG 2.5.8).",
                         node: frameMod.reportNode,
                         context: context,
+                        fix: fix,
                         suggestion: "Use .frame(width: 24, height: 24) or add padding for spacing"
                     ))
                 }

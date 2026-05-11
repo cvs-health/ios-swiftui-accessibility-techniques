@@ -239,18 +239,22 @@ Preview what would change without modifying files:
 a11y-check . --fix --dry-run
 ```
 
-Example output:
+### Rules with auto-fix
 
-```
-Auto-fix: fixed 3 issues in 2 files
+| Rule | Fix applied |
+|---|---|
+| `heading-trait-missing` | Appends `.accessibilityAddTraits(.isHeader)` to the view's modifier chain |
+| `fake-heading-in-label` | Removes the word "heading" from the `.accessibilityLabel()` string |
+| `image-label-contains-role` | Removes role words ("image", "icon", "graphic") from the label string |
+| `missing-accessibility-grouping` | Appends `.accessibilityElement(children: .combine)` to the HStack/VStack |
+| `fixed-font-size` | Replaces `.font(.system(size: N))` with `.font(.body)` |
+| `line-limit-1` | Removes `.lineLimit(1)` entirely |
+| `hardcoded-color` | Removes the hardcoded color modifier (`.foregroundColor(.black)`, etc.) to restore SwiftUI's adaptive defaults |
+| `input-missing-purpose` | Appends `.textContentType(...)` with the inferred content type |
+| `button-label-contains-role` | Removes the word "button" from the `.accessibilityLabel()` string |
+| `small-touch-target` | Increases `.frame(width:height:)` to the 24×24pt minimum |
 
-  MyView.swift — 2 fixes
-    ✓ Add .accessibilityLabel("Profile") to Image
-    ✓ Add .accessibilityLabel("Search") to Button
-
-  FormView.swift — 1 fix
-    ✓ Add .accessibilityLabel("Email") to TextField
-```
+Use `--dry-run` to preview all fixes without modifying files.
 
 After applying fixes, `a11y-check` re-analyzes and shows the updated score.
 

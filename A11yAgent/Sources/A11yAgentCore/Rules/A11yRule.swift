@@ -95,4 +95,80 @@ extension A11yRule {
             suggestion: suggestion
         )
     }
+
+    public func makeModifierFix(
+        chainRoot: ExprSyntax,
+        modifier: String,
+        sourceFile: SourceFileSyntax
+    ) -> A11yFix? {
+        let endPosition = chainRoot.endPositionBeforeTrailingTrivia
+        let offset = sourceFile.position.utf8Offset
+        let insertOffset = endPosition.utf8Offset - offset
+
+        let indentEnd = chainRoot.positionAfterSkippingLeadingTrivia
+        let lineStart = chainRoot.position
+        let leadingTrivia = sourceFile.description[
+            sourceFile.description.utf8.index(sourceFile.description.utf8.startIndex, offsetBy: lineStart.utf8Offset - offset)
+            ..<
+            sourceFile.description.utf8.index(sourceFile.description.utf8.startIndex, offsetBy: indentEnd.utf8Offset - offset)
+        ]
+        let indent = leadingTrivia.filter { $0 == " " || $0 == "\t" }
+
+        let replacement = "\n\(indent)    \(modifier)"
+
+        return A11yFix(
+            description: "Add \(modifier)",
+            replacementText: replacement,
+            startOffset: insertOffset,
+            endOffset: insertOffset
+        )
+    }
+
+    public func makeReplacementFix(
+        node: some SyntaxProtocol,
+        replacementText: String,
+        description: String,
+        sourceFile: SourceFileSyntax
+    ) -> A11yFix? {
+        let offset = sourceFile.position.utf8Offset
+        let startOffset = node.positionAfterSkippingLeadingTrivia.utf8Offset - offset
+        let endOffset = node.endPositionBeforeTrailingTrivia.utf8Offset - offset
+        return A11yFix(
+            description: description,
+            replacementText: replacementText,
+            startOffset: startOffset,
+            endOffset: endOffset
+        )
+    }
+
+    public func makeStringReplacementFix(
+        callExpr: FunctionCallExprSyntax,
+        originalText: String,
+        word: String,
+        sourceFile: SourceFileSyntax
+    ) -> A11yFix? {
+        guard let firstArg = callExpr.arguments.first,
+              let stringLiteral = firstArg.expression.as(StringLiteralExprSyntax.self),
+              let segment = stringLiteral.segments.first?.as(StringSegmentSyntax.self) else {
+            return nil
+        }
+
+        var cleaned = originalText
+        if let range = cleaned.range(of: word, options: .caseInsensitive) {
+            cleaned.removeSubrange(range)
+        }
+        cleaned = cleaned.split(separator: " ").joined(separator: " ")
+        cleaned = cleaned.trimmingCharacters(in: .whitespaces)
+
+        let offset = sourceFile.position.utf8Offset
+        let startOffset = segment.positionAfterSkippingLeadingTrivia.utf8Offset - offset
+        let endOffset = segment.endPositionBeforeTrailingTrivia.utf8Offset - offset
+
+        return A11yFix(
+            description: "Remove \"\(word)\" from label",
+            replacementText: cleaned,
+            startOffset: startOffset,
+            endOffset: endOffset
+        )
+    }
 }

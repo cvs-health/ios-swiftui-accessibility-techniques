@@ -64,10 +64,16 @@ public struct HeadingTraitMissingRule: A11yRule {
             }
 
             if !hasHeaderTrait && !hasOldHeaderTrait {
+                let fix = makeModifierFix(
+                    chainRoot: view.chainRoot,
+                    modifier: ".accessibilityAddTraits(.isHeader)",
+                    sourceFile: syntax
+                )
                 diagnostics.append(makeDiagnostic(
                     message: "Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading.",
                     node: view.callExpr,
                     context: context,
+                    fix: fix,
                     suggestion: "Add .accessibilityAddTraits(.isHeader)"
                 ))
             }
@@ -133,10 +139,17 @@ public struct FakeHeadingInLabelRule: A11yRule {
         for mod in collector.modifiers(named: "accessibilityLabel") {
             guard let text = mod.firstStringArgument else { continue }
             if text.lowercased().contains("heading") {
+                let fix = makeStringReplacementFix(
+                    callExpr: mod.callExpr,
+                    originalText: text,
+                    word: "heading",
+                    sourceFile: syntax
+                )
                 diagnostics.append(makeDiagnostic(
                     message: "Accessibility label \"\(text)\" contains 'heading'. Use .accessibilityAddTraits(.isHeader) instead of faking a heading in the label text.",
                     node: mod.reportNode,
                     context: context,
+                    fix: fix,
                     suggestion: "Remove \"heading\" from label and add .accessibilityAddTraits(.isHeader)"
                 ))
             }

@@ -36,11 +36,24 @@ public struct HardcodedColorRule: A11yRule {
 
                 // Flag hardcoded .black / .white
                 if Self.hardcodedColors.contains(argText) {
+                    var fix: A11yFix? = nil
+                    if let memberAccess = mod.callExpr.calledExpression.as(MemberAccessExprSyntax.self) {
+                        let offset = syntax.position.utf8Offset
+                        let startOffset = memberAccess.period.position.utf8Offset - offset
+                        let endOffset = mod.callExpr.endPositionBeforeTrailingTrivia.utf8Offset - offset
+                        fix = A11yFix(
+                            description: "Remove .\(modName)(\(argText))",
+                            replacementText: "",
+                            startOffset: startOffset,
+                            endOffset: endOffset
+                        )
+                    }
                     diagnostics.append(makeDiagnostic(
-                        message: "Hardcoded color \(argText) in .\(modName)() may not adapt to Dark Mode. Use semantic colors from asset catalog.",
+                        message: "Hardcoded color \(argText) in .\(modName)() may not adapt to Dark Mode. Remove the modifier to use SwiftUI's adaptive default, or use a named Color from your asset catalog.",
                         node: mod.reportNode,
                         context: context,
-                        suggestion: "Replace \(argText) with a named Color from your asset catalog"
+                        fix: fix,
+                        suggestion: "Remove .\(modName)(\(argText)) to use adaptive default colors"
                     ))
                 }
 

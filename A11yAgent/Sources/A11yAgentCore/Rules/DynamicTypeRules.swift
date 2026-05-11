@@ -25,10 +25,17 @@ public struct FixedFontSizeRule: A11yRule {
             let argText = mod.arguments.first?.text ?? ""
             // Detect .system(size: N) pattern
             if argText.contains("system(size:") || argText.contains(".system(size:") {
+                let fix = makeReplacementFix(
+                    node: mod.callExpr,
+                    replacementText: ".font(.body)",
+                    description: "Replace with .font(.body)",
+                    sourceFile: syntax
+                )
                 diagnostics.append(makeDiagnostic(
                     message: "Fixed font size doesn't scale with Dynamic Type. Use semantic text styles like .font(.body) or .font(.title) instead.",
                     node: mod.reportNode,
                     context: context,
+                    fix: fix,
                     suggestion: "Replace .font(.system(size:)) with .font(.body) or another text style"
                 ))
             }
@@ -60,10 +67,23 @@ public struct LineLimit1Rule: A11yRule {
         for mod in collector.modifiers(named: "lineLimit") {
             let argText = mod.arguments.first?.text ?? ""
             if argText == "1" {
+                var fix: A11yFix? = nil
+                if let memberAccess = mod.callExpr.calledExpression.as(MemberAccessExprSyntax.self) {
+                    let offset = syntax.position.utf8Offset
+                    let startOffset = memberAccess.period.position.utf8Offset - offset
+                    let endOffset = mod.callExpr.endPositionBeforeTrailingTrivia.utf8Offset - offset
+                    fix = A11yFix(
+                        description: "Remove .lineLimit(1)",
+                        replacementText: "",
+                        startOffset: startOffset,
+                        endOffset: endOffset
+                    )
+                }
                 diagnostics.append(makeDiagnostic(
                     message: ".lineLimit(1) will truncate text at larger Dynamic Type sizes. Remove the limit or use a higher value.",
                     node: mod.reportNode,
                     context: context,
+                    fix: fix,
                     suggestion: "Remove .lineLimit(1) or increase to .lineLimit(3) or higher"
                 ))
             }

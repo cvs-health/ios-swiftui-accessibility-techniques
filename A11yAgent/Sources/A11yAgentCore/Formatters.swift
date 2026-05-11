@@ -8,12 +8,12 @@ public struct TerminalFormatter {
     /// Format a list of diagnostics for colored terminal output.
     public func format(_ diagnostics: [A11yDiagnostic], relativeTo basePath: String? = nil, score: A11yScore? = nil) -> String {
         if diagnostics.isEmpty, let score = score {
-            var output = "\u{001B}[32m✓ No accessibility issues found.\u{001B}[0m\n"
+            var output = "\u{001B}[34m✓ No accessibility issues found.\u{001B}[0m\n"
             output += formatScoreSummary(score)
             return output
         }
         guard !diagnostics.isEmpty else {
-            return "\u{001B}[32m✓ No accessibility issues found.\u{001B}[0m\n"
+            return "\u{001B}[34m✓ No accessibility issues found.\u{001B}[0m\n"
         }
 
         var output = ""
@@ -42,10 +42,10 @@ public struct TerminalFormatter {
                 severityColor = "\u{001B}[31m" // red
                 severityIcon = "✗"
             case .warning:
-                severityColor = "\u{001B}[33m" // yellow
+                severityColor = "\u{001B}[1m" // bold
                 severityIcon = "⚠"
             case .info:
-                severityColor = "\u{001B}[36m" // cyan
+                severityColor = "\u{001B}[34m" // blue
                 severityIcon = "ℹ"
             }
             let reset = "\u{001B}[0m"
@@ -53,9 +53,9 @@ public struct TerminalFormatter {
             let wcag = diag.wcagCriteria.isEmpty ? "" : " [WCAG \(diag.wcagCriteria.joined(separator: ", "))]"
             output += "  \(severityColor)\(severityIcon) \(diag.line):\(diag.column)\(reset) "
             output += "\(severityColor)\(diag.severity.rawValue)\(reset) "
-            output += "\u{001B}[2m[\(diag.impact.rawValue)]\(reset): "
+            output += "\u{001B}[0m[\(diag.impact.rawValue)]\(reset): "
             output += "\(diag.message)"
-            output += "\u{001B}[2m\(wcag) (\(diag.ruleID))\(reset)\n"
+            output += "\u{001B}[0m\(wcag) (\(diag.ruleID))\(reset)\n"
         }
 
         // Summary
@@ -69,11 +69,11 @@ public struct TerminalFormatter {
         }
         if warningCount > 0 {
             if errorCount > 0 { output += ", " }
-            output += "\u{001B}[33m\(warningCount) warning\(warningCount == 1 ? "" : "s")\u{001B}[0m"
+            output += "\u{001B}[1m\(warningCount) warning\(warningCount == 1 ? "" : "s")\u{001B}[0m"
         }
         if infoCount > 0 {
             if errorCount > 0 || warningCount > 0 { output += ", " }
-            output += "\u{001B}[36m\(infoCount) info\u{001B}[0m"
+            output += "\u{001B}[34m\(infoCount) info\u{001B}[0m"
         }
         output += " in \(Set(diagnostics.map(\.filePath)).count) file\(Set(diagnostics.map(\.filePath)).count == 1 ? "" : "s")\n"
 
@@ -87,14 +87,13 @@ public struct TerminalFormatter {
     private func formatScoreSummary(_ score: A11yScore) -> String {
         let reset = "\u{001B}[0m"
         let bold = "\u{001B}[1m"
-        let dim = "\u{001B}[2m"
         let red = "\u{001B}[31m"
         let gradeColor: String
         switch score.grade.prefix(1) {
-        case "A": gradeColor = "\u{001B}[32m" // green
-        case "B": gradeColor = "\u{001B}[32m"
-        case "C": gradeColor = "\u{001B}[33m" // yellow
-        case "D": gradeColor = "\u{001B}[33m"
+        case "A": gradeColor = "\u{001B}[34m" // blue
+        case "B": gradeColor = "\u{001B}[34m"
+        case "C": gradeColor = "\u{001B}[1m" // bold
+        case "D": gradeColor = "\u{001B}[1m"
         default:  gradeColor = "\u{001B}[31m" // red
         }
 
@@ -104,8 +103,8 @@ public struct TerminalFormatter {
         let empty = 20 - filled
         let bar = String(repeating: "\u{2588}", count: filled) + String(repeating: "\u{2591}", count: empty)
         out += "  \(gradeColor)[\(bar)]\(reset)  \(String(format: "%5.1f", score.score))%"
-        out += "  \(dim)\(score.criteriaPassed) criteria passed, \(score.criteriaFailed) failed"
-        out += " — \(score.totalErrors) errors, \(score.totalWarnings) warnings\(reset)\n"
+        out += "  \(score.criteriaPassed) criteria passed, \(score.criteriaFailed) failed"
+        out += " — \(score.totalErrors) errors, \(score.totalWarnings) warnings\n"
 
         // Show failed criteria
         let failed = score.criteriaScores.filter { $0.status == .fail }
@@ -116,18 +115,17 @@ public struct TerminalFormatter {
                 if cs.errorCount > 0 { counts.append("\(cs.errorCount) \(cs.errorCount == 1 ? "error" : "errors")") }
                 if cs.warningCount > 0 { counts.append("\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings")") }
                 out += "  \(red)\u{2717}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
-                out += "  \(dim)(\(counts.joined(separator: ", ")))\(reset)\n"
+                out += "  \(reset)(\(counts.joined(separator: ", ")))\(reset)\n"
             }
         }
 
         // Show review criteria
         let review = score.criteriaScores.filter { $0.status == .review }
         if !review.isEmpty {
-            let yellow = "\u{001B}[33m"
-            out += "\(yellow)\(bold)Needs review:\(reset)\n"
+            out += "\(bold)Needs review:\(reset)\n"
             for cs in review {
-                out += "  \(yellow)\u{26a0}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
-                out += "  \(dim)(\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings"))\(reset)\n"
+                out += "  \(bold)\u{26a0}\(reset) \(bold)\(cs.criterion)\(reset) \(cs.name)"
+                out += "  \(reset)(\(cs.warningCount) \(cs.warningCount == 1 ? "warning" : "warnings"))\(reset)\n"
             }
         }
 
@@ -149,7 +147,7 @@ public struct XcodeFormatter {
             switch diag.severity {
             case .error:   xcodeSeverity = "error"
             case .warning: xcodeSeverity = "warning"
-            case .info:    xcodeSeverity = "note"
+            case .info:    xcodeSeverity = "warning"
             }
             let wcag = diag.wcagCriteria.isEmpty ? "" : " [WCAG \(diag.wcagCriteria.joined(separator: ", "))]"
             output += "\(diag.filePath):\(diag.line):\(diag.column): \(xcodeSeverity): [\(diag.ruleID)] [\(diag.impact.rawValue)] \(diag.message)\(wcag)\n"

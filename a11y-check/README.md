@@ -476,7 +476,7 @@ targets: [
 
 1. File → Add Package Dependencies
 2. Enter `https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git`, set branch to `main`
-3. Select your target → Build Phases → the `A11yCheckBuildPlugin` should appear automatically
+3. Select your target → Build Phases → expand **Run Build Tool Plug-ins** → click **+** → select `A11yCheckBuildPlugin` → click **Add**
 
 Build your project. Accessibility errors and warnings appear inline. **Errors will fail the build** — fix them or use [inline suppression](#inline-suppression) to silence specific diagnostics. To downgrade a rule from error to warning, use a [`.a11ycheck.yml` config file](#configuration-file) with `severity_overrides`.
 

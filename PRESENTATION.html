@@ -249,6 +249,29 @@ AI:   Score: 100/100 (A) &mdash; 11 passed, 0 failed
   <img src="xcode-a11y-check.jpg" alt="a11y-check warnings shown inline in Xcode editor" style="max-width:75%; border-radius:8px; border:1px solid #30363d; margin-top:0.5em;">
 </section>
 
+<!-- SLIDE: Adding SPM Package to Xcode -->
+<section>
+  <h2>Adding to Xcode: <span class="green">3 Steps</span></h2>
+  <h3>File &rarr; Add Package Dependencies</h3>
+  <pre><code>https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git</code></pre>
+  <ol>
+    <li>File &rarr; <strong>Add Package Dependencies</strong> &rarr; paste the URL above, set branch to <code>main</code>, click <strong>Add Package</strong></li>
+    <li>Select your target &rarr; <strong>Build Phases</strong> &rarr; <code>A11yCheckBuildPlugin</code> appears automatically</li>
+    <li><strong>Build</strong> (&#8984;B) &mdash; accessibility errors and warnings appear inline in the editor</li>
+  </ol>
+  <h3>Or in Package.swift:</h3>
+  <pre><code>dependencies: [
+    .package(url: "https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git",
+             branch: "main"),
+],
+targets: [
+    .target(name: "MyApp", plugins: [
+        .plugin(name: "A11yCheckBuildPlugin", package: "a11y-check"),
+    ]),
+]</code></pre>
+  <p style="font-size:0.7em;">No Homebrew install needed &mdash; SPM builds the tool from source</p>
+</section>
+
 <!-- SLIDE 10: GitHub Actions -->
 <section>
   <h2>CI/CD: <span class="accent">Pull Requests</span></h2>
@@ -362,6 +385,7 @@ const thumbData = [
   { title: 'CLI Directly', sub: 'No AI · No tokens · Offline', color: '#50fa7b' },
   { title: 'AI + MCP', sub: 'Real-time in editor', color: '#ff79c6' },
   { title: 'Xcode Integration', sub: 'Build phase · SPM plugin', color: '#8be9fd' },
+  { title: 'Adding to Xcode', sub: '3 steps · SPM package', color: '#50fa7b' },
   { title: 'CI/CD', sub: 'GitHub Actions · SARIF', color: '#ff79c6' },
   { title: 'Scoring & Trends', sub: 'WCAG 0–100 · Sparklines', color: '#f1fa8c' },
   { title: 'Demo', sub: 'Live walkthrough', color: '#50fa7b' },

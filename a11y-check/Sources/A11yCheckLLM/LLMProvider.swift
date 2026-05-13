@@ -1,5 +1,5 @@
 import Foundation
-import A11yAgentCore
+import A11yCheckCore
 
 /// Protocol for LLM providers that perform context-aware accessibility analysis.
 public protocol LLMProvider {

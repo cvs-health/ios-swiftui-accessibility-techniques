@@ -19,7 +19,7 @@ class A11yCheck < Formula
   depends_on :macos
 
   def install
-    cd "A11yAgent" do
+    cd "a11y-check" do
       system "swift", "build", "-c", "release", "--disable-sandbox"
       bin.install ".build/release/a11y-check"
     end

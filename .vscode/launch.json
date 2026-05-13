@@ -4,21 +4,81 @@
             "type": "swift",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}/A11yAgent",
-            "name": "Debug a11y-check (A11yAgent)",
+            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}/a11y-check",
+            "name": "Debug a11y-check (a11y-check)",
             "target": "a11y-check",
             "configuration": "debug",
-            "preLaunchTask": "swift: Build Debug a11y-check (A11yAgent)"
+            "preLaunchTask": "swift: Build Debug a11y-check (a11y-check)"
         },
         {
             "type": "swift",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}/A11yAgent",
-            "name": "Release a11y-check (A11yAgent)",
+            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}/a11y-check",
+            "name": "Release a11y-check (a11y-check)",
             "target": "a11y-check",
             "configuration": "release",
-            "preLaunchTask": "swift: Build Release a11y-check (A11yAgent)"
+            "preLaunchTask": "swift: Build Release a11y-check (a11y-check)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}",
+            "name": "Debug a11y-check",
+            "target": "a11y-check",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug a11y-check"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}",
+            "name": "Release a11y-check",
+            "target": "a11y-check",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release a11y-check"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}",
+            "name": "Debug a11y-checkCLI",
+            "target": "a11y-checkCLI",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug a11y-checkCLI"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}",
+            "name": "Release a11y-checkCLI",
+            "target": "a11y-checkCLI",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release a11y-checkCLI"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}",
+            "name": "Debug A11yCheckCLI",
+            "target": "A11yCheckCLI",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug A11yCheckCLI"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:ios-swiftui-accessibility-techniques}",
+            "name": "Release A11yCheckCLI",
+            "target": "A11yCheckCLI",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release A11yCheckCLI"
         }
     ]
 }

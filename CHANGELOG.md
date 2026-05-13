@@ -111,7 +111,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `textContentType` inference from field context
 - Link underlines and color contrast in HTML report
 
-### A11yAgent
+### a11y-check
 
 #### Added
 

@@ -3,7 +3,7 @@
     "servers": {
       "a11y-check": {
         "command": "node",
-        "args": ["/path/to/ios-swiftui-accessibility-techniques/A11yAgent/mcp-server/dist/index.js"],
+        "args": ["/path/to/ios-swiftui-accessibility-techniques/a11y-check/mcp-server/dist/index.js"],
         "env": {
           "A11Y_CHECK_PATH": "/path/to/a11y-check",
           "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"

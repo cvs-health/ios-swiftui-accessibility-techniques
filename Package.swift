@@ -5,7 +5,7 @@ let package = Package(
     name: "ios-swiftui-accessibility-techniques",
     platforms: [.macOS(.v13), .iOS(.v16), .watchOS(.v9)],
     products: [
-        .library(name: "A11yAgentCore", targets: ["A11yAgentCore"]),
+        .library(name: "A11yCheckCore", targets: ["A11yCheckCore"]),
         .plugin(name: "A11yCheckBuildPlugin", targets: ["A11yCheckBuildPlugin"]),
     ],
     dependencies: [
@@ -15,26 +15,26 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "A11yAgentCore",
+            name: "A11yCheckCore",
             dependencies: [
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
                 .product(name: "Yams", package: "Yams"),
             ],
-            path: "A11yAgent/Sources/A11yAgentCore"
+            path: "a11y-check/Sources/A11yCheckCore"
         ),
         .executableTarget(
-            name: "A11yAgentCLI",
+            name: "A11yCheckCLI",
             dependencies: [
-                "A11yAgentCore",
+                "A11yCheckCore",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],
-            path: "A11yAgent/Sources/A11yAgentCLI"
+            path: "a11y-check/Sources/A11yCheckCLI"
         ),
         .target(
-            name: "A11yAgentLLM",
-            dependencies: ["A11yAgentCore"],
-            path: "A11yAgent/Sources/A11yAgentLLM"
+            name: "A11yCheckLLM",
+            dependencies: ["A11yCheckCore"],
+            path: "a11y-check/Sources/A11yCheckLLM"
         ),
         .plugin(
             name: "A11yCheckPlugin",
@@ -43,25 +43,25 @@ let package = Package(
                 permissions: [.writeToPackageDirectory(reason: "Write HTML report files when using --format html")]
             ),
             dependencies: [
-                .target(name: "A11yAgentCLI"),
+                .target(name: "A11yCheckCLI"),
             ],
-            path: "A11yAgent/Plugins/A11yCheckPlugin"
+            path: "a11y-check/Plugins/A11yCheckPlugin"
         ),
         .plugin(
             name: "A11yCheckBuildPlugin",
             capability: .buildTool(),
             dependencies: [
-                .target(name: "A11yAgentCLI"),
+                .target(name: "A11yCheckCLI"),
             ],
-            path: "A11yAgent/Plugins/A11yCheckBuildPlugin"
+            path: "a11y-check/Plugins/A11yCheckBuildPlugin"
         ),
         .testTarget(
-            name: "A11yAgentCoreTests",
+            name: "A11yCheckCoreTests",
             dependencies: [
-                "A11yAgentCore",
+                "A11yCheckCore",
                 .product(name: "SwiftParser", package: "swift-syntax"),
             ],
-            path: "A11yAgent/Tests/A11yAgentCoreTests",
+            path: "a11y-check/Tests/A11yCheckCoreTests",
             resources: [
                 .copy("Fixtures"),
             ]

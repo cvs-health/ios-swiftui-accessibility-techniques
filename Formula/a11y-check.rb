@@ -9,11 +9,11 @@ class A11yCheck < Formula
   depends_on :macos
 
   def install
-    cd "A11yAgent" do
+    cd "a11y-check" do
       # Embed the git commit hash in the version string
       commit = `git rev-parse --short HEAD`.strip
       build_date = Time.now.strftime("%Y-%m-%d")
-      File.write("Sources/A11yAgentCLI/BuildInfo.swift",
+      File.write("Sources/A11yCheckCLI/BuildInfo.swift",
                  "let buildCommit = \"#{commit}\"\nlet buildDate = \"#{build_date}\"\n")
 
       # Swift 6.2 + swift-argument-parser need a toolchain SDK that provides

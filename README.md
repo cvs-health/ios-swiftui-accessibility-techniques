@@ -58,21 +58,21 @@ Requires **Swift 5.9+** and **macOS 13+** (Xcode or [Swift.org](https://swift.or
 
 ```bash
 git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
-cd ios-swiftui-accessibility-techniques/A11yAgent
+cd ios-swiftui-accessibility-techniques/a11y-check
 swift build
 ```
 
 To run the checker on your app: from anywhere use the full path to the binary, with your app’s folder as the argument:
 
 ```bash
-/path/to/ios-swiftui-accessibility-techniques/A11yAgent/.build/debug/a11y-check /path/to/YourApp
+/path/to/ios-swiftui-accessibility-techniques/a11y-check/.build/debug/a11y-check /path/to/YourApp
 ```
 
 (Replace both paths with your actual paths.) If `swift build` fails, run `swift --version` (you need 5.9 or later); otherwise use the Homebrew method above.
 
-See **[A11yAgent/README.md](A11yAgent/README.md)** for full usage, options, and CI integration.
+See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, and CI integration.
 
-**Use with AI editors (MCP):** An [MCP server](A11yAgent/mcp-server/README.md) is included so you can run a11y-check from any MCP-compatible editor like Windsurf or Cursor (e.g. "check this project for accessibility"). Install a11y-check first, then add the MCP server config pointing at `A11yAgent/mcp-server`.
+**Use with AI editors (MCP):** An [MCP server](a11y-check/mcp-server/README.md) is included so you can run a11y-check from any MCP-compatible editor like Windsurf or Cursor (e.g. "check this project for accessibility"). Install a11y-check first, then add the MCP server config pointing at `a11y-check/mcp-server`.
 
 **AI coding skill:** A [SKILL.md](SKILL.md) file is included that teaches AI coding assistants (Claude Code, CVS Code, Cursor, etc.) how to write accessible SwiftUI code. Copy it to your `~/.claude/skills/` directory or your editor's skills folder and it will automatically enforce WCAG 2.2 accessible coding patterns — labels, traits, Dynamic Type, contrast, touch targets, focus management, and more.
 

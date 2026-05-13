@@ -1,6 +1,6 @@
 import ArgumentParser
 import Foundation
-import A11yAgentCore
+import A11yCheckCore
 
 @main
 struct A11yCheck: ParsableCommand {

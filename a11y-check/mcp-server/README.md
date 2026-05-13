@@ -10,7 +10,7 @@ Model Context Protocol (MCP) server that exposes the SwiftUI **a11y-check** tool
 ## Install and run
 
 ```bash
-cd A11yAgent/mcp-server
+cd a11y-check/mcp-server
 npm install
 npm run build
 ```
@@ -39,7 +39,7 @@ All tools use the same MCP server — only the config file location differs. Rep
   "mcpServers": {
     "a11y-check": {
       "command": "node",
-      "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"],
+      "args": ["/path/to/a11y-check/mcp-server/dist/index.js"],
       "env": {
         "A11Y_CHECK_PATH": "/path/to/a11y-check",
         "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
@@ -63,7 +63,7 @@ See [cursor-mcp-example.json](cursor-mcp-example.json) for a copy-paste template
   "mcpServers": {
     "a11y-check": {
       "command": "node",
-      "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"],
+      "args": ["/path/to/a11y-check/mcp-server/dist/index.js"],
       "env": {
         "A11Y_CHECK_PATH": "/path/to/a11y-check",
         "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
@@ -88,7 +88,7 @@ After saving, refresh MCP servers from the hammer icon or restart Windsurf. See 
   "mcpServers": {
     "a11y-check": {
       "command": "node",
-      "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"],
+      "args": ["/path/to/a11y-check/mcp-server/dist/index.js"],
       "env": {
         "A11Y_CHECK_PATH": "/path/to/a11y-check",
         "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
@@ -112,7 +112,7 @@ Restart Claude Desktop after saving. See [claude-desktop-mcp-example.json](claud
     "servers": {
       "a11y-check": {
         "command": "node",
-        "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"],
+        "args": ["/path/to/a11y-check/mcp-server/dist/index.js"],
         "env": {
           "A11Y_CHECK_PATH": "/path/to/a11y-check",
           "A11Y_PROJECT_ROOT": "/path/to/ios-swiftui-accessibility-techniques"
@@ -132,8 +132,8 @@ Reload VS Code after saving. Copilot Chat will discover the MCP tools automatica
 If you build a11y-check from source instead of Homebrew, point `A11Y_CHECK_PATH` at the binary:
 
 ```bash
-cd A11yAgent && swift build -c release
-# Binary is at: A11yAgent/.build/release/a11y-check
+cd a11y-check && swift build -c release
+# Binary is at: a11y-check/.build/release/a11y-check
 ```
 
 Set `A11Y_CHECK_PATH` to the absolute path of that binary in your MCP config. This is needed because AI tools often don't inherit your shell PATH.

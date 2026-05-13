@@ -33,7 +33,7 @@ jobs:
 
       - name: Build a11y-check
         run: |
-          cd A11yAgent
+          cd a11y-check
           swift build -c release
           echo "$(pwd)/.build/release" >> $GITHUB_PATH
 
@@ -126,7 +126,7 @@ jobs:
               failedCriteria,
               '',
               '---',
-              `*Checked by [a11y-check](https://github.com/cvs-health/ios-swiftui-accessibility-techniques/tree/main/A11yAgent)*`,
+              `*Checked by [a11y-check](https://github.com/cvs-health/ios-swiftui-accessibility-techniques/tree/main/a11y-check)*`,
             ].join('\n');
 
             // Find existing comment to update

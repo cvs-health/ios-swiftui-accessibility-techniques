@@ -60,7 +60,7 @@ Then run `a11y-check` from anywhere. Run `a11y-check --version` to verify the in
 
 ```bash
 git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
-cd ios-swiftui-accessibility-techniques/A11yAgent
+cd ios-swiftui-accessibility-techniques/a11y-check
 ./generate-build-info.sh   # optional: embeds git commit in --version output
 swift build
 ```
@@ -466,7 +466,7 @@ targets: [
     .target(
         name: "MyApp",
         plugins: [
-            .plugin(name: "A11yCheckBuildPlugin", package: "A11yAgent"),
+            .plugin(name: "A11yCheckBuildPlugin", package: "a11y-check"),
         ]
     ),
 ]
@@ -631,7 +631,7 @@ The AI runs `a11y-check . --format html > accessibility-report.html` in the term
 
 ### GitHub Actions
 
-A ready-to-use workflow is included at [`A11yAgent/.github/workflows/a11y-check.yml`](.github/workflows/a11y-check.yml). It:
+A ready-to-use workflow is included at [`a11y-check/.github/workflows/a11y-check.yml`](.github/workflows/a11y-check.yml). It:
 
 1. Builds a11y-check from source
 2. Runs the accessibility check
@@ -647,7 +647,7 @@ Alternatively, use a simpler inline step:
 - name: Checkout repo
   uses: actions/checkout@v4
 - name: Build a11y-check
-  run: cd A11yAgent && swift build -c release && echo "$(pwd)/.build/release" >> $GITHUB_PATH
+  run: cd a11y-check && swift build -c release && echo "$(pwd)/.build/release" >> $GITHUB_PATH
 - name: Accessibility check
   run: a11y-check Sources/ --min-score 70
 ```
@@ -697,7 +697,7 @@ An [MCP server](mcp-server/README.md) is included so AI assistants like Cursor c
 1. Install a11y-check (Homebrew or build from source).
 2. Install the MCP server dependencies:
    ```bash
-   cd A11yAgent/mcp-server && npm install && npm run build
+   cd a11y-check/mcp-server && npm install && npm run build
    ```
 3. Add to **Cursor Settings → Features → MCP → Edit config**:
    ```json
@@ -705,7 +705,7 @@ An [MCP server](mcp-server/README.md) is included so AI assistants like Cursor c
      "mcpServers": {
        "a11y-check": {
          "command": "node",
-         "args": ["/path/to/A11yAgent/mcp-server/dist/index.js"]
+         "args": ["/path/to/a11y-check/mcp-server/dist/index.js"]
        }
      }
    }

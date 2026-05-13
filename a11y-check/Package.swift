@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "A11yAgent",
+    name: "a11y-check",
     platforms: [.macOS(.v13)],
     products: [
-        .executable(name: "a11y-check", targets: ["A11yAgentCLI"]),
-        .library(name: "A11yAgentCore", targets: ["A11yAgentCore"]),
+        .executable(name: "a11y-check", targets: ["A11yCheckCLI"]),
+        .library(name: "A11yCheckCore", targets: ["A11yCheckCore"]),
         .plugin(name: "A11yCheckPlugin", targets: ["A11yCheckPlugin"]),
         .plugin(name: "A11yCheckBuildPlugin", targets: ["A11yCheckBuildPlugin"]),
     ],
@@ -18,7 +18,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "A11yAgentCore",
+            name: "A11yCheckCore",
             dependencies: [
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
@@ -26,15 +26,15 @@ let package = Package(
             ]
         ),
         .executableTarget(
-            name: "A11yAgentCLI",
+            name: "A11yCheckCLI",
             dependencies: [
-                "A11yAgentCore",
+                "A11yCheckCore",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ]
         ),
         .target(
-            name: "A11yAgentLLM",
-            dependencies: ["A11yAgentCore"]
+            name: "A11yCheckLLM",
+            dependencies: ["A11yCheckCore"]
         ),
         .plugin(
             name: "A11yCheckPlugin",
@@ -43,20 +43,20 @@ let package = Package(
                 permissions: [.writeToPackageDirectory(reason: "Write HTML report files when using --format html")]
             ),
             dependencies: [
-                .target(name: "A11yAgentCLI"),
+                .target(name: "A11yCheckCLI"),
             ]
         ),
         .plugin(
             name: "A11yCheckBuildPlugin",
             capability: .buildTool(),
             dependencies: [
-                .target(name: "A11yAgentCLI"),
+                .target(name: "A11yCheckCLI"),
             ]
         ),
         .testTarget(
-            name: "A11yAgentCoreTests",
+            name: "A11yCheckCoreTests",
             dependencies: [
-                "A11yAgentCore",
+                "A11yCheckCore",
                 .product(name: "SwiftParser", package: "swift-syntax"),
             ],
             resources: [

@@ -8,7 +8,7 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-/** Use A11Y_CHECK_PATH for a local build (e.g. .../A11yAgent/.build/debug/a11y-check), else "a11y-check" from PATH. */
+/** Use A11Y_CHECK_PATH for a local build (e.g. .../a11y-check/.build/debug/a11y-check), else "a11y-check" from PATH. */
 const A11Y_CHECK_CMD = process.env.A11Y_CHECK_PATH ?? "a11y-check";
 
 const server = new Server(
@@ -121,7 +121,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         content: [
           {
             type: "text" as const,
-            text: `a11y-check failed (exit ${code}). ${msg}\n\nIf a11y-check is not installed: brew install a11y-check (after tap) or set A11Y_CHECK_PATH to your A11yAgent/.build/debug/a11y-check path.`,
+            text: `a11y-check failed (exit ${code}). ${msg}\n\nIf a11y-check is not installed: brew install a11y-check (after tap) or set A11Y_CHECK_PATH to your a11y-check/.build/debug/a11y-check path.`,
           },
         ],
         isError: true,

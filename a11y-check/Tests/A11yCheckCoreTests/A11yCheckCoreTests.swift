@@ -1,9 +1,9 @@
 import XCTest
 import SwiftParser
 import SwiftSyntax
-@testable import A11yAgentCore
+@testable import A11yCheckCore
 
-final class A11yAgentCoreTests: XCTestCase {
+final class A11yCheckCoreTests: XCTestCase {
 
     private var registry: RuleRegistry!
 

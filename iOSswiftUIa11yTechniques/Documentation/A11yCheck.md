@@ -3,7 +3,7 @@
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 
-See the full [A11yAgent README](../../A11yAgent/README.md) for installation, CLI options, CI integration, and MCP server setup.
+See the full [a11y-check README](../../a11y-check/README.md) for installation, CLI options, CI integration, and MCP server setup.
 
 ## Rules
 

@@ -33,7 +33,7 @@ a11y-check . --format sarif > results.sarif  # SARIF for GitHub code scanning
 a11y-check . --badge > badge.svg   # Score badge for README
 a11y-check . --watch               # Re-run on file changes
 a11y-check --generate-docs > RULES.md  # Generate rule docs
-a11y-check --list-rules            # List all 34 rules
+a11y-check --list-rules            # List all 35 rules
 ```
 
 Every run automatically includes a **WCAG 2.2 accessibility score** (0–100 with letter grade) after the diagnostics. Use `--min-score 80` to fail CI if the score drops below a threshold.
@@ -722,7 +722,7 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Run a11y-check on TextFieldsView.swift"** — check a specific file
 - **"Which of those are the most critical to fix?"** — the AI explains severity and WCAG impact
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
-- **"List all the a11y rules"** — shows all 34 rules with descriptions and WCAG criteria
+- **"List all the a11y rules"** — shows all 35 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
 - **"What's the accessibility score for this project?"** — runs `a11y-check .` and explains the WCAG 2.2 score breakdown
 - **"Score ProfileView.swift"** — runs the check on a single file and highlights what to fix based on the score
@@ -732,7 +732,7 @@ The full loop — detect, understand, fix, report — happens conversationally w
 
 ## Rules
 
-a11y-check includes 34 rules across these categories:
+a11y-check includes 35 rules across these categories:
 
 | Category | Rules | WCAG | Impact |
 |----------|-------|------|--------|
@@ -748,7 +748,7 @@ a11y-check includes 34 rules across these categories:
 | **Label in Name** | `label-in-name` | 2.5.3 | Serious |
 | **Traits** | `tap-gesture-missing-button-trait` | 4.1.2 | Critical |
 | **Toggles** | `toggle-missing-label` | 4.1.2 | Critical |
-| **Form controls** | `textfield-missing-label`, `slider-missing-label`, `stepper-missing-label`, `picker-missing-label` | 4.1.2 | Critical |
+| **Form controls** | `textfield-missing-label`, `slider-missing-label`, `stepper-missing-label`, `picker-missing-label`, `picker-style-missing-accessibility` | 4.1.2 | Critical |
 | **Accessibility hidden** | `hidden-parent-with-controls` | 4.1.2 | Critical |
 | **Animation** | `animation-missing-reduce-motion` | 2.3.1 | Serious |
 | **Tab views** | `tabview-missing-label` | 4.1.2, 2.4.2 | Serious |
@@ -766,6 +766,8 @@ The **textfield-missing-label** rule catches two problems:
 - **Warning:** TextField/SecureField using placeholder text as its label (e.g. `TextField("First Name", text: $name)` without a `prompt:` parameter or `.accessibilityLabel()`). Placeholder text disappears when the user starts typing and renders in low-contrast gray, failing both WCAG 3.3.2 (Labels or Instructions) and 1.4.3 (Contrast). Use a visible `Text` label above the field, or use the `prompt:` parameter to separate the placeholder from the label.
 
 The **color contrast** rule computes actual WCAG 2.x contrast ratios when both foreground and background colors can be resolved — including SwiftUI system colors (`.black`, `.white`, `.red`, etc.), `Color(red:green:blue:)` literals, hex patterns, and named colors from your `.xcassets` catalogs.
+
+The **image-missing-label** and **missing-accessibility-grouping** rules automatically skip views inside `label:` closures (e.g., `Menu { } label: { HStack { Text("Sort") Image(systemName: "chevron.down") } }`). SwiftUI treats the entire `label:` closure content as a single accessibility element, so individual images don't need their own labels and HStacks don't need manual grouping.
 
 The **orientation-lock** rule flags code that restricts the app to a single orientation (portrait-only or landscape-only). Users with mounted devices (e.g. wheelchair mounts) may not be able to rotate their device. The rule checks `supportedInterfaceOrientations` overrides and `requestGeometryUpdate` calls. It does not flag code that returns `.all` or `.allButUpsideDown`.
 

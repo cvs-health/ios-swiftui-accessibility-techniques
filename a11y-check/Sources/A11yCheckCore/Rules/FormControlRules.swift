@@ -273,3 +273,96 @@ public struct PickerMissingLabelRule: A11yRule {
         return diagnostics
     }
 }
+
+// MARK: - Picker Style Accessibility Rule
+
+/// Flags `Picker` views using `WheelPickerStyle` or `SegmentedPickerStyle` that are
+/// missing `.accessibilityLabel` or `.accessibilityElement(children: .contain)`.
+///
+/// WCAG 4.1.2 Name, Role, Value — these picker styles require both modifiers
+/// for VoiceOver to speak the accessible label.
+public struct PickerStyleAccessibilityRule: A11yRule {
+    public let id = "picker-style-missing-accessibility"
+    public let name = "Picker Style Missing Accessibility Modifiers"
+    public let severity = A11ySeverity.error
+    public let impact = A11yImpact.critical
+    public let wcagCriteria = ["4.1.2"]
+    public let description = "Pickers using WheelPickerStyle or SegmentedPickerStyle must have .accessibilityLabel and .accessibilityElement(children: .contain) or VoiceOver will not speak the label."
+
+    public init() {}
+
+    private func isWheelOrSegmentedStyle(_ mods: ModifierCollector) -> Bool {
+        mods.modifiers(named: "pickerStyle").contains { mod in
+            guard let text = mod.arguments.first?.text else { return false }
+            return text.contains("wheel") || text.contains("Wheel")
+                || text.contains("segmented") || text.contains("Segmented")
+        }
+    }
+
+    private func hasAccessibilityElementContain(_ mods: ModifierCollector) -> Bool {
+        mods.modifiers(named: "accessibilityElement").contains { mod in
+            mod.arguments.contains { $0.label == "children" && $0.text.contains("contain") }
+        }
+    }
+
+    public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
+        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        var diagnostics: [A11yDiagnostic] = []
+
+        for view in visitor.views(ofType: "Picker") {
+            let mods = view.modifiers
+
+            guard isWheelOrSegmentedStyle(mods) else { continue }
+
+            let hasLabel = mods.hasModifier("accessibilityLabel")
+            let hasContain = hasAccessibilityElementContain(mods)
+
+            if hasLabel && hasContain { continue }
+
+            let styleName = mods.modifiers(named: "pickerStyle").first
+                .flatMap { $0.arguments.first?.text } ?? "wheel/segmented"
+
+            if !hasLabel && !hasContain {
+                let fix = makeModifierFix(
+                    chainRoot: view.chainRoot,
+                    modifier: ".accessibilityElement(children: .contain)",
+                    sourceFile: syntax
+                )
+                diagnostics.append(makeDiagnostic(
+                    message: "Picker with \(styleName) style is missing both .accessibilityLabel() and .accessibilityElement(children: .contain). Without these modifiers, VoiceOver will not speak the picker's label.",
+                    node: view.callExpr,
+                    context: context,
+                    fix: fix,
+                    suggestion: "Add .accessibilityLabel(\"Label\") and .accessibilityElement(children: .contain)"
+                ))
+            } else if !hasLabel {
+                let fix = makeModifierFix(
+                    chainRoot: view.chainRoot,
+                    modifier: ".accessibilityLabel(\"Label\")",
+                    sourceFile: syntax
+                )
+                diagnostics.append(makeDiagnostic(
+                    message: "Picker with \(styleName) style is missing .accessibilityLabel(). Add .accessibilityLabel() matching the visible label text so VoiceOver can identify this picker.",
+                    node: view.callExpr,
+                    context: context,
+                    fix: fix,
+                    suggestion: "Add .accessibilityLabel(\"Label\") matching the visible label"
+                ))
+            } else {
+                let fix = makeModifierFix(
+                    chainRoot: view.chainRoot,
+                    modifier: ".accessibilityElement(children: .contain)",
+                    sourceFile: syntax
+                )
+                diagnostics.append(makeDiagnostic(
+                    message: "Picker with \(styleName) style is missing .accessibilityElement(children: .contain). Without this modifier, VoiceOver will not speak the .accessibilityLabel.",
+                    node: view.callExpr,
+                    context: context,
+                    fix: fix,
+                    suggestion: "Add .accessibilityElement(children: .contain)"
+                ))
+            }
+        }
+        return diagnostics
+    }
+}

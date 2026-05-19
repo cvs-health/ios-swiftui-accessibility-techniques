@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import SwiftSyntax
 
 // MARK: - Accessibility Grouping Rule
@@ -28,6 +44,9 @@ public struct AccessibilityGroupingRule: A11yRule {
 
             // Skip if already has accessibility grouping
             if chainText.contains("accessibilityElement") { continue }
+
+            // Skip if inside a label: closure — VoiceOver groups the entire label as one element
+            if isInsideLabelClosure(view.callExpr) { continue }
 
             // Check if the container's trailing closure has both Image and Text as direct children
             guard let trailingClosure = view.callExpr.trailingClosure else { continue }

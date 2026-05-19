@@ -469,10 +469,137 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 1)
     }
 
+    // MARK: - Picker Style Accessibility Rules
+
+    func testPickerStyleAccessibility_flagsWheelWithoutModifiers() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var selection = "A"
+            var body: some View {
+                Picker("Choice", selection: $selection) {
+                    Text("A").tag("A")
+                }
+                .pickerStyle(.wheel)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-style-missing-accessibility")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("missing both"))
+    }
+
+    func testPickerStyleAccessibility_flagsSegmentedWithoutModifiers() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var selection = "A"
+            var body: some View {
+                Picker("Choice", selection: $selection) {
+                    Text("A").tag("A")
+                }
+                .pickerStyle(.segmented)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-style-missing-accessibility")
+        XCTAssertEqual(diags.count, 1)
+    }
+
+    func testPickerStyleAccessibility_flagsMissingContain() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var selection = "A"
+            var body: some View {
+                Picker("Choice", selection: $selection) {
+                    Text("A").tag("A")
+                }
+                .pickerStyle(.wheel)
+                .accessibilityLabel("Choice")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-style-missing-accessibility")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("missing .accessibilityElement"))
+    }
+
+    func testPickerStyleAccessibility_flagsMissingLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var selection = "A"
+            var body: some View {
+                Picker("Choice", selection: $selection) {
+                    Text("A").tag("A")
+                }
+                .pickerStyle(.wheel)
+                .accessibilityElement(children: .contain)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-style-missing-accessibility")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("missing .accessibilityLabel"))
+    }
+
+    func testPickerStyleAccessibility_passesWithBothModifiers() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var selection = "A"
+            var body: some View {
+                Picker("Choice", selection: $selection) {
+                    Text("A").tag("A")
+                }
+                .pickerStyle(.wheel)
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Choice")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-style-missing-accessibility")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testPickerStyleAccessibility_passesDefaultStyle() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var selection = "A"
+            var body: some View {
+                Picker("Choice", selection: $selection) {
+                    Text("A").tag("A")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-style-missing-accessibility")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testPickerStyleAccessibility_flagsOldStyleSyntax() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State var selection = "A"
+            var body: some View {
+                Picker("Choice", selection: $selection) {
+                    Text("A").tag("A")
+                }
+                .pickerStyle(WheelPickerStyle())
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-style-missing-accessibility")
+        XCTAssertEqual(diags.count, 1)
+    }
+
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 31)
+        XCTAssertEqual(registry.rules.count, 35)
     }
 
     func testDisableRule() {

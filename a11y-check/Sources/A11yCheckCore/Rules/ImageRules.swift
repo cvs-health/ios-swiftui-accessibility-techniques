@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import SwiftSyntax
 
 // MARK: - Image Missing Label Rule
@@ -42,6 +58,9 @@ public struct ImageMissingLabelRule: A11yRule {
 
             // Skip if image is inside a Button/Link that has .accessibilityLabel() — the button's label is the accessible name
             if isImageInsideLabeledButtonOrLink(view.callExpr) { continue }
+
+            // Skip if image is inside a label: closure — VoiceOver groups the entire label as one element
+            if isInsideLabelClosure(view.callExpr) { continue }
 
             diagnostics.append(makeDiagnostic(
                 message: "Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images.",
@@ -171,4 +190,23 @@ func hasAccessibilityElementCombine(_ mods: ModifierCollector) -> Bool {
     mods.modifiers(named: "accessibilityElement").contains { mod in
         mod.arguments.contains { $0.label == "children" && $0.text.contains("combine") }
     }
+}
+
+/// Check if a node is inside a `label:` closure parameter (e.g., `Menu { } label: { ... }`).
+/// Views inside label closures are grouped as a single accessibility element by VoiceOver,
+/// so they don't need individual labels or manual grouping.
+func isInsideLabelClosure(_ node: some SyntaxProtocol) -> Bool {
+    var current: Syntax? = Syntax(node).parent
+    while let parent = current {
+        if let trailing = parent.as(MultipleTrailingClosureElementSyntax.self),
+           trailing.label.text == "label" {
+            return true
+        }
+        if let arg = parent.as(LabeledExprSyntax.self),
+           arg.label?.text == "label" {
+            return true
+        }
+        current = parent.parent
+    }
+    return false
 }

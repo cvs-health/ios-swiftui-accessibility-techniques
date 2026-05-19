@@ -75,6 +75,7 @@ public final class RuleRegistry {
         register(SliderMissingLabelRule())
         register(StepperMissingLabelRule())
         register(PickerMissingLabelRule())
+        register(PickerStyleAccessibilityRule())
 
         // Focus return (WCAG 2.4.3, 2.1.2)
         register(SheetFocusReturnRule())

@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [26.7] - 2026-05-19
+
+### a11y-check
+
+#### Fixed
+
+- `image-missing-label` and `missing-accessibility-grouping` rules no longer flag views inside `label:` closures (e.g., `Menu { } label: { ... }`) — SwiftUI already groups label closure content as a single accessibility element
+
 ## [26.6] - 2026-05-01
 
 ### iOS App

@@ -68,6 +68,7 @@ public final class ModifierCollector: SyntaxVisitor {
         "textContentType",
         "keyboardType",
         "textFieldStyle",
+        "pickerStyle",
         // Interactions
         "onTapGesture",
         "sheet",

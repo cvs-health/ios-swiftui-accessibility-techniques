@@ -562,6 +562,15 @@ brew uninstall a11y-check
 brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
 ```
 
+**"No such file or directory" during install:**  
+If `brew install` fails with `Dir.chdir` or "no such file or directory", the local tap has a stale formula. Re-tap from GitHub:
+
+```bash
+brew untap cvs-health/ios-swiftui-accessibility-techniques
+brew tap cvs-health/ios-swiftui-accessibility-techniques https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
+brew install --HEAD cvs-health/ios-swiftui-accessibility-techniques/a11y-check
+```
+
 **Old version after update:**  
 If `a11y-check --version` shows an old version (e.g. `0.1.0` without a commit hash), uninstall and reinstall:
 

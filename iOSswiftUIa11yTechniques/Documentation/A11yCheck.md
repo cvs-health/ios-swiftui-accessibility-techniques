@@ -1,5 +1,5 @@
 # A11y-check
-`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 34 rules across 19 WCAG 2.2 success criteria, with a 0–100 scoring system.
+`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 35 rules across 19 WCAG 2.2 success criteria, with a 0–100 scoring system.
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 
@@ -52,6 +52,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 - **`slider-missing-label`** (error, WCAG 3.3.2, 4.1.2) — `Slider` with no label and no `.accessibilityLabel()`.
 - **`stepper-missing-label`** (error, WCAG 3.3.2, 4.1.2) — `Stepper` with an empty label and no `.accessibilityLabel()`.
 - **`picker-missing-label`** (error, WCAG 3.3.2, 4.1.2) — `Picker` with an empty label and no `.accessibilityLabel()`.
+- **`picker-style-missing-accessibility`** (error, WCAG 4.1.2) — `Picker` with `WheelPickerStyle` or `SegmentedPickerStyle` missing `.accessibilityLabel()` or `.accessibilityElement(children: .contain)`. Without both modifiers, VoiceOver will not speak the picker's label.
 
 ### Focus
 - **`sheet-focus-return`** (error, WCAG 2.4.3, 2.1.2) — `.sheet()`, `.fullScreenCover()`, `.alert()`, or `.popover()` with no focus state management on dismiss. VoiceOver focus is lost after dismissal.

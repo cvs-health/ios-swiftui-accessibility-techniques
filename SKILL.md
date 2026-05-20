@@ -1,6 +1,6 @@
 ---
 name: iOS SwiftUI Accessibility
-description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, and more. Based on the ios-swiftui-accessibility-techniques project with 31 static analysis rules across 17 WCAG criteria.
+description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, and more. Based on the ios-swiftui-accessibility-techniques project with 35 static analysis rules across 19 WCAG criteria.
 ---
 
 # iOS SwiftUI Accessibility Coding Rules
@@ -204,6 +204,7 @@ Button(action: {}) {
 
 - `TextField`, `SecureField`, `Slider`, `Stepper`, `Picker`, and `Toggle` all need visible labels. Use the built-in label parameter or add `.accessibilityLabel`.
 - Never use `.labelsHidden()` without providing an `.accessibilityLabel`.
+- Pickers with `WheelPickerStyle` or `SegmentedPickerStyle` require both `.accessibilityLabel("Label")` and `.accessibilityElement(children: .contain)` or VoiceOver will not speak the picker's label.
 - Add `.textContentType(.emailAddress)`, `.textContentType(.password)`, etc. to text fields so autofill works correctly.
 
 ```swift
@@ -211,6 +212,16 @@ Button(action: {}) {
 Text("Email")
 TextField("Email", text: $email)
     .textContentType(.emailAddress)
+
+// Good — segmented picker with both required modifiers
+Picker("Size", selection: $size) {
+    Text("S").tag("S")
+    Text("M").tag("M")
+    Text("L").tag("L")
+}
+.pickerStyle(.segmented)
+.accessibilityElement(children: .contain)
+.accessibilityLabel("Size")
 
 // Bad — hidden label, no accessibility label
 TextField("", text: $email)
@@ -305,4 +316,4 @@ Button("Click here") { openURL(privacyURL) }
 
 ---
 
-Source: [ios-swiftui-accessibility-techniques](https://github.com/cvs-health/ios-swiftui-accessibility-techniques) by CVS Health — 85+ technique examples, 31 static analysis rules, 17 WCAG 2.2 criteria.
+Source: [ios-swiftui-accessibility-techniques](https://github.com/cvs-health/ios-swiftui-accessibility-techniques) by CVS Health — 85+ technique examples, 35 static analysis rules, 19 WCAG 2.2 criteria.

@@ -29,6 +29,8 @@ struct A11yCheckView: View {
     @State private var stepperBad: Int = 5
     @State private var pickerGood = "Apple"
     @State private var pickerBad = "Apple"
+    @State private var segmentedGood = "A"
+    @State private var segmentedBad = "A"
     @State private var showSheetGood = false
     @State private var showSheetBad = false
     @AccessibilityFocusState private var isSheetTriggerFocused: Bool
@@ -49,7 +51,7 @@ struct A11yCheckView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 31 rules across 17 WCAG 2.2 success criteria. The good examples below pass the `a11y-check` rules. The bad examples trigger `a11y-check` violations. Run `a11y-check .` in your project folder to scan your own code.")
+                Text("`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 35 rules across 19 WCAG 2.2 success criteria. The good examples below pass the `a11y-check` rules. The bad examples trigger `a11y-check` violations. Run `a11y-check .` in your project folder to scan your own code.")
                     .padding(.bottom)
                 // MARK: - Good Examples
                 Text("Good Examples")
@@ -253,8 +255,19 @@ struct A11yCheckView: View {
                         Text("Banana").tag("Banana")
                     }
                 }
+                VStack(spacing: 2) {
+                    Text("Option")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Picker("Option", selection: $segmentedGood) {
+                        Text("A").tag("A")
+                        Text("B").tag("B")
+                    }
+                    .pickerStyle(.segmented)
+                    .accessibilityElement(children: .contain)
+                    .accessibilityLabel("Option")
+                }
                 DisclosureGroup("Details") {
-                    Text("The good form control examples pass four rules. The `TextField` has `.accessibilityLabel(\"Search\")`, passing `textfield-missing-label`. The email field has `.textContentType(.emailAddress)`, passing `input-missing-purpose`. The `Slider` has a \"Volume\" label, passing `slider-missing-label`. The `Stepper` has a \"Quantity\" label, passing `stepper-missing-label`. The `Picker` has a \"Fruit\" label, passing `picker-missing-label`.")
+                    Text("The good form control examples pass five rules. The `TextField` has `.accessibilityLabel(\"Search\")`, passing `textfield-missing-label`. The email field has `.textContentType(.emailAddress)`, passing `input-missing-purpose`. The `Slider` has a \"Volume\" label, passing `slider-missing-label`. The `Stepper` has a \"Quantity\" label, passing `stepper-missing-label`. The `Picker` has a \"Fruit\" label, passing `picker-missing-label`. The segmented `Picker` has both `.accessibilityElement(children: .contain)` and `.accessibilityLabel(\"Option\")`, passing `picker-style-missing-accessibility`.")
                 }.padding(.bottom).accessibilityHint("Good Example Form Controls")
                 // MARK: Good Focus
                 Text("Good Example Focus")
@@ -575,8 +588,13 @@ struct A11yCheckView: View {
                     Text("Apple").tag("Apple")
                     Text("Banana").tag("Banana")
                 }
+                Picker("Option", selection: $segmentedBad) {
+                    Text("A").tag("A")
+                    Text("B").tag("B")
+                }
+                .pickerStyle(.segmented)
                 DisclosureGroup("Details") {
-                    Text("The bad form control examples fail five rules. The `TextField` fields use placeholder text which has insufficient contrast and disappears when typing, and have no `.accessibilityLabel`, failing `textfield-missing-label`. The email `TextField` has no `.textContentType(.emailAddress)`, failing `input-missing-purpose`. The `Slider` uses `.labelsHidden()` with no `.accessibilityLabel`, failing `slider-missing-label`. The `Stepper` has a visible \"Quantity\" text next to it but it is a separate `Text` element not programmatically associated with the `Stepper`, which has an empty label, failing `stepper-missing-label`. The `Picker` has an empty label, failing `picker-missing-label`.")
+                    Text("The bad form control examples fail six rules. The `TextField` fields use placeholder text which has insufficient contrast and disappears when typing, and have no `.accessibilityLabel`, failing `textfield-missing-label`. The email `TextField` has no `.textContentType(.emailAddress)`, failing `input-missing-purpose`. The `Slider` uses `.labelsHidden()` with no `.accessibilityLabel`, failing `slider-missing-label`. The `Stepper` has a visible \"Quantity\" text next to it but it is a separate `Text` element not programmatically associated with the `Stepper`, which has an empty label, failing `stepper-missing-label`. The `Picker` has an empty label, failing `picker-missing-label`. The segmented `Picker` is missing `.accessibilityElement(children: .contain)` and `.accessibilityLabel()`, failing `picker-style-missing-accessibility`.")
                 }.padding(.bottom).accessibilityHint("Bad Example Form Controls")
                 // MARK: Bad Focus
                 Text("Bad Example Focus")

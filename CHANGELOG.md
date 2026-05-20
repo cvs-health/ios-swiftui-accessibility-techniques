@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### a11y-check
 
+#### Added
+
+- `sort-priority-overused` rule (warning, WCAG 1.3.2) — flags `.accessibilitySortPriority()` usage for review since it overrides VoiceOver's default reading order and is frequently misused
+
 #### Fixed
 
 - `image-missing-label` and `missing-accessibility-grouping` rules no longer flag views inside `label:` closures (e.g., `Menu { } label: { ... }`) — SwiftUI already groups label closure content as a single accessibility element

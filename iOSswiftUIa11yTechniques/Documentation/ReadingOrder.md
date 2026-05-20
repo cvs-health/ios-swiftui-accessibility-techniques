@@ -10,6 +10,7 @@ Notes:
 
 - By default the VoiceOver reading order moves from left to right and then top to bottom.
 - Only add extra code to control the VoiceOver reading order if the layout is structured in a way that it disrupts the expected reading order.
+- Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine/.contain)` before resorting to `.accessibilitySortPriority()`. Sort priority overrides VoiceOver's natural order and is fragile — every new element needs a priority value, and existing values may need re-numbering.
 
 ## Applicable WCAG Success Criteria
 - [1.3.2 Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
@@ -23,7 +24,7 @@ Notes:
 
 ----
 
-Copyright 2023-2025 CVS Health and/or one of its affiliates
+Copyright 2023-2026 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

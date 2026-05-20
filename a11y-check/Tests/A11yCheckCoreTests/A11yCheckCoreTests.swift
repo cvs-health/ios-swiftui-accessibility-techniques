@@ -599,7 +599,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 35)
+        XCTAssertEqual(registry.rules.count, 36)
     }
 
     func testDisableRule() {
@@ -1258,6 +1258,43 @@ final class A11yCheckCoreTests: XCTestCase {
         }
         """
         let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    // MARK: - Sort Priority Overused
+
+    func testSortPriorityOverused_flagsUsage() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("First")
+                        .accessibilitySortPriority(2)
+                    Text("Second")
+                        .accessibilitySortPriority(1)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sort-priority-overused")
+        XCTAssertEqual(diags.count, 2)
+        XCTAssertEqual(diags.first?.severity, .warning)
+    }
+
+    func testSortPriorityOverused_passesWithoutModifier() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("First")
+                    Text("Second")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sort-priority-overused")
         XCTAssertEqual(diags.count, 0)
     }
 }

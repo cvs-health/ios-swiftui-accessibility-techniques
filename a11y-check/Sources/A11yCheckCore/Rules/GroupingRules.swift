@@ -146,3 +146,38 @@ public struct ZStackSequenceRule: A11yRule {
         return diagnostics
     }
 }
+
+// MARK: - Sort Priority Overused Rule
+
+/// Flags every use of .accessibilitySortPriority() for review. Sort priority
+/// overrides VoiceOver's natural reading order and is frequently misused.
+/// Prefer restructuring the view hierarchy or using .accessibilityElement
+/// before resorting to sort priority.
+///
+/// WCAG 1.3.2 Meaningful Sequence
+public struct SortPriorityOverusedRule: A11yRule {
+    public let id = "sort-priority-overused"
+    public let name = "Accessibility Sort Priority Needs Review"
+    public let severity = A11ySeverity.warning
+    public let impact = A11yImpact.moderate
+    public let wcagCriteria = ["1.3.2"]
+    public let description = ".accessibilitySortPriority() overrides VoiceOver's default reading order. Only use when the visual layout doesn't match the logical reading order (e.g., ZStack overlays). Verify the VoiceOver order matches the visual order."
+
+    public init() {}
+
+    public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
+        let collector = ModifierCollector.collect(from: syntax)
+        var diagnostics: [A11yDiagnostic] = []
+
+        for mod in collector.modifiers(named: "accessibilitySortPriority") {
+            diagnostics.append(makeDiagnostic(
+                message: ".accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Only use this inside ZStack or when the visual layout genuinely doesn't match the logical order. Prefer restructuring the view hierarchy or using .accessibilityElement(children: .combine) instead.",
+                node: mod.reportNode,
+                context: context,
+                suggestion: "Verify sort priority is necessary — consider restructuring the view hierarchy or using .accessibilityElement instead"
+            ))
+        }
+
+        return diagnostics
+    }
+}

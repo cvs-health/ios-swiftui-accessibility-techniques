@@ -1,6 +1,6 @@
 ---
 name: iOS SwiftUI Accessibility
-description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, and more. Based on the ios-swiftui-accessibility-techniques project with 35 static analysis rules across 19 WCAG criteria.
+description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, and more. Based on the ios-swiftui-accessibility-techniques project with 36 static analysis rules across 19 WCAG criteria.
 ---
 
 # iOS SwiftUI Accessibility Coding Rules
@@ -289,6 +289,7 @@ Button("Click here") { openURL(privacyURL) }
 
 - Use `.accessibilityElement(children: .combine)` on an `HStack` or `VStack` containing an `Image` and `Text` that represent a single concept, so VoiceOver reads them as one element.
 - In a `ZStack` with multiple interactive elements, use `.accessibilitySortPriority()` or `.accessibilityElement` to control VoiceOver reading order.
+- Only use `.accessibilitySortPriority()` when the visual layout genuinely doesn't match VoiceOver's default left-to-right, top-to-bottom order (e.g., ZStack overlays). Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)` first — sort priority overrides are fragile and easy to get wrong.
 
 ## Sheets and Modals (WCAG 2.4.3)
 

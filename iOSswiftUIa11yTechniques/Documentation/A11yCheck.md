@@ -1,5 +1,5 @@
 # A11y-check
-`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 35 rules across 19 WCAG 2.2 success criteria, with a 0–100 scoring system.
+`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 36 rules across 19 WCAG 2.2 success criteria, with a 0–100 scoring system.
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 
@@ -72,6 +72,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 ### Grouping
 - **`missing-accessibility-grouping`** (info, WCAG 1.3.1) — `HStack` or `VStack` containing both `Image` and `Text` without `.accessibilityElement(children: .combine)`.
 - **`zstack-order-confusing`** (info, WCAG 1.3.2) — `ZStack` with multiple interactive elements and no `accessibilitySortPriority` or `accessibilityElement` to control VoiceOver reading order.
+- **`sort-priority-overused`** (warning, WCAG 1.3.2) — `.accessibilitySortPriority()` overrides VoiceOver's default reading order. Only use when the visual layout doesn't match the logical reading order (e.g., ZStack overlays). Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)`.
 
 ### Timing
 - **`auto-dismiss-no-control`** (error, WCAG 2.2.1) — `.task` or `.onAppear` containing `Task.sleep` or `asyncAfter` with a dismiss, without giving the user control to extend or pause.

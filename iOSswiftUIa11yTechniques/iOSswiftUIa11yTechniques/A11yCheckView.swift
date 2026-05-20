@@ -51,7 +51,7 @@ struct A11yCheckView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 35 rules across 19 WCAG 2.2 success criteria. The good examples below pass the `a11y-check` rules. The bad examples trigger `a11y-check` violations. Run `a11y-check .` in your project folder to scan your own code.")
+                Text("`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 36 rules across 19 WCAG 2.2 success criteria. The good examples below pass the `a11y-check` rules. The bad examples trigger `a11y-check` violations. Run `a11y-check .` in your project folder to scan your own code.")
                     .padding(.bottom)
                 // MARK: - Good Examples
                 Text("Good Examples")
@@ -677,6 +677,21 @@ struct A11yCheckView: View {
                 DisclosureGroup("Details") {
                     Text("The bad grouping example has an `HStack` containing an `Image` and `Text` without `.accessibilityElement(children: .combine)`, failing the `missing-accessibility-grouping` rule. VoiceOver reads the image and text as separate elements instead of a single combined element. The `zstack-order-confusing` rule flags `ZStack` views with multiple interactive elements that lack `accessibilitySortPriority` to control VoiceOver reading order.")
                 }.padding(.bottom).accessibilityHint("Bad Example Grouping")
+                // MARK: Bad Sort Priority
+                Text("Bad Example Sort Priority")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                VStack {
+                    Text("First item")
+                        .accessibilitySortPriority(2)
+                    Text("Second item")
+                        .accessibilitySortPriority(1)
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad sort priority example uses `.accessibilitySortPriority()` on a `VStack` where VoiceOver's default top-to-bottom order already matches the visual layout, failing the `sort-priority-overused` rule. Sort priority should only be used when the visual layout doesn't match the logical reading order, such as ZStack overlays. Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)` instead.")
+                }.padding(.bottom).accessibilityHint("Bad Example Sort Priority")
                 // MARK: Bad Timing
                 Text("Bad Example Timing")
                     .font(.subheadline)

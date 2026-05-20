@@ -97,6 +97,7 @@ public final class RuleRegistry {
 
         // Meaningful Sequence (WCAG 1.3.2)
         register(ZStackSequenceRule())
+        register(SortPriorityOverusedRule())
 
         // Timing (WCAG 2.2.1)
         register(TimingAdjustableRule())

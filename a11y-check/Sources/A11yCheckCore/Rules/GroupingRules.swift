@@ -171,10 +171,10 @@ public struct SortPriorityOverusedRule: A11yRule {
 
         for mod in collector.modifiers(named: "accessibilitySortPriority") {
             diagnostics.append(makeDiagnostic(
-                message: ".accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Only use this inside ZStack or when the visual layout genuinely doesn't match the logical order. Prefer restructuring the view hierarchy or using .accessibilityElement(children: .combine) instead.",
+                message: ".accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first.",
                 node: mod.reportNode,
                 context: context,
-                suggestion: "Verify sort priority is necessary — consider restructuring the view hierarchy or using .accessibilityElement instead"
+                suggestion: "Verify sort priority values produce the correct VoiceOver reading order"
             ))
         }
 

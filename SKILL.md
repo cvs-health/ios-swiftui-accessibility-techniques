@@ -285,7 +285,7 @@ Link("CVS Health Privacy Policy", destination: privacyURL)
 Button("Click here") { openURL(privacyURL) }
 ```
 
-## Grouping (WCAG 1.3.1, 1.3.2)
+## Reading Order / Grouping (WCAG 1.3.1, 1.3.2)
 
 - Use `.accessibilityElement(children: .combine)` on an `HStack` or `VStack` containing an `Image` and `Text` that represent a single concept, so VoiceOver reads them as one element.
 - In a `ZStack` with multiple interactive elements, use `.accessibilitySortPriority()` or `.accessibilityElement` to control VoiceOver reading order.

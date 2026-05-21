@@ -92,10 +92,8 @@ public final class RuleRegistry {
         // Gesture Alternatives (WCAG 2.1.1, 2.5.1)
         register(CustomGestureMissingAlternativeRule())
 
-        // Grouping (WCAG 1.3.1)
+        // Reading Order / Grouping (WCAG 1.3.1, 1.3.2)
         register(AccessibilityGroupingRule())
-
-        // Meaningful Sequence (WCAG 1.3.2)
         register(ZStackSequenceRule())
         register(SortPriorityOverusedRule())
 

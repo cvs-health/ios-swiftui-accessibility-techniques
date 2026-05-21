@@ -69,7 +69,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 ### Gestures
 - **`gesture-missing-alternative`** (error, WCAG 2.1.1, 2.5.1) — `.onLongPressGesture` or `.gesture(DragGesture() / RotationGesture() / etc.)` without an `.accessibilityAction()` alternative for VoiceOver users and a visible single-tap Button alternative for touch users who cannot perform the gesture.
 
-### Grouping
+### Reading Order / Grouping
 - **`missing-accessibility-grouping`** (info, WCAG 1.3.1) — `HStack` or `VStack` containing both `Image` and `Text` without `.accessibilityElement(children: .combine)`.
 - **`zstack-order-confusing`** (info, WCAG 1.3.2) — `ZStack` with multiple interactive elements and no `accessibilitySortPriority` or `accessibilityElement` to control VoiceOver reading order.
 - **`sort-priority-overused`** (warning, WCAG 1.3.2) — `.accessibilitySortPriority()` overrides VoiceOver's default reading order. Only use when the visual layout doesn't match the logical reading order (e.g., ZStack overlays). Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)`.

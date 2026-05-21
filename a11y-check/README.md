@@ -763,7 +763,7 @@ a11y-check includes 36 rules across these categories:
 | **Tab views** | `tabview-missing-label` | 4.1.2, 2.4.2 | Serious |
 | **Input purpose** | `input-missing-purpose` | 1.3.5 | Moderate |
 | **Gestures** | `gesture-missing-alternative` | 2.1.1, 2.5.1 | Serious |
-| **Grouping** | `missing-accessibility-grouping`, `zstack-order-confusing`, `sort-priority-overused` | 1.3.1, 1.3.2 | Minor, Minor, Moderate |
+| **Reading Order / Grouping** | `missing-accessibility-grouping`, `zstack-order-confusing`, `sort-priority-overused` | 1.3.1, 1.3.2 | Minor, Minor, Moderate |
 | **Timing** | `auto-dismiss-no-control` | 2.2.1 | Moderate |
 | **Orientation** | `orientation-lock` | 1.3.4 | Serious |
 | **Hints** | `missing-accessibility-hint`, `hint-describes-action-method` | 3.3.2 | Moderate, Minor |

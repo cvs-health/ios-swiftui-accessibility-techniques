@@ -374,8 +374,8 @@ struct A11yCheckView: View {
                 DisclosureGroup("Details") {
                     Text("The good gestures example uses `.gesture(DragGesture())` with both a visible single-tap `Button(\"Delete\")` alternative for touch users who cannot perform a swipe gesture, and an `.accessibilityAction(named: \"Delete\")` for VoiceOver users, passing the `gesture-missing-alternative` rule. WCAG 2.5.1 requires that path-based gestures have a single-pointer alternative so all touch users can perform the action.")
                 }.padding(.bottom).accessibilityHint("Good Example Gestures")
-                // MARK: Good Grouping
-                Text("Good Example Grouping")
+                // MARK: Good Reading Order / Grouping
+                Text("Good Example Reading Order / Grouping")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -387,7 +387,7 @@ struct A11yCheckView: View {
                 .accessibilityElement(children: .combine)
                 DisclosureGroup("Details") {
                     Text("The good grouping example uses `.accessibilityElement(children: .combine)` on an `HStack` containing an `Image` and `Text`, passing the `missing-accessibility-grouping` rule. VoiceOver reads the combined content as a single element.")
-                }.padding(.bottom).accessibilityHint("Good Example Grouping")
+                }.padding(.bottom).accessibilityHint("Good Example Reading Order / Grouping")
                 // MARK: Good Label in Name
                 Text("Good Example Label in Name")
                     .font(.subheadline)
@@ -663,8 +663,8 @@ struct A11yCheckView: View {
                 DisclosureGroup("Details") {
                     Text("The bad gestures example uses `.gesture(DragGesture())` with no `.accessibilityAction` alternative and no visible single-tap button, failing the `gesture-missing-alternative` rule. VoiceOver and Switch Control users cannot perform a swipe gesture, and touch users who cannot drag have no visible single-pointer alternative to trigger the delete action. WCAG 2.5.1 requires single-pointer alternatives for path-based gestures.")
                 }.padding(.bottom).accessibilityHint("Bad Example Gestures")
-                // MARK: Bad Grouping
-                Text("Bad Example Grouping")
+                // MARK: Bad Reading Order / Grouping
+                Text("Bad Example Reading Order / Grouping")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -676,7 +676,7 @@ struct A11yCheckView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad grouping example has an `HStack` containing an `Image` and `Text` without `.accessibilityElement(children: .combine)`, failing the `missing-accessibility-grouping` rule. VoiceOver reads the image and text as separate elements instead of a single combined element. The `zstack-order-confusing` rule flags `ZStack` views with multiple interactive elements that lack `accessibilitySortPriority` to control VoiceOver reading order.")
-                }.padding(.bottom).accessibilityHint("Bad Example Grouping")
+                }.padding(.bottom).accessibilityHint("Bad Example Reading Order / Grouping")
                 // MARK: Bad Sort Priority
                 Text("Bad Example Sort Priority")
                     .font(.subheadline)

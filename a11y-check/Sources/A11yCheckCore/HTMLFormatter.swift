@@ -319,7 +319,7 @@ public struct HTMLFormatter {
             }
             allPoints.append((label: "Now", score: currentScore.score, errors: currentScore.totalErrors, grade: currentScore.grade))
 
-            let maxDataPoints = 30
+            let maxDataPoints = 20
             if allPoints.count > maxDataPoints {
                 allPoints = Array(allPoints.suffix(maxDataPoints))
             }

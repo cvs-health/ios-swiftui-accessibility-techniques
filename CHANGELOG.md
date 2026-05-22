@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [26.7] - 2026-05-19
 
+### iOS App
+
+#### Added
+
+- Bad sort priority example on Accessibility Sort Priority technique page — NavigationLink opens a page with incorrect `.accessibilitySortPriority` values that make VoiceOver read a bottom tab bar first
+
 ### a11y-check
 
 #### Added

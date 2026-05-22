@@ -317,4 +317,4 @@ Button("Click here") { openURL(privacyURL) }
 
 ---
 
-Source: [ios-swiftui-accessibility-techniques](https://github.com/cvs-health/ios-swiftui-accessibility-techniques) by CVS Health — 85+ technique examples, 35 static analysis rules, 19 WCAG 2.2 criteria.
+Source: [ios-swiftui-accessibility-techniques](https://github.com/cvs-health/ios-swiftui-accessibility-techniques) by CVS Health — 85+ technique examples, 36 static analysis rules, 19 WCAG 2.2 criteria.

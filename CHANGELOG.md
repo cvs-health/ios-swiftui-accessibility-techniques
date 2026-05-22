@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [26.7] - 2026-05-19
 
+### Documentation
+
+#### Added
+
+- Orientation (WCAG 1.3.4) section in SKILL.md covering the `orientation-lock` rule with good/bad code examples
+- Toggle, Slider, and Stepper code examples in Form Controls section of SKILL.md
+- Code examples for Reading Order / Grouping (combine and ZStack patterns) in SKILL.md
+- Tab Bars code examples (good/bad tab labels, badge accessibility) in SKILL.md
+- Contrast code example showing insufficient `Color(red:green:blue:)` contrast in SKILL.md
+- Long press and context menu hint examples in Accessibility Hint section of SKILL.md
+
+#### Changed
+
+- Clarified that accessibility hints are required for complex gesture elements (long press, context menu, swipe actions, drag) in SKILL.md
+- Expanded ZStack guidance explaining source-order vs visual-order confusion and overuse of `.accessibilitySortPriority()` in SKILL.md
+- Clarified that tabs without any label are invisible to VoiceOver in SKILL.md
+
 ### iOS App
 
 #### Added

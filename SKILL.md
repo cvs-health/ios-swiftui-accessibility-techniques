@@ -1,6 +1,6 @@
 ---
 name: iOS SwiftUI Accessibility
-description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, and more. Based on the ios-swiftui-accessibility-techniques project with 36 static analysis rules across 19 WCAG criteria.
+description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, orientation, and more. Based on the ios-swiftui-accessibility-techniques project with 36 static analysis rules across 19 WCAG criteria.
 ---
 
 # iOS SwiftUI Accessibility Coding Rules
@@ -102,9 +102,10 @@ HStack {
 
 ## Accessibility Hint (WCAG 3.3.2)
 
-- Hints are optional — VoiceOver users can turn them off. Only add a hint when the result of activating an element is not obvious from the label alone.
+- Hints are optional for standard buttons and taps — VoiceOver users can turn them off. Only add a hint when the result of activating an element is not obvious from the label alone.
+- **Hints are required** for elements with non-obvious interactions: `.onLongPressGesture`, `.onDrag`, `.onDrop`, `.contextMenu`, `.swipeActions`, `DragGesture`, and `LongPressGesture`. Without a hint, VoiceOver users won't know these interactions exist.
 - Use third-person singular verb describing the result: "Adds this item to your favorites." NOT "Add this item to your favorites."
-- Never mention gestures ("tap", "double tap", "swipe") — VoiceOver already tells users how to interact.
+- Never describe the gesture method ("tap", "double tap", "swipe") — VoiceOver already tells users how to interact. Describe what happens, not how to do it.
 - Never repeat the label text or include the control type ("button", "link").
 - Begin capitalized, end with a period.
 
@@ -116,11 +117,21 @@ Button(action: { toggleFavorite() }) {
 .accessibilityLabel("Favorite")
 .accessibilityHint("Adds this item to your favorites.")
 
-// Bad — mentions gesture and control type
+// Bad — describes the gesture method
 .accessibilityHint("Double tap to add this item to your favorites.")
 
 // Bad — repeats label
 .accessibilityHint("Favorite")
+
+// Good — hint required for long press
+Text(item.name)
+    .onLongPressGesture { showActions() }
+    .accessibilityHint("Shows available actions.")
+
+// Good — hint required for context menu
+Button(item.name) { selectItem() }
+    .contextMenu { /* menu items */ }
+    .accessibilityHint("Shows additional options.")
 ```
 
 ## Headings (WCAG 1.3.1)
@@ -185,6 +196,15 @@ Text("Hello")
 // Bad — won't adapt to dark mode
 Text("Hello")
     .foregroundColor(.black)
+
+// Bad — insufficient contrast (gray text on white background)
+Text("Subtitle")
+    .foregroundColor(Color(red: 0.7, green: 0.7, blue: 0.7))
+    .background(Color.white)
+
+// Good — sufficient contrast
+Text("Subtitle")
+    .foregroundColor(.secondary)
 ```
 
 ## Touch Target Size (WCAG 2.5.8)
@@ -212,6 +232,33 @@ Button(action: {}) {
 Text("Email")
 TextField("Email", text: $email)
     .textContentType(.emailAddress)
+
+// Good — Toggle with built-in label
+Toggle("Enable notifications", isOn: $notificationsEnabled)
+
+// Bad — Toggle without a label
+Toggle(isOn: $notificationsEnabled) {
+    Image(systemName: "bell")
+}
+// Fix: add .accessibilityLabel("Enable notifications")
+
+// Good — Slider with label
+Slider(value: $volume, in: 0...100) {
+    Text("Volume")
+}
+
+// Bad — Slider without any label
+Slider(value: $volume, in: 0...100)
+// Fix: add .accessibilityLabel("Volume")
+
+// Good — Stepper with label
+Stepper("Quantity: \(quantity)", value: $quantity, in: 1...10)
+
+// Bad — Stepper without a label
+Stepper(value: $quantity, in: 1...10) {
+    Image(systemName: "cart")
+}
+// Fix: add .accessibilityLabel("Quantity")
 
 // Good — segmented picker with both required modifiers
 Picker("Size", selection: $size) {
@@ -288,18 +335,56 @@ Button("Click here") { openURL(privacyURL) }
 ## Reading Order / Grouping (WCAG 1.3.1, 1.3.2)
 
 - Use `.accessibilityElement(children: .combine)` on an `HStack` or `VStack` containing an `Image` and `Text` that represent a single concept, so VoiceOver reads them as one element.
-- In a `ZStack` with multiple interactive elements, use `.accessibilitySortPriority()` or `.accessibilityElement` to control VoiceOver reading order.
-- Only use `.accessibilitySortPriority()` when the visual layout genuinely doesn't match VoiceOver's default left-to-right, top-to-bottom order (e.g., ZStack overlays). Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)` first — sort priority overrides are fragile and easy to get wrong.
+- In a `ZStack`, VoiceOver reads elements in source order (bottom to top visually), which often doesn't match the visual reading order. If overlaid elements are interactive, use `.accessibilitySortPriority()` or `.accessibilityElement` to control VoiceOver reading order — or restructure the view hierarchy so the source order matches the visual order.
+- Only use `.accessibilitySortPriority()` when the visual layout genuinely doesn't match VoiceOver's default left-to-right, top-to-bottom order. Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)` first — sort priority overrides are fragile and easy to get wrong. Overusing `.accessibilitySortPriority()` across many elements makes the reading order hard to maintain.
+
+```swift
+// Good — combine image and text into one element
+HStack {
+    Image(systemName: "star.fill")
+    Text("Favorites")
+}
+.accessibilityElement(children: .combine)
+
+// Bad — ZStack with confusing reading order
+ZStack {
+    Image("background")
+    VStack {
+        Text("Title")
+        Button("Action") { doSomething() }
+    }
+}
+// VoiceOver reads Image first, then Title, then Button — but Image is behind everything.
+// Fix: hide the background image and let the foreground content speak.
+```
 
 ## Sheets and Modals (WCAG 2.4.3)
 
 - Always include a `ScrollView` inside `.sheet()` and `.fullScreenCover()` so content remains accessible at large Dynamic Type sizes.
 - Manage focus return on dismiss to avoid losing VoiceOver focus.
 
-## Tab Bars (WCAG 4.1.2)
+## Tab Bars (WCAG 4.1.2, 2.4.2)
 
-- Every tab in a `TabView` must have a `.tabItem { Label("name", systemImage: "icon") }`.
+- Every tab in a `TabView` must have a `.tabItem { Label("name", systemImage: "icon") }`. A tab without any label is invisible to VoiceOver — users won't know what the tab is for.
 - When using `.badge(count)`, also add `.accessibilityValue("\(count) notifications")` because `.badge()` is not automatically read by VoiceOver.
+
+```swift
+// Good
+TabView {
+    HomeView()
+        .tabItem { Label("Home", systemImage: "house") }
+    SettingsView()
+        .tabItem { Label("Settings", systemImage: "gear") }
+        .badge(3)
+        .accessibilityValue("3 notifications")
+}
+
+// Bad — tab has no label
+TabView {
+    HomeView()
+        .tabItem { Image(systemName: "house") }
+}
+```
 
 ## Accessibility Hidden (WCAG 4.1.2)
 
@@ -309,6 +394,24 @@ Button("Click here") { openURL(privacyURL) }
 ## Timing (WCAG 2.2.1)
 
 - Content that auto-dismisses (using `Task.sleep` or `asyncAfter` with a dismiss) must give the user control to extend or pause the timer.
+
+## Orientation (WCAG 1.3.4)
+
+- Never lock the app to a single orientation (portrait-only or landscape-only). Users with mounted devices (e.g., wheelchair mounts) may not be able to rotate their device.
+- Do not override `supportedInterfaceOrientations` to return only `.portrait` or only `.landscape`.
+- Do not call `requestGeometryUpdate` to force a single orientation.
+
+```swift
+// Bad — locks to portrait only
+override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    .portrait
+}
+
+// Good — supports all orientations
+override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    .allButUpsideDown
+}
+```
 
 ## Accessibility Notifications
 

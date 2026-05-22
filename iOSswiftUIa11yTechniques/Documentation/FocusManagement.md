@@ -13,6 +13,8 @@ Notes:
 - Use `.accessibilityAction(.escape)` to close a custom dialog or view and return focus when the VoiceOver escape gesture (2 finger Z) is activated.
 - Use `.accessibilityElement(children: .ignore)` to prevent keyboard focus of elements behind a modal dialog.
 
+**Test on a real device.** The iOS Simulator does not respect `@AccessibilityFocusState` — VoiceOver in the Simulator will not move focus when you set the bound property to `true`. You must test on a physical device to verify focus moves correctly.
+
 Platform Defects:
 
 - `FocusState` does not work to send Full Keyboard Access focus to elements except for `TextField`.
@@ -30,7 +32,7 @@ Platform Defects:
 
 ----
 
-Copyright 2023-2025 CVS Health and/or one of its affiliates
+Copyright 2023-2026 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -84,8 +84,8 @@ summary:hover { background: #f1f3f5; }
 .criteria-table td.status-cell { text-align: center; }
 .trend-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
 .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; font-size: 1.125rem; margin-bottom: 0.75rem; }
-.trend-content { display: flex; flex-direction: column; gap: 1.5rem; }
-.trend-chart { width: 100%; }
+.trend-content { display: flex; gap: 1.5rem; align-items: flex-start; }
+.trend-chart { flex: 1; min-width: 0; }
 .trend-chart svg { width: 100%; }
 .trend-chart .chart-line { fill: none; stroke: #0d6efd; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 .trend-chart .chart-area { fill: rgba(13, 110, 253, 0.1); }
@@ -93,7 +93,7 @@ summary:hover { background: #f1f3f5; }
 .trend-chart .chart-dot-current { fill: #198754; stroke: #fff; stroke-width: 2; }
 .trend-chart .chart-grid { stroke: #e9ecef; stroke-width: 1; }
 .trend-chart .chart-label { fill: #595f64; font-size: 11px; font-family: -apple-system, sans-serif; }
-.trend-meta { width: 100%; }
+.trend-meta { flex: 0 0 auto; min-width: 200px; }
 .trend-delta { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.75rem; }
 .trend-delta.positive { color: var(--pass); }
 .trend-delta.negative { color: var(--error); }
@@ -101,7 +101,7 @@ summary:hover { background: #f1f3f5; }
 .trend-table { width: 100%; font-size: 0.8125rem; }
 .trend-table th { background: #f1f3f5; }
 .trend-table th, .trend-table td { padding: 0.375rem 0.625rem; }
-@media (max-width: 900px) { .trend-meta { min-width: unset; } }
+@media (max-width: 900px) { .trend-content { flex-direction: column; } .trend-meta { min-width: unset; } }
 .bar-chart { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
 .bar-chart h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; margin-bottom: 1rem; }
 .bar-row { display: flex; align-items: center; margin-bottom: 0.5rem; gap: 0.5rem; }
@@ -123,7 +123,7 @@ summary:hover { background: #f1f3f5; }
 </head>
 <body>
 <h1>a11y-check Accessibility Report</h1>
-<p class="timestamp">Generated: 5/22/26 12:34 PM</p><div class="score-bar-row">
+<p class="timestamp">Generated: 5/22/26 12:39 PM</p><div class="score-bar-row">
 <div class="score-section">
   <div class="score-header">
     <div class="score-big">33.0</div>
@@ -200,14 +200,14 @@ summary:hover { background: #f1f3f5; }
 <text x="35" y="54" class="chart-label" text-anchor="end">75</text>
 <line x1="40" y1="20" x2="480" y2="20" class="chart-grid"/>
 <text x="35" y="24" class="chart-label" text-anchor="end">100</text>
-<path d="M 40 99 L 63 121 L 86 99 L 109 99 L 132 99 L 155 99 L 178 99 L 202 99 L 225 99 L 248 99 L 271 99 L 294 99 L 317 99 L 341 99 L 364 99 L 387 100 L 410 100 L 433 100 L 456 100 L 480 100 L 480 140 L 40 140 Z" class="chart-area"/>
-<path d="M 40 99 L 63 121 L 86 99 L 109 99 L 132 99 L 155 99 L 178 99 L 202 99 L 225 99 L 248 99 L 271 99 L 294 99 L 317 99 L 341 99 L 364 99 L 387 100 L 410 100 L 433 100 L 456 100 L 480 100" class="chart-line"/>
+<path d="M 40 99 L 63 99 L 86 99 L 109 99 L 132 99 L 155 99 L 178 99 L 202 99 L 225 99 L 248 99 L 271 99 L 294 99 L 317 99 L 341 100 L 364 100 L 387 100 L 410 100 L 433 100 L 456 100 L 480 100 L 480 140 L 40 140 Z" class="chart-area"/>
+<path d="M 40 99 L 63 99 L 86 99 L 109 99 L 132 99 L 155 99 L 178 99 L 202 99 L 225 99 L 248 99 L 271 99 L 294 99 L 317 99 L 341 100 L 364 100 L 387 100 L 410 100 L 433 100 L 456 100 L 480 100" class="chart-line"/>
 <circle cx="40" cy="99" r="4" class="chart-dot"/>
 <text x="40" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
 <text x="40" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="63" cy="121" r="4" class="chart-dot"/>
+<circle cx="63" cy="99" r="4" class="chart-dot"/>
 <text x="63" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
-<text x="63" y="111" class="chart-label" text-anchor="middle">15</text>
+<text x="63" y="89" class="chart-label" text-anchor="middle">34</text>
 <circle cx="86" cy="99" r="4" class="chart-dot"/>
 <text x="86" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
 <text x="86" y="89" class="chart-label" text-anchor="middle">34</text>
@@ -218,35 +218,35 @@ summary:hover { background: #f1f3f5; }
 <text x="132" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
 <text x="132" y="89" class="chart-label" text-anchor="middle">34</text>
 <circle cx="155" cy="99" r="4" class="chart-dot"/>
-<text x="155" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
+<text x="155" y="160" class="chart-label" text-anchor="middle">5/21/26</text>
 <text x="155" y="89" class="chart-label" text-anchor="middle">34</text>
 <circle cx="178" cy="99" r="4" class="chart-dot"/>
-<text x="178" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
+<text x="178" y="160" class="chart-label" text-anchor="middle">5/21/26</text>
 <text x="178" y="89" class="chart-label" text-anchor="middle">34</text>
 <circle cx="202" cy="99" r="4" class="chart-dot"/>
-<text x="202" y="160" class="chart-label" text-anchor="middle">5/21/26</text>
+<text x="202" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
 <text x="202" y="89" class="chart-label" text-anchor="middle">34</text>
 <circle cx="225" cy="99" r="4" class="chart-dot"/>
-<text x="225" y="160" class="chart-label" text-anchor="middle">5/21/26</text>
+<text x="225" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
 <text x="225" y="89" class="chart-label" text-anchor="middle">34</text>
 <circle cx="248" cy="99" r="4" class="chart-dot"/>
 <text x="248" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="248" y="89" class="chart-label" text-anchor="middle">34</text>
+<text x="248" y="89" class="chart-label" text-anchor="middle">33</text>
 <circle cx="271" cy="99" r="4" class="chart-dot"/>
 <text x="271" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="271" y="89" class="chart-label" text-anchor="middle">34</text>
+<text x="271" y="89" class="chart-label" text-anchor="middle">33</text>
 <circle cx="294" cy="99" r="4" class="chart-dot"/>
 <text x="294" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
 <text x="294" y="89" class="chart-label" text-anchor="middle">33</text>
 <circle cx="317" cy="99" r="4" class="chart-dot"/>
 <text x="317" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
 <text x="317" y="89" class="chart-label" text-anchor="middle">33</text>
-<circle cx="341" cy="99" r="4" class="chart-dot"/>
+<circle cx="341" cy="100" r="4" class="chart-dot"/>
 <text x="341" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="341" y="89" class="chart-label" text-anchor="middle">33</text>
-<circle cx="364" cy="99" r="4" class="chart-dot"/>
+<text x="341" y="90" class="chart-label" text-anchor="middle">33</text>
+<circle cx="364" cy="100" r="4" class="chart-dot"/>
 <text x="364" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="364" y="89" class="chart-label" text-anchor="middle">33</text>
+<text x="364" y="90" class="chart-label" text-anchor="middle">33</text>
 <circle cx="387" cy="100" r="4" class="chart-dot"/>
 <text x="387" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
 <text x="387" y="90" class="chart-label" text-anchor="middle">33</text>
@@ -269,8 +269,6 @@ summary:hover { background: #f1f3f5; }
 <table class="trend-table">
 <tr><th>Date</th><th>Score</th><th>Grade</th><th>Errors</th><th>Change</th></tr>
 <tr><td>5/20/26</td><td>33.7</td><td>F</td><td>282</td><td>—</td></tr>
-<tr><td>5/20/26</td><td>15.1</td><td>F</td><td>19</td><td><span style="color:var(--error)">-18.6</span></td></tr>
-<tr><td>5/20/26</td><td>33.7</td><td>F</td><td>282</td><td><span style="color:var(--pass)">+18.6</span></td></tr>
 <tr><td>5/20/26</td><td>33.7</td><td>F</td><td>282</td><td>±0.0</td></tr>
 <tr><td>5/20/26</td><td>33.7</td><td>F</td><td>282</td><td>±0.0</td></tr>
 <tr><td>5/20/26</td><td>33.7</td><td>F</td><td>282</td><td>±0.0</td></tr>
@@ -284,6 +282,8 @@ summary:hover { background: #f1f3f5; }
 <tr><td>5/22/26</td><td>33.4</td><td>F</td><td>285</td><td>±0.0</td></tr>
 <tr><td>5/22/26</td><td>33.4</td><td>F</td><td>285</td><td>±0.0</td></tr>
 <tr><td>5/22/26</td><td>33.0</td><td>F</td><td>278</td><td><span style="color:var(--error)">-0.4</span></td></tr>
+<tr><td>5/22/26</td><td>33.0</td><td>F</td><td>278</td><td>±0.0</td></tr>
+<tr><td>5/22/26</td><td>33.0</td><td>F</td><td>278</td><td>±0.0</td></tr>
 <tr><td>5/22/26</td><td>33.0</td><td>F</td><td>278</td><td>±0.0</td></tr>
 <tr><td>5/22/26</td><td>33.0</td><td>F</td><td>278</td><td>±0.0</td></tr>
 <tr><td>5/22/26</td><td>33.0</td><td>F</td><td>278</td><td>±0.0</td></tr>

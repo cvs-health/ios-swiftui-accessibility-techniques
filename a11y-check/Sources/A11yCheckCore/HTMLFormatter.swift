@@ -122,8 +122,8 @@ public struct HTMLFormatter {
         .criteria-table td.status-cell { text-align: center; }
         .trend-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
         .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; font-size: 1.125rem; margin-bottom: 0.75rem; }
-        .trend-content { display: flex; flex-direction: column; gap: 1.5rem; }
-        .trend-chart { width: 100%; }
+        .trend-content { display: flex; gap: 1.5rem; align-items: flex-start; }
+        .trend-chart { flex: 1; min-width: 0; }
         .trend-chart svg { width: 100%; }
         .trend-chart .chart-line { fill: none; stroke: #0d6efd; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
         .trend-chart .chart-area { fill: rgba(13, 110, 253, 0.1); }
@@ -131,7 +131,7 @@ public struct HTMLFormatter {
         .trend-chart .chart-dot-current { fill: #198754; stroke: #fff; stroke-width: 2; }
         .trend-chart .chart-grid { stroke: #e9ecef; stroke-width: 1; }
         .trend-chart .chart-label { fill: #595f64; font-size: 11px; font-family: -apple-system, sans-serif; }
-        .trend-meta { width: 100%; }
+        .trend-meta { flex: 0 0 auto; min-width: 200px; }
         .trend-delta { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.75rem; }
         .trend-delta.positive { color: var(--pass); }
         .trend-delta.negative { color: var(--error); }
@@ -139,7 +139,7 @@ public struct HTMLFormatter {
         .trend-table { width: 100%; font-size: 0.8125rem; }
         .trend-table th { background: #f1f3f5; }
         .trend-table th, .trend-table td { padding: 0.375rem 0.625rem; }
-        @media (max-width: 900px) { .trend-meta { min-width: unset; } }
+        @media (max-width: 900px) { .trend-content { flex-direction: column; } .trend-meta { min-width: unset; } }
         .bar-chart { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
         .bar-chart h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; margin-bottom: 1rem; }
         .bar-row { display: flex; align-items: center; margin-bottom: 0.5rem; gap: 0.5rem; }

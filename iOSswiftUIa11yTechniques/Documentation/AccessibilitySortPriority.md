@@ -11,6 +11,8 @@ Before using `.accessibilitySortPriority()`, consider these alternatives:
 - Use `.accessibilityElement(children: .contain)` to scope reading order within a container
 - Use `.accessibilityHidden(true)` on decorative elements that don't need to be read
 
+**Test on a real device.** The iOS Simulator does not respect `.accessibilitySortPriority()` values — VoiceOver in the Simulator reads elements in source order regardless of sort priority. You must test on a physical device to verify the reading order is correct.
+
 ## Applicable WCAG Success Criteria
 - [1.3.2: Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
 - [2.4.3: Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)

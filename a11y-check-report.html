@@ -84,8 +84,8 @@ summary:hover { background: #f1f3f5; }
 .criteria-table td.status-cell { text-align: center; }
 .trend-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
 .trend-section h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; font-size: 1.125rem; margin-bottom: 0.75rem; }
-.trend-content { display: flex; gap: 1.5rem; align-items: flex-start; }
-.trend-chart { flex: 1; min-width: 0; }
+.trend-content { display: flex; flex-direction: column; gap: 1.5rem; }
+.trend-chart { width: 100%; }
 .trend-chart svg { width: 100%; }
 .trend-chart .chart-line { fill: none; stroke: #0d6efd; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 .trend-chart .chart-area { fill: rgba(13, 110, 253, 0.1); }
@@ -93,7 +93,7 @@ summary:hover { background: #f1f3f5; }
 .trend-chart .chart-dot-current { fill: #198754; stroke: #fff; stroke-width: 2; }
 .trend-chart .chart-grid { stroke: #e9ecef; stroke-width: 1; }
 .trend-chart .chart-label { fill: #595f64; font-size: 11px; font-family: -apple-system, sans-serif; }
-.trend-meta { flex: 0 0 auto; min-width: 200px; }
+.trend-meta { width: 100%; }
 .trend-delta { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.75rem; }
 .trend-delta.positive { color: var(--pass); }
 .trend-delta.negative { color: var(--error); }
@@ -101,7 +101,7 @@ summary:hover { background: #f1f3f5; }
 .trend-table { width: 100%; font-size: 0.8125rem; }
 .trend-table th { background: #f1f3f5; }
 .trend-table th, .trend-table td { padding: 0.375rem 0.625rem; }
-@media (max-width: 900px) { .trend-content { flex-direction: column; } .trend-meta { min-width: unset; } }
+@media (max-width: 900px) { .trend-meta { min-width: unset; } }
 .bar-chart { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
 .bar-chart h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; margin-bottom: 1rem; }
 .bar-row { display: flex; align-items: center; margin-bottom: 0.5rem; gap: 0.5rem; }
@@ -123,7 +123,7 @@ summary:hover { background: #f1f3f5; }
 </head>
 <body>
 <h1>a11y-check Accessibility Report</h1>
-<p class="timestamp">Generated: 5/22/26 11:52 AM</p><div class="score-bar-row">
+<p class="timestamp">Generated: 5/22/26 12:28 PM</p><div class="score-bar-row">
 <div class="score-section">
   <div class="score-header">
     <div class="score-big">33.0</div>
@@ -176,8 +176,8 @@ summary:hover { background: #f1f3f5; }
 <div class="bar-row"><div class="bar-label"><a href="https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose">1.3.5 Identify Input Purpose</a></div><div class="bar-track"><div class="bar-fill-error" style="width:24.2%"></div></div><div class="bar-count">22</div></div>
 <div class="bar-row"><div class="bar-label"><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum">2.5.8 Target Size</a></div><div class="bar-track"><div class="bar-fill-error" style="width:20.9%"></div></div><div class="bar-count">19</div></div>
 <div class="bar-row"><div class="bar-label"><a href="https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold">2.3.1 Three Flashes</a></div><div class="bar-track"><div class="bar-fill-error" style="width:13.2%"></div></div><div class="bar-count">12</div></div>
-<div class="bar-row"><div class="bar-label"><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-order">2.4.3 Focus Order</a></div><div class="bar-track"><div class="bar-fill-error" style="width:12.1%"></div></div><div class="bar-count">11</div></div>
 <div class="bar-row"><div class="bar-label"><a href="https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap">2.1.2 No Keyboard Trap</a></div><div class="bar-track"><div class="bar-fill-error" style="width:12.1%"></div></div><div class="bar-count">11</div></div>
+<div class="bar-row"><div class="bar-label"><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-order">2.4.3 Focus Order</a></div><div class="bar-track"><div class="bar-fill-error" style="width:12.1%"></div></div><div class="bar-count">11</div></div>
 <div class="bar-row"><div class="bar-label"><a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2 Meaningful Sequence</a></div><div class="bar-track"><div class="bar-fill-warning" style="left:0.0%;width:7.7%"></div><div class="bar-fill-info" style="left:7.7%;width:1.1%"></div></div><div class="bar-count">8</div></div>
 <div class="bar-row"><div class="bar-label"><a href="https://www.w3.org/WAI/WCAG22/Understanding/label-in-name">2.5.3 Label in Name</a></div><div class="bar-track"><div class="bar-fill-error" style="width:3.3%"></div><div class="bar-fill-warning" style="left:3.3%;width:3.3%"></div></div><div class="bar-count">6</div></div>
 <div class="bar-row"><div class="bar-label"><a href="https://www.w3.org/WAI/WCAG22/Understanding/page-titled">2.4.2 Page Titled</a></div><div class="bar-track"><div class="bar-fill-error" style="width:3.3%"></div></div><div class="bar-count">3</div></div>
@@ -200,218 +200,95 @@ summary:hover { background: #f1f3f5; }
 <text x="35" y="54" class="chart-label" text-anchor="end">75</text>
 <line x1="40" y1="20" x2="480" y2="20" class="chart-grid"/>
 <text x="35" y="24" class="chart-label" text-anchor="end">100</text>
-<path d="M 40 87 L 46 87 L 52 110 L 58 104 L 65 87 L 71 88 L 77 91 L 84 91 L 90 92 L 96 92 L 102 92 L 109 92 L 115 107 L 121 107 L 128 107 L 134 46 L 140 107 L 146 107 L 153 107 L 159 107 L 165 86 L 172 107 L 178 107 L 184 107 L 190 107 L 197 107 L 203 107 L 209 107 L 216 107 L 222 107 L 228 106 L 234 106 L 241 112 L 247 106 L 253 106 L 260 112 L 266 123 L 272 123 L 278 123 L 285 123 L 291 123 L 297 123 L 304 123 L 310 123 L 316 123 L 322 123 L 329 123 L 335 121 L 341 121 L 348 98 L 354 98 L 360 99 L 366 60 L 373 98 L 379 99 L 385 121 L 392 99 L 398 99 L 404 99 L 410 99 L 417 99 L 423 99 L 429 99 L 436 99 L 442 99 L 448 99 L 454 99 L 461 99 L 467 99 L 473 100 L 480 100 L 480 140 L 40 140 Z" class="chart-area"/>
-<path d="M 40 87 L 46 87 L 52 110 L 58 104 L 65 87 L 71 88 L 77 91 L 84 91 L 90 92 L 96 92 L 102 92 L 109 92 L 115 107 L 121 107 L 128 107 L 134 46 L 140 107 L 146 107 L 153 107 L 159 107 L 165 86 L 172 107 L 178 107 L 184 107 L 190 107 L 197 107 L 203 107 L 209 107 L 216 107 L 222 107 L 228 106 L 234 106 L 241 112 L 247 106 L 253 106 L 260 112 L 266 123 L 272 123 L 278 123 L 285 123 L 291 123 L 297 123 L 304 123 L 310 123 L 316 123 L 322 123 L 329 123 L 335 121 L 341 121 L 348 98 L 354 98 L 360 99 L 366 60 L 373 98 L 379 99 L 385 121 L 392 99 L 398 99 L 404 99 L 410 99 L 417 99 L 423 99 L 429 99 L 436 99 L 442 99 L 448 99 L 454 99 L 461 99 L 467 99 L 473 100 L 480 100" class="chart-line"/>
-<circle cx="40" cy="87" r="4" class="chart-dot"/>
-<text x="40" y="160" class="chart-label" text-anchor="middle">4/8/26</text>
-<text x="40" y="77" class="chart-label" text-anchor="middle">44</text>
-<circle cx="46" cy="87" r="4" class="chart-dot"/>
-<text x="46" y="160" class="chart-label" text-anchor="middle">4/8/26</text>
-<text x="46" y="77" class="chart-label" text-anchor="middle">44</text>
-<circle cx="52" cy="110" r="4" class="chart-dot"/>
-<text x="52" y="160" class="chart-label" text-anchor="middle">4/8/26</text>
-<text x="52" y="100" class="chart-label" text-anchor="middle">25</text>
-<circle cx="58" cy="104" r="4" class="chart-dot"/>
-<text x="58" y="160" class="chart-label" text-anchor="middle">4/15/26</text>
-<text x="58" y="94" class="chart-label" text-anchor="middle">30</text>
-<circle cx="65" cy="87" r="4" class="chart-dot"/>
-<text x="65" y="160" class="chart-label" text-anchor="middle">4/27/26</text>
-<text x="65" y="77" class="chart-label" text-anchor="middle">44</text>
-<circle cx="71" cy="88" r="4" class="chart-dot"/>
-<text x="71" y="160" class="chart-label" text-anchor="middle">4/29/26</text>
-<text x="71" y="78" class="chart-label" text-anchor="middle">43</text>
-<circle cx="77" cy="91" r="4" class="chart-dot"/>
-<text x="77" y="160" class="chart-label" text-anchor="middle">5/1/26</text>
-<text x="77" y="81" class="chart-label" text-anchor="middle">41</text>
-<circle cx="84" cy="91" r="4" class="chart-dot"/>
-<text x="84" y="160" class="chart-label" text-anchor="middle">5/1/26</text>
-<text x="84" y="81" class="chart-label" text-anchor="middle">41</text>
-<circle cx="90" cy="92" r="4" class="chart-dot"/>
-<text x="90" y="160" class="chart-label" text-anchor="middle">5/1/26</text>
-<text x="90" y="82" class="chart-label" text-anchor="middle">40</text>
-<circle cx="96" cy="92" r="4" class="chart-dot"/>
-<text x="96" y="160" class="chart-label" text-anchor="middle">5/1/26</text>
-<text x="96" y="82" class="chart-label" text-anchor="middle">40</text>
-<circle cx="102" cy="92" r="4" class="chart-dot"/>
-<text x="102" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="102" y="82" class="chart-label" text-anchor="middle">40</text>
-<circle cx="109" cy="92" r="4" class="chart-dot"/>
-<text x="109" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="109" y="82" class="chart-label" text-anchor="middle">40</text>
-<circle cx="115" cy="107" r="4" class="chart-dot"/>
-<text x="115" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="115" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="121" cy="107" r="4" class="chart-dot"/>
-<text x="121" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="121" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="128" cy="107" r="4" class="chart-dot"/>
-<text x="128" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="128" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="134" cy="46" r="4" class="chart-dot"/>
-<text x="134" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="134" y="36" class="chart-label" text-anchor="middle">78</text>
-<circle cx="140" cy="107" r="4" class="chart-dot"/>
-<text x="140" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="140" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="146" cy="107" r="4" class="chart-dot"/>
-<text x="146" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="146" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="153" cy="107" r="4" class="chart-dot"/>
-<text x="153" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="153" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="159" cy="107" r="4" class="chart-dot"/>
-<text x="159" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="159" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="165" cy="86" r="4" class="chart-dot"/>
-<text x="165" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="165" y="76" class="chart-label" text-anchor="middle">45</text>
-<circle cx="172" cy="107" r="4" class="chart-dot"/>
-<text x="172" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="172" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="178" cy="107" r="4" class="chart-dot"/>
-<text x="178" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="178" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="184" cy="107" r="4" class="chart-dot"/>
-<text x="184" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="184" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="190" cy="107" r="4" class="chart-dot"/>
-<text x="190" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="190" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="197" cy="107" r="4" class="chart-dot"/>
-<text x="197" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="197" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="203" cy="107" r="4" class="chart-dot"/>
-<text x="203" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="203" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="209" cy="107" r="4" class="chart-dot"/>
-<text x="209" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="209" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="216" cy="107" r="4" class="chart-dot"/>
-<text x="216" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="216" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="222" cy="107" r="4" class="chart-dot"/>
-<text x="222" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="222" y="97" class="chart-label" text-anchor="middle">27</text>
-<circle cx="228" cy="106" r="4" class="chart-dot"/>
-<text x="228" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="228" y="96" class="chart-label" text-anchor="middle">28</text>
-<circle cx="234" cy="106" r="4" class="chart-dot"/>
-<text x="234" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="234" y="96" class="chart-label" text-anchor="middle">28</text>
-<circle cx="241" cy="112" r="4" class="chart-dot"/>
-<text x="241" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="241" y="102" class="chart-label" text-anchor="middle">23</text>
-<circle cx="247" cy="106" r="4" class="chart-dot"/>
-<text x="247" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="247" y="96" class="chart-label" text-anchor="middle">28</text>
-<circle cx="253" cy="106" r="4" class="chart-dot"/>
-<text x="253" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="253" y="96" class="chart-label" text-anchor="middle">28</text>
-<circle cx="260" cy="112" r="4" class="chart-dot"/>
-<text x="260" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="260" y="102" class="chart-label" text-anchor="middle">23</text>
-<circle cx="266" cy="123" r="4" class="chart-dot"/>
-<text x="266" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="266" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="272" cy="123" r="4" class="chart-dot"/>
-<text x="272" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="272" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="278" cy="123" r="4" class="chart-dot"/>
-<text x="278" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="278" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="285" cy="123" r="4" class="chart-dot"/>
-<text x="285" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="285" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="291" cy="123" r="4" class="chart-dot"/>
-<text x="291" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="291" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="297" cy="123" r="4" class="chart-dot"/>
-<text x="297" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="297" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="304" cy="123" r="4" class="chart-dot"/>
-<text x="304" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="304" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="310" cy="123" r="4" class="chart-dot"/>
-<text x="310" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="310" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="316" cy="123" r="4" class="chart-dot"/>
-<text x="316" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="316" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="322" cy="123" r="4" class="chart-dot"/>
-<text x="322" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="322" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="329" cy="123" r="4" class="chart-dot"/>
-<text x="329" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
-<text x="329" y="113" class="chart-label" text-anchor="middle">14</text>
-<circle cx="335" cy="121" r="4" class="chart-dot"/>
-<text x="335" y="160" class="chart-label" text-anchor="middle">5/7/26</text>
-<text x="335" y="111" class="chart-label" text-anchor="middle">15</text>
-<circle cx="341" cy="121" r="4" class="chart-dot"/>
-<text x="341" y="160" class="chart-label" text-anchor="middle">5/7/26</text>
-<text x="341" y="111" class="chart-label" text-anchor="middle">15</text>
-<circle cx="348" cy="98" r="4" class="chart-dot"/>
-<text x="348" y="160" class="chart-label" text-anchor="middle">5/7/26</text>
-<text x="348" y="88" class="chart-label" text-anchor="middle">35</text>
-<circle cx="354" cy="98" r="4" class="chart-dot"/>
-<text x="354" y="160" class="chart-label" text-anchor="middle">5/7/26</text>
-<text x="354" y="88" class="chart-label" text-anchor="middle">35</text>
-<circle cx="360" cy="99" r="4" class="chart-dot"/>
-<text x="360" y="160" class="chart-label" text-anchor="middle">5/19/26</text>
-<text x="360" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="366" cy="60" r="4" class="chart-dot"/>
-<text x="366" y="160" class="chart-label" text-anchor="middle">5/19/26</text>
-<text x="366" y="50" class="chart-label" text-anchor="middle">66</text>
-<circle cx="373" cy="98" r="4" class="chart-dot"/>
-<text x="373" y="160" class="chart-label" text-anchor="middle">5/19/26</text>
-<text x="373" y="88" class="chart-label" text-anchor="middle">34</text>
-<circle cx="379" cy="99" r="4" class="chart-dot"/>
-<text x="379" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
-<text x="379" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="385" cy="121" r="4" class="chart-dot"/>
-<text x="385" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
-<text x="385" y="111" class="chart-label" text-anchor="middle">15</text>
-<circle cx="392" cy="99" r="4" class="chart-dot"/>
-<text x="392" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
-<text x="392" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="398" cy="99" r="4" class="chart-dot"/>
-<text x="398" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
-<text x="398" y="89" class="chart-label" text-anchor="middle">34</text>
+<path d="M 40 123 L 55 123 L 70 123 L 85 123 L 100 123 L 115 121 L 131 121 L 146 98 L 161 98 L 176 99 L 191 60 L 206 98 L 222 99 L 237 121 L 252 99 L 267 99 L 282 99 L 297 99 L 313 99 L 328 99 L 343 99 L 358 99 L 373 99 L 388 99 L 404 99 L 419 99 L 434 99 L 449 100 L 464 100 L 480 100 L 480 140 L 40 140 Z" class="chart-area"/>
+<path d="M 40 123 L 55 123 L 70 123 L 85 123 L 100 123 L 115 121 L 131 121 L 146 98 L 161 98 L 176 99 L 191 60 L 206 98 L 222 99 L 237 121 L 252 99 L 267 99 L 282 99 L 297 99 L 313 99 L 328 99 L 343 99 L 358 99 L 373 99 L 388 99 L 404 99 L 419 99 L 434 99 L 449 100 L 464 100 L 480 100" class="chart-line"/>
+<circle cx="40" cy="123" r="4" class="chart-dot"/>
+<text x="40" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
+<text x="40" y="113" class="chart-label" text-anchor="middle">14</text>
+<circle cx="55" cy="123" r="4" class="chart-dot"/>
+<text x="55" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
+<text x="55" y="113" class="chart-label" text-anchor="middle">14</text>
+<circle cx="70" cy="123" r="4" class="chart-dot"/>
+<text x="70" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
+<text x="70" y="113" class="chart-label" text-anchor="middle">14</text>
+<circle cx="85" cy="123" r="4" class="chart-dot"/>
+<text x="85" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
+<text x="85" y="113" class="chart-label" text-anchor="middle">14</text>
+<circle cx="100" cy="123" r="4" class="chart-dot"/>
+<text x="100" y="160" class="chart-label" text-anchor="middle">5/4/26</text>
+<text x="100" y="113" class="chart-label" text-anchor="middle">14</text>
+<circle cx="115" cy="121" r="4" class="chart-dot"/>
+<text x="115" y="160" class="chart-label" text-anchor="middle">5/7/26</text>
+<text x="115" y="111" class="chart-label" text-anchor="middle">15</text>
+<circle cx="131" cy="121" r="4" class="chart-dot"/>
+<text x="131" y="160" class="chart-label" text-anchor="middle">5/7/26</text>
+<text x="131" y="111" class="chart-label" text-anchor="middle">15</text>
+<circle cx="146" cy="98" r="4" class="chart-dot"/>
+<text x="146" y="160" class="chart-label" text-anchor="middle">5/7/26</text>
+<text x="146" y="88" class="chart-label" text-anchor="middle">35</text>
+<circle cx="161" cy="98" r="4" class="chart-dot"/>
+<text x="161" y="160" class="chart-label" text-anchor="middle">5/7/26</text>
+<text x="161" y="88" class="chart-label" text-anchor="middle">35</text>
+<circle cx="176" cy="99" r="4" class="chart-dot"/>
+<text x="176" y="160" class="chart-label" text-anchor="middle">5/19/26</text>
+<text x="176" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="191" cy="60" r="4" class="chart-dot"/>
+<text x="191" y="160" class="chart-label" text-anchor="middle">5/19/26</text>
+<text x="191" y="50" class="chart-label" text-anchor="middle">66</text>
+<circle cx="206" cy="98" r="4" class="chart-dot"/>
+<text x="206" y="160" class="chart-label" text-anchor="middle">5/19/26</text>
+<text x="206" y="88" class="chart-label" text-anchor="middle">34</text>
+<circle cx="222" cy="99" r="4" class="chart-dot"/>
+<text x="222" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
+<text x="222" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="237" cy="121" r="4" class="chart-dot"/>
+<text x="237" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
+<text x="237" y="111" class="chart-label" text-anchor="middle">15</text>
+<circle cx="252" cy="99" r="4" class="chart-dot"/>
+<text x="252" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
+<text x="252" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="267" cy="99" r="4" class="chart-dot"/>
+<text x="267" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
+<text x="267" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="282" cy="99" r="4" class="chart-dot"/>
+<text x="282" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
+<text x="282" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="297" cy="99" r="4" class="chart-dot"/>
+<text x="297" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
+<text x="297" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="313" cy="99" r="4" class="chart-dot"/>
+<text x="313" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
+<text x="313" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="328" cy="99" r="4" class="chart-dot"/>
+<text x="328" y="160" class="chart-label" text-anchor="middle">5/21/26</text>
+<text x="328" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="343" cy="99" r="4" class="chart-dot"/>
+<text x="343" y="160" class="chart-label" text-anchor="middle">5/21/26</text>
+<text x="343" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="358" cy="99" r="4" class="chart-dot"/>
+<text x="358" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
+<text x="358" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="373" cy="99" r="4" class="chart-dot"/>
+<text x="373" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
+<text x="373" y="89" class="chart-label" text-anchor="middle">34</text>
+<circle cx="388" cy="99" r="4" class="chart-dot"/>
+<text x="388" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
+<text x="388" y="89" class="chart-label" text-anchor="middle">33</text>
 <circle cx="404" cy="99" r="4" class="chart-dot"/>
-<text x="404" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
-<text x="404" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="410" cy="99" r="4" class="chart-dot"/>
-<text x="410" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
-<text x="410" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="417" cy="99" r="4" class="chart-dot"/>
-<text x="417" y="160" class="chart-label" text-anchor="middle">5/20/26</text>
-<text x="417" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="423" cy="99" r="4" class="chart-dot"/>
-<text x="423" y="160" class="chart-label" text-anchor="middle">5/21/26</text>
-<text x="423" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="429" cy="99" r="4" class="chart-dot"/>
-<text x="429" y="160" class="chart-label" text-anchor="middle">5/21/26</text>
-<text x="429" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="436" cy="99" r="4" class="chart-dot"/>
-<text x="436" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="436" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="442" cy="99" r="4" class="chart-dot"/>
-<text x="442" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="442" y="89" class="chart-label" text-anchor="middle">34</text>
-<circle cx="448" cy="99" r="4" class="chart-dot"/>
-<text x="448" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="448" y="89" class="chart-label" text-anchor="middle">33</text>
-<circle cx="454" cy="99" r="4" class="chart-dot"/>
-<text x="454" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="454" y="89" class="chart-label" text-anchor="middle">33</text>
-<circle cx="461" cy="99" r="4" class="chart-dot"/>
-<text x="461" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="461" y="89" class="chart-label" text-anchor="middle">33</text>
-<circle cx="467" cy="99" r="4" class="chart-dot"/>
-<text x="467" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="467" y="89" class="chart-label" text-anchor="middle">33</text>
-<circle cx="473" cy="100" r="4" class="chart-dot"/>
-<text x="473" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
-<text x="473" y="90" class="chart-label" text-anchor="middle">33</text>
+<text x="404" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
+<text x="404" y="89" class="chart-label" text-anchor="middle">33</text>
+<circle cx="419" cy="99" r="4" class="chart-dot"/>
+<text x="419" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
+<text x="419" y="89" class="chart-label" text-anchor="middle">33</text>
+<circle cx="434" cy="99" r="4" class="chart-dot"/>
+<text x="434" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
+<text x="434" y="89" class="chart-label" text-anchor="middle">33</text>
+<circle cx="449" cy="100" r="4" class="chart-dot"/>
+<text x="449" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
+<text x="449" y="90" class="chart-label" text-anchor="middle">33</text>
+<circle cx="464" cy="100" r="4" class="chart-dot"/>
+<text x="464" y="160" class="chart-label" text-anchor="middle">5/22/26</text>
+<text x="464" y="90" class="chart-label" text-anchor="middle">33</text>
 <circle cx="480" cy="100" r="5" class="chart-dot-current"/>
 <text x="480" y="160" class="chart-label" text-anchor="middle">Now</text>
 <text x="480" y="90" class="chart-label" text-anchor="middle">33</text>
@@ -421,49 +298,7 @@ summary:hover { background: #f1f3f5; }
 <div class="trend-delta neutral">Change: ±0.0</div>
 <table class="trend-table">
 <tr><th>Date</th><th>Score</th><th>Grade</th><th>Errors</th><th>Change</th></tr>
-<tr><td>4/8/26</td><td>43.9</td><td>F</td><td>212</td><td>—</td></tr>
-<tr><td>4/8/26</td><td>43.8</td><td>F</td><td>212</td><td><span style="color:var(--error)">-0.1</span></td></tr>
-<tr><td>4/8/26</td><td>25.0</td><td>F</td><td>11</td><td><span style="color:var(--error)">-18.8</span></td></tr>
-<tr><td>4/15/26</td><td>29.5</td><td>F</td><td>392</td><td><span style="color:var(--pass)">+4.5</span></td></tr>
-<tr><td>4/27/26</td><td>43.8</td><td>F</td><td>212</td><td><span style="color:var(--pass)">+14.3</span></td></tr>
-<tr><td>4/29/26</td><td>43.1</td><td>F</td><td>213</td><td><span style="color:var(--error)">-0.7</span></td></tr>
-<tr><td>5/1/26</td><td>40.6</td><td>F</td><td>228</td><td><span style="color:var(--error)">-2.5</span></td></tr>
-<tr><td>5/1/26</td><td>40.8</td><td>F</td><td>228</td><td><span style="color:var(--pass)">+0.2</span></td></tr>
-<tr><td>5/1/26</td><td>40.0</td><td>F</td><td>233</td><td><span style="color:var(--error)">-0.8</span></td></tr>
-<tr><td>5/1/26</td><td>39.8</td><td>F</td><td>243</td><td><span style="color:var(--error)">-0.2</span></td></tr>
-<tr><td>5/4/26</td><td>39.8</td><td>F</td><td>243</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>39.8</td><td>F</td><td>243</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td><span style="color:var(--error)">-13.0</span></td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>77.9</td><td>C+</td><td>2</td><td><span style="color:var(--pass)">+51.1</span></td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td><span style="color:var(--error)">-51.1</span></td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>45.0</td><td>F</td><td>3</td><td><span style="color:var(--pass)">+18.2</span></td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td><span style="color:var(--error)">-18.2</span></td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>26.8</td><td>F</td><td>406</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>27.8</td><td>F</td><td>389</td><td><span style="color:var(--pass)">+1.0</span></td></tr>
-<tr><td>5/4/26</td><td>27.8</td><td>F</td><td>389</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>22.9</td><td>F</td><td>41</td><td><span style="color:var(--error)">-4.9</span></td></tr>
-<tr><td>5/4/26</td><td>27.8</td><td>F</td><td>389</td><td><span style="color:var(--pass)">+4.9</span></td></tr>
-<tr><td>5/4/26</td><td>27.8</td><td>F</td><td>389</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>22.9</td><td>F</td><td>41</td><td><span style="color:var(--error)">-4.9</span></td></tr>
-<tr><td>5/4/26</td><td>14.1</td><td>F</td><td>23</td><td><span style="color:var(--error)">-8.8</span></td></tr>
-<tr><td>5/4/26</td><td>14.1</td><td>F</td><td>21</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>14.1</td><td>F</td><td>21</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>14.1</td><td>F</td><td>21</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>14.1</td><td>F</td><td>21</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>14.1</td><td>F</td><td>21</td><td>±0.0</td></tr>
-<tr><td>5/4/26</td><td>14.1</td><td>F</td><td>21</td><td>±0.0</td></tr>
+<tr><td>5/4/26</td><td>14.1</td><td>F</td><td>21</td><td>—</td></tr>
 <tr><td>5/4/26</td><td>14.1</td><td>F</td><td>20</td><td>±0.0</td></tr>
 <tr><td>5/4/26</td><td>14.1</td><td>F</td><td>19</td><td>±0.0</td></tr>
 <tr><td>5/4/26</td><td>14.1</td><td>F</td><td>19</td><td>±0.0</td></tr>
@@ -491,6 +326,7 @@ summary:hover { background: #f1f3f5; }
 <tr><td>5/22/26</td><td>33.4</td><td>F</td><td>285</td><td>±0.0</td></tr>
 <tr><td>5/22/26</td><td>33.4</td><td>F</td><td>285</td><td>±0.0</td></tr>
 <tr><td>5/22/26</td><td>33.0</td><td>F</td><td>278</td><td><span style="color:var(--error)">-0.4</span></td></tr>
+<tr><td>5/22/26</td><td>33.0</td><td>F</td><td>278</td><td>±0.0</td></tr>
 <tr style="font-weight:700"><td>Now</td><td>33.0</td><td>F</td><td>278</td><td>±0.0</td></tr>
 </table>
 </div>
@@ -801,18 +637,18 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; 672 |                      .accessibilityElement(children: .combine)</span>
   673 |                     Image(systemName: &quot;person.fill&quot;)
 </div></div>
-<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">688:25</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Only use this inside ZStack or when the visual layout genuinely doesn't match the logical order. Prefer restructuring the view hierarchy or using .accessibilityElement(children: .combine) instead. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
+<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">688:25</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  687 |                     Text(&quot;First item&quot;)
 <span class="line-bad">&gt; 688 |                         .accessibilitySortPriority(2)</span>
   689 |                     Text(&quot;Second item&quot;)
-</div><div class="suggestion">Verify sort priority is necessary — consider restructuring the view hierarchy or using .accessibilityElement instead</div></div>
-<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">690:25</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Only use this inside ZStack or when the visual layout genuinely doesn't match the logical order. Prefer restructuring the view hierarchy or using .accessibilityElement(children: .combine) instead. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
+</div><div class="suggestion">Verify sort priority values produce the correct VoiceOver reading order</div></div>
+<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">690:25</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  689 |                     Text(&quot;Second item&quot;)
 <span class="line-bad">&gt; 690 |                         .accessibilitySortPriority(1)</span>
   691 |                 }
-</div><div class="suggestion">Verify sort priority is necessary — consider restructuring the view hierarchy or using .accessibilityElement instead</div></div>
+</div><div class="suggestion">Verify sort priority values produce the correct VoiceOver reading order</div></div>
 <div class="diag"><div class="diag-title">Label in Name</div><span class="badge badge-error">error</span> <span class="badge badge-serious">serious</span> <span class="diag-loc">712:17</span> Button's visible text &quot;Save Changes&quot; is not contained in .accessibilityLabel(&quot;Submit form data&quot;). Speech input users won't be able to activate this control by speaking the visible label. <span class="diag-rule">label-in-name</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/label-in-name">2.5.3</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  711 |                     .accessibilityAddTraits(.isHeader)
@@ -1112,12 +948,12 @@ summary:hover { background: #f1f3f5; }
 <details>
 <summary>AccessibilitySortPriority.swift — 8 issues <span class="badge badge-error">3 errors</span> <span class="badge badge-warning">5 warnings</span></summary>
 <div class="diag-list">
-<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">71:30</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Only use this inside ZStack or when the visual layout genuinely doesn't match the logical order. Prefer restructuring the view hierarchy or using .accessibilityElement(children: .combine) instead. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
+<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">71:30</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  70 |                              .labelsHidden()
 <span class="line-bad">&gt; 71 |                              .accessibilitySortPriority(1) // make VoiceOver focus go here first when sheet opens</span>
   72 |                          .presentationDetents([.height(300)])
-</div><div class="suggestion">Verify sort priority is necessary — consider restructuring the view hierarchy or using .accessibilityElement instead</div></div>
+</div><div class="suggestion">Verify sort priority values produce the correct VoiceOver reading order</div></div>
 <div class="diag"><div class="diag-title">Heading Trait Missing</div><span class="badge badge-warning">warning</span> <span class="badge badge-serious">serious</span> <span class="diag-loc">114:21</span> Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading. <span class="diag-rule">heading-trait-missing</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels">2.4.6</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  113 |                         .accessibilityAddTraits(.isHeader)
@@ -1130,18 +966,18 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; 114 |                          .accessibilityAddTraits(.isHeader)</span>
   115 |                         .font(.subheadline)
 </div></div>
-<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">121:17</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Only use this inside ZStack or when the visual layout genuinely doesn't match the logical order. Prefer restructuring the view hierarchy or using .accessibilityElement(children: .combine) instead. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
+<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">121:17</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  120 |                 .background(Color(.systemGroupedBackground))
 <span class="line-bad">&gt; 121 |                 .accessibilitySortPriority(2)</span>
   122 | 
-</div><div class="suggestion">Verify sort priority is necessary — consider restructuring the view hierarchy or using .accessibilityElement instead</div></div>
-<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">136:17</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Only use this inside ZStack or when the visual layout genuinely doesn't match the logical order. Prefer restructuring the view hierarchy or using .accessibilityElement(children: .combine) instead. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
+</div><div class="suggestion">Verify sort priority values produce the correct VoiceOver reading order</div></div>
+<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">136:17</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  135 |                 }
 <span class="line-bad">&gt; 136 |                 .accessibilitySortPriority(1)</span>
   137 | 
-</div><div class="suggestion">Verify sort priority is necessary — consider restructuring the view hierarchy or using .accessibilityElement instead</div></div>
+</div><div class="suggestion">Verify sort priority values produce the correct VoiceOver reading order</div></div>
 <div class="diag"><div class="diag-title">Image Missing Accessibility Label</div><span class="badge badge-error">error</span> <span class="badge badge-critical">critical</span> <span class="diag-loc">140:25</span> Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images. <span class="diag-rule">image-missing-label</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-content">1.1.1</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  139 |                     VStack {
@@ -1178,12 +1014,12 @@ summary:hover { background: #f1f3f5; }
 <span class="line-good">&gt; 154 |                              .accessibilityLabel(&quot;description&quot;) or use Image(decorative:)</span>
   155 |                         Text(&quot;Settings&quot;).font(.caption2)
 </div></div>
-<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">162:17</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Only use this inside ZStack or when the visual layout genuinely doesn't match the logical order. Prefer restructuring the view hierarchy or using .accessibilityElement(children: .combine) instead. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
+<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">162:17</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  161 |                 .background(Color(.systemGroupedBackground))
 <span class="line-bad">&gt; 162 |                 .accessibilitySortPriority(3)</span>
   163 |             }
-</div><div class="suggestion">Verify sort priority is necessary — consider restructuring the view hierarchy or using .accessibilityElement instead</div></div>
+</div><div class="suggestion">Verify sort priority values produce the correct VoiceOver reading order</div></div>
 </div>
 </details>
 <details>
@@ -4219,12 +4055,12 @@ summary:hover { background: #f1f3f5; }
 <details>
 <summary>SignUpA.swift — 3 issues <span class="badge badge-error">1 error</span> <span class="badge badge-warning">1 warning</span></summary>
 <div class="diag-list">
-<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">190:30</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Only use this inside ZStack or when the visual layout genuinely doesn't match the logical order. Prefer restructuring the view hierarchy or using .accessibilityElement(children: .combine) instead. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
+<div class="diag"><div class="diag-title">Accessibility Sort Priority Needs Review</div><span class="badge badge-warning">warning</span> <span class="badge badge-moderate">moderate</span> <span class="diag-loc">190:30</span> .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first. <span class="diag-rule">sort-priority-overused</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence">1.3.2</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  189 |                              .labelsHidden()
 <span class="line-bad">&gt; 190 |                              .accessibilitySortPriority(1) // make VoiceOver focus go here first when sheet opens</span>
   191 |                          .presentationDetents([.height(300)])
-</div><div class="suggestion">Verify sort priority is necessary — consider restructuring the view hierarchy or using .accessibilityElement instead</div></div>
+</div><div class="suggestion">Verify sort priority values produce the correct VoiceOver reading order</div></div>
 <div class="diag"><div class="diag-title">Related Elements Missing Accessibility Grouping</div><span class="badge badge-info">info</span> <span class="badge badge-minor">minor</span> <span class="diag-loc">204:21</span> Image and Text in HStack are separate elements for VoiceOver. Consider adding .accessibilityElement(children: .combine) to the HStack so they're read as one item. <span class="diag-rule">missing-accessibility-grouping</span> <span class="diag-wcag">WCAG <a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships">1.3.1</a></span>
 <div class="code-label bad-label">Current code</div>
 <div class="code-block">  203 |                 NavigationLink(destination: ThankYou()) {

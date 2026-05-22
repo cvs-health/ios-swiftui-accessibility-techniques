@@ -319,6 +319,11 @@ public struct HTMLFormatter {
             }
             allPoints.append((label: "Now", score: currentScore.score, errors: currentScore.totalErrors, grade: currentScore.grade))
 
+            let maxDataPoints = 30
+            if allPoints.count > maxDataPoints {
+                allPoints = Array(allPoints.suffix(maxDataPoints))
+            }
+
             // Delta
             let delta = currentScore.score - trendEntries.last!.score
             let deltaClass: String

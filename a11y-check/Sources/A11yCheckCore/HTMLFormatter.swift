@@ -345,11 +345,11 @@ public struct HTMLFormatter {
 
             // SVG Line Chart
             let chartW = 500.0
-            let chartH = 180.0
+            let chartH = 210.0
             let padL = 40.0
             let padR = 20.0
             let padT = 20.0
-            let padB = 40.0
+            let padB = 60.0
             let plotW = chartW - padL - padR
             let plotH = chartH - padT - padB
 
@@ -400,7 +400,7 @@ public struct HTMLFormatter {
                 let dotClass = i == allPoints.count - 1 ? "chart-dot-current" : "chart-dot"
                 let r = i == allPoints.count - 1 ? 5 : 4
                 html += "<circle cx=\"\(cx)\" cy=\"\(cy)\" r=\"\(r)\" class=\"\(dotClass)\"/>\n"
-                html += "<text x=\"\(cx)\" y=\"\(Int(padT + plotH + 20))\" class=\"chart-label\" text-anchor=\"middle\">\(escapeHTML(pt.label))</text>\n"
+                html += "<text x=\"\(cx)\" y=\"\(Int(padT + plotH + 8))\" class=\"chart-label\" text-anchor=\"start\" transform=\"rotate(90, \(cx), \(Int(padT + plotH + 8)))\">\(escapeHTML(pt.label))</text>\n"
                 html += "<text x=\"\(cx)\" y=\"\(cy - 10)\" class=\"chart-label\" text-anchor=\"middle\">\(String(format: "%.0f", pt.score))</text>\n"
             }
 

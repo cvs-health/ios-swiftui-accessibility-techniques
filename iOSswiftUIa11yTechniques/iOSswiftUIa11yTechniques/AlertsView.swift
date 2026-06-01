@@ -70,7 +70,7 @@ struct AlertsView: View {
                 DisclosureGroup("Details") {
                     Text("The good alert example uses `.alert()` to create a native SwiftUI alert that receives VoiceOver focus when displayed. Additionally, `AccessibilityFocusState` is used to send focus back to the trigger button that opened the alert when the alert is closed.")
                 }.padding(.bottom).accessibilityHint("Good Example")
-                Text("Bad Example")
+                Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -80,6 +80,11 @@ struct AlertsView: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
+                Text("Bad Example Custom Alert")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 Button("Delete All Messages", role: .destructive) {
                   showingAlertBad = true
                 }
@@ -96,18 +101,13 @@ struct AlertsView: View {
                     }
                 }
                 DisclosureGroup("Details") {
-                    Text("The bad alert example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
-                }.padding(.bottom).accessibilityHint("Bad Example")
-                Text("Bad Example")
+                    Text("The bad custom alert example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
+                }.padding(.bottom).accessibilityHint("Bad Example Custom Alert")
+                Text("Bad Example Native Alert Without Focus Return")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                Divider()
-                    .frame(height: 2.0, alignment: .leading)
-                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                    .padding(.bottom)
                 Button("Delete All Messages", role: .destructive) {
                     showingAlertBad2 = true
                 }
@@ -120,7 +120,7 @@ struct AlertsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad native alert example uses `.alert()` which receives VoiceOver focus when displayed, but does not use `AccessibilityFocusState` to return focus back to the trigger button when the alert is closed.")
-                }.accessibilityHint("Bad Example Native Alert")
+                }.accessibilityHint("Bad Example Native Alert Without Focus Return")
             }
             .navigationTitle("Alerts")
             .padding()

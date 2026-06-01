@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [26.8] - 2026-06-01
+
+### iOS App
+
+#### Added
+
+- Bad example native alert without focus management on Alerts technique page — uses `.alert()` but does not use `AccessibilityFocusState` to return focus to the trigger button when dismissed
+
 ## [26.7] - 2026-05-19
 
 ### Documentation

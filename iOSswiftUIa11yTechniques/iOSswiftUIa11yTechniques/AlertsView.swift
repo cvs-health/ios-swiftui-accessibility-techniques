@@ -1,5 +1,5 @@
 /*
-   Copyright 2023 CVS Health and/or one of its affiliates
+   Copyright 2023-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import SwiftUI
 struct AlertsView: View {
     @State private var showingAlert = false
     @State private var showingAlertBad = false
+    @State private var showingAlertBad2 = false
     @AccessibilityFocusState private var isTriggerFocused: Bool
 
 
@@ -96,7 +97,30 @@ struct AlertsView: View {
                 }
                 DisclosureGroup("Details") {
                     Text("The bad alert example uses a custom view which does not receive VoiceOver focus when displayed and does not return focus when closed.")
-                }.accessibilityHint("Bad Example")
+                }.padding(.bottom).accessibilityHint("Bad Example")
+                Text("Bad Example")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.bottom)
+                Button("Delete All Messages", role: .destructive) {
+                    showingAlertBad2 = true
+                }
+                .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                .alert("Are you sure you want to delete all messages?", isPresented: $showingAlertBad2) {
+                    Button("Cancel", role: .cancel) { }
+                    Button ("Delete All Messages", role: .destructive) { }
+                } message: {
+                    Text("You cannot undo deleting all messages!")
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad native alert example uses `.alert()` which receives VoiceOver focus when displayed, but does not use `AccessibilityFocusState` to return focus back to the trigger button when the alert is closed.")
+                }.accessibilityHint("Bad Example Native Alert")
             }
             .navigationTitle("Alerts")
             .padding()

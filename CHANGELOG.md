@@ -4,13 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [26.8] - 2026-06-01
+## [26.8] - 2026-06-10
 
 ### iOS App
 
 #### Added
 
 - Bad example native alert without focus management on Alerts technique page — uses `.alert()` but does not use `AccessibilityFocusState` to return focus to the trigger button when dismissed
+
+### a11y-check
+
+#### Added
+
+- `button-group-missing-container-label` rule (warning, WCAG 1.3.1) — flags HStack/VStack/LazyVGrid/LazyHStack containers of 2+ Buttons that have a visible group label (preceding Text) but are missing `.accessibilityElement(children: .contain)` and/or `.accessibilityLabel()`, so VoiceOver users hear the group context when navigating to the buttons
 
 ## [26.7] - 2026-05-19
 

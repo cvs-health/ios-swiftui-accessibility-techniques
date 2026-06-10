@@ -1,7 +1,7 @@
 # iOS SwiftUI Accessibility Techniques
 iOS and watchOS SwiftUI sample code demonstrating a variety of good and bad accessibility techniques. Learn how to apply WCAG 2.2 to iOS SwiftUI apps. Good and bad examples can be tested with VoiceOver and other iOS accessibility features.
 
-This repo also includes **[a11y-check](#a11y-checker-a11y-check)**, a static analysis tool that scans your Swift/SwiftUI source code for accessibility issues — 36 rules across 19 WCAG 2.2 criteria, with scoring, auto-fix, and CI integration.
+This repo also includes **[a11y-check](#a11y-checker-a11y-check)**, a static analysis tool that scans your Swift/SwiftUI source code for accessibility issues — 37 rules across 19 WCAG 2.2 criteria, with scoring, auto-fix, and CI integration.
 
 [Download the iOS app from the App Store.](https://apps.apple.com/app/accessibility-techniques/id6474141089)
 
@@ -24,7 +24,7 @@ To verify it installed correctly, run `a11y-check --version`. To update later, r
 
 ## A11y Checker (a11y-check)
 
-Static analysis for SwiftUI accessibility issues, mapped to WCAG 2.2 success criteria. **36 rules** across **19 WCAG criteria** with a **0–100 scoring system**. Run it on your Swift sources to find missing labels, incorrect traits, touch target size, and more. Supports auto-fix (`--fix`), SARIF output for GitHub code scanning, trend tracking, and per-view scoring.
+Static analysis for SwiftUI accessibility issues, mapped to WCAG 2.2 success criteria. **37 rules** across **19 WCAG criteria** with a **0–100 scoring system**. Run it on your Swift sources to find missing labels, incorrect traits, touch target size, and more. Supports auto-fix (`--fix`), SARIF output for GitHub code scanning, trend tracking, and per-view scoring.
 
 ### Check your own iOS app
 

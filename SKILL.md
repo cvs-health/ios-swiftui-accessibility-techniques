@@ -1,6 +1,6 @@
 ---
 name: iOS SwiftUI Accessibility
-description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, orientation, and more. Based on the ios-swiftui-accessibility-techniques project with 36 static analysis rules across 19 WCAG criteria.
+description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, orientation, and more. Based on the ios-swiftui-accessibility-techniques project with 37 static analysis rules across 19 WCAG criteria.
 ---
 
 # iOS SwiftUI Accessibility Coding Rules
@@ -335,6 +335,7 @@ Button("Click here") { openURL(privacyURL) }
 ## Reading Order / Grouping (WCAG 1.3.1, 1.3.2)
 
 - Use `.accessibilityElement(children: .combine)` on an `HStack` or `VStack` containing an `Image` and `Text` that represent a single concept, so VoiceOver reads them as one element.
+<<<<<<< HEAD
 - In a `ZStack`, VoiceOver reads elements in source order (bottom to top visually), which often doesn't match the visual reading order. If overlaid elements are interactive, use `.accessibilitySortPriority()` or `.accessibilityElement` to control VoiceOver reading order — or restructure the view hierarchy so the source order matches the visual order.
 - Only use `.accessibilitySortPriority()` when the visual layout genuinely doesn't match VoiceOver's default left-to-right, top-to-bottom order. Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)` first — sort priority overrides are fragile and easy to get wrong. Overusing `.accessibilitySortPriority()` across many elements makes the reading order hard to maintain.
 
@@ -357,6 +358,11 @@ ZStack {
 // VoiceOver reads Image first, then Title, then Button — but Image is behind everything.
 // Fix: hide the background image and let the foreground content speak.
 ```
+=======
+- Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("group label")` on containers of related Buttons (radio-style choices, rating buttons, control groups) so VoiceOver announces the group context when the user navigates into the group. This is analogous to a `<fieldset>` with a `<legend>` in HTML.
+- In a `ZStack` with multiple interactive elements, use `.accessibilitySortPriority()` or `.accessibilityElement` to control VoiceOver reading order.
+- Only use `.accessibilitySortPriority()` when the visual layout genuinely doesn't match VoiceOver's default left-to-right, top-to-bottom order (e.g., ZStack overlays). Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)` first — sort priority overrides are fragile and easy to get wrong.
+>>>>>>> 40d6936 (Add button-group-missing-container-label rule (WCAG 1.3.1))
 
 ## Sheets and Modals (WCAG 2.4.3)
 
@@ -420,4 +426,8 @@ override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
 
 ---
 
+<<<<<<< HEAD
 Source: [ios-swiftui-accessibility-techniques](https://github.com/cvs-health/ios-swiftui-accessibility-techniques) by CVS Health — 85+ technique examples, 36 static analysis rules, 19 WCAG 2.2 criteria.
+=======
+Source: [ios-swiftui-accessibility-techniques](https://github.com/cvs-health/ios-swiftui-accessibility-techniques) by CVS Health — 85+ technique examples, 37 static analysis rules, 19 WCAG 2.2 criteria.
+>>>>>>> 40d6936 (Add button-group-missing-container-label rule (WCAG 1.3.1))

@@ -51,7 +51,7 @@ struct A11yCheckView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 36 rules across 19 WCAG 2.2 success criteria. The good examples below pass the `a11y-check` rules. The bad examples trigger `a11y-check` violations. Run `a11y-check .` in your project folder to scan your own code.")
+                Text("`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 37 rules across 19 WCAG 2.2 success criteria. The good examples below pass the `a11y-check` rules. The bad examples trigger `a11y-check` violations. Run `a11y-check .` in your project folder to scan your own code.")
                     .padding(.bottom)
                 // MARK: - Good Examples
                 Text("Good Examples")

@@ -96,6 +96,7 @@ public final class RuleRegistry {
         register(AccessibilityGroupingRule())
         register(ZStackSequenceRule())
         register(SortPriorityOverusedRule())
+        register(ButtonGroupMissingContainerLabelRule())
 
         // Timing (WCAG 2.2.1)
         register(TimingAdjustableRule())

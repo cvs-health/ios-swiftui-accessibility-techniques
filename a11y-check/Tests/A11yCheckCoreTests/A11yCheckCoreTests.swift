@@ -596,10 +596,149 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 1)
     }
 
+    // MARK: - Button Group Missing Container Label
+
+    func testButtonGroupMissingContainerLabel_flagsBothMissing() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("Rate this experience")
+                    HStack {
+                        Button("Yes") {}
+                        Button("No") {}
+                    }
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-group-missing-container-label")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssert(diags[0].message.contains("missing .accessibilityElement(children: .contain) and .accessibilityLabel()"))
+    }
+
+    func testButtonGroupMissingContainerLabel_flagsMissingLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("Rate this experience")
+                    HStack {
+                        Button("Yes") {}
+                        Button("No") {}
+                    }
+                    .accessibilityElement(children: .contain)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-group-missing-container-label")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssert(diags[0].message.contains("missing .accessibilityLabel()"))
+    }
+
+    func testButtonGroupMissingContainerLabel_flagsMissingContain() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("Rate this experience")
+                    HStack {
+                        Button("Yes") {}
+                        Button("No") {}
+                    }
+                    .accessibilityLabel("Rate this experience")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-group-missing-container-label")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssert(diags[0].message.contains("missing .accessibilityElement(children: .contain)"))
+    }
+
+    func testButtonGroupMissingContainerLabel_passesBothPresent() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("Rate this experience")
+                    HStack {
+                        Button("Yes") {}
+                        Button("No") {}
+                    }
+                    .accessibilityElement(children: .contain)
+                    .accessibilityLabel("Rate this experience")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-group-missing-container-label")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testButtonGroupMissingContainerLabel_passesNoPrecedingText() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                HStack {
+                    Button("Edit") {}
+                    Button("Delete") {}
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-group-missing-container-label")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testButtonGroupMissingContainerLabel_passesSingleButton() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("Actions")
+                    HStack {
+                        Button("Submit") {}
+                    }
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-group-missing-container-label")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testButtonGroupMissingContainerLabel_passesAlreadyHasAccessibilityElement() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("Choose one")
+                    HStack {
+                        Button("A") {}
+                        Button("B") {}
+                    }
+                    .accessibilityElement(children: .combine)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-group-missing-container-label")
+        XCTAssertEqual(diags.count, 0)
+    }
+
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 36)
+        XCTAssertEqual(registry.rules.count, 37)
     }
 
     func testDisableRule() {

@@ -2,7 +2,7 @@
 
 ![a11y score](a11y-badge.svg)
 
-Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 36 rules across 19 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
+Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 37 rules across 19 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
 
 ## Check your own iOS app
 
@@ -33,7 +33,7 @@ a11y-check . --format sarif > results.sarif  # SARIF for GitHub code scanning
 a11y-check . --badge > badge.svg   # Score badge for README
 a11y-check . --watch               # Re-run on file changes
 a11y-check --generate-docs > RULES.md  # Generate rule docs
-a11y-check --list-rules            # List all 36 rules
+a11y-check --list-rules            # List all 37 rules
 ```
 
 Every run automatically includes a **WCAG 2.2 accessibility score** (0–100 with letter grade) after the diagnostics. Use `--min-score 80` to fail CI if the score drops below a threshold.
@@ -247,6 +247,7 @@ a11y-check . --fix --dry-run
 | `fake-heading-in-label` | Removes the word "heading" from the `.accessibilityLabel()` string |
 | `image-label-contains-role` | Removes role words ("image", "icon", "graphic") from the label string |
 | `missing-accessibility-grouping` | Appends `.accessibilityElement(children: .combine)` to the HStack/VStack |
+| `button-group-missing-container-label` | Appends `.accessibilityElement(children: .contain)` to the button group container |
 | `fixed-font-size` | Replaces `.font(.system(size: N))` with `.font(.body)` |
 | `line-limit-1` | Removes `.lineLimit(1)` entirely |
 | `hardcoded-color` | Removes the hardcoded color modifier (`.foregroundColor(.black)`, etc.) to restore SwiftUI's adaptive defaults |
@@ -731,7 +732,7 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Run a11y-check on TextFieldsView.swift"** — check a specific file
 - **"Which of those are the most critical to fix?"** — the AI explains severity and WCAG impact
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
-- **"List all the a11y rules"** — shows all 36 rules with descriptions and WCAG criteria
+- **"List all the a11y rules"** — shows all 37 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
 - **"What's the accessibility score for this project?"** — runs `a11y-check .` and explains the WCAG 2.2 score breakdown
 - **"Score ProfileView.swift"** — runs the check on a single file and highlights what to fix based on the score
@@ -741,7 +742,7 @@ The full loop — detect, understand, fix, report — happens conversationally w
 
 ## Rules
 
-a11y-check includes 36 rules across these categories:
+a11y-check includes 37 rules across these categories:
 
 | Category | Rules | WCAG | Impact |
 |----------|-------|------|--------|
@@ -763,7 +764,7 @@ a11y-check includes 36 rules across these categories:
 | **Tab views** | `tabview-missing-label` | 4.1.2, 2.4.2 | Serious |
 | **Input purpose** | `input-missing-purpose` | 1.3.5 | Moderate |
 | **Gestures** | `gesture-missing-alternative` | 2.1.1, 2.5.1 | Serious |
-| **Reading Order / Grouping** | `missing-accessibility-grouping`, `zstack-order-confusing`, `sort-priority-overused` | 1.3.1, 1.3.2 | Minor, Minor, Moderate |
+| **Reading Order / Grouping** | `missing-accessibility-grouping`, `zstack-order-confusing`, `sort-priority-overused`, `button-group-missing-container-label` | 1.3.1, 1.3.2 | Minor, Minor, Moderate, Moderate |
 | **Timing** | `auto-dismiss-no-control` | 2.2.1 | Moderate |
 | **Orientation** | `orientation-lock` | 1.3.4 | Serious |
 | **Hints** | `missing-accessibility-hint`, `hint-describes-action-method` | 3.3.2 | Moderate, Minor |

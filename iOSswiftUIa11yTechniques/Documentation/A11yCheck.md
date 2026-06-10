@@ -1,5 +1,5 @@
 # A11y-check
-`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 36 rules across 19 WCAG 2.2 success criteria, with a 0–100 scoring system.
+`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 37 rules across 19 WCAG 2.2 success criteria, with a 0–100 scoring system.
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 

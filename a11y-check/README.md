@@ -777,6 +777,11 @@ The **textfield-missing-label** rule catches two problems:
 
 The **color contrast** rule computes actual WCAG 2.x contrast ratios when both foreground and background colors can be resolved — including SwiftUI system colors (`.black`, `.white`, `.red`, etc.), `Color(red:green:blue:)` literals, hex patterns, and named colors from your `.xcassets` catalogs.
 
+- **Dark mode & Increase Contrast variants:** when a `.xcassets` color set defines `dark` or `high-contrast` appearance entries, the rule checks the contrast ratio for each theme that is present. A diagnostic names the failing theme (e.g. _"…in Dark Mode…"_). Light-mode-only catalogs are unaffected.
+- **Container backgrounds:** if a text view (e.g. `Text`) has no `.background` on its own modifier chain, the rule walks up to the nearest enclosing container (VStack, HStack, ZStack, ScrollView, List, etc.) and pairs against its `.background`. Sibling views' backgrounds are never paired.
+- **Numeric large text:** `.font(.system(size: N))` is treated as large text (3.0:1 threshold) when `N ≥ 18`, or when `N ≥ 14` combined with a bold/semibold/heavy/black weight. Named styles (`.largeTitle`, `.title`, `.title2`, `.title3`) continue to be detected as before.
+- **Runtime complement:** static analysis cannot reach dynamic or runtime-resolved colors. For full coverage, pair `a11y-check` with Xcode's [`performAccessibilityAudit(for: .contrast)`](https://developer.apple.com/documentation/xctest/xcuiapplication/4191487-performaccessibilityaudit) in your UI tests.
+
 The **image-missing-label** and **missing-accessibility-grouping** rules automatically skip views inside `label:` closures (e.g., `Menu { } label: { HStack { Text("Sort") Image(systemName: "chevron.down") } }`). SwiftUI treats the entire `label:` closure content as a single accessibility element, so individual images don't need their own labels and HStacks don't need manual grouping.
 
 The **orientation-lock** rule flags code that restricts the app to a single orientation (portrait-only or landscape-only). Users with mounted devices (e.g. wheelchair mounts) may not be able to rotate their device. The rule checks `supportedInterfaceOrientations` overrides and `requestGeometryUpdate` calls. It does not flag code that returns `.all` or `.allButUpsideDown`.

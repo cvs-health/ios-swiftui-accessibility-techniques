@@ -1031,7 +1031,7 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0, "Should not pair foreground from Text with background from sibling Divider")
     }
 
-    func testColorContrastRule_skipsContainerViews() {
+    func testColorContrastRule_pairsTextWithAncestorContainerBackground() {
         let source = """
         import SwiftUI
         struct MyView: View {
@@ -1045,7 +1045,73 @@ final class A11yCheckCoreTests: XCTestCase {
         }
         """
         let diags = analyze(source, ruleID: "color-contrast-insufficient")
-        XCTAssertEqual(diags.count, 0, "VStack is a container; its children's colors should not be paired with its own background")
+        XCTAssertEqual(diags.count, 1, "Text foreground should be paired with the enclosing VStack background")
+        XCTAssertTrue(diags.first?.message.contains("inherited from enclosing container") ?? false)
+    }
+
+    func testColorContrastRule_largeNumericFontUsesLowerThreshold() {
+        // .font(.system(size: 18)) → large text → 3.0:1 threshold
+        // gray-on-white is ~3.95:1, which fails 4.5:1 but passes 3.0:1
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Big")
+                    .font(.system(size: 18))
+                    .foregroundColor(.gray)
+                    .background(.white)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 0, ".font(.system(size: 18)) should be treated as large text (3.0:1 threshold)")
+    }
+
+    func testColorContrastRule_boldNumericFontUsesLowerThreshold() {
+        // .font(.system(size: 14, weight: .bold)) → large text per WCAG 1.4.3
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Bold")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(.gray)
+                    .background(.white)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 0, ".font(.system(size: 14, weight: .bold)) should be treated as large text (3.0:1 threshold)")
+    }
+
+    func testColorContrastRule_smallNumericFontUsesNormalThreshold() {
+        // .font(.system(size: 16)) → normal text → 4.5:1 threshold; gray-on-white ~3.95:1 → fail
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Small")
+                    .font(.system(size: 16))
+                    .foregroundColor(.gray)
+                    .background(.white)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 1, ".font(.system(size: 16)) should use the 4.5:1 normal-text threshold")
+    }
+
+    func testAssetCatalogParser_parsesThemedVariants() {
+        let themedColor = AssetCatalogParser.ThemedColor(
+            light: ContrastCalculator.RGBA(r: 1, g: 1, b: 1),
+            dark: ContrastCalculator.RGBA(r: 0, g: 0, b: 0),
+            highContrast: nil,
+            darkHighContrast: nil
+        )
+        XCTAssertEqual(themedColor.resolve(darkMode: false, contrastMode: false).r, 1.0)
+        XCTAssertEqual(themedColor.resolve(darkMode: true, contrastMode: false).r, 0.0)
+        XCTAssertTrue(themedColor.hasDarkVariant)
+        XCTAssertFalse(themedColor.hasHighContrastVariant)
     }
 
     // MARK: - Diff Filter

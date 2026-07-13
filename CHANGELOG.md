@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [26.9] - 2026-07-13
+
+### a11y-check
+
+#### Fixed
+
+- `color-contrast-insufficient` rule now checks dark-mode and Increase Contrast asset variants — `.xcassets` color sets with `dark` or `high-contrast` appearance entries are resolved per theme and contrast is evaluated for each; the diagnostic message names the failing theme (e.g. "…in Dark Mode…"). Light-mode-only catalogs are unaffected.
+- `color-contrast-insufficient` rule now pairs a text view's foreground color with the nearest enclosing container's (VStack, HStack, ZStack, ScrollView, List, etc.) `.background` when no same-chain background is present. Sibling view backgrounds are never paired. Ancestor-sourced diagnostics include a note "(background inherited from enclosing container)".
+- `color-contrast-insufficient` rule now applies the WCAG 1.4.3 large-text threshold (3.0:1) to `.font(.system(size: N))` when `N ≥ 18`, or `N ≥ 14` with a bold/semibold/heavy/black weight. Previously only named styles (`.largeTitle`, `.title`, `.title2`, `.title3`) triggered the lower threshold.
+- Fixed an internal `isInsideClosure` guard that was checking parent nodes in the wrong direction, causing all text views inside container closures to be silently skipped by the contrast rule regardless of whether a valid foreground/background pair existed. Replaced with `ModifierCollector.collectChainOnly` which is correct-by-construction.
+
+#### Changed
+
+- `AssetCatalogParser.discoverColors(in:)` now returns `ThemedColorMap` (`[String: ThemedColor]`) instead of a flat `[String: RGBA]`. `ThemedColor` carries `light`, `dark`, `highContrast`, and `darkHighContrast` variants with a `resolve(darkMode:contrastMode:)` helper. This is a **minor-version API change** — callers that assign to `RuleRegistry.assetColors` must update to `ThemedColorMap`. (WCAG 1.4.3)
+- Added `bold`, `fontWeight`, and `italic` to `ModifierCollector.trackedModifiers`.
+
 ## [26.8] - 2026-06-10
 
 ### iOS App

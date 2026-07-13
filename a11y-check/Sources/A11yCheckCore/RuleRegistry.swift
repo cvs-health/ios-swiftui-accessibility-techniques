@@ -15,8 +15,8 @@ public final class RuleRegistry {
     /// Loaded project configuration.
     public var config: A11yConfig = .empty
 
-    /// Asset catalog colors discovered for the project (name → RGBA).
-    public var assetColors: [String: (r: Double, g: Double, b: Double, a: Double)] = [:]
+    /// Asset catalog colors discovered for the project, including dark-mode and high-contrast variants.
+    public var assetColors: AssetCatalogParser.ThemedColorMap = [:]
 
     /// Create a registry with all built-in rules.
     public init() {

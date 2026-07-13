@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import Foundation
 import SwiftSyntax
 
@@ -15,8 +31,8 @@ public struct RuleContext {
     public let severityOverrides: [String: A11ySeverity]
     /// Project configuration options.
     public let configOptions: A11yConfig.ConfigOptions
-    /// Asset catalog colors resolved for the project (name → RGBA).
-    public let assetColors: [String: (r: Double, g: Double, b: Double, a: Double)]
+    /// Asset catalog colors resolved for the project, including dark-mode and high-contrast variants.
+    public let assetColors: AssetCatalogParser.ThemedColorMap
 
     public init(
         filePath: String,
@@ -25,7 +41,7 @@ public struct RuleContext {
         disabledRules: Set<String> = [],
         severityOverrides: [String: A11ySeverity] = [:],
         configOptions: A11yConfig.ConfigOptions = .init(),
-        assetColors: [String: (r: Double, g: Double, b: Double, a: Double)] = [:]
+        assetColors: AssetCatalogParser.ThemedColorMap = [:]
     ) {
         self.filePath = filePath
         self.sourceText = sourceText

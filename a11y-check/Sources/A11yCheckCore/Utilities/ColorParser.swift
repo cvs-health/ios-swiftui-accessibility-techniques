@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import Foundation
 
 /// Parses SwiftUI color expressions into RGBA values.
@@ -40,38 +56,45 @@ public enum ColorParser {
         "Color.gray":   RGBA(r: 0.557, g: 0.557, b: 0.576),
     ]
 
-    /// Try to resolve a color expression string to an RGBA value.
+    /// Try to resolve a color expression string to an RGBA value (light/universal appearance).
     /// Handles system colors, Color(red:green:blue:), Color(white:), hex patterns,
     /// and asset catalog named colors.
     public static func parse(
         _ expression: String,
-        assetColors: [String: (r: Double, g: Double, b: Double, a: Double)] = [:]
+        assetColors: AssetCatalogParser.ThemedColorMap = [:]
     ) -> RGBA? {
+        parseThemed(expression, assetColors: assetColors)?.light
+    }
+
+    /// Resolve a color expression to a ``AssetCatalogParser/ThemedColor`` that carries
+    /// dark-mode and high-contrast variants for asset catalog colors.
+    /// Non-asset colors (system, RGB literal, hex) always return a light-only themed color.
+    public static func parseThemed(
+        _ expression: String,
+        assetColors: AssetCatalogParser.ThemedColorMap = [:]
+    ) -> AssetCatalogParser.ThemedColor? {
         let trimmed = expression.trimmingCharacters(in: .whitespaces)
 
-        // System named colors
+        // System named colors (not theme-aware — wrap in light-only ThemedColor)
         if let color = systemColors[trimmed] {
-            return color
+            return AssetCatalogParser.ThemedColor(light: color)
         }
 
-        // Color(red: R, green: G, blue: B) or with optional alpha
         if let rgba = parseColorRGB(trimmed) {
-            return rgba
+            return AssetCatalogParser.ThemedColor(light: rgba)
         }
 
-        // Color(white: W) or Color(white: W, opacity: A)
         if let rgba = parseColorWhite(trimmed) {
-            return rgba
+            return AssetCatalogParser.ThemedColor(light: rgba)
         }
 
-        // Hex patterns: Color(hex: "RRGGBB") or Color(hex: "#RRGGBB")
         if let rgba = parseColorHex(trimmed) {
-            return rgba
+            return AssetCatalogParser.ThemedColor(light: rgba)
         }
 
-        // Asset catalog: Color("MyColorName")
-        if let name = parseAssetColorName(trimmed), let asset = assetColors[name] {
-            return RGBA(r: asset.r, g: asset.g, b: asset.b, a: asset.a)
+        // Asset catalog: Color("MyColorName") — may have dark/highContrast variants
+        if let name = parseAssetColorName(trimmed), let themed = assetColors[name] {
+            return themed
         }
 
         return nil

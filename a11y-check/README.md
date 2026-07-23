@@ -647,7 +647,7 @@ A ready-to-use workflow is included at [`a11y-check/.github/workflows/a11y-check
 
 1. Builds a11y-check from source
 2. Runs the accessibility check
-3. Posts the score as a **PR comment** with WCAG criteria pass/fail
+3. Posts the score as a **PR comment** with score, grade, error/warning counts, and a collapsible section listing every violation with file path, line number, rule ID, WCAG criterion, impact level, and fix suggestion
 4. Uploads JSON results as an artifact
 5. Fails the job if the score is below the configurable threshold
 
@@ -836,4 +836,5 @@ env -u SDKROOT brew install --HEAD cvs-health/ios-swiftui-accessibility-techniqu
 ## License
 
 Apache License 2.0 — see the [repository root LICENSE](../LICENSE).
+
 

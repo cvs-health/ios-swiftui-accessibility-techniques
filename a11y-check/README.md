@@ -781,6 +781,13 @@ a11y-check includes 37 rules across these categories:
 | **Orientation** | `orientation-lock` | 1.3.4 | Serious |
 | **Hints** | `missing-accessibility-hint`, `hint-describes-action-method` | 3.3.2 | Moderate, Minor |
 
+The **tap-gesture-missing-button-trait** rule automatically skips `.onTapGesture` closures whose only statement is a keyboard-dismiss call — `hideKeyboard()`, `dismissKeyboard()`, `endEditing(...)`, or `resignFirstResponder()`. These are background dismiss gestures (not interactive UI controls) and do not need `.accessibilityAddTraits(.isButton)`. For any other tap gesture you believe is a false positive, use inline suppression:
+
+```swift
+// a11y-check:disable-next-line tap-gesture-missing-button-trait
+.onTapGesture { ... }
+```
+
 The **input-missing-purpose** rule only flags TextFields when it can infer a specific `UITextContentType` from the field's label, placeholder, or binding name — for example, a field labeled "Email" gets flagged with a suggestion to add `.textContentType(.emailAddress)`. TextFields for generic input (task names, folder names, notes, search queries, etc.) are silently skipped because there is no standard content type for them and flagging them would be a false positive. SecureFields are always flagged since they almost always need `.textContentType(.password)` or `.textContentType(.newPassword)`.
 
 The **textfield-missing-label** rule catches two problems:

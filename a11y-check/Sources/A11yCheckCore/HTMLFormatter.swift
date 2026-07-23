@@ -600,6 +600,7 @@ public struct HTMLFormatter {
     /// Returns nil if the suggestion doesn't map to a recognisable pattern.
     private func generateCorrectedSnippet(snippet: String, suggestion: String) -> String? {
         var modifier: String? = nil
+        var callAlternative: String? = nil
         var viewToInsertAbove: String? = nil
 
         // Look for a Text("...") view to add above the field
@@ -626,6 +627,21 @@ public struct HTMLFormatter {
                     let candidate = String(source[dotIndex...])
                     if let parenClose = candidate.lastIndex(of: ")") {
                         modifier = String(candidate[...parenClose])
+                    }
+                }
+                // Detect a function-call alternative before "; or .modifier"
+                // e.g. "Add Toggle("Label", isOn: $binding) — desc; or .accessibilityLabel("Label") ..."
+                if pattern == "Add ", modifier != nil {
+                    for sep in ["; or .", " or ."] {
+                        if let sepRange = source.range(of: sep) {
+                            let before = String(source[..<sepRange.lowerBound]).trimmingCharacters(in: .whitespaces)
+                            let callPart = (before.components(separatedBy: " — ").first ?? before).trimmingCharacters(in: .whitespaces)
+                            if let firstChar = callPart.first, firstChar.isUppercase, callPart.contains("("),
+                               let closeIndex = callPart.lastIndex(of: ")") {
+                                callAlternative = String(callPart[...closeIndex])
+                            }
+                            break
+                        }
                     }
                 }
                 break
@@ -680,11 +696,18 @@ public struct HTMLFormatter {
                         result.append(">\(prefix) \(indent)\(view)")
                     }
 
-                    result.append(">\(prefix) \(indent)\(stripped)")
-
-                    // Append modifier on the line below
-                    if let mod = modifier {
+                    if let call = callAlternative, let mod = modifier {
+                        // Dual-option: show preferred call-replacement first, then modifier alternative
+                        result.append(">\(prefix) \(indent)\(call)")
+                        result.append(">\(prefix) \(indent)// — or, if the visible label is a separate Text view:")
+                        result.append(">\(prefix) \(indent)\(stripped)")
                         result.append(">\(prefix)     \(indent)\(mod)")
+                    } else {
+                        result.append(">\(prefix) \(indent)\(stripped)")
+                        // Append modifier on the line below
+                        if let mod = modifier {
+                            result.append(">\(prefix)     \(indent)\(mod)")
+                        }
                     }
                 } else {
                     result.append(line)

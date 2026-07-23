@@ -58,6 +58,9 @@ struct A11yCheck: ParsableCommand {
     @Option(name: .long, help: "Git ref to diff against (default: HEAD). Used with --diff.")
     var diffBase: String?
 
+    @Option(name: .long, help: "Strip this path prefix from file paths in all output (useful in CI to show relative paths).")
+    var basePath: String?
+
     @Option(name: .long, help: "Minimum passing score (0–100). Exit with error if score is below this threshold.")
     var minScore: Double?
 
@@ -313,29 +316,46 @@ struct A11yCheck: ParsableCommand {
             return
         }
 
+        // Strip base path prefix from diagnostics if --base-path is set
+        let resolvedBasePath: String? = basePath.map { ($0.hasSuffix("/") ? $0 : $0 + "/") }
+        let outputDiagnostics: [A11yDiagnostic] = resolvedBasePath.map { prefix in
+            allDiagnostics.map { diag in
+                var d = diag
+                if diag.filePath.hasPrefix(prefix) {
+                    d = A11yDiagnostic(
+                        ruleID: diag.ruleID, severity: diag.severity, impact: diag.impact,
+                        message: diag.message, filePath: String(diag.filePath.dropFirst(prefix.count)),
+                        line: diag.line, column: diag.column, wcagCriteria: diag.wcagCriteria,
+                        fix: diag.fix, suggestion: diag.suggestion, sourceSnippet: diag.sourceSnippet
+                    )
+                }
+                return d
+            }
+        } ?? allDiagnostics
+
         // Output results
         switch format {
         case .terminal:
-            let basePath = paths.count == 1 ? resolvePath(paths[0]) : nil
+            let termBasePath = paths.count == 1 ? resolvePath(paths[0]) : nil
             let formatter = TerminalFormatter()
-            print(formatter.format(allDiagnostics, relativeTo: basePath, score: score))
+            print(formatter.format(outputDiagnostics, relativeTo: termBasePath, score: score))
 
         case .json:
             let formatter = JSONFormatter()
-            let output = try formatter.format(allDiagnostics, score: score, trendEntries: trendEntries)
+            let output = try formatter.format(outputDiagnostics, score: score, trendEntries: trendEntries)
             print(output)
 
         case .xcode:
             let formatter = XcodeFormatter()
-            print(formatter.format(allDiagnostics, score: score), terminator: "")
+            print(formatter.format(outputDiagnostics, score: score), terminator: "")
 
         case .html:
             let formatter = HTMLFormatter()
-            print(formatter.format(allDiagnostics, allRules: registry.rules, score: score, trendEntries: trendEntries))
+            print(formatter.format(outputDiagnostics, allRules: registry.rules, score: score, trendEntries: trendEntries))
 
         case .sarif:
             let formatter = SARIFFormatter()
-            let output = try formatter.format(allDiagnostics, rules: registry.enabledRules, score: score)
+            let output = try formatter.format(outputDiagnostics, rules: registry.enabledRules, score: score)
             print(output)
         }
 
@@ -459,3 +479,4 @@ enum OutputFormat: String, ExpressibleByArgument {
 
 // Make A11ySeverity conform to ExpressibleByArgument for CLI parsing
 extension A11ySeverity: ExpressibleByArgument {}
+

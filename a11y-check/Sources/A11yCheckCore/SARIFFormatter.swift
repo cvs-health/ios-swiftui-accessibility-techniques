@@ -55,6 +55,7 @@ public struct SARIFFormatter {
                 result["fixes"] = [
                     [
                         "description": ["text": fix.description],
+                        "artifactChanges": [],
                     ] as [String: Any],
                 ]
             }
@@ -119,3 +120,4 @@ public struct SARIFFormatter {
         return "https://www.w3.org/TR/WCAG22/#:\(criterion)"
     }
 }
+

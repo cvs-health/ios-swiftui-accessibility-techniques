@@ -30,6 +30,7 @@ a11y-check . --no-trend            # Disable automatic trend tracking
 a11y-check --baseline-save         # Save current issues as baseline
 a11y-check . --baseline            # Only report new issues (not in baseline)
 a11y-check . --format sarif > results.sarif  # SARIF for GitHub code scanning
+a11y-check . --base-path /path/to/workspace  # Strip prefix from all file paths (use in CI)
 a11y-check . --badge > badge.svg   # Score badge for README
 a11y-check . --watch               # Re-run on file changes
 a11y-check --generate-docs > RULES.md  # Generate rule docs
@@ -388,6 +389,7 @@ The generated document includes a summary table, grouping by WCAG criterion, and
 | `--watch` | Watch for file changes and re-run analysis automatically |
 | `--diff-report` | Compare against a previous JSON report — only new issues shown |
 | `--generate-docs` | Generate Markdown rule documentation to stdout |
+| `--base-path` | Strip this path prefix from all file paths in every output format (JSON, SARIF, HTML, terminal). Use `--base-path ${{ github.workspace }}` in GitHub Actions to show `PackageSources/MyView.swift` instead of the full runner path |
 
 ## Configuration file
 
@@ -647,8 +649,8 @@ A ready-to-use workflow is included at [`a11y-check/.github/workflows/a11y-check
 
 1. Builds a11y-check from source
 2. Runs the accessibility check
-3. Posts the score as a **PR comment** with score, grade, error/warning counts, and a collapsible section listing every violation with file path, line number, rule ID, WCAG criterion, impact level, and fix suggestion
-4. Uploads JSON results as an artifact
+3. Posts the score as a **PR comment** with score, grade, error/warning counts, and a collapsible section listing every violation with file path, line number, rule ID, WCAG criterion, impact level, and fix suggestion — all relative paths (no runner prefixes) thanks to `--base-path`
+4. Uploads both an HTML report (`a11y-report.html`) and the raw JSON (`a11y-results.json`) as an artifact — open the HTML for a human-readable view
 5. Fails the job if the score is below the configurable threshold
 
 Copy it to your repo's `.github/workflows/` directory. Set the `MIN_SCORE` and `PATHS` environment variables at the top of the file.
@@ -688,15 +690,23 @@ a11y-check Sources/ --baseline
 
 ### HTML report as artifact
 
+Generate both HTML (human-readable) and JSON alongside each other. Use `--base-path` to strip the runner workspace from file paths:
+
 ```yaml
-- name: Generate accessibility report
-  run: a11y-check Sources/ --format html > accessibility-report.html
-- name: Upload report
+- name: Generate accessibility reports
+  run: |
+    a11y-check Sources/ --base-path ${{ github.workspace }} --format html > a11y-report.html
+    a11y-check Sources/ --base-path ${{ github.workspace }} --format json > a11y-results.json
+- name: Upload reports
   uses: actions/upload-artifact@v4
   with:
-    name: accessibility-report
-    path: accessibility-report.html
+    name: a11y-static-report
+    path: |
+      a11y-report.html
+      a11y-results.json
 ```
+
+Open `a11y-report.html` from the downloaded artifact for a formatted view with code snippets, fix suggestions, and a WCAG conformance table. The JSON is machine-readable and is used to drive the PR comment violation list.
 
 The CLI exits with code **1** when any diagnostic has severity **error**, so the step fails the job.
 
@@ -836,5 +846,6 @@ env -u SDKROOT brew install --HEAD cvs-health/ios-swiftui-accessibility-techniqu
 ## License
 
 Apache License 2.0 — see the [repository root LICENSE](../LICENSE).
+
 
 

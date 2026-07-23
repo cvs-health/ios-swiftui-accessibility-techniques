@@ -79,25 +79,15 @@ public final class GestureVisitor: SyntaxVisitor {
     }
 
     /// Returns true when the closure body is a single keyboard-dismiss call:
-    /// `hideKeyboard()`, `dismissKeyboard()`, `endEditing(...)`,
-    /// `resignFirstResponder()`, or any member call whose name contains those terms.
+    /// `hideKeyboard()`, `dismissKeyboard()`, `endEditing(...)`, `resignFirstResponder()`.
     private static func isKeyboardDismissGesture(_ node: FunctionCallExprSyntax) -> Bool {
-        // Accept either a trailing closure or the first closure argument
-        let closure = node.trailingClosure
-            ?? node.arguments.first?.expression.as(ClosureExprSyntax.self)
-        guard let closure = closure else { return false }
+        guard let closure = node.trailingClosure
+                ?? node.arguments.first?.expression.as(ClosureExprSyntax.self),
+              closure.statements.count == 1 else { return false }
 
-        // Must be exactly one statement
-        let stmts = closure.statements
-        guard stmts.count == 1, let stmt = stmts.first else { return false }
-
-        // Extract the call text from the single statement
-        let itemText = stmt.item.description
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .lowercased()
-
-        let dismissTerms = ["hidekeyboard", "dismisskeyboard", "endediting", "resignfirstresponder"]
-        return dismissTerms.contains { itemText.contains($0) }
+        let text = closure.statements.description.lowercased()
+        return ["hidekeyboard", "dismisskeyboard", "endediting", "resignfirstresponder"]
+            .contains { text.contains($0) }
     }
 
     private func findChainRoot(for expr: ExprSyntax) -> ExprSyntax {

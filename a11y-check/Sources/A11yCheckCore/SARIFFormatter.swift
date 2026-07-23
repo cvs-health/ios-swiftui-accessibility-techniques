@@ -55,7 +55,23 @@ public struct SARIFFormatter {
                 result["fixes"] = [
                     [
                         "description": ["text": fix.description],
-                        "artifactChanges": [],
+                        "artifactChanges": [
+                            [
+                                "artifactLocation": [
+                                    "uri": diag.filePath,
+                                    "uriBaseId": "%SRCROOT%",
+                                ],
+                                "replacements": [
+                                    [
+                                        "deletedRegion": [
+                                            "byteOffset": fix.startOffset,
+                                            "byteLength": fix.endOffset - fix.startOffset,
+                                        ],
+                                        "insertedContent": ["text": fix.replacementText],
+                                    ] as [String: Any],
+                                ],
+                            ] as [String: Any],
+                        ],
                     ] as [String: Any],
                 ]
             }
@@ -120,4 +136,5 @@ public struct SARIFFormatter {
         return "https://www.w3.org/TR/WCAG22/#:\(criterion)"
     }
 }
+
 

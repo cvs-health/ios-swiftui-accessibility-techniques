@@ -16,6 +16,11 @@ public final class GestureVisitor: SyntaxVisitor {
         public let hasButtonTrait: Bool
         /// Whether the chain also contains `.accessibilityLabel(...)`.
         public let hasAccessibilityLabel: Bool
+        /// Whether the gesture closure is a keyboard-dismiss pattern —
+        /// e.g. `.onTapGesture { hideKeyboard() }` on a background view.
+        /// These don't represent interactive UI controls and should not
+        /// require `.accessibilityAddTraits(.isButton)`.
+        public let isKeyboardDismiss: Bool
 
         /// Node positioned at the gesture modifier token rather than the
         /// base of the chain. Use for diagnostic reporting.
@@ -66,10 +71,33 @@ public final class GestureVisitor: SyntaxVisitor {
             gestureName: name,
             callExpr: node,
             hasButtonTrait: hasButtonTrait || hasOldButtonTrait,
-            hasAccessibilityLabel: hasLabel
+            hasAccessibilityLabel: hasLabel,
+            isKeyboardDismiss: Self.isKeyboardDismissGesture(node)
         ))
 
         return .visitChildren
+    }
+
+    /// Returns true when the closure body is a single keyboard-dismiss call:
+    /// `hideKeyboard()`, `dismissKeyboard()`, `endEditing(...)`,
+    /// `resignFirstResponder()`, or any member call whose name contains those terms.
+    private static func isKeyboardDismissGesture(_ node: FunctionCallExprSyntax) -> Bool {
+        // Accept either a trailing closure or the first closure argument
+        let closure = node.trailingClosure
+            ?? node.arguments.first?.expression.as(ClosureExprSyntax.self)
+        guard let closure = closure else { return false }
+
+        // Must be exactly one statement
+        let stmts = closure.statements
+        guard stmts.count == 1, let stmt = stmts.first else { return false }
+
+        // Extract the call text from the single statement
+        let itemText = stmt.item.description
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        let dismissTerms = ["hidekeyboard", "dismisskeyboard", "endediting", "resignfirstresponder"]
+        return dismissTerms.contains { itemText.contains($0) }
     }
 
     private func findChainRoot(for expr: ExprSyntax) -> ExprSyntax {
@@ -92,3 +120,4 @@ public final class GestureVisitor: SyntaxVisitor {
         return current
     }
 }
+

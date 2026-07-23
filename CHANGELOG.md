@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### a11y-check
 
+#### Added
+
+- GitHub Actions PR comment now includes a collapsible section listing every violation with file path, line number, rule ID, WCAG criterion, impact level, and fix suggestion — no need to download the artifact to see all errors
+
 #### Fixed
 
 - SARIF output now includes the required `artifactChanges` property in each `fixes` entry, resolving validation errors when uploading to GitHub Code Scanning
@@ -294,5 +298,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 See the License for the specific language governing permissions and
 limitations under the License.
+
 
 

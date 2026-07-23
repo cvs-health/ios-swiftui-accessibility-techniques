@@ -614,8 +614,16 @@ public struct HTMLFormatter {
         for pattern in addPatterns {
             if suggestion.hasPrefix(pattern) {
                 let rest = String(suggestion.dropFirst(pattern.count))
-                if let dotIndex = rest.firstIndex(of: ".") {
-                    let candidate = String(rest[dotIndex...])
+                // "Replace X with Y" — the replacement to apply is Y, not X
+                let source: String
+                if pattern == "Replace ", let withRange = rest.range(of: " with ") {
+                    let afterWith = String(rest[withRange.upperBound...])
+                    source = afterWith.components(separatedBy: " or ").first ?? afterWith
+                } else {
+                    source = rest
+                }
+                if let dotIndex = source.firstIndex(of: ".") {
+                    let candidate = String(source[dotIndex...])
                     if let parenClose = candidate.lastIndex(of: ")") {
                         modifier = String(candidate[...parenClose])
                     }
@@ -755,3 +763,4 @@ public struct HTMLFormatter {
         return map[criterion] ?? criterion.replacingOccurrences(of: ".", with: "-")
     }
 }
+

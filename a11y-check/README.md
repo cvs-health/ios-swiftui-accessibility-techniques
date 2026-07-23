@@ -312,7 +312,7 @@ Upload to GitHub in your workflow:
     sarif_file: results.sarif
 ```
 
-> **Requires GitHub Advanced Security (GHAS).** The `upload-sarif` step only works on public repositories or private repositories with GHAS enabled. Without it, the upload step will fail with "Resource not accessible by integration" — but the rest of the workflow (PR score comment, artifact upload, Slack notification) works without GHAS. To enable GHAS on a private repo, go to **Settings → Security → Code security and analysis → Code scanning → Enable**.
+> **Repository requirements.** The `upload-sarif` step works automatically on **public repositories** (no extra setup needed). For **private repositories**, GitHub Advanced Security (GHAS) must be enabled — without it the step fails with "Resource not accessible by integration". To enable GHAS on a private repo, go to **Settings → Security → Code security and analysis → Code scanning → Enable**. The rest of the workflow (PR score comment, artifact upload, Slack notification) works without GHAS regardless of repo visibility.
 
 ## Score badge
 

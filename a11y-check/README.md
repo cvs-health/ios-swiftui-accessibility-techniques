@@ -312,6 +312,8 @@ Upload to GitHub in your workflow:
     sarif_file: results.sarif
 ```
 
+> **Requires GitHub Advanced Security (GHAS).** The `upload-sarif` step only works on public repositories or private repositories with GHAS enabled. Without it, the upload step will fail with "Resource not accessible by integration" — but the rest of the workflow (PR score comment, artifact upload, Slack notification) works without GHAS. To enable GHAS on a private repo, go to **Settings → Security → Code security and analysis → Code scanning → Enable**.
+
 ## Score badge
 
 Generate an SVG badge showing your project's accessibility score:
@@ -834,3 +836,4 @@ env -u SDKROOT brew install --HEAD cvs-health/ios-swiftui-accessibility-techniqu
 ## License
 
 Apache License 2.0 — see the [repository root LICENSE](../LICENSE).
+

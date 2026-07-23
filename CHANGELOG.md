@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 #### Fixed
 
 - SARIF output now includes the required `artifactChanges` property in each `fixes` entry, resolving validation errors when uploading to GitHub Code Scanning
+- Documented that `upload-sarif` works automatically on public repositories; private repositories require GitHub Advanced Security (GHAS) to be enabled
 
 ## [26.9] - 2026-07-13
 
@@ -293,4 +294,5 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 See the License for the specific language governing permissions and
 limitations under the License.
+
 

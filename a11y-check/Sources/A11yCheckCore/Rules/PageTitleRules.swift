@@ -38,7 +38,7 @@ public struct MissingNavigationTitleRule: A11yRule {
                     let bodyCollector = ModifierCollector.collect(from: body)
                     if !bodyCollector.hasModifier("navigationTitle") {
                         diagnostics.append(makeDiagnostic(
-                            message: "NavigationStack is missing .navigationTitle(). Set a page title so VoiceOver users know which screen they're on.",
+                            message: "NavigationStack is missing .navigationTitle(). Set a page title so VoiceOver users know which page they're on.",
                             node: nav.callExpr,
                             context: context,
                             suggestion: "Add .navigationTitle(\"Page Title\") inside the NavigationStack"

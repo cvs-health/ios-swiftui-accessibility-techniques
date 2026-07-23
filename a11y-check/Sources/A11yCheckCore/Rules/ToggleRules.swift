@@ -43,7 +43,7 @@ public struct ToggleMissingLabelRule: A11yRule {
                     node: view.callExpr,
                     context: context,
                     wcagCriteriaOverride: ["3.3.2", "4.1.2"],
-                    suggestion: "Add label text: Toggle(\"Label\", isOn:) or .accessibilityLabel(\"Label\")"
+                    suggestion: "Add Toggle(\"Label\", isOn: $binding) — preferred, shows visible label; or .accessibilityLabel(\"Label\") if the visible label is a separate Text view"
                 ))
             } else if hasLabelsHidden {
                 diagnostics.append(makeDiagnostic(

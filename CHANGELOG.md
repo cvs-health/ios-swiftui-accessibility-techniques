@@ -13,6 +13,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `--base-path <path>` flag strips the given directory prefix from all file paths in every output format (JSON, SARIF, HTML, plain text). Use `--base-path ${{ github.workspace }}` in GitHub Actions to show relative paths instead of full runner paths (e.g. `PackageSources/MyView.swift` instead of `/Users/ec2-user/actions-runner/…/PackageSources/MyView.swift`)
 - GitHub Actions PR artifact now includes both `a11y-report.html` (human-readable) and `a11y-results.json` alongside each other — no more reading raw JSON to understand violations
 - GitHub Actions PR comment now includes a collapsible section listing every violation with file path, line number, rule ID, WCAG criterion, impact level, and fix suggestion — no need to download the artifact to see all errors
+- `--create-github-issues` flag: creates a GitHub issue for every accessibility finding using the `gh` CLI. Issues are assigned to **Copilot** by default (`--github-assign-copilot`, on by default) so GitHub Copilot can automatically open a fix PR for each one. Each issue includes the rule ID, severity, WCAG criteria, file path, line number, source snippet, suggested fix, and a "For Copilot" prompt section.
+- `--github-repo <owner/repo>`: specify the target repository. Auto-detected from the git remote when omitted.
+- `--github-assign-copilot` / `--no-github-assign-copilot`: assign issues to the `copilot` GitHub user for automated fix PRs (default: on).
+- `--github-labels <labels>`: comma-separated labels to apply to created issues (default: `accessibility,a11y`).
+- `--github-group-by <diagnostic|file|rule>`: control how findings are grouped into issues. `diagnostic` (default) creates one issue per finding; `file` groups all findings in a source file into a single issue; `rule` groups all occurrences of the same rule across files into a single issue.
+- `--dry-run` now also previews GitHub issue creation when used with `--create-github-issues` — prints the issue titles that would be created without calling the GitHub API.
+- When `--fix` and `--create-github-issues` are combined, auto-fixes are applied first and issues are only created for findings that couldn't be auto-fixed.
 
 #### Fixed
 

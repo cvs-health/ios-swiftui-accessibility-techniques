@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import ArgumentParser
 import Foundation
 import A11yCheckCore
@@ -27,6 +43,9 @@ struct A11yCheck: ParsableCommand {
           a11y-check . --badge > badge.svg
           a11y-check . --watch
           a11y-check --generate-docs > RULES.md
+          a11y-check . --create-github-issues
+          a11y-check . --create-github-issues --github-group-by file
+          a11y-check . --create-github-issues --github-repo owner/repo --dry-run
         """,
         version: "0.3.0 (\(buildCommit) \(buildDate))"
     )
@@ -96,6 +115,23 @@ struct A11yCheck: ParsableCommand {
 
     @Flag(name: .long, help: "Generate Markdown rule documentation to stdout.")
     var generateDocs = false
+
+    // MARK: GitHub Issues
+
+    @Flag(name: .long, help: "Create a GitHub issue for each accessibility finding. Requires the gh CLI (https://cli.github.com). Use --dry-run to preview without creating.")
+    var createGithubIssues = false
+
+    @Option(name: .long, help: "GitHub repository in owner/repo format. Auto-detected from git remote when omitted.")
+    var githubRepo: String?
+
+    @Flag(name: .long, inversion: .prefixedNo, help: "Assign created issues to Copilot so it can open a fix PR. Enabled by default with --create-github-issues; use --no-github-assign-copilot to disable.")
+    var githubAssignCopilot = true
+
+    @Option(name: .long, help: "Comma-separated labels to apply to created issues. Default: accessibility,a11y")
+    var githubLabels: String?
+
+    @Option(name: .long, help: "Group issues by: diagnostic (one per finding, default), file (one per source file), or rule (one per rule ID).")
+    var githubGroupBy: GitHubGroupBy = .diagnostic
 
     func run() throws {
         let registry = RuleRegistry()
@@ -285,6 +321,11 @@ struct A11yCheck: ParsableCommand {
                     print(trendOutput)
                 }
 
+                // Create GitHub issues for issues that couldn't be auto-fixed
+                if createGithubIssues {
+                    try runGitHubIssueCreation(diagnostics: allDiagnostics)
+                }
+
                 let errorCount = allDiagnostics.filter { $0.severity == .error }.count
                 if errorCount > 0 { throw ExitCode(1) }
                 if let threshold = minScore, updatedScore.score < threshold {
@@ -376,6 +417,11 @@ struct A11yCheck: ParsableCommand {
             tracker.record(score: score)
         }
 
+        // Create GitHub issues if requested
+        if createGithubIssues {
+            try runGitHubIssueCreation(diagnostics: allDiagnostics)
+        }
+
         // Exit with error code if there are errors (skip in watch mode)
         let errorCount = allDiagnostics.filter { $0.severity == .error }.count
         if errorCount > 0 && !watch {
@@ -409,6 +455,45 @@ struct A11yCheck: ParsableCommand {
                 }
             }
         }
+    }
+
+    private func runGitHubIssueCreation(diagnostics: [A11yDiagnostic]) throws {
+        let creator = GitHubIssueCreator()
+        guard creator.isGHAvailable() else {
+            printError("--create-github-issues requires the GitHub CLI (gh). Install it at https://cli.github.com")
+            throw ExitCode(1)
+        }
+
+        let labels = (githubLabels ?? "accessibility,a11y")
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+
+        let workDir = resolvePath(paths.first ?? ".")
+        let options = GitHubIssueCreator.Options(
+            repo: githubRepo,
+            assignCopilot: githubAssignCopilot,
+            labels: labels,
+            groupBy: githubGroupBy,
+            dryRun: dryRun,
+            workingDirectory: workDir
+        )
+
+        if diagnostics.isEmpty {
+            print("\nNo accessibility issues — no GitHub issues to create.")
+            return
+        }
+
+        let result = creator.createIssues(for: diagnostics, options: options)
+
+        if dryRun {
+            print("\n[dry-run] Would create \(result.skipped) GitHub issue\(result.skipped == 1 ? "" : "s")\(githubAssignCopilot ? " assigned to Copilot" : "").")
+        } else if result.created > 0 {
+            print("\nCreated \(result.created) GitHub issue\(result.created == 1 ? "" : "s")\(githubAssignCopilot ? " assigned to Copilot" : ""):")
+            for url in result.urls { print("  \(url)") }
+        }
+
+        for error in result.errors { printError("gh: \(error)") }
     }
 
     private func resolvePath(_ path: String) -> String {

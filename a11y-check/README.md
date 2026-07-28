@@ -25,6 +25,9 @@ a11y-check . --diff                # Only issues on lines you changed
 a11y-check MyView.swift --lines 50-120  # Check only specific lines
 a11y-check . --fix                 # Auto-fix issues where possible
 a11y-check . --fix --dry-run       # Preview fixes without applying
+a11y-check . --create-github-issues            # Create a GitHub issue per finding (requires gh CLI)
+a11y-check . --create-github-issues --github-group-by file  # One issue per file
+a11y-check . --create-github-issues --dry-run  # Preview without creating
 a11y-check . --per-view            # Score each SwiftUI View separately
 a11y-check . --no-trend            # Disable automatic trend tracking
 a11y-check --baseline-save         # Save current issues as baseline
@@ -260,6 +263,57 @@ Use `--dry-run` to preview all fixes without modifying files.
 
 After applying fixes, `a11y-check` re-analyzes and shows the updated score.
 
+## GitHub Issues (Copilot fix PRs)
+
+Use `--create-github-issues` to file a GitHub issue for every accessibility finding. When issues are assigned to **Copilot**, GitHub Copilot will automatically attempt to open a fix PR for each one — giving you a fully automated fix loop from static analysis to pull request.
+
+Requires the [GitHub CLI](https://cli.github.com) (`gh`) to be installed and authenticated.
+
+```bash
+# Create one issue per finding, assigned to Copilot (default)
+a11y-check . --create-github-issues
+
+# Preview what would be created without filing anything
+a11y-check . --create-github-issues --dry-run
+
+# One issue per source file (groups all findings in that file)
+a11y-check . --create-github-issues --github-group-by file
+
+# One issue per rule (groups all occurrences of the same rule)
+a11y-check . --create-github-issues --github-group-by rule
+
+# Target a specific repo
+a11y-check . --create-github-issues --github-repo owner/repo
+
+# File issues without assigning to Copilot
+a11y-check . --create-github-issues --no-github-assign-copilot
+
+# Custom labels
+a11y-check . --create-github-issues --github-labels "a11y,needs-fix,wcag"
+```
+
+When `--github-assign-copilot` is enabled (the default), each issue includes a **"For Copilot"** section with instructions that guide Copilot's fix PR. Issues also include the rule ID, severity, WCAG criteria, file path, line number, source snippet, and suggested fix — everything Copilot needs to produce a correct change.
+
+### Combining with --fix
+
+When `--fix` and `--create-github-issues` are both set, auto-fixes are applied first and GitHub issues are created only for the findings that couldn't be auto-fixed:
+
+```bash
+a11y-check . --fix --create-github-issues
+```
+
+### GitHub Issues options
+
+| Option | Description |
+|--------|-------------|
+| `--create-github-issues` | Enable issue creation (requires `gh` CLI) |
+| `--github-repo` | Repository in `owner/repo` format. Auto-detected from git remote when omitted |
+| `--github-assign-copilot` / `--no-github-assign-copilot` | Assign issues to Copilot for automated fix PRs (default: on) |
+| `--github-labels` | Comma-separated labels. Default: `accessibility,a11y` |
+| `--github-group-by` | `diagnostic` (one issue per finding, default), `file`, or `rule` |
+
+Use `--dry-run` (the same flag used for `--fix` preview) to see what issues would be created without calling the GitHub API.
+
 ## Trend tracking
 
 Score tracking is **automatic** — every run records the score, grade, error count, and git commit hash to `.a11y-scores.json` in the project directory. Once you have history from previous runs, the output automatically shows a sparkline, delta from the last run, and a history table:
@@ -390,6 +444,11 @@ The generated document includes a summary table, grouping by WCAG criterion, and
 | `--diff-report` | Compare against a previous JSON report — only new issues shown |
 | `--generate-docs` | Generate Markdown rule documentation to stdout |
 | `--base-path` | Strip this path prefix from all file paths in every output format (JSON, SARIF, HTML, terminal). Use `--base-path ${{ github.workspace }}` in GitHub Actions to show `PackageSources/MyView.swift` instead of the full runner path |
+| `--create-github-issues` | Create a GitHub issue for each accessibility finding (requires `gh` CLI) |
+| `--github-repo` | Repository in `owner/repo` format. Auto-detected from git remote when omitted |
+| `--github-assign-copilot` / `--no-github-assign-copilot` | Assign issues to Copilot for automated fix PRs (default: on) |
+| `--github-labels` | Comma-separated labels for created issues. Default: `accessibility,a11y` |
+| `--github-group-by` | Group issues by `diagnostic` (default), `file`, or `rule` |
 
 ## Configuration file
 
@@ -854,5 +913,18 @@ env -u SDKROOT brew install --HEAD cvs-health/ios-swiftui-accessibility-techniqu
 
 Apache License 2.0 — see the [repository root LICENSE](../LICENSE).
 
+----
 
+Copyright 2026 CVS Health and/or one of its affiliates
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+[http://www.apache.org/licenses/LICENSE-2.0]()
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Fixed
 
+- `missing-navigation-title` auto-fix (`--fix`) now correctly inserts `.navigationTitle("Page Title")` on the first child view inside the `NavigationStack` closure instead of on the `NavigationStack` itself (which produced a no-op modifier). The HTML report "FIXED CODE" preview for this rule is also suppressed — rather than showing a syntactically invalid placement — until the user applies the actual fix.
 - `tap-gesture-missing-button-trait` rule no longer flags `.onTapGesture` closures whose only statement is a keyboard-dismiss call (`hideKeyboard()`, `dismissKeyboard()`, `endEditing(...)`, `resignFirstResponder()`) — these are background dismiss gestures, not interactive UI controls, and do not need `.accessibilityAddTraits(.isButton)`
 - HTML report "FIXED CODE" block for `fixed-font-size` now shows `.font(.body)` instead of the full suggestion description (`.font(.system(size:)) with .font(.body))`) — the parser now correctly extracts the replacement from "Replace X **with** Y" suggestions rather than taking everything from the first `.` to the last `)`
 - HTML report "FIXED CODE" block for `toggle-missing-label` now shows both fix options: the preferred `Toggle("Label", isOn: $binding)` (visible label) and the alternative `.accessibilityLabel("Label")` (for when a separate `Text` label element is used); the dual-option pattern is handled generically for any suggestion formatted as `"Add Call(args) — description; or .modifier(...)"`

@@ -33,6 +33,9 @@ public struct RuleContext {
     public let configOptions: A11yConfig.ConfigOptions
     /// Asset catalog colors resolved for the project, including dark-mode and high-contrast variants.
     public let assetColors: AssetCatalogParser.ThemedColorMap
+    /// View struct names that receive `.navigationTitle()` from a parent at the call site rather
+    /// than setting it in their own body. Populated by a cross-file pre-pass in RuleRegistry.
+    public let externallyTitledViews: Set<String>
 
     public init(
         filePath: String,
@@ -41,7 +44,8 @@ public struct RuleContext {
         disabledRules: Set<String> = [],
         severityOverrides: [String: A11ySeverity] = [:],
         configOptions: A11yConfig.ConfigOptions = .init(),
-        assetColors: AssetCatalogParser.ThemedColorMap = [:]
+        assetColors: AssetCatalogParser.ThemedColorMap = [:],
+        externallyTitledViews: Set<String> = []
     ) {
         self.filePath = filePath
         self.sourceText = sourceText
@@ -50,6 +54,7 @@ public struct RuleContext {
         self.severityOverrides = severityOverrides
         self.configOptions = configOptions
         self.assetColors = assetColors
+        self.externallyTitledViews = externallyTitledViews
     }
 
     /// Convert a syntax node's position to a 1-based line number.

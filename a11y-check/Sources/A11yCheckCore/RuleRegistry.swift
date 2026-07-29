@@ -17,6 +17,9 @@ public final class RuleRegistry {
 
     /// Asset catalog colors discovered for the project, including dark-mode and high-contrast variants.
     public var assetColors: AssetCatalogParser.ThemedColorMap = [:]
+    /// View struct names that receive `.navigationTitle()` from a parent at the call site.
+    /// Built by `buildNavigationTitleIndex(at:)` during `analyzeDirectory`.
+    public var externallyTitledViews: Set<String> = []
 
     /// Create a registry with all built-in rules.
     public init() {
@@ -138,7 +141,8 @@ public final class RuleRegistry {
             disabledRules: disabledRuleIDs,
             severityOverrides: config.severityOverrides,
             configOptions: config.options,
-            assetColors: assetColors
+            assetColors: assetColors,
+            externallyTitledViews: externallyTitledViews
         )
 
         var allDiagnostics: [A11yDiagnostic] = []
@@ -182,8 +186,33 @@ public final class RuleRegistry {
         return analyze(sourceText: sourceText, filePath: path)
     }
 
+    /// Pre-pass: scan all .swift files to build `externallyTitledViews` — the set of View struct
+    /// names that receive `.navigationTitle()` from a parent navigation container at the call site.
+    /// Called once by `analyzeDirectory` before per-file analysis begins.
+    private func buildNavigationTitleIndex(at directoryPath: String) {
+        let fileManager = FileManager.default
+        guard let enumerator = fileManager.enumerator(atPath: directoryPath) else { return }
+        var found = Set<String>()
+        while let relativePath = enumerator.nextObject() as? String {
+            guard relativePath.hasSuffix(".swift") else { continue }
+            if config.shouldExclude(relativePath: relativePath) { continue }
+            let fullPath = (directoryPath as NSString).appendingPathComponent(relativePath)
+            guard let sourceText = try? String(contentsOfFile: fullPath, encoding: .utf8) else { continue }
+            // Fast pre-filter: the external-title pattern requires a @ViewBuilder function
+            // called with .navigationTitle(...) chained at the call site. Only parse files
+            // that contain @ViewBuilder — this cuts the pre-pass from O(all files) to O(few).
+            guard sourceText.contains("@ViewBuilder") else { continue }
+            let syntax = Parser.parse(source: sourceText)
+            let scanner = NavigationTitleCallSiteScanner(viewMode: .sourceAccurate)
+            scanner.walk(syntax)
+            found.formUnion(scanner.resolvedExternallyTitledViews())
+        }
+        externallyTitledViews = found
+    }
+
     /// Analyze all .swift files in a directory (recursively).
     public func analyzeDirectory(at path: String) throws -> [A11yDiagnostic] {
+        buildNavigationTitleIndex(at: path)
         let fileManager = FileManager.default
         var allDiagnostics: [A11yDiagnostic] = []
 

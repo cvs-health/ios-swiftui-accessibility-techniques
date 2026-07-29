@@ -77,7 +77,10 @@ public struct MissingNavigationTitleRule: A11yRule {
         }
         // Pattern 2: View structs whose body root is ScrollView or List but have no .navigationTitle.
         // These are screen-level navigation destinations that must set their own title.
-        for (rootCall, bodyStatements) in screenLevelViewBodies(in: syntax) {
+        for (structName, rootCall, bodyStatements) in screenLevelViewBodies(in: syntax) {
+            // Skip view types that receive .navigationTitle from a parent navigation container
+            // (detected by the cross-file pre-pass in RuleRegistry).
+            if context.externallyTitledViews.contains(structName) { continue }
             let bodyText = bodyStatements.map(\.description).joined()
             if !bodyText.contains("navigationTitle") {
                 // Fix targets the first content view inside ScrollView/List, not the container itself.
@@ -104,8 +107,8 @@ public struct MissingNavigationTitleRule: A11yRule {
     /// Returns (root ScrollView/List call, body statements) for every View struct in the file
     /// whose `body` computed property starts with a ScrollView or List — the heuristic for a
     /// screen-level navigation-destination view rather than a reusable component.
-    private func screenLevelViewBodies(in syntax: SourceFileSyntax) -> [(FunctionCallExprSyntax, [CodeBlockItemSyntax])] {
-        var results: [(FunctionCallExprSyntax, [CodeBlockItemSyntax])] = []
+    private func screenLevelViewBodies(in syntax: SourceFileSyntax) -> [(structName: String, rootCall: FunctionCallExprSyntax, bodyStatements: [CodeBlockItemSyntax])] {
+        var results: [(structName: String, rootCall: FunctionCallExprSyntax, bodyStatements: [CodeBlockItemSyntax])] = []
         let screenRootViews: Set<String> = ["ScrollView", "List"]
 
         for statement in syntax.statements {
@@ -138,7 +141,7 @@ public struct MissingNavigationTitleRule: A11yRule {
                       let name = call.calledExpression.as(DeclReferenceExprSyntax.self)?.baseName.text,
                       screenRootViews.contains(name) else { continue }
 
-                results.append((call, Array(items)))
+                results.append((structName: structDecl.name.text, rootCall: call, bodyStatements: Array(items)))
             }
         }
         return results

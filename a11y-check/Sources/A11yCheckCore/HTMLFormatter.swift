@@ -694,10 +694,14 @@ public struct HTMLFormatter {
                         prefix = String(prefix.dropFirst())
                     }
 
-                    // Don't append a modifier to a NavigationStack/NavigationView opening line —
-                    // .navigationTitle belongs on the child view inside the closure, not the container.
+                    // When the highlighted line opens a multi-line trailing closure (ends with {
+                    // but not an inline {}), the fix modifier belongs after the closing } which
+                    // isn't shown in the snippet. Suppress FIXED CODE to avoid suggesting the
+                    // modifier is placed inside the view body.
                     if modifier != nil,
-                       stripped.hasPrefix("NavigationStack") || stripped.hasPrefix("NavigationView") { return nil }
+                       stripped.hasSuffix("{"),
+                       !stripped.hasSuffix("{}"),
+                       !stripped.hasSuffix("{ }") { return nil }
 
                     // If the modifier already exists on this line, replace it in-place
                     // e.g. .frame(width:18, height:18) → .frame(width: 24, height: 24)

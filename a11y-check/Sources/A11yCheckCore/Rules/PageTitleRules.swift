@@ -80,8 +80,11 @@ public struct MissingNavigationTitleRule: A11yRule {
         for (rootCall, bodyStatements) in screenLevelViewBodies(in: syntax) {
             let bodyText = bodyStatements.map(\.description).joined()
             if !bodyText.contains("navigationTitle") {
-                let fix = makeModifierFix(
-                    chainRoot: walkToChainRoot(ExprSyntax(rootCall)),
+                // Fix targets the first content view inside ScrollView/List, not the container itself.
+                // e.g.  ScrollView { VStack { ... }.padding() }
+                //       → inserts .navigationTitle after VStack's last modifier, not on ScrollView.
+                let fix = firstChildModifierFix(
+                    in: rootCall,
                     modifier: ".navigationTitle(\"Page Title\")",
                     sourceFile: syntax
                 )
@@ -90,7 +93,7 @@ public struct MissingNavigationTitleRule: A11yRule {
                     node: rootCall,
                     context: context,
                     fix: fix,
-                    suggestion: "Add .navigationTitle(\"Page Title\") on the root view inside the NavigationStack"
+                    suggestion: "Add .navigationTitle(\"Page Title\") on the content view inside the body's ScrollView or List (e.g., on VStack)"
                 ))
             }
         }

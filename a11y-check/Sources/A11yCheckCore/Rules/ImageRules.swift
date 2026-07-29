@@ -69,6 +69,14 @@ public struct ImageMissingLabelRule: A11yRule {
             // representation (e.g. a card component with .accessibilityLabel on the root).
             if isInsideAccessiblyManagedAncestor(view.callExpr) { continue }
 
+            // Skip if the enclosing component struct has a stored property of type `Image` —
+            // the image was injected from outside and the caller controls its accessibility.
+            if enclosingStructHasImageProperty(view.callExpr) { continue }
+
+            // Skip if the enclosing component struct has a stored property named
+            // `accessibilityLabel` — the component is designed to receive a label from its caller.
+            if enclosingStructHasAccessibilityLabelProperty(view.callExpr) { continue }
+
             diagnostics.append(makeDiagnostic(
                 message: "Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images.",
                 node: view.callExpr,
@@ -96,6 +104,54 @@ public struct ImageMissingLabelRule: A11yRule {
                 if hasAccessibilityElementIgnoreOrCombine(mods) { return true }
             }
             current = node.parent
+        }
+        return false
+    }
+
+    /// True if the struct enclosing this Image has a stored property of type `Image`,
+    /// meaning the component accepts an image from its caller who is responsible for
+    /// setting its accessibility label at the call site.
+    private func enclosingStructHasImageProperty(_ node: FunctionCallExprSyntax) -> Bool {
+        guard let structDecl = enclosingStructDecl(from: Syntax(node)) else { return false }
+        return structHasPropertyOfType("Image", in: structDecl)
+    }
+
+    /// True if the struct enclosing this Image has a stored property named `accessibilityLabel`,
+    /// meaning the component is explicitly designed to receive a label from its caller.
+    private func enclosingStructHasAccessibilityLabelProperty(_ node: FunctionCallExprSyntax) -> Bool {
+        guard let structDecl = enclosingStructDecl(from: Syntax(node)) else { return false }
+        return structHasPropertyNamed("accessibilityLabel", in: structDecl)
+    }
+
+    /// Walk up the AST to find the innermost enclosing struct declaration.
+    private func enclosingStructDecl(from node: Syntax) -> StructDeclSyntax? {
+        var current: Syntax? = node.parent
+        while let n = current {
+            if let structDecl = n.as(StructDeclSyntax.self) { return structDecl }
+            current = n.parent
+        }
+        return nil
+    }
+
+    /// True if the struct has a stored `var`/`let` property whose type annotation is `typeName`.
+    private func structHasPropertyOfType(_ typeName: String, in structDecl: StructDeclSyntax) -> Bool {
+        for member in structDecl.memberBlock.members {
+            guard let varDecl = member.decl.as(VariableDeclSyntax.self) else { continue }
+            for binding in varDecl.bindings {
+                if binding.typeAnnotation?.type.trimmedDescription == typeName { return true }
+            }
+        }
+        return false
+    }
+
+    /// True if the struct has a stored `var`/`let` property whose name is `name`.
+    private func structHasPropertyNamed(_ name: String, in structDecl: StructDeclSyntax) -> Bool {
+        for member in structDecl.memberBlock.members {
+            guard let varDecl = member.decl.as(VariableDeclSyntax.self) else { continue }
+            for binding in varDecl.bindings {
+                if let id = binding.pattern.as(IdentifierPatternSyntax.self),
+                   id.identifier.text == name { return true }
+            }
         }
         return false
     }

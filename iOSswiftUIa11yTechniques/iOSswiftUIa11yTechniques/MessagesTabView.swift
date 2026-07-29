@@ -43,7 +43,6 @@ struct MessagesTabView: View {
             }
             .padding(.vertical, 4)
         }
-        .navigationTitle("Messages")
     }
 }
 

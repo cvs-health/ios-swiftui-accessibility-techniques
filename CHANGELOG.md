@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 #### Fixed
 
 - `TabsGoodView` now shows a unique navigation bar title per tab ("Home" or "Messages") that updates as the user switches tabs, satisfying WCAG 2.4.2. A `@State private var selectedTab` drives `TabView(selection:)` and the `.navigationTitle` is derived dynamically from the selected tab index.
-- `MessagesTabView` `.navigationTitle("Messages")` was incorrectly placed inside the `List` row closure (applied to the `HStack` of each row instead of the `List` container). Moved to the correct position outside the `List { }` closure.
+- `MessagesTabView` `.navigationTitle("Messages")` removed — navigation title is now managed centrally by `TabsGoodView` based on the selected tab, so individual tab content views no longer need to set their own title.
 
 ### a11y-check
 

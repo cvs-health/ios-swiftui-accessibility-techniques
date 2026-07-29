@@ -618,6 +618,7 @@ public struct HTMLFormatter {
         var modifier: String? = nil
         var callAlternative: String? = nil
         var viewToInsertAbove: String? = nil
+        var wordToRemove: String? = nil
 
         // Look for a Text("...") view to add above the field
         // Pattern: "Add a visible Text(\"Label\") label above..."
@@ -677,7 +678,23 @@ public struct HTMLFormatter {
             }
         }
 
-        guard modifier != nil || viewToInsertAbove != nil else { return nil }
+        // Parse a word to remove from a string literal: Remove "WORD" from ...
+        // Handles image-label-contains-role ("icon"), fake-heading-in-label ("heading"),
+        // button-label-contains-role ("button"), etc.
+        if suggestion.hasPrefix("Remove ") {
+            let rest = String(suggestion.dropFirst("Remove ".count))
+            for qc: Character in ["\"", "'"] {
+                if let start = rest.firstIndex(of: qc) {
+                    let after = rest.index(after: start)
+                    if let end = rest[after...].firstIndex(of: qc) {
+                        wordToRemove = String(rest[after..<end])
+                        break
+                    }
+                }
+            }
+        }
+
+        guard modifier != nil || viewToInsertAbove != nil || wordToRemove != nil else { return nil }
 
         let lines = snippet.components(separatedBy: "\n")
         var result: [String] = []
@@ -694,14 +711,32 @@ public struct HTMLFormatter {
                         prefix = String(prefix.dropFirst())
                     }
 
+                    // Apply word removal to any string literal on this line
+                    // e.g. .accessibilityLabel("Heart icon") → .accessibilityLabel("Heart")
+                    if let word = wordToRemove {
+                        for pattern in [" \(word)", "\(word) "] {
+                            if let range = stripped.range(of: pattern, options: .caseInsensitive) {
+                                stripped = stripped.replacingCharacters(in: range, with: "")
+                                break
+                            }
+                        }
+                    }
+
                     // When the highlighted line opens a multi-line trailing closure (ends with {
-                    // but not an inline {}), the fix modifier belongs after the closing } which
-                    // isn't shown in the snippet. Suppress FIXED CODE to avoid suggesting the
-                    // modifier is placed inside the view body.
+                    // but not an inline {}), show an abbreviated form — implied body, closing },
+                    // then the modifier — so placement after } is clear.
                     if modifier != nil,
                        stripped.hasSuffix("{"),
                        !stripped.hasSuffix("{}"),
-                       !stripped.hasSuffix("{ }") { return nil }
+                       !stripped.hasSuffix("{ }") {
+                        result.append(">\(prefix) \(indent)\(stripped)")   // Container {
+                        result.append(" \(prefix) \(indent)    // …")      // abbreviated body
+                        result.append(">\(prefix) \(indent)}")              // implied closing }
+                        if let mod = modifier {
+                            result.append(">\(prefix) \(indent)\(mod)")    // modifier after }
+                        }
+                        break  // stop: original context lines after { would appear below modifier
+                    }
 
                     // If the modifier already exists on this line, replace it in-place
                     // e.g. .frame(width:18, height:18) → .frame(width: 24, height: 24)

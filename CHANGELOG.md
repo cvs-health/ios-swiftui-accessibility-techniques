@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased] - 2026-07-29
 
+### iOSswiftUIa11yTechniques
+
+#### Fixed
+
+- `TabsGoodView` now shows a navigation bar title ("Tabs Good Example") when navigated to from `TabsView`. The title is set on the `TabView` itself, which correctly propagates to the outer `NavigationStack` that wraps the tabs navigation hierarchy.
+- `MessagesTabView` `.navigationTitle("Messages")` was incorrectly placed inside the `List` row closure (applied to the `HStack` of each row instead of the `List` container). Moved to the correct position outside the `List { }` closure.
+
 ### a11y-check
 
 #### Added

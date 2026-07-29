@@ -31,6 +31,7 @@ struct TabsGoodView: View {
                 .badge(3)
         }.accessibilityLabel("Navigation")
         .modifier(TabBarMinimizeBehaviorIfAvailable())
+        .navigationTitle("Tabs Good Example")
     }
 }
  

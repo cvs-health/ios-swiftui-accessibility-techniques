@@ -1502,4 +1502,19 @@ final class A11yCheckCoreTests: XCTestCase {
         let diags = analyze(source, ruleID: "sort-priority-overused")
         XCTAssertEqual(diags.count, 0)
     }
+
+    func testMissingNavTitle_flagsScreenWithScrollView() {
+        let source = """
+        import SwiftUI
+        struct PageBad: View {
+            var body: some View {
+                ScrollView {
+                    Text("No title")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "missing-navigation-title")
+        XCTAssertEqual(diags.count, 1, "Expected 1 diagnostic, got \(diags.count)")
+    }
 }

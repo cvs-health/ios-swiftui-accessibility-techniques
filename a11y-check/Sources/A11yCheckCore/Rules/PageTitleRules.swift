@@ -18,10 +18,16 @@ import SwiftSyntax
 
 // MARK: - Missing Navigation Title Rule
 
-/// Flags views with `NavigationStack` (or `NavigationView`) that don't set `.navigationTitle()`.
-/// Page titles are critical for VoiceOver orientation.
+/// Flags two patterns that violate WCAG 2.4.2 Page Titled:
 ///
-/// Skips NavigationStack/NavigationView inside PreviewProvider or #Preview — the wrapped view sets the title at runtime.
+/// 1. NavigationStack/NavigationView whose trailing closure contains no `.navigationTitle()`.
+///    The NavigationStack is the host — it must have a title so VoiceOver can announce the page.
+///    Skips stacks inside #Preview or PreviewProvider — the child sets the title at runtime.
+///
+/// 2. View structs that look like screens (body's root view is ScrollView or List) but have
+///    no `.navigationTitle()` anywhere in their body. These are navigation-destination views
+///    that rely on a parent NavigationStack — the rule flags them even though the stack is
+///    in a different file, because the destination is responsible for setting its own title.
 ///
 /// WCAG 2.4.2 Page Titled
 /// Reference: PageTitlesView.swift — bad example omits .navigationTitle()
@@ -69,7 +75,70 @@ public struct MissingNavigationTitleRule: A11yRule {
                 }
             }
         }
+        // Pattern 2: View structs whose body root is ScrollView or List but have no .navigationTitle.
+        // These are screen-level navigation destinations that must set their own title.
+        for (rootCall, bodyStatements) in screenLevelViewBodies(in: syntax) {
+            let bodyText = bodyStatements.map(\.description).joined()
+            if !bodyText.contains("navigationTitle") {
+                let fix = makeModifierFix(
+                    chainRoot: walkToChainRoot(ExprSyntax(rootCall)),
+                    modifier: ".navigationTitle(\"Page Title\")",
+                    sourceFile: syntax
+                )
+                diagnostics.append(makeDiagnostic(
+                    message: "This screen-level view has no .navigationTitle(). Add one so VoiceOver users know which page they're on when it is pushed onto a NavigationStack.",
+                    node: rootCall,
+                    context: context,
+                    fix: fix,
+                    suggestion: "Add .navigationTitle(\"Page Title\") on the root view inside the NavigationStack"
+                ))
+            }
+        }
+
         return diagnostics
+    }
+
+    /// Returns (root ScrollView/List call, body statements) for every View struct in the file
+    /// whose `body` computed property starts with a ScrollView or List — the heuristic for a
+    /// screen-level navigation-destination view rather than a reusable component.
+    private func screenLevelViewBodies(in syntax: SourceFileSyntax) -> [(FunctionCallExprSyntax, [CodeBlockItemSyntax])] {
+        var results: [(FunctionCallExprSyntax, [CodeBlockItemSyntax])] = []
+        let screenRootViews: Set<String> = ["ScrollView", "List"]
+
+        for statement in syntax.statements {
+            guard case .decl(let decl) = statement.item,
+                  let structDecl = decl.as(StructDeclSyntax.self) else { continue }
+
+            // Only check structs conforming to View
+            guard let clause = structDecl.inheritanceClause,
+                  clause.inheritedTypes.contains(where: { $0.type.trimmedDescription == "View" }) else { continue }
+
+            for member in structDecl.memberBlock.members {
+                guard let varDecl = member.decl.as(VariableDeclSyntax.self),
+                      let binding = varDecl.bindings.first,
+                      let idPattern = binding.pattern.as(IdentifierPatternSyntax.self),
+                      idPattern.identifier.text == "body",
+                      let accessorBlock = binding.accessorBlock else { continue }
+
+                let items: CodeBlockItemListSyntax
+                switch accessorBlock.accessors {
+                case .getter(let list): items = list
+                case .accessors(let list):
+                    guard let getter = list.first(where: { $0.accessorSpecifier.text == "get" }),
+                          let body = getter.body else { continue }
+                    items = body.statements
+                }
+
+                guard let first = items.first,
+                      case .expr(let expr) = first.item,
+                      let call = expr.as(FunctionCallExprSyntax.self),
+                      let name = call.calledExpression.as(DeclReferenceExprSyntax.self)?.baseName.text,
+                      screenRootViews.contains(name) else { continue }
+
+                results.append((call, Array(items)))
+            }
+        }
+        return results
     }
 
     /// Builds a fix that inserts `modifier` on the chain root of the first child expression

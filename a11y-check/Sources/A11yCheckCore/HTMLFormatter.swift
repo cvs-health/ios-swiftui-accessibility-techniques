@@ -698,7 +698,15 @@ public struct HTMLFormatter {
 
         let lines = snippet.components(separatedBy: "\n")
         var result: [String] = []
+        var containerMode = false
+        var containerIndent = ""
+        var containerPrefix = ""
         for line in lines {
+            if containerMode {
+                // Show child lines as-is; synthetic } + modifier are appended after the loop
+                result.append(line)
+                continue
+            }
             if line.hasPrefix(">") {
                 let trimmed = line.trimmingCharacters(in: .whitespaces)
                 if let pipeIndex = trimmed.firstIndex(of: "|") {
@@ -723,19 +731,17 @@ public struct HTMLFormatter {
                     }
 
                     // When the highlighted line opens a multi-line trailing closure (ends with {
-                    // but not an inline {}), show an abbreviated form — implied body, closing },
-                    // then the modifier — so placement after } is clear.
+                    // but not an inline {}), show actual child lines from the snippet, then an
+                    // implied closing } with the modifier after it — so placement is clear.
                     if modifier != nil,
                        stripped.hasSuffix("{"),
                        !stripped.hasSuffix("{}"),
                        !stripped.hasSuffix("{ }") {
                         result.append(">\(prefix) \(indent)\(stripped)")   // Container {
-                        result.append(" \(prefix) \(indent)    // …")      // abbreviated body
-                        result.append(">\(prefix) \(indent)}")              // implied closing }
-                        if let mod = modifier {
-                            result.append(">\(prefix) \(indent)\(mod)")    // modifier after }
-                        }
-                        break  // stop: original context lines after { would appear below modifier
+                        containerMode = true
+                        containerIndent = indent
+                        containerPrefix = prefix
+                        continue  // collect child lines; } + modifier appended after loop
                     }
 
                     // If the modifier already exists on this line, replace it in-place
@@ -775,6 +781,11 @@ public struct HTMLFormatter {
             } else {
                 result.append(line)
             }
+        }
+        // If the loop ended while showing container children, close with } + modifier
+        if containerMode, let mod = modifier {
+            result.append(">\(containerPrefix) \(containerIndent)}")
+            result.append(">\(containerPrefix) \(containerIndent)\(mod)")
         }
         return result.joined(separator: "\n")
     }

@@ -62,6 +62,13 @@ public struct ImageMissingLabelRule: A11yRule {
             // Skip if image is inside a label: closure — VoiceOver groups the entire label as one element
             if isInsideLabelClosure(view.callExpr) { continue }
 
+            // Skip if an ancestor container manages this image's accessibility:
+            // .accessibilityElement(children: .ignore/.combine) absorbs children into
+            // one element, or .accessibilityHidden(true) removes the subtree entirely.
+            // This is the correct pattern for components that expose a single accessible
+            // representation (e.g. a card component with .accessibilityLabel on the root).
+            if isInsideAccessiblyManagedAncestor(view.callExpr) { continue }
+
             diagnostics.append(makeDiagnostic(
                 message: "Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images.",
                 node: view.callExpr,
@@ -70,6 +77,27 @@ public struct ImageMissingLabelRule: A11yRule {
             ))
         }
         return diagnostics
+    }
+
+    /// True if an ancestor view in the same file manages this image's accessibility, meaning
+    /// the image does not need its own label. Handles two patterns:
+    ///   1. `.accessibilityElement(children: .ignore)` or `.combine` on an ancestor — the
+    ///      container collapses its children into a single accessible element.
+    ///   2. `.accessibilityHidden(true)` on an ancestor — the entire subtree is hidden.
+    /// This is the correct pattern for reusable components (cards, list rows, etc.) that
+    /// expose one accessible name via the root view rather than labeling each sub-image.
+    private func isInsideAccessiblyManagedAncestor(_ imageCallExpr: FunctionCallExprSyntax) -> Bool {
+        var current: Syntax? = Syntax(imageCallExpr).parent
+        while let node = current {
+            if let call = node.as(FunctionCallExprSyntax.self) {
+                let chainRoot = findChainRoot(for: ExprSyntax(call))
+                let mods = ModifierCollector.collect(from: chainRoot)
+                if hasAccessibilityHidden(mods) { return true }
+                if hasAccessibilityElementIgnoreOrCombine(mods) { return true }
+            }
+            current = node.parent
+        }
+        return false
     }
 
     /// True if this Image is inside a Button or Link that has .accessibilityLabel() (or equivalent).
@@ -189,6 +217,15 @@ func hasAccessibilityHidden(_ mods: ModifierCollector) -> Bool {
 func hasAccessibilityElementCombine(_ mods: ModifierCollector) -> Bool {
     mods.modifiers(named: "accessibilityElement").contains { mod in
         mod.arguments.contains { $0.label == "children" && $0.text.contains("combine") }
+    }
+}
+
+/// Check if a modifier collection includes `.accessibilityElement(children: .ignore)` or `.combine`.
+/// Both collapse children into the container's accessible representation so individual
+/// sub-views don't need their own labels.
+func hasAccessibilityElementIgnoreOrCombine(_ mods: ModifierCollector) -> Bool {
+    mods.modifiers(named: "accessibilityElement").contains { mod in
+        mod.arguments.contains { $0.label == "children" && ($0.text.contains("ignore") || $0.text.contains("combine")) }
     }
 }
 

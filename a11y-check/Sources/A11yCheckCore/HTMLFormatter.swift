@@ -666,13 +666,32 @@ public struct HTMLFormatter {
         }
 
         // Also handle suggestions that start with "Choose ", "Use ", or "Remove " and contain a modifier
+        var removeLine = false
         if modifier == nil {
             for kw in ["Choose ", "Use ", "Remove "] where suggestion.hasPrefix(kw) {
                 let rest = String(suggestion.dropFirst(kw.count))
-                if let dotIndex = rest.firstIndex(of: ".") {
-                    let candidate = String(rest[dotIndex...])
-                    if let parenClose = candidate.lastIndex(of: ")") {
-                        modifier = String(candidate[...parenClose])
+                if kw == "Remove " {
+                    if let orRange = rest.range(of: " or increase to ") {
+                        // "Remove .X or increase to .Y or higher" → replacement is .Y
+                        let afterOr = String(rest[orRange.upperBound...])
+                        let replacementStr = afterOr.components(separatedBy: " or ").first ?? afterOr
+                        if let dotIdx = replacementStr.firstIndex(of: ".") {
+                            let candidate = String(replacementStr[dotIdx...])
+                            if let parenClose = candidate.lastIndex(of: ")") {
+                                modifier = String(candidate[...parenClose])
+                            }
+                        }
+                    } else if rest.hasPrefix(".") {
+                        // "Remove .modifier() description" — delete the flagged line in FIXED CODE
+                        removeLine = true
+                    }
+                    // "Remove 'word' from …" is handled by wordToRemove extraction below
+                } else {
+                    if let dotIndex = rest.firstIndex(of: ".") {
+                        let candidate = String(rest[dotIndex...])
+                        if let parenClose = candidate.lastIndex(of: ")") {
+                            modifier = String(candidate[...parenClose])
+                        }
                     }
                 }
             }
@@ -711,7 +730,7 @@ public struct HTMLFormatter {
             }
         }
 
-        guard modifier != nil || viewToInsertAbove != nil || wordToRemove != nil || viewNameFrom != nil else { return nil }
+        guard modifier != nil || viewToInsertAbove != nil || wordToRemove != nil || viewNameFrom != nil || removeLine else { return nil }
 
         let lines = snippet.components(separatedBy: "\n")
         var result: [String] = []
@@ -740,6 +759,8 @@ public struct HTMLFormatter {
                 continue
             }
             if line.hasPrefix(">") {
+                // "Remove .modifier()" suggestion — delete the flagged line from FIXED CODE
+                if removeLine { continue outerLoop }
                 let trimmed = line.trimmingCharacters(in: .whitespaces)
                 if let pipeIndex = trimmed.firstIndex(of: "|") {
                     let codeStart = trimmed.index(after: pipeIndex)

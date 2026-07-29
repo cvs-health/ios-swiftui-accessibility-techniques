@@ -161,7 +161,7 @@ public final class RuleRegistry {
             let opensContainer = flaggedContent.hasSuffix("{")
                 && !flaggedContent.hasSuffix("{}")
                 && !flaggedContent.hasSuffix("{ }")
-            let afterLines = opensContainer ? 5 : 1
+            let afterLines = opensContainer ? 5 : 3
             let end = min(sourceLines.count - 1, diagLine - 1 + afterLines) // N lines after (0-based)
             let snippet = (start...end).map { idx in
                 let lineNum = idx + 1

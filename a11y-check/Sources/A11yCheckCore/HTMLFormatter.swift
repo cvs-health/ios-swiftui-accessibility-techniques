@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import Foundation
 
 /// Generates a self-contained HTML report with WCAG conformance summary.
@@ -677,6 +693,10 @@ public struct HTMLFormatter {
                     if prefix.hasPrefix(">") {
                         prefix = String(prefix.dropFirst())
                     }
+
+                    // Don't append a modifier to a closure-opening line (e.g. NavigationStack {).
+                    // The modifier belongs on a child view inside the closure, not the container itself.
+                    if modifier != nil, stripped.hasSuffix("{") { return nil }
 
                     // If the modifier already exists on this line, replace it in-place
                     // e.g. .frame(width:18, height:18) → .frame(width: 24, height: 24)

@@ -150,12 +150,19 @@ public final class RuleRegistry {
         // Filter out inline suppressions
         allDiagnostics = InlineSuppressionFilter.filter(allDiagnostics, sourceText: sourceText)
 
-        // Populate source snippets (1 line before through 1 line after)
+        // Populate source snippets (1 line before, variable lines after)
         let sourceLines = sourceText.components(separatedBy: "\n")
         for i in allDiagnostics.indices {
             let diagLine = allDiagnostics[i].line // 1-based
             let start = max(0, diagLine - 2)      // 1 line before (0-based)
-            let end = min(sourceLines.count - 1, diagLine) // 1 line after (0-based)
+            // When the flagged line opens a trailing closure, show enough lines
+            // after to capture the typical container body (children + closing }).
+            let flaggedContent = sourceLines[diagLine - 1].trimmingCharacters(in: .whitespaces)
+            let opensContainer = flaggedContent.hasSuffix("{")
+                && !flaggedContent.hasSuffix("{}")
+                && !flaggedContent.hasSuffix("{ }")
+            let afterLines = opensContainer ? 5 : 1
+            let end = min(sourceLines.count - 1, diagLine - 1 + afterLines) // N lines after (0-based)
             let snippet = (start...end).map { idx in
                 let lineNum = idx + 1
                 let marker = (lineNum == diagLine) ? ">" : " "

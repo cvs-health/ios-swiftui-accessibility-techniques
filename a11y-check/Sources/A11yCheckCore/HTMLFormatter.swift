@@ -694,16 +694,48 @@ public struct HTMLFormatter {
             }
         }
 
-        guard modifier != nil || viewToInsertAbove != nil || wordToRemove != nil else { return nil }
+        // "Replace ViewA with ViewB(args)" — simple view name substitution in highlighted line.
+        // Used for e.g. button-used-as-link: "Replace Button with Link(destination:)"
+        var viewNameFrom: String? = nil
+        var viewNameTo: String? = nil
+        if suggestion.hasPrefix("Replace "), modifier == nil {
+            let rest = String(suggestion.dropFirst("Replace ".count))
+            if let withRange = rest.range(of: " with ") {
+                let from = String(rest[..<withRange.lowerBound]).trimmingCharacters(in: .whitespaces)
+                let toFull = String(rest[withRange.upperBound...]).trimmingCharacters(in: .whitespaces)
+                let to = String(toFull.prefix(while: { !$0.isWhitespace && $0 != "(" }))
+                if !from.isEmpty, !to.isEmpty, from.first?.isUppercase == true, to.first?.isUppercase == true {
+                    viewNameFrom = from
+                    viewNameTo = to
+                }
+            }
+        }
+
+        guard modifier != nil || viewToInsertAbove != nil || wordToRemove != nil || viewNameFrom != nil else { return nil }
 
         let lines = snippet.components(separatedBy: "\n")
         var result: [String] = []
         var containerMode = false
         var containerIndent = ""
         var containerPrefix = ""
-        for line in lines {
+        var containerDone = false
+        outerLoop: for line in lines {
             if containerMode {
-                // Show child lines as-is; synthetic } + modifier are appended after the loop
+                // If this line is the container's closing }, emit highlighted } + modifier and stop.
+                // Lines after } are siblings (not children) and should not be shown.
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                if let pipeIdx = trimmed.firstIndex(of: "|") {
+                    let code = String(trimmed[trimmed.index(after: pipeIdx)...])
+                    let lineIndent = String(code.prefix(while: { $0 == " " || $0 == "\t" }))
+                    if code.trimmingCharacters(in: .whitespaces) == "}" && lineIndent == containerIndent {
+                        if let mod = modifier {
+                            result.append(">\(containerPrefix) \(containerIndent)}")
+                            result.append(">\(containerPrefix) \(containerIndent)\(mod)")
+                        }
+                        containerDone = true
+                        break outerLoop
+                    }
+                }
                 result.append(line)
                 continue
             }
@@ -719,15 +751,20 @@ public struct HTMLFormatter {
                         prefix = String(prefix.dropFirst())
                     }
 
-                    // Apply word removal to any string literal on this line
-                    // e.g. .accessibilityLabel("Heart icon") → .accessibilityLabel("Heart")
-                    if let word = wordToRemove {
+                    // Apply word removal only when the line contains a string literal,
+                    // so view names like "Button" in `Button {} label:` are never stripped.
+                    if let word = wordToRemove, stripped.contains("\"") || stripped.contains("'") {
                         for pattern in [" \(word)", "\(word) "] {
                             if let range = stripped.range(of: pattern, options: .caseInsensitive) {
                                 stripped = stripped.replacingCharacters(in: range, with: "")
                                 break
                             }
                         }
+                    }
+
+                    // Apply view name substitution: e.g. Button → Link
+                    if let from = viewNameFrom, let to = viewNameTo, stripped.hasPrefix(from) {
+                        stripped = to + stripped.dropFirst(from.count)
                     }
 
                     // When the highlighted line opens a multi-line trailing closure (ends with {
@@ -779,11 +816,35 @@ public struct HTMLFormatter {
                     result.append(line)
                 }
             } else {
-                result.append(line)
+                // Apply wordToRemove to non-highlighted context lines that contain the word
+                // in a string literal, e.g. .accessibilityLabel("Edit button") → .accessibilityLabel("Edit").
+                // Highlight the changed line so the fix is visually clear.
+                var replaced = false
+                if let word = wordToRemove {
+                    let t = line.trimmingCharacters(in: .whitespaces)
+                    if let pipeIdx = t.firstIndex(of: "|") {
+                        let code = String(t[t.index(after: pipeIdx)...])
+                        var s = code.trimmingCharacters(in: .whitespaces)
+                        if s.contains("\"") || s.contains("'") {
+                            var p = String(t[...pipeIdx])
+                            if p.hasPrefix(">") { p = String(p.dropFirst()) }
+                            let ind = String(code.prefix(while: { $0 == " " || $0 == "\t" }))
+                            for pattern in [" \(word)", "\(word) "] {
+                                if let range = s.range(of: pattern, options: .caseInsensitive) {
+                                    s = s.replacingCharacters(in: range, with: "")
+                                    result.append(">\(p) \(ind)\(s)")
+                                    replaced = true
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+                if !replaced { result.append(line) }
             }
         }
-        // If the loop ended while showing container children, close with } + modifier
-        if containerMode, let mod = modifier {
+        // If the loop ended while still in container mode (} not found in snippet), close with } + modifier
+        if containerMode, !containerDone, let mod = modifier {
             result.append(">\(containerPrefix) \(containerIndent)}")
             result.append(">\(containerPrefix) \(containerIndent)\(mod)")
         }

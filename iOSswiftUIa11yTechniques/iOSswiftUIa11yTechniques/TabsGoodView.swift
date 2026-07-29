@@ -17,13 +17,17 @@
 import SwiftUI
  
 struct TabsGoodView: View {
+    @State private var selectedTab = 0
+
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             HomeTabView()
+                .tag(0)
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
             MessagesTabView()
+                .tag(1)
                 .tabItem {
                     Label("Messages", systemImage: "envelope")
                         .accessibilityValue("3 notifications")
@@ -31,7 +35,7 @@ struct TabsGoodView: View {
                 .badge(3)
         }.accessibilityLabel("Navigation")
         .modifier(TabBarMinimizeBehaviorIfAvailable())
-        .navigationTitle("Tabs Good Example")
+        .navigationTitle(selectedTab == 0 ? "Home" : "Messages")
     }
 }
  

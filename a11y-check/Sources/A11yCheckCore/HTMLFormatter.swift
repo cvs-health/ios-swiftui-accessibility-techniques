@@ -694,9 +694,10 @@ public struct HTMLFormatter {
                         prefix = String(prefix.dropFirst())
                     }
 
-                    // Don't append a modifier to a closure-opening line (e.g. NavigationStack {).
-                    // The modifier belongs on a child view inside the closure, not the container itself.
-                    if modifier != nil, stripped.hasSuffix("{") { return nil }
+                    // Don't append a modifier to a NavigationStack/NavigationView opening line —
+                    // .navigationTitle belongs on the child view inside the closure, not the container.
+                    if modifier != nil,
+                       stripped.hasPrefix("NavigationStack") || stripped.hasPrefix("NavigationView") { return nil }
 
                     // If the modifier already exists on this line, replace it in-place
                     // e.g. .frame(width:18, height:18) → .frame(width: 24, height: 24)

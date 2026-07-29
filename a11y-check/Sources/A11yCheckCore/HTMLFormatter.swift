@@ -642,8 +642,17 @@ public struct HTMLFormatter {
                 }
                 if let dotIndex = source.firstIndex(of: ".") {
                     let candidate = String(source[dotIndex...])
-                    if let parenClose = candidate.lastIndex(of: ")") {
-                        modifier = String(candidate[...parenClose])
+                    var depth = 0
+                    for i in candidate.indices {
+                        let ch = candidate[i]
+                        if ch == "(" {
+                            depth += 1
+                        } else if ch == ")" {
+                            if depth > 0 {
+                                depth -= 1
+                                if depth == 0 { modifier = String(candidate[...i]); break }
+                            }
+                        }
                     }
                 }
                 // Detect a function-call alternative before "; or .modifier"
@@ -732,15 +741,20 @@ public struct HTMLFormatter {
 
         guard modifier != nil || viewToInsertAbove != nil || wordToRemove != nil || viewNameFrom != nil || removeLine else { return nil }
 
+        // When suggestion says "inside ... ScrollView or List", the modifier belongs on the
+        // child view (VStack) inside the flagged container, not chained after the container itself.
+        let modifierGoesInside = modifier != nil && suggestion.contains("ScrollView or List")
+
         let lines = snippet.components(separatedBy: "\n")
         var result: [String] = []
         var containerMode = false
         var containerIndent = ""
         var containerPrefix = ""
         var containerDone = false
+        var childIndent = ""
         outerLoop: for line in lines {
             if containerMode {
-                // If this line is the container's closing }, emit highlighted } + modifier and stop.
+                // If this line is the container's closing }, emit modifier + } and stop.
                 // Lines after } are siblings (not children) and should not be shown.
                 let trimmed = line.trimmingCharacters(in: .whitespaces)
                 if let pipeIdx = trimmed.firstIndex(of: "|") {
@@ -748,11 +762,22 @@ public struct HTMLFormatter {
                     let lineIndent = String(code.prefix(while: { $0 == " " || $0 == "\t" }))
                     if code.trimmingCharacters(in: .whitespaces) == "}" && lineIndent == containerIndent {
                         if let mod = modifier {
-                            result.append(">\(containerPrefix) \(containerIndent)}")
-                            result.append(">\(containerPrefix) \(containerIndent)\(mod)")
+                            if modifierGoesInside {
+                                // Modifier belongs on child view inside the container (e.g. VStack inside ScrollView).
+                                let innerIndent = childIndent.isEmpty ? containerIndent + "    " : childIndent
+                                result.append(">\(containerPrefix) \(innerIndent)\(mod)")
+                                result.append(line)  // show the original } non-highlighted
+                            } else {
+                                result.append(">\(containerPrefix) \(containerIndent)}")
+                                result.append(">\(containerPrefix) \(containerIndent)\(mod)")
+                            }
                         }
                         containerDone = true
                         break outerLoop
+                    }
+                    // Track indent of first non-empty child line so inside-placement uses the right indent.
+                    if childIndent.isEmpty, !code.trimmingCharacters(in: .whitespaces).isEmpty {
+                        childIndent = lineIndent
                     }
                 }
                 result.append(line)
@@ -864,10 +889,16 @@ public struct HTMLFormatter {
                 if !replaced { result.append(line) }
             }
         }
-        // If the loop ended while still in container mode (} not found in snippet), close with } + modifier
+        // If the loop ended while still in container mode (} not found in snippet), close with modifier + }
         if containerMode, !containerDone, let mod = modifier {
+            if modifierGoesInside {
+                let innerIndent = childIndent.isEmpty ? containerIndent + "    " : childIndent
+                result.append(">\(containerPrefix) \(innerIndent)\(mod)")
+            }
             result.append(">\(containerPrefix) \(containerIndent)}")
-            result.append(">\(containerPrefix) \(containerIndent)\(mod)")
+            if !modifierGoesInside {
+                result.append(">\(containerPrefix) \(containerIndent)\(mod)")
+            }
         }
         return result.joined(separator: "\n")
     }

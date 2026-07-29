@@ -63,7 +63,7 @@ public struct MissingNavigationTitleRule: A11yRule {
                             node: nav.callExpr,
                             context: context,
                             fix: fix,
-                            suggestion: "Add .navigationTitle(\"Page Title\") inside the NavigationStack"
+                            suggestion: "Add .navigationTitle(\"Page Title\") on the root view inside the NavigationStack"
                         ))
                     }
                 }

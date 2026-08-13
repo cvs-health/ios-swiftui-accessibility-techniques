@@ -1,5 +1,5 @@
 /*
-   Copyright 2023-2025 CVS Health and/or one of its affiliates
+   Copyright 2023-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -942,7 +942,26 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         }
     }
 
-
+    func testA11yCheck() throws {
+        let app = XCUIApplication()
+        app.launch()
+        app.searchFields["Search"].tap()
+        app.typeText("a11y")
+        app.collectionViews.buttons["A11y-check"].tap()
+        //performA11yAudit
+        if #available(iOS 17.0, *) {
+            var issues: [XCUIAccessibilityAuditIssue] = []
+            try app.performAccessibilityAudit { issue in
+                issues.append(issue)
+                return true // collect all issues instead of stopping at first failure
+            }
+            for issue in issues {
+                XCTFail(issue.compactDescription)
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
     
     

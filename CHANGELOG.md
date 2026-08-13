@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Fixed
 
-- `testA11yCheck` now reports all `performAccessibilityAudit` failures in a single run. Previously the test would throw and stop at the first issue (e.g. Contrast); now all issues are collected via the `issueHandler` closure and reported individually with `XCTFail`.
+- `testA11yCheck` and `testInformative` now report all `performAccessibilityAudit` failures in a single run. Previously each test would throw and stop at the first issue; now all issues are collected via the `issueHandler` closure and reported individually with `XCTFail`.
 
 ## [Unreleased] - 2026-07-29
 

@@ -995,6 +995,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
                 issues.append(issue)
                 return true // collect all issues instead of stopping at first failure
             }
+            continueAfterFailure = true // allow all XCTFail calls to execute, not just the first
             for issue in issues {
                 XCTFail(issue.compactDescription)
             }

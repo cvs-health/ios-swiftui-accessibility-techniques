@@ -215,6 +215,7 @@ struct ContentView: View {
         case "reduce transparency": ReduceTransparencyView()
         case "smart invert": SmartInvertView()
         case "a11y-check": A11yCheckView()
+        case "xctest accessibility": XCTestAccessibilityView()
         default: InformativeView()
         }
     }

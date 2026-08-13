@@ -96,6 +96,23 @@ func testMyView() throws {
 }
 ```
 
+### Collect all failures instead of stopping at first
+
+By default `performAccessibilityAudit()` throws on the first issue, stopping the test. Use the `issueHandler` closure to collect every issue and report them all with `XCTFail`:
+
+```swift
+if #available(iOS 17.0, *) {
+    var issues: [XCUIAccessibilityAuditIssue] = []
+    try app.performAccessibilityAudit { issue in
+        issues.append(issue)
+        return true // suppress throw so all issues are collected
+    }
+    for issue in issues {
+        XCTFail(issue.compactDescription)
+    }
+}
+```
+
 ## Apple Developer Documentation
 - [performAccessibilityAudit(for:_:)](https://developer.apple.com/documentation/xctest/xcuiapplication/4190847-performaccessibilityaudit)
 - [XCUIElement](https://developer.apple.com/documentation/xctest/xcuielement)
@@ -107,6 +124,10 @@ func testMyView() throws {
 - [Xcode 15 Automated Accessibility Audits](https://www.polpiella.dev/xcode-15-automated-accessibility-audits)
 - [Mobile A11y: XCUI Guide](https://mobilea11y.com/guides/xcui/)
 - [Orange A11y Guidelines: WWDC 2023 Session Notes](https://a11y-guidelines.orange.com/en/mobile/ios/wwdc/nota11y/2023/2310035/)
+
+## Swift Technique Source Code
+
+[XCTestAccessibilityView.swift](../iOSswiftUIa11yTechniques/XCTestAccessibilityView.swift)
 
 ## Test Source Code
 

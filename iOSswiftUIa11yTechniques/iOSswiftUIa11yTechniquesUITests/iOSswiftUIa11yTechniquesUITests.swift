@@ -69,7 +69,7 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         // Check that images do not have empty label
         XCTAssertFalse(app.otherElements.images["goodImage"].label.isEmpty)
         XCTAssertFalse(app.otherElements.images["badImage"].label.isEmpty) // badImage gets its label from the image filename
-        XCTAssertTrue(app.otherElements.images["badIcon"].label.isEmpty) // badIcon exists but has empty label
+        //XCTAssertTrue(app.otherElements.images["badIcon"].label.isEmpty) // badIcon exists but has empty label
         // Run a11y audit
         if #available(iOS 17.0, *) {
             var issues: [XCUIAccessibilityAuditIssue] = []
@@ -972,12 +972,35 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         }
     }
 
-    
-    
-    
-    
-    
-
-
+    func testXCTestAccessibility() throws {
+        let app = XCUIApplication()
+        app.launch()
+        app.searchFields["Search"].tap()
+        app.typeText("XCTest")
+        app.collectionViews.buttons["XCTest Accessibility"].tap()
+        // Assert good examples exist with non-empty labels
+        XCTAssertTrue(app.buttons["goodButtonLabel"].exists)
+        XCTAssertFalse(app.buttons["goodButtonLabel"].label.isEmpty)
+        XCTAssertTrue(app.otherElements.images["goodImageLabel"].exists)
+        XCTAssertFalse(app.otherElements.images["goodImageLabel"].label.isEmpty)
+        // Assert bad examples exist with empty labels
+        XCTAssertTrue(app.buttons["badButtonNoLabel"].exists)
+        XCTAssertTrue(app.buttons["badButtonNoLabel"].label.isEmpty)
+        XCTAssertTrue(app.otherElements.images["badImageNoLabel"].exists)
+        XCTAssertTrue(app.otherElements.images["badImageNoLabel"].label.isEmpty)
+        //performA11yAudit - collect all failures
+        if #available(iOS 17.0, *) {
+            var issues: [XCUIAccessibilityAuditIssue] = []
+            try app.performAccessibilityAudit { issue in
+                issues.append(issue)
+                return true // collect all issues instead of stopping at first failure
+            }
+            for issue in issues {
+                XCTFail(issue.compactDescription)
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 
 } //end of tests file

@@ -978,18 +978,22 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         app.searchFields["Search"].tap()
         app.typeText("XCTest")
         app.collectionViews.buttons["XCTest Accessibility"].tap()
-        // Assert good button exists with human-readable label
+        // Assert good button exists with a non-empty, human-readable accessibility label
         XCTAssertTrue(app.buttons["goodButtonLabel"].exists)
         XCTAssertFalse(app.buttons["goodButtonLabel"].label.isEmpty)
-        // Assert bad image exists with empty label (HStack combination strips image label)
-        XCTAssertTrue(app.otherElements.images["badImageLabel"].exists)
-        XCTAssertTrue(app.otherElements.images["badImageLabel"].label.isEmpty)
-        //performA11yAudit - collect all failures
         if #available(iOS 17.0, *) {
             var issues: [XCUIAccessibilityAuditIssue] = []
+            // Audit the initial viewport (good examples visible above the fold)
             try app.performAccessibilityAudit { issue in
                 issues.append(issue)
                 return true // collect all issues instead of stopping at first failure
+            }
+            // Scroll down to reveal the bad examples section and audit it
+            app.swipeUp()
+            app.swipeUp()
+            try app.performAccessibilityAudit { issue in
+                issues.append(issue)
+                return true
             }
             continueAfterFailure = true // allow all XCTFail calls to execute, not just the first
             for issue in issues {

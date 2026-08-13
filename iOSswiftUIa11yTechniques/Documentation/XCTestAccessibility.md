@@ -98,7 +98,7 @@ func testMyView() throws {
 
 ### Collect all failures instead of stopping at first
 
-By default `performAccessibilityAudit()` throws on the first issue, stopping the test. Use the `issueHandler` closure to collect every issue and report them all with `XCTFail`:
+By default `performAccessibilityAudit()` throws on the first issue, stopping the test. Use the `issueHandler` closure to collect every issue and report them all with `XCTFail`. Also set `continueAfterFailure = true` before the reporting loop so every `XCTFail` call executes instead of stopping at the first one:
 
 ```swift
 if #available(iOS 17.0, *) {
@@ -107,9 +107,30 @@ if #available(iOS 17.0, *) {
         issues.append(issue)
         return true // suppress throw so all issues are collected
     }
+    continueAfterFailure = true // allow all XCTFail calls to run
     for issue in issues {
         XCTFail(issue.compactDescription)
     }
+}
+```
+
+### Audit content below the fold
+
+`performAccessibilityAudit()` only checks **visible** content. Scroll down before auditing to catch issues further down the page:
+
+```swift
+var issues: [XCUIAccessibilityAuditIssue] = []
+// Audit initial viewport
+try app.performAccessibilityAudit { issue in
+    issues.append(issue)
+    return true
+}
+// Scroll and audit the rest of the page
+app.swipeUp()
+app.swipeUp()
+try app.performAccessibilityAudit { issue in
+    issues.append(issue)
+    return true
 }
 ```
 

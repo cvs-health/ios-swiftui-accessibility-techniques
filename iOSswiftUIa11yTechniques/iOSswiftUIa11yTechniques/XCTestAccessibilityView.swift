@@ -15,12 +15,29 @@
  */
 
 import SwiftUI
+import UIKit
+
+// UIViewRepresentable wrapper that creates a tappable UIView with no accessibility label at the UIKit layer.
+// Unlike SwiftUI's empty-string label, a nil UIKit accessibilityLabel reliably triggers
+// performAccessibilityAudit()'s "Element has no description" check.
+private struct NoLabelButton: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        view.isAccessibilityElement = true
+        view.accessibilityTraits = .button
+        view.accessibilityLabel = nil
+        view.accessibilityIdentifier = "badButtonNoLabel"
+        view.backgroundColor = .systemBlue
+        view.layer.cornerRadius = 4
+        return view
+    }
+    func updateUIView(_ uiView: UIView, context: Context) {}
+}
 
 struct XCTestAccessibilityView: View {
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
-    @State private var badStepperValue = 0
 
     var body: some View {
         ScrollView {
@@ -94,20 +111,17 @@ struct XCTestAccessibilityView: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example Stepper with no accessibility label")
+                Text("Bad Example Button with no accessibility label")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                HStack {
-                    Text("Quantity")
-                    Stepper("", value: $badStepperValue, in: 0...10)
-                        .accessibilityIdentifier("badStepperNoLabel")
-                }
-                // Stepper("") has an empty label so VoiceOver has nothing to speak — audit reports "Element has no description"
+                NoLabelButton()
+                    .frame(width: 44, height: 44)
+                // UIView with accessibilityLabel = nil at the UIKit layer — audit reports "Element has no description"
                 DisclosureGroup("Details") {
-                    Text("The bad Stepper uses Stepper(\"\") which gives it an empty accessibility label. The adjacent Text(\"Quantity\") is a separate element not programmatically associated with the Stepper, so VoiceOver cannot read a label for it. performAccessibilityAudit() reports an 'Element has no description' failure.")
-                }.padding(.bottom).accessibilityHint("Bad Example Stepper with no accessibility label")
+                    Text("The bad Button is a UIViewRepresentable wrapping a UIView with accessibilityLabel = nil at the UIKit layer. Unlike SwiftUI's empty-string label, a nil UIKit label is unambiguously missing. performAccessibilityAudit() reports an 'Element has no description' failure.")
+                }.padding(.bottom).accessibilityHint("Bad Example Button with no accessibility label")
                 Text("Bad Example Text with insufficient contrast")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -137,17 +151,18 @@ struct XCTestAccessibilityView: View {
                 DisclosureGroup("Details") {
                     Text("The bad icon Button uses .frame(width: 20, height: 20) directly on the Button (not the Image), constraining the accessibility element's frame to 20×20 points, well below Apple's recommended 44×44 minimum. performAccessibilityAudit() reports a hit region failure.")
                 }.padding(.bottom).accessibilityHint("Bad Example Icon Button with small hit area")
-                Text("Bad Example Text truncated by lineLimit")
+                Text("Bad Example Text truncated by lineLimit and narrow frame")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("This text is intentionally truncated by lineLimit(1) so that the full content is hidden from every user including those who do not use assistive technology and those who do.")
+                Text("This text is intentionally truncated: the full content is not visible to any user.")
                     .lineLimit(1)
+                    .frame(maxWidth: 160)
                     .accessibilityIdentifier("badTextClipped")
                 DisclosureGroup("Details") {
-                    Text("The bad Text uses .lineLimit(1) which truncates the content with an ellipsis. The full text exists in the accessibility label but is not visible, meaning screen reader users get more information than sighted users — a parity failure. performAccessibilityAudit() reports a text clipped failure.")
-                }.padding(.bottom).accessibilityHint("Bad Example Text truncated by lineLimit")
+                    Text("The bad Text uses .lineLimit(1) combined with .frame(maxWidth: 160) to force visual truncation. The full text exists in the accessibility label but is visually cut off, creating a parity failure. performAccessibilityAudit() reports a text clipped failure.")
+                }.padding(.bottom).accessibilityHint("Bad Example Text truncated by lineLimit and narrow frame")
             }
             .padding()
             .navigationTitle("XCTest Accessibility")

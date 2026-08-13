@@ -20,6 +20,7 @@ struct XCTestAccessibilityView: View {
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
+    @State private var badStepperValue = 0
 
     var body: some View {
         ScrollView {
@@ -93,21 +94,20 @@ struct XCTestAccessibilityView: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example Button with no accessibility label")
+                Text("Bad Example Stepper with no accessibility label")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Button(action: {}) {
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.blue)
-                        .frame(width: 44, height: 44)
+                HStack {
+                    Text("Quantity")
+                    Stepper("", value: $badStepperValue, in: 0...10)
+                        .accessibilityIdentifier("badStepperNoLabel")
                 }
-                .accessibilityIdentifier("badButtonNoLabel")
-                // Button wrapping a Shape has no derived accessibility label — audit reports "Element has no description"
+                // Stepper("") has an empty label so VoiceOver has nothing to speak — audit reports "Element has no description"
                 DisclosureGroup("Details") {
-                    Text("The bad Button wraps a RoundedRectangle shape with no .accessibilityLabel. A Shape has no inherent accessibility label so VoiceOver has nothing to speak. performAccessibilityAudit() reports an 'Element has no description' failure.")
-                }.padding(.bottom).accessibilityHint("Bad Example Button with no accessibility label")
+                    Text("The bad Stepper uses Stepper(\"\") which gives it an empty accessibility label. The adjacent Text(\"Quantity\") is a separate element not programmatically associated with the Stepper, so VoiceOver cannot read a label for it. performAccessibilityAudit() reports an 'Element has no description' failure.")
+                }.padding(.bottom).accessibilityHint("Bad Example Stepper with no accessibility label")
                 Text("Bad Example Text with insufficient contrast")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -137,18 +137,17 @@ struct XCTestAccessibilityView: View {
                 DisclosureGroup("Details") {
                     Text("The bad icon Button uses .frame(width: 20, height: 20) directly on the Button (not the Image), constraining the accessibility element's frame to 20×20 points, well below Apple's recommended 44×44 minimum. performAccessibilityAudit() reports a hit region failure.")
                 }.padding(.bottom).accessibilityHint("Bad Example Icon Button with small hit area")
-                Text("Bad Example Text visually clipped by frame")
+                Text("Bad Example Text truncated by lineLimit")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("This text is visually clipped by its container frame and cannot be fully read by any user because the height is fixed too small for the content.")
-                    .frame(height: 20, alignment: .top)
-                    .clipped()
+                Text("This text is intentionally truncated by lineLimit(1) so that the full content is hidden from every user including those who do not use assistive technology and those who do.")
+                    .lineLimit(1)
                     .accessibilityIdentifier("badTextClipped")
                 DisclosureGroup("Details") {
-                    Text("The bad Text uses .frame(height: 20).clipped() which visually cuts off the content. Unlike lineLimit truncation, this clips pixels — the accessible text exists but is invisible. performAccessibilityAudit() reports a text clipped failure.")
-                }.padding(.bottom).accessibilityHint("Bad Example Text visually clipped by frame")
+                    Text("The bad Text uses .lineLimit(1) which truncates the content with an ellipsis. The full text exists in the accessibility label but is not visible, meaning screen reader users get more information than sighted users — a parity failure. performAccessibilityAudit() reports a text clipped failure.")
+                }.padding(.bottom).accessibilityHint("Bad Example Text truncated by lineLimit")
             }
             .padding()
             .navigationTitle("XCTest Accessibility")

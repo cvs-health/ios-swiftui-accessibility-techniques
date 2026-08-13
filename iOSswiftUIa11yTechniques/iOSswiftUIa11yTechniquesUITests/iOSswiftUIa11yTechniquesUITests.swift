@@ -978,12 +978,12 @@ final class iOSswiftUIa11yTechniquesUITests: XCTestCase {
         app.searchFields["Search"].tap()
         app.typeText("XCTest")
         app.collectionViews.buttons["XCTest Accessibility"].tap()
-        // Assert good examples exist with human-readable labels
+        // Assert good button exists with human-readable label
         XCTAssertTrue(app.buttons["goodButtonLabel"].exists)
         XCTAssertFalse(app.buttons["goodButtonLabel"].label.isEmpty)
-        // Assert bad button has non-empty but non-human-readable filename label
-        XCTAssertTrue(app.buttons["badButtonLabel"].exists)
-        XCTAssertFalse(app.buttons["badButtonLabel"].label.isEmpty) // label is filename, not a description
+        // Assert bad image exists with empty label (HStack combination strips image label)
+        XCTAssertTrue(app.otherElements.images["badImageLabel"].exists)
+        XCTAssertTrue(app.otherElements.images["badImageLabel"].label.isEmpty)
         //performA11yAudit - collect all failures
         if #available(iOS 17.0, *) {
             var issues: [XCUIAccessibilityAuditIssue] = []

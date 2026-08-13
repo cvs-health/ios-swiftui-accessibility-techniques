@@ -93,30 +93,37 @@ struct XCTestAccessibilityView: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                Text("Bad Example Image Button label not human-readable")
+                Text("Bad Example Image with no accessibility label")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Button(action: {}) {
-                    Image("barcode.viewfinder")
+                HStack {
+                    Image(systemName: "exclamationmark.circle")
+                        .accessibilityIdentifier("badImageLabel")
+                    Text("Error loading content")
                 }
-                .accessibilityIdentifier("badButtonLabel")
-                // No .accessibilityLabel — VoiceOver reads the filename "barcode.viewfinder"
+                // Image inside HStack with Text gets an empty label from iOS accessibility combination
                 DisclosureGroup("Details") {
-                    Text("The bad Button uses Image(\"barcode.viewfinder\") with no .accessibilityLabel. VoiceOver reads the asset filename \"barcode.viewfinder\" which is not human-readable. performAccessibilityAudit() reports a label failure.")
-                }.padding(.bottom).accessibilityHint("Bad Example Image Button label not human-readable")
-                Text("Bad Example Link with insufficient contrast")
+                    Text("The bad Image is inside an HStack with a Text element. iOS accessibility combines them, leaving the Image with an empty accessibility label. performAccessibilityAudit() reports an 'Element has no description' failure.")
+                }.padding(.bottom).accessibilityHint("Bad Example Image with no accessibility label")
+                Text("Bad Example Text with insufficient contrast")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Link("View accessibility details", destination: URL(string: "https://www.w3.org/WAI/")!)
-                    .tint(.blue) // ~3.8:1 on white — fails WCAG AA 4.5:1
-                    .accessibilityIdentifier("badContrastLink")
+                ZStack {
+                    Color(red: 0.15, green: 0.15, blue: 0.15)
+                    Text("Insufficient contrast text")
+                        .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
+                        // ~1.6:1 contrast ratio — fails WCAG AA in both light and dark mode
+                        .padding()
+                        .accessibilityIdentifier("badContrastText")
+                }
+                .frame(height: 60)
                 DisclosureGroup("Details") {
-                    Text("The bad Link uses .tint(.blue) which has a contrast ratio of approximately 3.8:1 on a white background, below the WCAG AA minimum of 4.5:1. performAccessibilityAudit() reports a contrast failure.")
-                }.padding(.bottom).accessibilityHint("Bad Example Link with insufficient contrast")
+                    Text("The bad Text uses near-identical shades of dark gray (~1.6:1 contrast ratio), well below the WCAG AA minimum of 4.5:1. Explicit colors are used so the failure occurs in both light and dark mode. performAccessibilityAudit() reports a contrast failure.")
+                }.padding(.bottom).accessibilityHint("Bad Example Text with insufficient contrast")
                 Text("Bad Example Icon Button with small hit area")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -131,18 +138,18 @@ struct XCTestAccessibilityView: View {
                 DisclosureGroup("Details") {
                     Text("The bad icon Button uses .frame(width: 14, height: 14) on the Image, well below Apple's recommended 44×44 point minimum. performAccessibilityAudit() reports a hit region failure.")
                 }.padding(.bottom).accessibilityHint("Bad Example Icon Button with small hit area")
-                Text("Bad Example Text clipped by lineLimit(1)")
+                Text("Bad Example Text visually clipped by frame")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Text("This text is intentionally clipped so that it cannot be fully read because the lineLimit is set to one line and the content is longer than that.")
-                    .lineLimit(1)
-                    .truncationMode(.tail)
+                Text("This text is visually clipped by its container frame and cannot be fully read by any user because the height is fixed too small for the content.")
+                    .frame(height: 20, alignment: .top)
+                    .clipped()
                     .accessibilityIdentifier("badTextClipped")
                 DisclosureGroup("Details") {
-                    Text("The bad Text uses .lineLimit(1) and .truncationMode(.tail) which clips the content. Users relying on accessibility cannot read the full text. performAccessibilityAudit() reports a text clipped failure.")
-                }.padding(.bottom).accessibilityHint("Bad Example Text clipped by lineLimit(1)")
+                    Text("The bad Text uses .frame(height: 20).clipped() which visually cuts off the content. Unlike lineLimit truncation, this clips pixels — the accessible text exists but is invisible. performAccessibilityAudit() reports a text clipped failure.")
+                }.padding(.bottom).accessibilityHint("Bad Example Text visually clipped by frame")
             }
             .padding()
             .navigationTitle("XCTest Accessibility")

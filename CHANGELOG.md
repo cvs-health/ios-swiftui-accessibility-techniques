@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 #### Fixed
 
 - `testA11yCheck` and `testInformative` now report all `performAccessibilityAudit` failures in a single run. Previously each test would throw and stop at the first issue; now all issues are collected via the `issueHandler` closure and reported individually with `XCTFail`.
+- New `XCTestAccessibilityView` page added with intentional good/bad examples for each `performAccessibilityAudit` failure type: missing accessibility label (button + image), small hit area (20×20 button), and insufficient contrast (gray on white text). Paired `testXCTestAccessibility()` uses the collect-all-failures pattern to report every audit issue in a single run.
 
 ## [Unreleased] - 2026-07-29
 

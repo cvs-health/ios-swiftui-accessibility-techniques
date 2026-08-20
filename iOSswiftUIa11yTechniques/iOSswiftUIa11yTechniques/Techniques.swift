@@ -59,6 +59,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Maps"),
     Techniques(name: "Meaningful Accessible Names"),
     Techniques(name: "Menus"),
+    Techniques(name: "Motion Actuation"),
     Techniques(name: "Multi-Selection Lists"),
     Techniques(name: "Navigation"),
     Techniques(name: "Page Titles"),

@@ -22,6 +22,8 @@ struct DragDropView: View {
     @State private var goodSelectedItem: String?
     @State private var goodDraggingItem: String?
     @State private var badDraggingItem: String?
+    @State private var draggableGoodItems = ["Apples", "Bananas", "Cherries", "Dates"]
+    @State private var draggableBadItems  = ["Apples", "Bananas", "Cherries", "Dates"]
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -105,6 +107,90 @@ struct DragDropView: View {
                     Text("The bad drag and drop example only supports touch-based drag and drop with no single-tap alternative. There are no visible move buttons for users who cannot perform drag gestures, and no `.accessibilityAction` custom actions for VoiceOver, Switch Control, or Full Keyboard Access users to reorder items.")
                 }
                 .padding(.bottom).accessibilityHint("Bad Example Reorderable List")
+                Text("Good Example Draggable API With Accessibility Actions")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.bottom)
+                Text("Good Example Draggable API")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                ForEach(draggableGoodItems, id: \.self) { item in
+                    let index = draggableGoodItems.firstIndex(of: item)!
+                    HStack {
+                        Image(systemName: "line.3.horizontal")
+                            .foregroundColor(.secondary)
+                            .accessibilityHidden(true)
+                        Text(item)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color(.secondarySystemBackground)))
+                    .draggable(item)
+                    .dropDestination(for: String.self) { dropped, _ in
+                        guard let droppedItem = dropped.first,
+                              let from = draggableGoodItems.firstIndex(of: droppedItem),
+                              let to   = draggableGoodItems.firstIndex(of: item),
+                              from != to else { return false }
+                        withAnimation {
+                            draggableGoodItems.move(
+                                fromOffsets: IndexSet(integer: from),
+                                toOffset: to > from ? to + 1 : to
+                            )
+                        }
+                        return true
+                    }
+                    .accessibilityAction(named: "Move Up") {
+                        guard index > 0 else { return }
+                        withAnimation { draggableGoodItems.move(fromOffsets: IndexSet(integer: index), toOffset: index - 1) }
+                    }
+                    .accessibilityAction(named: "Move Down") {
+                        guard index < draggableGoodItems.count - 1 else { return }
+                        withAnimation { draggableGoodItems.move(fromOffsets: IndexSet(integer: index), toOffset: index + 2) }
+                    }
+                    .accessibilityHint("Reorderable. Use actions to move.")
+                }
+                DisclosureGroup("Details") {
+                    Text("The good draggable API example uses `.draggable()` and `.dropDestination()` from the SwiftUI Transferable API (iOS 16+). It adds `.accessibilityAction(named: \"Move Up\")` and `.accessibilityAction(named: \"Move Down\")` so VoiceOver, Switch Control, and Full Keyboard Access users can reorder without dragging. `.accessibilityHint` communicates that the item is reorderable. This passes the a11y-check `draggable-missing-accessibility-action` rule.")
+                }.padding(.bottom).accessibilityHint("Good Example Draggable API")
+
+                Text("Bad Example Draggable API Without Accessibility Actions")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.bottom)
+                Text("Bad Example Draggable API")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                ForEach(draggableBadItems, id: \.self) { item in
+                    HStack {
+                        Image(systemName: "line.3.horizontal")
+                            .foregroundColor(.secondary)
+                            .accessibilityHidden(true)
+                        Text(item)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color(.secondarySystemBackground)))
+                    .draggable(item)
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad draggable API example uses `.draggable()` but has no `.accessibilityAction(named:)` alternatives. VoiceOver, Switch Control, and Full Keyboard Access users cannot reorder items because there are no accessible actions and no visible move buttons. The a11y-check `draggable-missing-accessibility-action` rule (WCAG 2.5.7) flags `.draggable()` used without `.accessibilityAction(named:)` on the same modifier chain.")
+                }.padding(.bottom).accessibilityHint("Bad Example Draggable API")
             }
             .padding()
             .navigationTitle("Drag & Drop")

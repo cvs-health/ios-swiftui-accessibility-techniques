@@ -181,6 +181,7 @@ struct ContentView: View {
         case "maps": MapView()
         case "meaningful accessible names": MeaningfulAccessibleNamesView()
         case "menus": MenusView()
+        case "motion actuation": MotionActuationView()
         case "multi-selection lists": MultiSelectionListView()
         case "navigation": NavigationLinkView()
         case "page titles": PageTitlesView()

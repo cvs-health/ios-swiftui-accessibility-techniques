@@ -1,5 +1,5 @@
 /*
-   Copyright 2024 CVS Health and/or one of its affiliates
+   Copyright 2024-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -204,17 +204,88 @@ struct PickersView: View {
                 DisclosureGroup("Details") {
                     Text("The menu style bad example uses empty `Picker(\"\")` label text so there is no accessibility label spoken to VoiceOver.")
                 }.padding()
+                Text("Good Example Context Change on Input")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.bottom)
+                NavigationLink("Good Example — Picker with Save Button") {
+                    ContextChangePickerGoodView()
+                }
+                DisclosureGroup("Details") {
+                    Text("The good context-change example puts the dismiss/navigation action in a separate \"Save Settings\" Button. Changing the Picker value alone does not navigate away — the user explicitly taps Save to confirm. This passes the a11y-check `input-triggers-context-change` rule (WCAG 3.2.2).")
+                }.padding(.bottom).accessibilityHint("Good Example Context Change on Input")
+
+                Text("Bad Example Context Change on Input")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.bottom)
+                NavigationLink("Bad Example — Picker that Dismisses on Change") {
+                    ContextChangePickerBadView()
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad context-change example calls `dismiss()` directly inside `.onChange`, immediately navigating away when the user changes the Picker value. VoiceOver users and users with cognitive disabilities are disoriented because they did not initiate the navigation. The a11y-check `input-triggers-context-change` rule (WCAG 3.2.2) flags Picker `.onChange` closures that call `dismiss()` or mutate a navigation path.")
+                }.padding(.bottom).accessibilityHint("Bad Example Context Change on Input")
             }
             .navigationTitle("Pickers")
             .padding()
         }
- 
+
     }
 }
- 
+
 #Preview {
     NavigationStack {
         PickersView()
+    }
+}
+
+struct ContextChangePickerGoodView: View {
+    @Environment(\.dismiss) var dismiss
+    @State private var selectedFrequency = "Daily"
+    let frequencies = ["Never", "Daily", "Weekly", "Monthly"]
+
+    var body: some View {
+        Form {
+            Section("Notification Frequency") {
+                Picker("Frequency", selection: $selectedFrequency) {
+                    ForEach(frequencies, id: \.self) { Text($0) }
+                }
+            }
+            Button("Save Settings") {
+                dismiss()
+            }
+        }
+        .navigationTitle("Good Example")
+    }
+}
+
+struct ContextChangePickerBadView: View {
+    @Environment(\.dismiss) var dismiss
+    @State private var selectedFrequency = "Daily"
+    let frequencies = ["Never", "Daily", "Weekly", "Monthly"]
+
+    var body: some View {
+        Form {
+            Section("Notification Frequency") {
+                Picker("Frequency", selection: $selectedFrequency) {
+                    ForEach(frequencies, id: \.self) { Text($0) }
+                }
+                .onChange(of: selectedFrequency) { dismiss() }
+            }
+        }
+        .navigationTitle("Bad Example")
     }
 }
 

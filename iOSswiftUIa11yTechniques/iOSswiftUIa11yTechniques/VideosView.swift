@@ -1,5 +1,5 @@
 /*
-   Copyright 2025 CVS Health and/or one of its affiliates
+   Copyright 2025-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -110,7 +110,25 @@ struct VideosView: View {
                 
                 DisclosureGroup("Details") {
                     Text("The bad example has no custom play button which blocks accessibility users from playing the video. The video has no group container or accessibility label so VoiceOver users can't focus on the video with direct touch. There is no hint so VoiceOver users wont hear they can double-tap to play the video and show controls. Closed captions and audio descriptions are not provided. The video cannot be played with Full Keyboard Access or other accessibility features.")
-                }.accessibilityHint("Bad Example")
+                }.padding(.bottom).accessibilityHint("Bad Example")
+
+                Text("Bad Example Auto-play")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.bottom)
+                let autoPlayer = AVPlayer(url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4")!)
+                VideoPlayer(player: autoPlayer)
+                    .frame(height: 240)
+                    .onAppear { autoPlayer.play() }
+                DisclosureGroup("Details") {
+                    Text("The auto-play bad example calls `.play()` inside `.onAppear {}`, starting the video immediately when the view appears without user initiation. VoiceOver users have their screen reader speech drowned out, and users with cognitive disabilities cannot stop the media before it starts. The a11y-check `video-audio-autoplay` rule (WCAG 1.4.2) flags `.play()` called inside `.onAppear {}` or `.task {}`. The good example above uses a custom play Button instead.")
+                }.accessibilityHint("Bad Example Auto-play")
             }
         }
         .navigationTitle("Videos")

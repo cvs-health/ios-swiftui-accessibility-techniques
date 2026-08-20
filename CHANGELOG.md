@@ -15,6 +15,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **`input-triggers-context-change`** (warning, WCAG 3.2.2) — Flags `.onChange` on `Picker`, `Toggle`, `Slider`, `DatePicker`, or `Stepper` whose closure calls `dismiss()` or mutates a navigation path. Emitted as a warning because the dismiss may be intentional with prior user notice.
 - **`video-audio-autoplay`** (warning, WCAG 1.4.2) — Flags `.play()` called inside `.onAppear {}` or `.task {}`, causing audio or video to start automatically without user initiation. Emitted as a warning because silent decorative video may be acceptable — review manually.
 
+### iOSswiftUIa11yTechniques
+
+#### Added
+
+- **Motion Actuation** technique view (`MotionActuationView.swift`) with good example (CMMotionManager + Undo Button) and bad example (CMMotionManager only, no Button alternative). Demonstrates the `motion-actuation-missing-alternative` rule (WCAG 2.5.4).
+- **Drag & Drop** — added good and bad `.draggable()` / `.dropDestination()` API examples to `DragDropView.swift`. Good example includes `.accessibilityAction(named: "Move Up/Down")`; bad example uses `.draggable()` without any accessibility actions. Demonstrates the `draggable-missing-accessibility-action` rule (WCAG 2.5.7).
+- **Pickers** — added Context Changes on Input good and bad examples to `PickersView.swift`. Good example uses a separate Save Button for dismiss; bad example calls `dismiss()` directly inside `.onChange`. Demonstrates the `input-triggers-context-change` rule (WCAG 3.2.2).
+- **Videos** — added Auto-play bad example to `VideosView.swift` showing `.onAppear { player.play() }`. Demonstrates the `video-audio-autoplay` rule (WCAG 1.4.2).
+
 #### Fixed
 
 - `XcodeFormatter` now maps `.info` severity diagnostics to `note:` (Xcode inline annotation level) instead of `warning:`. Previously info-level findings appeared as warnings in the Xcode issue navigator.

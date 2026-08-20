@@ -5,12 +5,15 @@ import SwiftSyntax
 /// Flags views that use animations (.animation(), withAnimation, .transition())
 /// without checking @Environment(\.accessibilityReduceMotion).
 ///
-/// WCAG 2.3.3 Animation from Interactions (Level AAA)
-/// Users who experience motion sickness or vestibular disorders need the ability
-/// to disable non-essential animations.
+/// WCAG 2.2.2 Pause, Stop, Hide (Level AA)
+/// Moving, blinking, or scrolling content that starts automatically and lasts
+/// more than 5 seconds must provide a mechanism to pause, stop, or hide it.
+/// Checking `@Environment(\.accessibilityReduceMotion)` is the SwiftUI mechanism
+/// that stops looping or auto-playing animations when the user enables Reduce Motion.
 ///
 /// Emitted as a warning because:
-/// - 2.3.3 is Level AAA — stricter than minimum WCAG conformance
+/// - Static analysis cannot determine whether an animation loops for >5 seconds,
+///   starts automatically, or is essential — all required to assess 2.2.2 compliance
 /// - `withAnimation` is also used for purely incidental transitions (list reordering,
 ///   accordion expand/collapse) that are hard to distinguish statically from problematic
 ///   looping or parallax animations
@@ -20,7 +23,7 @@ public struct ReduceMotionRule: A11yRule {
     public let name = "Animation Without Reduce Motion Check"
     public let severity = A11ySeverity.warning
     public let impact = A11yImpact.moderate
-    public let wcagCriteria = ["2.3.3"]
+    public let wcagCriteria = ["2.2.2"]
     public let description = "Animations should respect the user's Reduce Motion preference. Check @Environment(\\.accessibilityReduceMotion) or use .animation(.default, value:) which automatically respects the setting."
 
     public init() {}

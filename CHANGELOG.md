@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
-- **`animation-missing-reduce-motion`** — downgraded from `error`/`serious` to `warning`/`moderate` and fixed WCAG criterion from `2.3.1` (Three Flashes) to `2.3.3` (Animation from Interactions, Level AAA). The rule fires on any `withAnimation` or `.animation()` without a file-level `reduceMotion` check, which includes incidental transitions (list reordering, accordion expand) that are hard to distinguish statically from problematic looping animations. Warning calibration better reflects the AAA level and the inherent uncertainty of static detection.
+- **`animation-missing-reduce-motion`** — downgraded from `error`/`serious` to `warning`/`moderate` and fixed WCAG criterion from `2.3.1` (Three Flashes, wrong) to `2.2.2` (Pause, Stop, Hide, Level AA). `@Environment(\.accessibilityReduceMotion)` is the SwiftUI mechanism for WCAG 2.2.2 — it stops auto-playing looping animations when the user enables Reduce Motion. Warning because static analysis cannot determine whether an animation loops >5 seconds, starts automatically, or is essential, and `withAnimation` is also used for incidental transitions that are hard to distinguish from problematic looping animations.
 
 #### Added
 

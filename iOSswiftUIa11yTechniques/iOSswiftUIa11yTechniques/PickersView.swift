@@ -262,6 +262,9 @@ struct ContextChangePickerGoodView: View {
                 Picker("Frequency", selection: $selectedFrequency) {
                     ForEach(frequencies, id: \.self) { Text($0) }
                 }
+                .pickerStyle(.wheel)
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Frequency")
             }
             Button("Save Settings") {
                 dismiss()
@@ -282,6 +285,9 @@ struct ContextChangePickerBadView: View {
                 Picker("Frequency", selection: $selectedFrequency) {
                     ForEach(frequencies, id: \.self) { Text($0) }
                 }
+                .pickerStyle(.wheel)
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Frequency")
                 .onChange(of: selectedFrequency) { dismiss() }
             }
         }

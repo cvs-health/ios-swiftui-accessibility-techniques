@@ -122,6 +122,9 @@ public final class RuleRegistry {
 
         // Context Changes on Input (WCAG 3.2.2)
         register(InputTriggersContextChangeRule())
+
+        // Video / Audio Auto-play (WCAG 1.4.2)
+        register(VideoAudioAutoplayRule())
     }
 
     /// Apply a config: merge disabled rules and enabled-only from config with CLI overrides.

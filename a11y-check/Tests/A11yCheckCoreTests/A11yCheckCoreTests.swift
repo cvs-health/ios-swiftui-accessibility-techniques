@@ -738,7 +738,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 40)
+        XCTAssertEqual(registry.rules.count, 41)
     }
 
     func testDisableRule() {
@@ -1697,6 +1697,81 @@ final class A11yCheckCoreTests: XCTestCase {
         }
         """
         let diags = analyze(source, ruleID: "input-triggers-context-change")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    // MARK: - Video Auto-play Rules
+
+    func testVideoAutoplay_flagsOnAppearPlay() {
+        let source = """
+        import SwiftUI
+        import AVKit
+        struct VideoView: View {
+            let player = AVPlayer(url: URL(string: "https://example.com/video.mp4")!)
+            var body: some View {
+                VideoPlayer(player: player)
+                    .onAppear { player.play() }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "video-audio-autoplay")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("onAppear"))
+        XCTAssertTrue(diags[0].message.contains("WCAG 1.4.2"))
+    }
+
+    func testVideoAutoplay_flagsTaskPlay() {
+        let source = """
+        import SwiftUI
+        import AVFoundation
+        struct AudioView: View {
+            let player = AVPlayer(url: URL(string: "https://example.com/audio.mp3")!)
+            var body: some View {
+                Text("Now Playing")
+                    .task { player.play() }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "video-audio-autoplay")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("task"))
+    }
+
+    func testVideoAutoplay_passesButtonTriggeredPlay() {
+        let source = """
+        import SwiftUI
+        import AVKit
+        struct VideoView: View {
+            let player = AVPlayer(url: URL(string: "https://example.com/video.mp4")!)
+            @State private var isPlaying = false
+            var body: some View {
+                VideoPlayer(player: player)
+                    .accessibilityElement(children: .contain)
+                Button(isPlaying ? "Pause" : "Play") {
+                    isPlaying ? player.pause() : player.play()
+                    isPlaying.toggle()
+                }
+                .accessibilityLabel(isPlaying ? "Pause" : "Play")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "video-audio-autoplay")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testVideoAutoplay_passesOnDisappearPause() {
+        let source = """
+        import SwiftUI
+        import AVKit
+        struct VideoView: View {
+            let player = AVPlayer(url: URL(string: "https://example.com/video.mp4")!)
+            var body: some View {
+                VideoPlayer(player: player)
+                    .onDisappear { player.pause() }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "video-audio-autoplay")
         XCTAssertEqual(diags.count, 0)
     }
 }

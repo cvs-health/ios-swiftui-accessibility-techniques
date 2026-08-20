@@ -1,5 +1,5 @@
 # A11y-check
-`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 37 rules across 19 WCAG 2.2 success criteria, with a 0–100 scoring system.
+`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 41 rules across 23 WCAG 2.2 success criteria, with a 0–100 scoring system.
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 
@@ -84,6 +84,9 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 ### Orientation
 - **`orientation-lock`** (warning, WCAG 1.3.4) — `supportedInterfaceOrientations` restricts the app to portrait-only or landscape-only. Users with mounted devices (e.g. wheelchair mounts) may not be able to rotate their device. Does not flag `.all` or `.allButUpsideDown`.
 
+### Video / Audio
+- **`video-audio-autoplay`** (warning, WCAG 1.4.2) — `.play()` called inside `.onAppear {}` or `.task {}`, causing audio or video to start without user initiation. VoiceOver speech is disrupted and users with cognitive disabilities cannot stop the media in time. Provide a play/pause Button instead. Warning because silent decorative video or user-acknowledged audio may be acceptable — review manually.
+
 ### Motion Actuation
 - **`motion-actuation-missing-alternative`** (warning, WCAG 2.5.4) — `CMMotionManager` or CoreMotion update methods (`startAccelerometerUpdates`, `startGyroUpdates`, `startDeviceMotionUpdates`, `startMagnetometerUpdates`) detected without a confirmed UI control alternative in the same file. Functionality driven by device motion (shake, tilt, accelerometer) must also be operable via a standard Button so users with mounted devices can access it. Warning because the UI alternative may live in a parent view or different file — review manually.
 
@@ -96,6 +99,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 
 ## Applicable WCAG Success Criteria
 - [1.1.1: Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content)
+- [1.4.2: Audio Control](https://www.w3.org/WAI/WCAG22/Understanding/audio-control)
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
 - [1.3.2: Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
 - [1.3.4: Orientation](https://www.w3.org/WAI/WCAG22/Understanding/orientation)

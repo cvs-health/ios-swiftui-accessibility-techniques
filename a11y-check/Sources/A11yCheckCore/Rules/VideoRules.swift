@@ -50,7 +50,7 @@ public struct VideoAudioAutoplayRule: A11yRule {
     public let id = "video-audio-autoplay"
     public let name = "Video or Audio Starts Playing Automatically"
     public let severity = A11ySeverity.warning
-    public let impact = A11yImpact.moderate
+    public let impact = A11yImpact.serious
     public let wcagCriteria = ["1.4.2"]
     public let description = "Video or audio that calls .play() inside .onAppear or .task starts without user initiation. Provide a play/pause Button so users can control when media plays. Auto-playing media drowns out VoiceOver speech and disorients users with cognitive disabilities."
 

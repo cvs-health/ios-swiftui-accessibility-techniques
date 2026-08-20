@@ -16,6 +16,7 @@
 
 import SwiftUI
 import CoreMotion
+import UIKit
 
 // Simulator's Hardware > Shake sends a UIKit motionEnded event via the responder chain,
 // not a CMMotionManager update. This UIViewController intercepts it so shake works on Simulator.

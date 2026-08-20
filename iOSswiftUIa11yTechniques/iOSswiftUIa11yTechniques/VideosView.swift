@@ -128,7 +128,7 @@ struct VideosView: View {
                     .frame(height: 240)
                     .onAppear { autoPlayer.play() }
                 DisclosureGroup("Details") {
-                    Text("The auto-play bad example calls `.play()` inside `.onAppear {}`, starting the video immediately when the view appears without user initiation. VoiceOver users have their screen reader speech drowned out, and users with cognitive disabilities cannot stop the media before it starts. The a11y-check `video-audio-autoplay` rule (WCAG 1.4.2) flags `.play()` called inside `.onAppear {}` or `.task {}`. The good example above uses a custom play Button instead.")
+                    Text("The auto-play bad example calls `.play()` inside `.onAppear {}`, starting the video immediately when the view appears without user initiation. VoiceOver users have their screen reader speech drowned out, and users with cognitive disabilities cannot stop the media before it starts. The a11y-check `video-audio-autoplay` rule (WCAG 1.4.2) flags `.play()` called inside `.onAppear {}` or `.task {}`.")
                 }.accessibilityHint("Bad Example Auto-play")
             }
         }

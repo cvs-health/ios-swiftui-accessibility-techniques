@@ -68,6 +68,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 
 ### Gestures
 - **`gesture-missing-alternative`** (error, WCAG 2.1.1, 2.5.1) — `.onLongPressGesture` or `.gesture(DragGesture() / RotationGesture() / etc.)` without an `.accessibilityAction()` alternative for VoiceOver users and a visible single-tap Button alternative for touch users who cannot perform the gesture.
+- **`draggable-missing-accessibility-action`** (warning, WCAG 2.5.7, 2.1.1) — `.draggable()` or `.dropDestination()` without `.accessibilityAction(named:)` alternatives (e.g. `"Move Up"`, `"Move Down"`) on the same modifier chain. Use `.accessibilityAction` and `.accessibilityHint("Reorderable. Use actions to move.")`. Warning because the actions may be defined in a parent view. Note: this rule covers the high-level SwiftUI drag-and-drop API; `gesture-missing-alternative` covers the lower-level `.gesture(DragGesture())` API.
 
 ### Reading Order / Grouping
 - **`missing-accessibility-grouping`** (info, WCAG 1.3.1) — `HStack` or `VStack` containing both `Image` and `Text` without `.accessibilityElement(children: .combine)`.
@@ -82,6 +83,12 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 
 ### Orientation
 - **`orientation-lock`** (warning, WCAG 1.3.4) — `supportedInterfaceOrientations` restricts the app to portrait-only or landscape-only. Users with mounted devices (e.g. wheelchair mounts) may not be able to rotate their device. Does not flag `.all` or `.allButUpsideDown`.
+
+### Motion Actuation
+- **`motion-actuation-missing-alternative`** (warning, WCAG 2.5.4) — `CMMotionManager` or CoreMotion update methods (`startAccelerometerUpdates`, `startGyroUpdates`, `startDeviceMotionUpdates`, `startMagnetometerUpdates`) detected without a confirmed UI control alternative in the same file. Functionality driven by device motion (shake, tilt, accelerometer) must also be operable via a standard Button so users with mounted devices can access it. Warning because the UI alternative may live in a parent view or different file — review manually.
+
+### Context Changes
+- **`input-triggers-context-change`** (warning, WCAG 3.2.2) — `.onChange` on a `Picker`, `Toggle`, `Slider`, `DatePicker`, or `Stepper` whose closure calls `dismiss()` or mutates a navigation path, triggering an unexpected context change. Move the navigation or dismiss into a user-initiated confirm `Button` instead. Warning because the behavior may be intentional with prior user notice.
 
 ### Hints
 - **`missing-accessibility-hint`** (warning, WCAG 3.3.2) — Interactive element with a complex gesture (`onLongPressGesture`, `onDrag`, `onDrop`, `contextMenu`, `swipeActions`, `DragGesture`, `LongPressGesture`) without `.accessibilityHint()`. Standard taps and buttons are not flagged.
@@ -104,7 +111,10 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 - [2.4.6: Headings and Labels](https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels)
 - [2.5.1: Pointer Gestures](https://www.w3.org/WAI/WCAG22/Understanding/pointer-gestures)
 - [2.5.3: Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name)
+- [2.5.4: Motion Actuation](https://www.w3.org/WAI/WCAG22/Understanding/motion-actuation)
+- [2.5.7: Dragging Movements](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements)
 - [2.5.8: Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum)
+- [3.2.2: On Input](https://www.w3.org/WAI/WCAG22/Understanding/on-input)
 - [3.3.2: Labels or Instructions](https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions)
 - [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value)
 

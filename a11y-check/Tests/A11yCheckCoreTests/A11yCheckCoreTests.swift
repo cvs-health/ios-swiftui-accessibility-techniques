@@ -738,7 +738,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 37)
+        XCTAssertEqual(registry.rules.count, 40)
     }
 
     func testDisableRule() {
@@ -1516,5 +1516,187 @@ final class A11yCheckCoreTests: XCTestCase {
         """
         let diags = analyze(source, ruleID: "missing-navigation-title")
         XCTAssertEqual(diags.count, 1, "Expected 1 diagnostic, got \(diags.count)")
+    }
+
+    // MARK: - Draggable Missing Accessibility Action (WCAG 2.5.7)
+
+    func testDraggable_flagsMissingAction() {
+        let source = """
+        import SwiftUI
+        struct ReorderList: View {
+            var body: some View {
+                ForEach(items) { item in
+                    Text(item.name)
+                        .draggable(item)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "draggable-missing-accessibility-action")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("accessibilityAction"))
+        XCTAssertEqual(diags[0].severity, .warning)
+    }
+
+    func testDraggable_passesWithAccessibilityAction() {
+        let source = """
+        import SwiftUI
+        struct ReorderList: View {
+            var body: some View {
+                ForEach(items) { item in
+                    Text(item.name)
+                        .draggable(item)
+                        .accessibilityAction(named: "Move Up") { moveUp(item) }
+                        .accessibilityAction(named: "Move Down") { moveDown(item) }
+                        .accessibilityHint("Reorderable. Use actions to move.")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "draggable-missing-accessibility-action")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testDropDestination_flagsMissingAction() {
+        let source = """
+        import SwiftUI
+        struct DropZone: View {
+            var body: some View {
+                Rectangle()
+                    .dropDestination(for: String.self) { items, _ in true }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "draggable-missing-accessibility-action")
+        XCTAssertEqual(diags.count, 1)
+    }
+
+    // MARK: - Motion Actuation Missing Alternative (WCAG 2.5.4)
+
+    func testMotion_flagsCMMotionManager() {
+        let source = """
+        import CoreMotion
+        import SwiftUI
+        struct ShakeView: View {
+            let manager = CMMotionManager()
+            var body: some View { Text("Shake to undo") }
+        }
+        """
+        let diags = analyze(source, ruleID: "motion-actuation-missing-alternative")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("CMMotionManager"))
+        XCTAssertEqual(diags[0].severity, .warning)
+    }
+
+    func testMotion_flagsStartDeviceMotionUpdates() {
+        let source = """
+        import CoreMotion
+        class MotionService {
+            let motionManager = CMMotionManager()
+            func start() {
+                motionManager.startDeviceMotionUpdates(to: .main) { _, _ in
+                    self.handleShake()
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "motion-actuation-missing-alternative")
+        XCTAssertFalse(diags.isEmpty)
+        XCTAssertEqual(diags[0].severity, .warning)
+    }
+
+    func testMotion_noFalsePositiveWithoutMotion() {
+        let source = """
+        import SwiftUI
+        struct StaticView: View {
+            var body: some View { Text("Hello") }
+        }
+        """
+        let diags = analyze(source, ruleID: "motion-actuation-missing-alternative")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    // MARK: - Input Triggers Context Change (WCAG 3.2.2)
+
+    func testContextChange_flagsPickerWithDismiss() {
+        let source = """
+        import SwiftUI
+        struct FilterSheet: View {
+            @Environment(\\.dismiss) var dismiss
+            @State var filter = "All"
+            var body: some View {
+                Picker("Filter", selection: $filter) {
+                    Text("All").tag("All")
+                    Text("Recent").tag("Recent")
+                }
+                .onChange(of: filter) { _ in
+                    dismiss()
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "input-triggers-context-change")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("Picker"))
+        XCTAssertTrue(diags[0].message.contains("dismiss()"))
+        XCTAssertEqual(diags[0].severity, .warning)
+    }
+
+    func testContextChange_flagsToggleWithDismiss() {
+        let source = """
+        import SwiftUI
+        struct SettingsView: View {
+            @Environment(\\.dismiss) var dismiss
+            @State var enabled = false
+            var body: some View {
+                Toggle("Enable", isOn: $enabled)
+                    .onChange(of: enabled) { _ in dismiss() }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "input-triggers-context-change")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("Toggle"))
+    }
+
+    func testContextChange_passesPickerWithConfirmButton() {
+        let source = """
+        import SwiftUI
+        struct FilterView: View {
+            @Environment(\\.dismiss) var dismiss
+            @State var filter = "All"
+            var body: some View {
+                Picker("Filter", selection: $filter) {
+                    Text("All").tag("All")
+                }
+                .onChange(of: filter) { _ in
+                    updateResults()
+                }
+                Button("Done") { dismiss() }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "input-triggers-context-change")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testContextChange_passesPickerWithNonNavigatingOnChange() {
+        let source = """
+        import SwiftUI
+        struct SortView: View {
+            @State var sort = "Name"
+            var body: some View {
+                Picker("Sort", selection: $sort) {
+                    Text("Name").tag("Name")
+                    Text("Date").tag("Date")
+                }
+                .onChange(of: sort) { newValue in
+                    applySorting(newValue)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "input-triggers-context-change")
+        XCTAssertEqual(diags.count, 0)
     }
 }

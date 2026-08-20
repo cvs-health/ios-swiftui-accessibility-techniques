@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased] - 2026-08-20
+
+### a11y-check
+
+#### Added
+
+- **`draggable-missing-accessibility-action`** (warning, WCAG 2.5.7, 2.1.1) — Flags `.draggable()` or `.dropDestination()` modifiers without `.accessibilityAction(named:)` alternatives. Covers the high-level SwiftUI drag-and-drop API; the existing `gesture-missing-alternative` rule covers the lower-level `.gesture(DragGesture())` API. Emitted as a warning because the accessibility actions may be defined in a parent view.
+- **`motion-actuation-missing-alternative`** (warning, WCAG 2.5.4) — Flags `CMMotionManager` and CoreMotion update methods (`startAccelerometerUpdates`, `startGyroUpdates`, `startDeviceMotionUpdates`, `startMagnetometerUpdates`) without a confirmed UI control alternative in the same file. Emitted as a warning because the UI alternative may be in a parent view or different file.
+- **`input-triggers-context-change`** (warning, WCAG 3.2.2) — Flags `.onChange` on `Picker`, `Toggle`, `Slider`, `DatePicker`, or `Stepper` whose closure calls `dismiss()` or mutates a navigation path. Emitted as a warning because the dismiss may be intentional with prior user notice.
+
+#### Fixed
+
+- `XcodeFormatter` now maps `.info` severity diagnostics to `note:` (Xcode inline annotation level) instead of `warning:`. Previously info-level findings appeared as warnings in the Xcode issue navigator.
+
 ## [Unreleased] - 2026-08-13
 
 ### iOSswiftUIa11yTechniquesUITests

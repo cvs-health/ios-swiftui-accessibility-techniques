@@ -113,6 +113,15 @@ public final class RuleRegistry {
         // Accessibility Hints (WCAG 3.3.2)
         register(MissingAccessibilityHintRule())
         register(BadHintContentRule())
+
+        // Dragging Movements (WCAG 2.5.7)
+        register(DraggableMissingAccessibilityActionRule())
+
+        // Motion Actuation (WCAG 2.5.4)
+        register(MotionActuationMissingAlternativeRule())
+
+        // Context Changes on Input (WCAG 3.2.2)
+        register(InputTriggersContextChangeRule())
     }
 
     /// Apply a config: merge disabled rules and enabled-only from config with CLI overrides.

@@ -147,7 +147,7 @@ public struct XcodeFormatter {
             switch diag.severity {
             case .error:   xcodeSeverity = "error"
             case .warning: xcodeSeverity = "warning"
-            case .info:    xcodeSeverity = "warning"
+            case .info:    xcodeSeverity = "note"
             }
             let wcag = diag.wcagCriteria.isEmpty ? "" : " [WCAG \(diag.wcagCriteria.joined(separator: ", "))]"
             output += "\(diag.filePath):\(diag.line):\(diag.column): \(xcodeSeverity): [\(diag.ruleID)] [\(diag.impact.rawValue)] \(diag.message)\(wcag)\n"

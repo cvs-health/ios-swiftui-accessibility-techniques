@@ -68,7 +68,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 
 ### Gestures
 - **`gesture-missing-alternative`** (error, WCAG 2.1.1, 2.5.1) — `.onLongPressGesture` or `.gesture(DragGesture() / RotationGesture() / etc.)` without an `.accessibilityAction()` alternative for VoiceOver users and a visible single-tap Button alternative for touch users who cannot perform the gesture.
-- **`draggable-missing-accessibility-action`** (warning, WCAG 2.5.7, 2.1.1) — `.draggable()` or `.dropDestination()` without `.accessibilityAction(named:)` alternatives (e.g. `"Move Up"`, `"Move Down"`) on the same modifier chain. Use `.accessibilityAction` and `.accessibilityHint("Reorderable. Use actions to move.")`. Warning because the actions may be defined in a parent view. Note: this rule covers the high-level SwiftUI drag-and-drop API; `gesture-missing-alternative` covers the lower-level `.gesture(DragGesture())` API.
+- **`draggable-missing-accessibility-action`** (warning, WCAG 2.5.7, 2.1.1) — `.draggable()`, `.dropDestination()`, or `.onDrag()` without `.accessibilityAction(named:)` alternatives (e.g. `"Move Up"`, `"Move Down"`) on the same modifier chain. Use `.accessibilityAction` and `.accessibilityHint("Reorderable. Use actions to move.")`. Warning because the actions may be defined in a parent view. Covers both the new SwiftUI Transferable API (`.draggable`) and the older UIKit-backed API (`.onDrag`); `gesture-missing-alternative` covers `.gesture(DragGesture())`.
 
 ### Reading Order / Grouping
 - **`missing-accessibility-grouping`** (info, WCAG 1.3.1) — `HStack` or `VStack` containing both `Image` and `Text` without `.accessibilityElement(children: .combine)`.

@@ -18,8 +18,10 @@ import SwiftSyntax
 
 // MARK: - Draggable Missing Accessibility Action Rule
 
-/// Flags SwiftUI views using the `.draggable()` or `.dropDestination()` modifier
-/// without an `.accessibilityAction(named:)` alternative on the same modifier chain.
+/// Flags SwiftUI views using drag APIs without an `.accessibilityAction(named:)`
+/// alternative on the same modifier chain. Covers both APIs:
+/// - New: `.draggable()` / `.dropDestination()` (SwiftUI Transferable, iOS 16+)
+/// - Old: `.onDrag()` / `.onDrop()` (UIKit-backed, iOS 13+)
 ///
 /// Drag-and-drop is inaccessible to VoiceOver, Switch Control, and Full Keyboard
 /// Access users unless custom accessibility actions are provided. The correct pattern
@@ -35,11 +37,9 @@ import SwiftSyntax
 /// }
 /// ```
 ///
-/// Note: This rule targets the high-level `.draggable()` / `.dropDestination()` SwiftUI
-/// API. The existing `gesture-missing-alternative` rule covers the lower-level
-/// `.gesture(DragGesture())` API. This rule is emitted as a **warning** because the
-/// accessibility actions may be defined in a parent view or container that static
-/// analysis cannot see from this file alone.
+/// Note: The `gesture-missing-alternative` rule covers `.gesture(DragGesture())`.
+/// This rule is emitted as a **warning** because the accessibility actions may be
+/// defined in a parent view or container that static analysis cannot see.
 ///
 /// WCAG 2.5.7 Dragging Movements (Level AA)
 /// WCAG 2.1.1 Keyboard (Level A)
@@ -49,13 +49,13 @@ public struct DraggableMissingAccessibilityActionRule: A11yRule {
     public let severity = A11ySeverity.warning
     public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.5.7", "2.1.1"]
-    public let description = "Views using .draggable() or .dropDestination() must have .accessibilityAction(named:) alternatives (e.g. \"Move Up\", \"Move Down\") so VoiceOver, Switch Control, and Full Keyboard Access users can perform the same action without dragging."
+    public let description = "Views using .draggable(), .dropDestination(), or .onDrag() must have .accessibilityAction(named:) alternatives (e.g. \"Move Up\", \"Move Down\") so VoiceOver, Switch Control, and Full Keyboard Access users can perform the same action without dragging."
 
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let sourceText = context.sourceText
-        guard sourceText.contains("draggable") || sourceText.contains("dropDestination") else {
+        guard sourceText.contains("draggable") || sourceText.contains("dropDestination") || sourceText.contains("onDrag") else {
             return []
         }
 
@@ -114,7 +114,7 @@ private class DraggableModifierVisitor: SyntaxVisitor {
             return .visitChildren
         }
         let name = memberAccess.declName.baseName.text
-        if name == "draggable" || name == "dropDestination" {
+        if name == "draggable" || name == "dropDestination" || name == "onDrag" {
             draggableCalls.append(DraggableCall(modifierName: name, callExpr: node))
         }
         return .visitChildren

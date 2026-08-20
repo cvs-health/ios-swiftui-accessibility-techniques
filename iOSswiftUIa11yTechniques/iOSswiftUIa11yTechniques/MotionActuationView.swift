@@ -17,6 +17,37 @@
 import SwiftUI
 import CoreMotion
 
+// Simulator's Hardware > Shake sends a UIKit motionEnded event via the responder chain,
+// not a CMMotionManager update. This UIViewController intercepts it so shake works on Simulator.
+private class ShakeViewController: UIViewController {
+    var onShake: (() -> Void)?
+
+    override var canBecomeFirstResponder: Bool { true }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        becomeFirstResponder()
+    }
+
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake { onShake?() }
+    }
+}
+
+private struct ShakeDetector: UIViewControllerRepresentable {
+    var onShake: () -> Void
+
+    func makeUIViewController(context: Context) -> ShakeViewController {
+        let vc = ShakeViewController()
+        vc.onShake = onShake
+        return vc
+    }
+
+    func updateUIViewController(_ vc: ShakeViewController, context: Context) {
+        vc.onShake = onShake
+    }
+}
+
 private class MotionManager: ObservableObject {
     let manager = CMMotionManager()
     @Published var lastAction = "No action yet"
@@ -24,7 +55,7 @@ private class MotionManager: ObservableObject {
     func startShakeDetection(action: @escaping () -> Void) {
         guard manager.isDeviceMotionAvailable else { return }
         manager.deviceMotionUpdateInterval = 0.1
-        manager.startDeviceMotionUpdates(to: .main) { [weak self] data, _ in
+        manager.startDeviceMotionUpdates(to: .main) { data, _ in
             guard let data = data else { return }
             let accel = data.userAcceleration
             if abs(accel.x) > 2.0 || abs(accel.y) > 2.0 || abs(accel.z) > 2.0 {
@@ -86,7 +117,7 @@ struct MotionActuationView: View {
                 .padding(.top, 8)
                 .accessibilityLabel("Undo Last Edit")
                 DisclosureGroup("Details") {
-                    Text("The good example detects shaking via `CMMotionManager.startDeviceMotionUpdates` and also provides a visible \"Undo Last Edit\" Button that calls the same `performGoodUndo()` function. Users with mounted devices who cannot shake their phone can use the Button instead. The a11y-check `motion-actuation-missing-alternative` rule will still flag this file as a warning — review manually to confirm the Button is reachable.")
+                    Text("The good example detects shaking via `CMMotionManager.startDeviceMotionUpdates` on a real device and via the UIKit responder chain `motionEnded` (catches Simulator Hardware > Shake). It also provides a visible \"Undo Last Edit\" Button that calls the same `performGoodUndo()` function. Users with mounted devices who cannot shake their phone can use the Button instead. The a11y-check `motion-actuation-missing-alternative` rule will still flag this file as a warning — review manually to confirm the Button is reachable.")
                 }
                 .padding(.bottom).accessibilityHint("Good Example Shake to Undo")
 
@@ -121,6 +152,13 @@ struct MotionActuationView: View {
             .padding()
         }
         .navigationTitle("Motion Actuation")
+        .background(
+            ShakeDetector(onShake: {
+                performGoodUndo()
+                performBadUndo()
+            })
+            .frame(width: 0, height: 0)
+        )
         .onAppear {
             goodMotion.startShakeDetection { performGoodUndo() }
             badMotion.startShakeDetection { performBadUndo() }

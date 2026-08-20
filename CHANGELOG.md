@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Fixed
 
+- **Motion Actuation** — Simulator `Hardware > Shake` now triggers the undo demo. The Simulator sends `UIEvent.motionShake` through the UIKit responder chain, not through `CMMotionManager`; added `ShakeDetector: UIViewControllerRepresentable` (wrapping a `UIViewController` that overrides `motionEnded`) as a companion to the existing `CMMotionManager` path, which continues to handle real-device shake.
 - `XcodeFormatter` now maps `.info` severity diagnostics to `note:` (Xcode inline annotation level) instead of `warning:`. Previously info-level findings appeared as warnings in the Xcode issue navigator.
 
 ## [Unreleased] - 2026-08-13

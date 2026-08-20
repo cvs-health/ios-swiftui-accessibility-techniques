@@ -42,6 +42,8 @@ struct VideosView: View {
     
     @State private var isMuted = false
     @State private var isPlaying = false
+    @State private var badPlayer = AVPlayer(url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4")!)
+    @State private var autoPlayer = AVPlayer(url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4")!)
 
     var body: some View {
         ScrollView {
@@ -105,7 +107,7 @@ struct VideosView: View {
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
                 
-                VideoPlayer(player: AVPlayer(url: URL(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4")!))
+                VideoPlayer(player: badPlayer)
                     .frame(width: .infinity, height: 320)
                 
                 DisclosureGroup("Details") {
@@ -122,7 +124,6 @@ struct VideosView: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
                     .padding(.bottom)
-                let autoPlayer = AVPlayer(url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4")!)
                 VideoPlayer(player: autoPlayer)
                     .frame(height: 240)
                     .onAppear { autoPlayer.play() }

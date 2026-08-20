@@ -43,7 +43,7 @@ struct VideosView: View {
     @State private var isMuted = false
     @State private var isPlaying = false
     @State private var badPlayer = AVPlayer(url: URL(string: "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4")!)
-    @State private var autoPlayer = AVPlayer(url: URL(string: "https://filesamples.com/samples/video/mp4/sample_640x360.mp4")!)
+    @State private var autoPlayer = AVPlayer(url: URL(string: "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4")!)
 
     var body: some View {
         ScrollView {

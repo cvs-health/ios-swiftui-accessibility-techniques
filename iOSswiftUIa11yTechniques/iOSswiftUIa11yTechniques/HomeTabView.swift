@@ -71,7 +71,6 @@ struct HomeTabView: View {
             }
             .padding()
         }
-        .navigationTitle("Home")
     }
 }
 

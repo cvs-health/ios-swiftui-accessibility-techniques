@@ -11,6 +11,7 @@
 		85631A7D74186404AD9BCCD8 /* AccessibilityHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B033E4EAFAF40009797BD1C /* AccessibilityHintView.swift */; };
 		AA0F3EF42AB26D930062E7BC /* LinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0F3EF32AB26D930062E7BC /* LinksView.swift */; };
 		AA13673C302E60A2001D48F4 /* XCTestAccessibilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA13673B302E60A2001D48F4 /* XCTestAccessibilityView.swift */; };
+		AA13677730375B51001D48F4 /* MotionActuationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA13677630375B51001D48F4 /* MotionActuationView.swift */; };
 		AA1AC60C2ABD2C3800AC02DA /* TogglesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */; };
 		AA59CDC82ABA1F3B0004908F /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59CDC72ABA1F3B0004908F /* TabsView.swift */; };
 		AA59CDCA2ABA1F4E0004908F /* TabsGoodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59CDC92ABA1F4E0004908F /* TabsGoodView.swift */; };
@@ -53,7 +54,6 @@
 		BC0BBAF72FA0442A00870252 /* LanguageOfPageBadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0BBAF52FA0442A00870252 /* LanguageOfPageBadView.swift */; };
 		BC0BBAF82FA0442A00870252 /* LanguageOfPageGoodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0BBAF62FA0442A00870252 /* LanguageOfPageGoodView.swift */; };
 		BC0C846F2CC811E900B3DB52 /* DragDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0C846E2CC811E900B3DB52 /* DragDropView.swift */; };
-		BC4A2F022E0011AB00C3FF41 /* MotionActuationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4A2F012E0011AB00C3FF41 /* MotionActuationView.swift */; };
 		BC163FC22B6AD3F3009E3A83 /* ContactBoston.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */; };
 		BC163FC42B6AD3FB009E3A83 /* ContactOrlando.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */; };
 		BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */; };
@@ -74,6 +74,7 @@
 		BC3EA3B22B76B71B0003B8A2 /* DateTimePickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B12B76B71B0003B8A2 /* DateTimePickers.swift */; };
 		BC3EA3B52B7C069F0003B8A2 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B42B7C069F0003B8A2 /* MapView.swift */; };
 		BC3EA3B72B7D197E0003B8A2 /* ScrollViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */; };
+		BC4A2F022E0011AB00C3FF41 /* MotionActuationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4A2F012E0011AB00C3FF41 /* MotionActuationView.swift */; };
 		BC4F17952D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4F17942D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift */; };
 		BC6C39BE2C2CE70B00AA842A /* ResponsiveLayoutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6C39BD2C2CE70B00AA842A /* ResponsiveLayoutsView.swift */; };
 		BC6C39C02C2E044000AA842A /* PrototypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6C39BF2C2E044000AA842A /* PrototypesView.swift */; };
@@ -208,6 +209,7 @@
 		AA1303192B027685001AE0BF /* Steppers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Steppers.md; sourceTree = "<group>"; };
 		AA13031A2B0278FA001AE0BF /* PageTitles.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PageTitles.md; sourceTree = "<group>"; };
 		AA13673B302E60A2001D48F4 /* XCTestAccessibilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestAccessibilityView.swift; sourceTree = "<group>"; };
+		AA13677630375B51001D48F4 /* MotionActuationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionActuationView.swift; sourceTree = "<group>"; };
 		AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogglesView.swift; sourceTree = "<group>"; };
 		AA23F04F2AB501DA00E1EB26 /* Accordions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Accordions.md; sourceTree = "<group>"; };
 		AA2B1D452ABDDC76007B2383 /* Toggles.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Toggles.md; sourceTree = "<group>"; };
@@ -270,7 +272,6 @@
 		BC0BBBBD2FA51F9F00870252 /* AccessibilityLabel.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityLabel.md; sourceTree = "<group>"; };
 		BC0BBBBE2FA51F9F00870252 /* AccessibilityValue.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityValue.md; sourceTree = "<group>"; };
 		BC0C846E2CC811E900B3DB52 /* DragDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropView.swift; sourceTree = "<group>"; };
-		BC4A2F012E0011AB00C3FF41 /* MotionActuationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionActuationView.swift; sourceTree = "<group>"; };
 		BC163FC12B6AD3F3009E3A83 /* ContactBoston.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactBoston.swift; sourceTree = "<group>"; };
 		BC163FC32B6AD3FB009E3A83 /* ContactOrlando.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactOrlando.swift; sourceTree = "<group>"; };
 		BC163FC52B6BF421009E3A83 /* AssistiveAccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistiveAccessView.swift; sourceTree = "<group>"; };
@@ -307,6 +308,7 @@
 		BC3EA3B42B7C069F0003B8A2 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		BC3EA3B62B7D197E0003B8A2 /* ScrollViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViews.swift; sourceTree = "<group>"; };
 		BC3EA3B82B7D26460003B8A2 /* ScrollViews.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ScrollViews.md; sourceTree = "<group>"; };
+		BC4A2F012E0011AB00C3FF41 /* MotionActuationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionActuationView.swift; sourceTree = "<group>"; };
 		BC4F17942D7B678400BB509B /* AccessibilityRespondsToUserInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityRespondsToUserInteraction.swift; sourceTree = "<group>"; };
 		BC4F17962D7B743000BB509B /* AccessibilityRespondsToUserInteraction.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityRespondsToUserInteraction.md; sourceTree = "<group>"; };
 		BC6C39BD2C2CE70B00AA842A /* ResponsiveLayoutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveLayoutsView.swift; sourceTree = "<group>"; };
@@ -658,6 +660,7 @@
 				BC2133A22B713B1100753693 /* MeaningfulAccessibleNamesView.swift */,
 				BC1B59C22B4E664700E8F782 /* MenusView.swift */,
 				AA59CDCD2ABA209D0004908F /* MessagesTabView.swift */,
+				AA13677630375B51001D48F4 /* MotionActuationView.swift */,
 				BCB60D5F2E720E3B00ED2D51 /* MultiSelectionListView.swift */,
 				BCEDB9132B4C812C00B4D85D /* NavigationLinkView.swift */,
 				AA74DD5C2AFDCCFA00348078 /* PageTitleBad.swift */,
@@ -1113,6 +1116,7 @@
 				BC1A5FA22B6079080008513C /* AttributedStringsView.swift in Sources */,
 				BC8C92092B2A94B2006DAC20 /* ListsView.swift in Sources */,
 				AA9FCA2E2AB4D50400DF93A5 /* AccordionsView.swift in Sources */,
+				AA13677730375B51001D48F4 /* MotionActuationView.swift in Sources */,
 				BCDF3F562D4AE1D000A13D09 /* SignUp2.swift in Sources */,
 				BC8CD0E52B4D06FD00B9A28A /* MagicTapView.swift in Sources */,
 				AA59CDCC2ABA20920004908F /* HomeTabView.swift in Sources */,

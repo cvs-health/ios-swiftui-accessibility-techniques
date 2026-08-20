@@ -179,6 +179,7 @@ struct InformativeView: View {
                     .accessibilityAddTraits(.isHeader)
                 HStack {
                     Image(systemName: "exclamationmark.circle")
+                        .accessibilityIdentifier("badIcon")
                     Text("We're sorry. We can't show the offer details right now.").bold().font(.callout)
                 }
                 .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)

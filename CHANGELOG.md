@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased] - 2026-08-20
 
+### Documentation
+
+#### Changed
+
+- Updated rule count from 37 to **41 rules** across **23 WCAG criteria** in `README.md`, `a11y-check/README.md`, `A11yCheckView.swift`, `A11yCheck.md`, and `SKILL.md`.
+- Added missing rules (`video-audio-autoplay`, `motion-actuation-missing-alternative`, `input-triggers-context-change`, `draggable-missing-accessibility-action`) to the rules table in `a11y-check/README.md`.
+- Fixed animation rule WCAG criterion in `a11y-check/README.md` table from `2.3.1` to `2.2.2`.
+- Resolved unresolved git merge conflict in `SKILL.md`.
+
 ### a11y-check
 
 #### Changed

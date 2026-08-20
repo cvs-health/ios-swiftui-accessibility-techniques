@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### a11y-check
 
+#### Changed
+
+- **`animation-missing-reduce-motion`** — downgraded from `error`/`serious` to `warning`/`moderate` and fixed WCAG criterion from `2.3.1` (Three Flashes) to `2.3.3` (Animation from Interactions, Level AAA). The rule fires on any `withAnimation` or `.animation()` without a file-level `reduceMotion` check, which includes incidental transitions (list reordering, accordion expand) that are hard to distinguish statically from problematic looping animations. Warning calibration better reflects the AAA level and the inherent uncertainty of static detection.
+
 #### Added
 
 - **`draggable-missing-accessibility-action`** (warning, WCAG 2.5.7, 2.1.1) — Flags `.draggable()` or `.dropDestination()` modifiers without `.accessibilityAction(named:)` alternatives. Covers the high-level SwiftUI drag-and-drop API; the existing `gesture-missing-alternative` rule covers the lower-level `.gesture(DragGesture())` API. Emitted as a warning because the accessibility actions may be defined in a parent view.

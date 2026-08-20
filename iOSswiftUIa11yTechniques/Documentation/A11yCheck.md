@@ -58,7 +58,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 - **`sheet-focus-return`** (error, WCAG 2.4.3, 2.1.2) — `.sheet()`, `.fullScreenCover()`, `.alert()`, or `.popover()` with no focus state management on dismiss. VoiceOver focus is lost after dismissal.
 
 ### Animation
-- **`animation-missing-reduce-motion`** (error, WCAG 2.3.1) — `.animation()` or `withAnimation` in a file that does not check `accessibilityReduceMotion` or `UIAccessibility.isReduceMotionEnabled`.
+- **`animation-missing-reduce-motion`** (warning, WCAG 2.3.3) — `.animation()` or `withAnimation` in a file that does not check `accessibilityReduceMotion` or `UIAccessibility.isReduceMotionEnabled`. Warning because WCAG 2.3.3 is Level AAA and `withAnimation` is also used for minor interaction transitions (list reordering, accordion expand) that are hard to distinguish statically from problematic looping animations.
 
 ### Tab Bars
 - **`tabview-missing-label`** (error, WCAG 4.1.2, 2.4.2) — Views inside a `TabView` that lack a `.tabItem` modifier. Also flags custom tab bar containers using `.accessibilityAddTraits(.isTabBar)` that are missing an `.accessibilityLabel()` group label. VoiceOver users need to hear the tab bar name when entering it.
@@ -108,7 +108,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 - [1.4.4: Resize Text](https://www.w3.org/WAI/WCAG22/Understanding/resize-text)
 - [2.1.1: Keyboard](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)
 - [2.2.1: Timing Adjustable](https://www.w3.org/WAI/WCAG22/Understanding/timing-adjustable)
-- [2.3.1: Three Flashes or Below Threshold](https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold)
+- [2.3.3: Animation from Interactions](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions)
 - [2.4.2: Page Titled](https://www.w3.org/WAI/WCAG22/Understanding/page-titled)
 - [2.4.3: Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
 - [2.4.4: Link Purpose (In Context)](https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context)

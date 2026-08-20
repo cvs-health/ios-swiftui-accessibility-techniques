@@ -5,15 +5,22 @@ import SwiftSyntax
 /// Flags views that use animations (.animation(), withAnimation, .transition())
 /// without checking @Environment(\.accessibilityReduceMotion).
 ///
-/// WCAG 2.3.3 Animation from Interactions (AAA) / best practice for WCAG 2.3.1
+/// WCAG 2.3.3 Animation from Interactions (Level AAA)
 /// Users who experience motion sickness or vestibular disorders need the ability
 /// to disable non-essential animations.
+///
+/// Emitted as a warning because:
+/// - 2.3.3 is Level AAA — stricter than minimum WCAG conformance
+/// - `withAnimation` is also used for purely incidental transitions (list reordering,
+///   accordion expand/collapse) that are hard to distinguish statically from problematic
+///   looping or parallax animations
+/// - A whole-file `reduceMotion` check is the practical detection limit for static analysis
 public struct ReduceMotionRule: A11yRule {
     public let id = "animation-missing-reduce-motion"
     public let name = "Animation Without Reduce Motion Check"
-    public let severity = A11ySeverity.error
-    public let impact = A11yImpact.serious
-    public let wcagCriteria = ["2.3.1"]
+    public let severity = A11ySeverity.warning
+    public let impact = A11yImpact.moderate
+    public let wcagCriteria = ["2.3.3"]
     public let description = "Animations should respect the user's Reduce Motion preference. Check @Environment(\\.accessibilityReduceMotion) or use .animation(.default, value:) which automatically respects the setting."
 
     public init() {}

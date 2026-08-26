@@ -198,6 +198,9 @@ See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, an
 - [x] [Videos](iOSswiftUIa11yTechniques/Documentation/Videos.md)
 - [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
 
+### W
+- [x] [Web View Dynamic Type](iOSswiftUIa11yTechniques/Documentation/WebViewDynamicType.md)
+
 ### X
 - [x] [XCTest Accessibility Testing](iOSswiftUIa11yTechniques/Documentation/XCTestAccessibility.md)
 

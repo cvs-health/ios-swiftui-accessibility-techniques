@@ -63,6 +63,9 @@ struct WebViewDynamicTypeView: View {
     </html>
     """
 
+    @State private var goodWebViewHeight: CGFloat = 100
+    @State private var badWebViewHeight: CGFloat = 100
+
     var body: some View {
         ScrollView {
             VStack {
@@ -83,12 +86,12 @@ struct WebViewDynamicTypeView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                WebViewHTMLRepresentable(htmlString: goodHTML)
+                WebViewHTMLRepresentable(htmlString: goodHTML, height: $goodWebViewHeight)
                     .id(dynamicTypeSize)
-                    .frame(height: 180)
+                    .frame(height: goodWebViewHeight)
                     .accessibilityIdentifier("goodWebView")
                 DisclosureGroup("Details") {
-                    Text("The good example uses the CSS font shorthand `font: -apple-system-body` in the web view HTML. This maps to the iOS system body text style and reads the user's current Dynamic Type size when the page loads. The SwiftUI `.id(dynamicTypeSize)` modifier forces the web view to reload whenever the user changes their Dynamic Type setting, ensuring the new font size is applied immediately.")
+                    Text("The good example uses the CSS font shorthand `font: -apple-system-body` in the web view HTML. This maps to the iOS system body text style and reads the user's current Dynamic Type size when the page loads. The SwiftUI `.id(dynamicTypeSize)` modifier forces the web view to reload whenever the user changes their Dynamic Type setting, ensuring the new font size is applied immediately. The web view height is measured via JavaScript after each load so the frame always fits the content.")
                 }.padding(.bottom).accessibilityHint("Good Example CSS font: -apple-system-body")
                 Text("Bad Examples")
                     .font(.subheadline)
@@ -105,8 +108,8 @@ struct WebViewDynamicTypeView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                WebViewHTMLRepresentable(htmlString: badHTML)
-                    .frame(height: 180)
+                WebViewHTMLRepresentable(htmlString: badHTML, height: $badWebViewHeight)
+                    .frame(height: badWebViewHeight)
                     .accessibilityIdentifier("badWebView")
                 DisclosureGroup("Details") {
                     Text("The bad example uses a fixed pixel size `font-size: 16px` in the web view HTML. This hardcoded value does not respond to the user's Dynamic Type text size setting in iOS Settings, so the text remains the same size regardless of the user's preference.")
@@ -126,13 +129,39 @@ struct WebViewDynamicTypeView: View {
 
 struct WebViewHTMLRepresentable: UIViewRepresentable {
     var htmlString: String
+    @Binding var height: CGFloat
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
 
     func makeUIView(context: Context) -> WKWebView {
-        WKWebView()
+        let webView = WKWebView()
+        webView.navigationDelegate = context.coordinator
+        webView.scrollView.isScrollEnabled = false
+        return webView
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {
         uiView.loadHTMLString(htmlString, baseURL: nil)
+    }
+
+    class Coordinator: NSObject, WKNavigationDelegate {
+        var parent: WebViewHTMLRepresentable
+
+        init(_ parent: WebViewHTMLRepresentable) {
+            self.parent = parent
+        }
+
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            webView.evaluateJavaScript("document.body.scrollHeight") { result, _ in
+                if let height = result as? CGFloat {
+                    DispatchQueue.main.async {
+                        self.parent.height = height
+                    }
+                }
+            }
+        }
     }
 }
 

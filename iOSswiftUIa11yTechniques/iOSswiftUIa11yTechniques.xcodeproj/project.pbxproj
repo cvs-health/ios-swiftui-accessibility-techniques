@@ -30,6 +30,7 @@
 		AA9B13512AABADD5009A3D84 /* ButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9B13502AABADD5009A3D84 /* ButtonsView.swift */; };
 		AA9FCA2E2AB4D50400DF93A5 /* AccordionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9FCA2D2AB4D50400DF93A5 /* AccordionsView.swift */; };
 		AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB44092AE6C0FB003480B3 /* DynamicTypeView.swift */; };
+		FB04A0D2DEFF4339AC1AF8EA /* WebViewDynamicTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2846FC0128434DB0A754F7 /* WebViewDynamicTypeView.swift */; };
 		AABD27BA2A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABD27B92A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift */; };
 		AABD27BE2A9FE69500F718F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AABD27BD2A9FE69500F718F7 /* Assets.xcassets */; };
 		AABD27C12A9FE69500F718F7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AABD27C02A9FE69500F718F7 /* Preview Assets.xcassets */; };
@@ -80,7 +81,6 @@
 		BC6C39C02C2E044000AA842A /* PrototypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6C39BF2C2E044000AA842A /* PrototypesView.swift */; };
 		BC6D39552CDA896F00876212 /* CarouselViewBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6D39542CDA896F00876212 /* CarouselViewBad.swift */; };
 		BC6D39E02CDB112D00876212 /* HorizontalScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6D39DF2CDB112D00876212 /* HorizontalScrollView.swift */; };
-		BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6F3E432BB5DC5800868AE5 /* WebView.swift */; };
 		BC7109F82BABA3A00062D9BB /* AccessibilityHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */; };
 		BC715B632B449F0500C77B57 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B622B449F0500C77B57 /* AlertsView.swift */; };
 		BC715B672B465B9F00C77B57 /* CheckboxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC715B662B465B9F00C77B57 /* CheckboxesView.swift */; };
@@ -229,6 +229,7 @@
 		AA74DD5B2AFDCCF900348078 /* PageTitleGood.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageTitleGood.swift; sourceTree = "<group>"; };
 		AA74DD5C2AFDCCFA00348078 /* PageTitleBad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageTitleBad.swift; sourceTree = "<group>"; };
 		AA7786352AEFFE6000AA39DA /* DynamicType.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DynamicType.md; sourceTree = "<group>"; };
+		BCA11Y032026000000000001 /* WebViewDynamicType.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = WebViewDynamicType.md; sourceTree = "<group>"; };
 		AA7ADECF2AF2BAFE0019D210 /* PickersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickersView.swift; sourceTree = "<group>"; };
 		AA9B134D2AA923FA009A3D84 /* Headings.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Headings.md; sourceTree = "<group>"; };
 		AA9B134E2AAA3867009A3D84 /* DecorativeImages.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DecorativeImages.md; sourceTree = "<group>"; };
@@ -240,6 +241,7 @@
 		AAAFD7142AAFCC00008DA3AD /* Buttons.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Buttons.md; sourceTree = "<group>"; };
 		AABB44082AE06297003480B3 /* ProgressIndicators.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ProgressIndicators.md; sourceTree = "<group>"; };
 		AABB44092AE6C0FB003480B3 /* DynamicTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTypeView.swift; sourceTree = "<group>"; };
+		1D2846FC0128434DB0A754F7 /* WebViewDynamicTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDynamicTypeView.swift; sourceTree = "<group>"; };
 		AABD27B62A9FE69300F718F7 /* iOSswiftUIa11yTechniques.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSswiftUIa11yTechniques.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABD27B92A9FE69300F718F7 /* iOSswiftUIa11yTechniquesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSswiftUIa11yTechniquesApp.swift; sourceTree = "<group>"; };
 		AABD27BD2A9FE69500F718F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -317,7 +319,6 @@
 		BC6D39652CDABF5A00876212 /* Carousels.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Carousels.md; sourceTree = "<group>"; };
 		BC6D39DF2CDB112D00876212 /* HorizontalScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalScrollView.swift; sourceTree = "<group>"; };
 		BC6D39E12CDDD56100876212 /* HorizontalScrollViews.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = HorizontalScrollViews.md; sourceTree = "<group>"; };
-		BC6F3E432BB5DC5800868AE5 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		BC7109F72BABA3A00062D9BB /* AccessibilityHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHidden.swift; sourceTree = "<group>"; };
 		BC7109F92BABB6670062D9BB /* AccessibilityHidden.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AccessibilityHidden.md; sourceTree = "<group>"; };
 		BC715B622B449F0500C77B57 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
@@ -513,6 +514,7 @@
 				BCEDB8F52B48775500B4D85D /* DeviceOrientation.md */,
 				BCBAFAB42EF36B1300D5E700 /* DimFlashingLights.md */,
 				AA7786352AEFFE6000AA39DA /* DynamicType.md */,
+				BCA11Y032026000000000001 /* WebViewDynamicType.md */,
 				AAF127B62B2194E200D5313D /* ErrorValidation.md */,
 				BCD1CF992B57671700A26ED3 /* EscapeAction.md */,
 				BC715B652B44D01200C77B57 /* FocusManagement.md */,
@@ -634,6 +636,7 @@
 				BC0C846E2CC811E900B3DB52 /* DragDropView.swift */,
 				BC4A2F012E0011AB00C3FF41 /* MotionActuationView.swift */,
 				AABB44092AE6C0FB003480B3 /* DynamicTypeView.swift */,
+				1D2846FC0128434DB0A754F7 /* WebViewDynamicTypeView.swift */,
 				AAF127B72B2194EA00D5313D /* ErrorValidationView.swift */,
 				BCD1CF972B57670D00A26ED3 /* EscapeView.swift */,
 				BCC4F1832B4119A0004AAB65 /* FocusManagementView.swift */,
@@ -702,7 +705,6 @@
 				BC3951F72D67C45E00D26DBB /* VideosView.swift */,
 				BCF615B62D35AE58006AEA80 /* VoiceOverAnnouncementDelayView.swift */,
 				BCD1CF942B574C8800A26ED3 /* VoiceOverPronunciationView.swift */,
-				BC6F3E432BB5DC5800868AE5 /* WebView.swift */,
 				AA13673B302E60A2001D48F4 /* XCTestAccessibilityView.swift */,
 			);
 			path = iOSswiftUIa11yTechniques;
@@ -1074,6 +1076,7 @@
 				BC2133A32B713B1100753693 /* MeaningfulAccessibleNamesView.swift in Sources */,
 				BCEDB8F02B48722100B4D85D /* DeviceOrientationView.swift in Sources */,
 				AABB440A2AE6C0FB003480B3 /* DynamicTypeView.swift in Sources */,
+				FB04A0D2DEFF4339AC1AF8EA /* WebViewDynamicTypeView.swift in Sources */,
 				BCAD88CB2B5F5B3B0011DFF0 /* LargeContentViewerView.swift in Sources */,
 				BC046F2D2BEE547900E498E1 /* IncreaseContrastView.swift in Sources */,
 				BCB059572CAB5F9C00C670B8 /* TableView.swift in Sources */,
@@ -1097,7 +1100,6 @@
 				BCF615B72D35AE58006AEA80 /* VoiceOverAnnouncementDelayView.swift in Sources */,
 				BCF615B92D36F2D3006AEA80 /* SignUp0.swift in Sources */,
 				BC163FC62B6BF421009E3A83 /* AssistiveAccessView.swift in Sources */,
-				BC6F3E442BB5DC5800868AE5 /* WebView.swift in Sources */,
 				BC7D81842ECE889F00F98333 /* SwiftLintView.swift in Sources */,
 				AA74DD562AFD8DA800348078 /* SegmentedControlsView.swift in Sources */,
 				BC046F2B2BEDC83800E498E1 /* ReduceTransparencyView.swift in Sources */,

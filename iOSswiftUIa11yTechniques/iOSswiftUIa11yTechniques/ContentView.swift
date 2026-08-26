@@ -203,6 +203,7 @@ struct ContentView: View {
         case "swiftlint": SwiftLintView()
         case "tabs": TabsView()
         case "videos": VideosView()
+        case "web view dynamic type": WebViewDynamicTypeView()
         case "text fields": TextFieldsView()
         case "toggles": TogglesView()
         case "tipkit": TipKitView()

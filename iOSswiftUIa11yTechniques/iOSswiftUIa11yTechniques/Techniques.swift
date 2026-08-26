@@ -88,6 +88,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Toggles"),
     Techniques(name: "Toolbars"),
     Techniques(name: "Videos"),
+    Techniques(name: "Web View Dynamic Type"),
     Techniques(name: "Touch Target Size"),
     Techniques(name: "VoiceOver Announcement Delay"),
     Techniques(name: "VoiceOver Pronunciation"),

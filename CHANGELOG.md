@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased] - 2026-08-26
+
+### iOSswiftUIa11yTechniques
+
+#### Added
+
+- **Web View Dynamic Type** technique page (`WebViewDynamicTypeView.swift`) with good example (WKWebView using CSS `font: -apple-system-body` + `.id(dynamicTypeSize)` reload) and bad example (fixed `font-size: 16px` that ignores Dynamic Type). Demonstrates how to make web view text resizable with Dynamic Type (WCAG 1.4.4 Resize Text).
+- **`WebViewDynamicType.md`** documentation explaining the CSS `-apple-system-*` font shorthands and the SwiftUI `.id(dynamicTypeSize)` reload pattern.
+
+#### Changed
+
+- Moved "Web View Apple System CSS Font Test" from Prototypes to the new **Web View Dynamic Type** technique page.
+- Removed `WebView.swift` prototype file; replaced by `WebViewDynamicTypeView.swift` in the techniques layer.
+
 ## [Unreleased] - 2026-08-20
 
 ### Documentation

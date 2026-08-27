@@ -72,10 +72,8 @@ private final class TabBarExploreInterceptUIView: UIView {
 
     // BUG: intercepts Explore by Touch on the tab bar and returns a scroll-content
     // element instead of passing through to the tab buttons below.
-    override func accessibilityHitTest(_ point: CGPoint, with event: UIEvent?) -> Any? {
-        fakeElement.accessibilityFrame = UIAccessibilityConvertFrameToScreenCoordinates(
-            bounds, self
-        )
+    override func accessibilityHitTest(_ point: CGPoint, event: UIEvent?) -> Any? {
+        fakeElement.accessibilityFrame = UIAccessibility.convertToScreenCoordinates(bounds, in: self)
         return fakeElement
     }
 }

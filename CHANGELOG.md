@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
-- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): rewrote using a `UIViewRepresentable` (`TabBarExploreIntercept`) backed by `TabBarExploreInterceptUIView`. The UIView overrides `accessibilityHitTest(_:event:)` to return a fake scroll-content element ("Mindfulness, button") when VoiceOver Explores the tab bar. The UIView returns `[]` from `accessibilityElements` so swipe navigation is unaffected. No `.accessibilityHidden` is used on the tab bar. Replaced the ZStack layout with `.overlay(TabBarExploreIntercept())` applied directly to the tab capsule so the intercept bounds match the capsule frame exactly (fixes an oversized VoiceOver focus ring).
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): rewrote using a `UIViewRepresentable` (`TabBarExploreIntercept`) backed by `TabBarExploreInterceptUIView`. The UIView overrides `accessibilityHitTest(_:event:)` to temporarily hide itself and re-run the hit test from the window root, so VoiceOver Explore by Touch on the tab bar finds the actual scroll-content element physically behind the tab bar instead of the tab button. Returns `[]` from `accessibilityElements` so swipe navigation still reaches each tab. No `.accessibilityHidden` used. Uses `.overlay(TabBarExploreIntercept())` directly on the tab capsule so the intercept frame matches the capsule exactly.
 
 ## [Unreleased] - 2026-08-26
 

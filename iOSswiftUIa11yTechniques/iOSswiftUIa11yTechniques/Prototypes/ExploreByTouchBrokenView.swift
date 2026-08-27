@@ -35,28 +35,19 @@ private let tabBarItems: [TabBarItem] = [
 
 // MARK: - Explore-by-Touch intercept layer
 
-/// Transparent UIView that sits on top of the visual tab bar in the Z-order.
+/// Transparent UIView overlaid on the tab bar capsule.
 ///
-/// UIKit calls `accessibilityHitTest(_:with:)` on the topmost view when
-/// VoiceOver Explore by Touch fires. By overriding that method here, this view
-/// intercepts every Explore by Touch event that lands on the tab bar area and
-/// returns a fake scroll-content element — exactly what the CVS app does through
-/// its `.accessibilityElement(children: .contain)` container pattern.
+/// `accessibilityElements` returns `[]` so this view contributes nothing to
+/// VoiceOver swipe navigation. The SwiftUI tab buttons beneath it remain in the
+/// accessibility tree and are still reachable by swiping.
 ///
-/// `accessibilityElements` returns an empty array so this view contributes
-/// nothing to VoiceOver swipe navigation. The SwiftUI tab buttons behind it
-/// remain in the accessibility tree and are still reachable by swiping.
+/// `accessibilityHitTest(_:event:)` is the UIKit hook VoiceOver calls during
+/// Explore by Touch. The override here temporarily hides this view and re-runs
+/// the hit test from the window root, so UIKit finds whatever scroll-content
+/// element is physically behind the tab bar at the touch point — exactly the
+/// bug in the CVS Pharmacy app where Explore by Touch on the tab bar focuses
+/// the content card behind it instead of the tab button.
 private final class TabBarExploreInterceptUIView: UIView {
-
-    private lazy var fakeElement: UIAccessibilityElement = {
-        let element = UIAccessibilityElement(accessibilityContainer: self)
-        // Sounds like a visible scroll-content card, not a tab item.
-        element.accessibilityLabel = "Mindfulness"
-        element.accessibilityValue = "Guided practices for clarity and calm."
-        element.accessibilityTraits = .button
-        element.accessibilityHint = "Double tap to open"
-        return element
-    }()
 
     override var isAccessibilityElement: Bool {
         get { false }
@@ -70,11 +61,14 @@ private final class TabBarExploreInterceptUIView: UIView {
         set { }
     }
 
-    // BUG: intercepts Explore by Touch on the tab bar and returns a scroll-content
-    // element instead of passing through to the tab buttons below.
+    // BUG: hides itself so the accessibility hit test falls through to the
+    // scroll content behind the tab bar instead of finding the tab buttons.
     override func accessibilityHitTest(_ point: CGPoint, event: UIEvent?) -> Any? {
-        fakeElement.accessibilityFrame = UIAccessibility.convertToScreenCoordinates(bounds, in: self)
-        return fakeElement
+        guard let window = self.window else { return nil }
+        isHidden = true
+        let element = window.accessibilityHitTest(convert(point, to: window), event: event)
+        isHidden = false
+        return element
     }
 }
 
@@ -133,12 +127,13 @@ private struct ContentCard: View {
 ///
 /// The tab bar buttons are fully visible and accessible via VoiceOver swipe
 /// navigation. The bug is that `TabBarExploreInterceptUIView` overlays the tab
-/// capsule exactly and overrides `accessibilityHitTest(_:event:)` — the UIKit
-/// hook VoiceOver calls during Explore by Touch.
+/// capsule and overrides `accessibilityHitTest(_:event:)` — the UIKit hook
+/// VoiceOver calls during Explore by Touch.
 ///
-/// When the user drags a finger over the tab bar area, the intercept view returns
-/// a fake scroll-content element instead of passing through to the tab buttons.
-/// VoiceOver announces "Mindfulness, button" rather than "Home, button."
+/// When the user drags a finger over the tab bar area, the intercept view hides
+/// itself and re-runs the hit test from the window root. UIKit finds whatever
+/// scroll-content element is physically behind the tab bar at that touch point,
+/// so VoiceOver announces the card content rather than the tab button.
 ///
 /// The intercept view returns `[]` from `accessibilityElements`, so it does not
 /// pollute the swipe-navigation order. The tab buttons below it remain reachable

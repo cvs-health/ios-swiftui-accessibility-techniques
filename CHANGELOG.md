@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
-- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): rewrote using a `UIViewRepresentable` (`TabBarMisplacedA11yLayer`) backed by a custom `UIAccessibilityElement`-based `UIView`. The tab items' `accessibilityFrame` values are placed at the top of the screen (status-bar zone, y ≈ 5 pt) instead of at the visual tab bar position (bottom). Combined with `.accessibilityHidden(true)` on the visual tab bar buttons, this produces the exact CVS-like behavior: VoiceOver swipe navigation still reaches each tab (UIKit swipe traversal follows the tree regardless of frame position), but Explore by Touch at the visual tab bar finds scroll-content cards instead of tabs (no tab element has a frame there). Added a no-bottom-inset comment to explain why card frames extend into the tab bar zone.
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): rewrote using a `UIViewRepresentable` (`TabBarExploreIntercept`) backed by `TabBarExploreInterceptUIView`. The UIView sits on top of the tab buttons in Z-order and overrides `accessibilityHitTest(_:with:)` — the UIKit hook VoiceOver calls during Explore by Touch. It returns a fake scroll-content element ("Mindfulness, button") instead of the tab buttons. The UIView returns `[]` from `accessibilityElements`, so swipe navigation is unaffected and the tab buttons remain reachable via swipe. No `.accessibilityHidden` is used on the tab bar. This matches CVS Pharmacy app behavior: swipe reaches each tab, Explore by Touch at the tab bar finds content instead.
 
 ## [Unreleased] - 2026-08-26
 

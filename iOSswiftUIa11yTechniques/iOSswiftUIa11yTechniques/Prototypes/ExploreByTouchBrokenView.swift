@@ -33,74 +33,62 @@ private let tabBarItems: [TabBarItem] = [
     TabBarItem(id: 3, label: "Profile",  icon: "person.circle", selectedIcon: "person.circle.fill"),
 ]
 
-// MARK: - UIKit accessibility layer
+// MARK: - Explore-by-Touch intercept layer
 
-/// UIView that owns UIAccessibilityElement objects for the tab bar items.
+/// Transparent UIView that sits on top of the visual tab bar in the Z-order.
 ///
-/// BUG: The elements' `accessibilityFrame` values are placed at the TOP of the
-/// screen (status-bar area, y ≈ 5 pt) instead of at the visual tab bar position
-/// at the bottom (y ≈ screen height − 80 pt).
+/// UIKit calls `accessibilityHitTest(_:with:)` on the topmost view when
+/// VoiceOver Explore by Touch fires. By overriding that method here, this view
+/// intercepts every Explore by Touch event that lands on the tab bar area and
+/// returns a fake scroll-content element — exactly what the CVS app does through
+/// its `.accessibilityElement(children: .contain)` container pattern.
 ///
-/// Consequence:
-/// - VoiceOver swipe navigation still reaches these elements (the UIKit
-///   accessibility tree contains all elements regardless of frame position).
-/// - Explore by Touch at the visual tab bar position (bottom of screen) finds
-///   NO tab element there and falls through to the scroll-content cards behind it.
-private final class TabBarMisplacedA11yView: UIView {
-    private var tabElements: [UIAccessibilityElement] = []
+/// `accessibilityElements` returns an empty array so this view contributes
+/// nothing to VoiceOver swipe navigation. The SwiftUI tab buttons behind it
+/// remain in the accessibility tree and are still reachable by swiping.
+private final class TabBarExploreInterceptUIView: UIView {
+
+    private lazy var fakeElement: UIAccessibilityElement = {
+        let element = UIAccessibilityElement(accessibilityContainer: self)
+        // Sounds like a visible scroll-content card, not a tab item.
+        element.accessibilityLabel = "Mindfulness"
+        element.accessibilityValue = "Guided practices for clarity and calm."
+        element.accessibilityTraits = .button
+        element.accessibilityHint = "Double tap to open"
+        return element
+    }()
 
     override var isAccessibilityElement: Bool {
         get { false }
         set { }
     }
 
+    // Empty: this view adds nothing to the swipe-navigation order.
+    // The SwiftUI tab buttons beneath it remain accessible via swipe.
     override var accessibilityElements: [Any]? {
-        get { tabElements }
+        get { [] }
         set { }
     }
 
-    func configure(items: [TabBarItem], selectedId: Int) {
-        let screenWidth = UIScreen.main.bounds.width
-        let tabWidth = screenWidth / CGFloat(max(items.count, 1))
-
-        tabElements = items.enumerated().map { index, item in
-            let element = UIAccessibilityElement(accessibilityContainer: self)
-            element.accessibilityLabel = item.label
-            element.accessibilityTraits = .button
-            element.accessibilityHint = "Double tap to select"
-            if item.id == selectedId {
-                element.accessibilityValue = "selected"
-            }
-            // BUG: frame is at the very TOP of the screen (status-bar zone),
-            // not at the visual tab bar at the bottom.
-            // Explore by Touch at the real tab bar finds no element here,
-            // so VoiceOver falls through to the scroll-content card behind it.
-            element.accessibilityFrame = CGRect(
-                x: CGFloat(index) * tabWidth,
-                y: 5,
-                width: tabWidth,
-                height: 44
-            )
-            return element
-        }
+    // BUG: intercepts Explore by Touch on the tab bar and returns a scroll-content
+    // element instead of passing through to the tab buttons below.
+    override func accessibilityHitTest(_ point: CGPoint, with event: UIEvent?) -> Any? {
+        fakeElement.accessibilityFrame = UIAccessibilityConvertFrameToScreenCoordinates(
+            bounds, self
+        )
+        return fakeElement
     }
 }
 
-private struct TabBarMisplacedA11yLayer: UIViewRepresentable {
-    let tabItems: [TabBarItem]
-    let selectedTab: Int
-
-    func makeUIView(context: Context) -> TabBarMisplacedA11yView {
-        let view = TabBarMisplacedA11yView()
+private struct TabBarExploreIntercept: UIViewRepresentable {
+    func makeUIView(context: Context) -> TabBarExploreInterceptUIView {
+        let view = TabBarExploreInterceptUIView()
         view.backgroundColor = .clear
         view.isUserInteractionEnabled = false
-        view.configure(items: tabItems, selectedId: selectedTab)
         return view
     }
 
-    func updateUIView(_ uiView: TabBarMisplacedA11yView, context: Context) {
-        uiView.configure(items: tabItems, selectedId: selectedTab)
-    }
+    func updateUIView(_ uiView: TabBarExploreInterceptUIView, context: Context) { }
 }
 
 // MARK: - Card component
@@ -143,146 +131,141 @@ private struct ContentCard: View {
 
 // MARK: - Main view
 
-/// Bad example: custom liquid-glass tab bar whose accessibility elements are
-/// placed at the wrong screen position, breaking VoiceOver Explore by Touch.
+/// Bad example: custom liquid-glass tab bar that breaks VoiceOver Explore by Touch.
 ///
-/// THE BUG — misplaced accessibility frames:
+/// The tab bar buttons are fully visible and accessible via VoiceOver swipe
+/// navigation. The bug is that `TabBarExploreInterceptUIView` sits on top of
+/// them in the Z-order and overrides `accessibilityHitTest(_:with:)` — the UIKit
+/// hook VoiceOver calls during Explore by Touch.
 ///
-///   `TabBarMisplacedA11yView` creates UIAccessibilityElement objects for
-///   the four tab items with `accessibilityFrame` values at the TOP of the
-///   screen (y ≈ 5 pt, status-bar zone) instead of at the visual tab bar at
-///   the bottom (y ≈ screenHeight − 80 pt).
+/// When the user drags a finger over the tab bar area, the intercept view returns
+/// a fake scroll-content element instead of passing through to the tab buttons.
+/// VoiceOver announces "Mindfulness, button" rather than "Home, button."
 ///
-/// The visual tab bar buttons are `.accessibilityHidden(true)` so they do not
-/// appear at any screen position in the accessibility tree. No bottom safe-area
-/// inset is added to the scroll content, so card accessibility frames extend
-/// into the tab bar zone at the bottom.
-///
-/// Result for a VoiceOver user:
-/// - Swipe navigation: still reaches each tab item because UIKit swipe traversal
-///   includes all elements in the tree regardless of frame position.
-/// - Explore by Touch at the visual tab bar: no tab element has a frame there,
-///   so VoiceOver finds the scroll-content card whose frame covers that area.
+/// The intercept view returns `[]` from `accessibilityElements`, so it does not
+/// pollute the swipe-navigation order. The tab buttons below it remain reachable
+/// via swipe — exactly matching the CVS Pharmacy app behavior.
 struct ExploreByTouchBrokenView: View {
     @State private var selectedTab = 0
 
     var body: some View {
-        ZStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 28) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 28) {
 
-                    // Discover section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Discover")
-                            .font(.title2).bold()
-                            .accessibilityAddTraits(.isHeader)
+                // Discover section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Discover")
+                        .font(.title2).bold()
+                        .accessibilityAddTraits(.isHeader)
 
-                        ContentCard(
-                            title: "National Parks Guide",
-                            subtitle: "America's most breathtaking landscapes and trails.",
-                            systemImage: "mountain.2",
-                            accentColor: .green
-                        )
-                        ContentCard(
-                            title: "Urban Architecture",
-                            subtitle: "A tour through iconic buildings and design history.",
-                            systemImage: "building.columns",
-                            accentColor: .indigo
-                        )
-                        ContentCard(
-                            title: "Ocean Exploration",
-                            subtitle: "Dive into the mysteries of the underwater world.",
-                            systemImage: "drop.fill",
-                            accentColor: .blue
-                        )
-                    }
-
-                    // For You section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("For You")
-                            .font(.title2).bold()
-                            .accessibilityAddTraits(.isHeader)
-
-                        ContentCard(
-                            title: "Morning Routines",
-                            subtitle: "Science-backed habits to energize your day.",
-                            systemImage: "sunrise",
-                            accentColor: .orange
-                        )
-                        ContentCard(
-                            title: "Creative Writing",
-                            subtitle: "Tips and exercises to develop your storytelling voice.",
-                            systemImage: "pencil",
-                            accentColor: .purple
-                        )
-                        ContentCard(
-                            title: "Healthy Recipes",
-                            subtitle: "Quick, nutritious meals for busy schedules.",
-                            systemImage: "fork.knife",
-                            accentColor: .red
-                        )
-                        ContentCard(
-                            title: "Mindfulness",
-                            subtitle: "Guided practices for clarity and calm.",
-                            systemImage: "brain",
-                            accentColor: .teal
-                        )
-                    }
-
-                    // Trending section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Trending")
-                            .font(.title2).bold()
-                            .accessibilityAddTraits(.isHeader)
-
-                        ContentCard(
-                            title: "Space Exploration",
-                            subtitle: "The latest missions and discoveries beyond Earth.",
-                            systemImage: "moon.stars",
-                            accentColor: .cyan
-                        )
-                        ContentCard(
-                            title: "Sustainable Living",
-                            subtitle: "Practical steps toward a smaller carbon footprint.",
-                            systemImage: "leaf",
-                            accentColor: .green
-                        )
-                        ContentCard(
-                            title: "Digital Nomad Life",
-                            subtitle: "Work from anywhere — stories from around the globe.",
-                            systemImage: "globe",
-                            accentColor: .brown
-                        )
-                    }
+                    ContentCard(
+                        title: "National Parks Guide",
+                        subtitle: "America's most breathtaking landscapes and trails.",
+                        systemImage: "mountain.2",
+                        accentColor: .green
+                    )
+                    ContentCard(
+                        title: "Urban Architecture",
+                        subtitle: "A tour through iconic buildings and design history.",
+                        systemImage: "building.columns",
+                        accentColor: .indigo
+                    )
+                    ContentCard(
+                        title: "Ocean Exploration",
+                        subtitle: "Dive into the mysteries of the underwater world.",
+                        systemImage: "drop.fill",
+                        accentColor: .blue
+                    )
                 }
-                .padding()
-                // BUG: no bottom inset — card frames extend into the tab bar zone.
-                // When Explore by Touch lands on the tab bar area, it finds a card
-                // instead of a tab item.
-            }
 
-            // BUG: tab accessibility frames are at the wrong position (top of screen).
-            // Must fill the ZStack so its UIKit coordinate space matches the screen.
-            TabBarMisplacedA11yLayer(tabItems: tabBarItems, selectedTab: selectedTab)
+                // For You section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("For You")
+                        .font(.title2).bold()
+                        .accessibilityAddTraits(.isHeader)
+
+                    ContentCard(
+                        title: "Morning Routines",
+                        subtitle: "Science-backed habits to energize your day.",
+                        systemImage: "sunrise",
+                        accentColor: .orange
+                    )
+                    ContentCard(
+                        title: "Creative Writing",
+                        subtitle: "Tips and exercises to develop your storytelling voice.",
+                        systemImage: "pencil",
+                        accentColor: .purple
+                    )
+                    ContentCard(
+                        title: "Healthy Recipes",
+                        subtitle: "Quick, nutritious meals for busy schedules.",
+                        systemImage: "fork.knife",
+                        accentColor: .red
+                    )
+                    ContentCard(
+                        title: "Mindfulness",
+                        subtitle: "Guided practices for clarity and calm.",
+                        systemImage: "brain",
+                        accentColor: .teal
+                    )
+                }
+
+                // Trending section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Trending")
+                        .font(.title2).bold()
+                        .accessibilityAddTraits(.isHeader)
+
+                    ContentCard(
+                        title: "Space Exploration",
+                        subtitle: "The latest missions and discoveries beyond Earth.",
+                        systemImage: "moon.stars",
+                        accentColor: .cyan
+                    )
+                    ContentCard(
+                        title: "Sustainable Living",
+                        subtitle: "Practical steps toward a smaller carbon footprint.",
+                        systemImage: "leaf",
+                        accentColor: .green
+                    )
+                    ContentCard(
+                        title: "Digital Nomad Life",
+                        subtitle: "Work from anywhere — stories from around the globe.",
+                        systemImage: "globe",
+                        accentColor: .brown
+                    )
+                }
+            }
+            .padding()
         }
         .overlay(alignment: .bottom) {
-            HStack(spacing: 0) {
-                ForEach(tabBarItems) { item in
-                    Button {
-                        selectedTab = item.id
-                    } label: {
-                        VStack(spacing: 4) {
-                            Image(systemName: selectedTab == item.id ? item.selectedIcon : item.icon)
-                                .font(.system(size: 22))
-                            Text(item.label)
-                                .font(.caption2)
-                                .fontWeight(selectedTab == item.id ? .semibold : .regular)
+            ZStack(alignment: .bottom) {
+                // Tab bar buttons — visible and accessible via VoiceOver swipe.
+                // No .accessibilityHidden; users can swipe to each tab.
+                HStack(spacing: 0) {
+                    ForEach(tabBarItems) { item in
+                        Button {
+                            selectedTab = item.id
+                        } label: {
+                            VStack(spacing: 4) {
+                                Image(systemName: selectedTab == item.id
+                                      ? item.selectedIcon : item.icon)
+                                    .font(.system(size: 22))
+                                Text(item.label)
+                                    .font(.caption2)
+                                    .fontWeight(selectedTab == item.id ? .semibold : .regular)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
+                        .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
                     }
-                    .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
                 }
+
+                // BUG: Intercept view sits on top of the tab buttons in Z-order.
+                // UIKit calls its accessibilityHitTest during Explore by Touch and
+                // it returns a fake content element instead of the tab buttons.
+                TabBarExploreIntercept()
             }
             .padding(.horizontal, 4)
             .background(.ultraThinMaterial, in: Capsule())
@@ -290,10 +273,6 @@ struct ExploreByTouchBrokenView: View {
             .shadow(color: .black.opacity(0.14), radius: 16, x: 0, y: 4)
             .padding(.horizontal, 20)
             .padding(.bottom, 8)
-            // BUG: visual tab bar hidden from the accessibility tree entirely.
-            // VoiceOver has no element at the visual tab bar position, so
-            // Explore by Touch finds the scroll content behind it.
-            .accessibilityHidden(true)
         }
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)

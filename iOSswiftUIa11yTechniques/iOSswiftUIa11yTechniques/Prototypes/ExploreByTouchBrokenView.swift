@@ -72,22 +72,64 @@ private struct ContentCard: View {
 
 // MARK: - Main view
 
-/// Bad example: custom liquid-glass tab bar overlaid with ZStack.
+/// Bad example: custom liquid-glass tab bar whose ZStack position breaks
+/// VoiceOver Explore by Touch.
 ///
-/// The bug: the scroll content has no bottom inset for the tab bar height,
-/// so card accessibility frames extend into the tab bar zone. When VoiceOver
-/// Explore by Touch drags a finger over the tab bar area, the focus lands on
-/// the underlying scroll content instead of the tab items.
+/// The bug: SwiftUI's accessibility traversal order follows ZStack structural
+/// order, NOT visual .zIndex() order. The tab bar is declared FIRST in the
+/// ZStack (lowest accessibility priority) and given .zIndex(1) to appear
+/// visually on top. The scroll content is declared LAST (highest accessibility
+/// priority). When VoiceOver Explore by Touch drags over the tab bar area it
+/// hits the scroll content element — not the tab buttons — because the scroll
+/// view is last in the accessibility tree and its cards have no bottom inset
+/// to keep their frames out of the tab bar zone.
+///
+/// This mirrors the pattern found in the CVS Pharmacy component (PharmacyRootView)
+/// where the header/footer VStack appears first in a ZStack and content appears
+/// last, meaning the content wins for Explore by Touch even though the tab bar
+/// is visually on top.
 struct ExploreByTouchBrokenView: View {
     @State private var selectedTab = 0
 
     var body: some View {
         ZStack(alignment: .bottom) {
 
+            // ── Custom liquid glass tab bar ───────────────────────────────────
+            // BUG: Declared FIRST in ZStack so it is FIRST in the accessibility
+            // tree — lowest priority for VoiceOver Explore by Touch.
+            // .zIndex(1) makes it VISUALLY on top, but VoiceOver ignores zIndex
+            // when determining Explore by Touch focus order; it uses structural
+            // declaration order instead.
+            HStack(spacing: 0) {
+                ForEach(tabBarItems) { item in
+                    Button {
+                        selectedTab = item.id
+                    } label: {
+                        VStack(spacing: 4) {
+                            Image(systemName: selectedTab == item.id ? item.selectedIcon : item.icon)
+                                .font(.system(size: 22))
+                            Text(item.label)
+                                .font(.caption2)
+                                .fontWeight(selectedTab == item.id ? .semibold : .regular)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                    }
+                    .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
+                }
+            }
+            .padding(.horizontal, 4)
+            .background(.ultraThinMaterial, in: Capsule())
+            .overlay(Capsule().strokeBorder(.primary.opacity(0.08), lineWidth: 0.5))
+            .shadow(color: .black.opacity(0.14), radius: 16, x: 0, y: 4)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 8)
+            .zIndex(1) // visually on top — but this does NOT affect accessibility order
+
             // ── Scrollable content ───────────────────────────────────────────
-            // BUG: ScrollView has no bottom padding / safeAreaInset to account
-            // for the tab bar height. Card elements' accessibility frames
-            // extend all the way into the tab bar region.
+            // BUG: Declared LAST in ZStack so it is LAST in the accessibility
+            // tree — highest priority for VoiceOver Explore by Touch.
+            // Also has no bottom padding, so cards extend into the tab bar zone.
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
 
@@ -176,44 +218,11 @@ struct ExploreByTouchBrokenView: View {
                     }
                 }
                 .padding()
-                // BUG: No .padding(.bottom, tabBarHeight) here.
-                // Last card's accessibility frame overlaps the tab bar zone.
+                // BUG: No .padding(.bottom, tabBarHeight) — last card's frame
+                // extends into the tab bar zone, ensuring Explore by Touch
+                // always finds a card element when dragging over the tab bar.
             }
-
-            // ── Custom liquid glass tab bar ───────────────────────────────────
-            // BUG 1: Positioned with ZStack overlay instead of .safeAreaInset,
-            //         so the system doesn't reserve space at the bottom.
-            // BUG 2: No .accessibilityElement(children: .contain) container,
-            //         so VoiceOver doesn't group these buttons as a tab bar.
-            // BUG 3: No .accessibilityAddTraits(.isTabBar) on the HStack.
-            // BUG 4: No .accessibilityAddTraits(.isSelected) on the active tab.
-            //
-            // Result: Explore by Touch in the tab bar area focuses on the
-            // scroll content card behind it instead of the tab buttons.
-            HStack(spacing: 0) {
-                ForEach(tabBarItems) { item in
-                    Button {
-                        selectedTab = item.id
-                    } label: {
-                        VStack(spacing: 4) {
-                            Image(systemName: selectedTab == item.id ? item.selectedIcon : item.icon)
-                                .font(.system(size: 22))
-                            Text(item.label)
-                                .font(.caption2)
-                                .fontWeight(selectedTab == item.id ? .semibold : .regular)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
-                    }
-                    .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
-                }
-            }
-            .padding(.horizontal, 4)
-            .background(.ultraThinMaterial, in: Capsule())
-            .overlay(Capsule().strokeBorder(.primary.opacity(0.08), lineWidth: 0.5))
-            .shadow(color: .black.opacity(0.14), radius: 16, x: 0, y: 4)
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
+            .zIndex(0) // visually behind — but LAST in ZStack = wins for Explore by Touch
         }
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)

@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased] - 2026-08-27
+
+### iOSswiftUIa11yTechniques
+
+#### Changed
+
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): updated to reproduce the exact CVS Pharmacy accessibility bug pattern. Added `@AccessibilityFocusState` + `.accessibilityFocused()` binding, `.accessibilityRemoveTraits(.isButton)` on each tab item, `.accessibilityHidden(true)` on icon images, and `.clipShape(Rectangle())` on the tab bar — matching `BottomTabBubbleView.swift` from the UnifiedNavigation package. Clarified doc-comment to explain the two-bug combination: (1) `.accessibilityElement(children: .contain)` creates a full-screen accessibility container that iOS hit-testing drills into first, and (2) `.accessibilityRemoveTraits(.isButton)` strips the interactive trait from tab items so they lose Explore by Touch conflict resolution to the scroll-content cards behind them.
+
 ## [Unreleased] - 2026-08-26
 
 ### iOSswiftUIa11yTechniques

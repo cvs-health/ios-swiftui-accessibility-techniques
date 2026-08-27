@@ -74,35 +74,84 @@ private struct ContentCard: View {
 
 /// Bad example: custom liquid-glass tab bar that breaks VoiceOver Explore by Touch.
 ///
-/// The bug pattern is taken directly from the CVS Pharmacy component
-/// (GlobalHeaderAndFooterModifier in GlobalHeaderFooterParams.swift):
+/// Bug pattern copied from the CVS Pharmacy module:
 ///
-///     content
-///         .accessibilityElement(children: .contain)   // ← BUG
-///         .overlay(alignment: .bottom) { tabBar }
+/// BUG 1 — GlobalHeaderAndFooterModifier (GlobalHeaderFooterParams.swift):
 ///
-/// `.accessibilityElement(children: .contain)` groups all scroll content into
-/// one accessibility container whose frame covers the full screen — including
-/// the tab bar area. The tab bar is then placed as a `.overlay(alignment: .bottom)`
-/// AFTER and OUTSIDE that container. No bottom inset is added to the scroll
-/// content, so card elements' accessibility frames extend into the tab bar zone.
+///     VStack { content }
+///         .accessibilityElement(children: .contain)   // groups content into full-screen container
+///         .overlay(alignment: .bottom) { getFooterView() }  // tab bar OUTSIDE the container
 ///
-/// When VoiceOver Explore by Touch drags over the tab bar area:
-/// - The tab bar buttons are OUTSIDE the accessibility container (overlay)
-/// - The scroll content cards are INSIDE the container with frames extending
-///   into the tab bar area
-/// - VoiceOver resolves the overlap by finding the most specific element inside
-///   the nearest container — the card — instead of the tab bar buttons
+/// `.accessibilityElement(children: .contain)` turns the VStack into an iOS accessibility
+/// container whose frame spans the full screen. iOS hit-testing drills INTO this container
+/// first when the touch position is inside its frame. The tab bar lives in an .overlay()
+/// AFTER this modifier — so it is a sibling of the container, not a child. iOS accessibility
+/// does not exit the container to check siblings while it still has children to offer.
+///
+/// BUG 2 — BottomTabBubbleView.swift:
+///
+///     tabItemButton
+///         .accessibilityRemoveTraits(.isButton)   // strips the interactive trait
+///         .accessibilityFocused($focusedTabId, equals: tabItem.id)
+///
+/// Each tab is a Button, but `.accessibilityRemoveTraits(.isButton)` turns it into a
+/// static, non-interactive element in VoiceOver's eyes. Elements without an interactive
+/// trait rank below interactive elements during Explore by Touch conflict resolution.
+///
+/// Combined effect — Explore by Touch over the tab bar area:
+/// - iOS enters the full-screen accessibility container (from BUG 1)
+/// - Looks for children whose frames include the touch point
+/// - Finds a scroll-content card (no bottom safe-area inset was added, so card frames
+///   extend into the tab bar zone)
+/// - Returns the card without ever checking the non-interactive tab items outside the
+///   container
 struct ExploreByTouchBrokenView: View {
     @State private var selectedTab = 0
+    @AccessibilityFocusState private var focusedTabId: Int?
+
+    // Extracted to avoid type-checker complexity from long modifier chains inside ForEach.
+    @ViewBuilder
+    private func tabButton(for item: TabBarItem) -> some View {
+        let hint = "Double tap to select \(item.label)"
+        Button {
+            selectedTab = item.id
+            // BUG 2 (part): sets focusedTabId so VoiceOver is asked to
+            // move focus here, but the tab item has no .isButton trait —
+            // it cannot receive Explore by Touch focus normally.
+            focusedTabId = item.id
+        } label: {
+            VStack(spacing: 4) {
+                Image(systemName: selectedTab == item.id ? item.selectedIcon : item.icon)
+                    .font(.system(size: 22))
+                    // BUG 2 (part): icon hidden, matching BottomTabBubbleView —
+                    // VoiceOver reads only the text label, not the image.
+                    .accessibilityHidden(true)
+                Text(item.label)
+                    .font(.caption2)
+                    .fontWeight(selectedTab == item.id ? .semibold : .regular)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10)
+        }
+        .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
+        .accessibilityLabel(item.label)
+        .accessibilityValue(selectedTab == item.id ? "selected" : "")
+        // BUG 2: strips the interactive .isButton trait, exactly as
+        // BottomTabBubbleView does. Non-interactive elements lose
+        // priority to interactive elements during Explore by Touch
+        // conflict resolution, so the card behind them wins.
+        .accessibilityRemoveTraits(.isButton)
+        .accessibilityHint(hint)
+        .accessibilityFocused($focusedTabId, equals: item.id)
+    }
 
     var body: some View {
         // ── Scrollable content ───────────────────────────────────────────────
-        // BUG 1: .accessibilityElement(children: .contain) groups all content
-        //         into a container with a full-screen frame. The tab bar added
-        //         below as an overlay is OUTSIDE this container.
-        // BUG 2: No bottom padding — card frames extend into the tab bar zone,
-        //         so VoiceOver always finds a card when exploring that region.
+        // BUG 1: .accessibilityElement(children: .contain) turns this VStack into
+        //         a full-screen iOS accessibility container. iOS hit-testing enters
+        //         the container first and never exits to check the tab bar overlay.
+        // BUG 2: No bottom safe-area inset — card frames extend into the tab bar
+        //         zone, so iOS always finds a card when probing that region.
         ScrollView {
             VStack(alignment: .leading, spacing: 28) {
 
@@ -192,31 +241,18 @@ struct ExploreByTouchBrokenView: View {
             }
             .padding()
         }
-        // BUG: groups all scroll content into an accessibility container.
-        // The tab bar overlay added next is outside this container.
+        // BUG 1: Creates a full-screen accessibility container.
+        // The tab bar overlay declared next is OUTSIDE this container;
+        // iOS hit-testing never reaches it when a card frame fills that zone.
         .accessibilityElement(children: .contain)
         // ── Custom liquid glass tab bar ───────────────────────────────────────
-        // BUG: Added as overlay AFTER .accessibilityElement(children: .contain),
-        //      placing it OUTSIDE the accessibility container. VoiceOver
-        //      Explore by Touch finds the card elements inside the container
-        //      instead of these tab buttons when dragging over this area.
+        // Placed as .overlay(alignment: .bottom) AFTER .accessibilityElement(children: .contain)
+        // — exactly matching GlobalHeaderAndFooterModifier — so the tab bar lives
+        // OUTSIDE the accessibility container.
         .overlay(alignment: .bottom) {
             HStack(spacing: 0) {
                 ForEach(tabBarItems) { item in
-                    Button {
-                        selectedTab = item.id
-                    } label: {
-                        VStack(spacing: 4) {
-                            Image(systemName: selectedTab == item.id ? item.selectedIcon : item.icon)
-                                .font(.system(size: 22))
-                            Text(item.label)
-                                .font(.caption2)
-                                .fontWeight(selectedTab == item.id ? .semibold : .regular)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
-                    }
-                    .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
+                    tabButton(for: item)
                 }
             }
             .padding(.horizontal, 4)
@@ -225,6 +261,9 @@ struct ExploreByTouchBrokenView: View {
             .shadow(color: .black.opacity(0.14), radius: 16, x: 0, y: 4)
             .padding(.horizontal, 20)
             .padding(.bottom, 8)
+            // BUG 2 (part): clips to a Rectangle, matching UnifiedNavigationBottomBarView —
+            // the frame boundary that confines the tab bar's accessibility region.
+            .clipShape(Rectangle())
         }
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)

@@ -63,6 +63,12 @@ private final class TabBarExploreInterceptUIView: UIView {
 
     // BUG: hides itself so the accessibility hit test falls through to the
     // scroll content behind the tab bar instead of finding the tab buttons.
+    //
+    // `@available(iOS 18, *)` matches the SDK declaration and silences the
+    // availability error. Both Swift names (`event:` and `withEvent:`) share the
+    // same ObjC selector, so the ObjC runtime dispatches to this implementation
+    // on iOS 17 at runtime even though Swift sees it as iOS-18-only.
+    @available(iOS 18, *)
     override func accessibilityHitTest(_ point: CGPoint, event: UIEvent?) -> Any? {
         guard let window = self.window else { return nil }
         isHidden = true

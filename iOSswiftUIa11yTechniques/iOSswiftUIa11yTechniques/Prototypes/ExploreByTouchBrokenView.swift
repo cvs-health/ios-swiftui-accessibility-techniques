@@ -72,34 +72,135 @@ private struct ContentCard: View {
 
 // MARK: - Main view
 
-/// Bad example: custom liquid-glass tab bar whose ZStack position breaks
-/// VoiceOver Explore by Touch.
+/// Bad example: custom liquid-glass tab bar that breaks VoiceOver Explore by Touch.
 ///
-/// The bug: SwiftUI's accessibility traversal order follows ZStack structural
-/// order, NOT visual .zIndex() order. The tab bar is declared FIRST in the
-/// ZStack (lowest accessibility priority) and given .zIndex(1) to appear
-/// visually on top. The scroll content is declared LAST (highest accessibility
-/// priority). When VoiceOver Explore by Touch drags over the tab bar area it
-/// hits the scroll content element — not the tab buttons — because the scroll
-/// view is last in the accessibility tree and its cards have no bottom inset
-/// to keep their frames out of the tab bar zone.
+/// The bug pattern is taken directly from the CVS Pharmacy component
+/// (GlobalHeaderAndFooterModifier in GlobalHeaderFooterParams.swift):
 ///
-/// This mirrors the pattern found in the CVS Pharmacy component (PharmacyRootView)
-/// where the header/footer VStack appears first in a ZStack and content appears
-/// last, meaning the content wins for Explore by Touch even though the tab bar
-/// is visually on top.
+///     content
+///         .accessibilityElement(children: .contain)   // ← BUG
+///         .overlay(alignment: .bottom) { tabBar }
+///
+/// `.accessibilityElement(children: .contain)` groups all scroll content into
+/// one accessibility container whose frame covers the full screen — including
+/// the tab bar area. The tab bar is then placed as a `.overlay(alignment: .bottom)`
+/// AFTER and OUTSIDE that container. No bottom inset is added to the scroll
+/// content, so card elements' accessibility frames extend into the tab bar zone.
+///
+/// When VoiceOver Explore by Touch drags over the tab bar area:
+/// - The tab bar buttons are OUTSIDE the accessibility container (overlay)
+/// - The scroll content cards are INSIDE the container with frames extending
+///   into the tab bar area
+/// - VoiceOver resolves the overlap by finding the most specific element inside
+///   the nearest container — the card — instead of the tab bar buttons
 struct ExploreByTouchBrokenView: View {
     @State private var selectedTab = 0
 
     var body: some View {
-        ZStack(alignment: .bottom) {
+        // ── Scrollable content ───────────────────────────────────────────────
+        // BUG 1: .accessibilityElement(children: .contain) groups all content
+        //         into a container with a full-screen frame. The tab bar added
+        //         below as an overlay is OUTSIDE this container.
+        // BUG 2: No bottom padding — card frames extend into the tab bar zone,
+        //         so VoiceOver always finds a card when exploring that region.
+        ScrollView {
+            VStack(alignment: .leading, spacing: 28) {
 
-            // ── Custom liquid glass tab bar ───────────────────────────────────
-            // BUG: Declared FIRST in ZStack so it is FIRST in the accessibility
-            // tree — lowest priority for VoiceOver Explore by Touch.
-            // .zIndex(1) makes it VISUALLY on top, but VoiceOver ignores zIndex
-            // when determining Explore by Touch focus order; it uses structural
-            // declaration order instead.
+                // Discover section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Discover")
+                        .font(.title2).bold()
+                        .accessibilityAddTraits(.isHeader)
+
+                    ContentCard(
+                        title: "National Parks Guide",
+                        subtitle: "America's most breathtaking landscapes and trails.",
+                        systemImage: "mountain.2",
+                        accentColor: .green
+                    )
+                    ContentCard(
+                        title: "Urban Architecture",
+                        subtitle: "A tour through iconic buildings and design history.",
+                        systemImage: "building.columns",
+                        accentColor: .indigo
+                    )
+                    ContentCard(
+                        title: "Ocean Exploration",
+                        subtitle: "Dive into the mysteries of the underwater world.",
+                        systemImage: "drop.fill",
+                        accentColor: .blue
+                    )
+                }
+
+                // For You section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("For You")
+                        .font(.title2).bold()
+                        .accessibilityAddTraits(.isHeader)
+
+                    ContentCard(
+                        title: "Morning Routines",
+                        subtitle: "Science-backed habits to energize your day.",
+                        systemImage: "sunrise",
+                        accentColor: .orange
+                    )
+                    ContentCard(
+                        title: "Creative Writing",
+                        subtitle: "Tips and exercises to develop your storytelling voice.",
+                        systemImage: "pencil",
+                        accentColor: .purple
+                    )
+                    ContentCard(
+                        title: "Healthy Recipes",
+                        subtitle: "Quick, nutritious meals for busy schedules.",
+                        systemImage: "fork.knife",
+                        accentColor: .red
+                    )
+                    ContentCard(
+                        title: "Mindfulness",
+                        subtitle: "Guided practices for clarity and calm.",
+                        systemImage: "brain",
+                        accentColor: .teal
+                    )
+                }
+
+                // Trending section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Trending")
+                        .font(.title2).bold()
+                        .accessibilityAddTraits(.isHeader)
+
+                    ContentCard(
+                        title: "Space Exploration",
+                        subtitle: "The latest missions and discoveries beyond Earth.",
+                        systemImage: "moon.stars",
+                        accentColor: .cyan
+                    )
+                    ContentCard(
+                        title: "Sustainable Living",
+                        subtitle: "Practical steps toward a smaller carbon footprint.",
+                        systemImage: "leaf",
+                        accentColor: .green
+                    )
+                    ContentCard(
+                        title: "Digital Nomad Life",
+                        subtitle: "Work from anywhere — stories from around the globe.",
+                        systemImage: "globe",
+                        accentColor: .brown
+                    )
+                }
+            }
+            .padding()
+        }
+        // BUG: groups all scroll content into an accessibility container.
+        // The tab bar overlay added next is outside this container.
+        .accessibilityElement(children: .contain)
+        // ── Custom liquid glass tab bar ───────────────────────────────────────
+        // BUG: Added as overlay AFTER .accessibilityElement(children: .contain),
+        //      placing it OUTSIDE the accessibility container. VoiceOver
+        //      Explore by Touch finds the card elements inside the container
+        //      instead of these tab buttons when dragging over this area.
+        .overlay(alignment: .bottom) {
             HStack(spacing: 0) {
                 ForEach(tabBarItems) { item in
                     Button {
@@ -124,105 +225,6 @@ struct ExploreByTouchBrokenView: View {
             .shadow(color: .black.opacity(0.14), radius: 16, x: 0, y: 4)
             .padding(.horizontal, 20)
             .padding(.bottom, 8)
-            .zIndex(1) // visually on top — but this does NOT affect accessibility order
-
-            // ── Scrollable content ───────────────────────────────────────────
-            // BUG: Declared LAST in ZStack so it is LAST in the accessibility
-            // tree — highest priority for VoiceOver Explore by Touch.
-            // Also has no bottom padding, so cards extend into the tab bar zone.
-            ScrollView {
-                VStack(alignment: .leading, spacing: 28) {
-
-                    // Discover section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Discover")
-                            .font(.title2).bold()
-                            .accessibilityAddTraits(.isHeader)
-
-                        ContentCard(
-                            title: "National Parks Guide",
-                            subtitle: "America's most breathtaking landscapes and trails.",
-                            systemImage: "mountain.2",
-                            accentColor: .green
-                        )
-                        ContentCard(
-                            title: "Urban Architecture",
-                            subtitle: "A tour through iconic buildings and design history.",
-                            systemImage: "building.columns",
-                            accentColor: .indigo
-                        )
-                        ContentCard(
-                            title: "Ocean Exploration",
-                            subtitle: "Dive into the mysteries of the underwater world.",
-                            systemImage: "drop.fill",
-                            accentColor: .blue
-                        )
-                    }
-
-                    // For You section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("For You")
-                            .font(.title2).bold()
-                            .accessibilityAddTraits(.isHeader)
-
-                        ContentCard(
-                            title: "Morning Routines",
-                            subtitle: "Science-backed habits to energize your day.",
-                            systemImage: "sunrise",
-                            accentColor: .orange
-                        )
-                        ContentCard(
-                            title: "Creative Writing",
-                            subtitle: "Tips and exercises to develop your storytelling voice.",
-                            systemImage: "pencil",
-                            accentColor: .purple
-                        )
-                        ContentCard(
-                            title: "Healthy Recipes",
-                            subtitle: "Quick, nutritious meals for busy schedules.",
-                            systemImage: "fork.knife",
-                            accentColor: .red
-                        )
-                        ContentCard(
-                            title: "Mindfulness",
-                            subtitle: "Guided practices for clarity and calm.",
-                            systemImage: "brain",
-                            accentColor: .teal
-                        )
-                    }
-
-                    // Trending section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Trending")
-                            .font(.title2).bold()
-                            .accessibilityAddTraits(.isHeader)
-
-                        ContentCard(
-                            title: "Space Exploration",
-                            subtitle: "The latest missions and discoveries beyond Earth.",
-                            systemImage: "moon.stars",
-                            accentColor: .cyan
-                        )
-                        ContentCard(
-                            title: "Sustainable Living",
-                            subtitle: "Practical steps toward a smaller carbon footprint.",
-                            systemImage: "leaf",
-                            accentColor: .green
-                        )
-                        ContentCard(
-                            title: "Digital Nomad Life",
-                            subtitle: "Work from anywhere — stories from around the globe.",
-                            systemImage: "globe",
-                            accentColor: .brown
-                        )
-                    }
-                }
-                .padding()
-                // BUG: No .padding(.bottom, tabBarHeight) — last card's frame
-                // extends into the tab bar zone, ensuring Explore by Touch
-                // always finds a card element when dragging over the tab bar.
-            }
-            .zIndex(0) // visually behind — but LAST in ZStack = wins for Explore by Touch
         }
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)

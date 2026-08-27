@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
-- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): updated to reproduce the exact CVS Pharmacy accessibility bug pattern. Added `@AccessibilityFocusState` + `.accessibilityFocused()` binding, `.accessibilityRemoveTraits(.isButton)` on each tab item, `.accessibilityHidden(true)` on icon images, and `.clipShape(Rectangle())` on the tab bar — matching `BottomTabBubbleView.swift` from the UnifiedNavigation package. Clarified doc-comment to explain the two-bug combination: (1) `.accessibilityElement(children: .contain)` creates a full-screen accessibility container that iOS hit-testing drills into first, and (2) `.accessibilityRemoveTraits(.isButton)` strips the interactive trait from tab items so they lose Explore by Touch conflict resolution to the scroll-content cards behind them.
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): rewrote using a `UIViewRepresentable` (`TabBarMisplacedA11yLayer`) backed by a custom `UIAccessibilityElement`-based `UIView`. The tab items' `accessibilityFrame` values are placed at the top of the screen (status-bar zone, y ≈ 5 pt) instead of at the visual tab bar position (bottom). Combined with `.accessibilityHidden(true)` on the visual tab bar buttons, this produces the exact CVS-like behavior: VoiceOver swipe navigation still reaches each tab (UIKit swipe traversal follows the tree regardless of frame position), but Explore by Touch at the visual tab bar finds scroll-content cards instead of tabs (no tab element has a frame there). Added a no-bottom-inset comment to explain why card frames extend into the tab bar zone.
 
 ## [Unreleased] - 2026-08-26
 

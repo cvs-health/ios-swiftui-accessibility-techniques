@@ -47,6 +47,9 @@ struct PrototypesView: View {
             NavigationLink(destination: MarkdownView()) {
                 Text("Markdown View Test")
             }
+            NavigationLink(destination: ExploreByTouchBrokenView()) {
+                Text("Explore by Touch Broken")
+            }
         }
         .navigationTitle("Prototypes")
     }

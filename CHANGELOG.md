@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
-- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): rewrote using a `UIViewRepresentable` (`TabBarExploreIntercept`) backed by `TabBarExploreInterceptUIView`. The UIView overrides `accessibilityHitTest(_:event:)` to temporarily hide itself and re-run the hit test from the window root, so VoiceOver Explore by Touch on the tab bar finds the actual scroll-content element physically behind the tab bar instead of the tab button. Returns `[]` from `accessibilityElements` so swipe navigation still reaches each tab. No `.accessibilityHidden` used. Uses `.overlay(TabBarExploreIntercept())` directly on the tab capsule so the intercept frame matches the capsule exactly.
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): replaced all UIKit intercept code with the exact CVS Pharmacy bad-code pattern from `GlobalHeaderAndFooterModifier`. Content `VStack` wrapped in `.accessibilityElement(children: .contain)` before `.overlay(alignment: .bottom)` adds the tab bar — the container's frame covers the full screen including the tab bar area, so Explore by Touch on the tab bar finds a scroll-content element instead of a tab button. Tab buttons use `.accessibilityRemoveTraits(.isButton)` matching `BottomTabBubbleView`. No UIKit code, no `import UIKit`.
 
 ## [Unreleased] - 2026-08-26
 

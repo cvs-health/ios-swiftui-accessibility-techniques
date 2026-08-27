@@ -132,8 +132,8 @@ private struct ContentCard: View {
 /// Bad example: custom liquid-glass tab bar that breaks VoiceOver Explore by Touch.
 ///
 /// The tab bar buttons are fully visible and accessible via VoiceOver swipe
-/// navigation. The bug is that `TabBarExploreInterceptUIView` sits on top of
-/// them in the Z-order and overrides `accessibilityHitTest(_:with:)` — the UIKit
+/// navigation. The bug is that `TabBarExploreInterceptUIView` overlays the tab
+/// capsule exactly and overrides `accessibilityHitTest(_:event:)` — the UIKit
 /// hook VoiceOver calls during Explore by Touch.
 ///
 /// When the user drags a finger over the tab bar area, the intercept view returns
@@ -237,37 +237,34 @@ struct ExploreByTouchBrokenView: View {
             .padding()
         }
         .overlay(alignment: .bottom) {
-            ZStack(alignment: .bottom) {
-                // Tab bar buttons — visible and accessible via VoiceOver swipe.
-                // No .accessibilityHidden; users can swipe to each tab.
-                HStack(spacing: 0) {
-                    ForEach(tabBarItems) { item in
-                        Button {
-                            selectedTab = item.id
-                        } label: {
-                            VStack(spacing: 4) {
-                                Image(systemName: selectedTab == item.id
-                                      ? item.selectedIcon : item.icon)
-                                    .font(.system(size: 22))
-                                Text(item.label)
-                                    .font(.caption2)
-                                    .fontWeight(selectedTab == item.id ? .semibold : .regular)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 10)
+            // Tab bar buttons — visible and accessible via VoiceOver swipe.
+            // No .accessibilityHidden; users can swipe to each tab.
+            HStack(spacing: 0) {
+                ForEach(tabBarItems) { item in
+                    Button {
+                        selectedTab = item.id
+                    } label: {
+                        VStack(spacing: 4) {
+                            Image(systemName: selectedTab == item.id
+                                  ? item.selectedIcon : item.icon)
+                                .font(.system(size: 22))
+                            Text(item.label)
+                                .font(.caption2)
+                                .fontWeight(selectedTab == item.id ? .semibold : .regular)
                         }
-                        .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
                     }
+                    .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
                 }
-
-                // BUG: Intercept view sits on top of the tab buttons in Z-order.
-                // UIKit calls its accessibilityHitTest during Explore by Touch and
-                // it returns a fake content element instead of the tab buttons.
-                TabBarExploreIntercept()
             }
             .padding(.horizontal, 4)
             .background(.ultraThinMaterial, in: Capsule())
             .overlay(Capsule().strokeBorder(.primary.opacity(0.08), lineWidth: 0.5))
+            // BUG: Intercept view overlays the capsule exactly, so its bounds match
+            // the tab bar frame. UIKit calls accessibilityHitTest on it first during
+            // Explore by Touch and it returns a fake content element.
+            .overlay(TabBarExploreIntercept())
             .shadow(color: .black.opacity(0.14), radius: 16, x: 0, y: 4)
             .padding(.horizontal, 20)
             .padding(.bottom, 8)

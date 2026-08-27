@@ -61,20 +61,46 @@ private final class TabBarExploreInterceptUIView: UIView {
         set { }
     }
 
-    // BUG: hides itself so the accessibility hit test falls through to the
-    // scroll content behind the tab bar instead of finding the tab buttons.
+    // BUG: hides the entire overlay branch (tab buttons + this intercept) so
+    // UIKit's accessibility hit test falls through to the scroll content.
+    // Hiding only `self` doesn't work because the tab buttons are siblings
+    // in the same overlay UIView and are still found by the hit test.
     //
-    // `@available(iOS 18, *)` matches the SDK declaration and silences the
-    // availability error. Both Swift names (`event:` and `withEvent:`) share the
-    // same ObjC selector, so the ObjC runtime dispatches to this implementation
-    // on iOS 17 at runtime even though Swift sees it as iOS-18-only.
+    // `findOverlayBranch()` walks up the UIView tree looking for the ancestor
+    // that is a sibling of the UIScrollView backing the SwiftUI ScrollView.
+    // Hiding that ancestor hides the whole tab bar capsule at once.
+    //
+    // `@available(iOS 18, *)` matches the SDK declaration. Both Swift names
+    // (`event:` and `withEvent:`) share the same ObjC selector, so the ObjC
+    // runtime dispatches here on iOS 17 at runtime too.
     @available(iOS 18, *)
     override func accessibilityHitTest(_ point: CGPoint, event: UIEvent?) -> Any? {
         guard let window = self.window else { return nil }
-        isHidden = true
-        let element = window.accessibilityHitTest(convert(point, to: window), event: event)
-        isHidden = false
+        let windowPoint = convert(point, to: window)
+        let overlay = findOverlayBranch()
+        overlay?.isHidden = true
+        let element = window.accessibilityHitTest(windowPoint, event: event)
+        overlay?.isHidden = false
         return element
+    }
+
+    // Walk up from self until we find the ancestor whose SIBLING subtree
+    // contains the UIScrollView. That ancestor is the overlay branch to hide.
+    private func findOverlayBranch() -> UIView? {
+        var current: UIView = self
+        while let parent = current.superview, !(parent is UIWindow) {
+            let siblings = parent.subviews.filter { $0 !== current }
+            if siblings.contains(where: { subtreeContainsScrollView($0) }) {
+                return current
+            }
+            current = parent
+        }
+        return nil
+    }
+
+    private func subtreeContainsScrollView(_ view: UIView) -> Bool {
+        if view is UIScrollView { return true }
+        return view.subviews.contains { subtreeContainsScrollView($0) }
     }
 }
 

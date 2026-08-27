@@ -74,33 +74,30 @@ private struct ContentCard: View {
 
 // MARK: - Main view
 
-/// Bad example: replicates the CVS Pharmacy app's Explore by Touch bug.
+/// Bad example: replicates the CVS Pharmacy home screen Explore by Touch bug.
 ///
-/// The pattern comes directly from `GlobalHeaderAndFooterModifier` in the CVS
-/// codebase. `.accessibilityElement(children: .contain)` is applied to the
-/// content `VStack` BEFORE `.overlay(alignment: .bottom)` adds the tab bar.
-/// This creates a UIKit accessibility container whose frame covers the full
-/// screen — including the area where the tab bar floats. When VoiceOver
-/// Explore by Touch fires over the tab bar, the container captures the event
-/// and returns a scroll-content element instead of the tab button.
+/// Layout mirrors `H100HomeScreenView` in the CVS codebase:
+/// - `ZStack` with the scroll content in the background
+/// - `.ignoresSafeArea(edges: .bottom)` on the scroll view so content
+///   extends behind the floating tab bar
+/// - The tab bar is inside the ZStack (not an overlay modifier), sitting on
+///   top of the content in the same layer
 ///
-/// Each tab also uses `.accessibilityRemoveTraits(.isButton)` matching
-/// `BottomTabBubbleView` in the CVS codebase, which further degrades the
-/// tab bar's accessibility signal.
-///
-/// VoiceOver swipe navigation still reaches every tab because `.contain`
-/// does not hide children — it groups them. The tab buttons remain in the
-/// swipe order after the content elements.
+/// The bug comes from `UnifiedNavigationTabBarView`'s `.padding(.top, 32)`:
+/// the tab bar view has 32 pt of empty space above the actual pill buttons.
+/// That zone shows the background gradient but has no accessibility elements.
+/// When VoiceOver Explore by Touch fires anywhere in the tab bar region
+/// (including that empty 32 pt zone) the hit test falls through the empty
+/// padding and finds the scroll content element below instead of a tab button.
 struct ExploreByTouchBrokenView: View {
     @State private var selectedTab = 0
 
     var body: some View {
-        // BUG: .accessibilityElement(children: .contain) on the content VStack
-        // creates a full-screen UIKit container. The .overlay(alignment: .bottom)
-        // for the tab bar is applied after, so the container's accessibility
-        // frame covers the tab bar area. Explore by Touch on the tab bar finds
-        // a content element inside the container instead of the tab button.
-        VStack(spacing: 0) {
+        // BUG: ZStack lets scroll content extend under the floating tab bar.
+        // The tab bar has 32 pt of empty padding above its pill buttons,
+        // matching UnifiedNavigationTabBarView.body in the CVS codebase.
+        // Explore by Touch in that zone hits the scroll content instead of a tab.
+        ZStack(alignment: .top) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
 
@@ -189,43 +186,53 @@ struct ExploreByTouchBrokenView: View {
                     }
                 }
                 .padding()
+                // Extra bottom padding so last card scrolls clear of the tab bar
+                .padding(.bottom, 100)
             }
-            .frame(maxHeight: .infinity)
-        }
-        // BUG: .contain applied here, before the tab bar overlay is added.
-        // Mirrors GlobalHeaderAndFooterModifier in the CVS codebase.
-        .accessibilityElement(children: .contain)
-        .overlay(alignment: .bottom) {
-            HStack(spacing: 0) {
-                ForEach(tabBarItems) { item in
-                    Button {
-                        selectedTab = item.id
-                    } label: {
-                        VStack(spacing: 4) {
-                            Image(systemName: selectedTab == item.id
-                                  ? item.selectedIcon : item.icon)
-                                .font(.system(size: 22))
-                                .accessibilityHidden(true)
-                            Text(item.label)
-                                .font(.caption2)
-                                .fontWeight(selectedTab == item.id ? .semibold : .regular)
+            // BUG: content extends behind the floating tab bar, matching
+            // segmentedContent.ignoresSafeArea(edges: .bottom) in H100HomeScreenView.
+            .ignoresSafeArea(edges: .bottom)
+
+            // Tab bar: sits inside the ZStack on top of the scroll content.
+            // BUG: .padding(.top, 32) mirrors UnifiedNavigationTabBarView's
+            // 32 pt empty zone above the pill buttons. Explore by Touch in
+            // that zone has no accessibility elements and falls through to
+            // the scroll content beneath it.
+            VStack {
+                Spacer()
+                HStack(spacing: 0) {
+                    ForEach(tabBarItems) { item in
+                        Button {
+                            selectedTab = item.id
+                        } label: {
+                            VStack(spacing: 4) {
+                                Image(systemName: selectedTab == item.id
+                                      ? item.selectedIcon : item.icon)
+                                    .font(.system(size: 22))
+                                    .accessibilityHidden(true)
+                                Text(item.label)
+                                    .font(.caption2)
+                                    .fontWeight(selectedTab == item.id ? .semibold : .regular)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
+                        .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
+                        .accessibilityLabel(item.label)
+                        .accessibilityRemoveTraits(.isButton)
+                        .accessibilityHint("Double tap to activate")
                     }
-                    .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
-                    // BUG: mirrors BottomTabBubbleView in the CVS codebase.
-                    .accessibilityLabel(item.label)
-                    .accessibilityRemoveTraits(.isButton)
-                    .accessibilityHint("Double tap to activate")
                 }
+                .padding(.horizontal, 4)
+                .background(.ultraThinMaterial, in: Capsule())
+                .overlay(Capsule().strokeBorder(.primary.opacity(0.08), lineWidth: 0.5))
+                .shadow(color: .black.opacity(0.14), radius: 16, x: 0, y: 4)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 8)
+                // BUG: 32 pt empty zone above the pill, matching CVS's tab bar.
+                // No accessibility elements exist here — Explore by Touch falls through.
+                .padding(.top, 32)
             }
-            .padding(.horizontal, 4)
-            .background(.ultraThinMaterial, in: Capsule())
-            .overlay(Capsule().strokeBorder(.primary.opacity(0.08), lineWidth: 0.5))
-            .shadow(color: .black.opacity(0.14), radius: 16, x: 0, y: 4)
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
         }
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)

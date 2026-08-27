@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
-- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): replaced all UIKit intercept code with the exact CVS Pharmacy bad-code pattern from `GlobalHeaderAndFooterModifier`. Content `VStack` wrapped in `.accessibilityElement(children: .contain)` before `.overlay(alignment: .bottom)` adds the tab bar — the container's frame covers the full screen including the tab bar area, so Explore by Touch on the tab bar finds a scroll-content element instead of a tab button. Tab buttons use `.accessibilityRemoveTraits(.isButton)` matching `BottomTabBubbleView`. No UIKit code, no `import UIKit`.
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): rewrote to match `H100HomeScreenView` layout from the CVS codebase. Uses a `ZStack` (no overlay modifier) with the scroll content using `.ignoresSafeArea(edges: .bottom)` so it extends behind the floating tab bar. Tab bar sits inside the ZStack with `.padding(.top, 32)` matching `UnifiedNavigationTabBarView` — that 32 pt empty zone above the pill has no accessibility elements, so Explore by Touch there falls through to the scroll content. Tab buttons use `.accessibilityRemoveTraits(.isButton)` matching `BottomTabBubbleView`.
 
 ## [Unreleased] - 2026-08-26
 

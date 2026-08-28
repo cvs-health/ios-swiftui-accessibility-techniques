@@ -83,6 +83,12 @@ private struct ContentCard: View {
                 .stroke(Color.black.opacity(0.08), lineWidth: 1)
         )
         .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
+        // Matches CVS ActivityCardView: merges title, image, and subtitle into
+        // one focusable element instead of three. VoiceOver announces the whole
+        // card as a single button.
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title). \(subtitle)")
+        .accessibilityAddTraits(.isButton)
     }
 }
 

@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
+- **Accessibility Sort Priority** documentation (`Documentation/AccessibilitySortPriority.md`): added a "Never use negative sort priority values" section explaining that sort priority also governs Explore by Touch hit testing, not just swipe reading order. Negative-priority overlays (e.g., a tab bar with `.accessibilitySortPriority(-1)`) lose hit tests to any overlapping scroll content, silently breaking Explore by Touch — a critical WCAG 2.5.1 / 2.1.1 failure. Includes concrete remediation steps and points readers at the `ExploreByTouchBrokenView` prototype. Added WCAG 2.1.1 Keyboard and 2.5.1 Pointer Gestures to the success criteria list.
 - **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): restored `.accessibilitySortPriority(-1)` on the tab bar after empirical testing confirmed it is required — without it, Explore by Touch reaches the tabs. Doc comment updated to note the empirical confirmation.
 - **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): wrapped the bug explanation panel in a `DisclosureGroup` so it is collapsed by default. Users tap the "Why the tab bar is unreachable by touch" header to expand.
 

@@ -13,9 +13,30 @@ Before using `.accessibilitySortPriority()`, consider these alternatives:
 
 **Test on a real device.** The iOS Simulator does not respect `.accessibilitySortPriority()` values — VoiceOver in the Simulator reads elements in source order regardless of sort priority. You must test on a physical device to verify the reading order is correct.
 
+## Never use negative sort priority values
+
+**Do not set `.accessibilitySortPriority()` to a negative value.** Sort priority does more than just reorder swipe navigation — VoiceOver also consults it during **Explore by Touch** hit testing. When two accessibility elements overlap at a touch point, VoiceOver picks the one with the higher priority. The default priority is `0`, so any element with a negative priority — for example, `-1` — loses to any other overlapping element with the default priority.
+
+This has serious consequences for floating UI that overlaps scroll content:
+
+- A floating bottom tab bar with `.accessibilitySortPriority(-1)` will lose Explore by Touch hit tests to any scroll content sitting behind it (for example, a `ScrollView` that uses `.ignoresSafeArea(edges: .bottom)`).
+- Users dragging a finger over the tab bar will hear scroll content instead of a tab button, even though swipe navigation still reaches each tab. The tab bar effectively becomes unreachable via Explore by Touch — a critical failure of WCAG 2.5.1 Pointer Gestures and 2.1.1 Keyboard.
+- The failure is silent: unit tests, snapshot tests, and swipe-navigation testing all pass; only Explore by Touch testing on a real device catches it.
+
+If you need to place a floating overlay on top of scroll content and keep it usable with VoiceOver:
+
+- **Leave the overlay at the default priority (`0`).** Do not lower it below content.
+- **If reading order is a concern, raise the overlay's priority instead of lowering it.** For example, set the tab bar to `.accessibilitySortPriority(1)` and leave content at `0`.
+- **Do not let scroll content extend behind the overlay.** Constrain the `ScrollView` to end above the overlay rather than using `.ignoresSafeArea(edges: .bottom)`. If you must extend behind, ensure the overlay wins hit tests via priority, not loses.
+- **Avoid large combined accessibility frames near the overlay.** `.accessibilityElement(children: .combine)` merges children into one frame that spans the full bounds of the container. A tall combined card behind a tab bar guarantees hit-test overlap.
+
+You can see this failure mode reproduced in the *Explore by Touch Broken* prototype (`Prototypes/ExploreByTouchBrokenView.swift`), which mirrors the exact layout, sort priority, and combined-card pattern of a real production app.
+
 ## Applicable WCAG Success Criteria
 - [1.3.2: Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
+- [2.1.1: Keyboard](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)
 - [2.4.3: Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)
+- [2.5.1: Pointer Gestures](https://www.w3.org/WAI/WCAG22/Understanding/pointer-gestures)
 
 
 ## Apple Developer Documentation

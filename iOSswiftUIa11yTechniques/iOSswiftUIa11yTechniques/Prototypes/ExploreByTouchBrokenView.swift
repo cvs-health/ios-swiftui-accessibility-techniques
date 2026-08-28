@@ -45,34 +45,44 @@ private struct ContentCard: View {
     let accentColor: Color
 
     var body: some View {
-        HStack(spacing: 16) {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(accentColor.opacity(0.15))
-                .frame(width: 52, height: 52)
-                .overlay(
-                    Image(systemName: systemImage)
-                        .font(.title3)
-                        .foregroundStyle(accentColor)
-                        .accessibilityHidden(true)
-                )
-            VStack(alignment: .leading, spacing: 3) {
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                Text(subtitle)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
+        VStack(alignment: .leading, spacing: 0) {
+            Text(title)
+                .font(.system(size: 28, weight: .bold))
+                .foregroundStyle(.primary)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 24)
+                .padding(.top, 28)
+
+            Spacer(minLength: 24)
+
+            HStack {
+                Spacer()
+                Image(systemName: systemImage)
+                    .font(.system(size: 80, weight: .light))
+                    .foregroundStyle(accentColor)
+                    .padding(.bottom, 18)
+                    .accessibilityHidden(true)
+                Spacer()
             }
-            Spacer(minLength: 0)
-            Image(systemName: "chevron.right")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-                .accessibilityHidden(true)
+
+            Divider()
+
+            Text(subtitle)
+                .font(.system(size: 15))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 16)
         }
-        .padding(14)
-        .background(Color(.secondarySystemGroupedBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .frame(height: 360)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
+        .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
     }
 }
 

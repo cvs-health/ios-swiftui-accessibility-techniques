@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### iOSswiftUIa11yTechniques
 
+#### Changed
+
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): temporarily removed `.accessibilitySortPriority(-1)` from the tab bar to test whether it is actually required for the bug. If Explore by Touch still fails to reach the tabs without it, the bug is caused solely by `.ignoresSafeArea(edges: .bottom)` on the scroll content plus combined card accessibility frames overlapping the tab bar region — and the sort-priority theory can be removed from the explanation panel.
+
 #### Added
 
 - **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): added an in-page bug explanation panel at the top of the scroll content. Describes the three compounding mechanisms — `.ignoresSafeArea(edges: .bottom)` on scroll content, `.accessibilitySortPriority(-1)` on the tab bar, and `.accessibilityElement(children: .combine)` on the cards — so readers can understand why the tab bar becomes unreachable via Explore by Touch even though swipe navigation still works. Panel uses a warning icon, orange border, and numbered steps with combined accessibility labels for VoiceOver. File-level doc comment expanded to describe the same three mechanisms.

@@ -243,12 +243,11 @@ struct ExploreByTouchBrokenView: View {
                     .padding(.top, 32)
                     .padding(.bottom, 8)
             }
-            // BUG: mirrors UnifiedNavigationTabBarView's .accessibilitySortPriority(-1).
-            // SwiftUI builds the accessibility hit-test tree in priority order (higher first).
-            // Scroll content has the default priority (0), so its elements are checked before
-            // the tab buttons (-1). When a content card's frame overlaps the touch point the
-            // content element wins immediately — the tab buttons are never reached.
-            .accessibilitySortPriority(-1)
+            // TEST: .accessibilitySortPriority(-1) intentionally removed here to
+            // check whether it is actually a required part of the bug. If tabs
+            // remain unreachable via Explore by Touch without this line, the
+            // bug is caused solely by (1) content ignoring bottom safe area and
+            // (3) each card's combined accessibility frame overlapping the tab bar.
         }
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)

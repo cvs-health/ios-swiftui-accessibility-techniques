@@ -79,10 +79,21 @@ public struct ValueContainsRoleRule: A11yRule {
                             word: word,
                             sourceFile: syntax
                         )
+                        // Gray area: iOS has no checkbox trait, so writing
+                        // "checkbox" in the value is a defensible workaround
+                        // for developers who want to compensate for the
+                        // "Switch button" role announcement not matching the
+                        // visible checkbox UI. WCAG 4.1.2 is satisfied by the
+                        // Toggle's Switch trait regardless. Downgrade to a
+                        // warning so it still flags the anti-pattern without
+                        // treating it as a hard failure.
+                        let severityOverride: A11ySeverity? = (word == "checkbox") ? .warning : nil
+
                         diagnostics.append(makeDiagnostic(
-                            message: ".accessibilityValue(\"\(text)\") contains the role word '\(word)'. Values are for state, not role — VoiceOver announces the role automatically. Remove '\(word)' from the value, and if the role is not being announced, restore the correct accessibility trait instead.",
+                            message: messageFor(word: word, valueText: text),
                             node: value.reportNode,
                             context: context,
+                            severityOverride: severityOverride,
                             fix: fix,
                             suggestion: "Remove \"\(word)\" from the accessibility value"
                         ))
@@ -93,6 +104,22 @@ public struct ValueContainsRoleRule: A11yRule {
         }
 
         return diagnostics
+    }
+
+    /// Custom guidance for role words that have a well-known iOS pattern.
+    /// "checkbox" in particular is a common trap because iOS has no checkbox
+    /// trait — developers reach for the value string as a workaround, but the
+    /// correct pattern is `Toggle` + `.toggleStyle(CheckboxToggleStyle())`,
+    /// which supplies the "Switch button" trait automatically.
+    private func messageFor(word: String, valueText: String) -> String {
+        switch word {
+        case "checkbox":
+            return ".accessibilityValue(\"\(valueText)\") contains 'checkbox'. iOS has no checkbox trait, so developers sometimes put 'checkbox' into the value — but this makes VoiceOver announce the role twice when combined with a Toggle's built-in Switch trait. The correct pattern is a Toggle with a custom .toggleStyle (e.g. CheckboxToggleStyle) plus .accessibilityValue(isChecked ? \"Checked\" : \"Unchecked\") — the trait supplies the role, the value supplies just the state. See CheckboxesView.swift and Documentation/Checkboxes.md for the reference implementation."
+        case "tab":
+            return ".accessibilityValue(\"\(valueText)\") contains 'tab'. Tab items should get the .isTabBar or .isSelected traits — VoiceOver announces the tab role from the trait. If you need to communicate position, use a state-only value like \"1 of 5\" and leave the role out of the value string."
+        default:
+            return ".accessibilityValue(\"\(valueText)\") contains the role word '\(word)'. Values are for state, not role — VoiceOver announces the role automatically from accessibility traits. Remove '\(word)' from the value; if the role is not being announced, restore the correct accessibility trait instead of embedding the role in the value string."
+        }
     }
 
     /// True if `haystack` contains `word` as a whole word (bounded by non-letter

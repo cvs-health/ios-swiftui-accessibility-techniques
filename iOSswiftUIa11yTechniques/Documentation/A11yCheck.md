@@ -21,7 +21,8 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 - **`visually-disabled-not-semantic`** (error, WCAG 4.1.2) — `Button` with `.opacity()` or `.tint(.gray)` but no `.disabled(true)`. Appears disabled visually but assistive tech does not know it.
 
 ### Accessibility Value
-- **`value-contains-role`** (error, WCAG 4.1.2) — Any view whose `.accessibilityValue()` string contains a role word like "button", "tab", "link", "toggle", "switch", "slider", "picker", or "checkbox". Values must describe state, not role — VoiceOver announces the role automatically from accessibility traits.
+- **`value-contains-role`** (error, WCAG 4.1.2 — **warning** when the role word is "checkbox") — Any view whose `.accessibilityValue()` string contains a role word like "button", "tab", "link", "toggle", "switch", "slider", "picker", or "menu". Values must describe state, not role — VoiceOver announces the role automatically from accessibility traits.
+  - **`checkbox` is a warning, not an error.** iOS has no native checkbox trait, so embedding "checkbox" in the label or value is a defensible workaround for teams who feel that VoiceOver's "Switch button" announcement doesn't match the visible checkbox UI. WCAG 4.1.2 is already satisfied by the Toggle's Switch trait, so this is best-practice guidance rather than a hard failure. The recommended pattern is `Toggle` + `.toggleStyle(CheckboxToggleStyle())` + `.accessibilityValue(isChecked ? "Checked" : "Unchecked")` — see [Checkboxes.md](Checkboxes.md) for the reference implementation.
 
 ### Traits
 - **`tap-gesture-missing-button-trait`** (error, WCAG 4.1.2) — View with `.onTapGesture` missing `.accessibilityAddTraits(.isButton)`. VoiceOver won't announce it as interactive.

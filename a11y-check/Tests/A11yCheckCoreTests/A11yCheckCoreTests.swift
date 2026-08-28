@@ -286,6 +286,62 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0)
     }
 
+    func testValueContainsRole_flagsCheckboxWithToggleGuidance() {
+        // Fake-checkbox pattern is not an exception — the correct approach is
+        // Toggle + custom toggleStyle, which supplies the Switch button trait
+        // automatically, and the value should be state-only ("Checked"/"Unchecked").
+        // Downgraded to a warning because iOS has no checkbox trait — WCAG 4.1.2
+        // is satisfied by the Switch trait regardless, so this is best-practice
+        // guidance rather than a hard failure.
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Toggle("Terms", isOn: .constant(true))
+                    .accessibilityValue("checkbox, checked")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("'checkbox'"))
+        XCTAssertTrue(diags[0].message.contains("CheckboxToggleStyle"))
+        XCTAssertEqual(diags[0].severity, .warning)
+    }
+
+    func testValueContainsRole_flagsOtherRoleWordsAsError() {
+        // All non-checkbox role words remain errors — those roles all have
+        // native iOS traits, so there is no defensible reason to embed the
+        // role word in the value string.
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Home") { }
+                    .accessibilityValue("Tab 1 of 5")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags[0].severity, .error)
+    }
+
+    func testValueContainsRole_passesCheckedStateOnly() {
+        // The recommended fake-checkbox value is state-only.
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Toggle("Terms", isOn: .constant(true))
+                    .accessibilityValue("Checked")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 0)
+    }
+
     func testValueContainsRole_wholeWordMatchingSkipsSubstrings() {
         // "linked" contains "link" as a substring but is not the role word.
         // "buttonhole" contains "button" as a substring but is not the role.

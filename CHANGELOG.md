@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased] - 2026-08-28
+
+### iOSswiftUIa11yTechniques
+
+#### Changed
+
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): redesigned tab bar to match the CVS Pharmacy app visual — white pill with drop shadows (standard `backgroundBubble` mode), `systemFill` rounded-rect highlight on the selected tab (matches `TabsBubbleView.tabs`), CVS brand red icons, and 5 tabs (Home, Pharmacy, Health, Shop, Search) matching the real tab labels. Bug mechanisms unchanged: `.ignoresSafeArea(edges: .bottom)` on scroll content and `.padding(.top, 32)` empty zone above the pill.
+
 ## [Unreleased] - 2026-08-27
 
 ### iOSswiftUIa11yTechniques

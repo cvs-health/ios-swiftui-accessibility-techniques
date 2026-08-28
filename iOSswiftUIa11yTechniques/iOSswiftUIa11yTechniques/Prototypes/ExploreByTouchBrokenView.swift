@@ -26,11 +26,15 @@ private struct TabBarItem: Identifiable {
 }
 
 private let tabBarItems: [TabBarItem] = [
-    TabBarItem(id: 0, label: "Home",     icon: "house",         selectedIcon: "house.fill"),
-    TabBarItem(id: 1, label: "Explore",  icon: "safari",        selectedIcon: "safari.fill"),
-    TabBarItem(id: 2, label: "Messages", icon: "message",       selectedIcon: "message.fill"),
-    TabBarItem(id: 3, label: "Profile",  icon: "person.circle", selectedIcon: "person.circle.fill"),
+    TabBarItem(id: 0, label: "Home",     icon: "house",           selectedIcon: "house.fill"),
+    TabBarItem(id: 1, label: "Pharmacy", icon: "cross.case",      selectedIcon: "cross.case.fill"),
+    TabBarItem(id: 2, label: "Health",   icon: "heart",           selectedIcon: "heart.fill"),
+    TabBarItem(id: 3, label: "Shop",     icon: "bag",             selectedIcon: "bag.fill"),
+    TabBarItem(id: 4, label: "Search",   icon: "magnifyingglass", selectedIcon: "magnifyingglass"),
 ]
+
+// Approximates CVS brand red (action.active.color from PulseTokens)
+private let cvsRed = Color(red: 0.80, green: 0.11, blue: 0.11)
 
 // MARK: - Card component
 
@@ -194,49 +198,79 @@ struct ExploreByTouchBrokenView: View {
             .ignoresSafeArea(edges: .bottom)
 
             // Tab bar: sits inside the ZStack on top of the scroll content.
-            // BUG: .padding(.top, 32) mirrors UnifiedNavigationTabBarView's
-            // 32 pt empty zone above the pill buttons. Explore by Touch in
-            // that zone has no accessibility elements and falls through to
-            // the scroll content beneath it.
-            VStack {
+            // Visual matches UnifiedNavigationTabBarView (standard, non-translucent mode):
+            // white pill with drop shadows + systemFill highlight on the selected tab.
+            VStack(spacing: 0) {
                 Spacer()
-                HStack(spacing: 0) {
-                    ForEach(tabBarItems) { item in
-                        Button {
-                            selectedTab = item.id
-                        } label: {
-                            VStack(spacing: 4) {
-                                Image(systemName: selectedTab == item.id
-                                      ? item.selectedIcon : item.icon)
-                                    .font(.system(size: 22))
-                                    .accessibilityHidden(true)
-                                Text(item.label)
-                                    .font(.caption2)
-                                    .fontWeight(selectedTab == item.id ? .semibold : .regular)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 10)
-                        }
-                        .foregroundStyle(selectedTab == item.id ? Color.primary : Color.secondary)
-                        .accessibilityLabel(item.label)
-                        .accessibilityRemoveTraits(.isButton)
-                        .accessibilityHint("Double tap to activate")
-                    }
-                }
-                .padding(.horizontal, 4)
-                .background(.ultraThinMaterial, in: Capsule())
-                .overlay(Capsule().strokeBorder(.primary.opacity(0.08), lineWidth: 0.5))
-                .shadow(color: .black.opacity(0.14), radius: 16, x: 0, y: 4)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 8)
-                // BUG: 32 pt empty zone above the pill, matching CVS's tab bar.
-                // No accessibility elements exist here — Explore by Touch falls through.
-                .padding(.top, 32)
+                tabBarPill
+                    // BUG: 32 pt empty zone above the pill, mirrors CVS's
+                    // UnifiedNavigationTabBarView's .padding(.top, 32).
+                    // No accessibility elements exist here — Explore by Touch falls through
+                    // this zone and focuses the scroll content instead of a tab button.
+                    .padding(.top, 32)
+                    .padding(.bottom, 8)
             }
         }
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)
         .background(Color(.systemGroupedBackground))
+    }
+
+    // Floating pill tab bar — mirrors TabsBubbleView.backgroundBubble (standard mode):
+    // white rounded-rect + double drop shadow, horizontal padding of 16 pt.
+    private var tabBarPill: some View {
+        HStack(spacing: 0) {
+            ForEach(tabBarItems) { item in
+                tabButton(item)
+            }
+        }
+        .padding(2)
+        .background {
+            GeometryReader { geo in
+                RoundedRectangle(cornerRadius: geo.size.height / 2)
+                    .fill(.white)
+                    .shadow(color: .black.opacity(0.20), radius: 4, x: 0, y: 4)
+                    .shadow(color: .black.opacity(0.10), radius: 4, x: 0, y: 1)
+            }
+        }
+        .padding(.horizontal, 16)
+    }
+
+    // Individual tab button — matches LeadingTabView (.highlighted) for the selected tab
+    // and TabButtonView for the rest. The selected tab gets a systemFill rounded-rect
+    // background (cornerRadius: 100) identical to the highlight in TabsBubbleView.tabs.
+    @ViewBuilder
+    private func tabButton(_ item: TabBarItem) -> some View {
+        let isSelected = selectedTab == item.id
+        Button {
+            selectedTab = item.id
+        } label: {
+            VStack(spacing: 0) {
+                Image(systemName: isSelected ? item.selectedIcon : item.icon)
+                    .font(.system(size: 24))
+                    .frame(width: 24, height: 24)
+                    .padding(4)
+                    .padding(.bottom, 2)
+                    .accessibilityHidden(true)
+                Text(item.label)
+                    .font(.system(size: 11))
+                    .fontWeight(isSelected ? .medium : .regular)
+                    .lineLimit(1)
+                    .minimumScaleFactor(1)
+                    .padding(.bottom, 7)
+            }
+            .frame(maxWidth: .infinity, maxHeight: 49)
+        }
+        .background {
+            if isSelected {
+                RoundedRectangle(cornerRadius: 100)
+                    .fill(Color(UIColor.systemFill))
+            }
+        }
+        .foregroundStyle(cvsRed)
+        .accessibilityLabel(item.label)
+        .accessibilityRemoveTraits(.isButton)
+        .accessibilityHint("Double tap to activate")
     }
 }
 

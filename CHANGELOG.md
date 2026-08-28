@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): added `.accessibilitySortPriority(-1)` to the tab bar container, matching `UnifiedNavigationTabBarView`'s setting in the CVS codebase. SwiftUI builds the accessibility hit-test tree in priority order (higher first); scroll content (default priority 0) is therefore checked before the tab buttons (-1), so Explore by Touch on any part of the tab bar — not just the 32 pt empty zone — now focuses scroll content instead of a tab button, replicating the full CVS bug.
 - **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): redesigned tab bar to match the CVS Pharmacy app visual — white pill with drop shadows (standard `backgroundBubble` mode), `systemFill` rounded-rect highlight on the selected tab (matches `TabsBubbleView.tabs`), CVS brand red icons, and 5 tabs (Home, Pharmacy, Health, Shop, Search) matching the real tab labels. Bug mechanisms unchanged: `.ignoresSafeArea(edges: .bottom)` on scroll content and `.padding(.top, 32)` empty zone above the pill.
 
 ## [Unreleased] - 2026-08-27

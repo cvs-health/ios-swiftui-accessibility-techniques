@@ -210,6 +210,12 @@ struct ExploreByTouchBrokenView: View {
                     .padding(.top, 32)
                     .padding(.bottom, 8)
             }
+            // BUG: mirrors UnifiedNavigationTabBarView's .accessibilitySortPriority(-1).
+            // SwiftUI builds the accessibility hit-test tree in priority order (higher first).
+            // Scroll content has the default priority (0), so its elements are checked before
+            // the tab buttons (-1). When a content card's frame overlaps the touch point the
+            // content element wins immediately — the tab buttons are never reached.
+            .accessibilitySortPriority(-1)
         }
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)

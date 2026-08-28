@@ -929,6 +929,29 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertFalse(config.shouldExclude(relativePath: "Sources/MyView.swift"))
     }
 
+    func testConfigExcludePaths_explicitFileArguments() throws {
+        let yaml = """
+        exclude_paths:
+          - "**/App/*Example/**"
+          - "**/GeneratedMocks.swift"
+        """
+        let config = try ConfigLoader.parse(yaml)
+        let root = "/Users/anka/builds/zillow/ios/apps/ZillowMap"
+        let example = "Modules/SellerComparableHomes/App/SellerComparableHomesSwiftUIExample/ContentView.swift"
+
+        XCTAssertTrue(config.shouldExclude(filePath: "./\(example)", relativeTo: root))
+        XCTAssertTrue(config.shouldExclude(filePath: "\(root)/\(example)", relativeTo: root))
+        XCTAssertTrue(config.shouldExclude(filePath: "\(root)/./\(example)", relativeTo: root))
+        XCTAssertTrue(config.shouldExclude(
+            filePath: "\(root)/Modules/X/Sources/FooMocks/GeneratedMocks.swift",
+            relativeTo: root
+        ))
+        XCTAssertFalse(config.shouldExclude(
+            filePath: "\(root)/Modules/SellerComparableHomes/Sources/UI/CardView.swift",
+            relativeTo: root
+        ))
+    }
+
     func testConfigSeverityOverrideApplied() throws {
         let yaml = """
         severity_overrides:

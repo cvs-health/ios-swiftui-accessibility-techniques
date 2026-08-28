@@ -158,6 +158,47 @@ extension A11yConfig {
         }
         return false
     }
+
+    /// Whether an explicit file argument should be skipped.
+    ///
+    /// Directory scans already apply `exclude_paths` to enumerator-relative paths.
+    /// File arguments must be matched the same way: resolve against `root`
+    /// (typically the process working directory), strip a leading `./`, and
+    /// also try the raw argument so CI paths like `./Modules/Foo/Bar.swift` work.
+    public func shouldExclude(filePath: String, relativeTo root: String) -> Bool {
+        for candidate in Self.exclusionPathCandidates(filePath: filePath, relativeTo: root) {
+            if shouldExclude(relativePath: candidate) {
+                return true
+            }
+        }
+        return false
+    }
+
+    /// Path forms to try against `exclude_paths` for an explicit file argument.
+    public static func exclusionPathCandidates(filePath: String, relativeTo root: String) -> [String] {
+        var seen = Set<String>()
+        var result: [String] = []
+        func add(_ path: String) {
+            guard !path.isEmpty, !seen.contains(path) else { return }
+            seen.insert(path)
+            result.append(path)
+        }
+
+        add(filePath)
+        if filePath.hasPrefix("./") {
+            add(String(filePath.dropFirst(2)))
+        }
+
+        let stdFile = (filePath as NSString).standardizingPath
+        let stdRoot = (root as NSString).standardizingPath
+        add(stdFile)
+        if stdFile == stdRoot {
+            add(".")
+        } else if stdFile.hasPrefix(stdRoot + "/") {
+            add(String(stdFile.dropFirst(stdRoot.count + 1)))
+        }
+        return result
+    }
 }
 
 /// Simple glob matching supporting `*` (any segment chars) and `**` (any path segments).

@@ -10,7 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
-- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): temporarily removed `.accessibilitySortPriority(-1)` from the tab bar to test whether it is actually required for the bug. If Explore by Touch still fails to reach the tabs without it, the bug is caused solely by `.ignoresSafeArea(edges: .bottom)` on the scroll content plus combined card accessibility frames overlapping the tab bar region — and the sort-priority theory can be removed from the explanation panel.
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): restored `.accessibilitySortPriority(-1)` on the tab bar after empirical testing confirmed it is required — without it, Explore by Touch reaches the tabs. Doc comment updated to note the empirical confirmation.
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): wrapped the bug explanation panel in a `DisclosureGroup` so it is collapsed by default. Users tap the "Why the tab bar is unreachable by touch" header to expand.
 
 #### Added
 

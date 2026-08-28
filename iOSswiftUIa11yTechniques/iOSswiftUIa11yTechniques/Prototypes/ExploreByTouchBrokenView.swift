@@ -126,6 +126,7 @@ private struct ContentCard: View {
 /// focuses whichever combined content card sits behind it.
 struct ExploreByTouchBrokenView: View {
     @State private var selectedTab = 0
+    @State private var isExplanationExpanded = false
 
     var body: some View {
         // BUG: ZStack lets scroll content extend under the floating tab bar.
@@ -243,11 +244,14 @@ struct ExploreByTouchBrokenView: View {
                     .padding(.top, 32)
                     .padding(.bottom, 8)
             }
-            // TEST: .accessibilitySortPriority(-1) intentionally removed here to
-            // check whether it is actually a required part of the bug. If tabs
-            // remain unreachable via Explore by Touch without this line, the
-            // bug is caused solely by (1) content ignoring bottom safe area and
-            // (3) each card's combined accessibility frame overlapping the tab bar.
+            // BUG: mirrors UnifiedNavigationTabBarView's .accessibilitySortPriority(-1).
+            // SwiftUI checks higher-priority accessibility elements first during
+            // hit testing. Scroll content has the default priority (0), so its
+            // elements are checked before the tab buttons (-1). When a combined
+            // card's frame overlaps the touch point the card wins immediately —
+            // the tab buttons are never reached. Confirmed empirically: removing
+            // this line makes Explore by Touch reach the tabs again.
+            .accessibilitySortPriority(-1)
         }
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)
@@ -255,8 +259,33 @@ struct ExploreByTouchBrokenView: View {
     }
 
     // Info panel explaining the three bug mechanisms shown on this screen.
+    // Collapsed by default; users tap the disclosure header to expand.
     private var bugExplanation: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        DisclosureGroup(isExpanded: $isExplanationExpanded) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("VoiceOver swipe navigation reaches every tab, but Explore by Touch — dragging a finger over the tab bar — focuses the content card behind it instead of a tab. Three coding choices compound:")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                bugPoint(
+                    number: "1",
+                    title: "Scroll content extends behind the tab bar.",
+                    body: ".ignoresSafeArea(edges: .bottom) on the ScrollView lets its frame reach the bottom of the screen, physically overlapping the tab bar region."
+                )
+                bugPoint(
+                    number: "2",
+                    title: "Tab bar loses the accessibility priority race.",
+                    body: ".accessibilitySortPriority(-1) on the tab bar. When elements overlap at a touch point, SwiftUI checks higher-priority elements first. Content defaults to 0, so it wins over the tab (-1). Confirmed empirically — removing this line makes tabs reachable again."
+                )
+                bugPoint(
+                    number: "3",
+                    title: "Each card is one giant accessibility frame.",
+                    body: ".accessibilityElement(children: .combine) merges title + image + subtitle into a single 360 pt frame per card. That combined frame is large enough to overlap into the tab bar region as it scrolls, and combined with #2 it wins the hit test."
+                )
+            }
+            .padding(.top, 12)
+        } label: {
             HStack(spacing: 8) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundStyle(.orange)
@@ -265,28 +294,8 @@ struct ExploreByTouchBrokenView: View {
                     .font(.headline)
                     .accessibilityAddTraits(.isHeader)
             }
-
-            Text("VoiceOver swipe navigation reaches every tab, but Explore by Touch — dragging a finger over the tab bar — focuses the content card behind it instead of a tab. Three coding choices compound:")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            bugPoint(
-                number: "1",
-                title: "Scroll content extends behind the tab bar.",
-                body: ".ignoresSafeArea(edges: .bottom) on the ScrollView lets its frame reach the bottom of the screen, physically overlapping the tab bar region."
-            )
-            bugPoint(
-                number: "2",
-                title: "Tab bar loses the accessibility priority race.",
-                body: ".accessibilitySortPriority(-1) on the tab bar. When elements overlap at a touch point, SwiftUI checks higher-priority elements first. Content defaults to 0, so it wins over the tab (-1)."
-            )
-            bugPoint(
-                number: "3",
-                title: "Each card is one giant accessibility frame.",
-                body: ".accessibilityElement(children: .combine) merges title + image + subtitle into a single 360 pt frame per card. That combined frame is large enough to overlap into the tab bar region as it scrolls, and combined with #2 it wins the hit test."
-            )
         }
+        .tint(.orange)
         .padding(16)
         .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 12))

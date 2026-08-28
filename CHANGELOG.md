@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### iOSswiftUIa11yTechniques
 
+#### Added
+
+- **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): added an in-page bug explanation panel at the top of the scroll content. Describes the three compounding mechanisms — `.ignoresSafeArea(edges: .bottom)` on scroll content, `.accessibilitySortPriority(-1)` on the tab bar, and `.accessibilityElement(children: .combine)` on the cards — so readers can understand why the tab bar becomes unreachable via Explore by Touch even though swipe navigation still works. Panel uses a warning icon, orange border, and numbered steps with combined accessibility labels for VoiceOver. File-level doc comment expanded to describe the same three mechanisms.
+
 #### Changed
 
 - **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): combined `ContentCard` accessibility focus into a single element matching CVS `ActivityCardView` — `.accessibilityElement(children: .combine)` with a merged `accessibilityLabel` ("title. subtitle") and `.accessibilityAddTraits(.isButton)`. VoiceOver now announces the whole card as one button instead of stopping on title, illustration, and subtitle separately.

@@ -96,19 +96,34 @@ private struct ContentCard: View {
 
 /// Bad example: replicates the CVS Pharmacy home screen Explore by Touch bug.
 ///
-/// Layout mirrors `H100HomeScreenView` in the CVS codebase:
-/// - `ZStack` with the scroll content in the background
-/// - `.ignoresSafeArea(edges: .bottom)` on the scroll view so content
-///   extends behind the floating tab bar
-/// - The tab bar is inside the ZStack (not an overlay modifier), sitting on
-///   top of the content in the same layer
+/// Three mechanisms must compound to produce the bug:
 ///
-/// The bug comes from `UnifiedNavigationTabBarView`'s `.padding(.top, 32)`:
-/// the tab bar view has 32 pt of empty space above the actual pill buttons.
-/// That zone shows the background gradient but has no accessibility elements.
-/// When VoiceOver Explore by Touch fires anywhere in the tab bar region
-/// (including that empty 32 pt zone) the hit test falls through the empty
-/// padding and finds the scroll content element below instead of a tab button.
+/// 1. **Scroll content extends behind the tab bar.**
+///    `.ignoresSafeArea(edges: .bottom)` on the `ScrollView` makes its UIView
+///    frame reach the bottom of the screen, physically overlapping the tab bar
+///    region. Matches `segmentedContent.ignoresSafeArea(edges: .bottom)` in
+///    `H100HomeScreenView`.
+///
+/// 2. **Tab bar loses the accessibility priority race.**
+///    `.accessibilitySortPriority(-1)` on the tab bar. When multiple
+///    accessibility elements sit under a touch point, SwiftUI's hit test
+///    walks them in priority order (high → low). Scroll content defaults to
+///    priority 0, so it is checked before the tab (-1) and wins. Matches
+///    `UnifiedNavigationTabBarView`.
+///
+/// 3. **Each card is one giant accessibility frame.**
+///    `.accessibilityElement(children: .combine)` on `ContentCard` merges
+///    title + image + subtitle into a single element whose accessibility
+///    frame covers the entire 360 pt card. Without `.combine`, the card's
+///    inner text/image frames are small enough that they might not reach
+///    the tab bar. With `.combine`, the whole card is one frame — whenever
+///    it scrolls near the bottom of the screen it *guarantees* overlap into
+///    the tab bar region. Combined with #2, the card wins the hit test.
+///    Matches `ActivityCardView`.
+///
+/// Result: VoiceOver swipe navigation still reaches each tab (the tree order
+/// is unchanged), but Explore by Touch — dragging a finger over the tab bar —
+/// focuses whichever combined content card sits behind it.
 struct ExploreByTouchBrokenView: View {
     @State private var selectedTab = 0
 
@@ -120,6 +135,8 @@ struct ExploreByTouchBrokenView: View {
         ZStack(alignment: .top) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
+
+                    bugExplanation
 
                     // Discover section
                     VStack(alignment: .leading, spacing: 12) {
@@ -236,6 +253,70 @@ struct ExploreByTouchBrokenView: View {
         .navigationTitle("Explore by Touch Broken")
         .navigationBarTitleDisplayMode(.inline)
         .background(Color(.systemGroupedBackground))
+    }
+
+    // Info panel explaining the three bug mechanisms shown on this screen.
+    private var bugExplanation: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.orange)
+                    .accessibilityHidden(true)
+                Text("Why the tab bar is unreachable by touch")
+                    .font(.headline)
+                    .accessibilityAddTraits(.isHeader)
+            }
+
+            Text("VoiceOver swipe navigation reaches every tab, but Explore by Touch — dragging a finger over the tab bar — focuses the content card behind it instead of a tab. Three coding choices compound:")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            bugPoint(
+                number: "1",
+                title: "Scroll content extends behind the tab bar.",
+                body: ".ignoresSafeArea(edges: .bottom) on the ScrollView lets its frame reach the bottom of the screen, physically overlapping the tab bar region."
+            )
+            bugPoint(
+                number: "2",
+                title: "Tab bar loses the accessibility priority race.",
+                body: ".accessibilitySortPriority(-1) on the tab bar. When elements overlap at a touch point, SwiftUI checks higher-priority elements first. Content defaults to 0, so it wins over the tab (-1)."
+            )
+            bugPoint(
+                number: "3",
+                title: "Each card is one giant accessibility frame.",
+                body: ".accessibilityElement(children: .combine) merges title + image + subtitle into a single 360 pt frame per card. That combined frame is large enough to overlap into the tab bar region as it scrolls, and combined with #2 it wins the hit test."
+            )
+        }
+        .padding(16)
+        .background(Color(.secondarySystemGroupedBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.orange.opacity(0.35), lineWidth: 1)
+        )
+    }
+
+    private func bugPoint(number: String, title: String, body: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Text(number)
+                .font(.footnote.bold())
+                .foregroundStyle(.white)
+                .frame(width: 22, height: 22)
+                .background(Color.orange)
+                .clipShape(Circle())
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.footnote.bold())
+                Text(body)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Cause \(number). \(title) \(body)")
     }
 
     // Floating pill tab bar — mirrors TabsBubbleView.backgroundBubble (standard mode):

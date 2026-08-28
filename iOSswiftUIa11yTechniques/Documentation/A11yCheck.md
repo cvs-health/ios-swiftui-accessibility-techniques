@@ -1,5 +1,5 @@
 # A11y-check
-`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 42 rules across 23 WCAG 2.2 success criteria, with a 0–100 scoring system.
+`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 43 rules across 23 WCAG 2.2 success criteria, with a 0–100 scoring system.
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 
@@ -78,6 +78,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 - **`missing-accessibility-grouping`** (info, WCAG 1.3.1) — `HStack` or `VStack` containing both `Image` and `Text` without `.accessibilityElement(children: .combine)`.
 - **`zstack-order-confusing`** (info, WCAG 1.3.2) — `ZStack` with multiple interactive elements and no `accessibilitySortPriority` or `accessibilityElement` to control VoiceOver reading order.
 - **`sort-priority-overused`** (warning, WCAG 1.3.2) — `.accessibilitySortPriority()` overrides VoiceOver's default reading order. Only use when the visual layout doesn't match the logical reading order (e.g., ZStack overlays). Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)`.
+- **`sort-priority-negative`** (error, WCAG 2.5.1 / 2.1.1 / 4.1.2) — `.accessibilitySortPriority(-N)` with a negative numeric literal. Sort priority also governs Explore by Touch hit testing — when overlapping accessibility elements share a touch point, the higher-priority one wins. A negative-priority overlay (e.g., a floating tab bar with `.accessibilitySortPriority(-1)`) loses hit tests to any default-priority (0) scroll content sitting behind it, silently breaking VoiceOver Explore by Touch. Raise the overlay above 0 instead of lowering it below 0. See [AccessibilitySortPriority.md](AccessibilitySortPriority.md).
 
 ### Timing
 - **`auto-dismiss-no-control`** (error, WCAG 2.2.1) — `.task` or `.onAppear` containing `Task.sleep` or `asyncAfter` with a dismiss, without giving the user control to extend or pause.

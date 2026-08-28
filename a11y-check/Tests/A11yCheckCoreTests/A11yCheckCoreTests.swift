@@ -212,6 +212,83 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0)
     }
 
+    // MARK: - Sort Priority Negative Rule
+
+    func testSortPriorityNegative_flagsNegativeOne() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Home") { }
+                    .accessibilitySortPriority(-1)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sort-priority-negative")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("Explore by Touch"))
+        XCTAssertEqual(diags[0].severity, .error)
+    }
+
+    func testSortPriorityNegative_flagsNegativeLargeValue() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Bar")
+                    .accessibilitySortPriority(-10)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sort-priority-negative")
+        XCTAssertEqual(diags.count, 1)
+    }
+
+    func testSortPriorityNegative_passesPositiveValue() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Bar")
+                    .accessibilitySortPriority(1)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sort-priority-negative")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testSortPriorityNegative_passesZero() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Bar")
+                    .accessibilitySortPriority(0)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sort-priority-negative")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testSortPriorityOverused_suppressedWhenNegative() {
+        // Negative values are handled by sort-priority-negative with an error
+        // message. sort-priority-overused should not also fire on the same line
+        // to avoid duplicate diagnostics.
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Bar")
+                    .accessibilitySortPriority(-1)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sort-priority-overused")
+        XCTAssertEqual(diags.count, 0)
+    }
+
     // MARK: - Accessibility Value Rules
 
     func testValueContainsRole_flagsTabInValue() {
@@ -884,7 +961,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 42)
+        XCTAssertEqual(registry.rules.count, 43)
     }
 
     func testDisableRule() {

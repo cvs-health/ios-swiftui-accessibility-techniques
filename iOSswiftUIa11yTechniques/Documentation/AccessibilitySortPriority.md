@@ -32,6 +32,8 @@ If you need to place a floating overlay on top of scroll content and keep it usa
 
 You can see this failure mode reproduced in the *Explore by Touch Broken* prototype (`Prototypes/ExploreByTouchBrokenView.swift`), which mirrors the exact layout, sort priority, and combined-card pattern of a real production app.
 
+The `a11y-check` static analyzer flags every negative-priority call as an error under the [`sort-priority-negative`](A11yCheck.md#reading-order--grouping) rule — running `a11y-check .` on your codebase catches this before it ships.
+
 ## Applicable WCAG Success Criteria
 - [1.3.2: Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence)
 - [2.1.1: Keyboard](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)

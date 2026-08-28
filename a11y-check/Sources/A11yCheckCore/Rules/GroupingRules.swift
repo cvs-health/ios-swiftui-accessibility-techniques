@@ -333,6 +333,10 @@ public struct SortPriorityOverusedRule: A11yRule {
         var diagnostics: [A11yDiagnostic] = []
 
         for mod in collector.modifiers(named: "accessibilitySortPriority") {
+            // Skip if the value is a negative literal — SortPriorityNegativeRule
+            // reports that case with a stronger, more specific message.
+            if isNegativeNumberArgument(mod.arguments.first) { continue }
+
             diagnostics.append(makeDiagnostic(
                 message: ".accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first.",
                 node: mod.reportNode,
@@ -343,4 +347,65 @@ public struct SortPriorityOverusedRule: A11yRule {
 
         return diagnostics
     }
+}
+
+// MARK: - Negative Sort Priority Rule
+
+/// Flags `.accessibilitySortPriority()` calls with a negative numeric literal
+/// argument (e.g. `-1`, `-10`). Sort priority controls both VoiceOver swipe
+/// reading order **and** Explore by Touch hit-testing — when two accessibility
+/// elements overlap at a touch point, VoiceOver picks the one with the higher
+/// priority. Any element with a negative priority loses to the default (0),
+/// which silently breaks Explore by Touch for floating overlays on top of
+/// scroll content (e.g. a bottom tab bar overlaying a ScrollView that uses
+/// `.ignoresSafeArea(edges: .bottom)`).
+///
+/// This is a critical failure of WCAG 2.5.1 Pointer Gestures and WCAG 2.1.1
+/// Keyboard: users can still swipe to reach the tab bar, but they cannot
+/// activate it via Explore by Touch. Unit tests, snapshot tests, and swipe
+/// navigation all pass — only Explore by Touch testing on a real device
+/// catches it.
+///
+/// WCAG 2.5.1 Pointer Gestures, 2.1.1 Keyboard, 4.1.2 Name Role Value
+public struct SortPriorityNegativeRule: A11yRule {
+    public let id = "sort-priority-negative"
+    public let name = "Accessibility Sort Priority Is Negative"
+    public let severity = A11ySeverity.error
+    public let impact = A11yImpact.serious
+    public let wcagCriteria = ["2.5.1", "2.1.1", "4.1.2"]
+    public let description = "Never use a negative value with .accessibilitySortPriority(). Negative-priority elements lose Explore by Touch hit tests to any overlapping content with the default priority (0), silently breaking VoiceOver Explore by Touch for floating overlays like bottom tab bars."
+
+    public init() {}
+
+    public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
+        let collector = ModifierCollector.collect(from: syntax)
+        var diagnostics: [A11yDiagnostic] = []
+
+        for mod in collector.modifiers(named: "accessibilitySortPriority") {
+            guard let firstArg = mod.arguments.first,
+                  isNegativeNumberArgument(firstArg) else { continue }
+
+            diagnostics.append(makeDiagnostic(
+                message: ".accessibilitySortPriority(\(firstArg.text)) — negative sort priority breaks VoiceOver Explore by Touch. When an element with a negative priority overlaps scroll content with the default priority (0), Explore by Touch hits the content instead of the negative-priority element (e.g. a floating tab bar becomes unreachable via touch drag even though swipe navigation still works). Raise the overlay's priority above 0 instead of lowering it below 0. See Documentation/AccessibilitySortPriority.md for the full pattern.",
+                node: mod.reportNode,
+                context: context,
+                suggestion: "Remove the negative value; if reading order matters, raise the overlay's priority above 0 rather than lowering it below 0"
+            ))
+        }
+
+        return diagnostics
+    }
+}
+
+/// True when the argument's expression text is a negative numeric literal such
+/// as `-1`, `-10`, or `-1.5`. Uses a text check rather than evaluating the
+/// expression so it works for both integer and floating-point literals without
+/// needing to parse further.
+private func isNegativeNumberArgument(_ arg: (label: String?, text: String)?) -> Bool {
+    guard let text = arg?.text else { return false }
+    let trimmed = text.trimmingCharacters(in: .whitespaces)
+    guard trimmed.hasPrefix("-") else { return false }
+    let rest = trimmed.dropFirst()
+    // Must be a numeric literal after the leading minus (int or decimal)
+    return !rest.isEmpty && rest.allSatisfy { $0.isNumber || $0 == "." || $0 == "_" }
 }

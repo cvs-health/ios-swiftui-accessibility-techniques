@@ -2,7 +2,7 @@
 
 ![a11y score](a11y-badge.svg)
 
-Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 41 rules across 23 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
+Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 42 rules across 23 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
 
 ## Check your own iOS app
 
@@ -37,7 +37,7 @@ a11y-check . --base-path /path/to/workspace  # Strip prefix from all file paths 
 a11y-check . --badge > badge.svg   # Score badge for README
 a11y-check . --watch               # Re-run on file changes
 a11y-check --generate-docs > RULES.md  # Generate rule docs
-a11y-check --list-rules            # List all 41 rules
+a11y-check --list-rules            # List all 42 rules
 ```
 
 Every run automatically includes a **WCAG 2.2 accessibility score** (0–100 with letter grade) after the diagnostics. Use `--min-score 80` to fail CI if the score drops below a threshold.
@@ -257,6 +257,7 @@ a11y-check . --fix --dry-run
 | `hardcoded-color` | Removes the hardcoded color modifier (`.foregroundColor(.black)`, etc.) to restore SwiftUI's adaptive defaults |
 | `input-missing-purpose` | Appends `.textContentType(...)` with the inferred content type |
 | `button-label-contains-role` | Removes the word "button" from the `.accessibilityLabel()` string |
+| `value-contains-role` | Removes the offending role word ("button", "tab", "link", …) from the `.accessibilityValue()` string |
 | `small-touch-target` | Increases `.frame(width:height:)` to the 24×24pt minimum |
 
 Use `--dry-run` to preview all fixes without modifying files.
@@ -803,7 +804,7 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Run a11y-check on TextFieldsView.swift"** — check a specific file
 - **"Which of those are the most critical to fix?"** — the AI explains severity and WCAG impact
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
-- **"List all the a11y rules"** — shows all 41 rules with descriptions and WCAG criteria
+- **"List all the a11y rules"** — shows all 42 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
 - **"What's the accessibility score for this project?"** — runs `a11y-check .` and explains the WCAG 2.2 score breakdown
 - **"Score ProfileView.swift"** — runs the check on a single file and highlights what to fix based on the score
@@ -813,7 +814,7 @@ The full loop — detect, understand, fix, report — happens conversationally w
 
 ## Rules
 
-a11y-check includes 41 rules across these categories:
+a11y-check includes 42 rules across these categories:
 
 | Category | Rules | WCAG | Impact |
 |----------|-------|------|--------|
@@ -826,6 +827,7 @@ a11y-check includes 41 rules across these categories:
 | **Links** | `generic-link-text`, `button-used-as-link` | 2.4.4, 4.1.2 | Serious, Serious |
 | **Touch targets** | `small-touch-target` | 2.5.8 | Serious |
 | **Buttons** | `button-label-contains-role`, `icon-button-missing-label`, `visually-disabled-not-semantic` | 4.1.2 | Moderate, Critical, Serious |
+| **Accessibility value** | `value-contains-role` | 4.1.2 | Moderate |
 | **Label in Name** | `label-in-name` | 2.5.3 | Serious |
 | **Traits** | `tap-gesture-missing-button-trait` | 4.1.2 | Critical |
 | **Toggles** | `toggle-missing-label` | 4.1.2 | Critical |

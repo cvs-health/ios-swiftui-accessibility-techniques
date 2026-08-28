@@ -212,6 +212,96 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0)
     }
 
+    // MARK: - Accessibility Value Rules
+
+    func testValueContainsRole_flagsTabInValue() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Home") { }
+                    .accessibilityValue("Tab 1 of 5")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("'tab'"))
+    }
+
+    func testValueContainsRole_flagsButtonInValue() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Toggle("Wi-Fi", isOn: .constant(true))
+                    .accessibilityValue("On, button")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("'button'"))
+    }
+
+    func testValueContainsRole_flagsLinkInValue() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Terms")
+                    .accessibilityValue("External link")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("'link'"))
+    }
+
+    func testValueContainsRole_passesStateOnlyValue() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Slider(value: .constant(0.5))
+                    .accessibilityValue("50 percent")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testValueContainsRole_passesNoValueModifier() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Home") { }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testValueContainsRole_wholeWordMatchingSkipsSubstrings() {
+        // "linked" contains "link" as a substring but is not the role word.
+        // "buttonhole" contains "button" as a substring but is not the role.
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Account")
+                    .accessibilityValue("Linked to your buttonhole account")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 0)
+    }
+
     // MARK: - Tap Gesture Rules
 
     func testTapGestureMissingTrait_flagsBad() {
@@ -738,7 +828,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 41)
+        XCTAssertEqual(registry.rules.count, 42)
     }
 
     func testDisableRule() {

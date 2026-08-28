@@ -46,6 +46,9 @@ public final class RuleRegistry {
         register(IconOnlyButtonMissingLabelRule())
         register(VisuallyDisabledNotSemanticallyRule())
 
+        // Accessibility Value (WCAG 4.1.2)
+        register(ValueContainsRoleRule())
+
         // Traits (WCAG 4.1.2)
         register(TapGestureMissingButtonTraitRule())
 

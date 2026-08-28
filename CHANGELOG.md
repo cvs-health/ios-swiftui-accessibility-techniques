@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased] - 2026-08-28
 
+### a11y-check
+
+#### Added
+
+- **New rule `value-contains-role`** (`AccessibilityValueRules.swift`, WCAG 4.1.2, error/moderate). Flags `.accessibilityValue()` strings that contain role words like "button", "tab", "link", "toggle", "switch", "slider", "checkbox", "picker", "menu", or "search field". Values are for state (e.g. "50 percent", "selected item 2 of 5"), not role — VoiceOver announces the role automatically from accessibility traits. Placing a role word in the value causes VoiceOver to speak it twice and is often a symptom of a missing or removed trait. Whole-word matching prevents false positives on descriptive terms like "linked" or "buttonhole". Applies to any view type, not just Button. Includes 6 unit tests. Rule count updated from 41 to 42 across the app, docs, and READMEs.
+
 ### iOSswiftUIa11yTechniques
 
 #### Changed

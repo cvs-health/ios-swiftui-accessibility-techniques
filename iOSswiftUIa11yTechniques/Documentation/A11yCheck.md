@@ -1,5 +1,5 @@
 # A11y-check
-`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 41 rules across 23 WCAG 2.2 success criteria, with a 0–100 scoring system.
+`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 42 rules across 23 WCAG 2.2 success criteria, with a 0–100 scoring system.
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 
@@ -19,6 +19,9 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 - **`button-label-contains-role`** (error, WCAG 4.1.2) — `Button` whose label contains the word "button". VoiceOver already announces the button role.
 - **`icon-button-missing-label`** (error, WCAG 4.1.2) — `Button` containing only an `Image` with no `.accessibilityLabel()`.
 - **`visually-disabled-not-semantic`** (error, WCAG 4.1.2) — `Button` with `.opacity()` or `.tint(.gray)` but no `.disabled(true)`. Appears disabled visually but assistive tech does not know it.
+
+### Accessibility Value
+- **`value-contains-role`** (error, WCAG 4.1.2) — Any view whose `.accessibilityValue()` string contains a role word like "button", "tab", "link", "toggle", "switch", "slider", "picker", or "checkbox". Values must describe state, not role — VoiceOver announces the role automatically from accessibility traits.
 
 ### Traits
 - **`tap-gesture-missing-button-trait`** (error, WCAG 4.1.2) — View with `.onTapGesture` missing `.accessibilityAddTraits(.isButton)`. VoiceOver won't announce it as interactive.

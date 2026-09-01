@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### a11y-check
 
+#### Changed
+
+- **`label-in-name` rule** (`LabelInNameRules.swift`, WCAG 2.5.3): upgraded the "visible text present but not at the beginning" case from `warning` to `error`. WCAG 2.5.3 Understanding states the accessible name must be "identical to or begins with the same sequence of characters as the visible text label" — prepending non-visible text (e.g. `.accessibilityLabel("Quick reply: Yes")` on `Button("Yes")`) is a definitive failure because Voice Control prefix-matches against what users see on screen, not what comes after an invisible prefix. The diagnostic message now explicitly names the Voice Control impact and offers two fix options: move the visible text to the start of the label, or remove `.accessibilityLabel()` entirely so SwiftUI derives the accessible name from the visible label automatically.
+
 #### Fixed
 
 - **`--per-view` corrupting `--format html` output** (`A11yCheck.swift`, `HTMLFormatter.swift`). When running `a11y-check ... --format html --per-view`, the per-view scores were rendered using the terminal formatter (ANSI color codes, Unicode block-character progress bars) and printed unconditionally after the HTML body, making the HTML file unparseable in a browser. Per-view data is now computed once before the format switch. For `--format html` it is rendered as a native HTML table and embedded in the report. For `--format terminal` the colored terminal view is still printed as before. Other formats (`json`, `xcode`, `sarif`) silently skip the per-view section (no ANSI pollution).

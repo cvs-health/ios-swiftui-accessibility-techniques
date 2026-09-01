@@ -14,7 +14,7 @@ public struct LabelInNameRule: A11yRule {
     public let severity = A11ySeverity.error
     public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.5.3"]
-    public let description = "The accessible name (.accessibilityLabel) must contain the visible text label so speech input users can activate the control."
+    public let description = "The accessible name (.accessibilityLabel) must begin with the visible text label so Voice Control users can activate the control by speaking what they see on screen. WCAG 2.5.3: 'the accessible name is identical to or begins with the same sequence of characters as the visible text label.'"
 
     public init() {}
 
@@ -55,13 +55,14 @@ public struct LabelInNameRule: A11yRule {
                         suggestion: "Ensure the accessible name contains the visible text \"\(visibleText)\""
                     ))
                 } else if !nameLower.hasPrefix(visibleLower) {
-                    // WARNING: visible text is contained but not at the start
+                    // ERROR: visible text present but not at the start — Voice Control prefix-match failure
+                    // WCAG 2.5.3 Understanding: "the accessible name is identical to or begins with
+                    // the same sequence of characters as the visible text label."
                     diagnostics.append(makeDiagnostic(
-                        message: "\(viewType)'s visible text \"\(visibleText)\" appears in .accessibilityLabel(\"\(accessibleName)\") but not at the start. The accessible name should begin with the visible label text.",
+                        message: "\(viewType)'s visible text \"\(visibleText)\" is in .accessibilityLabel(\"\(accessibleName)\") but is not at the beginning. WCAG 2.5.3 requires the accessible name to start with the visible label so Voice Control users can activate the control by speaking what they see. Move \"\(visibleText)\" to the start, or remove .accessibilityLabel() so the visible label is used automatically.",
                         node: labelModifier.callExpr,
                         context: context,
-                        severityOverride: .warning,
-                        suggestion: "Move \"\(visibleText)\" to the beginning of the accessible name"
+                        suggestion: "Move \"\(visibleText)\" to the beginning of .accessibilityLabel(), or remove .accessibilityLabel() to use the visible label automatically"
                     ))
                 }
             }

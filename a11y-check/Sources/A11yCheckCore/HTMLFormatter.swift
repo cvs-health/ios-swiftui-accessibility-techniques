@@ -21,7 +21,7 @@ public struct HTMLFormatter {
 
     public init() {}
 
-    public func format(_ diagnostics: [A11yDiagnostic], allRules: [any A11yRule], score: A11yScore? = nil, trendEntries: [TrendTracker.Entry] = []) -> String {
+    public func format(_ diagnostics: [A11yDiagnostic], allRules: [any A11yRule], score: A11yScore? = nil, trendEntries: [TrendTracker.Entry] = [], viewScores: [ViewScorer.ViewScore] = []) -> String {
         let errorCount = diagnostics.filter { $0.severity == .error }.count
         let warningCount = diagnostics.filter { $0.severity == .warning }.count
         let infoCount = diagnostics.filter { $0.severity == .info }.count
@@ -447,6 +447,38 @@ public struct HTMLFormatter {
             html += "</div>\n" // close trend-meta
             html += "</div>\n" // close trend-content
             html += "</div>\n" // close trend-section
+        }
+
+        // Per-View Scores
+        if !viewScores.isEmpty {
+            html += "<h2>Per-View Scores</h2>\n"
+            html += "<table>\n<tr><th>View</th><th>Score</th><th>Grade</th><th>Errors</th><th>Warnings</th><th>File</th></tr>\n"
+            for vs in viewScores {
+                let gradeClass: String
+                switch vs.grade.prefix(1) {
+                case "A": gradeClass = "badge-pass"
+                case "B": gradeClass = "badge-pass"
+                case "C": gradeClass = "badge-warning"
+                case "D": gradeClass = "badge-warning"
+                default:  gradeClass = "badge-fail"
+                }
+                let shortPath = (vs.view.filePath as NSString).lastPathComponent
+                html += "<tr>"
+                html += "<td>\(escapeHTML(vs.view.name))</td>"
+                html += "<td>\(String(format: "%.1f", vs.score))</td>"
+                html += "<td><span class=\"badge \(gradeClass)\">\(escapeHTML(vs.grade))</span></td>"
+                html += "<td>"
+                if vs.errorCount > 0 { html += "<span class=\"badge badge-error\">\(vs.errorCount)</span>" }
+                else { html += "—" }
+                html += "</td>"
+                html += "<td>"
+                if vs.warningCount > 0 { html += "<span class=\"badge badge-warning\">\(vs.warningCount)</span>" }
+                else { html += "—" }
+                html += "</td>"
+                html += "<td><span class=\"diag-loc\">\(escapeHTML(shortPath)):\(vs.view.startLine)–\(vs.view.endLine)</span></td>"
+                html += "</tr>\n"
+            }
+            html += "</table>\n"
         }
 
         // By-file detail

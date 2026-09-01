@@ -374,12 +374,25 @@ struct A11yCheck: ParsableCommand {
             }
         } ?? allDiagnostics
 
+        // Per-view scoring — compute before output so HTML can embed it
+        var computedViewScores: [ViewScorer.ViewScore] = []
+        if perView {
+            let viewScorer = ViewScorer()
+            let views = viewScorer.detectViews(filePaths: filePaths)
+            computedViewScores = viewScorer.scoreViews(views: views, diagnostics: allDiagnostics, rules: registry.enabledRules)
+        }
+
         // Output results
         switch format {
         case .terminal:
             let termBasePath = paths.count == 1 ? resolvePath(paths[0]) : nil
             let formatter = TerminalFormatter()
             print(formatter.format(outputDiagnostics, relativeTo: termBasePath, score: score))
+            if perView {
+                let viewScorer = ViewScorer()
+                let basePath = paths.count == 1 ? resolvePath(paths[0]) : nil
+                print(viewScorer.formatViewScores(computedViewScores, relativeTo: basePath))
+            }
 
         case .json:
             let formatter = JSONFormatter()
@@ -392,21 +405,12 @@ struct A11yCheck: ParsableCommand {
 
         case .html:
             let formatter = HTMLFormatter()
-            print(formatter.format(outputDiagnostics, allRules: registry.rules, score: score, trendEntries: trendEntries))
+            print(formatter.format(outputDiagnostics, allRules: registry.rules, score: score, trendEntries: trendEntries, viewScores: computedViewScores))
 
         case .sarif:
             let formatter = SARIFFormatter()
             let output = try formatter.format(outputDiagnostics, rules: registry.enabledRules, score: score)
             print(output)
-        }
-
-        // Per-view scoring
-        if perView {
-            let viewScorer = ViewScorer()
-            let views = viewScorer.detectViews(filePaths: filePaths)
-            let viewScores = viewScorer.scoreViews(views: views, diagnostics: allDiagnostics, rules: registry.enabledRules)
-            let basePath = paths.count == 1 ? resolvePath(paths[0]) : nil
-            print(viewScorer.formatViewScores(viewScores, relativeTo: basePath))
         }
 
         // Trend: show terminal output + record

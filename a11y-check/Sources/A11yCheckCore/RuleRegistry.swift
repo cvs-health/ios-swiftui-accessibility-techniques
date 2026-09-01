@@ -45,6 +45,7 @@ public final class RuleRegistry {
         register(ButtonLabelContainsRoleRule())
         register(IconOnlyButtonMissingLabelRule())
         register(VisuallyDisabledNotSemanticallyRule())
+        register(DuplicateButtonLabelRule())
 
         // Accessibility Value (WCAG 4.1.2)
         register(ValueContainsRoleRule())

@@ -77,133 +77,131 @@ See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, an
 **AI coding skill:** A [SKILL.md](SKILL.md) file is included that teaches AI coding assistants (Claude Code, CVS Code, Cursor, etc.) how to write accessible SwiftUI code. Copy it to your `~/.claude/skills/` directory or your editor's skills folder and it will automatically enforce WCAG 2.2 accessible coding patterns — labels, traits, Dynamic Type, contrast, touch targets, focus management, and more.
 
 ## Accessibility Techniques Documentation
-- [x] = Completed
 
 ### A
-- [x] [A11y-check](iOSswiftUIa11yTechniques/Documentation/A11yCheck.md)
-- [x] [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md)
-- [x] [Accessibility Custom Content](iOSswiftUIa11yTechniques/Documentation/AccessibilityCustomContent.md)
-- [x] [Accessibility Detection](iOSswiftUIa11yTechniques/Documentation/AccessibilityDetection.md)
-- [x] [Accessibility Hidden](iOSswiftUIa11yTechniques/Documentation/AccessibilityHidden.md)
-- [x] [Accessibility Hint](iOSswiftUIa11yTechniques/Documentation/AccessibilityHint.md)
-- [x] [Accessibility Identifier](iOSswiftUIa11yTechniques/Documentation/AccessibilityIdentifier.md)
-- [x] [Accessibility Input Labels](iOSswiftUIa11yTechniques/Documentation/AccessibilityInputLabels.md)
-- [x] [Accessibility Label](iOSswiftUIa11yTechniques/Documentation/AccessibilityLabel.md)
-- [x] [Accessibility Notifications](iOSswiftUIa11yTechniques/Documentation/AccessibilityNotifications.md)
-- [x] [Accessibility Representation](iOSswiftUIa11yTechniques/Documentation/AccessibilityRepresentation.md)
-- [x] [Accessibility Responds To User Interaction](iOSswiftUIa11yTechniques/Documentation/AccessibilityRespondsToUserInteraction.md)
-- [x] [Accessibility Sort Priority](iOSswiftUIa11yTechniques/Documentation/AccessibilitySortPriority.md)
-- [x] [Accessibility Traits](iOSswiftUIa11yTechniques/Documentation/AccessibilityTraits.md)
-- [x] [Accessibility Value](iOSswiftUIa11yTechniques/Documentation/AccessibilityValue.md)
-- [x] [Accordions](iOSswiftUIa11yTechniques/Documentation/Accordions.md)
-- [x] [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
-- [x] [Alerts](iOSswiftUIa11yTechniques/Documentation/Alerts.md)
-- [x] [Assistive Access](iOSswiftUIa11yTechniques/Documentation/AssistiveAccess.md)
-- [x] [Attributed Strings](iOSswiftUIa11yTechniques/Documentation/AttributedStrings.md)
+- [A11y-check](iOSswiftUIa11yTechniques/Documentation/A11yCheck.md)
+- [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md)
+- [Accessibility Custom Content](iOSswiftUIa11yTechniques/Documentation/AccessibilityCustomContent.md)
+- [Accessibility Detection](iOSswiftUIa11yTechniques/Documentation/AccessibilityDetection.md)
+- [Accessibility Hidden](iOSswiftUIa11yTechniques/Documentation/AccessibilityHidden.md)
+- [Accessibility Hint](iOSswiftUIa11yTechniques/Documentation/AccessibilityHint.md)
+- [Accessibility Identifier](iOSswiftUIa11yTechniques/Documentation/AccessibilityIdentifier.md)
+- [Accessibility Input Labels](iOSswiftUIa11yTechniques/Documentation/AccessibilityInputLabels.md)
+- [Accessibility Label](iOSswiftUIa11yTechniques/Documentation/AccessibilityLabel.md)
+- [Accessibility Notifications](iOSswiftUIa11yTechniques/Documentation/AccessibilityNotifications.md)
+- [Accessibility Representation](iOSswiftUIa11yTechniques/Documentation/AccessibilityRepresentation.md)
+- [Accessibility Responds To User Interaction](iOSswiftUIa11yTechniques/Documentation/AccessibilityRespondsToUserInteraction.md)
+- [Accessibility Sort Priority](iOSswiftUIa11yTechniques/Documentation/AccessibilitySortPriority.md)
+- [Accessibility Traits](iOSswiftUIa11yTechniques/Documentation/AccessibilityTraits.md)
+- [Accessibility Value](iOSswiftUIa11yTechniques/Documentation/AccessibilityValue.md)
+- [Accordions](iOSswiftUIa11yTechniques/Documentation/Accordions.md)
+- [Adjustable Action](iOSswiftUIa11yTechniques/Documentation/AdjustableAction.md)
+- [Alerts](iOSswiftUIa11yTechniques/Documentation/Alerts.md)
+- [Assistive Access](iOSswiftUIa11yTechniques/Documentation/AssistiveAccess.md)
+- [Attributed Strings](iOSswiftUIa11yTechniques/Documentation/AttributedStrings.md)
 
 ### B
-- [x] [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
+- [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
 
 ### C
-- [x] [Cards](iOSswiftUIa11yTechniques/Documentation/Cards.md)
-- [x] [Carousels](iOSswiftUIa11yTechniques/Documentation/Carousels.md)
-- [x] [Charts](iOSswiftUIa11yTechniques/Documentation/Charts.md)
-- [x] [Checkboxes](iOSswiftUIa11yTechniques/Documentation/Checkboxes.md)
-- [x] [Combining Focus](iOSswiftUIa11yTechniques/Documentation/CombiningFocus.md)
-- [x] [Confirmation Dialogs](iOSswiftUIa11yTechniques/Documentation/ConfirmationDialogs.md)
-- [x] [Containers](iOSswiftUIa11yTechniques/Documentation/Containers.md)
-- [x] [Contrast](iOSswiftUIa11yTechniques/Documentation/Contrast.md)
+- [Cards](iOSswiftUIa11yTechniques/Documentation/Cards.md)
+- [Carousels](iOSswiftUIa11yTechniques/Documentation/Carousels.md)
+- [Charts](iOSswiftUIa11yTechniques/Documentation/Charts.md)
+- [Checkboxes](iOSswiftUIa11yTechniques/Documentation/Checkboxes.md)
+- [Combining Focus](iOSswiftUIa11yTechniques/Documentation/CombiningFocus.md)
+- [Confirmation Dialogs](iOSswiftUIa11yTechniques/Documentation/ConfirmationDialogs.md)
+- [Containers](iOSswiftUIa11yTechniques/Documentation/Containers.md)
+- [Contrast](iOSswiftUIa11yTechniques/Documentation/Contrast.md)
 
 ### D
-- [x] [Dark Mode](iOSswiftUIa11yTechniques/Documentation/DarkMode.md)
-- [x] [Data Tables](iOSswiftUIa11yTechniques/Documentation/DataTables.md)
-- [x] [Date & Time Pickers](iOSswiftUIa11yTechniques/Documentation/DateTimePickers.md)
-- [x] [Decorative Images](iOSswiftUIa11yTechniques/Documentation/DecorativeImages.md)
-- [x] [Device Orientation](iOSswiftUIa11yTechniques/Documentation/DeviceOrientation.md)
-- [x] [Dim Flashing Lights](iOSswiftUIa11yTechniques/Documentation/DimFlashingLights.md)
-- [x] [Drag & Drop](iOSswiftUIa11yTechniques/Documentation/DragDrop.md)
-- [x] [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)
+- [Dark Mode](iOSswiftUIa11yTechniques/Documentation/DarkMode.md)
+- [Data Tables](iOSswiftUIa11yTechniques/Documentation/DataTables.md)
+- [Date & Time Pickers](iOSswiftUIa11yTechniques/Documentation/DateTimePickers.md)
+- [Decorative Images](iOSswiftUIa11yTechniques/Documentation/DecorativeImages.md)
+- [Device Orientation](iOSswiftUIa11yTechniques/Documentation/DeviceOrientation.md)
+- [Dim Flashing Lights](iOSswiftUIa11yTechniques/Documentation/DimFlashingLights.md)
+- [Drag & Drop](iOSswiftUIa11yTechniques/Documentation/DragDrop.md)
+- [Dynamic Type](iOSswiftUIa11yTechniques/Documentation/DynamicType.md)
 
 ### E
-- [x] [Error Validation](iOSswiftUIa11yTechniques/Documentation/ErrorValidation.md)
-- [x] [Escape Action](iOSswiftUIa11yTechniques/Documentation/EscapeAction.md)
+- [Error Validation](iOSswiftUIa11yTechniques/Documentation/ErrorValidation.md)
+- [Escape Action](iOSswiftUIa11yTechniques/Documentation/EscapeAction.md)
 
 ### F
-- [x] [Focus Management](iOSswiftUIa11yTechniques/Documentation/FocusManagement.md)
-- [x] [Functional Images](iOSswiftUIa11yTechniques/Documentation/FunctionalImages.md)
+- [Focus Management](iOSswiftUIa11yTechniques/Documentation/FocusManagement.md)
+- [Functional Images](iOSswiftUIa11yTechniques/Documentation/FunctionalImages.md)
 
 ### G
-- [x] [Grouping Controls](iOSswiftUIa11yTechniques/Documentation/GroupingControls.md)
+- [Grouping Controls](iOSswiftUIa11yTechniques/Documentation/GroupingControls.md)
 
 ### H
-- [x] [Headings](iOSswiftUIa11yTechniques/Documentation/Headings.md)
-- [x] [Horizontal Scroll Views](iOSswiftUIa11yTechniques/Documentation/HorizontalScrollViews.md)
+- [Headings](iOSswiftUIa11yTechniques/Documentation/Headings.md)
+- [Horizontal Scroll Views](iOSswiftUIa11yTechniques/Documentation/HorizontalScrollViews.md)
 
 ### I
-- [x] [Images](iOSswiftUIa11yTechniques/Documentation/Images.md)
-- [x] [Increase Contrast](iOSswiftUIa11yTechniques/Documentation/IncreaseContrast.md)
-- [x] [Informative Images](iOSswiftUIa11yTechniques/Documentation/InformativeImages.md)
-- [x] [Input Instructions](iOSswiftUIa11yTechniques/Documentation/InputInstructions.md)
+- [Images](iOSswiftUIa11yTechniques/Documentation/Images.md)
+- [Increase Contrast](iOSswiftUIa11yTechniques/Documentation/IncreaseContrast.md)
+- [Informative Images](iOSswiftUIa11yTechniques/Documentation/InformativeImages.md)
+- [Input Instructions](iOSswiftUIa11yTechniques/Documentation/InputInstructions.md)
 
 ### L
-- [x] [Language](iOSswiftUIa11yTechniques/Documentation/Language.md)
-- [x] [Large Content Viewer](iOSswiftUIa11yTechniques/Documentation/LargeContentViewer.md)
-- [x] [Links](iOSswiftUIa11yTechniques/Documentation/Links.md)
-- [x] [Lists](iOSswiftUIa11yTechniques/Documentation/Lists.md)
+- [Language](iOSswiftUIa11yTechniques/Documentation/Language.md)
+- [Large Content Viewer](iOSswiftUIa11yTechniques/Documentation/LargeContentViewer.md)
+- [Links](iOSswiftUIa11yTechniques/Documentation/Links.md)
+- [Lists](iOSswiftUIa11yTechniques/Documentation/Lists.md)
 
 ### M
-- [x] [Magic Tap](iOSswiftUIa11yTechniques/Documentation/MagicTap.md)
-- [x] [Maps](iOSswiftUIa11yTechniques/Documentation/Maps.md)
-- [x] [Meaningful Accessible Names](iOSswiftUIa11yTechniques/Documentation/MeaningfulAccessibleNames.md)
-- [x] [Menus](iOSswiftUIa11yTechniques/Documentation/Menus.md)
-- [x] [Multi-Selection Lists](iOSswiftUIa11yTechniques/Documentation/MultiSelectionLists.md)
+- [Magic Tap](iOSswiftUIa11yTechniques/Documentation/MagicTap.md)
+- [Maps](iOSswiftUIa11yTechniques/Documentation/Maps.md)
+- [Meaningful Accessible Names](iOSswiftUIa11yTechniques/Documentation/MeaningfulAccessibleNames.md)
+- [Menus](iOSswiftUIa11yTechniques/Documentation/Menus.md)
+- [Multi-Selection Lists](iOSswiftUIa11yTechniques/Documentation/MultiSelectionLists.md)
 
 ### N
-- [x] [Navigation](iOSswiftUIa11yTechniques/Documentation/Navigation.md)
+- [Navigation](iOSswiftUIa11yTechniques/Documentation/Navigation.md)
 
 ### P
-- [x] [Page Titles](iOSswiftUIa11yTechniques/Documentation/PageTitles.md)
-- [x] [Pickers](iOSswiftUIa11yTechniques/Documentation/Pickers.md)
-- [x] [Popovers](iOSswiftUIa11yTechniques/Documentation/Popovers.md)
-- [x] [Progress Indicators](iOSswiftUIa11yTechniques/Documentation/ProgressIndicators.md)
+- [Page Titles](iOSswiftUIa11yTechniques/Documentation/PageTitles.md)
+- [Pickers](iOSswiftUIa11yTechniques/Documentation/Pickers.md)
+- [Popovers](iOSswiftUIa11yTechniques/Documentation/Popovers.md)
+- [Progress Indicators](iOSswiftUIa11yTechniques/Documentation/ProgressIndicators.md)
 
 ### R
-- [x] [Radio Buttons](iOSswiftUIa11yTechniques/Documentation/RadioButtons.md)
-- [x] [Reading Order](iOSswiftUIa11yTechniques/Documentation/ReadingOrder.md)
-- [x] [Reduce Motion](iOSswiftUIa11yTechniques/Documentation/ReduceMotion.md)
-- [x] [Reduce Transparency](iOSswiftUIa11yTechniques/Documentation/ReduceTransparency.md)
-- [x] [Redundant Entry](iOSswiftUIa11yTechniques/Documentation/RedundantEntry.md)
-- [x] [Responsive Layouts](iOSswiftUIa11yTechniques/Documentation/ResponsiveLayouts.md)
-- [x] [Rotor](iOSswiftUIa11yTechniques/Documentation/Rotor.md)
+- [Radio Buttons](iOSswiftUIa11yTechniques/Documentation/RadioButtons.md)
+- [Reading Order](iOSswiftUIa11yTechniques/Documentation/ReadingOrder.md)
+- [Reduce Motion](iOSswiftUIa11yTechniques/Documentation/ReduceMotion.md)
+- [Reduce Transparency](iOSswiftUIa11yTechniques/Documentation/ReduceTransparency.md)
+- [Redundant Entry](iOSswiftUIa11yTechniques/Documentation/RedundantEntry.md)
+- [Responsive Layouts](iOSswiftUIa11yTechniques/Documentation/ResponsiveLayouts.md)
+- [Rotor](iOSswiftUIa11yTechniques/Documentation/Rotor.md)
 
 ### S
-- [x] [Scroll Views](iOSswiftUIa11yTechniques/Documentation/ScrollViews.md)
-- [x] [Search Suggestions](iOSswiftUIa11yTechniques/Documentation/SearchSuggestions.md)
-- [x] [Segmented Controls](iOSswiftUIa11yTechniques/Documentation/SegmentedControls.md)
-- [x] [Sheets](iOSswiftUIa11yTechniques/Documentation/Sheets.md)
-- [ ] Siri Shortcuts
-- [x] [Sliders](iOSswiftUIa11yTechniques/Documentation/Sliders.md)
-- [x] [Smart Invert](iOSswiftUIa11yTechniques/Documentation/SmartInvert.md)
-- [x] [Steppers](iOSswiftUIa11yTechniques/Documentation/Steppers.md)
-- [x] [SwiftLint](iOSswiftUIa11yTechniques/Documentation/SwiftLint.md)
+- [Scroll Views](iOSswiftUIa11yTechniques/Documentation/ScrollViews.md)
+- [Search Suggestions](iOSswiftUIa11yTechniques/Documentation/SearchSuggestions.md)
+- [Segmented Controls](iOSswiftUIa11yTechniques/Documentation/SegmentedControls.md)
+- [Sheets](iOSswiftUIa11yTechniques/Documentation/Sheets.md)
+- [Sliders](iOSswiftUIa11yTechniques/Documentation/Sliders.md)
+- [Smart Invert](iOSswiftUIa11yTechniques/Documentation/SmartInvert.md)
+- [Steppers](iOSswiftUIa11yTechniques/Documentation/Steppers.md)
+- [SwiftLint](iOSswiftUIa11yTechniques/Documentation/SwiftLint.md)
 
 ### T
-- [x] [Tabs](iOSswiftUIa11yTechniques/Documentation/Tabs.md)
-- [x] [Text Fields](iOSswiftUIa11yTechniques/Documentation/TextFields.md)
-- [x] [TipKit](iOSswiftUIa11yTechniques/Documentation/TipKit.md)
-- [x] [Toggles](iOSswiftUIa11yTechniques/Documentation/Toggles.md)
-- [x] [Toolbars](iOSswiftUIa11yTechniques/Documentation/Toolbars.md)
-- [x] [Touch Target Size](iOSswiftUIa11yTechniques/Documentation/TouchTargetSize.md)
+- [Tabs](iOSswiftUIa11yTechniques/Documentation/Tabs.md)
+- [Text Fields](iOSswiftUIa11yTechniques/Documentation/TextFields.md)
+- [TipKit](iOSswiftUIa11yTechniques/Documentation/TipKit.md)
+- [Toggles](iOSswiftUIa11yTechniques/Documentation/Toggles.md)
+- [Toolbars](iOSswiftUIa11yTechniques/Documentation/Toolbars.md)
+- [Touch Target Size](iOSswiftUIa11yTechniques/Documentation/TouchTargetSize.md)
 
 ### V
-- [x] [Videos](iOSswiftUIa11yTechniques/Documentation/Videos.md)
-- [x] [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
+- [Videos](iOSswiftUIa11yTechniques/Documentation/Videos.md)
+- [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
 
 ### W
-- [x] [Web View Dynamic Type](iOSswiftUIa11yTechniques/Documentation/WebViewDynamicType.md)
+- [Web View Dynamic Type](iOSswiftUIa11yTechniques/Documentation/WebViewDynamicType.md)
 
 ### X
-- [x] [XCTest Accessibility Testing](iOSswiftUIa11yTechniques/Documentation/XCTestAccessibility.md)
+- [XCTest Accessibility Testing](iOSswiftUIa11yTechniques/Documentation/XCTestAccessibility.md)
 
 
 ## Contributor Guide

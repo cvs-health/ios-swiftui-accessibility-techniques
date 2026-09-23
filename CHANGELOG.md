@@ -10,7 +10,7 @@ This repository ships two products on independent release schedules, so they hav
 
 | Product | Scheme | Released via | Current |
 | --- | --- | --- | --- |
-| iOS app | `26.x` | App Store | **26.6** |
+| iOS app | `26.x` | App Store | **26.7** |
 | `a11y-check` CLI | semver | Homebrew and git tags | **0.4.0** (tag) |
 
 Rules:
@@ -20,16 +20,13 @@ Rules:
 - **One `## [Unreleased]` section, undated.** Everything accumulates there until it ships. Do not add a new dated `[Unreleased]` header per batch of work — that is how this file ended up with six of them, and how the `26.7`, `26.8`, and `26.9` headers below came to describe work that was never released to the App Store (`26.9` is CLI-only changes filed under an app version number).
 - At release time, rename `[Unreleased]` to the version header for the product that shipped, move any entries belonging to the *other* product into a fresh `[Unreleased]`, and start over.
 
-## [Unreleased]
+## [iOS 26.7] - 2026-09-23
 
-### App Store Release Notes (draft for the next App Store release)
+App Store release. The previously published version was **26.6**, so this release contains everything since then, including the work recorded below under the `26.7`, `26.8`, and `26.9` headers, which were never released to the App Store.
 
-The published App Store version is **26.6**, so these notes cover everything since then — including the `26.7`, `26.8`, and `26.9` sections below, which were never released to the App Store.
+Before submitting, bump `CURRENT_PROJECT_VERSION` — it is still `78`, and the App Store rejects a build number it has already accepted.
 
-`MARKETING_VERSION` is now **26.7**, so that is the version being prepared. Two things still to do before submitting:
-
-- **Bump `CURRENT_PROJECT_VERSION`** — still `78`, and the App Store rejects a build number it has already seen.
-- **Resolve the duplicate `26.7`** — there is already a `## [26.7] - 2026-05-19` section below, describing different work. Either renumber this release, or relabel that older section, which never reached the App Store.
+### App Store Release Notes
 
 Copy the block below into the What's New field. Plain text, no Markdown — the App Store does not render it.
 
@@ -213,7 +210,7 @@ Also in this release
 - SARIF output now includes the required `artifactChanges` property in each `fixes` entry, resolving validation errors when uploading to GitHub Code Scanning
 - Documented that `upload-sarif` works automatically on public repositories; private repositories require GitHub Advanced Security (GHAS) to be enabled
 
-## [26.9] - 2026-07-13
+## [26.9 — not an App Store release] - 2026-07-13
 
 ### a11y-check
 
@@ -229,7 +226,7 @@ Also in this release
 - `AssetCatalogParser.discoverColors(in:)` now returns `ThemedColorMap` (`[String: ThemedColor]`) instead of a flat `[String: RGBA]`. `ThemedColor` carries `light`, `dark`, `highContrast`, and `darkHighContrast` variants with a `resolve(darkMode:contrastMode:)` helper. This is a **minor-version API change** — callers that assign to `RuleRegistry.assetColors` must update to `ThemedColorMap`. (WCAG 1.4.3)
 - Added `bold`, `fontWeight`, and `italic` to `ModifierCollector.trackedModifiers`.
 
-## [26.8] - 2026-06-10
+## [26.8 — not an App Store release] - 2026-06-10
 
 ### iOS App
 
@@ -243,7 +240,7 @@ Also in this release
 
 - `button-group-missing-container-label` rule (warning, WCAG 1.3.1) — flags HStack/VStack/LazyVGrid/LazyHStack containers of 2+ Buttons that have a visible group label (preceding Text) but are missing `.accessibilityElement(children: .contain)` and/or `.accessibilityLabel()`, so VoiceOver users hear the group context when navigating to the buttons
 
-## [26.7] - 2026-05-19
+## [26.7 — not an App Store release] - 2026-05-19
 
 ### Documentation
 

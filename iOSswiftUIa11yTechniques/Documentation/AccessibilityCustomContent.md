@@ -57,22 +57,50 @@ A key is also the only way to attach a label that is not a string literal. The o
 
 ## Seat map example
 
-Each seat is a `Button` containing only its seat number, so VoiceOver derives the name from the visible text and announces "14C, button". Whether it is a window seat, middle seat, or aisle seat, and which part of the cabin it sits in, exist nowhere as text — they are conveyed entirely by the seat's place in the grid:
+Each seat is a `Toggle` whose label is just the seat number, so VoiceOver derives the name from the visible text. Whether it is a window seat, middle seat, or aisle seat, and which part of the cabin it sits in, exist nowhere as text — they are conveyed entirely by the seat's place in the grid:
 
 ```swift
-Button(action: { selectedSeat = seat.id }) {
+Toggle(isOn: binding(for: seat)) {
     Text(seat.id)
-        // Flexible width so six seats plus the aisle always fit the screen.
-        // A fixed width overflows narrow devices and clips adjacent text.
-        .frame(maxWidth: .infinity, minHeight: 44)
-        // …
 }
+.toggleStyle(SeatToggleStyle(selectedBackground: darkGreen))
 .accessibilityCustomContent(positionKey, seat.position, importance: .high)   // "Window seat"
 .accessibilityCustomContent(cabinAreaKey, seat.cabinArea)                    // "Front"
-.accessibilityAddTraits(isSelected ? [.isSelected] : [])
 ```
 
-No `.accessibilityLabel` anywhere. Selection is essential state, so it uses `.isSelected` rather than custom content.
+No `.accessibilityLabel` anywhere.
+
+### Use a Toggle, not a Button with .isSelected
+
+A `Button` carrying only `.accessibilityAddTraits(.isSelected)` announces "selected" when it is on and says **nothing at all** when it is off, because iOS has no "not selected" trait. Users cannot tell an unselected seat from an ordinary button.
+
+A `Toggle` solves this natively: it is exposed as a switch whose value changes between off and on, so VoiceOver conveys the state either way. If you must use a `Button`, pair the trait with `.accessibilityValue("Not Selected")` when unselected, as `MultiSelectionListView` does.
+
+### Keep the switch semantics when styling
+
+The built-in `.toggleStyle(.button)` discards the seat border and renders the selected state as a large tinted circle, which stops the grid reading as a seat map. A custom `ToggleStyle` restores the appearance:
+
+```swift
+private struct SeatToggleStyle: ToggleStyle {
+    let selectedBackground: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        Button {
+            configuration.isOn.toggle()
+        } label: {
+            configuration.label
+                // Flexible width so six seats plus the aisle always fit the
+                // screen, and a 44pt minimum height for the touch target.
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .background(configuration.isOn ? selectedBackground : Color.clear)
+                // …
+        }
+        .buttonStyle(.plain)
+    }
+}
+```
+
+Wrapping `configuration.label` in a `Button` keeps the switch semantics the `Toggle` provides — the element still reports an off and an on value. Using `.onTapGesture` instead also works, but then the element has a tap handler without a role of its own, which accessibility linters flag.
 
 Give the seats a flexible width rather than a fixed one. A row of six fixed-width seats plus an aisle overflows the screen on narrower devices, which widens the whole scroll view and clips the surrounding body text on both edges.
 

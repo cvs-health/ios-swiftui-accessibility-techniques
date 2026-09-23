@@ -62,7 +62,7 @@ struct AccessibilityCustomContentView: View {
             VStack {
                 Text("Use `.accessibilityCustomContent` to expose information that the visual design conveys without text, such as an element's position within a layout. VoiceOver speaks `.default` importance content only when the user asks for it using the More Content rotor, and speaks `.high` importance content immediately. With VoiceOver on rotate 2 fingers on the screen to select the More Content rotor option and then swipe up or down with 1 finger to hear each detail.")
                     .padding(.bottom)
-                Text("Custom content adds to an element, it never replaces its accessible name. Do not override `.accessibilityLabel` to make room for it — let the element keep the name it derives from its own visible text. Anything essential belongs in the name, `.accessibilityValue`, or a trait, because the More Content rotor is gated behind a VoiceOver verbosity setting that many users never change.")
+                Text("Custom content adds to an element, it never replaces its accessible name. Do not override `.accessibilityLabel` to make room for it — let the element keep the name it derives from its own visible text. Anything essential belongs in the name, `.accessibilityValue`, or a trait. Content at `.default` importance is always reachable through the More Content rotor, but VoiceOver's Verbosity > More Content setting controls whether users get any cue that an element has it, and that setting can be turned off entirely, so users may never think to look.")
                     .padding(.bottom)
                 Text("Good Example")
                     .font(.subheadline)

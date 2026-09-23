@@ -26,6 +26,8 @@ App Store release. The previously published version was **26.6**, so this releas
 
 Before submitting, bump `CURRENT_PROJECT_VERSION` — it is still `78`, and the App Store rejects a build number it has already accepted.
 
+The App Store description and other listing fields live in [AppStore.md](AppStore.md).
+
 ### App Store Release Notes
 
 Copy the block below into the What's New field. Plain text, no Markdown — the App Store does not render it.
@@ -69,6 +71,12 @@ Also in this release
 
 - **New rule `sort-priority-negative`** (`GroupingRules.swift`, WCAG 2.5.1 / 2.1.1 / 4.1.2, error/serious). Flags `.accessibilitySortPriority(-N)` with any negative numeric literal (`-1`, `-10`, `-1.5`, etc.). Sort priority also governs Explore by Touch hit testing — a negative-priority element loses hit tests to any overlapping default-priority (0) content, silently breaking VoiceOver Explore by Touch for floating overlays over scroll content. Empirically verified against the CVS Pharmacy app tab bar bug reproduced in `ExploreByTouchBrokenView`. The existing `sort-priority-overused` rule now skips negative literals so the two rules don't produce duplicate diagnostics on the same line. Includes 5 unit tests. Rule count updated from 42 to 43.
 - **New rule `value-contains-role`** (`AccessibilityValueRules.swift`, WCAG 4.1.2). Flags `.accessibilityValue()` strings that contain role words like "button", "tab", "link", "toggle", "switch", "slider", "checkbox", "picker", "menu", or "search field". Values are for state (e.g. "50 percent", "selected item 2 of 5"), not role — VoiceOver announces the role automatically from accessibility traits. Placing a role word in the value causes VoiceOver to speak it twice and is often a symptom of a missing or removed trait. **Severity is `error` for most role words but downgraded to `warning` for `checkbox`** — iOS has no checkbox trait, so writing "checkbox" is a defensible workaround (WCAG 4.1.2 is already satisfied by the Toggle's Switch trait). Whole-word matching prevents false positives on descriptive terms like "linked" or "buttonhole". Applies to any view type, not just Button. Custom diagnostic messages for `checkbox` and `tab` point developers at the correct iOS pattern (Toggle + `.toggleStyle(CheckboxToggleStyle())` for checkboxes; `.isTabBar` / `.isSelected` traits for tabs). Includes 9 unit tests. Rule count updated from 41 to 42 across the app, docs, and READMEs.
+
+### Documentation
+
+#### Added
+
+- **`AppStore.md`** — copy-paste source for the App Store Connect listing fields, holding the app name and a rewritten description. The previous live description had drifted, claiming 76 techniques when the index holds 89, so the file records which numbers are hand-maintained and where their source of truth is. The new description leads with the good-and-bad-example comparison rather than the format, since only the first few lines show before the "more" link; names WCAG 2.2 rather than bare WCAG; and advertises a11y-check, which the listing had never mentioned. Headings use Title Case rather than ALL CAPS, because some screen reader verbosity settings spell short all-caps strings out letter by letter. Release notes are deliberately not duplicated there — they stay in this file under each version's App Store Release Notes heading.
 
 ### iOSswiftUIa11yTechniques
 

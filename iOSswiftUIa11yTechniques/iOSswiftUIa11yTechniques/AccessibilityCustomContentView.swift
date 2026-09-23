@@ -17,38 +17,53 @@
 import Accessibility
 import SwiftUI
 
-/// Example data model for the Accessibility Custom Content list examples.
-private struct Prescription: Identifiable {
-    let name: String
-    let refills: Int
-    let pharmacy: String
-    let prescriber: String
+/// Example data model for the Accessibility Custom Content seat map example.
+private struct Seat: Identifiable {
+    let row: Int
+    let column: String
 
-    var id: String { name }
+    /// Window, Middle, or Aisle — conveyed only by where the seat sits in the map.
+    var position: String {
+        switch column {
+        case "A", "F": return "Window"
+        case "C", "D": return "Aisle"
+        default: return "Middle"
+        }
+    }
+
+    /// Front, Middle, or Rear of the cabin — conveyed only by vertical position.
+    var cabinArea: String {
+        switch row {
+        case ..<13: return "Front of cabin"
+        case 13...14: return "Middle of cabin"
+        default: return "Rear of cabin"
+        }
+    }
+
+    var id: String { "\(row)\(column)" }
 }
 
 struct AccessibilityCustomContentView: View {
-    private let prescriptions: [Prescription] = [
-        Prescription(name: "Atorvastatin 20 mg", refills: 2, pharmacy: "Main Street", prescriber: "Dr. Chen"),
-        Prescription(name: "Metformin 500 mg", refills: 1, pharmacy: "Oak Avenue", prescriber: "Dr. Patel")
-    ]
+    @State private var selectedSeat: String?
 
-    // Reusable keys give every row the same custom content label and a stable `id`.
-    private let pharmacyKey = AccessibilityCustomContentKey("Pharmacy", id: "pharmacy")
-    private let prescriberKey = AccessibilityCustomContentKey("Prescriber", id: "prescriber")
+    private let rows = [12, 13, 14, 15]
+    private let columns = ["A", "B", "C", "D", "E", "F"]
+
+    // Reusable keys: the same two labels repeat across every seat in the map.
+    private let positionKey = AccessibilityCustomContentKey("Position", id: "position")
+    private let cabinAreaKey = AccessibilityCustomContentKey("Cabin area", id: "cabinArea")
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
-    private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use `.accessibilityCustomContent` to expose supplementary details that are not shown as text on screen, without adding them to the accessible name. VoiceOver speaks `.default` importance content only when the user asks for it using the More Content rotor, and speaks `.high` importance content immediately. With VoiceOver on rotate 2 fingers on the screen to select the More Content rotor option and then swipe up or down with 1 finger to hear each detail.")
+                Text("Use `.accessibilityCustomContent` to expose information that the visual design conveys without text, such as an element's position within a layout. VoiceOver speaks `.default` importance content only when the user asks for it using the More Content rotor, and speaks `.high` importance content immediately. With VoiceOver on rotate 2 fingers on the screen to select the More Content rotor option and then swipe up or down with 1 finger to hear each detail.")
                     .padding(.bottom)
-                Text("Custom content never replaces the accessible name. Every piece of text visible on screen must still be in the name, so keep `.accessibilityElement(children: .combine)` or a label that contains the visible text, otherwise VoiceOver stops speaking what is on screen and Voice Control users cannot say what they see.")
+                Text("Custom content adds to an element, it never replaces its accessible name. Do not override `.accessibilityLabel` to make room for it — let the element keep the name it derives from its own visible text. Anything essential belongs in the name, `.accessibilityValue`, or a trait, because the More Content rotor is gated behind a VoiceOver verbosity setting that many users never change.")
                     .padding(.bottom)
-                Text("Good Examples")
+                Text("Good Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -58,170 +73,56 @@ struct AccessibilityCustomContentView: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
-                Text("Good Example Supplementary Details")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                Button(action: {}) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Atorvastatin 20 mg").font(.headline)
-                        Text("Ready for pickup")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.secondary, lineWidth: 1)
-                )
-                .accessibilityCustomContent("Refills remaining", "2")
-                .accessibilityCustomContent("Prescriber", "Dr. Chen")
-                DisclosureGroup("Details") {
-                    Text("The good supplementary details example lets the Button build its own accessible name from its visible text, so VoiceOver speaks \"Atorvastatin 20 mg, Ready for pickup\" on focus and Voice Control users can say either phrase to activate the card. The refill count and prescriber are not printed on the compact card, they live on the detail screen, so `.accessibilityCustomContent(\"Refills remaining\", \"2\")` gives VoiceOver users a shortcut to them without taking anything out of the name.")
-                }.padding(.bottom).accessibilityHint("Good Example Supplementary Details")
-                Text("Good Example High Importance")
+                Text("Seat Map")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
                 VStack(spacing: 8) {
-                    ZStack {
-                        Circle()
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 10)
-                        Circle()
-                            .trim(from: 0, to: 0.72)
-                            .stroke(colorScheme == .dark ? Color(.systemGreen) : darkGreen, lineWidth: 10)
-                            .rotationEffect(.degrees(-90))
-                        Text("72%").bold()
-                    }
-                    .frame(width: 100, height: 100)
-                    Text("Daily steps")
-                }
-                .frame(maxWidth: .infinity)
-                .accessibilityElement(children: .combine)
-                .accessibilityCustomContent("Compared to yesterday", "1,400 steps ahead", importance: .high)
-                DisclosureGroup("Details") {
-                    Text("The good high importance example uses `.accessibilityElement(children: .combine)` so the visible \"72%\" and \"Daily steps\" text stays in the accessible name, then adds `.accessibilityCustomContent(\"Compared to yesterday\", \"1,400 steps ahead\", importance: .high)` for a comparison that is not drawn anywhere on screen. VoiceOver speaks high importance content immediately, so reserve it for the rare supplementary detail worth interrupting for. Marking everything `.high` recreates the long announcement custom content is meant to avoid.")
-                }.padding(.bottom).accessibilityHint("Good Example High Importance")
-                Text("Good Example Reusable Content Key")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                VStack(spacing: 8) {
-                    ForEach(prescriptions) { prescription in
-                        Button(action: {}) {
-                            HStack {
-                                Text(prescription.name)
-                                Spacer()
-                                Text("\(prescription.refills) refills")
-                                    .foregroundColor(.secondary)
+                    ForEach(rows, id: \.self) { row in
+                        HStack(spacing: 8) {
+                            ForEach(Array(columns.enumerated()), id: \.element) { index, column in
+                                seatButton(for: Seat(row: row, column: column))
+                                if index == 2 {
+                                    // The aisle. Sighted users see the gap, so the seats
+                                    // beside it are visibly the aisle seats.
+                                    Spacer().frame(width: 16)
+                                }
                             }
                         }
-                        .padding(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.secondary, lineWidth: 1)
-                        )
-                        .accessibilityCustomContent(pharmacyKey, prescription.pharmacy)
-                        .accessibilityCustomContent(prescriberKey, prescription.prescriber)
                     }
                 }
+                .padding(.bottom)
+                Text(selectedSeat.map { "Selected seat \($0)" } ?? "No seat selected")
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The good reusable content key example declares `AccessibilityCustomContentKey(\"Pharmacy\", id: \"pharmacy\")` once and passes it to `.accessibilityCustomContent(pharmacyKey, prescription.pharmacy)` for every row. The `id` lets VoiceOver recognize that each row's Pharmacy detail is the same piece of content, so it keeps a consistent position in the More Content rotor as users move down the list. A key is also the only way to attach a label that is not a string literal, because the overload taking a `String` variable for both the label and the value is unavailable in SwiftUI. Each row's visible name and refill count are still spoken on focus because the Button builds the name from its own visible text.")
-                }.padding(.bottom).accessibilityHint("Good Example Reusable Content Key")
-                Text("Bad Examples")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                Divider()
-                    .frame(height: 2.0, alignment: .leading)
-                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                    .padding(.bottom)
-                Text("Bad Example Visible Text Moved Into Custom Content")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                Button(action: {}) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Atorvastatin 20 mg").font(.headline)
-                        Text("Ready for pickup")
-                        Text("Refills remaining: 2")
-                        Text("Pharmacy: Main Street")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.secondary, lineWidth: 1)
-                )
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Atorvastatin 20 mg")
-                .accessibilityCustomContent("Status", "Ready for pickup")
-                .accessibilityCustomContent("Refills remaining", "2")
-                .accessibilityCustomContent("Pharmacy", "Main Street")
-                DisclosureGroup("Details") {
-                    Text("The bad visible text example uses `.accessibilityElement(children: .ignore)` to throw away all four visible `Text` views and keeps only the first line in `.accessibilityLabel(\"Atorvastatin 20 mg\")`. VoiceOver speaks just the drug name on focus, so three lines that are printed on the card are never heard unless the user thinks to open the More Content rotor. The accessible name no longer contains the visible text, which fails WCAG 2.5.3 Label in Name, and a Voice Control user who says \"tap Ready for pickup\" gets no match. Custom content is for details that are not on screen, it must never be used to shorten a name by removing text that is.")
-                }.padding(.bottom).accessibilityHint("Bad Example Visible Text Moved Into Custom Content")
-                Text("Bad Example Essential Status In Custom Content")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                Button(action: {}) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Metformin 500 mg").font(.headline)
-                        Text("Prescription expired")
-                            .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.secondary, lineWidth: 1)
-                )
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Metformin 500 mg")
-                .accessibilityCustomContent("Status", "Prescription expired")
-                DisclosureGroup("Details") {
-                    Text("The bad essential status example pulls the visible \"Prescription expired\" text out of the name and into default importance custom content, so VoiceOver announces only \"Metformin 500 mg, button\" and users can miss that the prescription cannot be refilled. Raising it to `importance: .high` would get it spoken, but the name would still be missing visible text, so `.high` is not a fix for this. Essential state belongs in the accessible name, either by letting the Button use its visible text or by putting it in `.accessibilityValue`.")
-                }.padding(.bottom).accessibilityHint("Bad Example Essential Status In Custom Content")
-                Text("Bad Example Content Only in the Rotor")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                Button(action: {}) {
-                    HStack {
-                        // The dot is a decorative status indicator inside the Button's label,
-                        // not a touch target of its own — the Button provides the tappable area.
-                        Circle()
-                            .fill(colorScheme == .dark ? Color(.systemRed) : darkRed)
-                            // a11y-check:disable-next-line small-touch-target
-                            .frame(width: 12, height: 12)
-                        Text("Lisinopril 10 mg")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.secondary, lineWidth: 1)
-                )
-                .accessibilityCustomContent("Status", "Action required")
-                DisclosureGroup("Details") {
-                    Text("The bad rotor only example conveys \"Action required\" with a red dot on screen and with `.accessibilityCustomContent(\"Status\", \"Action required\")` in the More Content rotor, and nowhere else. Sighted users have to know what the color means, which fails WCAG 1.4.1 Use of Color, and custom content is only surfaced by VoiceOver, so Voice Control and Full Keyboard Access users never receive it at all. Add visible text for the status so that every user gets it, then the name carries it too.")
-                }.padding(.bottom).accessibilityHint("Bad Example Content Only in the Rotor")
+                    Text("The good seat map example sets no `.accessibilityLabel` at all. Each seat is a Button containing `Text(\"14C\")`, so VoiceOver derives the name from the visible text and announces \"14C, button\" exactly as it reads on screen. Whether a seat is a window, middle, or aisle seat is conveyed only by where it sits in the grid, and which part of the cabin it is in is conveyed only by how far down the map it appears. Sighted users read both from the layout, but a VoiceOver user moving through the seats one at a time loses the two dimensional arrangement, so `.accessibilityCustomContent(positionKey, seat.position, importance: .high)` and `.accessibilityCustomContent(cabinAreaKey, seat.cabinArea)` carry that spatial information instead. Nothing here is information sighted users do not have, and nothing has been taken out of the name to make room for it. Position uses `importance: .high` because it is the attribute people choose a seat by, so VoiceOver speaks it immediately. Cabin area stays at the default importance in the More Content rotor. Both use an `AccessibilityCustomContentKey` with a stable `id` so the same two details keep a consistent position in the rotor as users move across the map. The selected seat uses `.accessibilityAddTraits(.isSelected)` rather than custom content, because selection is essential state.")
+                }.padding(.bottom).accessibilityHint("Seat Map")
             }
             .padding()
             .navigationTitle("Accessibility Custom Content")
         }
+    }
+
+    @ViewBuilder
+    private func seatButton(for seat: Seat) -> some View {
+        let isSelected = selectedSeat == seat.id
+        Button(action: {
+            selectedSeat = seat.id
+        }) {
+            Text(seat.id)
+                .font(.caption)
+                .frame(width: 44, height: 44)
+                .background(isSelected ? (colorScheme == .dark ? Color(.systemGreen) : darkGreen) : Color.clear)
+                .foregroundColor(isSelected ? Color(.systemBackground) : Color.primary)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color.primary, lineWidth: isSelected ? 3 : 1)
+                )
+        }
+        .accessibilityCustomContent(positionKey, seat.position, importance: .high)
+        .accessibilityCustomContent(cabinAreaKey, seat.cabinArea)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 }
 

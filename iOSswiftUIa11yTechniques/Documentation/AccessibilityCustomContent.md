@@ -1,52 +1,24 @@
 # Accessibility Custom Content
-Use `.accessibilityCustomContent` to expose supplementary details that are not shown as text on screen, without adding them to the element's accessible name. VoiceOver exposes those details through the More Content rotor instead of speaking them as part of the name.
+Use `.accessibilityCustomContent` to expose information that the visual design conveys without text, such as an element's position within a layout. VoiceOver exposes those details through the More Content rotor instead of speaking them as part of the accessible name.
 
 With VoiceOver on, rotate 2 fingers on the screen to select the More Content rotor option, then swipe up or down with 1 finger to hear each detail of the focused element.
 
-## Custom content never replaces the accessible name
+This is an accessibility usability enhancement, not a conformance requirement. Not using it fails no WCAG success criterion.
 
-This is the rule that matters most, and the one that is easiest to get wrong.
+## Custom content adds, it never replaces
 
-Every piece of text that is visible on screen must still be in the accessible name. Moving visible text out of the name and into custom content breaks two things:
+Do not override `.accessibilityLabel` to make room for custom content. Let the element keep the name it derives from its own visible text — a `Button` containing `Text("14C")` is already named "14C", and there is nothing to improve on. Custom content is for what the layout communicates that no text on screen states.
 
-- **VoiceOver stops speaking it on focus.** Custom content at `.default` importance is announced only when the user navigates to it in the More Content rotor. Most users never open that rotor, so the text is effectively gone.
-- **Speech input users cannot target what they see.** WCAG [2.5.3 Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html) requires the accessible name of a control to contain its visible text label. A Voice Control user who says "tap Ready for pickup" gets no match if that text was moved into custom content.
+Two rules follow from that:
 
-The pattern to avoid:
+- **Never put information in custom content that is not already available to sighted users.** Detail that exists only for VoiceOver creates a divergent experience, drifts out of sync with the rest of the app, and reaches nobody using Voice Control, Switch Control, Full Keyboard Access, or screen magnification.
+- **Never put essential information in custom content.** The More Content rotor is gated behind a VoiceOver verbosity setting that many users never change, so content there is easy to miss entirely. Essential information belongs in the accessible name, in `.accessibilityValue`, or in a trait.
 
-```swift
-// BAD — .ignore discards every visible Text, and the label keeps only the first line.
-Button(action: refill) {
-    VStack(alignment: .leading) {
-        Text("Atorvastatin 20 mg").font(.headline)
-        Text("Ready for pickup")
-        Text("Refills remaining: 2")
-    }
-}
-.accessibilityElement(children: .ignore)
-.accessibilityLabel("Atorvastatin 20 mg")
-.accessibilityCustomContent("Status", "Ready for pickup")
-.accessibilityCustomContent("Refills remaining", "2")
-```
+Good candidates are dimensions the design encodes spatially or graphically, where a linear traversal loses what a sighted user takes in at a glance:
 
-The fix is to let the name keep the visible text and reserve custom content for details the card does not print:
-
-```swift
-// GOOD — the Button builds its name from its visible text.
-// Refills and prescriber are on the detail screen, not on this card.
-Button(action: refill) {
-    VStack(alignment: .leading) {
-        Text("Atorvastatin 20 mg").font(.headline)
-        Text("Ready for pickup")
-    }
-}
-.accessibilityCustomContent("Refills remaining", "2")
-.accessibilityCustomContent("Prescriber", "Dr. Chen")
-```
-
-For a container that is not already a single element, use `.accessibilityElement(children: .combine)` so the visible text is gathered into the name, then attach custom content on top of it. Use `.ignore` only when you are replacing the children with a label that contains the same visible text.
-
-A long accessible name is not a reason to reach for custom content. If a card displays six lines of text, its name has to contain those six lines. VoiceOver users control announcement length with their own verbosity and speech rate settings.
+- A seat's window, middle, or aisle position, conveyed only by its column in a seat map.
+- Which part of a cabin, calendar, or grid an element sits in, conveyed only by how far down the layout it appears.
+- A value encoded by mark size in a chart, where the number appears nowhere as text.
 
 ## Importance
 
@@ -55,41 +27,50 @@ The `importance` parameter controls when VoiceOver speaks the detail:
 - `.default` — output on demand only. Users hear it when they navigate to it in the More Content rotor. This is the default value.
 - `.high` — output immediately, as part of the element's announcement.
 
-Reserve `.high` for the rare supplementary detail worth interrupting for. Marking everything `.high` recreates the long announcement custom content is meant to avoid.
-
-`.high` is **not** a fix for a name that is missing visible text. If the detail is visible on screen, or is essential to understanding the element, it belongs in the name or in `.accessibilityValue`, at which point it does not need to be custom content at all.
+Use `.high` for the one dimension users make their decision on — seat position, in the example below. Marking everything `.high` makes every element's announcement long, which defeats the purpose of putting the detail in custom content at all.
 
 ## Reusable content keys
 
 `AccessibilityCustomContentKey` declares a label once and gives it a stable `id`:
 
 ```swift
-private let pharmacyKey = AccessibilityCustomContentKey("Pharmacy", id: "pharmacy")
+private let positionKey = AccessibilityCustomContentKey("Position", id: "position")
 
 // …
 
-.accessibilityCustomContent(pharmacyKey, prescription.pharmacy)
+.accessibilityCustomContent(positionKey, seat.position, importance: .high)
 ```
 
-The `id` lets VoiceOver recognize the same piece of content across elements, so it keeps a consistent position in the More Content rotor as users move through a list.
+The `id` lets VoiceOver recognize the same piece of content across elements, so it keeps a consistent position in the More Content rotor as users move through a grid or list. This matters most when the same few labels repeat across many elements, as they do in a seat map.
 
 A key is also the only way to attach a label that is not a string literal. The overload that takes a `String` variable for both the label and the value is marked unavailable in SwiftUI — wrap both in `Text`, or use a key.
 
+## Seat map example
+
+Each seat is a `Button` containing only its seat number, so VoiceOver derives the name from the visible text and announces "14C, button". Window versus aisle, and front versus rear of the cabin, exist nowhere as text — they are conveyed entirely by the seat's place in the grid:
+
+```swift
+Button(action: { selectedSeat = seat.id }) {
+    Text(seat.id)
+        .frame(width: 44, height: 44)
+        // …
+}
+.accessibilityCustomContent(positionKey, seat.position, importance: .high)
+.accessibilityCustomContent(cabinAreaKey, seat.cabinArea)
+.accessibilityAddTraits(isSelected ? [.isSelected] : [])
+```
+
+No `.accessibilityLabel` anywhere. Selection is essential state, so it uses `.isSelected` rather than custom content.
+
 ## Notes
 
-- Custom content is surfaced by VoiceOver. Voice Control and Full Keyboard Access users do not receive it, so never put essential information there and nowhere else.
-- Information conveyed visually by color or shape alone needs visible text, not custom content. A red dot plus a custom content "Status" detail still fails [1.4.1 Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html) for sighted users.
 - Do not repeat the element's label, value, or role in custom content. VoiceOver already announces those.
 - Do not name gestures in custom content. Describe the data, not how to reach it.
-- Giving VoiceOver users a shortcut to detail that sighted users reach by opening the element is a legitimate enhancement. Hiding something from everyone except VoiceOver users is not.
+- Information conveyed visually by color alone needs a non-color indicator for sighted users, which is a [1.4.1 Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color) requirement in its own right. Custom content does not address it.
 - Available on iOS 15 and later.
 
 ## Applicable WCAG Success Criteria
-- [1.3.1 Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
-- [2.5.3 Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html)
-- [4.1.2 Name, Role, Value](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html)
-
-Used correctly, custom content is an enhancement beyond WCAG. The criteria above are the ones that misuse fails: moving visible text out of the accessible name (2.5.3), putting an element's name or state only in custom content instead of in `.accessibilityLabel` or `.accessibilityValue` (4.1.2), and conveying information that exists nowhere else in the interface (1.3.1).
+- N/A
 
 
 ## Apple Developer Documentation

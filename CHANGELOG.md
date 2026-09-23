@@ -4,6 +4,37 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [26.10] - 2026-09-23
+
+App Store version 26.6 is the currently published release, so this version's notes cover everything added since 26.6, including the work recorded below under 26.7, 26.8, 26.9, and the Unreleased sections. Bump `MARKETING_VERSION` from 26.6 and `CURRENT_PROJECT_VERSION` from 78 before submitting.
+
+### App Store Release Notes
+
+Copy the block below into the What's New field. Plain text, no Markdown — the App Store does not render it.
+
+```text
+New technique pages
+
+• Accessibility Custom Content — attach extra details to an element so VoiceOver can offer them under the More Content rotor, without lengthening the element's name. Demonstrated with a seat map where a seat's window, middle, or aisle position exists only in the layout.
+• Web View Dynamic Type — make text inside a WKWebView scale with Dynamic Type.
+• Motion Actuation — offer an alternative to a shake gesture for people who cannot shake the device.
+
+New examples on existing pages
+
+• Drag & Drop — accessible .draggable() and .dropDestination(), plus what breaks without an accessibility action.
+• Pickers — avoiding unexpected context changes when a control's value changes.
+• Videos — why auto-playing audio is a barrier.
+• Alerts — what goes wrong when focus is not returned to the trigger after dismissal.
+• Accessibility Sort Priority — how misused sort priority reorders what VoiceOver reads.
+
+Also in this release
+
+• New Explore by Touch prototype reproducing a tab bar that VoiceOver cannot reach by touch, with an in-page breakdown of the three causes.
+• Tabs now set a unique navigation bar title per tab.
+• Fixed sample video URLs that had stopped loading.
+• The Simulator's Hardware > Shake menu now triggers the Motion Actuation demo.
+```
+
 ## [Unreleased] - 2026-09-23
 
 ### a11y-check

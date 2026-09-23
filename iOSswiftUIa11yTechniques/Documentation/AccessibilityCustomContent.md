@@ -16,7 +16,7 @@ Two rules follow from that:
 
 Good candidates are dimensions the design encodes spatially or graphically, where a linear traversal loses what a sighted user takes in at a glance:
 
-- A seat's window, middle, or aisle position, conveyed only by its column in a seat map.
+- Whether a seat is a window seat, middle seat, or aisle seat, conveyed only by its column in a seat map.
 - Which part of a cabin, calendar, or grid an element sits in, conveyed only by how far down the layout it appears.
 - A value encoded by mark size in a chart, where the number appears nowhere as text.
 
@@ -47,20 +47,24 @@ A key is also the only way to attach a label that is not a string literal. The o
 
 ## Seat map example
 
-Each seat is a `Button` containing only its seat number, so VoiceOver derives the name from the visible text and announces "14C, button". Window versus aisle, and front versus rear of the cabin, exist nowhere as text — they are conveyed entirely by the seat's place in the grid:
+Each seat is a `Button` containing only its seat number, so VoiceOver derives the name from the visible text and announces "14C, button". Whether it is a window seat, middle seat, or aisle seat, and which part of the cabin it sits in, exist nowhere as text — they are conveyed entirely by the seat's place in the grid:
 
 ```swift
 Button(action: { selectedSeat = seat.id }) {
     Text(seat.id)
-        .frame(width: 44, height: 44)
+        // Flexible width so six seats plus the aisle always fit the screen.
+        // A fixed width overflows narrow devices and clips adjacent text.
+        .frame(maxWidth: .infinity, minHeight: 44)
         // …
 }
-.accessibilityCustomContent(positionKey, seat.position, importance: .high)
-.accessibilityCustomContent(cabinAreaKey, seat.cabinArea)
+.accessibilityCustomContent(positionKey, seat.position, importance: .high)   // "Window seat"
+.accessibilityCustomContent(cabinAreaKey, seat.cabinArea)                    // "Front"
 .accessibilityAddTraits(isSelected ? [.isSelected] : [])
 ```
 
 No `.accessibilityLabel` anywhere. Selection is essential state, so it uses `.isSelected` rather than custom content.
+
+Give the seats a flexible width rather than a fixed one. A row of six fixed-width seats plus an aisle overflows the screen on narrower devices, which widens the whole scroll view and clips the surrounding body text on both edges.
 
 ## Notes
 

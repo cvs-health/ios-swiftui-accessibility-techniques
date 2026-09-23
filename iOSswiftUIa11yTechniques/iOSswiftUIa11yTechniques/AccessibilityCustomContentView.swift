@@ -22,21 +22,22 @@ private struct Seat: Identifiable {
     let row: Int
     let column: String
 
-    /// Window, Middle, or Aisle — conveyed only by where the seat sits in the map.
+    /// Window seat, middle seat, or aisle seat — conveyed only by where the
+    /// seat sits in the map.
     var position: String {
         switch column {
-        case "A", "F": return "Window"
-        case "C", "D": return "Aisle"
-        default: return "Middle"
+        case "A", "F": return "Window seat"
+        case "C", "D": return "Aisle seat"
+        default: return "Middle seat"
         }
     }
 
-    /// Front, Middle, or Rear of the cabin — conveyed only by vertical position.
+    /// Front, middle, or rear of the cabin — conveyed only by vertical position.
     var cabinArea: String {
         switch row {
-        case ..<13: return "Front of cabin"
-        case 13...14: return "Middle of cabin"
-        default: return "Rear of cabin"
+        case ..<13: return "Front"
+        case 13...14: return "Middle"
+        default: return "Rear"
         }
     }
 
@@ -78,15 +79,15 @@ struct AccessibilityCustomContentView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                VStack(spacing: 8) {
+                VStack(spacing: 4) {
                     ForEach(rows, id: \.self) { row in
-                        HStack(spacing: 8) {
+                        HStack(spacing: 4) {
                             ForEach(Array(columns.enumerated()), id: \.element) { index, column in
                                 seatButton(for: Seat(row: row, column: column))
                                 if index == 2 {
                                     // The aisle. Sighted users see the gap, so the seats
                                     // beside it are visibly the aisle seats.
-                                    Spacer().frame(width: 16)
+                                    Spacer().frame(width: 12)
                                 }
                             }
                         }
@@ -96,7 +97,7 @@ struct AccessibilityCustomContentView: View {
                 Text(selectedSeat.map { "Selected seat \($0)" } ?? "No seat selected")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("The good seat map example sets no `.accessibilityLabel` at all. Each seat is a Button containing `Text(\"14C\")`, so VoiceOver derives the name from the visible text and announces \"14C, button\" exactly as it reads on screen. Whether a seat is a window, middle, or aisle seat is conveyed only by where it sits in the grid, and which part of the cabin it is in is conveyed only by how far down the map it appears. Sighted users read both from the layout, but a VoiceOver user moving through the seats one at a time loses the two dimensional arrangement, so `.accessibilityCustomContent(positionKey, seat.position, importance: .high)` and `.accessibilityCustomContent(cabinAreaKey, seat.cabinArea)` carry that spatial information instead. Nothing here is information sighted users do not have, and nothing has been taken out of the name to make room for it. Position uses `importance: .high` because it is the attribute people choose a seat by, so VoiceOver speaks it immediately. Cabin area stays at the default importance in the More Content rotor. Both use an `AccessibilityCustomContentKey` with a stable `id` so the same two details keep a consistent position in the rotor as users move across the map. The selected seat uses `.accessibilityAddTraits(.isSelected)` rather than custom content, because selection is essential state.")
+                    Text("The good seat map example sets no `.accessibilityLabel` at all. Each seat is a Button containing `Text(\"14C\")`, so VoiceOver derives the name from the visible text and announces \"14C, button\" exactly as it reads on screen. Whether a seat is a window seat, middle seat, or aisle seat is conveyed only by where it sits in the grid, and which part of the cabin it is in is conveyed only by how far down the map it appears. Sighted users read both from the layout, but a VoiceOver user moving through the seats one at a time loses the two dimensional arrangement, so `.accessibilityCustomContent(positionKey, seat.position, importance: .high)` and `.accessibilityCustomContent(cabinAreaKey, seat.cabinArea)` carry that spatial information instead, announcing \"Position, Window seat\" and \"Cabin area, Front\". Nothing here is information sighted users do not have, and nothing has been taken out of the name to make room for it. Position uses `importance: .high` because it is the attribute people choose a seat by, so VoiceOver speaks it immediately. Cabin area stays at the default importance in the More Content rotor. Both use an `AccessibilityCustomContentKey` with a stable `id` so the same two details keep a consistent position in the rotor as users move across the map. The selected seat uses `.accessibilityAddTraits(.isSelected)` rather than custom content, because selection is essential state. The seats use `.frame(maxWidth: .infinity, minHeight: 44)` so the row always fits the screen width instead of overflowing narrow devices and clipping the text beside it.")
                 }.padding(.bottom).accessibilityHint("Seat Map")
             }
             .padding()
@@ -112,7 +113,10 @@ struct AccessibilityCustomContentView: View {
         }) {
             Text(seat.id)
                 .font(.caption)
-                .frame(width: 44, height: 44)
+                // Flexible width so six seats plus the aisle always fit the
+                // screen. A fixed width overflows narrow devices and clips the
+                // surrounding text. Height keeps the 44pt touch target.
+                .frame(maxWidth: .infinity, minHeight: 44)
                 .background(isSelected ? (colorScheme == .dark ? Color(.systemGreen) : darkGreen) : Color.clear)
                 .foregroundColor(isSelected ? Color(.systemBackground) : Color.primary)
                 .overlay(

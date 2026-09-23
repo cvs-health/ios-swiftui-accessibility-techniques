@@ -51,6 +51,7 @@ Also in this release
 • Tabs now set a unique navigation bar title per tab.
 • Fixed sample video URLs that had stopped loading.
 • The Simulator's Hardware > Shake menu now triggers the Motion Actuation demo.
+• The in-app documentation browser now has Back and Forward buttons, and supports swipe navigation.
 ```
 
 ### a11y-check
@@ -71,6 +72,15 @@ Also in this release
 - **New rule `value-contains-role`** (`AccessibilityValueRules.swift`, WCAG 4.1.2). Flags `.accessibilityValue()` strings that contain role words like "button", "tab", "link", "toggle", "switch", "slider", "checkbox", "picker", "menu", or "search field". Values are for state (e.g. "50 percent", "selected item 2 of 5"), not role — VoiceOver announces the role automatically from accessibility traits. Placing a role word in the value causes VoiceOver to speak it twice and is often a symptom of a missing or removed trait. **Severity is `error` for most role words but downgraded to `warning` for `checkbox`** — iOS has no checkbox trait, so writing "checkbox" is a defensible workaround (WCAG 4.1.2 is already satisfied by the Toggle's Switch trait). Whole-word matching prevents false positives on descriptive terms like "linked" or "buttonhole". Applies to any view type, not just Button. Custom diagnostic messages for `checkbox` and `tab` point developers at the correct iOS pattern (Toggle + `.toggleStyle(CheckboxToggleStyle())` for checkboxes; `.isTabBar` / `.isSelected` traits for tabs). Includes 9 unit tests. Rule count updated from 41 to 42 across the app, docs, and READMEs.
 
 ### iOSswiftUIa11yTechniques
+
+#### Added
+
+- **Back and Forward navigation in the documentation browser** (`ContentView.swift`). `WebViewDocs` now sets `allowsBackForwardNavigationGestures = true`, which WebKit ships as `NO` by default — the swipe gesture was never enabled, not broken. Because a horizontal swipe is a path-based gesture, visible **Back** and **Forward** buttons are provided as the single-pointer alternative required by WCAG 2.5.1; VoiceOver consumes one-finger horizontal swipes for element navigation, so gesture-only history would be unreachable for VoiceOver and Switch Control users. A new `DocsWebViewStore` publishes `canGoBack` / `canGoForward` from the `WKNavigationDelegate`, so the buttons disable when there is nowhere to go and VoiceOver announces them as dimmed rather than leaving controls that silently do nothing. The `xmark` overlay is replaced by a labelled **Close** button in the same bar, keeping the "Close Documentation" accessible name.
+
+#### Fixed
+
+- **`WebViewDocs.updateUIView` reloading the page on every SwiftUI update** (`ContentView.swift`). The method called `webView.load(URLRequest(url: url))` on each update, which reloads the root README and discards the back-forward list. Since `url` never changes, the body is now empty, so history survives.
+- **Documentation toolbar labels shredding at accessibility text sizes** (`ContentView.swift`). Laid out side by side, "Back", "Forward", and "Close" wrapped to roughly one letter per line at Accessibility XXXL, consuming about 40% of the screen. The bar now switches to a vertical stack when `dynamicTypeSize.isAccessibilitySize`, keeping each word on one line. Each button's label also carries `.frame(minHeight: 44)` — sizing only the surrounding stack left the individual hit areas as short as their text, under the 44pt target.
 
 #### Changed
 

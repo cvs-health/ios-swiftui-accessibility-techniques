@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased] - 2026-09-01
+## [Unreleased] - 2026-09-23
 
 ### a11y-check
 
@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Added
 
+- **New technique page: Accessibility Custom Content** (`AccessibilityCustomContentView.swift`, `Documentation/AccessibilityCustomContent.md`). Covers `.accessibilityCustomContent` for attaching supplementary details to an element without lengthening its accessible name, exposed to VoiceOver through the More Content rotor. Three good examples: a data dense prescription card that keeps `.accessibilityLabel` / `.accessibilityValue` short and moves refills, pharmacy, and prescriber to custom content; a flight card using `importance: .high` so the delayed status is spoken immediately while gate and seat stay on demand; and a list that reuses an `AccessibilityCustomContentKey` with a stable `id` so the same detail keeps a consistent position in the rotor across rows. Three bad examples: every detail crammed into one run-on `.accessibilityLabel`; a critical expired status left at `.default` importance so VoiceOver never announces it unless the user opens the rotor; and status conveyed only by a color dot plus custom content, which fails WCAG 1.4.1 for sighted users and is invisible to Voice Control and Full Keyboard Access because custom content is VoiceOver-only. Documentation notes the `.default` vs `.high` behavior, the unavailable `String`-label overload (wrap in `Text` or use a key), and iOS 15 availability. Registered in `Techniques.swift`, `ContentView.swift`, and the README documentation index.
 - **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): added an in-page bug explanation panel at the top of the scroll content. Describes the three compounding mechanisms — `.ignoresSafeArea(edges: .bottom)` on scroll content, `.accessibilitySortPriority(-1)` on the tab bar, and `.accessibilityElement(children: .combine)` on the cards — so readers can understand why the tab bar becomes unreachable via Explore by Touch even though swipe navigation still works. Panel uses a warning icon, orange border, and numbered steps with combined accessibility labels for VoiceOver. File-level doc comment expanded to describe the same three mechanisms.
 
 #### Changed

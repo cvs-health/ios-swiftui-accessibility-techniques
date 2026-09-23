@@ -82,6 +82,7 @@ See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, an
 ### A
 - [x] [A11y-check](iOSswiftUIa11yTechniques/Documentation/A11yCheck.md)
 - [x] [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md)
+- [x] [Accessibility Custom Content](iOSswiftUIa11yTechniques/Documentation/AccessibilityCustomContent.md)
 - [x] [Accessibility Detection](iOSswiftUIa11yTechniques/Documentation/AccessibilityDetection.md)
 - [x] [Accessibility Hidden](iOSswiftUIa11yTechniques/Documentation/AccessibilityHidden.md)
 - [x] [Accessibility Hint](iOSswiftUIa11yTechniques/Documentation/AccessibilityHint.md)

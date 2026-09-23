@@ -141,6 +141,7 @@ struct ContentView: View {
         case "accessibility actions": ActionsView()
         case "accessibility traits": AccessibilityTraitsView()
         case "accessibility identifier": AccessibilityIdentifier()
+        case "accessibility custom content": AccessibilityCustomContentView()
         case "accordions": AccordionsView()
         case "adjustable action": AdjustableActionView()
         case "alerts": AlertsView()

@@ -4,11 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [26.10] - 2026-09-23
+## Versioning
 
-App Store version 26.6 is the currently published release, so this version's notes cover everything added since 26.6, including the work recorded below under 26.7, 26.8, 26.9, and the Unreleased sections. Bump `MARKETING_VERSION` from 26.6 and `CURRENT_PROJECT_VERSION` from 78 before submitting.
+This repository ships two products on independent release schedules, so they have independent version lines:
 
-### App Store Release Notes
+| Product | Scheme | Released via | Current |
+| --- | --- | --- | --- |
+| iOS app | `26.x` | App Store | **26.6** |
+| `a11y-check` CLI | semver | Homebrew and git tags | **0.4.0** (tag) |
+
+Rules:
+
+- **A version header means something shipped.** Create `## [iOS 26.7]` only when a build is submitted to the App Store, and `## [a11y-check 0.5.0]` only when the CLI is tagged and released. Ordinary commits never get a version.
+- **Prefix the product**, so `26.x` and `0.x` headers cannot be confused for one another.
+- **One `## [Unreleased]` section, undated.** Everything accumulates there until it ships. Do not add a new dated `[Unreleased]` header per batch of work — that is how this file ended up with six of them, and how the `26.7`, `26.8`, and `26.9` headers below came to describe work that was never released to the App Store (`26.9` is CLI-only changes filed under an app version number).
+- At release time, rename `[Unreleased]` to the version header for the product that shipped, move any entries belonging to the *other* product into a fresh `[Unreleased]`, and start over.
+
+## [Unreleased]
+
+### App Store Release Notes (draft for the next App Store release)
+
+No version number is assigned until a build is actually submitted. The published App Store version is **26.6**, so these notes cover everything since then — including the `26.7`, `26.8`, and `26.9` sections below, which never shipped. When submitting, bump `MARKETING_VERSION` from 26.6 and `CURRENT_PROJECT_VERSION` from 78.
 
 Copy the block below into the What's New field. Plain text, no Markdown — the App Store does not render it.
 
@@ -34,8 +50,6 @@ Also in this release
 • Fixed sample video URLs that had stopped loading.
 • The Simulator's Hardware > Shake menu now triggers the Motion Actuation demo.
 ```
-
-## [Unreleased] - 2026-09-23
 
 ### a11y-check
 

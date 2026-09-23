@@ -1,7 +1,7 @@
 # Accessibility Custom Content
-Use `.accessibilityCustomContent` to expose information that the visual design conveys without text, such as an element's position within a layout. VoiceOver exposes those details through the More Content rotor instead of speaking them as part of the accessible name.
+Use `.accessibilityCustomContent` to expose information that the visual design conveys without text, such as an element's position within a layout. The details are attached to the element as labelled key and value pairs, without being added to its accessible name.
 
-With VoiceOver on, rotate 2 fingers on the screen to select the More Content rotor option, then swipe up or down with 1 finger to hear each detail of the focused element.
+VoiceOver speaks `.default` importance details only when the user asks for them, and speaks `.high` importance details immediately as part of the element's announcement. To retrieve them on demand, turn VoiceOver on, rotate 2 fingers on the screen to select the More Content rotor option, then swipe up or down with 1 finger to hear each detail of the focused element.
 
 This is an accessibility usability enhancement, not a conformance requirement. Not using it fails no WCAG success criterion.
 
@@ -14,17 +14,17 @@ Two rules follow from that:
 - **Never put information in custom content that is not already available to sighted users.** Detail that exists only for VoiceOver creates a divergent experience, drifts out of sync with the rest of the app, and reaches nobody using Voice Control, Switch Control, Full Keyboard Access, or screen magnification.
 - **Never put essential information in custom content.** Content at `.default` importance is always retrievable, but nothing necessarily tells the user it is there to retrieve. Essential information belongs in the accessible name, in `.accessibilityValue`, or in a trait.
 
-### Discoverability
-
-VoiceOver's **Verbosity > More Content** setting controls whether users get any signal that the focused element has custom content attached. The options are to speak a hint, play a sound, change pitch, or **Do Nothing**. Set to Do Nothing, there is no cue at all — the content is still reachable through the More Content rotor, but users only find it if they already think to check every element.
-
-This is a discoverability limit, not an availability one, and it is the reason not to rely on `.default` importance for anything users need to notice. Content at `.high` importance is unaffected, because VoiceOver speaks it as part of the element's announcement regardless of this setting.
-
 Good candidates are dimensions the design encodes spatially or graphically, where a linear traversal loses what a sighted user takes in at a glance:
 
 - Whether a seat is a window seat, middle seat, or aisle seat, conveyed only by its column in a seat map.
 - Which part of a cabin, calendar, or grid an element sits in, conveyed only by how far down the layout it appears.
 - A value encoded by mark size in a chart, where the number appears nowhere as text.
+
+### Discoverability
+
+VoiceOver's **Verbosity > More Content** setting controls whether users get any signal that the focused element has custom content attached. The options are to speak a hint, play a sound, change pitch, or **Do Nothing**. Set to Do Nothing, there is no cue at all — the content is still reachable through the More Content rotor, but users only find it if they already think to check every element.
+
+This is a discoverability limit, not an availability one, and it is the reason not to rely on `.default` importance for anything users need to notice. Content at `.high` importance is unaffected, because VoiceOver speaks it as part of the element's announcement regardless of this setting.
 
 ## Importance
 
@@ -35,7 +35,9 @@ The `importance` parameter controls when VoiceOver speaks the detail:
 
 Use `.high` for the one dimension users make their decision on — seat position, in the example below. Marking everything `.high` makes every element's announcement long, which defeats the purpose of putting the detail in custom content at all.
 
-`.high` is also the only importance that is immune to the Verbosity > More Content setting described above, so it is the right choice for a detail users need to notice without going looking for it. If you have exactly one such detail, consider `.accessibilityValue` instead — it is spoken on focus too, and unlike custom content it reaches Voice Control, Switch Control, and automation rather than VoiceOver alone.
+`.high` is also the only importance that is immune to the Verbosity > More Content setting described above, so it is the right choice for a detail users need to notice without going looking for it.
+
+Marking a detail `.high` does not remove it from the rotor. Per Apple's WWDC21 session, `.high` content is announced on focus *and* remains available in the More Content rotor, so users can return to it individually — which is what distinguishes it from folding the same information into `.accessibilityValue`.
 
 ## Reusable content keys
 

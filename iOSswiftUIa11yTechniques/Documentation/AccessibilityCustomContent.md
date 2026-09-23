@@ -1,7 +1,9 @@
 # Accessibility Custom Content
-Use `.accessibilityCustomContent` to expose information that the visual design conveys without text, such as an element's position within a layout. The details are attached to the element as labelled key and value pairs, without being added to its accessible name.
+Use `.accessibilityCustomContent` to attach extra details to an element as labelled key and value pairs, without adding them to its accessible name. VoiceOver exposes them under the **More Content** rotor.
 
-VoiceOver speaks `.default` importance details only when the user asks for them, and speaks `.high` importance details immediately as part of the element's announcement. To retrieve them on demand, turn VoiceOver on, rotate 2 fingers on the screen to select the More Content rotor option, then swipe up or down with 1 finger to hear each detail of the focused element.
+Apple built the API for data-rich apps, where an element carries more information than its accessible name should hold. Their stated purpose, from the WWDC21 session "Tailor the VoiceOver experience in your data-rich apps", is to deliver that information in a concise form and only when someone wants it, rather than packing all of it into the label.
+
+VoiceOver speaks `.default` importance details only when the user asks for them, and speaks `.high` importance details immediately as part of the element's announcement.
 
 This is an accessibility usability enhancement, not a conformance requirement. Not using it fails no WCAG success criterion.
 

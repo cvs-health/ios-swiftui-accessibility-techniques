@@ -24,7 +24,7 @@ Rules:
 
 App Store release. The previously published version was **26.6**, so this release contains everything since then, including the work recorded below under the `26.7`, `26.8`, and `26.9` headers, which were never released to the App Store.
 
-Before submitting, bump `CURRENT_PROJECT_VERSION` — it is still `78`, and the App Store rejects a build number it has already accepted.
+The app target's build number (`CURRENT_PROJECT_VERSION`) is `1`, and no bump is required: App Store Connect only requires a build number to be unique within a given version string, and 26.7 is a new version string.
 
 The App Store description and other listing fields live in [AppStore.md](AppStore.md).
 

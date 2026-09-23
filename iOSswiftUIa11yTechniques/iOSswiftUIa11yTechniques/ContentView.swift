@@ -16,73 +16,17 @@
 import SwiftUI
 import WebKit
 
-/// Publishes the documentation web view's navigation state so SwiftUI can drive
-/// visible Back and Forward buttons, and forwards their actions to the web view.
-final class DocsWebViewStore: ObservableObject {
-    @Published var canGoBack = false
-    @Published var canGoForward = false
-
-    fileprivate weak var webView: WKWebView?
-
-    func goBack() {
-        webView?.goBack()
-    }
-
-    func goForward() {
-        webView?.goForward()
-    }
-}
-
 struct WebViewDocs: UIViewRepresentable {
     let url: URL
-    let store: DocsWebViewStore
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(store: store)
-    }
-
+    
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
-        // Horizontal swipes navigate the back-forward list. This is a path-based
-        // gesture, so the visible Back and Forward buttons are required as the
-        // single-pointer alternative (WCAG 2.5.1). VoiceOver consumes one-finger
-        // horizontal swipes for element navigation, so the gesture never reaches
-        // WebKit for VoiceOver users and the buttons are their only route.
-        webView.allowsBackForwardNavigationGestures = true
-        webView.navigationDelegate = context.coordinator
-        store.webView = webView
         webView.load(URLRequest(url: url))
         return webView
     }
-
+    
     func updateUIView(_ webView: WKWebView, context: Context) {
-        // Intentionally empty. Loading the URL here would reload the root page
-        // and discard the back-forward list on every SwiftUI update.
-    }
-
-    final class Coordinator: NSObject, WKNavigationDelegate {
-        private let store: DocsWebViewStore
-
-        init(store: DocsWebViewStore) {
-            self.store = store
-        }
-
-        func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-            syncNavigationState(webView)
-        }
-
-        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            syncNavigationState(webView)
-        }
-
-        func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-            syncNavigationState(webView)
-        }
-
-        private func syncNavigationState(_ webView: WKWebView) {
-            store.canGoBack = webView.canGoBack
-            store.canGoForward = webView.canGoForward
-        }
+        webView.load(URLRequest(url: url))
     }
 }
 
@@ -91,8 +35,6 @@ struct ContentView: View {
     @State private var searchKeyword = ""
     @State private var selection: UUID?
     @State private var showingWebPage = false
-    @StateObject private var docsStore = DocsWebViewStore()
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let url = URL(string: "https://github.com/cvs-health/ios-swiftui-accessibility-techniques?tab=readme-ov-file#accessibility-techniques-documentation")!
     @AccessibilityFocusState private var isTriggerFocused: Bool
 
@@ -158,71 +100,28 @@ struct ContentView: View {
         }
         //present sheet fullscreen
         .fullScreenCover(isPresented: $showingWebPage, onDismiss: didDismiss) {
-            VStack(spacing: 0) {
-                // Back and Forward are the non-gesture alternative to the web
-                // view's swipe navigation. They disable when there is nowhere to
-                // go, so VoiceOver announces them as dimmed rather than leaving a
-                // control that silently does nothing.
-                if dynamicTypeSize.isAccessibilitySize {
-                    // Side by side, these labels wrap to one letter per line at
-                    // accessibility text sizes. Stacking them keeps each word on
-                    // one line and readable.
-                    VStack(alignment: .leading, spacing: 4) {
-                        docsBackButton
-                        docsForwardButton
-                        docsCloseButton
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-                    .padding(.vertical, 8)
-                } else {
-                    HStack(spacing: 16) {
-                        docsBackButton
-                        docsForwardButton
-                        Spacer()
-                        docsCloseButton
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 8)
-                }
-                Divider()
-                WebViewDocs(url: url, store: docsStore)
-            }
+            WebViewDocs(url: url)
+                .overlay(
+                     Button(action: {
+                         showingWebPage = false
+                     }) {
+                         Image(systemName: "xmark")
+                             .font(.caption)
+                             .foregroundColor(.black)
+                             .bold()
+                             .accessibilityLabel("Close Documentation")
+                             .frame(minWidth:44, minHeight:44)
+                     }
+                     .overlay(
+                         RoundedRectangle(cornerRadius: 25)
+                             .stroke(Color.black, lineWidth: 4)
+                     )
+                     .background(Color.white)
+                     .cornerRadius(25)
+                     , alignment: .topTrailing
+                 )
         }
 
-    }
-
-    // minHeight sits on each label, not on the surrounding stack. Sizing the row
-    // alone leaves each button's hit area only as tall as its text, under the
-    // 44pt touch target.
-    private var docsBackButton: some View {
-        Button(action: {
-            docsStore.goBack()
-        }) {
-            Label("Back", systemImage: "chevron.backward")
-                .frame(minHeight: 44)
-        }
-        .disabled(!docsStore.canGoBack)
-    }
-
-    private var docsForwardButton: some View {
-        Button(action: {
-            docsStore.goForward()
-        }) {
-            Label("Forward", systemImage: "chevron.forward")
-                .frame(minHeight: 44)
-        }
-        .disabled(!docsStore.canGoForward)
-    }
-
-    private var docsCloseButton: some View {
-        Button(action: {
-            showingWebPage = false
-        }) {
-            Label("Close", systemImage: "xmark")
-                .frame(minHeight: 44)
-        }
-        .accessibilityLabel("Close Documentation")
     }
 
     @ViewBuilder

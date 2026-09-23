@@ -24,7 +24,12 @@ Rules:
 
 ### App Store Release Notes (draft for the next App Store release)
 
-No version number is assigned until a build is actually submitted. The published App Store version is **26.6**, so these notes cover everything since then — including the `26.7`, `26.8`, and `26.9` sections below, which never shipped. When submitting, bump `MARKETING_VERSION` from 26.6 and `CURRENT_PROJECT_VERSION` from 78.
+The published App Store version is **26.6**, so these notes cover everything since then — including the `26.7`, `26.8`, and `26.9` sections below, which were never released to the App Store.
+
+`MARKETING_VERSION` is now **26.7**, so that is the version being prepared. Two things still to do before submitting:
+
+- **Bump `CURRENT_PROJECT_VERSION`** — still `78`, and the App Store rejects a build number it has already seen.
+- **Resolve the duplicate `26.7`** — there is already a `## [26.7] - 2026-05-19` section below, describing different work. Either renumber this release, or relabel that older section, which never reached the App Store.
 
 Copy the block below into the What's New field. Plain text, no Markdown — the App Store does not render it.
 

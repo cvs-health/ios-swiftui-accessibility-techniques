@@ -127,11 +127,20 @@ struct AccessibilityCustomContentView: View {
                         }
                     }
                 }
+                // Group label matching the visible "Seat Map" heading, so the
+                // grid is reachable with VoiceOver container navigation.
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Seat Map")
                 .padding(.bottom)
                 Text(selectedSeats.isEmpty ? "No seats selected" : "Selected seats: \(selectedSeats.sorted().joined(separator: ", "))")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 DisclosureGroup("Details") {
-                    Text("Whether a seat is a window seat, middle seat, or aisle seat is conveyed only by where it sits in the grid, and which part of the cabin it is in only by how far down the map it appears. Sighted users read both from the layout, but a VoiceOver user moving between seats one at a time loses that arrangement, so `.accessibilityCustomContent(positionKey, seat.position, importance: .high)` and `.accessibilityCustomContent(cabinAreaKey, seat.cabinArea)` supply the same two dimensions without adding either to the accessible name, which stays \"12A\" from the seat's own visible text. Position uses `importance: .high` because it is the attribute people choose a seat by, so VoiceOver speaks it immediately. Cabin area stays at the default importance and waits in the More Content rotor. The position key uses an empty label so VoiceOver speaks only \"Window seat\" instead of a redundant \"Position, Window seat\", while cabin area keeps its label because \"Front\" would mean nothing alone. Both use an `AccessibilityCustomContentKey` with a stable `id` so the details keep a consistent place in the rotor across the map. Focusing an unselected window seat announces \"12A, Window seat, Switch button, off\", so high importance content arrives after the name and before the role.")
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Whether a seat is a window seat, middle seat, or aisle seat is conveyed only by where it sits in the grid, and which part of the cabin it is in only by how far down the map it appears. Sighted users read both from the layout, but a VoiceOver user moving between seats one at a time loses that arrangement.")
+                        Text("`.accessibilityCustomContent(positionKey, seat.position, importance: .high)` and `.accessibilityCustomContent(cabinAreaKey, seat.cabinArea)` supply those two dimensions without adding either to the accessible name, which stays \"12A\" from the seat's own visible text. Position uses `importance: .high` because it is the attribute people choose a seat by, so VoiceOver speaks it immediately, while cabin area stays at the default importance and waits in the More Content rotor. Both use an `AccessibilityCustomContentKey` with a stable `id`, so the details keep a consistent place in the rotor as users move across the map.")
+                        Text("The position key uses an empty label so VoiceOver speaks only \"Window seat\" instead of a redundant \"Position, Window seat\", while cabin area keeps its label because \"Front\" would mean nothing alone. Focusing an unselected window seat announces \"12A, Window seat, Switch button, off\", so high importance content arrives after the name and before the role.")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }.padding(.bottom).accessibilityHint("Seat Map")
             }
             .padding()

@@ -39,6 +39,8 @@ Use `.high` for the one dimension users make their decision on — seat position
 
 Marking a detail `.high` does not remove it from the rotor. Per Apple's WWDC21 session, `.high` content is announced on focus *and* remains available in the More Content rotor, so users can return to it individually — which is what distinguishes it from folding the same information into `.accessibilityValue`.
 
+VoiceOver speaks `.high` content immediately after the accessible name, ahead of the element's role and state. See [What VoiceOver announces](#what-voiceover-announces) for a verified example.
+
 ## Reusable content keys
 
 `AccessibilityCustomContentKey` declares a label once and gives it a stable `id`:
@@ -55,6 +57,8 @@ The `id` lets VoiceOver recognize the same piece of content across elements, so 
 
 A key is also the only way to attach a label that is not a string literal. The overload that takes a `String` variable for both the label and the value is marked unavailable in SwiftUI — wrap both in `Text`, or use a key.
 
+Give the key an **empty label** when the value already describes itself. `AccessibilityCustomContentKey("", id: "position")` with the value "Window seat" is announced as just "Window seat", where a label of `"Position"` would have produced the redundant "Position, Window seat". Keep a label when the value cannot stand alone, as "Front" cannot without "Cabin area" in front of it.
+
 ## Seat map example
 
 Each seat is a `Toggle` whose label is just the seat number, so VoiceOver derives the name from the visible text. Whether it is a window seat, middle seat, or aisle seat, and which part of the cabin it sits in, exist nowhere as text — they are conveyed entirely by the seat's place in the grid:
@@ -70,39 +74,15 @@ Toggle(isOn: binding(for: seat)) {
 
 No `.accessibilityLabel` anywhere.
 
-### Use a Toggle, not a Button with .isSelected
+### What VoiceOver announces
 
-A `Button` carrying only `.accessibilityAddTraits(.isSelected)` announces "selected" when it is on and says **nothing at all** when it is off, because iOS has no "not selected" trait. Users cannot tell an unselected seat from an ordinary button.
+Focusing an unselected window seat speaks:
 
-A `Toggle` solves this natively: it is exposed as a switch whose value changes between off and on, so VoiceOver conveys the state either way. If you must use a `Button`, pair the trait with `.accessibilityValue("Not Selected")` when unselected, as `MultiSelectionListView` does.
+> "12A, Window seat, Switch button, off, Double tap to toggle setting"
 
-### Keep the switch semantics when styling
+"12A" is the accessible name, taken from the visible label. "Window seat" is the `.high` custom content. Everything after that comes from the control itself, not from this API.
 
-The built-in `.toggleStyle(.button)` discards the seat border and renders the selected state as a large tinted circle, which stops the grid reading as a seat map. A custom `ToggleStyle` restores the appearance:
-
-```swift
-private struct SeatToggleStyle: ToggleStyle {
-    let selectedBackground: Color
-
-    func makeBody(configuration: Configuration) -> some View {
-        Button {
-            configuration.isOn.toggle()
-        } label: {
-            configuration.label
-                // Flexible width so six seats plus the aisle always fit the
-                // screen, and a 44pt minimum height for the touch target.
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .background(configuration.isOn ? selectedBackground : Color.clear)
-                // …
-        }
-        .buttonStyle(.plain)
-    }
-}
-```
-
-Wrapping `configuration.label` in a `Button` keeps the switch semantics the `Toggle` provides — the element still reports an off and an on value. Using `.onTapGesture` instead also works, but then the element has a tap handler without a role of its own, which accessibility linters flag.
-
-Give the seats a flexible width rather than a fixed one. A row of six fixed-width seats plus an aisle overflows the screen on narrower devices, which widens the whole scroll view and clips the surrounding body text on both edges.
+Two things to note. **`.high` content is spoken after the name but before the role**, so it reads almost as part of the name — keep it short for that reason. And **cabin area is not announced at all**, because it sits at `.default` importance in the More Content rotor until the user asks for it.
 
 ## Notes
 

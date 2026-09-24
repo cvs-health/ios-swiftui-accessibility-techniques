@@ -28,7 +28,7 @@ Who it's for
 Developers, designers, and QA who need to settle a question quickly, verify a real VoiceOver announcement before shipping, or show a teammate why a pattern fails.
 
 Open source
-The full SwiftUI source is on GitHub, so you can read how each example is built and copy what you need. The project also includes a11y-check, a free static analysis tool that scans your own Swift code for accessibility issues — 44 rules across 23 WCAG 2.2 criteria.
+The full SwiftUI source is on GitHub, so you can read how each example is built and copy what you need. The project also includes a11y-check, a free static analysis tool that scans your own Swift code for accessibility issues — 44 rules across 24 WCAG 2.2 criteria.
 
 https://github.com/cvs-health/ios-swiftui-accessibility-techniques
 
@@ -46,7 +46,19 @@ Two numbers in the description have to be maintained by hand:
 | Claim | Source of truth | Current |
 | --- | --- | --- |
 | techniques | entries in `iOSswiftUIa11yTechniques/iOSswiftUIa11yTechniques/Techniques.swift` | 89 |
-| a11y-check rules and criteria | `a11y-check` rule registry, also quoted in [README.md](README.md) | 44 rules, 23 criteria |
+| a11y-check rules | `a11y-check --list-rules` header line | 44 rules |
+| WCAG criteria | unique criteria across those rules, see below | 24 criteria |
+
+Both are also quoted in [README.md](README.md), `a11y-check/README.md`, `Documentation/A11yCheck.md`, `SKILL.md`, and `A11yCheckView.swift` — update all of them together. To recount the criteria:
+
+```bash
+cd a11y-check && swift run a11y-check --list-rules \
+  | grep -oE "\[(error|warning|info)\] WCAG [0-9., a-z]+" \
+  | sed -E 's/.*WCAG //' | tr ',' '\n' | tr -d ' ' | sed -E 's/[a-z]+$//' \
+  | grep -E "^[0-9]+\.[0-9]+\.[0-9]+$" | sort -u | wc -l
+```
+
+That reads only the structured WCAG field, ignoring criterion numbers that appear in rule descriptions, and folds `2.4.6b` into `2.4.6` — the `b` suffix is a CVS internal test-case label, not a WCAG criterion.
 
 Check both before submitting. The previous listing claimed 76 techniques for several releases after the count had moved on.
 

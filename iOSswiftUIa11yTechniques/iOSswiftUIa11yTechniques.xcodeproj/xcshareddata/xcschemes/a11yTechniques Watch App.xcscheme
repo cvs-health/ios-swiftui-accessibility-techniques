@@ -84,7 +84,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BCE1B4422D5FFE13001F92EF"
             BuildableName = "a11yTechniques Watch App.app"
-            BlueprintName = "a11yTechniques Watch App"
             ReferencedContainer = "container:iOSswiftUIa11yTechniques.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -101,7 +100,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BCE1B4422D5FFE13001F92EF"
             BuildableName = "a11yTechniques Watch App.app"
-            BlueprintName = "a11yTechniques Watch App"
             ReferencedContainer = "container:iOSswiftUIa11yTechniques.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

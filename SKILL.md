@@ -1,6 +1,6 @@
 ---
 name: iOS SwiftUI Accessibility
-description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, orientation, and more. Based on the ios-swiftui-accessibility-techniques project with 41 static analysis rules across 23 WCAG criteria.
+description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, orientation, and more. Based on the ios-swiftui-accessibility-techniques project with 41 static analysis rules across 24 WCAG criteria.
 ---
 
 # iOS SwiftUI Accessibility Coding Rules
@@ -426,4 +426,4 @@ override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
 
 ---
 
-Source: [ios-swiftui-accessibility-techniques](https://github.com/cvs-health/ios-swiftui-accessibility-techniques) by CVS Health — 85+ technique examples, 41 static analysis rules, 23 WCAG 2.2 criteria.
+Source: [ios-swiftui-accessibility-techniques](https://github.com/cvs-health/ios-swiftui-accessibility-techniques) by CVS Health — 85+ technique examples, 41 static analysis rules, 24 WCAG 2.2 criteria.

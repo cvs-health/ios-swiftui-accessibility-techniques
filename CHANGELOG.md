@@ -34,6 +34,7 @@ Rules:
 
 - **Two stale unit tests**, both failing on main before this change and unrelated to PR #27. `testRegistryHasAllRules` expected 43 rules against a registry of 44, and `testLabelInName_flagsSuffixOnly` still expected `warning` for the visible-text-not-at-start case that was deliberately upgraded to `error`. The suite now passes 125/125.
 - **Rule count corrected from 43 to 44** across `README.md`, `a11y-check/README.md`, `Documentation/A11yCheck.md`, `A11yCheckView.swift`, and `AppStore.md`. `a11y-check --list-rules` reports 44.
+- **WCAG criteria count corrected from 23 to 24** across the same files plus `SKILL.md`. Counted from the structured WCAG field of each rule only — criterion numbers that appear in rule description prose are ignored, and `2.4.6b` folds into `2.4.6` because the `b` suffix is a CVS internal test-case label rather than a WCAG criterion. `AppStore.md` now carries the exact command to recount, so the number can be re-derived instead of guessed.
 - **Contributor-specific test fixture paths** replaced with neutral ones (`/tmp/checkout/MyApp`, `Modules/Feature/...`). They were absolute paths from the contributor's employer's build machine. String-only, so the test remains platform-independent.
 
 ## [iOS 26.7] - 2026-09-23

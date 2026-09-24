@@ -194,6 +194,11 @@ struct A11yCheck: ParsableCommand {
                 let diagnostics = try registry.analyzeDirectory(at: resolvedPath)
                 allDiagnostics.append(contentsOf: diagnostics)
             } else {
+                let cwd = FileManager.default.currentDirectoryPath
+                if registry.config.shouldExclude(filePath: path, relativeTo: cwd)
+                    || registry.config.shouldExclude(filePath: resolvedPath, relativeTo: cwd) {
+                    continue
+                }
                 filePaths.append(resolvedPath)
                 let diagnostics = try registry.analyzeFile(at: resolvedPath)
                 allDiagnostics.append(contentsOf: diagnostics)

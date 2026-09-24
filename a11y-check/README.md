@@ -476,12 +476,14 @@ options:
   min_touch_target: 44    # override small-touch-target threshold (default 24)
   contrast_ratio: 4.5     # WCAG AA contrast minimum
 
-# Skip paths matching these patterns
+# Skip paths matching these patterns (directory scans and explicit file args)
 exclude_paths:
   - "*/Generated/*"
   - "*/Pods/*"
   - "*Tests*"
 ```
+
+`exclude_paths` apply to **directory scans and explicit file arguments**. File paths are matched relative to the current working directory (after resolving `.` / `..` and stripping a leading `./`), so `a11y-check --baseline ./Sources/Generated/Auto.swift` honors the same globs as `a11y-check Sources/`.
 
 CLI flags (`--disable`, `--only`) are applied on top of the config file.
 
@@ -590,7 +592,7 @@ Scanning your entire source tree can take **30–60+ seconds** on large projects
 /opt/homebrew/bin/a11y-check "${SRCROOT}/YourAppName/Views/ProfileView.swift" --format xcode || true
 ```
 
-You can also exclude paths using an [`.a11ycheck.yml` config file](#configuration-file) with `exclude_paths`.
+You can also exclude paths using an [`.a11ycheck.yml` config file](#configuration-file) with `exclude_paths`. Those patterns apply to directory scans **and** to explicit file arguments.
 
 ### Keeping the binary up to date
 

@@ -20,6 +20,22 @@ Rules:
 - **One `## [Unreleased]` section, undated.** Everything accumulates there until it ships. Do not add a new dated `[Unreleased]` header per batch of work — that is how this file ended up with six of them, and how the `26.7`, `26.8`, and `26.9` headers below came to describe work that was never released to the App Store (`26.9` is CLI-only changes filed under an app version number).
 - At release time, rename `[Unreleased]` to the version header for the product that shipped, move any entries belonging to the *other* product into a fresh `[Unreleased]`, and start over.
 
+## [Unreleased]
+
+### a11y-check
+
+#### Added
+
+- **`exclude_paths` now applies to explicit file arguments** (PR #27, thanks to [@danibachar](https://github.com/danibachar)). The patterns were only checked while walking a directory, so `a11y-check Sources/Generated/Auto.swift` analysed a file that `a11y-check Sources/` would skip — breaking CI that lints only changed files. Adds `shouldExclude(filePath:relativeTo:)`, which normalises the argument against the working directory so `./`-prefixed and absolute CI paths match the same relative-style globs.
+- **A skip notice for excluded explicit files** (`A11yCheck.swift`). An excluded file previously produced no output at all, indistinguishable from a clean one. It now prints `note: skipping <path> — matches exclude_paths in .a11ycheck.yml`. Written to **stderr**, never stdout, because stdout carries the `--format json` / `sarif` / `html` payload — the same mistake the `--per-view` HTML corruption fix addressed. Verified that `--format json` output stays parseable with the notice present.
+- **CI: `a11y-check Unit Tests` workflow** (`.github/workflows/a11y-check-tests.yml`). Runs `swift test` for the a11y-check package on pull requests and pushes to main that touch `a11y-check/**`, with the SwiftPM build cached on `Package.resolved`. The repository previously had no automated test run for the CLI at all — PR #27 merged with **no checks reported** on its branch.
+
+#### Fixed
+
+- **Two stale unit tests**, both failing on main before this change and unrelated to PR #27. `testRegistryHasAllRules` expected 43 rules against a registry of 44, and `testLabelInName_flagsSuffixOnly` still expected `warning` for the visible-text-not-at-start case that was deliberately upgraded to `error`. The suite now passes 125/125.
+- **Rule count corrected from 43 to 44** across `README.md`, `a11y-check/README.md`, `Documentation/A11yCheck.md`, `A11yCheckView.swift`, and `AppStore.md`. `a11y-check --list-rules` reports 44.
+- **Contributor-specific test fixture paths** replaced with neutral ones (`/tmp/checkout/MyApp`, `Modules/Feature/...`). They were absolute paths from the contributor's employer's build machine. String-only, so the test remains platform-independent.
+
 ## [iOS 26.7] - 2026-09-23
 
 App Store release. The previously published version was **26.6**, so this release contains everything since then, including the work recorded below under the `26.7`, `26.8`, and `26.9` headers, which were never released to the App Store.

@@ -961,7 +961,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 43)
+        XCTAssertEqual(registry.rules.count, 44)
     }
 
     func testDisableRule() {
@@ -1159,8 +1159,8 @@ final class A11yCheckCoreTests: XCTestCase {
           - "**/GeneratedMocks.swift"
         """
         let config = try ConfigLoader.parse(yaml)
-        let root = "/Users/anka/builds/zillow/ios/apps/ZillowMap"
-        let example = "Modules/SellerComparableHomes/App/SellerComparableHomesSwiftUIExample/ContentView.swift"
+        let root = "/tmp/checkout/MyApp"
+        let example = "Modules/Feature/App/FeatureSwiftUIExample/ContentView.swift"
 
         XCTAssertTrue(config.shouldExclude(filePath: "./\(example)", relativeTo: root))
         XCTAssertTrue(config.shouldExclude(filePath: "\(root)/\(example)", relativeTo: root))
@@ -1170,7 +1170,7 @@ final class A11yCheckCoreTests: XCTestCase {
             relativeTo: root
         ))
         XCTAssertFalse(config.shouldExclude(
-            filePath: "\(root)/Modules/SellerComparableHomes/Sources/UI/CardView.swift",
+            filePath: "\(root)/Modules/Feature/Sources/UI/CardView.swift",
             relativeTo: root
         ))
     }
@@ -1644,7 +1644,9 @@ final class A11yCheckCoreTests: XCTestCase {
         """
         let diags = analyze(source, ruleID: "label-in-name")
         XCTAssertEqual(diags.count, 1)
-        XCTAssertEqual(diags[0].severity, .warning)
+        // Visible text present but not at the start is an error, not a warning:
+        // Voice Control prefix-matches against what the user sees.
+        XCTAssertEqual(diags[0].severity, .error)
     }
 
     func testLabelInName_passesExactMatch() {

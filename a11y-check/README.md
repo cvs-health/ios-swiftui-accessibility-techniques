@@ -2,7 +2,7 @@
 
 ![a11y score](a11y-badge.svg)
 
-Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 43 rules across 23 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
+Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 44 rules across 23 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
 
 ## Check your own iOS app
 
@@ -37,7 +37,7 @@ a11y-check . --base-path /path/to/workspace  # Strip prefix from all file paths 
 a11y-check . --badge > badge.svg   # Score badge for README
 a11y-check . --watch               # Re-run on file changes
 a11y-check --generate-docs > RULES.md  # Generate rule docs
-a11y-check --list-rules            # List all 43 rules
+a11y-check --list-rules            # List all 44 rules
 ```
 
 Every run automatically includes a **WCAG 2.2 accessibility score** (0–100 with letter grade) after the diagnostics. Use `--min-score 80` to fail CI if the score drops below a threshold.
@@ -806,7 +806,7 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Run a11y-check on TextFieldsView.swift"** — check a specific file
 - **"Which of those are the most critical to fix?"** — the AI explains severity and WCAG impact
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
-- **"List all the a11y rules"** — shows all 43 rules with descriptions and WCAG criteria
+- **"List all the a11y rules"** — shows all 44 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
 - **"What's the accessibility score for this project?"** — runs `a11y-check .` and explains the WCAG 2.2 score breakdown
 - **"Score ProfileView.swift"** — runs the check on a single file and highlights what to fix based on the score
@@ -816,7 +816,7 @@ The full loop — detect, understand, fix, report — happens conversationally w
 
 ## Rules
 
-a11y-check includes 43 rules across these categories:
+a11y-check includes 44 rules across these categories:
 
 | Category | Rules | WCAG | Impact |
 |----------|-------|------|--------|

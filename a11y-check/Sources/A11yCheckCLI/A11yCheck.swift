@@ -197,6 +197,12 @@ struct A11yCheck: ParsableCommand {
                 let cwd = FileManager.default.currentDirectoryPath
                 if registry.config.shouldExclude(filePath: path, relativeTo: cwd)
                     || registry.config.shouldExclude(filePath: resolvedPath, relativeTo: cwd) {
+                    // Say so, otherwise an excluded file is indistinguishable from a
+                    // clean one. Written to stderr, never stdout, because stdout
+                    // carries the --format json/sarif/html payload.
+                    FileHandle.standardError.write(
+                        Data("note: skipping \(path) — matches exclude_paths in .a11ycheck.yml\n".utf8)
+                    )
                     continue
                 }
                 filePaths.append(resolvedPath)

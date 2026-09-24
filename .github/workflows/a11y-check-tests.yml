@@ -1,0 +1,33 @@
+name: a11y-check Unit Tests
+on:
+  pull_request:
+    paths:
+      - 'a11y-check/**'
+      - '.github/workflows/a11y-check-tests.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'a11y-check/**'
+      - '.github/workflows/a11y-check-tests.yml'
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Cache SwiftPM build
+        uses: actions/cache@v4
+        with:
+          path: a11y-check/.build
+          key: spm-${{ runner.os }}-${{ hashFiles('a11y-check/Package.resolved') }}
+          restore-keys: |
+            spm-${{ runner.os }}-
+
+      - name: Run tests
+        working-directory: a11y-check
+        run: swift test

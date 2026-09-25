@@ -1420,6 +1420,59 @@ final class A11yCheckCoreTests: XCTestCase {
         )
     }
 
+    func testHardcodedColor_systemColourBackgroundPinsThePair() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("a").foregroundColor(.white).background(Color.blue)
+                    Text("b").foregroundColor(.white).background(Color.accentColor)
+                    Text("c").foregroundColor(.white).background(Color(.systemRed))
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        XCTAssertEqual(diags.count, 0, "A named accent background makes the pair self-contained")
+    }
+
+    func testHardcodedColor_ternaryBackgroundPinsThePair() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @Environment(\\.colorScheme) var colorScheme
+            private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+            var body: some View {
+                Text("3")
+                    .foregroundColor(.white)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        XCTAssertEqual(diags.count, 0, "A colorScheme ternary already handles both appearances")
+    }
+
+    func testHardcodedColor_appearanceFollowingBackgroundIsStillFlagged() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("a").foregroundColor(.black).background(Color(.systemBackground))
+                    Text("b").foregroundColor(.black).background(Color.primary)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        // The surface flips with the appearance, so the fixed text colour disappears.
+        // This is the bug the rule exists to catch and must never be suppressed.
+        XCTAssertEqual(diags.count, 2)
+        XCTAssertTrue(diags.allSatisfy { $0.severity == .warning })
+    }
+
     func testHardcodedColor_stillFlagsLoneFixedColors() {
         let source = """
         import SwiftUI

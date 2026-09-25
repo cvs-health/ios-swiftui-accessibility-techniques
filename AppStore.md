@@ -68,9 +68,35 @@ Check both before submitting. The previous listing claimed 76 techniques for sev
 - **"WCAG 2.2", not bare "WCAG"**, matching what the techniques actually map to.
 - **The opening line carries the pitch.** Only the first two or three lines show before the "more" link, so they describe what makes the app useful rather than what format it takes.
 
-## Fields not currently set
+## Subtitle
 
-The listing has no **subtitle** (30 characters) or **promotional text** (170 characters). Both are optional, and promotional text can be changed without submitting a new build.
+30 characters maximum. This is 26:
+
+```text
+Good and bad WCAG examples
+```
+
+Alternatives, both within the limit:
+
+| Subtitle | Length |
+| --- | --- |
+| `Good and bad WCAG examples` | 26 |
+| `SwiftUI accessibility, tested` | 29 |
+| `89 SwiftUI a11y techniques` | 26 |
+
+## Promotional Text
+
+170 characters maximum, and the one field you can change **without submitting a new build** — use it for whatever is newest. This is 164:
+
+```text
+New: Accessibility Custom Content. See how a seat map tells VoiceOver users which seats are window, middle, or aisle when the layout is the only thing that says so.
+```
+
+A neutral evergreen alternative, 153 characters:
+
+```text
+Every technique ships a good and a bad example you can test with VoiceOver yourself. Hear the difference, then read exactly why each one passes or fails.
+```
 
 ----
 

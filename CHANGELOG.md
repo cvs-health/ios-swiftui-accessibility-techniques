@@ -11,7 +11,7 @@ This repository ships two products on independent release schedules, so they hav
 | Product | Scheme | Released via | Current |
 | --- | --- | --- | --- |
 | iOS app | `26.x` | App Store | **26.7** |
-| `a11y-check` CLI | semver | Homebrew and git tags | **0.4.0** (tag) |
+| `a11y-check` CLI | semver | Homebrew and git tags | **0.5.0** (tag) |
 
 Rules:
 
@@ -21,6 +21,22 @@ Rules:
 - At release time, rename `[Unreleased]` to the version header for the product that shipped, move any entries belonging to the *other* product into a fresh `[Unreleased]`, and start over.
 
 ## [Unreleased]
+
+iOS app changes made after 26.7 shipped. Not yet in the App Store.
+
+### iOSswiftUIa11yTechniques
+
+#### Fixed
+
+- **Two real contrast failures inside good examples**, found once the contrast rule could see them. Classifying all 25 `color-contrast-insufficient` findings showed 23 on bad examples and 2 on good ones, both genuine:
+  - **Tabs** (`TabsView.swift`): the unread badge in the good custom-tabs example used white on `Color.red`, which is 3.5:1 — short of the 4.5:1 its small bold text requires. Now uses the crimson the file already defines. The badge being `.accessibilityHidden(true)` does not excuse it: 1.4.3 protects low-vision sighted users, not VoiceOver users, and the count is conveyed visually. The matching bad example keeps `Color.red` deliberately.
+  - **A11y-check** (`A11yCheckView.swift`): the good gesture-alternative example's `Button("Delete")` used `.foregroundColor(.red)`, 3.5:1 against the default background — a good example of WCAG 2.5.1 that failed 1.4.3. Now crimson, which clears 4.5:1 against both the light and dark backgrounds, so no `colorScheme` ternary is needed. Verified with the tool rather than by hand; an initial hand-estimate of crimson-on-black was wrong.
+- **`WebViewDocs.updateUIView` reloading the documentation on every SwiftUI update** (`ContentView.swift`). The method called `webView.load(URLRequest(url: url))` on each update, resetting the page and discarding the web view's back-forward list. `url` is a constant, so the body is now empty. No visual change.
+
+
+## [a11y-check 0.5.0] - 2026-09-25
+
+Tagged CLI release. Installed via `brew install --HEAD`, so these land for anyone who reinstalls.
 
 ### a11y-check
 
@@ -36,6 +52,7 @@ Rules:
 
 #### Changed
 
+- **A named accent or a `colorScheme` ternary also pins a pair.** The first pass only recognised literal colours, so two false-positive classes survived on this repo's good examples: `.foregroundColor(.white).background(Color.blue)` and `.background(colorScheme == .dark ? Color(.systemRed) : darkRed)`. Both are now treated as self-contained — a named accent is a deliberate choice that the pair moves with, and a ternary counts when every branch counts, scanned at paren depth zero so labelled arguments inside `Color(red:green:blue:)` are not mistaken for the separator. Appearance-*following* colours are explicitly excluded: `.primary`, `.secondary`, `Color(.label)`, `Color(.systemBackground)` and friends never pin a pair, because `.foregroundColor(.black)` over a surface that flips to black is exactly the bug the rule exists to catch. Across the nine affected files this took good-example hits from 14 to 1, and that one is a legitimate advisory suggesting an asset catalog for a lone colour.
 - **`hardcoded-color` pair detection resolves constants.** The first cut of the pair check compared raw modifier arguments, so `.background(darkRed)` read as an unknown identifier and the pair was missed — which meant the badge fixed in `TabsView.swift` was still reported. It now resolves through file-local constants the same way the rest of the rule does.
 - **`hardcoded-color` no longer flags a self-contained colour pair.** A chain that pins both the foreground and the background — `Image(systemName: "xmark.circle.fill").foregroundColor(.white).background(Color.black)` — renders identically in either appearance, so "may not adapt to Dark Mode" is the wrong complaint; whether the pair is legible is `color-contrast-insufficient`'s job and it checks exactly that case. Found by classifying every finding in this repo as good-example or bad-example: this pattern accounted for most of the rule's hits inside good examples, including three carousel overlays, the documentation close button, and a styled Create Account button. A colour pinned on its own is still reported.
 - **`hardcoded-color` severity now depends on what the colour paints.** A fixed colour on **text** (`.foregroundColor`, `.foregroundStyle`) is reported as a `warning`, because it inverts against the background in the other appearance and is a near-certain Dark Mode defect. Decorative uses such as `.background()` and `.tint()` stay at `info`. Previously the whole rule was `info`, so it could never gate a build. Per-diagnostic severity was already supported via `severityOverride`; `severity_overrides` in `.a11ycheck.yml` still takes precedence.
@@ -84,6 +101,8 @@ Also in this release
 
 ### a11y-check
 
+These CLI changes were recorded under the app's release date. They ship to users as part of **[a11y-check 0.5.0]** above, which is cut from main and therefore includes them.
+
 #### Changed
 
 - **`label-in-name` rule** (`LabelInNameRules.swift`, WCAG 2.5.3): upgraded the "visible text present but not at the beginning" case from `warning` to `error`. WCAG 2.5.3 Understanding states the accessible name must be "identical to or begins with the same sequence of characters as the visible text label" — prepending non-visible text (e.g. `.accessibilityLabel("Quick reply: Yes")` on `Button("Yes")`) is a definitive failure because Voice Control prefix-matches against what users see on screen, not what comes after an invisible prefix. The diagnostic message now explicitly names the Voice Control impact and offers two fix options: move the visible text to the start of the label, or remove `.accessibilityLabel()` entirely so SwiftUI derives the accessible name from the visible label automatically.
@@ -107,12 +126,6 @@ Also in this release
 
 ### iOSswiftUIa11yTechniques
 
-#### Fixed
-
-- **Two real contrast failures inside good examples**, found once the contrast rule could see them. Classifying all 25 `color-contrast-insufficient` findings showed 23 on bad examples and 2 on good ones, both genuine:
-  - **Tabs** (`TabsView.swift`): the unread badge in the good custom-tabs example used white on `Color.red`, which is 3.5:1 — short of the 4.5:1 its small bold text requires. Now uses the crimson the file already defines. The badge being `.accessibilityHidden(true)` does not excuse it: 1.4.3 protects low-vision sighted users, not VoiceOver users, and the count is conveyed visually. The matching bad example keeps `Color.red` deliberately.
-  - **A11y-check** (`A11yCheckView.swift`): the good gesture-alternative example's `Button("Delete")` used `.foregroundColor(.red)`, 3.5:1 against the default background — a good example of WCAG 2.5.1 that failed 1.4.3. Now crimson, which clears 4.5:1 against both the light and dark backgrounds, so no `colorScheme` ternary is needed. Verified with the tool rather than by hand; an initial hand-estimate of crimson-on-black was wrong.
-
 #### Changed
 
 - **Accessibility Sort Priority** documentation (`Documentation/AccessibilitySortPriority.md`): added a "Never use negative sort priority values" section explaining that sort priority also governs Explore by Touch hit testing, not just swipe reading order. Negative-priority overlays (e.g., a tab bar with `.accessibilitySortPriority(-1)`) lose hit tests to any overlapping scroll content, silently breaking Explore by Touch — a critical WCAG 2.5.1 / 2.1.1 failure. Includes concrete remediation steps and points readers at the `ExploreByTouchBrokenView` prototype. Added WCAG 2.1.1 Keyboard and 2.5.1 Pointer Gestures to the success criteria list.
@@ -131,7 +144,7 @@ Also in this release
 - **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): added `.accessibilitySortPriority(-1)` to the tab bar container, matching `UnifiedNavigationTabBarView`'s setting in the CVS codebase. SwiftUI builds the accessibility hit-test tree in priority order (higher first); scroll content (default priority 0) is therefore checked before the tab buttons (-1), so Explore by Touch on any part of the tab bar — not just the 32 pt empty zone — now focuses scroll content instead of a tab button, replicating the full CVS bug.
 - **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): redesigned tab bar to match the CVS Pharmacy app visual — white pill with drop shadows (standard `backgroundBubble` mode), `systemFill` rounded-rect highlight on the selected tab (matches `TabsBubbleView.tabs`), CVS brand red icons, and 5 tabs (Home, Pharmacy, Health, Shop, Search) matching the real tab labels. Bug mechanisms unchanged: `.ignoresSafeArea(edges: .bottom)` on scroll content and `.padding(.top, 32)` empty zone above the pill.
 
-## [Unreleased] - 2026-08-27
+## iOS 26.7 development — 2026-08-27
 
 ### iOSswiftUIa11yTechniques
 
@@ -139,7 +152,7 @@ Also in this release
 
 - **Explore by Touch Broken** prototype (`ExploreByTouchBrokenView.swift`): rewrote to match `H100HomeScreenView` layout from the CVS codebase. Uses a `ZStack` (no overlay modifier) with the scroll content using `.ignoresSafeArea(edges: .bottom)` so it extends behind the floating tab bar. Tab bar sits inside the ZStack with `.padding(.top, 32)` matching `UnifiedNavigationTabBarView` — that 32 pt empty zone above the pill has no accessibility elements, so Explore by Touch there falls through to the scroll content. Tab buttons use `.accessibilityRemoveTraits(.isButton)` matching `BottomTabBubbleView`.
 
-## [Unreleased] - 2026-08-26
+## iOS 26.7 development — 2026-08-26
 
 ### iOSswiftUIa11yTechniques
 
@@ -153,7 +166,7 @@ Also in this release
 - Moved "Web View Apple System CSS Font Test" from Prototypes to the new **Web View Dynamic Type** technique page.
 - Removed `WebView.swift` prototype file; replaced by `WebViewDynamicTypeView.swift` in the techniques layer.
 
-## [Unreleased] - 2026-08-20
+## iOS 26.7 development — 2026-08-20
 
 ### Documentation
 
@@ -192,7 +205,7 @@ Also in this release
 - **Motion Actuation** — Simulator `Hardware > Shake` now triggers the undo demo. The Simulator sends `UIEvent.motionShake` through the UIKit responder chain, not through `CMMotionManager`; added `ShakeDetector: UIViewControllerRepresentable` (wrapping a `UIViewController` that overrides `motionEnded`) as a companion to the existing `CMMotionManager` path, which continues to handle real-device shake.
 - `XcodeFormatter` now maps `.info` severity diagnostics to `note:` (Xcode inline annotation level) instead of `warning:`. Previously info-level findings appeared as warnings in the Xcode issue navigator.
 
-## [Unreleased] - 2026-08-13
+## iOS 26.7 development — 2026-08-13
 
 ### iOSswiftUIa11yTechniquesUITests
 
@@ -201,7 +214,7 @@ Also in this release
 - `testA11yCheck` and `testInformative` now report all `performAccessibilityAudit` failures in a single run. Previously each test would throw and stop at the first issue; now all issues are collected via the `issueHandler` closure and reported individually with `XCTFail`.
 - New `XCTestAccessibilityView` page added with intentional good/bad examples for each `performAccessibilityAudit` failure type: missing accessibility label (button wrapping a shape with no label), insufficient contrast (light gray text on explicit white background), small hit area (20×20 button), and visually clipped text. Paired `testXCTestAccessibility()` uses the collect-all-failures pattern and scrolls down before the second audit to reveal the bad examples section, ensuring all failures are detected.
 
-## [Unreleased] - 2026-07-29
+## iOS 26.7 development — 2026-07-29
 
 ### iOSswiftUIa11yTechniques
 

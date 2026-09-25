@@ -60,8 +60,7 @@ public struct HardcodedColorRule: A11yRule {
             // Resolve constants first, or `.background(darkRed)` reads as an unknown
             // identifier and the pair is missed.
             let pinned = (fgMods + bgMods).filter {
-                let raw = $0.arguments.first?.text ?? ""
-                return Self.isFixedColor(ColorConstantCollector.resolve(raw, constants: colorConstants))
+                Self.pinsColor($0.arguments.first?.text ?? "", constants: colorConstants)
             }
             guard pinned.count == fgMods.count + bgMods.count else { continue }
             for mod in fgMods + bgMods {
@@ -75,6 +74,75 @@ public struct HardcodedColorRule: A11yRule {
     private static func isFixedColor(_ text: String) -> Bool {
         if hardcodedColors.contains(text) { return true }
         return inlineColorPrefixes.contains { text.contains($0) }
+    }
+
+    /// Colours that track the system appearance rather than naming one.
+    ///
+    /// These must never count towards a self-contained pair. `.foregroundColor(.black)` over
+    /// `Color(.systemBackground)` is precisely the Dark Mode bug this rule exists to catch:
+    /// the surface flips to black and the text disappears.
+    private static let appearanceFollowingColors: Set<String> = [
+        ".primary", ".secondary", "Color.primary", "Color.secondary",
+        "Color(.label)", "Color(.secondaryLabel)", "Color(.tertiaryLabel)",
+        "Color(.quaternaryLabel)", "Color(.placeholderText)", "Color(.separator)",
+        "Color(.opaqueSeparator)", "Color(.systemBackground)",
+        "Color(.secondarySystemBackground)", "Color(.tertiarySystemBackground)",
+        "Color(.systemGroupedBackground)", "Color(.secondarySystemGroupedBackground)",
+        "Color(.tertiarySystemGroupedBackground)", "Color(.systemFill)",
+        ".background", ".foreground",
+    ]
+
+    /// Whether an expression pins a specific colour, as opposed to following the appearance.
+    ///
+    /// Used only to decide whether a foreground/background pair is self-contained. A named
+    /// accent such as `Color.blue` or `Color(.systemRed)` counts: it may shift slightly
+    /// between appearances, but it is a deliberate choice and the pair moves with it. A
+    /// ternary counts when every branch counts, which is how `colorScheme`-switched colours
+    /// are written.
+    private static func pinsColor(_ text: String, constants: [String: String]) -> Bool {
+        let resolved = ColorConstantCollector
+            .resolve(text, constants: constants)
+            .trimmingCharacters(in: .whitespaces)
+        if resolved.isEmpty { return false }
+        if appearanceFollowingColors.contains(resolved) { return false }
+
+        if let branches = ternaryBranches(resolved) {
+            return branches.allSatisfy { pinsColor($0, constants: constants) }
+        }
+        if isFixedColor(resolved) { return true }
+        if ColorParser.systemColors[resolved] != nil { return true }
+        if resolved == "Color.accentColor" || resolved == ".accentColor" { return true }
+        // UIColor-backed system accents, e.g. Color(.systemRed). Surface and label
+        // semantics were already excluded above.
+        if resolved.hasPrefix("Color(.") { return true }
+        // Asset catalog colour: variants are defined deliberately in the catalog.
+        if resolved.hasPrefix("Color(\"") { return true }
+        return false
+    }
+
+    /// The two branches of a ternary, or nil when the text is not one.
+    ///
+    /// Scans for the `:` at paren depth zero so labelled arguments inside
+    /// `Color(red:green:blue:)` are not mistaken for the ternary's separator.
+    private static func ternaryBranches(_ text: String) -> [String]? {
+        guard let q = text.firstIndex(of: "?") else { return nil }
+        let after = text[text.index(after: q)...]
+        var depth = 0
+        var separator: String.Index?
+        for i in after.indices {
+            switch after[i] {
+            case "(", "[": depth += 1
+            case ")", "]": depth -= 1
+            case ":" where depth == 0: separator = i
+            default: break
+            }
+            if separator != nil { break }
+        }
+        guard let colon = separator else { return nil }
+        let first = after[after.startIndex..<colon].trimmingCharacters(in: .whitespaces)
+        let second = after[after.index(after: colon)...].trimmingCharacters(in: .whitespaces)
+        guard !first.isEmpty, !second.isEmpty else { return nil }
+        return [first, second]
     }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {

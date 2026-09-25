@@ -26,7 +26,8 @@ struct WebViewDocs: UIViewRepresentable {
     }
     
     func updateUIView(_ webView: WKWebView, context: Context) {
-        webView.load(URLRequest(url: url))
+        // Intentionally empty. `url` never changes, and reloading here would reset the
+        // page and discard the back-forward list on every SwiftUI update.
     }
 }
 

@@ -1538,6 +1538,58 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertTrue(diags.allSatisfy { $0.severity == .warning })
     }
 
+    // MARK: - Dynamic Type: custom fonts
+
+    func testFixedFontSize_flagsCustomFontWithoutRelativeTo() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("a").font(.custom("Helvetica", size: 17))
+                    Text("b").font(Font.custom("Helvetica", size: 17))
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "fixed-font-size")
+        XCTAssertEqual(diags.count, 2)
+        XCTAssertTrue(diags.allSatisfy { $0.message.contains("relativeTo:") })
+    }
+
+    func testFixedFontSize_allowsCustomFontWithRelativeTo() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("a").font(.custom("Helvetica", size: 17, relativeTo: .body))
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 0)
+    }
+
+    func testFixedFontSize_flagsUnscaledUIFontButNotScaledOnes() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("a").font(Font(UIFont(name: "Helvetica", size: 17)!))
+                    Text("b").font(Font(UIFont.systemFont(ofSize: 17)))
+                    Text("c").font(Font(UIFont.preferredFont(forTextStyle: .body)))
+                    Text("d").font(Font(UIFontMetrics(forTextStyle: .body)
+                        .scaledFont(for: UIFont(name: "Helvetica", size: 17)!)))
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "fixed-font-size")
+        // preferredFont and UIFontMetrics already scale, so only the first two are defects.
+        XCTAssertEqual(diags.count, 2)
+        XCTAssertTrue(diags.allSatisfy { $0.message.contains("UIFont") })
+    }
+
     func testHardcodedColor_nonColourBackdropPinsTheForeground() {
         let source = """
         import SwiftUI

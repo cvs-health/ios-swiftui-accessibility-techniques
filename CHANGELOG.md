@@ -11,7 +11,7 @@ This repository ships two products on independent release schedules, so they hav
 | Product | Scheme | Released via | Current |
 | --- | --- | --- | --- |
 | iOS app | `26.x` | App Store | **26.7** |
-| `a11y-check` CLI | semver | Homebrew and git tags | **0.5.2** (tag) |
+| `a11y-check` CLI | semver | Homebrew and git tags | **0.6.0** (tag) |
 
 Rules:
 
@@ -33,6 +33,14 @@ iOS app changes made after 26.7 shipped. Not yet in the App Store.
   - **A11y-check** (`A11yCheckView.swift`): the good gesture-alternative example's `Button("Delete")` used `.foregroundColor(.red)`, 3.5:1 against the default background — a good example of WCAG 2.5.1 that failed 1.4.3. Now crimson, which clears 4.5:1 against both the light and dark backgrounds, so no `colorScheme` ternary is needed. Verified with the tool rather than by hand; an initial hand-estimate of crimson-on-black was wrong.
 - **`WebViewDocs.updateUIView` reloading the documentation on every SwiftUI update** (`ContentView.swift`). The method called `webView.load(URLRequest(url: url))` on each update, resetting the page and discarding the web view's back-forward list. `url` is a constant, so the body is now empty. No visual change.
 
+
+## [a11y-check 0.6.0] - 2026-09-25
+
+### a11y-check
+
+#### Added
+
+- **`fixed-font-size` now covers custom typefaces and `UIFont`.** Prompted by comparing the rule set against the [Axiom accessibility-auditor](https://github.com/CharlesWiltgen/Axiom) agent, which names custom font scaling as its own detection category. The rule caught `.font(.system(size: N))` but silently passed `.font(.custom("Helvetica", size: 17))` and `.font(Font(UIFont(name:size:)))` — arguably the worse defects, since a custom typeface at a fixed size never scales at all, whereas `.system(size:)` at least tracks the system font. It now flags a custom font without a `relativeTo:` text style, and a `UIFont` built at an explicit size. `.font(.custom("Name", size: 17, relativeTo: .body))`, `UIFont.preferredFont(forTextStyle:)`, and anything already wrapped in `UIFontMetrics` are exempt. The repository's own `DynamicType.md` already taught `relativeTo:`, so the documentation and the tool had been out of step. Adds zero findings to this repository, which uses no custom fonts — verified before shipping.
 
 ## [a11y-check 0.5.2] - 2026-09-25
 

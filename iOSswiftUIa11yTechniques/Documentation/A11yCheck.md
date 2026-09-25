@@ -38,7 +38,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 - **`small-touch-target`** (error, WCAG 2.5.8) — `Button` or `Image` with `.frame(width:height:)` where both dimensions are below 24pt.
 
 ### Dynamic Type
-- **`fixed-font-size`** (error, WCAG 1.4.4) — `.font(.system(size: N))` uses a fixed size that does not scale with Dynamic Type.
+- **`fixed-font-size`** (error, WCAG 1.4.4) — text that does not scale with Dynamic Type. Covers three forms: `.font(.system(size: N))`; a custom typeface at a fixed size without a `relativeTo:` text style, `.font(.custom("Name", size: 17))`; and a `UIFont` at a fixed size, which needs `UIFontMetrics` to scale. `.font(.custom("Name", size: 17, relativeTo: .body))`, `UIFont.preferredFont(forTextStyle:)`, and anything already wrapped in `UIFontMetrics` are exempt.
 - **`line-limit-1`** (error, WCAG 1.4.4) — `.lineLimit(1)` truncates text at larger Dynamic Type sizes.
 
 ### Page Titles

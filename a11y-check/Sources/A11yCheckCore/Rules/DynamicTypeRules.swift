@@ -38,9 +38,51 @@ public struct FixedFontSizeRule: A11yRule {
                     fix: fix,
                     suggestion: "Replace .font(.system(size:)) with .font(.body) or another text style"
                 ))
+                continue
+            }
+
+            // A custom typeface at a fixed size never scales unless it is anchored to a
+            // text style with `relativeTo:`. This is worse than `.system(size:)`, which at
+            // least tracks the system font, so it is reported the same way.
+            if Self.isCustomFont(argText), !argText.contains("relativeTo:") {
+                diagnostics.append(makeDiagnostic(
+                    message: "Custom font at a fixed size doesn't scale with Dynamic Type. Add a `relativeTo:` text style, e.g. .font(.custom(\"Name\", size: 17, relativeTo: .body)).",
+                    node: mod.reportNode,
+                    context: context,
+                    suggestion: "Add relativeTo: to anchor the custom font to a Dynamic Type text style"
+                ))
+                continue
+            }
+
+            // A UIFont at a fixed size has the same problem, and needs UIFontMetrics to
+            // scale. `UIFont.preferredFont(forTextStyle:)` already scales, so it is exempt.
+            if Self.isUnscaledUIFont(argText) {
+                diagnostics.append(makeDiagnostic(
+                    message: "UIFont at a fixed size doesn't scale with Dynamic Type. Scale it with UIFontMetrics, or use a SwiftUI text style such as .font(.body).",
+                    node: mod.reportNode,
+                    context: context,
+                    suggestion: "Wrap the UIFont in UIFontMetrics, or use a SwiftUI text style"
+                ))
             }
         }
         return diagnostics
+    }
+
+    /// `.custom("Name", size: 17)` or `Font.custom(...)`, in any spelling.
+    private static func isCustomFont(_ text: String) -> Bool {
+        (text.contains(".custom(") || text.hasPrefix("custom("))
+            && text.contains("size:")
+    }
+
+    /// A UIFont built at an explicit size, which does not scale on its own.
+    /// `preferredFont(forTextStyle:)` and anything already wrapped in UIFontMetrics scale.
+    private static func isUnscaledUIFont(_ text: String) -> Bool {
+        guard text.contains("UIFont") else { return false }
+        if text.contains("UIFontMetrics") || text.contains("preferredFont") { return false }
+        return text.contains("UIFont(name:")
+            || text.contains("systemFont(ofSize:")
+            || text.contains("monospacedSystemFont(ofSize:")
+            || text.contains("boldSystemFont(ofSize:")
     }
 }
 

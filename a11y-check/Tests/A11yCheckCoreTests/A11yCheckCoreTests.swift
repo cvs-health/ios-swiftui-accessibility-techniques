@@ -1538,6 +1538,62 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertTrue(diags.allSatisfy { $0.severity == .warning })
     }
 
+    func testHardcodedColor_nonColourBackdropPinsTheForeground() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("a").foregroundColor(.white)
+                        .background(LinearGradient(colors: [.blue, .purple], startPoint: .top, endPoint: .bottom))
+                    Text("b").foregroundColor(.white).background(.ultraThinMaterial)
+                    Button("c") {}.foregroundColor(.white).buttonStyle(.borderedProminent)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        // The backdrop was chosen deliberately, so "may not adapt to Dark Mode" is the wrong
+        // complaint even though none of these backdrops is a colour this rule can read.
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testHardcodedColor_backdropOnEnclosingViewPinsTheForeground() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button(action: {}) {
+                    Text("child").foregroundColor(.black)
+                }
+                .background(Color.white)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        XCTAssertFalse(
+            diags.contains { $0.message.contains(".foregroundColor()") },
+            "A backdrop on an enclosing view pins the child's foreground"
+        )
+    }
+
+    func testHardcodedColor_appearanceFollowingBackdropOnAncestorStillFlags() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("child").foregroundColor(.black)
+                }
+                .background(Color(.systemBackground))
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        // The surface flips to black in Dark Mode, so the fixed text colour disappears.
+        XCTAssertTrue(diags.contains { $0.message.contains(".foregroundColor()") })
+    }
+
     func testHardcodedColor_stillFlagsLoneFixedColors() {
         let source = """
         import SwiftUI

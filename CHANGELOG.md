@@ -11,7 +11,7 @@ This repository ships two products on independent release schedules, so they hav
 | Product | Scheme | Released via | Current |
 | --- | --- | --- | --- |
 | iOS app | `26.x` | App Store | **26.7** |
-| `a11y-check` CLI | semver | Homebrew and git tags | **0.5.1** (tag) |
+| `a11y-check` CLI | semver | Homebrew and git tags | **0.5.2** (tag) |
 
 Rules:
 
@@ -33,6 +33,20 @@ iOS app changes made after 26.7 shipped. Not yet in the App Store.
   - **A11y-check** (`A11yCheckView.swift`): the good gesture-alternative example's `Button("Delete")` used `.foregroundColor(.red)`, 3.5:1 against the default background — a good example of WCAG 2.5.1 that failed 1.4.3. Now crimson, which clears 4.5:1 against both the light and dark backgrounds, so no `colorScheme` ternary is needed. Verified with the tool rather than by hand; an initial hand-estimate of crimson-on-black was wrong.
 - **`WebViewDocs.updateUIView` reloading the documentation on every SwiftUI update** (`ContentView.swift`). The method called `webView.load(URLRequest(url: url))` on each update, resetting the page and discarding the web view's back-forward list. `url` is a constant, so the body is now empty. No visual change.
 
+
+## [a11y-check 0.5.2] - 2026-09-25
+
+Applies the "explicit backdrop" reasoning from 0.5.1 to `hardcoded-color`, which had been left inconsistent with the contrast rule.
+
+### a11y-check
+
+#### Fixed
+
+- **`hardcoded-color` no longer warns about a foreground painted over a deliberate backdrop.** 0.5.1 taught the contrast rule that an explicit background means "do not assume", but left this rule reporting the same code. It warned on all four production patterns: white text over a `LinearGradient`, over `.ultraThinMaterial`, on a `.buttonStyle(.borderedProminent)` button, and on a child whose background sits on the enclosing `Button`. A backdrop now counts whether or not it is a colour this rule can read, and whether it is on the view's own chain or any enclosing view — because the rule's complaint is "may not adapt to Dark Mode", and that is simply the wrong complaint once the developer has pinned what sits behind the text. An appearance-*following* surface such as `Color(.systemBackground)` still does not count, on an ancestor as well as on the view itself, since that is precisely the case where a fixed text colour disappears.
+
+  `.ultraThinMaterial` is deliberately included even though it does adapt. Contrast over a material is genuinely unpredictable, but that is a different concern from Dark Mode adaptation and is not worth making badly here.
+
+  Verified against a six-case production probe: it now reports only the two true positives, `4.0:1` white on `Color.blue` and `3.3:1` `.gray` on the assumed background. `ContentView.swift` drops from two findings to one `info` advisory, and `DarkModeView` plus `ContrastView` still report all 15 of their intentional failures.
 
 ## [a11y-check 0.5.1] - 2026-09-25
 

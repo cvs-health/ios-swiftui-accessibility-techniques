@@ -50,24 +50,97 @@ public struct HardcodedColorRule: A11yRule {
         colorConstants: [String: String]
     ) -> Set<AbsolutePosition> {
         let visitor = ViewHierarchyVisitor.analyze(syntax)
+        var viewByPosition: [AbsolutePosition: ViewHierarchyVisitor.DetectedView] = [:]
+        for v in visitor.detectedViews {
+            viewByPosition[v.callExpr.positionAfterSkippingLeadingTrivia] = v
+        }
+
         var positions: Set<AbsolutePosition> = []
         for view in visitor.detectedViews {
             let mods = ModifierCollector.collectChainOnly(from: view.chainRoot, callExpr: view.callExpr)
             let fgMods = Self.foregroundModifiers.flatMap { mods.modifiers(named: $0) }
             let bgMods = ["background", "backgroundStyle"].flatMap { mods.modifiers(named: $0) }
+
+            // A foreground colour is only a Dark Mode risk when the backdrop follows the
+            // appearance. If the developer pinned a backdrop — a colour, a gradient, a
+            // material, or a ButtonStyle's fill — then "may not adapt to Dark Mode" is the
+            // wrong complaint, whether that backdrop is on this view or an enclosing one.
+            if !fgMods.isEmpty,
+               backdropIsPinned(
+                   for: view.callExpr,
+                   ownMods: mods,
+                   viewByPosition: viewByPosition,
+                   colorConstants: colorConstants
+               ) {
+                for mod in fgMods {
+                    positions.insert(mod.reportNode.positionAfterSkippingLeadingTrivia)
+                }
+            }
+
+            // The background half of a pinned colour pair is likewise not a Dark Mode
+            // problem: both halves move together.
             guard !fgMods.isEmpty, !bgMods.isEmpty else { continue }
-            // Both sides must actually be fixed colours for the pair to be self-contained.
-            // Resolve constants first, or `.background(darkRed)` reads as an unknown
-            // identifier and the pair is missed.
             let pinned = (fgMods + bgMods).filter {
                 Self.pinsColor($0.arguments.first?.text ?? "", constants: colorConstants)
             }
             guard pinned.count == fgMods.count + bgMods.count else { continue }
-            for mod in fgMods + bgMods {
+            for mod in bgMods {
                 positions.insert(mod.reportNode.positionAfterSkippingLeadingTrivia)
             }
         }
         return positions
+    }
+
+    /// Whether a deliberate backdrop sits behind this view, on its own chain or any
+    /// enclosing view. Siblings are unreachable because the walk only follows parents.
+    private func backdropIsPinned(
+        for callExpr: FunctionCallExprSyntax,
+        ownMods: ModifierCollector,
+        viewByPosition: [AbsolutePosition: ViewHierarchyVisitor.DetectedView],
+        colorConstants: [String: String]
+    ) -> Bool {
+        if Self.chainPinsBackdrop(ownMods, colorConstants: colorConstants) { return true }
+        var node: Syntax? = Syntax(callExpr).parent
+        while let current = node {
+            if let funcCall = current.as(FunctionCallExprSyntax.self),
+               let view = viewByPosition[funcCall.positionAfterSkippingLeadingTrivia] {
+                let chainMods = ModifierCollector.collectChainOnly(
+                    from: view.chainRoot,
+                    callExpr: view.callExpr
+                )
+                if Self.chainPinsBackdrop(chainMods, colorConstants: colorConstants) { return true }
+            }
+            node = current.parent
+        }
+        return false
+    }
+
+    private static func chainPinsBackdrop(
+        _ mods: ModifierCollector,
+        colorConstants: [String: String]
+    ) -> Bool {
+        for name in ["background", "backgroundStyle"] {
+            for mod in mods.modifiers(named: name) {
+                let arg = ColorConstantCollector
+                    .resolve(mod.arguments.first?.text ?? "", constants: colorConstants)
+                    .trimmingCharacters(in: .whitespaces)
+                // An appearance-following surface is exactly the risk, so it does not count.
+                if arg.isEmpty || appearanceFollowingColors.contains(arg) { continue }
+                return true
+            }
+        }
+        // Styles that paint a fill with no .background modifier to inspect.
+        for name in ["buttonStyle", "listRowBackground", "toolbarBackground"] {
+            for mod in mods.modifiers(named: name) {
+                if name == "buttonStyle",
+                   ["\u{2E}plain", ".borderless", "PlainButtonStyle()", "BorderlessButtonStyle()"]
+                       .contains(mod.arguments.first?.text ?? "") {
+                    continue
+                }
+                return true
+            }
+        }
+        return false
     }
 
     /// Whether an expression names a colour that does not vary with appearance.

@@ -511,7 +511,14 @@ Image(systemName: "xmark.circle.fill")
     .background(Color.black)   // not flagged — the pair is appearance-independent
 ```
 
-White on black renders as white on black in either appearance, so "may not adapt to Dark Mode" does not apply. Whether the pair is legible is `color-contrast-insufficient`'s job, and it checks exactly that case. A colour pinned on its own — a lone `.foregroundColor(.black)` — is still reported.
+White on black renders as white on black in either appearance, so "may not adapt to Dark Mode" does not apply. Whether the pair is legible is `color-contrast-insufficient`'s job, and it checks exactly that case.
+
+More generally, a fixed foreground is not reported when **any deliberate backdrop** sits behind it — a colour, a `LinearGradient`, a material, or a `ButtonStyle`'s fill — on the view's own chain or on any enclosing view. Once the developer has pinned what is behind the text, Dark Mode adaptation is not the issue.
+
+Two things still are reported:
+
+- a colour pinned on its own, such as a lone `.foregroundColor(.black)`
+- a fixed foreground over an appearance-**following** surface such as `Color(.systemBackground)`, `Color.primary`, or `Color(.label)` — the case where the surface flips and the text disappears
 
 `exclude_paths` apply to **directory scans and explicit file arguments**. File paths are matched relative to the current working directory (after resolving `.` / `..` and stripping a leading `./`), so `a11y-check --baseline ./Sources/Generated/Auto.swift` honors the same globs as `a11y-check Sources/`.
 

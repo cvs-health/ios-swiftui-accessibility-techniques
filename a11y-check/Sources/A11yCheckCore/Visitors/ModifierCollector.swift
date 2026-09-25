@@ -76,6 +76,11 @@ public final class ModifierCollector: SyntaxVisitor {
         "disabled",
         "foregroundColor",
         "foregroundStyle",
+        // Paint a background that cannot be read statically. Tracked so the contrast rule
+        // can tell "no background" from "a background it cannot evaluate".
+        "buttonStyle",
+        "listRowBackground",
+        "toolbarBackground",
         "background",
         "tint",
         "opacity",

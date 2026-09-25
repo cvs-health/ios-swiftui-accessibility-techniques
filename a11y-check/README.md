@@ -475,7 +475,7 @@ enabled_only: []
 options:
   min_touch_target: 44    # override small-touch-target threshold (default 24)
   contrast_ratio: 4.5     # WCAG AA contrast minimum
-  assume_default_background: true   # default true; see below
+  assume_default_background: false  # default false; see below
 
 # Skip paths matching these patterns (directory scans and explicit file args)
 exclude_paths:
@@ -492,9 +492,16 @@ exclude_paths:
 - asset catalog colours by name, including their dark-mode and Increase Contrast variants, each appearance checked separately
 - **colours held in a file-local `let`/`var`** — `.foregroundColor(darkGreen)` is resolved through the declaration of `darkGreen`, so storing a colour in a property no longer hides it from the check
 
-`assume_default_background: true` (the default) means a text view that sets a foreground colour but has **no background anywhere up the view tree** is compared against the system background — white in light mode, black in dark. This catches the most common real failure, such as `.foregroundColor(.black)` being invisible in Dark Mode.
+`assume_default_background` (**default `false`**) compares a text view that sets a foreground colour but has **no background anywhere up the view tree** against the system background — white in light mode, black in dark. That catches the most common real failure, such as `.foregroundColor(.black)` being invisible in Dark Mode.
 
-Set it to `false` for codebases that draw text over images, gradients, or materials, where the assumption does not hold and would produce false positives. Diagnostics from the assumption always say `assumed system background` so they are easy to identify.
+It is off by default because the assumption is wrong whenever a background exists but cannot be read, and a false `error` costs more than a miss. Turn it on for codebases built from self-contained views with literal colours; leave it off where text is drawn over images, gradients, or styles. Diagnostics from the assumption always say `assumed system background`, so they are easy to filter either way.
+
+The rule distinguishes *no background* from *a background it cannot evaluate*, and only assumes in the first case. It stays silent when:
+
+- a `.background(…)` exists but is not a colour — a `LinearGradient`, `.ultraThinMaterial`, an `Image`, a `Shape`
+- the view or anything enclosing it carries `.buttonStyle(…)` other than `.plain` or `.borderless`, `.listRowBackground(…)`, or `.toolbarBackground(…)`, all of which paint a fill with no `.background` modifier to inspect
+
+Backgrounds are also found on **any** enclosing view, not only `VStack`-style containers, so `Button { Text("x").foregroundColor(.white) }.background(Color.blue)` is evaluated against the button's real background rather than an assumed one.
 
 `hardcoded-color` skips a chain that pins **both** the foreground and the background:
 

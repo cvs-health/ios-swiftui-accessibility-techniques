@@ -1300,6 +1300,19 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertTrue(diags[0].message.contains("1.8:1"))
     }
 
+    /// Run the contrast rule with `assume_default_background` turned on, which is opt-in.
+    private func contrastWithAssumedBackground(_ source: String) -> [A11yDiagnostic] {
+        let syntax = Parser.parse(source: source)
+        let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
+        let context = RuleContext(
+            filePath: "test.swift",
+            sourceText: source,
+            locationConverter: converter,
+            configOptions: A11yConfig.ConfigOptions(assumeDefaultBackground: true)
+        )
+        return ColorContrastRule().check(syntax: syntax, context: context)
+    }
+
     func testColorContrastRule_assumesSystemBackgroundWhenNoneDeclared() {
         let source = """
         import SwiftUI
@@ -1309,9 +1322,61 @@ final class A11yCheckCoreTests: XCTestCase {
             }
         }
         """
-        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        // Opt-in: the assumption is off by default because it misfires on views whose
+        // background comes from a style or an image.
+        XCTAssertEqual(analyze(source, ruleID: "color-contrast-insufficient").count, 0)
+        let diags = contrastWithAssumedBackground(source)
         XCTAssertEqual(diags.count, 1)
         XCTAssertTrue(diags[0].message.contains("assumed system background"))
+    }
+
+    func testColorContrastRule_styleProvidedBackgroundIsNotAssumed() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Save") {}.foregroundColor(.white).buttonStyle(.borderedProminent)
+            }
+        }
+        """
+        // .borderedProminent paints a fill this rule cannot read, so the background is
+        // unknown rather than absent. Assuming it produced a bogus "1.0:1 white on white".
+        XCTAssertEqual(contrastWithAssumedBackground(source).count, 0)
+    }
+
+    func testColorContrastRule_plainButtonStyleStillAssumesBackground() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Save") {}.foregroundColor(.white).buttonStyle(.plain)
+            }
+        }
+        """
+        // .plain paints nothing, so white text really is on the default background.
+        XCTAssertEqual(contrastWithAssumedBackground(source).count, 1)
+    }
+
+    func testColorContrastRule_findsBackgroundOnEnclosingNonContainerView() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button(action: {}) {
+                    Text("child").foregroundColor(.white)
+                }
+                .background(Color.blue)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        // The ancestor walk used to consider only VStack-style containers, so a Button's
+        // background was invisible to its own label.
+        XCTAssertTrue(
+            diags.contains { $0.message.contains("background (Color.blue)") },
+            "A background on an enclosing Button must be paired with its label's foreground"
+        )
+        XCTAssertFalse(diags.contains { $0.message.contains("assumed system background") })
     }
 
     func testColorContrastRule_assumedBackgroundCanBeDisabled() {

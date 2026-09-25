@@ -11,7 +11,7 @@ This repository ships two products on independent release schedules, so they hav
 | Product | Scheme | Released via | Current |
 | --- | --- | --- | --- |
 | iOS app | `26.x` | App Store | **26.7** |
-| `a11y-check` CLI | semver | Homebrew and git tags | **0.5.0** (tag) |
+| `a11y-check` CLI | semver | Homebrew and git tags | **0.5.1** (tag) |
 
 Rules:
 
@@ -33,6 +33,21 @@ iOS app changes made after 26.7 shipped. Not yet in the App Store.
   - **A11y-check** (`A11yCheckView.swift`): the good gesture-alternative example's `Button("Delete")` used `.foregroundColor(.red)`, 3.5:1 against the default background — a good example of WCAG 2.5.1 that failed 1.4.3. Now crimson, which clears 4.5:1 against both the light and dark backgrounds, so no `colorScheme` ternary is needed. Verified with the tool rather than by hand; an initial hand-estimate of crimson-on-black was wrong.
 - **`WebViewDocs.updateUIView` reloading the documentation on every SwiftUI update** (`ContentView.swift`). The method called `webView.load(URLRequest(url: url))` on each update, resetting the page and discarding the web view's back-forward list. `url` is a constant, so the body is now empty. No visual change.
 
+
+## [a11y-check 0.5.1] - 2026-09-25
+
+Follow-up to 0.5.0, prompted by testing the colour rules against production-shaped SwiftUI rather than only this repository's self-contained examples. Two false positives turned up, both reporting an alarming `1.0:1` error on correct code.
+
+### a11y-check
+
+#### Changed
+
+- **`assume_default_background` now defaults to `false`.** It was shipped on in 0.5.0 on the strength of this repository, which is the best case for it — small self-contained views, literal colours, no design system or `ButtonStyle` layer. In a production app the assumption is wrong often enough that a false `error` costs more than a miss, so it is now opt-in. This repository opts in via a new root `.a11ycheck.yml`, where the assumption holds and earns its keep. The two fixes below mean it is considerably safer when enabled.
+
+#### Fixed
+
+- **A background supplied by a style is no longer mistaken for no background.** `Button("Save") {}.foregroundColor(.white).buttonStyle(.borderedProminent)` has a fill and no `.background` modifier to inspect, so the rule assumed the system background and reported "1.0:1 white on white". The rule now treats `.buttonStyle(…)` other than `.plain` / `.borderless`, `.listRowBackground(…)`, and `.toolbarBackground(…)` — on the view or anything enclosing it — as an *unknown* background and skips, which is the safe direction for a linter. `.plain` still assumes, correctly, since it paints nothing. Required adding those three modifiers to `ModifierCollector.trackedModifiers`; the collector only records an allowlist, so the first attempt at this check silently matched nothing.
+- **Backgrounds on enclosing non-container views are now found.** The ancestor walk consulted only `VStack`-style containers, so `Button { Text("x").foregroundColor(.white) }.background(Color.blue)` could not see the button's own background and fell through to the assumed one. It now considers every enclosing view, turning a bogus `1.0:1` into the real `4.0:1` finding. Siblings are still unreachable, since the walk only follows parent nodes.
 
 ## [a11y-check 0.5.0] - 2026-09-25
 

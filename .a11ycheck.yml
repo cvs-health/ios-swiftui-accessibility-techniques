@@ -1,0 +1,15 @@
+# a11y-check configuration for this repository.
+#
+# See a11y-check/README.md for every available option.
+
+options:
+  # Check text that sets a foreground colour but has no background anywhere up the view
+  # tree against the system background — white in light mode, black in dark.
+  #
+  # Off by default in the tool, because it misfires in apps that draw text over images,
+  # gradients, or backgrounds supplied by a custom ButtonStyle or ViewModifier. It is
+  # enabled here because this repository is made of small self-contained examples with
+  # literal colours, where the assumption holds, and it catches real failures that would
+  # otherwise go unreported — including the deliberate bad examples in ContrastView.swift,
+  # which declare no background at all.
+  assume_default_background: true

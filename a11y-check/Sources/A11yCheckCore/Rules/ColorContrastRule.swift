@@ -88,6 +88,21 @@ public struct ColorContrastRule: A11yRule {
     /// Shown in diagnostics when no background is declared anywhere up the tree.
     private static let systemBackgroundExpression = "assumed system background"
 
+    /// Modifiers that paint a background this rule cannot evaluate.
+    ///
+    /// `Button("Save") {}.buttonStyle(.borderedProminent)` has a filled background and no
+    /// `.background` modifier anywhere, so assuming the system background produced a bogus
+    /// "1.0:1 white on white". When one of these is in scope the background is *unknown*,
+    /// which means skipping — a miss is the safe direction for a linter, a false error is not.
+    private static let stylingBackgroundModifiers: Set<String> = [
+        "buttonStyle", "listRowBackground", "toolbarBackground",
+    ]
+
+    /// Button styles that paint nothing, so they do not hide a background.
+    private static let transparentButtonStyles: Set<String> = [
+        ".plain", ".borderless", "PlainButtonStyle()", "BorderlessButtonStyle()",
+    ]
+
     /// What SwiftUI renders behind unadorned content: white in light mode, black in dark.
     private static let systemBackground = AssetCatalogParser.ThemedColor(
         light: ContrastCalculator.RGBA(r: 1, g: 1, b: 1),
@@ -98,11 +113,15 @@ public struct ColorContrastRule: A11yRule {
         let visitor = ViewHierarchyVisitor.analyze(syntax)
         var diagnostics: [A11yDiagnostic] = []
         let colorConstants = ColorConstantCollector.collect(from: syntax)
-        let assumeDefaultBackground = context.configOptions.assumeDefaultBackground ?? true
+        let assumeDefaultBackground = context.configOptions.assumeDefaultBackground ?? false
 
-        // Build a lookup from callExpr position → DetectedView for all container views (Gap 2)
+        // Lookup from callExpr position → DetectedView for every view, so the ancestor walk
+        // can reach a background on any enclosing view. Restricting this to VStack-style
+        // containers meant `Button { Text(…).foregroundColor(.white) }.background(.blue)`
+        // never found its background and fell through to the assumed one. Siblings are still
+        // unreachable because the walk only follows parent nodes.
         var containerByPosition: [AbsolutePosition: ViewHierarchyVisitor.DetectedView] = [:]
-        for v in visitor.detectedViews where Self.containerViews.contains(v.viewType) {
+        for v in visitor.detectedViews {
             containerByPosition[v.callExpr.positionAfterSkippingLeadingTrivia] = v
         }
 
@@ -128,7 +147,12 @@ public struct ColorContrastRule: A11yRule {
                 containerByPosition: containerByPosition
             ) {
                 (bg, bgIsAncestor) = (ancestorBg, true)
-            } else if assumeDefaultBackground {
+            } else if assumeDefaultBackground,
+                      !hasStyleProvidedBackground(
+                          for: view.callExpr,
+                          ownMods: mods,
+                          containerByPosition: containerByPosition
+                      ) {
                 // No background anywhere up the tree. Assume the system background,
                 // which is what SwiftUI actually renders behind unadorned content.
                 (bg, bgIsAncestor) = (nil, false)
@@ -193,6 +217,43 @@ public struct ColorContrastRule: A11yRule {
         }
 
         return diagnostics
+    }
+
+    /// Whether the view, or anything enclosing it, carries a modifier that paints a
+    /// background this rule cannot read. If so the background is unknown rather than
+    /// absent, and assuming the system background would invent a failure.
+    private func hasStyleProvidedBackground(
+        for callExpr: FunctionCallExprSyntax,
+        ownMods: ModifierCollector,
+        containerByPosition: [AbsolutePosition: ViewHierarchyVisitor.DetectedView]
+    ) -> Bool {
+        if Self.carriesStylingBackground(ownMods) { return true }
+        var node: Syntax? = Syntax(callExpr).parent
+        while let current = node {
+            if let funcCall = current.as(FunctionCallExprSyntax.self),
+               let view = containerByPosition[funcCall.positionAfterSkippingLeadingTrivia] {
+                let chainMods = ModifierCollector.collectChainOnly(
+                    from: view.chainRoot,
+                    callExpr: view.callExpr
+                )
+                if Self.carriesStylingBackground(chainMods) { return true }
+            }
+            node = current.parent
+        }
+        return false
+    }
+
+    private static func carriesStylingBackground(_ mods: ModifierCollector) -> Bool {
+        for name in stylingBackgroundModifiers {
+            for mod in mods.modifiers(named: name) {
+                if name == "buttonStyle",
+                   transparentButtonStyles.contains(mod.arguments.first?.text ?? "") {
+                    continue
+                }
+                return true
+            }
+        }
+        return false
     }
 
     // MARK: - Gap 2: Ancestor container background search

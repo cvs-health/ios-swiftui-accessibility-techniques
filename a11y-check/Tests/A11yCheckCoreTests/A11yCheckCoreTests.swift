@@ -1403,6 +1403,23 @@ final class A11yCheckCoreTests: XCTestCase {
         )
     }
 
+    func testHardcodedColor_pairDetectionResolvesConstants() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
+            var body: some View {
+                Text("3").foregroundColor(.white).background(darkRed)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        XCTAssertEqual(
+            diags.count, 0,
+            "A background held in a constant still forms a self-contained pair"
+        )
+    }
+
     func testHardcodedColor_stillFlagsLoneFixedColors() {
         let source = """
         import SwiftUI

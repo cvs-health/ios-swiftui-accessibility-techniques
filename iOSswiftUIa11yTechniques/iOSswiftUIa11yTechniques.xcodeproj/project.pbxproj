@@ -12,7 +12,6 @@
 		85631A7D74186404AD9BCCD8 /* AccessibilityHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B033E4EAFAF40009797BD1C /* AccessibilityHintView.swift */; };
 		AA0F3EF42AB26D930062E7BC /* LinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0F3EF32AB26D930062E7BC /* LinksView.swift */; };
 		AA13673C302E60A2001D48F4 /* XCTestAccessibilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA13673B302E60A2001D48F4 /* XCTestAccessibilityView.swift */; };
-		AA13677730375B51001D48F4 /* MotionActuationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA13677630375B51001D48F4 /* MotionActuationView.swift */; };
 		AA1AC60C2ABD2C3800AC02DA /* TogglesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1AC60B2ABD2C3800AC02DA /* TogglesView.swift */; };
 		AA59CDC82ABA1F3B0004908F /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59CDC72ABA1F3B0004908F /* TabsView.swift */; };
 		AA59CDCA2ABA1F4E0004908F /* TabsGoodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59CDC92ABA1F4E0004908F /* TabsGoodView.swift */; };
@@ -897,7 +896,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 2630;
+				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					AA7367442AA24F810008F9DC = {
 						CreatedOnToolsVersion = 15.0;
@@ -1125,7 +1124,6 @@
 				BC1A5FA22B6079080008513C /* AttributedStringsView.swift in Sources */,
 				BC8C92092B2A94B2006DAC20 /* ListsView.swift in Sources */,
 				AA9FCA2E2AB4D50400DF93A5 /* AccordionsView.swift in Sources */,
-				AA13677730375B51001D48F4 /* MotionActuationView.swift in Sources */,
 				BCDF3F562D4AE1D000A13D09 /* SignUp2.swift in Sources */,
 				BC8CD0E52B4D06FD00B9A28A /* MagicTapView.swift in Sources */,
 				AA59CDCC2ABA20920004908F /* HomeTabView.swift in Sources */,
@@ -1421,6 +1419,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iOSswiftUIa11yTechniques/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "A11Y Techniques";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1455,6 +1454,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iOSswiftUIa11yTechniques/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "A11Y Techniques";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1493,6 +1493,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = pauljadam.com.iOSswiftUIa11yTechniques;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1528,6 +1529,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = pauljadam.com.iOSswiftUIa11yTechniques;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1554,6 +1556,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pauljadam.a11yTechniques-Watch-AppTests";
@@ -1577,6 +1580,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pauljadam.a11yTechniques-Watch-AppTests";
@@ -1598,6 +1602,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pauljadam.a11yTechniques-Watch-AppUITests";
@@ -1620,6 +1625,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pauljadam.a11yTechniques-Watch-AppUITests";

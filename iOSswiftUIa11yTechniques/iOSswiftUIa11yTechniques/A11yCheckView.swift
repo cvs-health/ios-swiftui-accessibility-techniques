@@ -368,7 +368,11 @@ struct A11yCheckView: View {
                             swipeDeleted = true
                             isDeletedTextFocused = true
                         }
-                        .foregroundColor(.red)
+                        // Crimson rather than .red: the system red is only 3.5:1 against the
+                        // default background, below the 4.5:1 this normal-size text needs.
+                        // Crimson clears 4.5:1 against both the light and dark backgrounds,
+                        // so it needs no colorScheme ternary (WCAG 1.4.3).
+                        .foregroundColor(darkRed)
                     }
                 }
                 DisclosureGroup("Details") {

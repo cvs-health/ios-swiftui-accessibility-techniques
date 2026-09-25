@@ -36,6 +36,7 @@ Rules:
 
 #### Changed
 
+- **`hardcoded-color` no longer flags a self-contained colour pair.** A chain that pins both the foreground and the background — `Image(systemName: "xmark.circle.fill").foregroundColor(.white).background(Color.black)` — renders identically in either appearance, so "may not adapt to Dark Mode" is the wrong complaint; whether the pair is legible is `color-contrast-insufficient`'s job and it checks exactly that case. Found by classifying every finding in this repo as good-example or bad-example: this pattern accounted for most of the rule's hits inside good examples, including three carousel overlays, the documentation close button, and a styled Create Account button. A colour pinned on its own is still reported.
 - **`hardcoded-color` severity now depends on what the colour paints.** A fixed colour on **text** (`.foregroundColor`, `.foregroundStyle`) is reported as a `warning`, because it inverts against the background in the other appearance and is a near-certain Dark Mode defect. Decorative uses such as `.background()` and `.tint()` stay at `info`. Previously the whole rule was `info`, so it could never gate a build. Per-diagnostic severity was already supported via `severityOverride`; `severity_overrides` in `.a11ycheck.yml` still takes precedence.
 
 #### Fixed
@@ -104,6 +105,12 @@ Also in this release
 - **`AppStore.md`** — copy-paste source for the App Store Connect listing fields, holding the app name and a rewritten description. The previous live description had drifted, claiming 76 techniques when the index holds 89, so the file records which numbers are hand-maintained and where their source of truth is. The new description leads with the good-and-bad-example comparison rather than the format, since only the first few lines show before the "more" link; names WCAG 2.2 rather than bare WCAG; and advertises a11y-check, which the listing had never mentioned. Headings use Title Case rather than ALL CAPS, because some screen reader verbosity settings spell short all-caps strings out letter by letter. Release notes are deliberately not duplicated there — they stay in this file under each version's App Store Release Notes heading.
 
 ### iOSswiftUIa11yTechniques
+
+#### Fixed
+
+- **Two real contrast failures inside good examples**, found once the contrast rule could see them. Classifying all 25 `color-contrast-insufficient` findings showed 23 on bad examples and 2 on good ones, both genuine:
+  - **Tabs** (`TabsView.swift`): the unread badge in the good custom-tabs example used white on `Color.red`, which is 3.5:1 — short of the 4.5:1 its small bold text requires. Now uses the crimson the file already defines. The badge being `.accessibilityHidden(true)` does not excuse it: 1.4.3 protects low-vision sighted users, not VoiceOver users, and the count is conveyed visually. The matching bad example keeps `Color.red` deliberately.
+  - **A11y-check** (`A11yCheckView.swift`): the good gesture-alternative example's `Button("Delete")` used `.foregroundColor(.red)`, 3.5:1 against the default background — a good example of WCAG 2.5.1 that failed 1.4.3. Now crimson, which clears 4.5:1 against both the light and dark backgrounds, so no `colorScheme` ternary is needed. Verified with the tool rather than by hand; an initial hand-estimate of crimson-on-black was wrong.
 
 #### Changed
 

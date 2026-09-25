@@ -111,7 +111,10 @@ struct TabsView: View {
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
                                         .frame(width: 16, height: 16)
-                                        .background(Color.red)
+                                        // Crimson rather than Color.red: white on the system
+                                        // red is only 3.5:1, short of the 4.5:1 this small
+                                        // bold badge text needs (WCAG 1.4.3).
+                                        .background(darkRed)
                                         .clipShape(Circle())
                                         .offset(x: 8, y: -4)
                                         .accessibilityHidden(true)

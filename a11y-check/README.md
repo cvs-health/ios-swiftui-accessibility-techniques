@@ -496,6 +496,16 @@ exclude_paths:
 
 Set it to `false` for codebases that draw text over images, gradients, or materials, where the assumption does not hold and would produce false positives. Diagnostics from the assumption always say `assumed system background` so they are easy to identify.
 
+`hardcoded-color` skips a chain that pins **both** the foreground and the background:
+
+```swift
+Image(systemName: "xmark.circle.fill")
+    .foregroundColor(.white)
+    .background(Color.black)   // not flagged — the pair is appearance-independent
+```
+
+White on black renders as white on black in either appearance, so "may not adapt to Dark Mode" does not apply. Whether the pair is legible is `color-contrast-insufficient`'s job, and it checks exactly that case. A colour pinned on its own — a lone `.foregroundColor(.black)` — is still reported.
+
 `exclude_paths` apply to **directory scans and explicit file arguments**. File paths are matched relative to the current working directory (after resolving `.` / `..` and stripping a leading `./`), so `a11y-check --baseline ./Sources/Generated/Auto.swift` honors the same globs as `a11y-check Sources/`.
 
 CLI flags (`--disable`, `--only`) are applied on top of the config file.

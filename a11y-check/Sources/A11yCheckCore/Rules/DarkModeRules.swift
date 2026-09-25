@@ -38,9 +38,41 @@ public struct HardcodedColorRule: A11yRule {
         "Color(.sRGB", "Color(.displayP3", "Color(cgColor:", "UIColor(", "#colorLiteral",
     ]
 
+    /// Positions of colour modifiers that sit in a chain which pins both the foreground and
+    /// the background.
+    ///
+    /// A self-contained pair renders identically in both appearances — white on black is
+    /// white on black whatever the system theme — so "may not adapt to Dark Mode" is the
+    /// wrong complaint. Whether the pair is legible is `color-contrast-insufficient`'s
+    /// business, and it checks exactly this case.
+    private func selfContainedPairPositions(syntax: SourceFileSyntax) -> Set<AbsolutePosition> {
+        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        var positions: Set<AbsolutePosition> = []
+        for view in visitor.detectedViews {
+            let mods = ModifierCollector.collectChainOnly(from: view.chainRoot, callExpr: view.callExpr)
+            let fgMods = Self.foregroundModifiers.flatMap { mods.modifiers(named: $0) }
+            let bgMods = ["background", "backgroundStyle"].flatMap { mods.modifiers(named: $0) }
+            guard !fgMods.isEmpty, !bgMods.isEmpty else { continue }
+            // Both sides must actually be fixed colours for the pair to be self-contained.
+            let pinned = (fgMods + bgMods).filter { Self.isFixedColor($0.arguments.first?.text ?? "") }
+            guard pinned.count == fgMods.count + bgMods.count else { continue }
+            for mod in fgMods + bgMods {
+                positions.insert(mod.reportNode.positionAfterSkippingLeadingTrivia)
+            }
+        }
+        return positions
+    }
+
+    /// Whether an expression names a colour that does not vary with appearance.
+    private static func isFixedColor(_ text: String) -> Bool {
+        if hardcodedColors.contains(text) { return true }
+        return inlineColorPrefixes.contains { text.contains($0) }
+    }
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let collector = ModifierCollector.collect(from: syntax)
         let colorConstants = ColorConstantCollector.collect(from: syntax)
+        let pairedPositions = selfContainedPairPositions(syntax: syntax)
         var diagnostics: [A11yDiagnostic] = []
 
         for modName in Self.colorModifiers {
@@ -52,6 +84,12 @@ public struct HardcodedColorRule: A11yRule {
                 let viaConstant = argText != rawArg
                 let constantNote = viaConstant ? " (via \(rawArg))" : ""
                 let isForeground = Self.foregroundModifiers.contains(modName)
+
+                // Skip chains that pin both foreground and background — the pair is
+                // appearance-independent, so Dark Mode adaptation does not apply.
+                if pairedPositions.contains(mod.reportNode.positionAfterSkippingLeadingTrivia) {
+                    continue
+                }
 
                 // Flag hardcoded .black / .white
                 if Self.hardcodedColors.contains(argText) {

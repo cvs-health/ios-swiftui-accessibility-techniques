@@ -1385,6 +1385,40 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.filter { $0.message.contains("Inline color definition") }.count, 2)
     }
 
+    func testHardcodedColor_skipsSelfContainedForegroundBackgroundPair() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundColor(.white)
+                    .background(Color.black)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        XCTAssertEqual(
+            diags.count, 0,
+            "A chain pinning both colours renders the same in either appearance, so Dark Mode does not apply"
+        )
+    }
+
+    func testHardcodedColor_stillFlagsLoneFixedColors() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("lone").foregroundColor(.black)
+                    Divider().background(.white)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        XCTAssertEqual(diags.count, 2, "Unpaired fixed colours must still be reported")
+    }
+
     func testColorParser_hsbToRGBMatchesKnownValues() {
         // Pure red at full saturation and brightness.
         let red = ColorParser.hsbToRGBA(hue: 0, saturation: 1, brightness: 1, alpha: 1)

@@ -88,6 +88,10 @@ public enum ColorParser {
             return AssetCatalogParser.ThemedColor(light: rgba)
         }
 
+        if let rgba = parseColorHSB(trimmed) {
+            return AssetCatalogParser.ThemedColor(light: rgba)
+        }
+
         if let rgba = parseColorHex(trimmed) {
             return AssetCatalogParser.ThemedColor(light: rgba)
         }
@@ -125,6 +129,58 @@ public enum ColorParser {
 
         guard let rr = r, let gg = g, let bb = b else { return nil }
         return RGBA(r: rr, g: gg, b: bb, a: a)
+    }
+
+    /// Parse `Color(hue: 0.5, saturation: 1, brightness: 0.8)` with optional `opacity:`.
+    /// Converts HSB to sRGB so the contrast calculator can use it.
+    private static func parseColorHSB(_ text: String) -> RGBA? {
+        guard text.hasPrefix("Color(") && text.hasSuffix(")") else { return nil }
+        guard text.contains("hue:") && text.contains("saturation:") && text.contains("brightness:") else {
+            return nil
+        }
+        let inner = String(text.dropFirst(6).dropLast())
+        let parts = inner.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+        var h: Double?, s: Double?, v: Double?
+        var a: Double = 1.0
+        for part in parts {
+            if part.hasPrefix("hue:") {
+                h = Double(part.dropFirst(4).trimmingCharacters(in: .whitespaces))
+            } else if part.hasPrefix("saturation:") {
+                s = Double(part.dropFirst(11).trimmingCharacters(in: .whitespaces))
+            } else if part.hasPrefix("brightness:") {
+                v = Double(part.dropFirst(11).trimmingCharacters(in: .whitespaces))
+            } else if part.hasPrefix("opacity:") {
+                a = Double(part.dropFirst(8).trimmingCharacters(in: .whitespaces)) ?? 1.0
+            }
+        }
+        guard let hue = h, let sat = s, let bright = v else { return nil }
+        return hsbToRGBA(hue: hue, saturation: sat, brightness: bright, alpha: a)
+    }
+
+    /// Standard HSB to sRGB conversion. `hue` is a 0–1 fraction, matching SwiftUI.
+    static func hsbToRGBA(hue: Double, saturation: Double, brightness: Double, alpha: Double) -> RGBA {
+        let s = min(max(saturation, 0), 1)
+        let v = min(max(brightness, 0), 1)
+        guard s > 0 else { return RGBA(r: v, g: v, b: v, a: alpha) }
+
+        // Wrap hue into 0–1 so values like 1.25 behave the way SwiftUI renders them.
+        var h = hue.truncatingRemainder(dividingBy: 1)
+        if h < 0 { h += 1 }
+        let sector = h * 6
+        let i = Int(sector) % 6
+        let f = sector - Double(Int(sector))
+        let p = v * (1 - s)
+        let q = v * (1 - s * f)
+        let t = v * (1 - s * (1 - f))
+
+        switch i {
+        case 0: return RGBA(r: v, g: t, b: p, a: alpha)
+        case 1: return RGBA(r: q, g: v, b: p, a: alpha)
+        case 2: return RGBA(r: p, g: v, b: t, a: alpha)
+        case 3: return RGBA(r: p, g: q, b: v, a: alpha)
+        case 4: return RGBA(r: t, g: p, b: v, a: alpha)
+        default: return RGBA(r: v, g: p, b: q, a: alpha)
+        }
     }
 
     /// Parse `Color(white: 0.5)` with optional `opacity:`

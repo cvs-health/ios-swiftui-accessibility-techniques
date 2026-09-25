@@ -17,10 +17,20 @@ public struct A11yConfig: Sendable {
     public struct ConfigOptions: Sendable {
         public let minTouchTarget: Double?
         public let contrastRatio: Double?
+        /// Whether to assume the system background when a text view declares a foreground
+        /// colour but no background exists anywhere up the view tree. Defaults to `true`.
+        /// Set `false` for views drawn over images, gradients, or materials, where the
+        /// assumption does not hold.
+        public let assumeDefaultBackground: Bool?
 
-        public init(minTouchTarget: Double? = nil, contrastRatio: Double? = nil) {
+        public init(
+            minTouchTarget: Double? = nil,
+            contrastRatio: Double? = nil,
+            assumeDefaultBackground: Bool? = nil
+        ) {
             self.minTouchTarget = minTouchTarget
             self.contrastRatio = contrastRatio
+            self.assumeDefaultBackground = assumeDefaultBackground
         }
     }
 
@@ -100,6 +110,7 @@ public enum ConfigLoader {
         // options
         var minTouchTarget: Double?
         var contrastRatio: Double?
+        var assumeDefaultBackground: Bool?
         if let opts = dict["options"] as? [String: Any] {
             if let v = opts["min_touch_target"] as? Double {
                 minTouchTarget = v
@@ -108,6 +119,9 @@ public enum ConfigLoader {
             }
             if let v = opts["contrast_ratio"] as? Double {
                 contrastRatio = v
+            }
+            if let v = opts["assume_default_background"] as? Bool {
+                assumeDefaultBackground = v
             }
         }
 
@@ -123,7 +137,8 @@ public enum ConfigLoader {
             enabledOnly: enabledOnly,
             options: A11yConfig.ConfigOptions(
                 minTouchTarget: minTouchTarget,
-                contrastRatio: contrastRatio
+                contrastRatio: contrastRatio,
+                assumeDefaultBackground: assumeDefaultBackground
             ),
             excludePaths: excludePaths
         )

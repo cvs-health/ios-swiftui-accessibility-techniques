@@ -1274,7 +1274,128 @@ final class A11yCheckCoreTests: XCTestCase {
         }
         """
         let diags = analyze(source, ruleID: "color-contrast-insufficient")
-        XCTAssertEqual(diags.count, 0, "Should not pair foreground from Text with background from sibling Divider")
+        // The Text has no background of its own, so it is compared against the assumed
+        // system background. What must never happen is pairing it with the sibling
+        // Divider's .background(.green), which would read as green-on-green.
+        XCTAssertFalse(
+            diags.contains { $0.message.contains("background (.green)") },
+            "Should not pair foreground from Text with background from sibling Divider"
+        )
+    }
+
+    // MARK: - Color Gaps: constants, assumed background, HSB, severity
+
+    func testColorContrastRule_resolvesColorHeldInConstant() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            private var faint = Color(red: 0.75, green: 0.75, blue: 0.75)
+            var body: some View {
+                Text("Hi").foregroundColor(faint).background(Color.white)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 1, "A colour stored in a property must still be checked")
+        XCTAssertTrue(diags[0].message.contains("1.8:1"))
+    }
+
+    func testColorContrastRule_assumesSystemBackgroundWhenNoneDeclared() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Hi").foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("assumed system background"))
+    }
+
+    func testColorContrastRule_assumedBackgroundCanBeDisabled() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Hi").foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
+            }
+        }
+        """
+        let syntax = Parser.parse(source: source)
+        let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
+        let context = RuleContext(
+            filePath: "test.swift",
+            sourceText: source,
+            locationConverter: converter,
+            configOptions: A11yConfig.ConfigOptions(assumeDefaultBackground: false)
+        )
+        let rule = ColorContrastRule()
+        XCTAssertEqual(rule.check(syntax: syntax, context: context).count, 0)
+    }
+
+    func testColorContrastRule_parsesHSBColors() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Hi")
+                    .foregroundColor(Color(hue: 0, saturation: 0, brightness: 0.85))
+                    .background(Color(hue: 0, saturation: 0, brightness: 1))
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "color-contrast-insufficient")
+        XCTAssertEqual(diags.count, 1, "HSB colours must resolve for contrast maths")
+    }
+
+    func testHardcodedColor_foregroundIsWarningBackgroundIsInfo() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("a").foregroundColor(.black)
+                    Divider().background(.white)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        let fg = diags.first { $0.message.contains(".foregroundColor()") }
+        let bg = diags.first { $0.message.contains(".background()") }
+        XCTAssertEqual(fg?.severity, .warning, "A fixed text colour is a Dark Mode defect")
+        XCTAssertEqual(bg?.severity, .info)
+    }
+
+    func testHardcodedColor_flagsAdditionalInlineForms() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("a").foregroundColor(Color(white: 0.8))
+                    Text("b").foregroundColor(Color(hue: 0.5, saturation: 1, brightness: 1))
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hardcoded-color")
+        XCTAssertEqual(diags.filter { $0.message.contains("Inline color definition") }.count, 2)
+    }
+
+    func testColorParser_hsbToRGBMatchesKnownValues() {
+        // Pure red at full saturation and brightness.
+        let red = ColorParser.hsbToRGBA(hue: 0, saturation: 1, brightness: 1, alpha: 1)
+        XCTAssertEqual(red.r, 1, accuracy: 0.001)
+        XCTAssertEqual(red.g, 0, accuracy: 0.001)
+        XCTAssertEqual(red.b, 0, accuracy: 0.001)
+        // Zero saturation is a grey of the given brightness.
+        let grey = ColorParser.hsbToRGBA(hue: 0.3, saturation: 0, brightness: 0.5, alpha: 1)
+        XCTAssertEqual(grey.r, 0.5, accuracy: 0.001)
+        XCTAssertEqual(grey.g, 0.5, accuracy: 0.001)
+        XCTAssertEqual(grey.b, 0.5, accuracy: 0.001)
     }
 
     func testColorContrastRule_pairsTextWithAncestorContainerBackground() {

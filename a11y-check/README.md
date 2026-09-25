@@ -475,6 +475,7 @@ enabled_only: []
 options:
   min_touch_target: 44    # override small-touch-target threshold (default 24)
   contrast_ratio: 4.5     # WCAG AA contrast minimum
+  assume_default_background: true   # default true; see below
 
 # Skip paths matching these patterns (directory scans and explicit file args)
 exclude_paths:
@@ -482,6 +483,18 @@ exclude_paths:
   - "*/Pods/*"
   - "*Tests*"
 ```
+
+### Colour and contrast resolution
+
+`color-contrast-insufficient` needs to resolve both colours to compute a ratio. It understands:
+
+- system colours (`.white`, `Color.black`, …), `Color(red:green:blue:)`, `Color(white:)`, `Color(hue:saturation:brightness:)`, and hex
+- asset catalog colours by name, including their dark-mode and Increase Contrast variants, each appearance checked separately
+- **colours held in a file-local `let`/`var`** — `.foregroundColor(darkGreen)` is resolved through the declaration of `darkGreen`, so storing a colour in a property no longer hides it from the check
+
+`assume_default_background: true` (the default) means a text view that sets a foreground colour but has **no background anywhere up the view tree** is compared against the system background — white in light mode, black in dark. This catches the most common real failure, such as `.foregroundColor(.black)` being invisible in Dark Mode.
+
+Set it to `false` for codebases that draw text over images, gradients, or materials, where the assumption does not hold and would produce false positives. Diagnostics from the assumption always say `assumed system background` so they are easy to identify.
 
 `exclude_paths` apply to **directory scans and explicit file arguments**. File paths are matched relative to the current working directory (after resolving `.` / `..` and stripping a leading `./`), so `a11y-check --baseline ./Sources/Generated/Auto.swift` honors the same globs as `a11y-check Sources/`.
 

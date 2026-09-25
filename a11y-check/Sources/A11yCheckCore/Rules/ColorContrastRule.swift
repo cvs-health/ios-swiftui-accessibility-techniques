@@ -85,9 +85,20 @@ public struct ColorContrastRule: A11yRule {
         AppearanceTheme(label: "Dark Mode + Increase Contrast", darkMode: true, contrastMode: true),
     ]
 
+    /// Shown in diagnostics when no background is declared anywhere up the tree.
+    private static let systemBackgroundExpression = "assumed system background"
+
+    /// What SwiftUI renders behind unadorned content: white in light mode, black in dark.
+    private static let systemBackground = AssetCatalogParser.ThemedColor(
+        light: ContrastCalculator.RGBA(r: 1, g: 1, b: 1),
+        dark: ContrastCalculator.RGBA(r: 0, g: 0, b: 0)
+    )
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax)
         var diagnostics: [A11yDiagnostic] = []
+        let colorConstants = ColorConstantCollector.collect(from: syntax)
+        let assumeDefaultBackground = context.configOptions.assumeDefaultBackground ?? true
 
         // Build a lookup from callExpr position → DetectedView for all container views (Gap 2)
         var containerByPosition: [AbsolutePosition: ViewHierarchyVisitor.DetectedView] = [:]
@@ -109,7 +120,7 @@ public struct ColorContrastRule: A11yRule {
 
             // Try same-chain background first; fall back to nearest ancestor container (Gap 2)
             let bgMod = Self.backgroundModifiers.compactMap { mods.modifiers(named: $0).first }.first
-            let (bg, bgIsAncestor): (ModifierCollector.CollectedModifier, Bool)
+            let (bg, bgIsAncestor): (ModifierCollector.CollectedModifier?, Bool)
             if let sameBg = bgMod {
                 (bg, bgIsAncestor) = (sameBg, false)
             } else if let ancestorBg = findAncestorBackground(
@@ -117,15 +128,31 @@ public struct ColorContrastRule: A11yRule {
                 containerByPosition: containerByPosition
             ) {
                 (bg, bgIsAncestor) = (ancestorBg, true)
+            } else if assumeDefaultBackground {
+                // No background anywhere up the tree. Assume the system background,
+                // which is what SwiftUI actually renders behind unadorned content.
+                (bg, bgIsAncestor) = (nil, false)
             } else {
                 continue
             }
 
             let fgText = fg.arguments.first?.text ?? ""
-            let bgText = bg.arguments.first?.text ?? ""
+            let bgText = bg?.arguments.first?.text ?? Self.systemBackgroundExpression
 
-            guard let fgThemed = ColorParser.parseThemed(fgText, assetColors: context.assetColors),
-                  let bgThemed = ColorParser.parseThemed(bgText, assetColors: context.assetColors) else {
+            // See through file-local constants: `.foregroundColor(darkGreen)` carries no
+            // colour on its own, but the declaration of `darkGreen` does.
+            let fgResolved = ColorConstantCollector.resolve(fgText, constants: colorConstants)
+            let bgResolved = ColorConstantCollector.resolve(bgText, constants: colorConstants)
+
+            guard let fgThemed = ColorParser.parseThemed(fgResolved, assetColors: context.assetColors) else {
+                continue
+            }
+            let bgThemed: AssetCatalogParser.ThemedColor
+            if bg == nil {
+                bgThemed = Self.systemBackground
+            } else if let parsed = ColorParser.parseThemed(bgResolved, assetColors: context.assetColors) {
+                bgThemed = parsed
+            } else {
                 continue
             }
 
@@ -146,7 +173,15 @@ public struct ColorContrastRule: A11yRule {
                 let ratio = ContrastCalculator.contrastRatio(fgColor, bgColor)
                 if ratio < requiredRatio {
                     let themeSuffix = theme.label == "Light Mode" ? "" : " in \(theme.label)"
-                    let ancestorNote = bgIsAncestor ? " (background inherited from enclosing container)" : ""
+                    let ancestorNote: String
+                    if bg == nil {
+                        ancestorNote = " No background is declared, so the system background was assumed"
+                            + " — set assume_default_background: false in .a11ycheck.yml to skip these."
+                    } else if bgIsAncestor {
+                        ancestorNote = " (background inherited from enclosing container)"
+                    } else {
+                        ancestorNote = ""
+                    }
                     diagnostics.append(makeDiagnostic(
                         message: "Contrast ratio \(ContrastCalculator.formatRatio(ratio)) between foreground (\(fgText)) and background (\(bgText)) is below the \(ContrastCalculator.formatRatio(requiredRatio)) minimum for \(textSize) text\(themeSuffix) (WCAG 1.4.3).\(ancestorNote)",
                         node: fg.reportNode,

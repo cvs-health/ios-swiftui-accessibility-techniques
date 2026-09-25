@@ -26,18 +26,40 @@ public struct HardcodedColorRule: A11yRule {
     /// Color modifiers to check.
     private static let colorModifiers = ["foregroundColor", "foregroundStyle", "background", "tint"]
 
+    /// Modifiers that set text colour. A fixed colour here is a near-certain Dark Mode
+    /// bug, so these are reported a level above the decorative cases.
+    private static let foregroundModifiers: Set<String> = ["foregroundColor", "foregroundStyle"]
+
+    /// Inline colour construction in any of its forms. `Color(red:` and `Color(uiColor:`
+    /// were the only two recognised previously, so `Color(white:)`, HSB, hex, and
+    /// `#colorLiteral` all passed unnoticed.
+    private static let inlineColorPrefixes = [
+        "Color(red:", "Color(white:", "Color(hue:", "Color(hex", "Color(uiColor:",
+        "Color(.sRGB", "Color(.displayP3", "Color(cgColor:", "UIColor(", "#colorLiteral",
+    ]
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let collector = ModifierCollector.collect(from: syntax)
+        let colorConstants = ColorConstantCollector.collect(from: syntax)
         var diagnostics: [A11yDiagnostic] = []
 
         for modName in Self.colorModifiers {
             for mod in collector.modifiers(named: modName) {
-                let argText = mod.arguments.first?.text ?? ""
+                let rawArg = mod.arguments.first?.text ?? ""
+                // Follow a file-local constant to the colour it holds, so
+                // `.foregroundColor(darkGreen)` is judged on its declaration.
+                let argText = ColorConstantCollector.resolve(rawArg, constants: colorConstants)
+                let viaConstant = argText != rawArg
+                let constantNote = viaConstant ? " (via \(rawArg))" : ""
+                let isForeground = Self.foregroundModifiers.contains(modName)
 
                 // Flag hardcoded .black / .white
                 if Self.hardcodedColors.contains(argText) {
                     var fix: A11yFix? = nil
-                    if let memberAccess = mod.callExpr.calledExpression.as(MemberAccessExprSyntax.self) {
+                    // Only offer the removal fix when the colour is written inline. Deleting
+                    // the modifier would not be equivalent when it reads from a constant.
+                    if !viaConstant,
+                       let memberAccess = mod.callExpr.calledExpression.as(MemberAccessExprSyntax.self) {
                         let offset = syntax.position.utf8Offset
                         let startOffset = memberAccess.period.position.utf8Offset - offset
                         let endOffset = mod.callExpr.endPositionBeforeTrailingTrivia.utf8Offset - offset
@@ -49,18 +71,21 @@ public struct HardcodedColorRule: A11yRule {
                         )
                     }
                     diagnostics.append(makeDiagnostic(
-                        message: "Hardcoded color \(argText) in .\(modName)() may not adapt to Dark Mode. Remove the modifier to use SwiftUI's adaptive default, or use a named Color from your asset catalog.",
+                        message: "Hardcoded color \(argText)\(constantNote) in .\(modName)() may not adapt to Dark Mode. Remove the modifier to use SwiftUI's adaptive default, or use a named Color from your asset catalog.",
                         node: mod.reportNode,
                         context: context,
+                        // A fixed text colour inverts against the background in the other
+                        // appearance, so it is a defect rather than a suggestion.
+                        severityOverride: isForeground ? .warning : nil,
                         fix: fix,
-                        suggestion: "Remove .\(modName)(\(argText)) to use adaptive default colors"
+                        suggestion: "Remove .\(modName)(\(rawArg)) to use adaptive default colors"
                     ))
                 }
 
-                // Flag Color(red:green:blue:) inline definitions
-                if argText.contains("Color(red:") || argText.contains("Color(uiColor:") {
+                // Flag inline colour construction in any recognised form
+                if Self.inlineColorPrefixes.contains(where: { argText.contains($0) }) {
                     diagnostics.append(makeDiagnostic(
-                        message: "Inline color definition in .\(modName)() — consider using a named color from asset catalog with Dark Mode variants to ensure contrast in both modes.",
+                        message: "Inline color definition\(constantNote) in .\(modName)() — consider using a named color from asset catalog with Dark Mode variants to ensure contrast in both modes.",
                         node: mod.reportNode,
                         context: context,
                         suggestion: "Use a named Color from asset catalog with Dark Mode variants"

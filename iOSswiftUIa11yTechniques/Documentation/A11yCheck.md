@@ -1,5 +1,5 @@
 # A11y-check
-`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 44 rules across 24 WCAG 2.2 success criteria, with a 0–100 scoring system.
+`a11y-check` is a static analysis tool that scans SwiftUI source code for accessibility issues. It includes 45 rules across 24 WCAG 2.2 success criteria, with a 0–100 scoring system.
 
 Run `a11y-check .` in your project folder to scan all Swift files for missing labels, incorrect traits, small touch targets, hardcoded colors, and more.
 
@@ -40,6 +40,7 @@ See the full [a11y-check README](../../a11y-check/README.md) for installation, C
 ### Dynamic Type
 - **`fixed-font-size`** (error, WCAG 1.4.4) — text that does not scale with Dynamic Type. Covers three forms: `.font(.system(size: N))`; a custom typeface at a fixed size without a `relativeTo:` text style, `.font(.custom("Name", size: 17))`; and a `UIFont` at a fixed size, which needs `UIFontMetrics` to scale. `.font(.custom("Name", size: 17, relativeTo: .body))`, `UIFont.preferredFont(forTextStyle:)`, and anything already wrapped in `UIFontMetrics` are exempt.
 - **`line-limit-1`** (error, WCAG 1.4.4) — `.lineLimit(1)` truncates text at larger Dynamic Type sizes.
+- **`fixed-height-clips-text`** (warning, WCAG 1.4.4) — a text view pinned to an exact `.frame(height:)` between 28 and 60pt. One line of body text is about 53pt at the largest accessibility size, so a snug box clips. The fix is mechanical: change `height:` to `minHeight:`. Deliberately narrow to avoid false positives — it skips `minHeight`/`maxHeight`, heights under 28pt (badges, page dots, icon frames), heights of 60pt and above, chains with `.minimumScaleFactor`, non-text views, and Buttons whose label renders no prose such as `Button { Rectangle() }` or `Button("⬅️")`. Reported as a warning rather than an error because static analysis cannot tell a short string in an adequate box from one that clips.
 
 ### Page Titles
 - **`missing-navigation-title`** (error, WCAG 2.4.2) — `NavigationStack` or `NavigationView` with no `.navigationTitle()` in its view hierarchy.

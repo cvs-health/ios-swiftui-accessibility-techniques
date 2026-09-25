@@ -81,6 +81,8 @@ public final class ModifierCollector: SyntaxVisitor {
         "buttonStyle",
         "listRowBackground",
         "toolbarBackground",
+        // Shrink-to-fit, which changes what a fixed height means for text.
+        "minimumScaleFactor",
         "background",
         "tint",
         "opacity",

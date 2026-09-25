@@ -28,7 +28,7 @@ Who it's for
 Developers, designers, and QA who need to settle a question quickly, verify a real VoiceOver announcement before shipping, or show a teammate why a pattern fails.
 
 Open source
-The full SwiftUI source is on GitHub, so you can read how each example is built and copy what you need. The project also includes a11y-check, a free static analysis tool that scans your own Swift code for accessibility issues — 44 rules across 24 WCAG 2.2 criteria.
+The full SwiftUI source is on GitHub, so you can read how each example is built and copy what you need. The project also includes a11y-check, a free static analysis tool that scans your own Swift code for accessibility issues — 45 rules across 24 WCAG 2.2 criteria.
 
 https://github.com/cvs-health/ios-swiftui-accessibility-techniques
 
@@ -46,7 +46,7 @@ Two numbers in the description have to be maintained by hand:
 | Claim | Source of truth | Current |
 | --- | --- | --- |
 | techniques | entries in `iOSswiftUIa11yTechniques/iOSswiftUIa11yTechniques/Techniques.swift` | 89 |
-| a11y-check rules | `a11y-check --list-rules` header line | 44 rules |
+| a11y-check rules | `a11y-check --list-rules` header line | 45 rules |
 | WCAG criteria | unique criteria across those rules, see below | 24 criteria |
 
 Both are also quoted in [README.md](README.md), `a11y-check/README.md`, `Documentation/A11yCheck.md`, `SKILL.md`, and `A11yCheckView.swift` — update all of them together. To recount the criteria:

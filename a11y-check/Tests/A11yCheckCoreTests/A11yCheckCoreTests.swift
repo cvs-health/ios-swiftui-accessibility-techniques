@@ -961,7 +961,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 44)
+        XCTAssertEqual(registry.rules.count, 45)
     }
 
     func testDisableRule() {
@@ -1588,6 +1588,51 @@ final class A11yCheckCoreTests: XCTestCase {
         // preferredFont and UIFontMetrics already scale, so only the first two are defects.
         XCTAssertEqual(diags.count, 2)
         XCTAssertTrue(diags.allSatisfy { $0.message.contains("UIFont") })
+    }
+
+    // MARK: - Fixed height clipping text
+
+    func testFixedHeightClipsText_flagsSnugTextBoxes() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("a").frame(height: 30)
+                    Text("b").frame(width: 100, height: 40)
+                    Button(action: {}) { Text("c") }.frame(height: 44)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "fixed-height-clips-text")
+        XCTAssertEqual(diags.count, 3)
+        XCTAssertTrue(diags.allSatisfy { $0.message.contains("minHeight") })
+    }
+
+    func testFixedHeightClipsText_exemptions() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("minHeight grows").frame(minHeight: 30)
+                    Text("maxHeight").frame(maxHeight: 30)
+                    Text("generous").frame(height: 120)
+                    Text("shrinks").frame(height: 30).minimumScaleFactor(0.6)
+                    Text("width only").frame(width: 30)
+                    Text("chrome badge").frame(width: 16, height: 16)
+                    Image(systemName: "star").frame(height: 30)
+                    Rectangle().frame(height: 4)
+                    Button(action: {}) { Rectangle() }.frame(height: 40)
+                    Button("⬅️") {}.frame(height: 40)
+                }
+            }
+        }
+        """
+        // Each of these either grows, shrinks to fit, is too small to be a text box, or
+        // renders no text at all.
+        XCTAssertEqual(analyze(source, ruleID: "fixed-height-clips-text").count, 0)
     }
 
     func testHardcodedColor_nonColourBackdropPinsTheForeground() {

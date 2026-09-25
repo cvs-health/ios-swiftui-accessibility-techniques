@@ -66,6 +66,7 @@ public final class RuleRegistry {
         // Dynamic Type (WCAG 1.4.4)
         register(FixedFontSizeRule())
         register(LineLimit1Rule())
+        register(FixedHeightTextRule())
 
         // Page Titles (WCAG 2.4.2)
         register(MissingNavigationTitleRule())

@@ -47,7 +47,7 @@ struct A11yCheck: ParsableCommand {
           a11y-check . --create-github-issues --github-group-by file
           a11y-check . --create-github-issues --github-repo owner/repo --dry-run
         """,
-        version: "0.6.0 (\(buildCommit) \(buildDate))"
+        version: "0.7.0 (\(buildCommit) \(buildDate))"
     )
 
     @Argument(help: "File or directory paths to analyze.")

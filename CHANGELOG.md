@@ -11,7 +11,7 @@ This repository ships two products on independent release schedules, so they hav
 | Product | Scheme | Released via | Current |
 | --- | --- | --- | --- |
 | iOS app | `26.x` | App Store | **26.7** |
-| `a11y-check` CLI | semver | Homebrew and git tags | **0.6.0** (tag) |
+| `a11y-check` CLI | semver | Homebrew and git tags | **0.7.0** (tag) |
 
 Rules:
 
@@ -33,6 +33,23 @@ iOS app changes made after 26.7 shipped. Not yet in the App Store.
   - **A11y-check** (`A11yCheckView.swift`): the good gesture-alternative example's `Button("Delete")` used `.foregroundColor(.red)`, 3.5:1 against the default background — a good example of WCAG 2.5.1 that failed 1.4.3. Now crimson, which clears 4.5:1 against both the light and dark backgrounds, so no `colorScheme` ternary is needed. Verified with the tool rather than by hand; an initial hand-estimate of crimson-on-black was wrong.
 - **`WebViewDocs.updateUIView` reloading the documentation on every SwiftUI update** (`ContentView.swift`). The method called `webView.load(URLRequest(url: url))` on each update, resetting the page and discarding the web view's back-forward list. `url` is a constant, so the body is now empty. No visual change.
 
+
+## [a11y-check 0.7.0] - 2026-09-25
+
+### a11y-check
+
+#### Added
+
+- **New rule `fixed-height-clips-text`** (`FixedHeightTextRule.swift`, warning, WCAG 1.4.4). Flags a text view pinned to an exact `.frame(height:)` that cannot fit its own text once Dynamic Type grows — one line of body text is roughly 22pt by default and roughly 53pt at the largest accessibility size, so `Text("Total").frame(height: 30)` reads fine as written and clips for anyone using large text. The fix is mechanical, so the rule ships an auto-fix that rewrites `height:` as `minHeight:`. Rule count 44 to 45; WCAG criteria unchanged at 24, since 1.4.4 was already covered.
+
+  The scope was set by measurement rather than guesswork, because the question asked was whether this could be done without false positives. A first cut reported **ten findings on this repository, six of them on good examples** — notification badges, carousel page dots, and emoji arrow buttons. Two tightenings followed:
+
+  - **A floor of 28pt.** Below that the view is chrome, not a text box: a badge or a page dot holds at most a digit or a glyph, and one line of text does not fit in 24pt at any size. A small height says "decoration", not "text container that forgot to grow".
+  - **A Button must actually render prose.** `Button { Rectangle() }` is a page indicator and grows with nothing; `Button("⬅️")` is a glyph used as an icon. Only a `Text` in the label or a title containing a letter or digit counts.
+
+  Together those took the repository from ten findings to **zero**, while a synthetic probe confirms the real pattern is still caught at 30, 40, and 44pt. It also skips `minHeight`/`maxHeight`, `.infinity`, heights of 60pt and above, chains with `.minimumScaleFactor`, and non-text views. Warning rather than error, because static analysis cannot distinguish a short string in an adequate box from one that clips.
+
+  Adding `minimumScaleFactor` to `ModifierCollector.trackedModifiers` was required for the exemption to work — the same allowlist trap that made the `buttonStyle` check silently match nothing in 0.5.1, caught this time by testing the exemption rather than assuming it.
 
 ## [a11y-check 0.6.0] - 2026-09-25
 

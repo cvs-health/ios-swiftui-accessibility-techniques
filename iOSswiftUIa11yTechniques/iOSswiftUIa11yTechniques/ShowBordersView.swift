@@ -16,46 +16,6 @@
 
 import SwiftUI
 
-/// A custom button style with no border by default. The fill is the affordance,
-/// so the button is never identified by color alone. When the user turns on Show
-/// Borders, the style draws its own border instead of leaving iOS to inject one.
-///
-/// The environment is read inside a nested `View` rather than on the style itself,
-/// because a `ButtonStyle` is not a `View` and does not reliably receive
-/// environment updates.
-struct ShowBordersButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        StyleBody(configuration: configuration)
-    }
-
-    private struct StyleBody: View {
-        let configuration: ButtonStyleConfiguration
-
-        @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
-        @Environment(\.colorScheme) private var colorScheme
-
-        var body: some View {
-            configuration.label
-                .fontWeight(.semibold)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .frame(minHeight: 44)
-                .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
-                .background(colorScheme == .dark ? Color.white : Color.black)
-                .cornerRadius(8)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .inset(by: 4)
-                        .stroke(
-                            showButtonShapes ? (colorScheme == .dark ? Color.black : Color.white) : Color.clear,
-                            lineWidth: 2
-                        )
-                )
-                .opacity(configuration.isPressed ? 0.7 : 1.0)
-        }
-    }
-}
-
 struct ShowBordersView: View {
 
     @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
@@ -65,14 +25,18 @@ struct ShowBordersView: View {
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
 
+    /// A standard filled iOS button fill, darkened from the system blue so white
+    /// label text clears the 4.5:1 minimum rather than sitting at 4.0:1.
+    private let buttonBlue = Color(red: 0.0, green: 0.337, blue: 0.702)
+
     var body: some View {
         ScrollView {
             VStack {
-                Text("Show Borders adds a system-drawn shape to controls iOS recognizes as buttons. When a button has no visible affordance of its own, that injected shape is the only thing the user gets, and it often reads as an oversized low-contrast grey block that fights your design. Give every button its own visible shape with sufficient contrast so the system has nothing left to add. Use `@Environment(\\.accessibilityShowButtonShapes)` to check if the user has enabled Show Borders and then strengthen your own affordance rather than suppressing the system shape, which some users rely on.")
+                Text("Show Borders adds a system-drawn shape to controls iOS recognizes as buttons. A plain filled iOS button has no border of its own, so give it one yourself when the user turns the setting on, and leave the button room to grow when you do. Use `@Environment(\\.accessibilityShowButtonShapes)` to check if the user has enabled Show Borders and then draw your own border rather than suppressing the system shape, which some users rely on.")
                     .padding(.bottom)
                 Text("This setting was labelled **Button Shapes** in iOS 26.0 and earlier and was renamed to **Show Borders** by iOS 26.3. The underlying preference and the SwiftUI and UIKit APIs still use the original button shapes naming.")
                     .padding(.bottom)
-                Text("Show Borders is currently **\(showButtonShapes ? "On" : "Off")**.")
+                Text("Show Borders is currently **\(showButtonShapes ? "On" : "Off")**. Both buttons below are identical while it is off. Turn it on and the good button gains a border, while the bad button truncates its label.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom)
                 Text("Good Example")
@@ -88,19 +52,23 @@ struct ShowBordersView: View {
                 Button(action: {
                 }) {
                     Text("Add to Cart")
+                        .fontWeight(.semibold)
+                        .padding(.horizontal, showButtonShapes ? 36 : 16)
+                        .padding(.vertical, 12)
+                        .frame(minWidth: 150, minHeight: 44)
+                        .foregroundColor(Color.white)
+                        .background(buttonBlue)
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .inset(by: 4)
+                                .stroke(showButtonShapes ? Color.white : Color.clear, lineWidth: 2)
+                        )
                 }
-                .buttonStyle(ShowBordersButtonStyle())
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom)
-                Button(action: {
-                }) {
-                    Text("View Details")
-                }
-                .buttonStyle(ShowBordersButtonStyle())
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The good show borders example uses a custom `ButtonStyle` with no border at all by default. The solid fill is the affordance, so the button is never identified by color alone and iOS has no missing affordance to compensate for. When Show Borders is enabled the style draws its own inset border, which is why no underline is needed. Because the button sizes itself from its label and uses `minHeight` rather than a fixed frame, the border has room to appear without changing the button's footprint or clipping the label.")
+                    Text("The good show borders example is a plain filled iOS button with no border of its own. The fill is the affordance, so the button is never identified by color alone and needs no underline. When Show Borders is enabled it draws its own inset border and widens its padding to make room for it. Because it is sized with `.frame(minWidth: 150, minHeight: 44)`, the button simply grows to fit, so the border appears without ever clipping the label.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -115,37 +83,24 @@ struct ShowBordersView: View {
                 Button(action: {
                 }) {
                     Text("Add to Cart")
+                        .fontWeight(.semibold)
                         .lineLimit(1)
-                        .padding(.horizontal, showButtonShapes ? 20 : 0)
-                        .frame(width: 120, height: 36)
+                        .padding(.horizontal, showButtonShapes ? 36 : 16)
+                        .padding(.vertical, 12)
+                        .frame(width: 150, height: 44)
                         .foregroundColor(Color.white)
-                        .background(Color(red: 0.0, green: 0.2, blue: 0.6))
-                        .cornerRadius(8)
+                        .background(buttonBlue)
+                        .cornerRadius(10)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
+                                .inset(by: 4)
                                 .stroke(showButtonShapes ? Color.white : Color.clear, lineWidth: 2)
                         )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
-                Button(action: {
-                }) {
-                    Text("View Details")
-                        .lineLimit(1)
-                        .padding(.horizontal, showButtonShapes ? 20 : 0)
-                        .frame(width: 120, height: 36)
-                        .foregroundColor(Color(red: 0.557, green: 0.557, blue: 0.576))
-                        .background(Color(red: 0.898, green: 0.898, blue: 0.918))
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(showButtonShapes ? Color(red: 0.557, green: 0.557, blue: 0.576) : Color.clear, lineWidth: 2)
-                        )
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The bad show borders example hardcodes `.frame(width: 120, height: 36)` with `.lineLimit(1)`, so the button cannot grow. It reserves horizontal room for its border only once Show Borders is enabled, and because the width is fixed that room has to come out of the label: \"Add to Cart\" and \"View Details\" both truncate to an ellipsis the moment the setting is turned on. Turning on an accessibility setting should never cost the user the button's name. \"View Details\" also uses grey text on a pale grey fill, which fails contrast and gives the fill too little contrast against the page to work as an affordance on its own.")
+                    Text("The bad show borders example is styled identically to the good one and differs in two modifiers: it uses a hardcoded `.frame(width: 150, height: 44)` instead of `minWidth` and `minHeight`, and it adds `.lineLimit(1)`. The button therefore cannot grow, so the room its border needs is taken out of the label and \"Add to Cart\" truncates to \"Add to...\" the moment Show Borders is turned on. Turning on an accessibility setting should never cost the user the button's name.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
                 VStack(alignment: .leading) {
                     Text("Enabling Show Borders").font(.subheadline).accessibilityAddTraits(.isHeader).bold()

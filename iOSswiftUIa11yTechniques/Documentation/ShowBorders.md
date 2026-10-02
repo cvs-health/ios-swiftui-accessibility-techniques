@@ -7,15 +7,18 @@ When a button has no visible affordance of its own, that injected shape is the o
 
 Give every button its own visible shape with sufficient contrast so the system has nothing left to add. Do not suppress the system shape outright — it is an accommodation some users depend on, and removing it without substituting your own affordance reintroduces the problem it exists to solve.
 
-- Use `@Environment(\.accessibilityShowButtonShapes)` to check if the user has enabled Show Borders and then strengthen your own border or underline. Keep padding fixed in both states so enabling the setting never shifts the layout.
-- Never identify a button by color alone. A border, a fill, or an underline that is always present keeps the button distinguishable whether or not the setting is on.
-- Any border or underline carrying the affordance needs at least 3:1 contrast against the adjacent background.
+- Use `@Environment(\.accessibilityShowButtonShapes)` to check if the user has enabled Show Borders and then draw your own border. A custom `ButtonStyle` is the cleanest place to do it, because every button adopting the style responds consistently.
+- Read the environment inside a nested `View` in `makeBody`, not on the `ButtonStyle` itself. A `ButtonStyle` is not a `View` and does not reliably receive environment updates.
+- Never identify a button by color alone. A fill, a border, or an underline that is always present keeps the button distinguishable whether or not the setting is on. A solid fill is enough on its own — a button with a fill does not also need an underline.
+- Any fill, border, or underline carrying the affordance needs at least 3:1 contrast against the adjacent background. A pale grey fill on a white page is around 1.3:1 and does not qualify.
+- **Let the button size itself from its label.** A hardcoded `.frame(width:height:)` combined with `.lineLimit(1)` leaves the border nowhere to go, so the room it needs is taken out of the label and the text truncates to an ellipsis the moment the user enables Show Borders. Use `minHeight` and intrinsic width so the border can appear without clipping the name. Turning on an accessibility setting should never cost the user the button's label.
 - `accessibilityShowButtonShapes` is a read-only environment key, so the enabled state cannot be pinned with `.environment()` in a SwiftUI `Preview`. Toggle the setting in iOS Settings to test both states.
 - In UIKit, read `UIAccessibility.buttonShapesEnabled` and observe `UIAccessibility.buttonShapesEnabledStatusDidChangeNotification`. With `UIButton.Configuration`, assign an explicit `background` inside `configurationUpdateHandler` so the resolver does not supply a grey fill of its own.
 
 ## Applicable WCAG Success Criteria
 - [1.4.1 Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color)
 - [1.4.3 Contrast (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum)
+- [1.4.4 Resize Text](https://www.w3.org/WAI/WCAG22/Understanding/resize-text)
 - [1.4.11 Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast)
 
 

@@ -16,6 +16,46 @@
 
 import SwiftUI
 
+/// A custom button style with no border by default. The fill is the affordance,
+/// so the button is never identified by color alone. When the user turns on Show
+/// Borders, the style draws its own border instead of leaving iOS to inject one.
+///
+/// The environment is read inside a nested `View` rather than on the style itself,
+/// because a `ButtonStyle` is not a `View` and does not reliably receive
+/// environment updates.
+struct ShowBordersButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        StyleBody(configuration: configuration)
+    }
+
+    private struct StyleBody: View {
+        let configuration: ButtonStyleConfiguration
+
+        @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
+        @Environment(\.colorScheme) private var colorScheme
+
+        var body: some View {
+            configuration.label
+                .fontWeight(.semibold)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .frame(minHeight: 44)
+                .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
+                .background(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .inset(by: 4)
+                        .stroke(
+                            showButtonShapes ? (colorScheme == .dark ? Color.black : Color.white) : Color.clear,
+                            lineWidth: 2
+                        )
+                )
+                .opacity(configuration.isPressed ? 0.7 : 1.0)
+        }
+    }
+}
+
 struct ShowBordersView: View {
 
     @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
@@ -48,38 +88,19 @@ struct ShowBordersView: View {
                 Button(action: {
                 }) {
                     Text("Add to Cart")
-                        .fontWeight(.semibold)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .frame(minHeight: 44)
-                        .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
-                        .background(colorScheme == .dark ? Color.white : Color.black)
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: showButtonShapes ? 3 : 1)
-                        )
                 }
+                .buttonStyle(ShowBordersButtonStyle())
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 Button(action: {
                 }) {
                     Text("View Details")
-                        .underline()
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .frame(minHeight: 44)
-                        .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                        .background(colorScheme == .dark ? Color.black : Color.white)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(showButtonShapes ? (colorScheme == .dark ? Color.white : Color.black) : Color.clear, lineWidth: 2)
-                        )
                 }
+                .buttonStyle(ShowBordersButtonStyle())
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The good show borders example gives each button an affordance the app owns. \"Add to Cart\" always has a solid background and a border, and \"View Details\" always has an underline, so neither button is identified by color alone and iOS has no missing affordance to compensate for. Both read `@Environment(\\.accessibilityShowButtonShapes)` and thicken their own border when the setting is on, so the button grows by a hairline instead of gaining a grey block. Padding is fixed in both states, so enabling Show Borders never changes the layout.")
+                    Text("The good show borders example uses a custom `ButtonStyle` with no border at all by default. The solid fill is the affordance, so the button is never identified by color alone and iOS has no missing affordance to compensate for. When Show Borders is enabled the style draws its own inset border, which is why no underline is needed. Because the button sizes itself from its label and uses `minHeight` rather than a fixed frame, the border has room to appear without changing the button's footprint or clipping the label.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -94,23 +115,37 @@ struct ShowBordersView: View {
                 Button(action: {
                 }) {
                     Text("Add to Cart")
-                        .foregroundColor(Color(red: 0.0, green: 0.478, blue: 1.0))
+                        .lineLimit(1)
+                        .padding(.horizontal, showButtonShapes ? 20 : 0)
+                        .frame(width: 120, height: 36)
+                        .foregroundColor(Color.white)
+                        .background(Color(red: 0.0, green: 0.2, blue: 0.6))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(showButtonShapes ? Color.white : Color.clear, lineWidth: 2)
+                        )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 Button(action: {
                 }) {
                     Text("View Details")
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 18)
+                        .lineLimit(1)
+                        .padding(.horizontal, showButtonShapes ? 20 : 0)
+                        .frame(width: 120, height: 36)
                         .foregroundColor(Color(red: 0.557, green: 0.557, blue: 0.576))
                         .background(Color(red: 0.898, green: 0.898, blue: 0.918))
-                        .cornerRadius(10)
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(showButtonShapes ? Color(red: 0.557, green: 0.557, blue: 0.576) : Color.clear, lineWidth: 2)
+                        )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The bad show borders example owns no affordance. \"Add to Cart\" is plain text tinted blue, so it is identified by color alone and is indistinguishable from body text when Show Borders is off. \"View Details\" hardcodes heavy padding with grey text on a pale grey fill, which is the oversized low-contrast grey block users complain about, and it collides with the shape iOS draws on top. Neither button checks `@Environment(\\.accessibilityShowButtonShapes)`, so both leave the affordance entirely up to the system.")
+                    Text("The bad show borders example hardcodes `.frame(width: 120, height: 36)` with `.lineLimit(1)`, so the button cannot grow. It reserves horizontal room for its border only once Show Borders is enabled, and because the width is fixed that room has to come out of the label: \"Add to Cart\" and \"View Details\" both truncate to an ellipsis the moment the setting is turned on. Turning on an accessibility setting should never cost the user the button's name. \"View Details\" also uses grey text on a pale grey fill, which fails contrast and gives the fill too little contrast against the page to work as an affordance on its own.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
                 VStack(alignment: .leading) {
                     Text("Enabling Show Borders").font(.subheadline).accessibilityAddTraits(.isHeader).bold()

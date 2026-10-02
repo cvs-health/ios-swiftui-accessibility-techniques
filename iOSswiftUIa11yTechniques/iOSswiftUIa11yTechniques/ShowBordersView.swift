@@ -37,9 +37,7 @@ struct ShowBordersView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("A basic `Button` with a text label is plain tinted text, so only its color says it is tappable. Use `@Environment(\\.accessibilityShowButtonShapes)` to draw your own border when the user enables Show Borders, and avoid a fixed width so the border never clips the label.")
-                    .padding(.bottom)
-                Text("Labelled **Button Shapes** in iOS 26.0 and earlier, renamed to **Show Borders** by iOS 26.3. The APIs still use the original naming.")
+                Text("Use `@Environment(\\.accessibilityShowButtonShapes)` to draw your own border on a custom button when the user enables Show Borders. Avoid fixed width button containers so the text does not truncate when Show Borders is enabled.")
                     .padding(.bottom)
                 Text("Show Borders is currently **\(showButtonShapes ? "On" : "Off")**. Both buttons are identical until you turn it on.")
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -68,7 +66,7 @@ struct ShowBordersView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The good show borders example uses `.frame(minHeight: 44)` with no fixed width, so it strokes a border and grows to fit when Show Borders is on. While the setting is off it is still color-only, which WCAG 1.4.1 cautions against, so a critical action wants a permanent border or fill.")
+                    Text("The good example uses `.frame(minHeight: 44)` with no fixed width, so it strokes a border and grows to fit when Show Borders is on.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -90,7 +88,7 @@ struct ShowBordersView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The bad show borders example pins a hardcoded `.frame(width:height:)` with `.lineLimit(1)`, reserving room for a border it never draws. The width cannot give, so \"Add to Cart\" truncates to \"Add to...\" — the label is lost and nothing is gained. The frame is `@ScaledMetric`, so this fails on Show Borders alone, not Dynamic Type.")
+                    Text("The bad example uses a hardcoded `.frame(width:height:)` with `.lineLimit(1)`. The width is fixed, so \"Add to Cart\" truncates to \"Add to...\". The frame is `@ScaledMetric`, so this fails on Show Borders alone, not Dynamic Type.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
                 VStack(alignment: .leading) {
                     Text("Enabling Show Borders").font(.subheadline).accessibilityAddTraits(.isHeader).bold()

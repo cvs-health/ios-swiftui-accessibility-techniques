@@ -6,7 +6,7 @@ The setting is at **Settings > Accessibility > Display & Text Size**. It was lab
 - Use `@Environment(\.accessibilityShowButtonShapes)` to check if the user has enabled Show Borders and then draw your own border.
 - Avoid a fixed width or height on the button. A hardcoded `.frame(width:height:)` with `.lineLimit(1)` leaves no room for the border, so the label truncates when the setting is enabled. Use `minWidth` and `minHeight` so the button grows to fit.
 - Scale any fixed dimensions with `@ScaledMetric` so the label still fits at larger Dynamic Type sizes.
-- Give the border at least 3:1 contrast against the background behind it to meet WCAG 1.4.11. `Color.accentColor` on the default background meets this.
+- The border does not have to meet 3:1 for WCAG 1.4.11. That criterion covers visual information required to identify a component, and where a control has visible content such as text, a border indicating the boundary of the hit area is not required. The label already identifies the button. Make the border clearly visible regardless, since the user enabled the setting in order to see it.
 - Tinted label text alone does not fail WCAG 1.4.1. The criterion applies where color is the only visual means of conveying something, and a standalone button is also distinguished by its position and its label. The relevant failure is F73, a control placed inline in a block of text that is not visually evident without color vision; add a permanent underline, fill, or border in that case.
 - Label text needs 4.5:1 against its background for WCAG 1.4.3 whether or not the setting is on. iOS `systemBlue` measures 4.0:1 on white and does not meet it. This project's `AccentColor` is a deeper blue that does.
 - Do not remove the system border without drawing your own. Users who enable Show Borders depend on it.
@@ -18,7 +18,6 @@ The setting is at **Settings > Accessibility > Display & Text Size**. It was lab
 - [1.4.1 Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color)
 - [1.4.3 Contrast (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum)
 - [1.4.4 Resize Text](https://www.w3.org/WAI/WCAG22/Understanding/resize-text)
-- [1.4.11 Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast)
 
 
 ## Apple Developer Documentation

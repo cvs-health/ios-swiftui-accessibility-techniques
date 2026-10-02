@@ -7,7 +7,8 @@ The setting is at **Settings > Accessibility > Display & Text Size**. It was lab
 - Avoid a fixed width or height on the button. A hardcoded `.frame(width:height:)` with `.lineLimit(1)` leaves no room for the border, so the label truncates when the setting is enabled. Use `minWidth` and `minHeight` so the button grows to fit.
 - Scale any fixed dimensions with `@ScaledMetric` so the label still fits at larger Dynamic Type sizes.
 - Give the border at least 3:1 contrast against the background behind it to meet WCAG 1.4.11. `Color.accentColor` on the default background meets this.
-- A text-only button is identified by color alone while the setting is off, which fails WCAG 1.4.1. Use a fill, border, or underline that is always present for buttons that must be identifiable without the setting.
+- Tinted label text alone does not fail WCAG 1.4.1. The criterion applies where color is the only visual means of conveying something, and a standalone button is also distinguished by its position and its label. The relevant failure is F73, a control placed inline in a block of text that is not visually evident without color vision; add a permanent underline, fill, or border in that case.
+- Label text needs 4.5:1 against its background for WCAG 1.4.3 whether or not the setting is on. iOS `systemBlue` measures 4.0:1 on white and does not meet it. This project's `AccentColor` is a deeper blue that does.
 - Do not remove the system border without drawing your own. Users who enable Show Borders depend on it.
 - `accessibilityShowButtonShapes` is read-only, so the enabled state cannot be set with `.environment()` in a `Preview`. Toggle the setting in iOS Settings to test both states.
 - In a custom `ButtonStyle`, read the environment inside a nested `View` in `makeBody`. A `ButtonStyle` is not a `View` and does not receive environment updates reliably.

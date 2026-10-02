@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct ButtonShapesView: View {
+struct ShowBordersView: View {
 
     @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
 
@@ -28,9 +28,11 @@ struct ButtonShapesView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Button Shapes adds a system-drawn shape to controls iOS recognizes as buttons. When a button has no visible affordance of its own, that injected shape is the only thing the user gets, and it often reads as an oversized low-contrast grey block that fights your design. Give every button its own visible shape with sufficient contrast so the system has nothing left to add. Use `@Environment(\\.accessibilityShowButtonShapes)` to check if the user has enabled Button Shapes and then strengthen your own affordance rather than suppressing the system shape, which some users rely on.")
+                Text("Show Borders adds a system-drawn shape to controls iOS recognizes as buttons. When a button has no visible affordance of its own, that injected shape is the only thing the user gets, and it often reads as an oversized low-contrast grey block that fights your design. Give every button its own visible shape with sufficient contrast so the system has nothing left to add. Use `@Environment(\\.accessibilityShowButtonShapes)` to check if the user has enabled Show Borders and then strengthen your own affordance rather than suppressing the system shape, which some users rely on.")
                     .padding(.bottom)
-                Text("Button Shapes is currently **\(showButtonShapes ? "On" : "Off")**.")
+                Text("This setting was labelled **Button Shapes** in iOS 26.0 and earlier and was renamed to **Show Borders** by iOS 26.3. The underlying preference and the SwiftUI and UIKit APIs still use the original button shapes naming.")
+                    .padding(.bottom)
+                Text("Show Borders is currently **\(showButtonShapes ? "On" : "Off")**.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom)
                 Text("Good Example")
@@ -77,7 +79,7 @@ struct ButtonShapesView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The good button shapes example gives each button an affordance the app owns. \"Add to Cart\" always has a solid background and a border, and \"View Details\" always has an underline, so neither button is identified by color alone and iOS has no missing affordance to compensate for. Both read `@Environment(\\.accessibilityShowButtonShapes)` and thicken their own border when the setting is on, so the button grows by a hairline instead of gaining a grey block. Padding is fixed in both states, so enabling Button Shapes never changes the layout.")
+                    Text("The good show borders example gives each button an affordance the app owns. \"Add to Cart\" always has a solid background and a border, and \"View Details\" always has an underline, so neither button is identified by color alone and iOS has no missing affordance to compensate for. Both read `@Environment(\\.accessibilityShowButtonShapes)` and thicken their own border when the setting is on, so the button grows by a hairline instead of gaining a grey block. Padding is fixed in both states, so enabling Show Borders never changes the layout.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -108,19 +110,19 @@ struct ButtonShapesView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The bad button shapes example owns no affordance. \"Add to Cart\" is plain text tinted blue, so it is identified by color alone and is indistinguishable from body text when Button Shapes is off. \"View Details\" hardcodes heavy padding with grey text on a pale grey fill, which is the oversized low-contrast grey block users complain about, and it collides with the shape iOS draws on top. Neither button checks `@Environment(\\.accessibilityShowButtonShapes)`, so both leave the affordance entirely up to the system.")
+                    Text("The bad show borders example owns no affordance. \"Add to Cart\" is plain text tinted blue, so it is identified by color alone and is indistinguishable from body text when Show Borders is off. \"View Details\" hardcodes heavy padding with grey text on a pale grey fill, which is the oversized low-contrast grey block users complain about, and it collides with the shape iOS draws on top. Neither button checks `@Environment(\\.accessibilityShowButtonShapes)`, so both leave the affordance entirely up to the system.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
                 VStack(alignment: .leading) {
-                    Text("Enabling Button Shapes").font(.subheadline).accessibilityAddTraits(.isHeader).bold()
+                    Text("Enabling Show Borders").font(.subheadline).accessibilityAddTraits(.isHeader).bold()
                     Text("1. Open iOS Settings")
                     Button(action: { self.openSettings() }) {
                        Text("Open Settings")
                     }.padding(.leading)
                     Text("2. Go to **Accessibility > Display & Text Size** from the Settings home page.")
-                    Text("3. Enable **Button Shapes**.")
+                    Text("3. Enable **Show Borders**, labelled **Button Shapes** in iOS 26.0 and earlier.")
                 }
             }
-            .navigationTitle("Button Shapes")
+            .navigationTitle("Show Borders")
             .padding()
         }
 
@@ -136,9 +138,9 @@ struct ButtonShapesView: View {
 }
 
 // `accessibilityShowButtonShapes` is a read-only environment key, so the enabled
-// state cannot be pinned in a Preview. Toggle Button Shapes in Settings to see it.
+// state cannot be pinned in a Preview. Toggle Show Borders in Settings to see it.
 #Preview {
     NavigationStack {
-        ButtonShapesView()
+        ShowBordersView()
     }
 }

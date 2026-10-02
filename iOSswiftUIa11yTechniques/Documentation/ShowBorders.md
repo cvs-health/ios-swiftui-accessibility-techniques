@@ -1,11 +1,13 @@
-# Button Shapes
-Button Shapes adds a system-drawn shape to controls iOS recognizes as buttons, so users who cannot infer interactivity from color or position can still tell what is tappable.
+# Show Borders
+Show Borders adds a system-drawn shape to controls iOS recognizes as buttons, so users who cannot infer interactivity from color or position can still tell what is tappable.
+
+This setting is found at **Settings > Accessibility > Display & Text Size**. It was labelled **Button Shapes** in iOS 26.0 and earlier and was renamed to **Show Borders** by iOS 26.3. Only the label changed: the preference key is still `BUTTON_SHAPES`, and the SwiftUI and UIKit APIs still use the original button shapes naming.
 
 When a button has no visible affordance of its own, that injected shape is the only thing the user gets, and it often reads as an oversized low-contrast grey block that fights the app's design.
 
 Give every button its own visible shape with sufficient contrast so the system has nothing left to add. Do not suppress the system shape outright — it is an accommodation some users depend on, and removing it without substituting your own affordance reintroduces the problem it exists to solve.
 
-- Use `@Environment(\.accessibilityShowButtonShapes)` to check if the user has enabled Button Shapes and then strengthen your own border or underline. Keep padding fixed in both states so enabling the setting never shifts the layout.
+- Use `@Environment(\.accessibilityShowButtonShapes)` to check if the user has enabled Show Borders and then strengthen your own border or underline. Keep padding fixed in both states so enabling the setting never shifts the layout.
 - Never identify a button by color alone. A border, a fill, or an underline that is always present keeps the button distinguishable whether or not the setting is on.
 - Any border or underline carrying the affordance needs at least 3:1 contrast against the adjacent background.
 - `accessibilityShowButtonShapes` is a read-only environment key, so the enabled state cannot be pinned with `.environment()` in a SwiftUI `Preview`. Toggle the setting in iOS Settings to test both states.
@@ -23,7 +25,7 @@ Give every button its own visible shape with sufficient contrast so the system h
 - [UIAccessibility/buttonShapesEnabledStatusDidChangeNotification](https://developer.apple.com/documentation/uikit/uiaccessibility/buttonshapesenabledstatusdidchangenotification)
 
 ## Swift Technique Source Code
-[ButtonShapesView.swift](../iOSswiftUIa11yTechniques/ButtonShapesView.swift)
+[ShowBordersView.swift](../iOSswiftUIa11yTechniques/ShowBordersView.swift)
 
 ----
 

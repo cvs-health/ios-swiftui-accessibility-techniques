@@ -101,7 +101,6 @@ See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, an
 - [Attributed Strings](iOSswiftUIa11yTechniques/Documentation/AttributedStrings.md)
 
 ### B
-- [Button Shapes](iOSswiftUIa11yTechniques/Documentation/ButtonShapes.md)
 - [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
 
 ### C
@@ -181,6 +180,7 @@ See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, an
 - [Search Suggestions](iOSswiftUIa11yTechniques/Documentation/SearchSuggestions.md)
 - [Segmented Controls](iOSswiftUIa11yTechniques/Documentation/SegmentedControls.md)
 - [Sheets](iOSswiftUIa11yTechniques/Documentation/Sheets.md)
+- [Show Borders](iOSswiftUIa11yTechniques/Documentation/ShowBorders.md)
 - [Sliders](iOSswiftUIa11yTechniques/Documentation/Sliders.md)
 - [Smart Invert](iOSswiftUIa11yTechniques/Documentation/SmartInvert.md)
 - [Steppers](iOSswiftUIa11yTechniques/Documentation/Steppers.md)

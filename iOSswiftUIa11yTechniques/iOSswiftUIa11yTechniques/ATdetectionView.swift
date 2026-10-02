@@ -1,5 +1,5 @@
 /*
-   Copyright 2023 CVS Health and/or one of its affiliates
+   Copyright 2023-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -106,7 +106,7 @@ struct A11ySettingsDetail: View {
                 SettingRow(title: "On/Off Switch Labels", isEnabled: UIAccessibility.isOnOffSwitchLabelsEnabled)
                 SettingRow(title: "Assistive Touch", isEnabled: UIAccessibility.isAssistiveTouchRunning)
                 SettingRow(title: "Video Autoplay", isEnabled: UIAccessibility.isVideoAutoplayEnabled)
-                SettingRow(title: "Button Shapes", isEnabled: UIAccessibility.buttonShapesEnabled)
+                SettingRow(title: "Show Borders", isEnabled: UIAccessibility.buttonShapesEnabled)
                 SettingRow(title: "Prefers Cross Fade Transitions", isEnabled: UIAccessibility.prefersCrossFadeTransitions)
                 SettingRow(title: "Differentiate Without Color", isEnabled: UIAccessibility.shouldDifferentiateWithoutColor)
                 SettingRow(title: "Grayscale Enabled", isEnabled: UIAccessibility.isGrayscaleEnabled)

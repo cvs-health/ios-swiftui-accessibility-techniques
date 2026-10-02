@@ -25,6 +25,15 @@ struct ShowBordersView: View {
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
 
+    /// The bad example's hardcoded frame and the room it reserves for a border it
+    /// never draws. Both scale with Dynamic Type, so the label keeps fitting at
+    /// every text size while Show Borders is off and the reserved room always
+    /// overflows it once the setting is on. That keeps this example's only failure
+    /// the Show Borders one, rather than a plain Dynamic Type bug at large sizes.
+    @ScaledMetric private var badButtonWidth: CGFloat = 130
+    @ScaledMetric private var badButtonHeight: CGFloat = 44
+    @ScaledMetric private var reservedBorderRoom: CGFloat = 30
+
     var body: some View {
         ScrollView {
             VStack {
@@ -75,13 +84,13 @@ struct ShowBordersView: View {
                 }) {
                     Text("Add to Cart")
                         .lineLimit(1)
-                        .padding(.horizontal, showButtonShapes ? 14 : 0)
-                        .frame(width: 100, height: 44, alignment: .leading)
+                        .padding(.horizontal, showButtonShapes ? reservedBorderRoom : 0)
+                        .frame(width: badButtonWidth, height: badButtonHeight, alignment: .leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The bad show borders example is the same plain text button pinned to a hardcoded `.frame(width: 100, height: 44)` with `.lineLimit(1)`. It reserves horizontal room once Show Borders is enabled but never actually draws a border, and because the width is fixed that room has to come out of the label, so \"Add to Cart\" truncates to \"Add to...\". The user loses the button's name and gains no affordance in exchange. Turning on an accessibility setting should never cost the user the button's name.")
+                    Text("The bad show borders example is the same plain text button pinned to a hardcoded `.frame(width:height:)` with `.lineLimit(1)`. It reserves horizontal room once Show Borders is enabled but never actually draws a border, and because the width is fixed that room has to come out of the label, so \"Add to Cart\" truncates to \"Add to...\". The user loses the button's name and gains no affordance in exchange. Turning on an accessibility setting should never cost the user the button's name. The frame and the reserved room are `@ScaledMetric`, so the label fits at every text size while the setting is off and this example fails on Show Borders alone rather than on Dynamic Type too.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
                 VStack(alignment: .leading) {
                     Text("Enabling Show Borders").font(.subheadline).accessibilityAddTraits(.isHeader).bold()

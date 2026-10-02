@@ -101,6 +101,7 @@ See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, an
 - [Attributed Strings](iOSswiftUIa11yTechniques/Documentation/AttributedStrings.md)
 
 ### B
+- [Button Shapes](iOSswiftUIa11yTechniques/Documentation/ButtonShapes.md)
 - [Buttons](iOSswiftUIa11yTechniques/Documentation/Buttons.md)
 
 ### C

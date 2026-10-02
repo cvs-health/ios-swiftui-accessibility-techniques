@@ -26,6 +26,13 @@ iOS app changes made after 26.7 shipped. Not yet in the App Store.
 
 ### iOSswiftUIa11yTechniques
 
+#### Added
+
+- **New Button Shapes technique** (`ButtonShapesView.swift`, `Documentation/ButtonShapes.md`), the sixth preference-detection technique alongside Increase Contrast, Reduce Transparency, Reduce Motion, Smart Invert, and Dim Flashing Lights. Button Shapes previously appeared in the repo only as a status row in `ATdetectionView.swift`, with no technique page.
+  - The technique teaches owning the affordance rather than suppressing the system shape. When a button has no visible affordance of its own, iOS injects one, and that injected shape is what users see as an oversized low-contrast grey block. The good example gives each button a border, fill, or underline that is always present, then reads `@Environment(\.accessibilityShowButtonShapes)` to thicken its own border when the setting is on. Padding is fixed in both states, so enabling the setting does not shift the layout — verified by rendering both branches.
+  - The bad example is colour-only text plus a grey-on-grey padded block, reproducing the oversized grey button the setting is blamed for. It fails 1.4.1 and carries one deliberate `color-contrast-insufficient` error at 2.6:1.
+  - Documented that `accessibilityShowButtonShapes` is a read-only environment key, so the enabled state cannot be pinned with `.environment()` in a `Preview`. Writing `com.apple.Accessibility ButtonShapesEnabled` via `simctl` does not drive it either, even across a simulator reboot; the setting has to be toggled in Settings.
+
 #### Fixed
 
 - **Two real contrast failures inside good examples**, found once the contrast rule could see them. Classifying all 25 `color-contrast-insufficient` findings showed 23 on bad examples and 2 on good ones, both genuine:

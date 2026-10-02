@@ -40,6 +40,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Accessibility Detection"),
     Techniques(name: "Attributed Strings"),
     Techniques(name: "Assistive Access"),
+    Techniques(name: "Button Shapes"),
     Techniques(name: "Buttons"),
     Techniques(name: "Cards"),
     Techniques(name: "Charts"),

@@ -76,17 +76,12 @@ struct ShowBordersView: View {
                     Text("Add to Cart")
                         .lineLimit(1)
                         .padding(.horizontal, showButtonShapes ? 14 : 0)
-                        .padding(.vertical, showButtonShapes ? 8 : 0)
                         .frame(width: 100, height: 44, alignment: .leading)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(showButtonShapes ? Color.accentColor : Color.clear, lineWidth: 1)
-                        )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The bad show borders example is the same plain text button and differs in two modifiers: a hardcoded `.frame(width: 100, height: 44)` instead of `minHeight`, and `.lineLimit(1)`. The button cannot grow, so the padding its border needs is taken out of the label and \"Add to Cart\" truncates to \"Add to...\" the moment Show Borders is turned on. Turning on an accessibility setting should never cost the user the button's name.")
+                    Text("The bad show borders example is the same plain text button pinned to a hardcoded `.frame(width: 100, height: 44)` with `.lineLimit(1)`. It reserves horizontal room once Show Borders is enabled but never actually draws a border, and because the width is fixed that room has to come out of the label, so \"Add to Cart\" truncates to \"Add to...\". The user loses the button's name and gains no affordance in exchange. Turning on an accessibility setting should never cost the user the button's name.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
                 VStack(alignment: .leading) {
                     Text("Enabling Show Borders").font(.subheadline).accessibilityAddTraits(.isHeader).bold()

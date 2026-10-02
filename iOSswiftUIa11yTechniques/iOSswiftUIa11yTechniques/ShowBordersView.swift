@@ -25,14 +25,10 @@ struct ShowBordersView: View {
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
     @Environment(\.colorScheme) var colorScheme
 
-    /// A standard filled iOS button fill, darkened from the system blue so white
-    /// label text clears the 4.5:1 minimum rather than sitting at 4.0:1.
-    private let buttonBlue = Color(red: 0.0, green: 0.337, blue: 0.702)
-
     var body: some View {
         ScrollView {
             VStack {
-                Text("Show Borders adds a system-drawn shape to controls iOS recognizes as buttons. A plain filled iOS button has no border of its own, so give it one yourself when the user turns the setting on, and leave the button room to grow when you do. Use `@Environment(\\.accessibilityShowButtonShapes)` to check if the user has enabled Show Borders and then draw your own border rather than suppressing the system shape, which some users rely on.")
+                Text("A basic SwiftUI `Button` with a text label renders as plain tinted text, with no border and no fill. Nothing but its color and position says it is tappable, which is exactly why iOS offers Show Borders. Honour the setting by drawing a real border when it is on, and leave the button room to grow so the border never comes at the expense of the label. Use `@Environment(\\.accessibilityShowButtonShapes)` to check whether the user has enabled it.")
                     .padding(.bottom)
                 Text("This setting was labelled **Button Shapes** in iOS 26.0 and earlier and was renamed to **Show Borders** by iOS 26.3. The underlying preference and the SwiftUI and UIKit APIs still use the original button shapes naming.")
                     .padding(.bottom)
@@ -52,23 +48,18 @@ struct ShowBordersView: View {
                 Button(action: {
                 }) {
                     Text("Add to Cart")
-                        .fontWeight(.semibold)
-                        .padding(.horizontal, showButtonShapes ? 36 : 16)
-                        .padding(.vertical, 12)
-                        .frame(minWidth: 150, minHeight: 44)
-                        .foregroundColor(Color.white)
-                        .background(buttonBlue)
-                        .cornerRadius(10)
+                        .padding(.horizontal, showButtonShapes ? 14 : 0)
+                        .padding(.vertical, showButtonShapes ? 8 : 0)
+                        .frame(minHeight: 44)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
-                                .inset(by: 4)
-                                .stroke(showButtonShapes ? Color.white : Color.clear, lineWidth: 2)
+                                .stroke(showButtonShapes ? Color.accentColor : Color.clear, lineWidth: 1)
                         )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The good show borders example is a plain filled iOS button with no border of its own. The fill is the affordance, so the button is never identified by color alone and needs no underline. When Show Borders is enabled it draws its own inset border and widens its padding to make room for it. Because it is sized with `.frame(minWidth: 150, minHeight: 44)`, the button simply grows to fit, so the border appears without ever clipping the label.")
+                    Text("The good show borders example is a plain text button that sizes itself from its label, using `.frame(minHeight: 44)` for the touch target and no fixed width. When Show Borders is enabled it adds padding and strokes a border in the accent color, and because nothing pins its width the button simply grows to fit, so the full label survives. Note that a text-only button is distinguished by color and position alone while the setting is off, which is what WCAG 1.4.1 Use of Color cautions against. Honouring Show Borders is the minimum; a button carrying a critical action is better off with a permanent fill or border so it never depends on the user having found this setting.")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -83,24 +74,19 @@ struct ShowBordersView: View {
                 Button(action: {
                 }) {
                     Text("Add to Cart")
-                        .fontWeight(.semibold)
                         .lineLimit(1)
-                        .padding(.horizontal, showButtonShapes ? 36 : 16)
-                        .padding(.vertical, 12)
-                        .frame(width: 150, height: 44)
-                        .foregroundColor(Color.white)
-                        .background(buttonBlue)
-                        .cornerRadius(10)
+                        .padding(.horizontal, showButtonShapes ? 14 : 0)
+                        .padding(.vertical, showButtonShapes ? 8 : 0)
+                        .frame(width: 100, height: 44, alignment: .leading)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
-                                .inset(by: 4)
-                                .stroke(showButtonShapes ? Color.white : Color.clear, lineWidth: 2)
+                                .stroke(showButtonShapes ? Color.accentColor : Color.clear, lineWidth: 1)
                         )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom)
                 DisclosureGroup("Details") {
-                    Text("The bad show borders example is styled identically to the good one and differs in two modifiers: it uses a hardcoded `.frame(width: 150, height: 44)` instead of `minWidth` and `minHeight`, and it adds `.lineLimit(1)`. The button therefore cannot grow, so the room its border needs is taken out of the label and \"Add to Cart\" truncates to \"Add to...\" the moment Show Borders is turned on. Turning on an accessibility setting should never cost the user the button's name.")
+                    Text("The bad show borders example is the same plain text button and differs in two modifiers: a hardcoded `.frame(width: 100, height: 44)` instead of `minHeight`, and `.lineLimit(1)`. The button cannot grow, so the padding its border needs is taken out of the label and \"Add to Cart\" truncates to \"Add to...\" the moment Show Borders is turned on. Turning on an accessibility setting should never cost the user the button's name.")
                 }.padding(.bottom).accessibilityHint("Bad Example")
                 VStack(alignment: .leading) {
                     Text("Enabling Show Borders").font(.subheadline).accessibilityAddTraits(.isHeader).bold()

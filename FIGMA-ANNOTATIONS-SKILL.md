@@ -91,7 +91,10 @@ Getting this wrong produces one of three real defects, which is why it earns a p
 
 Two rules that keep this from becoming clutter in its own right:
 
-- **One note for all the decoratives in a region**, not one per glyph: `Decorative — hidden from VoiceOver: thumbnail, row caret, divider.` A dozen separate "decorative" notes violates the budget as surely as a dozen redundant labels.
+- **Mark it decorative in the properties panel, and write no callout at all.** If the image or layer has a decorative/hidden toggle, an empty-alt option, or a description field you can set to decorative, set it there. Per Principle 2 this is both the cleanest result and the one an AI can actually read — and it keeps the design free of callouts that say nothing a field could not.
+- **If you must use a callout, give each element its own.** One note reading `Decorative: thumbnail, row caret, divider` looks economical and is not: it is a single text node pointing at three layers, so nothing in the file says *which* three. A developer or a code-generating AI has to infer the targets from position, which is exactly the ambiguity Principle 2 is about — and the failure mode is silent, because an unmarked glyph still renders fine. A callout must point at one element, unambiguously.
+
+That pair is not a contradiction of the budget, it is an argument for the properties panel: the budget counts callouts, and marking decoratives as properties costs none of it. If you find yourself needing a dozen decorative callouts, that is the signal to set them as properties instead.
 - **Never write a name and "decorative" on the same element.** They are mutually exclusive. If you are unsure which an image is, ask what a sighted user loses if it disappears. Nothing lost means decorative.
 
 ### 4. Never annotate reading order unless the visual order does not make sense
@@ -148,13 +151,16 @@ If you cannot state what breaks without the note, there is no note. And if a dev
 
 ## Rule 0 — The annotation budget
 
-**Hard ceiling: 10 annotations per screen, plus one screen-level block.** Most screens need 3–6.
+**Hard ceiling: 10 callouts per screen, plus one screen-level block.** Most screens need 3–6.
 
 If you are over the ceiling, you are annotating things the design already says. Delete until you are under it. Do not negotiate with yourself about "but this one is also important" — if everything is annotated, nothing is.
 
+**The ceiling counts callouts on the canvas, not properties-panel values.** Setting alt text in a field, marking a layer decorative, or setting a heading component's level costs nothing against the budget — those are the design specifying itself, not notes competing for attention (Principle 2). They are still bound by every content rule here: a redundant label in a field is still redundant, and a field is not a reason to annotate something you would otherwise leave alone. But if you are over the ceiling, the first question is not "what do I delete" — it is "which of these belongs in a property."
+
 Additional hard limits:
 
-- **One annotation per element, maximum.** Combine all fields for an element into one note. Never place separate "label" and "trait" and "hint" annotations on the same layer.
+- **One callout per element, maximum.** Combine all fields for an element into one note. Never place separate "label" and "trait" and "hint" annotations on the same layer.
+- **One callout, one element.** A note must point at exactly one layer. Never write a single callout covering several layers ("the icons are decorative") — nothing in the file records which layers it meant, and the association is left to guesswork.
 - **Annotate a repeating component once.** A list of 12 cards, a 5-star rating, a 4-tab tab bar: annotate the first instance, then write `Applies to all N instances.` Never annotate every row.
 - **Annotate a design-system component zero times** if its accessibility is already specified in the design system. Write `Uses DS/Button — accessibility per component spec.` once, at the screen level, and move on.
 
@@ -184,7 +190,7 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 ### Never annotate — pick a fight with yourself about these
 
 - ❌ Every text layer's contrast ratio. Contrast is a **token** concern. Annotate it **only** where a style is off-system or sits on an image or gradient. One screen-level line covers the rest.
-- ❌ Decorative images, one by one. One note: `Decorative — hidden from VoiceOver.` Applies to the group.
+- ❌ Decorative images as callouts, when the properties panel has a decorative or hidden option. Set it there and write nothing on the canvas. If there is no field, each decorative element gets **its own** callout — never one note covering several layers, which leaves the targets ambiguous. **Principle 3.**
 - ❌ "This is a button." The design shows a button. The developer will use `Button`.
 - ❌ **Accessibility traits, in any form.** No `Trait: isButton`, no `.accessibilityAddTraits(...)`, no `role=`. Name the component, or fix the component in the design. See `Component:` — Principle 1's redundant-code problem applies to traits exactly as it does to labels.
 - ❌ Visible text as an "accessible name" when the accessible name **is** the visible text. The default is already correct, and annotating it manufactures a Label in Name failure. **Principle 1.**
@@ -497,7 +503,7 @@ What is wrong with it:
 
 And every defect that would actually ship on this screen is missing: the badge is never spoken, because an iOS badge is not read by VoiceOver on its own; the heading level is unknown; 24 identically-named icon buttons are indistinguishable in the swipe order; swipe-to-archive is undiscoverable and has no alternative; and nothing says how the card groups.
 
-### ✅ Correct annotation set — 6 element annotations + 1 screen block
+### ✅ Correct annotation set — 4 properties + 5 callouts + 1 screen block
 
 ```
 SCREEN: Prescriptions
@@ -513,41 +519,49 @@ Motion: no animation on this screen.
 Components: DS/Card, DS/Button, DS/Badge — accessibility per component spec.
 ```
 
+**In the properties panel — nothing on the canvas.** Set on the first row's layers; the component carries them to all 12.
+
+```
+Thumbnail      → decorative / hidden
+Refill caret   → decorative / hidden     ("Refill" already names the button)
+Divider        → decorative / hidden
+Drug name      → Heading component, level 2
+```
+
+**Callouts on the canvas — one per element.**
+
 ```
 ① RX CARD  — applies to all 12 rows
 Group: contain — heading and both buttons stay individually focusable.
 Order: default is correct. No override.
 
-② DECORATIVE — thumbnail, Refill caret, divider
-Decorative — hidden from VoiceOver, no names. One note covers all three.
-The caret gets no name of its own: "Refill" already names the button.
-
-③ "Ready for pickup" BADGE
-Value: on the card heading — "Atorvastatin 20mg, ready for pickup".
-Reason: an iOS badge is not spoken on its own, and the status must not be a
+② "Ready for pickup" BADGE
+Value: merge into the card heading — "Atorvastatin 20mg, ready for pickup".
+Reason: an iOS badge is not spoken on its own, and the status must not become a
 separate VoiceOver stop.
 
-④ DRUG NAME
-Heading: 2
-(Delete this annotation if the design uses a heading component with a level.)
-
-⑤ REFILL + DIRECTIONS BUTTONS
-Name: "Refill, Atorvastatin 20mg" / "Directions, CVS Main St"
-Reason: 24 identically-named buttons in the swipe order are unusable. Combining
-each button with the drug name would fix the ambiguity without these labels, but
-it would swallow the Heading: 2 and cost the Rotor — so unique names it is.
+③ REFILL BUTTON
+Name: "Refill, Atorvastatin 20mg"
+Reason: 12 identical "Refill" buttons are unusable in the swipe order. Combining
+the button with the drug name would fix it without a label, but that would
+swallow the level-2 heading and cost the Rotor — so a unique name it is.
 Visible text comes first, so Voice Control still works.
-Component: Directions is a Link — opens Maps, leaves the app.
 
-⑥ SWIPE TO ARCHIVE
+④ DIRECTIONS BUTTON
+Name: "Directions, CVS Main St"
+Component: Link — opens Maps, leaves the app.
+
+⑤ SWIPE TO ARCHIVE
 Hint: "Archives this prescription."
 Gesture alternative: required. Add "Archive" to the row's accessibility actions
 and to the "More" menu — a swipe-only action fails WCAG 2.1.1 and 2.5.1.
 ```
 
-Six notes instead of thirty-two, and every one of them tells the developer something the design does not. Note what carried most of the reduction: no label on any control whose visible text was already correct, one grouped note for all the decoratives instead of one per glyph, no trait annotations at all, no contrast or target-size notes where they pass, and the repeating row annotated once.
+Five callouts instead of thirty-two, and every one of them tells the developer something the design does not.
 
-And per Principle 2, three of the six do not need to be callouts at all. ② belongs in each layer's alt-text/description field, ④ disappears entirely if the drug name uses a heading component with a level, and ⑤'s `Component: Link` is a component variant. Set those as properties and the canvas carries **three** callouts — ①, ③, and ⑥, all of them cross-element concerns that no single field can hold. That is the target shape: the per-layer facts live on the layers where an AI can read them, and the canvas holds only the relationships.
+Note where the reduction came from. Four of the facts moved into properties, where they cost nothing against the budget and an AI can read them off the layer they belong to. No label survives on a control whose visible text was already correct. There are no trait annotations at all. No contrast or target-size notes, because none of them fail. The repeating row is annotated once. And the five that remain are each about a *relationship* — a grouping, a badge that must merge into a heading, two names that need sibling context, and a gesture that needs an alternative — which is precisely the class of thing no properties field can hold.
+
+Note also what the one-callout-one-element rule changed: the two buttons get separate notes even though their reasoning is nearly identical, because a single note spanning both would leave a developer guessing which name belongs to which button.
 
 ---
 
@@ -562,18 +576,19 @@ Run every annotation through this. Delete, do not soften.
 5. **Every surviving `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?
 6. **Any SwiftUI or trait API in your output?** Grep for `accessibility`, `.is`, `Trait:`, `AddTraits`, `isButton`, `isHeader`. An annotation naming an iOS API gets implemented as redundant code. Rewrite as `Component:` or `Heading:`.
 7. **Every `Component:`** — is it a component name, and is it non-obvious? If the design already uses the right Figma component, delete the annotation.
-8. **Every informative image** — does it have a name, in its alt-text field if it has one? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative, in one grouped note, with no name?
-9. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
-10. **Every custom gesture** — does it have a visible single-tap alternative annotated?
-11. **Every `Group:` with a name** — does it say `contain`?
-12. **Every heading** — does it have a level, and do the levels run without skipping? If the design uses heading components with levels in the properties panel, delete these annotations.
-13. **Every modal, sheet, and alert** — is focus-on-open and focus-on-return annotated?
-14. **Every badge, star rating, stepper, and expandable** — does it have a `Value:`?
-15. **Every repeated component** — annotated once, with `Applies to all N`?
-16. **Every `Order:`** — would the default top-to-bottom order genuinely be wrong here? If not, delete it. If so, is it expressed as containers rather than numbered leaves?
-17. **Anything unactionable** — "ensure", "appropriate", "consider", "test with", a bare WCAG number? Delete it.
-18. **Any contrast or target-size note on something that passes?** Delete it.
-19. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
+8. **Every informative image** — does it have a name, set in its alt-text field if one exists? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative with no name, in the properties panel if possible?
+9. **Every callout — does it point at exactly one element?** A note covering several layers ("these icons are decorative", "both buttons get…") must be split, one per element, or the targets are guesswork.
+10. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
+11. **Every custom gesture** — does it have a visible single-tap alternative annotated?
+12. **Every `Group:` with a name** — does it say `contain`?
+13. **Every heading** — does it have a level, and do the levels run without skipping? If the design uses heading components with levels in the properties panel, delete these annotations.
+14. **Every modal, sheet, and alert** — is focus-on-open and focus-on-return annotated?
+15. **Every badge, star rating, stepper, and expandable** — does it have a `Value:`?
+16. **Every repeated component** — annotated once, with `Applies to all N`?
+17. **Every `Order:`** — would the default top-to-bottom order genuinely be wrong here? If not, delete it. If so, is it expressed as containers rather than numbered leaves?
+18. **Anything unactionable** — "ensure", "appropriate", "consider", "test with", a bare WCAG number? Delete it.
+19. **Any contrast or target-size note on something that passes?** Delete it.
+20. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
 
 ---
 

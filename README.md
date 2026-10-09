@@ -76,6 +76,8 @@ See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, an
 
 **AI coding skill:** A [SKILL.md](SKILL.md) file is included that teaches AI coding assistants (Claude Code, CVS Code, Cursor, etc.) how to write accessible SwiftUI code. Copy it to your `~/.claude/skills/` directory or your editor's skills folder and it will automatically enforce WCAG 2.2 accessible coding patterns — labels, traits, Dynamic Type, contrast, touch targets, focus management, and more.
 
+**AI design annotation skill:** A [FIGMA-ANNOTATIONS-SKILL.md](FIGMA-ANNOTATIONS-SKILL.md) file is included for the *design* stage — the rules an AI must follow when annotating an iOS design in Figma for accessibility. AI annotation reliably fails the same three ways: it over-annotates (forty notes where six belong), it uses web ARIA vocabulary that does not exist on iOS (`alt text`, `role=`, landmarks, skip links, tab order, breakpoints), and it gets the content wrong (roles inside labels, hints that name the gesture, fake headings). This file fixes all three with a hard annotation budget, a closed set of nine iOS annotation types, a banned-vocabulary table, exact grammar per type, a worked before/after example, and a self-check pass. Paste it into Figma AI or your AI tool of choice before asking for annotations, or install it as a skill alongside `SKILL.md`. Its annotations map one-to-one onto the SwiftUI modifiers in `SKILL.md`, so design and engineering use the same vocabulary.
+
 ## Accessibility Techniques Documentation
 
 ### A

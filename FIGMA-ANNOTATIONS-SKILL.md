@@ -1,6 +1,6 @@
 ---
 name: iOS Accessibility Design Annotations
-description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a strict annotation budget, an iOS/SwiftUI vocabulary instead of web ARIA terms, and exact grammar for labels, traits, values, hints, headings, groups, and reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
+description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a strict annotation budget, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, components, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
 ---
 
 # iOS Accessibility Design Annotations
@@ -9,7 +9,140 @@ You are annotating a **native iOS design** so that an engineer can build it acce
 
 An annotation is a **specification**, not a report. It exists for exactly one reason: to tell the developer something they **cannot** work out from looking at the design. If a developer would build it correctly without the note, the note is noise — and noise is the main way AI annotation fails. An over-annotated frame is worse than an un-annotated one, because the reviewer stops reading and the three annotations that mattered get lost with the forty that didn't.
 
-Read "Rule 0" and "The gate" before writing a single annotation.
+Read the principles, "Rule 0", and "The gate" before writing a single annotation.
+
+---
+
+## Principles
+
+Ten ideas the rest of this file is built on. When a specific rule below is unclear, resolve it against these.
+
+### 1. Never annotate visible text as an accessibility label
+
+If a control's visible text is already its accessible name, **write no `Name:` annotation at all.** This is the most common and most damaging annotation mistake, and it is damaging in three separate ways:
+
+- **It clutters.** A button labeled "Refill" annotated `Name: Refill` has consumed one of your ten annotations to say nothing. Do this across a screen and the handful of notes that carry real information are buried.
+- **It introduces drift, and manufactures a failure that did not exist.** An annotated label is retyped prose, so it is rarely byte-identical to the visible text — "Refill" becomes "Refill prescription", "Add to Cart" becomes "Add to cart", "Done" becomes "Save". The moment it differs, the accessible name no longer contains the visible label, and you have created a **WCAG 2.5.3 Label in Name** failure — along with a control that Voice Control users cannot activate by saying what they see. The code was correct before you annotated it.
+- **It produces redundant code.** A developer handed `Name: Refill` will write `.accessibilityLabel("Refill")` on a `Button("Refill")`, because the annotation implies something was needed. Now the same string exists twice, must be localized twice, and will be updated in one place and not the other. SwiftUI already derived that name from the visible text, for free and correctly.
+
+SwiftUI gets this right by default: `Button("Refill")`, `Text`, `Toggle("Notifications")`, `Link("Privacy Policy")`, and `TextField` with a visible label all take their accessible name from their visible content. **Annotating the default is not neutral — it is a regression.**
+
+`Name:` is for the two cases where the name is genuinely invisible in the design:
+
+- **There is no visible text** — an icon-only button, a glyph, an informative image.
+- **The visible text is generic or repeated** — a column of "Edit" buttons, twelve "Refill" buttons, a list of "Learn more" links. Each one is ambiguous in the VoiceOver swipe order, where the user hears the control without the context a sighted user gets from its position.
+
+**For that second case, try combining focus before you add a name.** A generic label is usually only ambiguous because it has been separated from the text next to it. A row reading "Email Address … Edit" needs no annotation if the row is one VoiceOver stop: combined, it announces "Email Address, Edit", which is already unique and already correct. Reach for `Group: combine` first — it costs one annotation instead of one per control, it adds no duplicated strings, and it stays correct when the field is renamed. Annotating ten unique names where one grouping would do is the clutter this principle is about.
+
+Add a unique `Name:` only when combining cannot fix it or does not make sense:
+
+- Combining would **swallow a heading** — a card titled with a `Heading: 2` must stay its own stop, so its buttons cannot absorb it.
+- Combining would **merge two distinct actions** into one stop.
+- There is **nothing adjacent to combine with**, or the context lives far from the control.
+
+So the order of preference is: **fix the component and the visible text → combine focus → and only then annotate a unique name.**
+
+When you do reach the last step, the name is an *extension*, not a restatement. The visible text stays verbatim and first, and the appended context is the part that was invisible: `Name: "Refill, Atorvastatin 20mg"`. If you find yourself annotating a name whose only content is the visible text, delete the annotation.
+
+### 2. Put it in the properties panel, not a callout on the canvas
+
+**Where** an annotation lives matters as much as what it says. If Figma exposes a field for the value, **put it in the field** — select the image and type the alt text into its description/alt-text property, set the component's `level` property on a heading, set the component variant, use the layer's annotation category. Do not place a floating text callout next to the element when a property will hold the same value.
+
+Three reasons, and the first is the one that matters most now:
+
+- **A property is structured data; a callout is a picture of data.** An AI generating an accessible prototype or SwiftUI code from the file can read a property reliably and attach it to the correct layer, because the value *is* on the layer. A canvas callout is a separate text node that happens to sit near something, connected by a line the tool cannot follow. Associating callouts with their targets is guesswork, and guessing wrong silently puts the alt text on the wrong image. If you want AI to build an accessible prototype from the design, properties are the channel that survives the trip.
+- **A property travels with the layer.** Copy the component, swap the instance, reflow the layout, move the frame — the property goes with it. A callout detaches, gets left behind, or ends up pointing at a neighbour. Annotations that drift are worse than none, because they are confidently wrong.
+- **A property adds nothing to the canvas.** The design stays readable. Thirty callouts do not just clutter the handoff, they clutter the *design*, which is how a reviewer ends up unable to see either.
+
+So the order of preference is: **fix the component → set the property → write a callout.** A callout is the last resort, not the default.
+
+**Callouts are still correct for anything that is not a property of one layer.** These are inherently about relationships between elements, so no single field can hold them:
+
+- `Group:` — which elements merge or contain
+- `Order:` — which container is read before which
+- `Focus:` — where focus goes when a sheet opens and closes
+- `Announce:` — what is spoken when something changes
+- Gesture alternatives, and the screen-level block
+
+⚠️ **A property is not a loophole.** Moving a value into a field does not exempt it from any other rule here: a redundant label is still redundant in a properties panel, visible text restated in an alt-text field still manufactures a Label in Name failure, and `role="button"` typed into a field is still web vocabulary. The properties panel changes the delivery, not the content — and it does not raise the budget.
+
+### 3. Annotate the bare minimum — and the bare minimum is images and decorative elements
+
+Start from zero annotations and add only what is forced. On a typical screen the irreducible set is just two things, and a great many screens need little else:
+
+**Give every informative image a name.** An image is the one element whose meaning is genuinely unavailable to a developer and to VoiceOver — nothing else on screen conveys it. Describe what it communicates, not what it depicts and never its file name.
+
+**Mark everything else decorative.** Most glyphs in a mobile UI carry no information, and the clearest case is a glyph inside a control that already has sufficient visible text:
+
+- a `>` caret or chevron on a list row or navigation button
+- a `+` on an "Add to Cart" button
+- a trailing arrow on a "Continue" button
+- an icon that duplicates the text beside it
+- dividers, rules, background shapes, gradients, decorative illustrations
+- a selected-state checkmark, where the selection is already annotated as a `Value: Selected`
+
+For all of these: **hide them from VoiceOver and give them no name.** The visible text already names the control. The caret on `Refill >` is a visual affordance, not content — "Refill" is the whole accessible name.
+
+Getting this wrong produces one of three real defects, which is why it earns a place in the minimum set:
+
+- An unmarked glyph becomes **an extra VoiceOver stop that says nothing** — the user swipes onto silence and cannot tell whether something failed to load.
+- Or iOS **auto-names it from the SF Symbol**, and the user hears "chevron dot right" or "plus".
+- Or an annotator gives the glyph **its own label**, and the user hears "Refill, chevron right" — two stops where there should be one, with the second carrying no meaning.
+
+Two rules that keep this from becoming clutter in its own right:
+
+- **One note for all the decoratives in a region**, not one per glyph: `Decorative — hidden from VoiceOver: thumbnail, row caret, divider.` A dozen separate "decorative" notes violates the budget as surely as a dozen redundant labels.
+- **Never write a name and "decorative" on the same element.** They are mutually exclusive. If you are unsure which an image is, ask what a sighted user loses if it disappears. Nothing lost means decorative.
+
+### 4. Never annotate reading order unless the visual order does not make sense
+
+VoiceOver already reads leading-to-trailing, then top-to-bottom. **A normal vertical stack of content needs no order annotation** — the default is correct, and saying so wastes an annotation and invites a developer to hand-write an order that will break the next time a layout changes.
+
+Annotate order only when the **layout itself** breaks the expected sequence. In practice that is a narrow set:
+
+- A **grid or multi-column layout** where elements that belong together are side by side. This is the main case. A two-column plan comparison — "Plan A / $20 / 5GB" beside "Plan B / $30 / 10GB", with the rows visually aligned — sweeps leading-to-trailing and comes out as "Plan A, Plan B, $20, $30, 5GB, 10GB". Every value is read next to the wrong label.
+- **Overlapping or z-stacked content** — a badge over an image, a floating action button, a sticky overlay — where the stacking order and the visual order disagree.
+- A **label positioned after its value** in the layer tree despite reading before it visually.
+
+And when you do annotate it, **annotate containers, not element numbers.** The instruction the developer needs is "these belong together" or "finish this container before moving to the next one" — not a renumbered list of every leaf:
+
+```
+✅ Order: group each plan column as one container, read fully before the next
+   column. Default sweeps across the columns and pairs every price with the
+   wrong plan name.
+
+✅ Order: "Ready" badge is part of the card heading, not a separate stop. It
+   overlaps the image and would otherwise be read first.
+
+❌ Order: 1 title, 2 price, 3 data, 4 title, 5 price, 6 data
+   (per-element numbering — fragile, and every new element renumbers the rest)
+```
+
+Container grouping is both the clearer instruction and the more durable fix: it survives layout changes, where explicit per-element priorities have to be renumbered every time something is added. Reach for explicit priorities only when no grouping or restructuring can express the order.
+
+### 5. The design is the spec; annotate only the delta
+
+The design already specifies most of the accessible experience — the labels, the layout, the order, the control types. Annotations cover the remainder: the semantics the picture cannot carry. Your job is the difference between what a developer can see and what they need to know, and nothing else.
+
+### 6. Fewer annotations are more accessible
+
+This is counter-intuitive and it is the whole point. Annotations compete for a finite amount of reviewer and developer attention. Forty notes do not get read; six do. An over-annotated frame ships *more* defects than a lightly annotated one, because the notes that mattered were indistinguishable from the ones that did not. Volume is not thoroughness.
+
+### 7. Native defaults are accessible — do not override them
+
+iOS ships more accessibility for free than any web platform: traits on native controls, Dynamic Type on text styles, toggle states, focus order, Voice Control, the Rotor. Every annotation that restates a default invites a developer to replace working platform behaviour with hand-written code that is worse. Annotate where you need to *depart* from the default or *add* to it.
+
+### 8. Annotate behaviour, not implementation
+
+Say what the user must experience — "focus returns to the button that opened this sheet" — not which API to call. The developer owns the implementation and knows the codebase; a prescribed modifier is often the wrong one for their view hierarchy, and it dates. The modifier table at the end of this file exists to translate, not to be pasted into annotations.
+
+### 9. The platform is iOS, not the web
+
+iOS has no landmarks, no skip links, no tabindex, no hover, no breakpoints, and no `alt` attribute. Importing web vocabulary makes an annotation unimplementable and signals that the annotator does not know the platform. Use the iOS terms in the banned-vocabulary table below.
+
+### 10. Every annotation must name a defect it prevents, and be verifiable
+
+If you cannot state what breaks without the note, there is no note. And if a developer cannot tell whether they have satisfied it, it is not a specification — "ensure appropriate labels" and "test with VoiceOver" fail both halves of this.
 
 ---
 
@@ -53,8 +186,14 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 - ❌ Every text layer's contrast ratio. Contrast is a **token** concern. Annotate it **only** where a style is off-system or sits on an image or gradient. One screen-level line covers the rest.
 - ❌ Decorative images, one by one. One note: `Decorative — hidden from VoiceOver.` Applies to the group.
 - ❌ "This is a button." The design shows a button. The developer will use `Button`.
-- ❌ Visible text as an "accessible name" when the accessible name **is** the visible text. The default is already correct.
-- ❌ Reading order, when the layout is a plain top-to-bottom stack. VoiceOver already does leading-to-trailing, then top-to-bottom.
+- ❌ **Accessibility traits, in any form.** No `Trait: isButton`, no `.accessibilityAddTraits(...)`, no `role=`. Name the component, or fix the component in the design. See `Component:` — Principle 1's redundant-code problem applies to traits exactly as it does to labels.
+- ❌ Visible text as an "accessible name" when the accessible name **is** the visible text. The default is already correct, and annotating it manufactures a Label in Name failure. **Principle 1.**
+- ❌ A unique name on a generic or repeated control before checking whether `Group: combine` with the adjacent text would make it unique. Combining is one annotation; renaming is one per control.
+- ❌ A name on a caret, chevron, `+`, or any glyph inside a control that already has visible text. Mark it decorative instead. **Principle 3.**
+- ❌ A callout on the canvas for anything Figma has a field for — alt text, a heading level, a component variant. Put it in the properties panel. **Principle 2.**
+- ❌ Heading levels, when the design uses heading components with the level visible in the Figma properties panel. The structure is already specified.
+- ❌ Reading order, when the layout is a plain top-to-bottom stack. VoiceOver already does leading-to-trailing, then top-to-bottom. **Principle 4.**
+- ❌ Reading order as a numbered list of individual elements. Group containers instead.
 - ❌ Hints on ordinary buttons and links. See the hint rules — they are **optional** in WCAG and most users switch them off.
 - ❌ Touch target size on controls that are already ≥ 44pt in the design. Measure first; annotate the violation, not the compliance.
 - ❌ Generic advice. `Ensure sufficient contrast`, `Add appropriate labels`, `Test with VoiceOver`, `Follow WCAG guidelines` are not annotations. They tell the developer nothing and cannot be checked.
@@ -66,25 +205,32 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 
 Use **only** these keys. Do not invent fields. Do not import fields from a web annotation kit.
 
+The **Key** column is what goes in the annotation. The **Builds to** column is the developer's side of the handoff and must never appear in an annotation — see Principle 8.
+
 | Key | Builds to | Use when |
 | --- | --- | --- |
-| `Name` | `.accessibilityLabel` | The accessible name differs from the visible text, or there is no visible text |
-| `Trait` | `.accessibilityAddTraits` / correct view type | The element is not already the right native control |
+| `Name` | `.accessibilityLabel` | There is no visible text, or it is generic/repeated **and** combining focus cannot fix it |
+| `Component` | the native control — `Button`, `Link`, `Toggle`, … | The design misleads about which control this is. **Never written as a trait** |
 | `Value` | `.accessibilityValue` | The element carries state or a quantity not in its name |
 | `Hint` | `.accessibilityHint` | **Only** for the non-obvious interactions listed below |
-| `Heading` | `.accessibilityAddTraits(.isHeader)` + `.accessibilityHeading(.hN)` | The text is a heading |
+| `Heading` | heading trait + level | The text is a heading **and** no heading component with a level is used |
 | `Group` | `.accessibilityElement(children: .combine / .contain)` | Several layers should be one VoiceOver stop, or need a shared group name |
 | `Order` | restructure, or `.accessibilitySortPriority` | The visual order genuinely disagrees with the default order |
 | `Focus` | `@AccessibilityFocusState` | Focus must move or return on a screen or modal change |
 | `Announce` | `UIAccessibility.post(notification:)` | A change happens without a screen transition and must be spoken |
 
-**Format.** Figma's native Dev Mode annotation is a free-text note on a layer (optionally tagged with a category such as "Accessibility"). Put these as plain `Key: value` lines inside one note, in the order above. This format works unchanged in a native annotation, in any annotation plugin, and in a handoff doc.
+**Where to put it.** Per Principle 2, prefer a **properties-panel field** whenever one exists for the value — an image's alt-text/description field, a heading component's `level`, a component variant. The key is then implied by the field and you write only the value.
+
+**Format for anything with no field.** Figma's native Dev Mode annotation is a free-text note on a layer (optionally tagged with a category such as "Accessibility"). Put these as plain `Key: value` lines inside one note, in the order above. This format works unchanged in a native annotation, in any annotation plugin, and in a handoff doc.
 
 ```
-Name: Refill
-Trait: Button
-Hint: Starts a refill for this prescription.
+Name: Directions, CVS Main St
+Component: Link — opens Maps, leaves the app
 ```
+
+Most annotations are one or two lines. If yours routinely runs to five keys, re-read the gate — you are specifying defaults.
+
+Note what is *not* in that example: no `Trait:`, because the component is named instead; no `Hint:`, because a link's destination is obvious; and no `Name:` at all if the control had visible text.
 
 ---
 
@@ -96,9 +242,10 @@ Every term on the left belongs to the web. On an iOS design it is wrong, and it 
 | --- | --- |
 | `alt text`, `alt=` | `Name:` |
 | `aria-label`, `aria-labelledby`, `aria-describedby` | `Name:` / `Hint:` |
-| `role="button"`, `role=` anything | `Trait: Button` |
+| `role="button"`, `role=` anything | `Component: Button` — name the component, not a role or trait |
+| `.accessibilityAddTraits(.isButton)`, `isHeader`, any iOS trait API | `Component: Button` / `Heading: 2`. **Never put SwiftUI API in an annotation** |
 | `aria-live`, `role="status"`, `role="alert"` | `Announce:` |
-| `aria-expanded`, `aria-checked`, `aria-selected` | `Value: Expanded` / `Value: Checked` / `Trait: Selected` |
+| `aria-expanded`, `aria-checked`, `aria-selected` | `Value: Expanded` / `Value: Checked` / `Value: Selected` |
 | `aria-hidden` | `Decorative — hidden from VoiceOver` |
 | `tabindex`, `tab order`, `keyboard focus order` | `Order:` (VoiceOver swipe order) |
 | `landmark`, `region`, `banner`, `main`, `complementary` | Nothing. **iOS has no landmarks.** Use `Heading:` and `Group:` |
@@ -123,9 +270,12 @@ Two more mobile-specific traps:
 
 ### `Name:` — the accessible name
 
+See Principle 1 — read it before using this key at all.
+
 - **Omit it entirely when the visible text is already the name.** This is the single biggest source of over-annotation.
+- **Omit it when `Group: combine` would make the control unique.** For a generic or repeated label — "Edit", "Refill", "Learn more" — combining the control with its adjacent text is the better fix: "Email Address, Edit" is unique without a single label annotation. Only annotate a unique name once combining is ruled out, and say why in the annotation ("combining would swallow the card heading").
 - 1–3 words where possible. Capitalized. **No trailing period.**
-- **Never include the role**: no "button", "icon", "image", "link", "tab", "graphic", "menu". VoiceOver speaks the trait itself, so "Delete button" is heard as "Delete button, button".
+- **Never include the role**: no "button", "icon", "image", "link", "tab", "graphic", "menu". VoiceOver speaks the component's role itself, so "Delete button" is heard as "Delete button, button".
 - **The name must start with the visible text**, verbatim, when there is visible text. Voice Control users say what they see — a name that does not contain the visible label fails WCAG 2.5.3 Label in Name and leaves the control unspeakable.
 - Distinguish repeated controls by appending context, not by rewording: `Refill, Atorvastatin 20mg`, not `Refill prescription number two`.
 - Describe what an image **conveys**, not what it depicts and not its file name.
@@ -138,15 +288,25 @@ Two more mobile-specific traps:
 ❌ Name: Refill.                        (trailing period)
 ```
 
-### `Trait:` — the role
+### `Component:` — name the component, never the trait
 
-- Allowed values: `Button`, `Link`, `Header`, `Image`, `Selected`, `Modal`, `Search field`, `Static text`, `Toggle`, `Tab`.
-- **Omit it when the native control is obvious.** A rectangle with centered text is a `Button`; you do not need to say so. Annotate the trait when the design **lies** about the element:
-  - Text that navigates but does not look like a link.
-  - A row that acts as a button.
-  - A custom control imitating a native one.
-- **`Button` vs `Link` is a real distinction on iOS.** `Link` is for anything leaving the app or opening a URL — a web page, Mail, Maps, the App Store. In-app navigation is a `Button` (or `NavigationLink`). Getting this backwards is a 4.1.2 defect.
-- If a control is drawn greyed out or dimmed, annotate `Trait: Button, disabled` so the developer marks it genuinely disabled rather than just styling it. A control that looks disabled but is not is a defect that only AT users hit.
+**Do not annotate accessibility traits.** Name the component the design uses, in design-system or Figma terms: `Button`, `Link`, `Tab`, `Toggle`, `Text field`, `Checkbox`, `Radio`, `Segmented control`, `Stepper`, `Slider`, `Search field`, `Modal sheet`, `Image`.
+
+The reason is the same one that governs labels (Principle 1): a trait written as iOS API gets implemented as iOS API. A developer handed `Trait: Button` or `.accessibilityAddTraits(.isButton)` will add that modifier — to a `Button`, which already has the trait. The result is redundant code, and in the worse cases a hand-rolled control carrying a manually-applied trait where a native control was available. Naming the component instead gives the developer the one instruction that matters: **use the native control**, and the trait comes with it for free, correctly, on every OS version.
+
+```
+✅ Component: Link
+✅ Component: Segmented control
+❌ Trait: isButton
+❌ Trait: .isHeader
+❌ Add .accessibilityAddTraits(.isButton)
+❌ role="button"
+```
+
+- **Best of all: fix it in the design and annotate nothing.** If the Figma file has a Button component, use the Button component. A correctly-chosen component needs no annotation at all, and this is the preferred outcome — see Principle 2. Failing that, set the component variant as a property rather than writing a callout.
+- **Omit it when the component is obvious.** A rectangle with centered text is a button, and the developer will build a `Button`. Annotate only where the design **misleads**: text that navigates but does not look tappable, a whole row that acts as one button, a custom control imitating a native one, or an off-system element with no component behind it.
+- **`Button` vs `Link` is a real distinction on iOS, and worth annotating.** `Link` is for anything that leaves the app or opens a URL — a web page, Mail, Maps, the App Store. In-app navigation is a `Button` or `NavigationLink`. The two look identical in a design and getting it backwards is a genuine WCAG 4.1.2 defect, so name it: `Component: Link — opens Maps, leaves the app.`
+- If a control is drawn greyed out or dimmed, annotate `Component: Button, disabled state` so the developer marks it genuinely disabled rather than only styling it. A control that looks disabled but is not is a defect only AT users hit.
 
 ### `Value:` — state and quantity
 
@@ -186,11 +346,16 @@ Gesture alternative: "More" button in the row, same actions. Required — gestur
 controls fail WCAG 2.1.1 and 2.5.1.
 ```
 
-### `Heading:` — the one thing you must not skip
+### `Heading:` — annotate unless the design already carries levels
 
-Figma renders a heading and a large bold label identically, so this is genuinely invisible and belongs in almost every screen's annotations.
+Figma renders a heading and a large bold label identically, so by default this is genuinely invisible and belongs in almost every screen's annotations. **Headings are the one thing you should expect to annotate** — they are the most commonly missed semantic on shipped iOS screens, and a screen with no heading structure has no Rotor navigation at all.
+
+**The exemption:** if the design already uses a **heading component whose level is visible in the Figma properties panel** — a `Heading/H2` component, or a heading component with a `level` property — the structure is already specified and **you annotate nothing.** The design is the spec; do not restate it. This is the better outcome, and if a design system has heading components, pushing designers toward them beats annotating every screen forever.
+
+Annotate when the heading is plain styled text, an off-system text layer, or a component with no level exposed.
 
 - Mark **every** heading, and give its level: `Heading: 1`, `Heading: 2`, …
+- The level is an **iOS heading level**, not markup and not a trait. Never write `H2` as a tag, and never write `.isHeader` or `accessibilityHeading` — see `Component:` above for why naming the API backfires.
 - **Do not skip levels.** 1 → 2 → 3, never 1 → 3.
 - The screen's **navigation title is the page title**, not a heading — annotate it as `Page title: "Prescriptions"` in the screen block. The first heading inside the content starts at level 1.
 - Never express a heading by putting the word "heading" in the name. It will not appear in the VoiceOver Rotor, which is the entire point.
@@ -230,10 +395,12 @@ Never annotate both. Pick one and say why.
 
 ### `Order:` — reading order, used sparingly
 
-- VoiceOver defaults to leading-to-trailing, then top-to-bottom. **For a normal stacked layout, write nothing.**
-- Annotate order **only** where the visual layout genuinely disagrees with that default: overlapping/z-stacked content, a floating element, a label visually above but after in the layer tree, a two-column compact layout, content that must be read before a sticky overlay.
-- State the intended sequence, numbered, and name what is wrong with the default: `Order: 1 heading, 2 price, 3 badge. Badge overlaps the image and would otherwise be read first.`
-- Prefer the fix that survives: **restructure the layout, or use `Group: contain`, before asking for explicit sort priorities.** Sort-priority overrides are fragile — every new element needs a number, and the existing numbers get renumbered. Only annotate explicit priorities when no restructuring works.
+See Principle 4 — this is the type most often annotated when it should be left alone.
+
+- VoiceOver defaults to leading-to-trailing, then top-to-bottom. **For a normal stacked layout, write nothing.** The default is already right.
+- Annotate order **only** where the layout itself disagrees with that default: a **grid or multi-column layout** whose columns get interleaved, overlapping or z-stacked content, a floating element, a label positioned after its value in the layer tree, content that must be read before a sticky overlay.
+- **Express it as containers, not element numbers.** Say which elements group together and which group is read first, and name what the default gets wrong: `Order: group each plan column as one container, read fully before the next. Default sweeps across the columns and pairs every price with the wrong plan.` Never hand over a renumbered list of leaves — it is fragile, and every element added later renumbers the rest.
+- Prefer the fix that survives: **restructure the layout, or use `Group: contain`, before asking for explicit sort priorities.** Only annotate explicit priorities when no grouping or restructuring can express the order.
 - Never call this "tab order."
 
 ### `Focus:` — where VoiceOver focus goes
@@ -243,7 +410,7 @@ Invisible in a static design and a frequent real-world defect, so annotate it wh
 - On open: `Focus: moves to the sheet title on open.`
 - On close: `Focus: returns to the "Refill" button that opened the sheet.` Without this, focus lands unpredictably — usually at the top of the screen — and the user loses their place.
 - For an inline expansion: `Focus: stays on the disclosure control; Value changes to "Expanded".`
-- Any modal needs `Trait: Modal` so VoiceOver does not wander into the content behind it.
+- Annotate `Component: Modal sheet` so VoiceOver does not wander into the content behind it.
 - If a sheet's content could exceed the screen at large text, add `Scrolls` — a modal that cannot scroll is unusable at accessibility text sizes.
 
 ### `Announce:` — changes with no screen transition
@@ -288,9 +455,9 @@ Three notes on that block:
 
 ## Worked example
 
-A prescription card: thumbnail, "Ready for pickup" badge, drug name, store name, a Refill button, a Directions icon button, and swipe-to-archive. Twelve of these in a list.
+A prescription card: thumbnail, "Ready for pickup" badge, drug name, store name, a `Refill >` button with a trailing caret, a Directions icon button, a divider, and swipe-to-archive. Twelve of these in a list.
 
-### ❌ What AI typically produces — 28 annotations, mostly wrong
+### ❌ What AI typically produces — 32 annotations, nearly all wrong
 
 ```
 1.  Image: alt text "prescription bottle icon"
@@ -300,25 +467,37 @@ A prescription card: thumbnail, "Ready for pickup" badge, drug name, store name,
 5.  Store name: static text, contrast 7.1:1 — passes
 6.  Refill: role="button", aria-label "Refill button", tabindex 1,
     hint "Tap to refill this prescription"
-7.  Directions: role="button", aria-label "Directions icon",
+7.  Caret: role="button", aria-label "chevron right icon", tabindex 2
+8.  Directions: role="button", aria-label "Directions icon",
     hint "Double tap to get directions"
-8.  Card: landmark region "prescription", aria-describedby drug name
-9.  Card: tab order 1 → 2 → 3 → 4 → 5
-10. Card: ensure sufficient color contrast (WCAG 1.4.3)
-11. Card: add appropriate ARIA labels (WCAG 4.1.2)
-12. Card: test with screen reader
-13–24. [the same twelve annotations repeated on every row]
-25. List: mobile breakpoint 390px
-26. Screen: portrait only
-27. Screen: text may truncate at large sizes
-28. Screen: skip to content link at top
+9.  Divider: aria-hidden="true"
+10. Card: landmark region "prescription", aria-describedby drug name
+11. Card: tab order 1 → 2 → 3 → 4 → 5 → 6
+12. Card: ensure sufficient color contrast (WCAG 1.4.3)
+13. Card: add appropriate ARIA labels (WCAG 4.1.2)
+14. Card: test with screen reader
+15–28. [the same fourteen annotations repeated on each of the other eleven rows]
+29. List: mobile breakpoint 390px
+30. Screen: portrait only
+31. Screen: text may truncate at large sizes
+32. Screen: skip to content link at top
 ```
 
-What is wrong with it: the entire web vocabulary (1, 2, 6, 7, 8, 9, 28) does not exist on iOS. Roles are annotated that SwiftUI gives for free (6, 7). Names include the role and break Label in Name (6, 7). Both hints name the gesture, and neither was needed (6, 7). Contrast is annotated where it passes (3, 4, 5) and generically where it cannot be checked (10). Four annotations say nothing actionable (10, 11, 12, 27). Landmarks and skip links are invented (8, 28). Twelve identical rows are annotated twelve times (13–24). Portrait-only fails 1.3.4 (26). Breakpoints are not an iOS concept (25).
+What is wrong with it:
 
-And the things that will actually break are all missing: the badge is never spoken, the heading level is unknown, the two icon buttons are indistinguishable across twelve rows, swipe-to-archive is undiscoverable with no alternative, and nothing says how the card groups.
+- **The entire web vocabulary** (1, 2, 6, 7, 8, 9, 10, 11, 32) does not exist on iOS — `alt`, `aria-*`, `role=`, `tabindex`, landmarks, skip links.
+- **Roles SwiftUI gives for free** are annotated anyway (6, 8).
+- **Names restate or contradict the visible text** (6, 8). "Refill button" puts the role in the name and will be heard as "Refill button, button"; "Directions icon" does the same with a word VoiceOver never needed.
+- **The caret is given its own label** (7). It is a visual affordance on a button that already says "Refill" — annotating it creates a second VoiceOver stop that announces "chevron right icon" and means nothing. It should be hidden.
+- **Both hints name the gesture, and neither was needed** (6, 8) — "Tap to", "Double tap to".
+- **Contrast is annotated where it passes** (3, 4, 5) and generically where it cannot be checked (12).
+- **Four annotations are unactionable** (12, 13, 14, 31) — "ensure", "appropriate", "test with", "may truncate".
+- **Twelve identical rows are annotated twelve times** (15–28), which is where more than half the volume comes from.
+- **Portrait-only fails WCAG 1.3.4** (30), and breakpoints are not an iOS concept (29).
 
-### ✅ Correct annotation set — 5 element annotations + 1 screen block
+And every defect that would actually ship on this screen is missing: the badge is never spoken, because an iOS badge is not read by VoiceOver on its own; the heading level is unknown; 24 identically-named icon buttons are indistinguishable in the swipe order; swipe-to-archive is undiscoverable and has no alternative; and nothing says how the card groups.
+
+### ✅ Correct annotation set — 6 element annotations + 1 screen block
 
 ```
 SCREEN: Prescriptions
@@ -339,8 +518,9 @@ Components: DS/Card, DS/Button, DS/Badge — accessibility per component spec.
 Group: contain — heading and both buttons stay individually focusable.
 Order: default is correct. No override.
 
-② THUMBNAIL
-Decorative — hidden from VoiceOver. The drug name carries the information.
+② DECORATIVE — thumbnail, Refill caret, divider
+Decorative — hidden from VoiceOver, no names. One note covers all three.
+The caret gets no name of its own: "Refill" already names the button.
 
 ③ "Ready for pickup" BADGE
 Value: on the card heading — "Atorvastatin 20mg, ready for pickup".
@@ -349,11 +529,15 @@ separate VoiceOver stop.
 
 ④ DRUG NAME
 Heading: 2
+(Delete this annotation if the design uses a heading component with a level.)
 
 ⑤ REFILL + DIRECTIONS BUTTONS
 Name: "Refill, Atorvastatin 20mg" / "Directions, CVS Main St"
-Reason: 24 identically-named buttons in the swipe order are unusable. Visible
-text comes first, so Voice Control still works.
+Reason: 24 identically-named buttons in the swipe order are unusable. Combining
+each button with the drug name would fix the ambiguity without these labels, but
+it would swallow the Heading: 2 and cost the Rotor — so unique names it is.
+Visible text comes first, so Voice Control still works.
+Component: Directions is a Link — opens Maps, leaves the app.
 
 ⑥ SWIPE TO ARCHIVE
 Hint: "Archives this prescription."
@@ -361,7 +545,9 @@ Gesture alternative: required. Add "Archive" to the row's accessibility actions
 and to the "More" menu — a swipe-only action fails WCAG 2.1.1 and 2.5.1.
 ```
 
-Six notes instead of twenty-eight, and every one of them tells the developer something the design does not.
+Six notes instead of thirty-two, and every one of them tells the developer something the design does not. Note what carried most of the reduction: no label on any control whose visible text was already correct, one grouped note for all the decoratives instead of one per glyph, no trait annotations at all, no contrast or target-size notes where they pass, and the repeating row annotated once.
+
+And per Principle 2, three of the six do not need to be callouts at all. ② belongs in each layer's alt-text/description field, ④ disappears entirely if the drug name uses a heading component with a level, and ⑤'s `Component: Link` is a component variant. Set those as properties and the canvas carries **three** callouts — ①, ③, and ⑥, all of them cross-element concerns that no single field can hold. That is the target shape: the per-layer facts live on the layers where an AI can read them, and the canvas holds only the relationships.
 
 ---
 
@@ -370,19 +556,24 @@ Six notes instead of twenty-eight, and every one of them tells the developer som
 Run every annotation through this. Delete, do not soften.
 
 1. **Count them.** Over 10 per screen? Delete down.
-2. **Grep your own output** for: `alt`, `aria`, `role=`, `tabindex`, `landmark`, `skip to`, `H1`–`H6`, `px`, `rem`, `breakpoint`, `hover`, `focus ring`, `tab order`, `screen reader`, `double tap`, `click`. Every hit is a rewrite.
-3. **Every `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?
-4. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
-5. **Every custom gesture** — does it have a visible single-tap alternative annotated?
-6. **Every `Group:` with a name** — does it say `contain`?
-7. **Every heading** — does it have a level, and do the levels run without skipping?
-8. **Every modal, sheet, and alert** — is focus-on-open and focus-on-return annotated?
-9. **Every badge, star rating, stepper, and expandable** — does it have a `Value:`?
-10. **Every repeated component** — annotated once, with `Applies to all N`?
-11. **Every `Order:`** — would the default order genuinely be wrong here? If not, delete it.
-12. **Anything unactionable** — "ensure", "appropriate", "consider", "test with", a bare WCAG number? Delete it.
-13. **Any contrast or target-size note on something that passes?** Delete it.
-14. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
+2. **Every callout — could it be a properties-panel field instead?** Alt text, heading level, component variant: move it. Only cross-element concerns (`Group`, `Order`, `Focus`, `Announce`, gesture alternatives, the screen block) stay as callouts.
+3. **Grep your own output** for: `alt`, `aria`, `role=`, `tabindex`, `landmark`, `skip to`, `H1`–`H6`, `px`, `rem`, `breakpoint`, `hover`, `focus ring`, `tab order`, `screen reader`, `double tap`, `click`. Every hit is a rewrite.
+4. **Every `Name:` on a control that has visible text** — delete it unless the text is generic or repeated. If it is, could `Group: combine` with the adjacent text make it unique instead? If yes, delete the name and group instead. If no, say why in the annotation.
+5. **Every surviving `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?
+6. **Any SwiftUI or trait API in your output?** Grep for `accessibility`, `.is`, `Trait:`, `AddTraits`, `isButton`, `isHeader`. An annotation naming an iOS API gets implemented as redundant code. Rewrite as `Component:` or `Heading:`.
+7. **Every `Component:`** — is it a component name, and is it non-obvious? If the design already uses the right Figma component, delete the annotation.
+8. **Every informative image** — does it have a name, in its alt-text field if it has one? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative, in one grouped note, with no name?
+9. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
+10. **Every custom gesture** — does it have a visible single-tap alternative annotated?
+11. **Every `Group:` with a name** — does it say `contain`?
+12. **Every heading** — does it have a level, and do the levels run without skipping? If the design uses heading components with levels in the properties panel, delete these annotations.
+13. **Every modal, sheet, and alert** — is focus-on-open and focus-on-return annotated?
+14. **Every badge, star rating, stepper, and expandable** — does it have a `Value:`?
+15. **Every repeated component** — annotated once, with `Applies to all N`?
+16. **Every `Order:`** — would the default top-to-bottom order genuinely be wrong here? If not, delete it. If so, is it expressed as containers rather than numbered leaves?
+17. **Anything unactionable** — "ensure", "appropriate", "consider", "test with", a bare WCAG number? Delete it.
+18. **Any contrast or target-size note on something that passes?** Delete it.
+19. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
 
 ---
 
@@ -406,21 +597,24 @@ Run every annotation through this. Delete, do not soften.
 | `Name` starts with visible text | 2.5.3 Label in Name |
 | Touch targets | 2.5.8 Target Size (Minimum) |
 | Error annotations | 3.3.1 Error Identification, 3.3.3 Error Suggestion |
-| `Name`, `Trait`, `Value` | 4.1.2 Name, Role, Value |
+| `Name`, `Component`, `Value` | 4.1.2 Name, Role, Value |
 | `Announce` | 4.1.3 Status Messages |
 
 ---
 
 ## Handing off to engineering
 
-These annotations map one-to-one onto SwiftUI modifiers. For the implementation rules the developer should follow — and for an AI coding assistant building from these annotations — use **[SKILL.md](SKILL.md)** in this repository, and verify the result with **[a11y-check](a11y-check/README.md)**.
+These annotations map onto SwiftUI as follows. For the implementation rules the developer should follow — and for an AI coding assistant building from these annotations — use **[SKILL.md](SKILL.md)** in this repository, and verify the result with **[a11y-check](a11y-check/README.md)**.
+
+⚠️ **This table is for the developer, not for the annotation.** Never paste a modifier name into a Figma annotation. Note too that the right column is mostly *native controls*, not accessibility modifiers: picking the right view satisfies most of these with no accessibility code at all, and adding a modifier on top of a native control is the redundancy this file exists to prevent.
 
 | Annotation | SwiftUI |
 | --- | --- |
 | `Name` | `.accessibilityLabel("…")` |
-| `Trait: Button` | `Button { }` or `.accessibilityAddTraits(.isButton)` |
-| `Trait: Link` | `Link("…", destination:)` |
-| `Trait: Button, disabled` | `.disabled(true)` |
+| `Component: Button` | `Button { }` — the trait is automatic, do **not** add `.accessibilityAddTraits(.isButton)` |
+| `Component: Link` | `Link("…", destination:)` — trait automatic |
+| `Component: Button, disabled state` | `.disabled(true)` |
+| `Component: Modal sheet` | `.sheet()` / `.fullScreenCover()` |
 | `Value` | `.accessibilityValue("…")` |
 | `Adjustable` | `.accessibilityAdjustableAction { }` |
 | `Hint` | `.accessibilityHint("…")` |

@@ -335,9 +335,10 @@ Button("Click here") { openURL(privacyURL) }
 ## Reading Order / Grouping (WCAG 1.3.1, 1.3.2)
 
 - Use `.accessibilityElement(children: .combine)` on an `HStack` or `VStack` containing an `Image` and `Text` that represent a single concept, so VoiceOver reads them as one element.
-<<<<<<< HEAD
+- Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("group label")` on containers of related Buttons (radio-style choices, rating buttons, control groups) so VoiceOver announces the group context when the user navigates into the group. This is analogous to a `<fieldset>` with a `<legend>` in HTML.
+- Never use `.accessibilityLabel` on a group container *without* `.accessibilityElement(children: .contain)` — it overrides the visible label text of every control inside the group and causes a Label in Name failure (WCAG 2.5.3).
 - In a `ZStack`, VoiceOver reads elements in source order (bottom to top visually), which often doesn't match the visual reading order. If overlaid elements are interactive, use `.accessibilitySortPriority()` or `.accessibilityElement` to control VoiceOver reading order — or restructure the view hierarchy so the source order matches the visual order.
-- Only use `.accessibilitySortPriority()` when the visual layout genuinely doesn't match VoiceOver's default left-to-right, top-to-bottom order. Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)` first — sort priority overrides are fragile and easy to get wrong. Overusing `.accessibilitySortPriority()` across many elements makes the reading order hard to maintain.
+- Only use `.accessibilitySortPriority()` when the visual layout genuinely doesn't match VoiceOver's default left-to-right, top-to-bottom order (e.g., ZStack overlays). Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)` first — sort priority overrides are fragile and easy to get wrong. Overusing `.accessibilitySortPriority()` across many elements makes the reading order hard to maintain.
 
 ```swift
 // Good — combine image and text into one element
@@ -357,12 +358,24 @@ ZStack {
 }
 // VoiceOver reads Image first, then Title, then Button — but Image is behind everything.
 // Fix: hide the background image and let the foreground content speak.
+
+// Good — group of related buttons with a container label
+VStack {
+    Text("Delivery method")
+    Button("Standard") { method = .standard }
+    Button("Express") { method = .express }
+}
+.accessibilityElement(children: .contain)
+.accessibilityLabel("Delivery method")
+
+// Bad — container label without children: .contain
+VStack {
+    Button("Standard") { method = .standard }
+    Button("Express") { method = .express }
+}
+.accessibilityLabel("Delivery method")
+// Both buttons now report "Delivery method" instead of their visible text — a Label in Name failure.
 ```
-=======
-- Use `.accessibilityElement(children: .contain)` and `.accessibilityLabel("group label")` on containers of related Buttons (radio-style choices, rating buttons, control groups) so VoiceOver announces the group context when the user navigates into the group. This is analogous to a `<fieldset>` with a `<legend>` in HTML.
-- In a `ZStack` with multiple interactive elements, use `.accessibilitySortPriority()` or `.accessibilityElement` to control VoiceOver reading order.
-- Only use `.accessibilitySortPriority()` when the visual layout genuinely doesn't match VoiceOver's default left-to-right, top-to-bottom order (e.g., ZStack overlays). Prefer restructuring the view hierarchy or using `.accessibilityElement(children: .combine)` first — sort priority overrides are fragile and easy to get wrong.
->>>>>>> 40d6936 (Add button-group-missing-container-label rule (WCAG 1.3.1))
 
 ## Sheets and Modals (WCAG 2.4.3)
 

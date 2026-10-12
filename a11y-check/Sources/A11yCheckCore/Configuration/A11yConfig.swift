@@ -22,15 +22,26 @@ public struct A11yConfig: Sendable {
         /// Set `false` for views drawn over images, gradients, or materials, where the
         /// assumption does not hold.
         public let assumeDefaultBackground: Bool?
+        /// Extra design-system font tokens to treat as heading styles, beyond the built-in
+        /// styles and the name heuristic. Match the token only, without a leading dot:
+        /// `brandJumbo` for `.font(.brandJumbo)`. Case-insensitive.
+        public let headingFonts: [String]
+        /// Font tokens to never treat as heading styles, even when the heuristic matches.
+        /// Takes precedence over `headingFonts`. Same token form.
+        public let headingFontDeny: [String]
 
         public init(
             minTouchTarget: Double? = nil,
             contrastRatio: Double? = nil,
-            assumeDefaultBackground: Bool? = nil
+            assumeDefaultBackground: Bool? = nil,
+            headingFonts: [String] = [],
+            headingFontDeny: [String] = []
         ) {
             self.minTouchTarget = minTouchTarget
             self.contrastRatio = contrastRatio
             self.assumeDefaultBackground = assumeDefaultBackground
+            self.headingFonts = headingFonts
+            self.headingFontDeny = headingFontDeny
         }
     }
 
@@ -111,6 +122,8 @@ public enum ConfigLoader {
         var minTouchTarget: Double?
         var contrastRatio: Double?
         var assumeDefaultBackground: Bool?
+        var headingFonts: [String] = []
+        var headingFontDeny: [String] = []
         if let opts = dict["options"] as? [String: Any] {
             if let v = opts["min_touch_target"] as? Double {
                 minTouchTarget = v
@@ -122,6 +135,12 @@ public enum ConfigLoader {
             }
             if let v = opts["assume_default_background"] as? Bool {
                 assumeDefaultBackground = v
+            }
+            if let v = opts["heading_fonts"] as? [String] {
+                headingFonts = v
+            }
+            if let v = opts["heading_font_deny"] as? [String] {
+                headingFontDeny = v
             }
         }
 
@@ -138,7 +157,9 @@ public enum ConfigLoader {
             options: A11yConfig.ConfigOptions(
                 minTouchTarget: minTouchTarget,
                 contrastRatio: contrastRatio,
-                assumeDefaultBackground: assumeDefaultBackground
+                assumeDefaultBackground: assumeDefaultBackground,
+                headingFonts: headingFonts,
+                headingFontDeny: headingFontDeny
             ),
             excludePaths: excludePaths
         )

@@ -20,10 +20,19 @@ final class A11yCheckCoreTests: XCTestCase {
     }
 
     /// Parse source and run a single rule by ID.
-    private func analyze(_ source: String, ruleID: String) -> [A11yDiagnostic] {
+    private func analyze(
+        _ source: String,
+        ruleID: String,
+        configOptions: A11yConfig.ConfigOptions = .init()
+    ) -> [A11yDiagnostic] {
         let syntax = Parser.parse(source: source)
         let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
-        let context = RuleContext(filePath: "test.swift", sourceText: source, locationConverter: converter)
+        let context = RuleContext(
+            filePath: "test.swift",
+            sourceText: source,
+            locationConverter: converter,
+            configOptions: configOptions
+        )
         guard let rule = registry.rules.first(where: { $0.id == ruleID }) else {
             XCTFail("Rule \(ruleID) not found")
             return []
@@ -146,6 +155,286 @@ final class A11yCheckCoreTests: XCTestCase {
         """
         let diags = analyze(source, ruleID: "heading-trait-missing")
         XCTAssertEqual(diags.count, 0)
+    }
+
+    /// Most apps style headings through their own type scale, not Apple's styles. Each of these
+    /// is a real-world design-system token shape.
+    func testHeadingTraitMissing_flagsDesignSystemHeadingTokens() {
+        for token in [
+            ".themeHeadingXL",              // Aetna Health
+            ".appTitleLarge",
+            ".dsHeading2",
+            ".themeSubheadingM",            // a subheading is a heading
+            ".subheadline",                  // ditto, and Apple's own name says so
+            ".subtitle",
+            ".subHeaderL",
+            ".themeDisplayXL",
+            ".themeHeadingL.weight(.bold)", // weight chain must not hide the token
+            "Font.largeTitle",              // fully qualified
+        ] {
+            let source = """
+            import SwiftUI
+            struct MyView: View {
+                var body: some View {
+                    Text("Store Hours")
+                        .font(\(token))
+                }
+            }
+            """
+            let diags = analyze(source, ruleID: "heading-trait-missing")
+            XCTAssertEqual(diags.count, 1, "\(token) should be treated as a heading font")
+        }
+    }
+
+    func testHeadingTraitMissing_ignoresBodyFonts() {
+        for token in [
+            ".themeParagraphM",
+            ".caption",
+            ".footnote",
+            #".custom("AetnaSans", size: 17)"#,
+        ] {
+            let source = """
+            import SwiftUI
+            struct MyView: View {
+                var body: some View {
+                    Text("Store Hours")
+                        .font(\(token))
+                }
+            }
+            """
+            let diags = analyze(source, ruleID: "heading-trait-missing")
+            XCTAssertEqual(diags.count, 0, "\(token) should not be treated as a heading font")
+        }
+    }
+
+    /// A font passed in by variable is judged by the token it holds, not by its name. This is
+    /// the real `InformationBannerView` shape: the stored properties carry no initialiser, so
+    /// the only place the fonts appear is the init signature.
+    func testHeadingTraitMissing_resolvesVariableFontToDeclaredToken() {
+        let source = """
+        import SwiftUI
+        struct InformationBannerView: View {
+            let title: String
+            let titleFont: Font
+            let subtitleFont: Font
+            init(title: String, titleFont: Font = .themeHeadingM, subtitleFont: Font = .themeParagraphXS) {
+                self.title = title
+                self.titleFont = titleFont
+                self.subtitleFont = subtitleFont
+            }
+            var body: some View {
+                VStack {
+                    Text(title).font(titleFont)
+                    Text("sub").font(subtitleFont)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 1, "the heading-token title should report and the paragraph-token subtitle should not")
+        XCTAssertEqual(diags.first?.line, 13)
+    }
+
+    /// `titleFont` holding a paragraph token must not report — the name is not the evidence.
+    func testHeadingTraitMissing_variableNameDoesNotOverrideItsValue() {
+        let source = """
+        import SwiftUI
+        struct ValueRow: View {
+            var titleFont: Font { .themeParagraphS }
+            var body: some View {
+                Text("Total").font(titleFont)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 0)
+    }
+
+    func testHeadingTraitMissing_resolvesThroughViewModelProperty() {
+        let source = """
+        import SwiftUI
+        struct CardModel { var titleFont: Font = .themeHeadingXL }
+        struct CardView: View {
+            let viewModel: CardModel
+            var body: some View {
+                Text("Card").font(viewModel.titleFont)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 1)
+    }
+
+    /// Two components in one file, each with its own `titleFont` and a different value. There
+    /// is no way to tell from the call site which declaration applies, so the name is left
+    /// unresolved and falls back to the heuristic rather than borrowing one component's scale.
+    func testHeadingTraitMissing_ambiguousVariableFallsBackToName() {
+        let source = """
+        import SwiftUI
+        struct A: View {
+            var titleFont: Font { .themeHeadingM }
+            var body: some View { Text("A").font(titleFont) }
+        }
+        struct B: View {
+            var titleFont: Font { .themeParagraphS }
+            var body: some View { Text("B").font(titleFont) }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 2, "both fall back to the name, which reads as a heading")
+    }
+
+    func testFontConstantCollector_recordsDeclarationsAndDropsConflicts() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var headingFont: Font { .themeHeadingXL }
+            var inlineFont = Font.themeParagraphM
+            func make(bodyFont: Font = .themeParagraphS) {}
+            var clash: Font { .themeHeadingM }
+        }
+        struct W: View {
+            var clash: Font { .themeParagraphXS }
+        }
+        """
+        let constants = FontConstantCollector.collect(from: Parser.parse(source: source))
+        XCTAssertEqual(constants["headingFont"], ".themeHeadingXL")
+        XCTAssertEqual(constants["inlineFont"], "Font.themeParagraphM")
+        XCTAssertEqual(constants["bodyFont"], ".themeParagraphS")
+        XCTAssertNil(constants["clash"], "conflicting declarations must not resolve")
+
+        XCTAssertEqual(FontConstantCollector.resolve("headingFont", constants: constants), ".themeHeadingXL")
+        XCTAssertEqual(FontConstantCollector.resolve("vm.headingFont", constants: constants), ".themeHeadingXL")
+        XCTAssertEqual(FontConstantCollector.resolve(".title", constants: constants), ".title")
+        XCTAssertEqual(FontConstantCollector.resolve("unknownFont", constants: constants), "unknownFont")
+    }
+
+    /// A conditional font must be judged on the fonts, not on whatever picks between them.
+    /// Reading `isHeader` as the font name reported two paragraph rows as unmarked headings.
+    func testHeadingTraitMissing_conditionalFontIgnoresTheCondition() {
+        let source = """
+        import SwiftUI
+        struct LimitRow: View {
+            let isHeader: Bool
+            let isBold: Bool
+            var body: some View {
+                Text("Label").font(isHeader || isBold ? .themeParagraphMStrong : .themeParagraphM)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 0)
+    }
+
+    /// A font that is a heading in either branch still needs the trait.
+    func testHeadingTraitMissing_conditionalFontFlagsHeadingBranch() {
+        let source = """
+        import SwiftUI
+        struct LimitRow: View {
+            let isBold: Bool
+            var body: some View {
+                Text("Label").font(isBold ? .themeHeadingM : .themeParagraphM)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 1)
+    }
+
+    func testHeadingFontTokens_scansMemberAccessNotLeadingIdentifier() {
+        XCTAssertEqual(HeadingTraitMissingRule.fontTokens(in: ".title"), ["title"])
+        XCTAssertEqual(HeadingTraitMissingRule.fontTokens(in: "Font.largeTitle"), ["largeTitle"])
+        XCTAssertEqual(
+            HeadingTraitMissingRule.fontTokens(in: ".themeHeadingL.weight(.bold)"),
+            ["themeHeadingL", "weight", "bold"]
+        )
+        XCTAssertEqual(
+            HeadingTraitMissingRule.fontTokens(in: #".custom("AetnaSans", size: 17)"#),
+            ["custom"]
+        )
+        XCTAssertEqual(
+            HeadingTraitMissingRule.fontTokens(in: "isHeader ? .themeParagraphMStrong : .themeParagraphM"),
+            ["themeParagraphMStrong", "themeParagraphM"],
+            "the condition is not a font token"
+        )
+        XCTAssertEqual(HeadingTraitMissingRule.fontTokens(in: "titleFont"), ["titleFont"])
+    }
+
+    func testHeadingTraitMissing_configCanOptTokenIn() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Store Hours")
+                    .font(.brandJumbo)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 0)
+
+        let opts = A11yConfig.ConfigOptions(headingFonts: ["brandJumbo"])
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing", configOptions: opts).count, 1)
+    }
+
+    func testHeadingTraitMissing_configCanOptTokenOut() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Store Hours")
+                    .font(.themeHeadingInline)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 1)
+
+        let opts = A11yConfig.ConfigOptions(headingFontDeny: ["themeHeadingInline"])
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing", configOptions: opts).count, 0)
+    }
+
+    /// Deny wins over allow, so a project can contradict itself without the rule guessing.
+    func testHeadingTraitMissing_configDenyBeatsAllow() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Store Hours")
+                    .font(.brandJumbo)
+            }
+        }
+        """
+        let opts = A11yConfig.ConfigOptions(
+            headingFonts: ["brandJumbo"],
+            headingFontDeny: ["brandJumbo"]
+        )
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing", configOptions: opts).count, 0)
+    }
+
+    /// A design-system heading token on a Button label is still a control label, not a heading.
+    func testHeadingTraitMissing_designSystemTokenOnButtonLabelIsNotFlagged() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button {
+                } label: {
+                    Text("Refill")
+                        .font(.themeHeadingM)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testHeadingFontConfig_parsesFromYAML() throws {
+        let yaml = """
+        options:
+          heading_fonts:
+            - brandJumbo
+          heading_font_deny:
+            - themeHeadingInline
+        """
+        let config = try ConfigLoader.parse(yaml)
+        XCTAssertEqual(config.options.headingFonts, ["brandJumbo"])
+        XCTAssertEqual(config.options.headingFontDeny, ["themeHeadingInline"])
     }
 
     func testFakeHeadingInLabel_flagsBadLabel() {

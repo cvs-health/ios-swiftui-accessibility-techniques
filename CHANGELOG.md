@@ -65,6 +65,14 @@ iOS app changes made after 26.7 shipped. Not yet in the App Store.
 
   Filed under the app rather than the CLI: it is project documentation, like `SKILL.md`, and ships no rule the checker can run. Static analysis sees Swift, not Figma.
 
+- **`FIGMA-ANNOTATIONS-SKILL.md` is now installable as a skill, where before it could only be pasted.** Two things stopped it loading. Its frontmatter `name` was `iOS Accessibility Design Annotations` — title case with spaces, where a skill name must be kebab-case and match its containing directory — and the file sat at the repository root rather than in a skills directory, which is the only place a skill is discovered. Renamed to `figma-a11y-annotations` and exposed at `.claude/skills/figma-a11y-annotations/SKILL.md`.
+
+  The new path is a **symlink to the root file, not a copy**, so there is one source of truth. A 663-line rule set duplicated across two paths in the same repository drifts, and the drift is silent: the pasted copy and the loaded copy would disagree about the annotation budget with nothing to flag it. Verified that skill discovery resolves the symlink.
+
+  Nothing moved, so the `FIGMA-ANNOTATIONS-SKILL.md` link in `README.md` still resolves and the paste-into-Figma-AI workflow is unchanged. Only the H1 carries the human-readable title now; the `name` field is an identifier, and it was being used as a heading.
+
+  `SKILL.md` at the root has the same two problems — `name: iOS SwiftUI Accessibility` and no skills directory — so the README instruction to copy it into `~/.claude/skills/` does not currently produce a loadable skill. Left alone here rather than fixed in passing, because renaming it changes the identifier for anyone who has already installed it and that deserves its own change.
+
 - **New Show Borders technique** (`ShowBordersView.swift`, `Documentation/ShowBorders.md`), the sixth preference-detection technique alongside Increase Contrast, Reduce Transparency, Reduce Motion, Smart Invert, and Dim Flashing Lights. The setting previously appeared in the repo only as a status row in `ATdetectionView.swift`, with no technique page.
   - Titled for the current Settings label. Reading `BUTTON_SHAPES` from `AccessibilitySettings.bundle` across the installed simulator runtimes shows `Button Shapes` on iOS 26.0 and `Show Borders` on 26.3, 26.4, 26.5, and 27.0. Only the label changed: the preference key is still `BUTTON_SHAPES` and the API is still `accessibilityShowButtonShapes`. The page and the docs both record the old name so the Settings steps work on either version.
   - Both examples are the basic SwiftUI `Button` with a text label, which renders as plain tinted text with no border or fill. They are identical while the setting is off and differ in two modifiers.

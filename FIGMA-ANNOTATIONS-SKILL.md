@@ -1,5 +1,5 @@
 ---
-name: iOS Accessibility Design Annotations
+name: figma-a11y-annotations
 description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a strict annotation budget, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, components, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
 ---
 

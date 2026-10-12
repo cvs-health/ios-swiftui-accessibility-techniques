@@ -595,7 +595,9 @@ Run every annotation through this. Delete, do not soften.
 17. **Every `Order:`** — would the default top-to-bottom order genuinely be wrong here? If not, delete it. If so, is it expressed as containers rather than numbered leaves?
 18. **Anything unactionable** — "ensure", "appropriate", "consider", "test with", a bare WCAG number? Delete it.
 19. **Any contrast or target-size note on something that passes?** Delete it.
-20. **Any list semantics?** Grep for `list`, `List,`, `items`, `setsize`, `posinset`, `containerType`. iOS has none of it — not as a role, not as a trait, not as a count. Delete the annotation; if the count matters, it goes in the section heading. Note that `Announce: "List, 3 items"` passes steps 3 and 6 cleanly, so this step is the only one that catches it.
+20. **Any list semantics?** Grep for `role="list`, `listitem`, `setsize`, `posinset`, `containerType`, `list count`, and `"List,`. iOS has none of it — not as a role, not as a trait, not as a count. Delete the annotation; if the count matters, it goes in the section heading. Note that `Announce: "List, 3 items"` passes steps 3 and 6 cleanly, so this step is the only one that catches it.
+
+    **Grep those tokens, not the bare word "list".** Describing a design in English is fine and common — "a list of 12 cards", "the row styling reads like a list row", `grouped-list` as a component name. None of those claim a semantic, and a grep for bare `list` flags every one of them, including ten in this file. What is banned is asserting a **role, container type, or item count** that iOS does not have. If you cannot tell which you are looking at, ask whether a SwiftUI developer could implement it: `Component: Button` is implementable, `accessibilityContainerType: .list` is not.
 21. **Is every annotation tagged with the Accessibility category?** An uncategorised note is invisible to a developer filtering by category.
 22. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
 

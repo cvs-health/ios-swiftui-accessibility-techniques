@@ -476,6 +476,10 @@ options:
   min_touch_target: 44    # override small-touch-target threshold (default 24)
   contrast_ratio: 4.5     # WCAG AA contrast minimum
   assume_default_background: false  # default false; see below
+  heading_fonts:          # extra font tokens heading-trait-missing treats as headings
+    - brandJumbo
+  heading_font_deny:      # font tokens it should never treat as headings
+    - themeHeadingInline
 
 # Skip paths matching these patterns (directory scans and explicit file args)
 exclude_paths:
@@ -483,6 +487,59 @@ exclude_paths:
   - "*/Pods/*"
   - "*Tests*"
 ```
+
+### How heading fonts are recognised
+
+`heading-trait-missing` has to decide whether a `Text`'s font is a heading style. Most apps do not
+use Apple's styles for headings — they have their own type scale — so matching works on the
+**leading token** of the `.font()` argument, in this order:
+
+1. `heading_font_deny` — never a heading. Deny beats allow.
+2. `heading_fonts` — always a heading.
+3. Apple's built-ins: `.title`, `.title2`, `.title3`, `.largeTitle`, `.headline`.
+4. A name containing `heading`, `header`, `title`, `headline`, or `display` — `.themeHeadingXL`,
+   `.appTitleLarge`, `.dsHeading2` all match with no configuration.
+
+**Subheadings count as headings.** `.subheadline`, `.subtitle`, `.themeSubheadingM` and
+`subHeaderL` all report. WCAG 1.3.1 asks for anything that appears to be a heading to be marked up
+as one, and it makes no exemption for subordinate headings — a section subheader that never reaches
+the Rotor is the defect this rule exists to catch.
+
+Only the leading token counts, so `.themeHeadingL.weight(.bold)` reads as `themeHeadingL`, and
+`.custom("AetnaSans", size: 17)` reads as `custom` and is never a heading. `Font.largeTitle` and
+`.largeTitle` are equivalent.
+
+#### Fonts passed in by variable
+
+A font held in a property or an init parameter is resolved to the token it holds before any of the
+above is applied, because the variable's **name is not evidence of its tier** — and it misleads in
+both directions. In one real component `subtitleFont` holds `.themeParagraphXS`; across components
+in the same app `titleFont` holds a heading token in one and a paragraph token in another:
+
+```swift
+struct InformationBannerView: View {
+    let titleFont: Font
+    let subtitleFont: Font
+    // the stored properties carry no initialiser — the fonts only appear in the signature
+    init(titleFont: Font = .themeHeadingM, subtitleFont: Font = .themeParagraphXS) { … }
+
+    var body: some View {
+        Text(title).font(titleFont)        // -> .themeHeadingM,     reports
+        Text(subtitle).font(subtitleFont)  // -> .themeParagraphXS,  does not
+    }
+}
+```
+
+`let`/`var` initialisers, single-expression computed properties, and function or init parameter
+defaults are all resolved, including through one level of member access (`viewModel.titleFont`).
+Resolution is per file and follows one level of indirection. When one file declares the same name
+with two *different* fonts — two components that each have a `titleFont` — there is no way to tell
+which applies at a given call site, so the name is left unresolved and falls back to the heuristic
+rather than borrowing one component's type scale for the other's text.
+
+Reach for the two config keys when your type scale uses a name the heuristic cannot infer
+(`heading_fonts: [brandJumbo]`) or applies a heading-named token to text that is not a heading
+(`heading_font_deny: [themeHeadingInline]`).
 
 ### Colour and contrast resolution
 

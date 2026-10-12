@@ -22,7 +22,7 @@ Rules:
 
 ## [Unreleased]
 
-iOS app changes made after 26.7 shipped. Not yet in the App Store.
+iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 0.7.0. Not yet in the App Store or tagged.
 
 ### iOSswiftUIa11yTechniques
 
@@ -96,6 +96,45 @@ iOS app changes made after 26.7 shipped. Not yet in the App Store.
   - **Tabs** (`TabsView.swift`): the unread badge in the good custom-tabs example used white on `Color.red`, which is 3.5:1 — short of the 4.5:1 its small bold text requires. Now uses the crimson the file already defines. The badge being `.accessibilityHidden(true)` does not excuse it: 1.4.3 protects low-vision sighted users, not VoiceOver users, and the count is conveyed visually. The matching bad example keeps `Color.red` deliberately.
   - **A11y-check** (`A11yCheckView.swift`): the good gesture-alternative example's `Button("Delete")` used `.foregroundColor(.red)`, 3.5:1 against the default background — a good example of WCAG 2.5.1 that failed 1.4.3. Now crimson, which clears 4.5:1 against both the light and dark backgrounds, so no `colorScheme` ternary is needed. Verified with the tool rather than by hand; an initial hand-estimate of crimson-on-black was wrong.
 - **`WebViewDocs.updateUIView` reloading the documentation on every SwiftUI update** (`ContentView.swift`). The method called `webView.load(URLRequest(url: url))` on each update, resetting the page and discarding the web view's back-forward list. `url` is a constant, so the body is now empty. No visual change.
+
+### a11y-check
+
+#### Changed
+
+- **`heading-trait-missing` now recognises design-system heading tokens, not just Apple's font styles.** The rule knew `.title`, `.title2`, `.title3`, `.largeTitle` and `.headline` and nothing else, which meant it saw almost nothing in any app with its own type scale — and most apps have one. On the Aetna Health iOS app it produced **5 findings against 380 `.font(.themeHeading*)` sites**, while that app's accessibility backlog carried **38 open "visual heading is not marked up as a heading" defects**. The rule was blind to precisely the defect class it exists to catch.
+
+  Matching now works on the **font tokens** in the `.font()` argument, resolved in a fixed order: `heading_font_deny`, then `heading_fonts`, then the built-in styles, then a name heuristic for tokens containing `heading`, `header`, `title`, `headline`, or `display`. So `.themeHeadingXL`, `.appTitleLarge` and `.dsHeading2` are recognised with no configuration.
+
+  **Subheadings are headings.** `.subheadline`, `.subtitle`, `.themeSubheadingM` and `subHeaderL` all report. WCAG 1.3.1 asks for anything that appears to be a heading to be marked up as one and makes no exemption for subordinate headings, so a section subheader that never reaches the Rotor is exactly the defect this rule exists to catch. An earlier revision of this change excluded `subtitle` and `subheadline` by name on the grounds that they are usually supporting text; that was the rule making a judgement that belongs to the content, and it would have silently dropped real subheadings.
+
+  Scanning tokens rather than taking the leading identifier also handles chained, constructed and conditional fonts: `.themeHeadingL.weight(.bold)` reads as `themeHeadingL` rather than being missed, `.custom("AetnaSans", size: 17)` reads as `custom` and is never a heading, and `isHeader ? .themeParagraphMStrong : .themeParagraphM` is judged on its two paragraph branches instead of on the `isHeader` that chooses between them. That last one is not hypothetical — reading the condition as the font name reported two paragraph rows in `FindCare+CostEstimateLimitsView.swift` as unmarked headings.
+
+  Measured on the same 13 Aetna Health packages: **5 findings to 211**, which matched an independent count of heading-font sites with no `isHeader` within ±6 lines. Every other rule's count was unchanged, confirmed against a control build of the previous commit.
+
+- **Fonts passed in by variable are resolved to the token they hold** (new `FontConstantCollector`, mirroring the existing `ColorConstantCollector`). A variable's *name* is not evidence of its tier, and in this codebase it misleads in both directions: `subtitleFont` holds `.themeParagraphXS`, while `titleFont` holds `.themeHeadingM` in one component and `.themeParagraphS` in two others.
+
+  So the old rule's handful of findings were mostly name-guesses. Of the **5** it produced on the Aetna Health app, **3 were false positives** — `InformationBannerView.swift:37` and `PharmacyInlineTitleView.swift:18` both report a `titleFont` that is declared `.themeParagraphS`, and line 41 of the same banner is a `subtitleFont` declared `.themeParagraphXS`. All three are gone, decided by the declared value rather than the name.
+
+  Resolves `let`/`var` initialisers, single-expression computed properties, and function and init parameter defaults, including through one level of member access (`viewModel.titleFont`). Parameter defaults matter more than they sound: in a component whose fonts are injected, the stored properties carry no initialiser at all, so the signature is the only place the font appears.
+
+  When one file declares the same name with two *different* fonts — two components that each have a `titleFont` — there is no way to tell which applies at a given call site, so the name is marked ambiguous and left unresolved rather than letting declaration order attach one component's type scale to the other's text.
+
+- **Two config keys for type scales the heuristic cannot infer**: `options.heading_fonts` opts a token in (`brandJumbo`), `options.heading_font_deny` opts one out (`themeHeadingInline`). Deny beats allow, so a project that lists a token in both gets the safe answer rather than an arbitrary one. Both default to empty, so no existing project changes behaviour without asking.
+
+#### Fixed
+
+- **Paragraph text held in a heading-named variable was reported as a missing heading.** The old check asked whether the font *text* contained a known style name, so the identifier `subtitleFont` matched `title` and `subheadline` matched `headline` — the variable's name decided the answer and its declared value was never consulted. Three of the rule's five findings on the Aetna Health app were this; see the resolution entry above.
+
+- **`HeadingRules.swift` was missing its Apache header**, which this repository requires of every file.
+
+#### Known limits
+
+Sampling the 211 findings by hand turned up two classes this rule cannot distinguish, both reported rather than silently filtered:
+
+- **16 sit in `#Preview` / `PreviewProvider` bodies.** Preview code is flagged by every rule in the tool, so suppressing it for this one rule alone would be inconsistent; it needs a tool-wide decision.
+- **27 sit within ±12 lines of an `.accessibilityElement(children: .combine)`.** Whether `.isHeader` on a child of a combined element reaches the merged element is a device question, not a source question, and it was not tested here — so no guard was added on an untested assumption.
+
+A font heuristic also cannot tell a structural heading from display text that borrows a heading token: avatar initials styled `.themeHeadingXXL` report, and correctly so by the rule's own definition. `heading_font_deny` is the wrong instrument for that, since the token is a real heading elsewhere. Value resolution narrows this to genuinely inline tokens — anything injected as a variable is now judged on what it holds.
 
 
 ## [a11y-check 0.7.0] - 2026-09-25

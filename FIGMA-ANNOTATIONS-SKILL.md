@@ -227,7 +227,11 @@ The **Key** column is what goes in the annotation. The **Builds to** column is t
 
 **Where to put it.** Per Principle 2, prefer a **properties-panel field** whenever one exists for the value — an image's alt-text/description field, a heading component's `level`, a component variant. The key is then implied by the field and you write only the value.
 
-**Format for anything with no field.** Figma's native Dev Mode annotation is a free-text note on a layer (optionally tagged with a category such as "Accessibility"). Put these as plain `Key: value` lines inside one note, in the order above. This format works unchanged in a native annotation, in any annotation plugin, and in a handoff doc.
+**Format for anything with no field.** Figma's native Dev Mode annotation is a free-text note on a layer. Put these as plain `Key: value` lines inside one note, in the order above. This format works unchanged in a native annotation, in any annotation plugin, and in a handoff doc.
+
+**Always tag the note with the Accessibility category — never leave it uncategorised.** Dev Mode lets a developer filter annotations by category, so an uncategorised accessibility note still exists but is invisible to the person who went looking for it. The category is metadata, not a callout, so it costs nothing against the budget.
+
+Two practical notes for anyone writing annotations programmatically. Category IDs are **per file** — the same "Accessibility" category is a different ID in every file, so nothing can be hardcoded. And there is no API to enumerate them: `figma.root.annotationCategories` does not exist, and the only reliable way to obtain the ID is to read it off an annotation that already carries one. A file with no categorised annotation yet therefore needs one seeded by hand before a tool can match it.
 
 ```
 Name: Directions, CVS Main St
@@ -264,6 +268,8 @@ Every term on the left belongs to the web. On an iOS design it is wrong, and it 
 | `breakpoint`, `mobile/tablet/desktop` | `Compact` / `Regular` size class |
 | `hover` state | Nothing. Touch has no hover. Specify `pressed` and `disabled` instead |
 | `double tap to activate` | Nothing. **Never** put a gesture in a hint |
+| `role="list"`, `role="listitem"`, `aria-setsize`, `aria-posinset` | Nothing. **iOS has no list semantics.** Each row is already its own VoiceOver stop and the swipe order carries the sequence |
+| `accessibilityContainerType: .list`, `List, N items`, `Announce list count` | Nothing. SwiftUI exposes **no** list role and no item count. UIKit has the enum, but it produces no such announcement and SwiftUI cannot reach it. If the count genuinely matters, put it in the section heading — `Heading: 2 "People you care for (3)"` |
 
 Two more mobile-specific traps:
 
@@ -426,6 +432,7 @@ Use when something changes on screen and VoiceOver would otherwise say nothing: 
 - Write the announcement text and its scope: `Announce: "3 results" when the filter changes. Layout change — does not move focus.`
 - Use `Screen change` only when the whole screen's content is replaced; `Layout change` for a region.
 - An error must **also** be visible text associated with its field — an announcement is not a substitute. Annotate both: `Error text below the field, programmatically associated. Announce on validation failure.`
+- **`Announce:` is not a route to a list role.** `Announce: "List, 3 items"` reads as compliant — it contains no banned term and this key does map to a real API — but it specifies something SwiftUI cannot produce, so the developer either ignores it or hand-rolls a fake announcement on appear. The same applies to any count of static content that was never going to change. This key is for a change the user must hear: an error appearing, a result count changing, async content arriving. If nothing changed, there is no `Announce:`.
 
 ---
 
@@ -588,7 +595,9 @@ Run every annotation through this. Delete, do not soften.
 17. **Every `Order:`** — would the default top-to-bottom order genuinely be wrong here? If not, delete it. If so, is it expressed as containers rather than numbered leaves?
 18. **Anything unactionable** — "ensure", "appropriate", "consider", "test with", a bare WCAG number? Delete it.
 19. **Any contrast or target-size note on something that passes?** Delete it.
-20. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
+20. **Any list semantics?** Grep for `list`, `List,`, `items`, `setsize`, `posinset`, `containerType`. iOS has none of it — not as a role, not as a trait, not as a count. Delete the annotation; if the count matters, it goes in the section heading. Note that `Announce: "List, 3 items"` passes steps 3 and 6 cleanly, so this step is the only one that catches it.
+21. **Is every annotation tagged with the Accessibility category?** An uncategorised note is invisible to a developer filtering by category.
+22. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
 
 ---
 

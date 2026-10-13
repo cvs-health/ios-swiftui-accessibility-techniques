@@ -420,14 +420,16 @@ A sheet that must stop VoiceOver reaching the content behind it is a different m
 - Write the spoken result and the pattern, not prose: `Value: "3 of 5 stars"`, `Value: "Step 2 of 4"`, `Value: "Collapsed" / "Expanded"`.
 - **A disclosure is the common conditional, and you cannot resolve it by looking.** A native `DisclosureGroup` carries the button trait *and* announces its own collapsed/expanded state, so a design using one needs **no annotation at all**. A custom row built from a frame, a label and a chevron provides neither. The two are pixel-identical in a design, so **ask which it is** — this is the same situation as behaviour the design does not show.
 
-  **State the required outcome, not the branch.** The mistake is reaching for `Value: Collapsed (if custom)`, which reads like a hedge. Write what must be true instead, and the branch disappears:
+  **Name both routes and what each requires**, so the developer can act on whichever they build:
 
 ```
-Value: "Collapsed" / "Expanded" must be announced. Free from a native disclosure
-control; specify it if the control is custom.
+Native accordion (disclosure group): no trait or value needed.
+If a custom control: use a Button, with Value: "Collapsed" / "Expanded".
 ```
 
-  That specifies the requirement, leaves the mechanism to the developer, costs two lines, and names no API — which matters, because `DisclosureGroup` in an annotation is SwiftUI API and Principle 8 forbids it.
+  Write the control *category* — "accordion", "disclosure group", "Button" — not the SwiftUI type. `DisclosureGroup` or `.accessibilityAddTraits` in an annotation is API, and Principle 8 still forbids that.
+
+  ⚠️ **This is the one place a control type belongs in an annotation**, and the carve-out is narrow. Everywhere else a component mismatch is a design fix, because the design *can* express the right component and should — see "Why there is no `Component:` key". A disclosure is different on all three counts: the design cannot show which of the two it is, the **developer** chooses, and the accessibility consequences of the choice are not the same. The test for whether this carve-out applies is one question: **can the design express the choice?** If it can, fix the design and annotate nothing. If it cannot and the developer resolves it, state both paths.
 
   **A condition the developer controls may be stated; a condition about the design may not.** This is the line between the form above and the hedging this file rejects elsewhere. *The developer chooses the control*, so "if the control is custom" is something they can resolve and act on. `.button (if tappable)` is not: it asks them to guess a fact only the designer knows, and the annotator should have asked instead of passing the uncertainty along.
 

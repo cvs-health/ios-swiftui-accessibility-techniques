@@ -1,6 +1,6 @@
 ---
 name: figma-a11y-annotations
-description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a bare-minimum annotation discipline, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, components, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
+description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a bare-minimum annotation discipline, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
 ---
 
 # iOS Accessibility Design Annotations
@@ -197,7 +197,8 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 - ❌ Every text layer's contrast ratio. Contrast is a **token** concern. Annotate it **only** where a style is off-system or sits on an image or gradient, and then on that element. A verified palette needs no annotation anywhere.
 - ❌ Decorative images as callouts, when the properties panel has a decorative or hidden option. Set it there and write nothing on the canvas. If there is no field, each decorative element gets **its own** callout — never one note covering several layers, which leaves the targets ambiguous. **Principle 3.**
 - ❌ "This is a button." The design shows a button. The developer will use `Button`.
-- ❌ **Accessibility traits, in any form.** No `Trait: isButton`, no `.accessibilityAddTraits(...)`, no `role=`. Name the component, or fix the component in the design. See `Component:` — Principle 1's redundant-code problem applies to traits exactly as it does to labels.
+- ❌ **Accessibility traits, in any form.** No `Trait: isButton`, no `.accessibilityAddTraits(...)`, no `role=`. Principle 1's redundant-code problem applies to traits exactly as it does to labels.
+- ❌ **The control type, in any form.** `Component: Button` is not an annotation either. If the design picked the wrong component, the fix is the design — use the Button component, the Link component, the disabled variant. See "Why there is no `Component:` key".
 - ❌ Visible text as an "accessible name" when the accessible name **is** the visible text. The default is already correct, and annotating it manufactures a Label in Name failure. **Principle 1.**
 - ❌ A unique name on a generic or repeated control before checking whether `Group: combine` with the adjacent text would make it unique. Combining is one annotation; renaming is one per control.
 - ❌ A name on a caret, chevron, `+`, or any glyph inside a control that already has visible text. Mark it decorative instead. **Principle 3.**
@@ -213,7 +214,7 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 
 ---
 
-## The nine annotation types — this list is closed
+## The eight annotation types — this list is closed
 
 Use **only** these keys. Do not invent fields. Do not import fields from a web annotation kit.
 
@@ -222,7 +223,6 @@ The **Key** column is what goes in the annotation. The **Builds to** column is t
 | Key | Builds to | Use when |
 | --- | --- | --- |
 | `Name` | `.accessibilityLabel` | There is no visible text, or it is generic/repeated **and** combining focus cannot fix it |
-| `Component` | the native control — `Button`, `Link`, `Toggle`, … | The design misleads about which control this is. **Never written as a trait** |
 | `Value` | `.accessibilityValue` | The element carries state or a quantity not in its name |
 | `Hint` | `.accessibilityHint` | **Only** for the non-obvious interactions listed below |
 | `Heading` | heading trait + level | The text is a heading **and** no heading component with a level is used |
@@ -243,12 +243,11 @@ Three practical notes for anyone writing annotations programmatically. Category 
 
 ```
 Name: Directions, CVS Main St
-Component: Link — opens Maps, leaves the app
 ```
 
 Most annotations are one or two lines. If yours routinely runs to five keys, re-read the gate — you are specifying defaults.
 
-Note what is *not* in that example: no `Trait:`, because the component is named instead; no `Hint:`, because a link's destination is obvious; and no `Name:` at all if the control had visible text.
+Note what is *not* in that example: no `Trait:` and no control type, because neither is ever annotated; no `Hint:`, because a link's destination is obvious; and no `Name:` at all if the control had visible text.
 
 ---
 
@@ -260,8 +259,8 @@ Every term on the left belongs to the web. On an iOS design it is wrong, and it 
 | --- | --- |
 | `alt text`, `alt=` | `Name:` |
 | `aria-label`, `aria-labelledby`, `aria-describedby` | `Name:` / `Hint:` |
-| `role="button"`, `role=` anything | `Component: Button` — name the component, not a role or trait |
-| `.accessibilityAddTraits(.isButton)`, `isHeader`, any iOS trait API | `Component: Button` / `Heading: 2`. **Never put SwiftUI API in an annotation** |
+| `role="button"`, `role=` anything | Nothing. Use the right component **in the design** — a native `Button` carries the trait for free |
+| `.accessibilityAddTraits(.isButton)`, `isHeader`, any iOS trait API | `Heading: 2` for a heading. For a control, fix the component in the design. **Never put SwiftUI API in an annotation** |
 | `aria-live`, `role="status"`, `role="alert"` | `Announce:` |
 | `aria-expanded`, `aria-checked`, `aria-selected` | `Value: Expanded` / `Value: Checked` / `Value: Selected` |
 | `aria-hidden` | `Decorative — hidden from VoiceOver` |
@@ -308,25 +307,29 @@ See Principle 1 — read it before using this key at all.
 ❌ Name: Refill.                        (trailing period)
 ```
 
-### `Component:` — name the component, never the trait
+### Why there is no `Component:` key
 
-**Do not annotate accessibility traits.** Name the component the design uses, in design-system or Figma terms: `Button`, `Link`, `Tab`, `Toggle`, `Text field`, `Checkbox`, `Radio`, `Segmented control`, `Stepper`, `Slider`, `Search field`, `Modal sheet`, `Image`.
+**Do not annotate accessibility traits, and do not annotate the control type either.**
 
-The reason is the same one that governs labels (Principle 1): a trait written as iOS API gets implemented as iOS API. A developer handed `Trait: Button` or `.accessibilityAddTraits(.isButton)` will add that modifier — to a `Button`, which already has the trait. The result is redundant code, and in the worse cases a hand-rolled control carrying a manually-applied trait where a native control was available. Naming the component instead gives the developer the one instruction that matters: **use the native control**, and the trait comes with it for free, correctly, on every OS version.
+The trait half is the older rule and the reason is Principle 1's: a trait written as iOS API gets implemented as iOS API. A developer handed `Trait: Button` or `.accessibilityAddTraits(.isButton)` will add that modifier — to a `Button`, which already has the trait. The result is redundant code, and in the worse cases a hand-rolled control carrying a manually-applied trait where a native control was available.
 
 ```
-✅ Component: Link
-✅ Component: Segmented control
 ❌ Trait: isButton
 ❌ Trait: .isHeader
 ❌ Add .accessibilityAddTraits(.isButton)
 ❌ role="button"
+❌ Component: Button
 ```
 
-- **Best of all: fix it in the design and annotate nothing.** If the Figma file has a Button component, use the Button component. A correctly-chosen component needs no annotation at all, and this is the preferred outcome — see Principle 2. Failing that, set the component variant as a property rather than writing a callout.
-- **Omit it when the component is obvious.** A rectangle with centered text is a button, and the developer will build a `Button`. Annotate only where the design **misleads**: text that navigates but does not look tappable, a whole row that acts as one button, a custom control imitating a native one, or an off-system element with no component behind it.
-- **`Button` vs `Link` is a real distinction on iOS, and worth annotating.** `Link` is for anything that leaves the app or opens a URL — a web page, Mail, Maps, the App Store. In-app navigation is a `Button` or `NavigationLink`. The two look identical in a design and getting it backwards is a genuine WCAG 4.1.2 defect, so name it: `Component: Link — opens Maps, leaves the app.`
-- If a control is drawn greyed out or dimmed, annotate `Component: Button, disabled state` so the developer marks it genuinely disabled rather than only styling it. A control that looks disabled but is not is a defect only AT users hit.
+Naming the *component* instead of the trait used to be this file's answer. It is not, because it still leaves the design wrong. An element that behaves as a button should **be** a button in the design — the Button component, the Link component, the disabled variant — and then there is nothing to annotate. A note reading `Component: Button` documents a design defect and asks the developer to compensate for it, which is the opposite of what an annotation is for. Per Principle 2, the order is fix the component → set the property → write a callout, and for control types the first step is always available.
+
+So a component mismatch is **design feedback, not an annotation.** Raise it with the designer and write nothing. Three cases worth raising, because each is a real defect:
+
+- **`Button` vs `Link`.** `Link` is for anything that leaves the app or opens a URL — a web page, Mail, Maps, the App Store. In-app navigation is a `Button` or `NavigationLink`. The two look identical in a design and getting it backwards is a genuine WCAG 4.1.2 defect. The fix is the right component, not a note naming one.
+- **A control drawn greyed out or dimmed** needs the component's disabled variant, so the developer marks it genuinely disabled rather than only styling it. A control that looks disabled but is not is a defect only AT users hit.
+- **A custom control imitating a native one** — a hand-drawn toggle, a fake segmented control. Replace it with the native component.
+
+A sheet that must stop VoiceOver reaching the content behind it is a different matter and belongs under `Focus:`.
 
 ### `Value:` — state and quantity
 
@@ -375,7 +378,7 @@ Figma renders a heading and a large bold label identically, so by default this i
 Annotate when the heading is plain styled text, an off-system text layer, or a component with no level exposed.
 
 - Mark **every** heading, and give its level: `Heading: 1`, `Heading: 2`, …
-- The level is an **iOS heading level**, not markup and not a trait. Never write `H2` as a tag, and never write `.isHeader` or `accessibilityHeading` — see `Component:` above for why naming the API backfires.
+- The level is an **iOS heading level**, not markup and not a trait. Never write `H2` as a tag, and never write `.isHeader` or `accessibilityHeading` — see the traits rule above for why naming the API backfires.
 - **Do not skip levels.** 1 → 2 → 3, never 1 → 3.
 - The screen's **navigation title is the page title**, not a heading. SwiftUI derives it from the visible title, so annotate nothing unless the spoken title must differ from the one on screen. The first heading inside the content starts at level 1.
 - Never express a heading by putting the word "heading" in the name. It will not appear in the VoiceOver Rotor, which is the entire point.
@@ -440,7 +443,7 @@ Invisible in a static design and a frequent real-world defect, so annotate it wh
 - On open: `Focus: moves to the sheet title on open.`
 - On close: `Focus: returns to the "Refill" button that opened the sheet.` Without this, focus lands unpredictably — usually at the top of the screen — and the user loses their place.
 - For an inline expansion: `Focus: stays on the disclosure control; Value changes to "Expanded".`
-- Annotate `Component: Modal sheet` so VoiceOver does not wander into the content behind it.
+- A sheet that must stop VoiceOver reaching the content behind it is annotated here, as part of the focus specification — not as a component.
 - If a sheet's content could exceed the screen at large text, add `Scrolls` — a modal that cannot scroll is unusable at accessibility text sizes.
 
 ### `Announce:` — changes with no screen transition
@@ -561,7 +564,6 @@ Visible text comes first, so Voice Control still works.
 
 ④ DIRECTIONS BUTTON
 Name: "Directions, CVS Main St"
-Component: Link — opens Maps, leaves the app.
 
 ⑤ SWIPE TO ARCHIVE
 Hint: "Archives this prescription."
@@ -586,8 +588,8 @@ Run every annotation through this. Delete, do not soften.
 3. **Grep your own output** for: `alt`, `aria`, `role=`, `tabindex`, `landmark`, `skip to`, `H1`–`H6`, `px`, `rem`, `breakpoint`, `hover`, `focus ring`, `tab order`, `screen reader`, `double tap`, `click`. Every hit is a rewrite.
 4. **Every `Name:` on a control that has visible text** — delete it unless the text is generic or repeated. If it is, could `Group: combine` with the adjacent text make it unique instead? If yes, delete the name and group instead. If no, say why in the annotation.
 5. **Every surviving `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?
-6. **Any SwiftUI or trait API in your output?** Grep for `accessibility`, `.is`, `Trait:`, `AddTraits`, `isButton`, `isHeader`. An annotation naming an iOS API gets implemented as redundant code. Rewrite as `Component:` or `Heading:`.
-7. **Every `Component:`** — is it a component name, and is it non-obvious? If the design already uses the right Figma component, delete the annotation.
+6. **Any SwiftUI or trait API in your output?** Grep for `accessibility`, `.is`, `Trait:`, `AddTraits`, `isButton`, `isHeader`. An annotation naming an iOS API gets implemented as redundant code. Rewrite as `Heading:`, or fix the component in the design.
+7. **Any annotation naming a control type?** `Component: Button`, `Component: Link`, "this is a toggle". A design that uses the wrong component is a design fix, not an annotation. Raise it as design feedback and write nothing.
 8. **Every informative image** — does it have a name, set in its alt-text field if one exists? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative with no name, in the properties panel if possible? **Every `Group: combine`** — read the child text in source order and confirm the concatenation announces correctly. Do **not** hide a text child merely for being redundant; visible text is read by design, and redundancy is not a defect.
 9. **Every callout — does it point at exactly one element?** A note covering several layers ("these icons are decorative", "both buttons get…") must be split, one per element, or the targets are guesswork.
 10. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
@@ -602,7 +604,7 @@ Run every annotation through this. Delete, do not soften.
 19. **Any contrast or target-size note on something that passes?** Delete it.
 20. **Any list semantics?** Grep for `role="list`, `listitem`, `setsize`, `posinset`, `containerType`, `list count`, and `"List,`. iOS has none of it — not as a role, not as a trait, not as a count. Delete the annotation; if the count matters, it goes in the section heading. Note that `Announce: "List, 3 items"` passes steps 3 and 6 cleanly, so this step is the only one that catches it.
 
-    **Grep those tokens, not the bare word "list".** Describing a design in English is fine and common — "a list of 12 cards", "the row styling reads like a list row", `grouped-list` as a component name. None of those claim a semantic, and a grep for bare `list` flags every one of them, including ten in this file. What is banned is asserting a **role, container type, or item count** that iOS does not have. If you cannot tell which you are looking at, ask whether a SwiftUI developer could implement it: `Component: Button` is implementable, `accessibilityContainerType: .list` is not.
+    **Grep those tokens, not the bare word "list".** Describing a design in English is fine and common — "a list of 12 cards", "the row styling reads like a list row", `grouped-list` as a component name. None of those claim a semantic, and a grep for bare `list` flags every one of them, including ten in this file. What is banned is asserting a **role, container type, or item count** that iOS does not have. If you cannot tell which you are looking at, ask whether a SwiftUI developer could implement it: `Group: combine` is implementable, `accessibilityContainerType: .list` is not.
 21. **Is every annotation tagged with the Accessibility category?** An uncategorised note is invisible to a developer filtering by category.
 22. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
 
@@ -627,7 +629,7 @@ Run every annotation through this. Delete, do not soften.
 | `Name` starts with visible text | 2.5.3 Label in Name |
 | Touch targets | 2.5.8 Target Size (Minimum) |
 | Error annotations | 3.3.1 Error Identification, 3.3.3 Error Suggestion |
-| `Name`, `Component`, `Value` | 4.1.2 Name, Role, Value |
+| `Name`, `Value` | 4.1.2 Name, Role, Value |
 | `Announce` | 4.1.3 Status Messages |
 
 ---
@@ -641,10 +643,6 @@ These annotations map onto SwiftUI as follows. For the implementation rules the 
 | Annotation | SwiftUI |
 | --- | --- |
 | `Name` | `.accessibilityLabel("…")` |
-| `Component: Button` | `Button { }` — the trait is automatic, do **not** add `.accessibilityAddTraits(.isButton)` |
-| `Component: Link` | `Link("…", destination:)` — trait automatic |
-| `Component: Button, disabled state` | `.disabled(true)` |
-| `Component: Modal sheet` | `.sheet()` / `.fullScreenCover()` |
 | `Value` | `.accessibilityValue("…")` |
 | `Adjustable` | `.accessibilityAdjustableAction { }` |
 | `Hint` | `.accessibilityHint("…")` |

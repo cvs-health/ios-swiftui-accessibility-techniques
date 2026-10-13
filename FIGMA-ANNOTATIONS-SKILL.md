@@ -1,6 +1,6 @@
 ---
 name: figma-a11y-annotations
-description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a strict annotation budget, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, components, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
+description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a bare-minimum annotation discipline, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, components, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
 ---
 
 # iOS Accessibility Design Annotations
@@ -21,7 +21,7 @@ Ten ideas the rest of this file is built on. When a specific rule below is uncle
 
 If a control's visible text is already its accessible name, **write no `Name:` annotation at all.** This is the most common and most damaging annotation mistake, and it is damaging in three separate ways:
 
-- **It clutters.** A button labeled "Refill" annotated `Name: Refill` has consumed one of your ten annotations to say nothing. Do this across a screen and the handful of notes that carry real information are buried.
+- **It clutters.** A button labeled "Refill" annotated `Name: Refill` has spent a note to say nothing. Do this across a screen and the handful of notes that carry real information are buried.
 - **It introduces drift, and manufactures a failure that did not exist.** An annotated label is retyped prose, so it is rarely byte-identical to the visible text — "Refill" becomes "Refill prescription", "Add to Cart" becomes "Add to cart", "Done" becomes "Save". The moment it differs, the accessible name no longer contains the visible label, and you have created a **WCAG 2.5.3 Label in Name** failure — along with a control that Voice Control users cannot activate by saying what they see. The code was correct before you annotated it.
 - **It produces redundant code.** A developer handed `Name: Refill` will write `.accessibilityLabel("Refill")` on a `Button("Refill")`, because the annotation implies something was needed. Now the same string exists twice, must be localized twice, and will be updated in one place and not the other. SwiftUI already derived that name from the visible text, for free and correctly.
 
@@ -64,7 +64,7 @@ So the order of preference is: **fix the component → set the property → writ
 - `Announce:` — what is spoken when something changes
 - Gesture alternatives, and the screen-level block
 
-⚠️ **A property is not a loophole.** Moving a value into a field does not exempt it from any other rule here: a redundant label is still redundant in a properties panel, visible text restated in an alt-text field still manufactures a Label in Name failure, and `role="button"` typed into a field is still web vocabulary. The properties panel changes the delivery, not the content — and it does not raise the budget.
+⚠️ **A property is not a loophole.** Moving a value into a field does not exempt it from any other rule here: a redundant label is still redundant in a properties panel, visible text restated in an alt-text field still manufactures a Label in Name failure, and `role="button"` typed into a field is still web vocabulary. The properties panel changes the delivery, not the content — and it does not exempt a value from the gate.
 
 ### 3. Annotate the bare minimum — and the bare minimum is images and decorative elements
 
@@ -94,7 +94,7 @@ Two rules that keep this from becoming clutter in its own right:
 - **Mark it decorative in the properties panel, and write no callout at all.** If the image or layer has a decorative/hidden toggle, an empty-alt option, or a description field you can set to decorative, set it there. Per Principle 2 this is both the cleanest result and the one an AI can actually read — and it keeps the design free of callouts that say nothing a field could not.
 - **If you must use a callout, give each element its own.** One note reading `Decorative: thumbnail, row caret, divider` looks economical and is not: it is a single text node pointing at three layers, so nothing in the file says *which* three. A developer or a code-generating AI has to infer the targets from position, which is exactly the ambiguity Principle 2 is about — and the failure mode is silent, because an unmarked glyph still renders fine. A callout must point at one element, unambiguously.
 
-That pair is not a contradiction of the budget, it is an argument for the properties panel: the budget counts callouts, and marking decoratives as properties costs none of it. If you find yourself needing a dozen decorative callouts, that is the signal to set them as properties instead.
+That pair is not a contradiction, it is an argument for the properties panel: a property is the design specifying itself, where a callout is a note competing for the reviewer's attention. If you find yourself needing a dozen decorative callouts, that is the signal to set them as properties instead.
 - **Never write a name and "decorative" on the same element.** They are mutually exclusive. If you are unsure which an image is, ask what a sighted user loses if it disappears. Nothing lost means decorative.
 
 ### 4. Never annotate reading order unless the visual order does not make sense
@@ -149,15 +149,21 @@ If you cannot state what breaks without the note, there is no note. And if a dev
 
 ---
 
-## Rule 0 — The annotation budget
+## Rule 0 — Annotate the bare minimum
 
-**Hard ceiling: 10 callouts per screen, plus one screen-level block.** Most screens need 3–6.
+**There is no annotation quota.** There is one test, applied to each annotation on its own merits: would omitting it cause a real defect you can name? If yes, it stays — however many that leaves. If no, it goes — however few that leaves.
 
-If you are over the ceiling, you are annotating things the design already says. Delete until you are under it. Do not negotiate with yourself about "but this one is also important" — if everything is annotated, nothing is.
+A fixed ceiling is the wrong instrument, and it fails in both directions. It invites deleting a *correct* annotation to satisfy a count: the gesture alternative that prevents a 2.1.1 failure is exactly as deletable as a redundant label when the only instruction is "get under ten." And on a screen that needed two, a stated allowance of ten reads as room to fill. Neither error is about volume; both come from letting a number stand in for the gate.
 
-**The ceiling counts callouts on the canvas, not properties-panel values.** Setting alt text in a field, marking a layer decorative, or setting a heading component's level costs nothing against the budget — those are the design specifying itself, not notes competing for attention (Principle 2). They are still bound by every content rule here: a redundant label in a field is still redundant, and a field is not a reason to annotate something you would otherwise leave alone. But if you are over the ceiling, the first question is not "what do I delete" — it is "which of these belongs in a property."
+Most screens do land at three to six callouts. That is an observation about how little in a design is genuinely invisible — not a target to hit, and not a limit to stay under. A dense settings screen with forty rows and six sections may legitimately need more, and a simple confirmation screen may need none at all.
 
-Additional hard limits:
+What keeps the set small is not counting. It is that the gate is strict and the four never-annotate principles remove whole categories before you ever tally anything: visible text as a label, traits, default reading order, and decoratives beyond image names. Apply those honestly and the number takes care of itself.
+
+So if you find yourself with fifteen annotations, do not delete five. **Re-run the gate on all fifteen and name the defect each one prevents.** Most will not survive that, and the ones that do should stay. Volume is a symptom worth noticing — it almost always means the gate was applied loosely — but it is never itself the thing to fix. The failure the budget was reaching for is real: if everything is annotated, nothing is, because the reviewer stops reading and the three notes that mattered are lost with the forty that did not. The gate prevents that directly. A quota only approximates it.
+
+**Properties-panel values are not callouts.** Setting alt text in a field, marking a layer decorative, or setting a heading component's level is the design specifying itself, not a note competing for attention (Principle 2). They are still bound by every content rule here: a redundant label in a field is still redundant, and a field is never a reason to annotate something you would otherwise leave alone. When a set of callouts feels heavy, the first question is not "what do I delete" — it is "which of these belongs in a property."
+
+These limits are structural rather than numeric, and they hold at any count:
 
 - **One callout per element, maximum.** Combine all fields for an element into one note. Never place separate "label" and "trait" and "hint" annotations on the same layer.
 - **One callout, one element.** A note must point at exactly one layer. Never write a single callout covering several layers ("the icons are decorative") — nothing in the file records which layers it meant, and the association is left to guesswork.
@@ -229,7 +235,7 @@ The **Key** column is what goes in the annotation. The **Builds to** column is t
 
 **Format for anything with no field.** Figma's native Dev Mode annotation is a free-text note on a layer. Put these as plain `Key: value` lines inside one note, in the order above. This format works unchanged in a native annotation, in any annotation plugin, and in a handoff doc.
 
-**Always tag the note with the Accessibility category — never leave it uncategorised.** Dev Mode lets a developer filter annotations by category, so an uncategorised accessibility note still exists but is invisible to the person who went looking for it. The category is metadata, not a callout, so it costs nothing against the budget.
+**Always tag the note with the Accessibility category — never leave it uncategorised.** Dev Mode lets a developer filter annotations by category, so an uncategorised accessibility note still exists but is invisible to the person who went looking for it. The category is metadata, not a note competing for attention.
 
 **Figma HTML-escapes the annotation label.** A straight `"` renders as `&quot;` and `&` renders as `&amp;`, visibly, in the annotation card the developer reads. Use typographic quotes (`“ ”`) and write the word "and". This is worth knowing before you type a `Name:` value, since names are the key most likely to contain quotation marks.
 
@@ -568,7 +574,7 @@ and to the "More" menu — a swipe-only action fails WCAG 2.1.1 and 2.5.1.
 
 Five callouts instead of thirty-two, and every one of them tells the developer something the design does not.
 
-Note where the reduction came from. Four of the facts moved into properties, where they cost nothing against the budget and an AI can read them off the layer they belong to. No label survives on a control whose visible text was already correct. There are no trait annotations at all. No contrast or target-size notes, because none of them fail. The repeating row is annotated once. And the five that remain are each about a *relationship* — a grouping, a badge that must merge into a heading, two names that need sibling context, and a gesture that needs an alternative — which is precisely the class of thing no properties field can hold.
+Note where the reduction came from. Four of the facts moved into properties, where they are the design specifying itself rather than notes competing for attention, and where an AI can read them off the layer they belong to. No label survives on a control whose visible text was already correct. There are no trait annotations at all. No contrast or target-size notes, because none of them fail. The repeating row is annotated once. And the five that remain are each about a *relationship* — a grouping, a badge that must merge into a heading, two names that need sibling context, and a gesture that needs an alternative — which is precisely the class of thing no properties field can hold.
 
 Note also what the one-callout-one-element rule changed: the two buttons get separate notes even though their reasoning is nearly identical, because a single note spanning both would leave a developer guessing which name belongs to which button.
 
@@ -578,7 +584,7 @@ Note also what the one-callout-one-element rule changed: the two buttons get sep
 
 Run every annotation through this. Delete, do not soften.
 
-1. **Count them.** Over 10 per screen? Delete down.
+1. **Look at the total.** There is no quota, so never delete down to a number — but a large set is a reliable sign the gate was applied loosely. If you are past six, re-read the gate and the four never-annotate principles before going further; most of the surplus usually fails one of them.
 2. **Every callout — could it be a properties-panel field instead?** Alt text, heading level, component variant: move it. Only cross-element concerns (`Group`, `Order`, `Focus`, `Announce`, gesture alternatives, the screen block) stay as callouts.
 3. **Grep your own output** for: `alt`, `aria`, `role=`, `tabindex`, `landmark`, `skip to`, `H1`–`H6`, `px`, `rem`, `breakpoint`, `hover`, `focus ring`, `tab order`, `screen reader`, `double tap`, `click`. Every hit is a rewrite.
 4. **Every `Name:` on a control that has visible text** — delete it unless the text is generic or repeated. If it is, could `Group: combine` with the adjacent text make it unique instead? If yes, delete the name and group instead. If no, say why in the annotation.

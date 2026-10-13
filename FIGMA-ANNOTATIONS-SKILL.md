@@ -30,7 +30,11 @@ SwiftUI gets this right by default: `Button("Refill")`, `Text`, `Toggle("Notific
 `Name:` is for the two cases where the name is genuinely invisible in the design:
 
 - **There is no visible text** — an icon-only button, a glyph, an informative image.
-- **The visible text is generic or repeated** — a column of "Edit" buttons, twelve "Refill" buttons, a list of "Learn more" links. Each one is ambiguous in the VoiceOver swipe order, where the user hears the control without the context a sighted user gets from its position.
+- **The visible text is generic or repeated.** Two distinct cases, and the first is the one most often missed:
+  - **Generic** — a bare verb that does not say what it acts on: `Apply`, `Change`, `Save`, `Add`, `Remove`, `Edit`, `View`, `Update`, `Select`, `Learn more`, `Continue`. **This counts even when the control appears only once on the screen.** The swipe order hands the user the control without the field, row or card sitting beside it, so they hear "Apply, button" and cannot tell what is being applied.
+  - **Repeated** — a column of "Edit" buttons, twelve "Refill" buttons, a list of "Learn more" links, each indistinguishable from the next.
+
+  **The test for both: read the label on its own, with the rest of the screen covered.** If it does not say what the control acts on, the name is incomplete. A generic label always looks correct in the design, because the person reviewing it is looking straight at the context the label is missing — which is exactly why this is the easiest case to skip.
 
 **For that second case, try combining focus before you add a name.** A generic label is usually only ambiguous because it has been separated from the text next to it. A row reading "Email Address … Edit" needs no annotation if the row is one VoiceOver stop: combined, it announces "Email Address, Edit", which is already unique and already correct. Reach for `Group: combine` first — it costs one annotation instead of one per control, it adds no duplicated strings, and it stays correct when the field is renamed. Annotating ten unique names where one grouping would do is the clutter this principle is about.
 
@@ -662,6 +666,7 @@ Run every annotation through this. Delete, do not soften.
 2. **Every callout — could it be a properties-panel field instead?** Alt text, heading level, component variant: move it. Only cross-element concerns (`Group`, `Order`, `Focus`, `Announce`, gesture alternatives) stay as annotations.
 3. **Grep your own output** for: `alt`, `aria`, `role=`, `tabindex`, `landmark`, `skip to`, `H1`–`H6`, `px`, `rem`, `breakpoint`, `hover`, `focus ring`, `tab order`, `screen reader`, `double tap`, `click`. Every hit is a rewrite.
 4. **Every `Name:` on a control that has visible text** — delete it unless the text is generic or repeated. If it is, could `Group: combine` with the adjacent text make it unique instead? If yes, delete the name and group instead. If no, say why in the annotation.
+    **Then run it backwards**, because this is the check that gets skipped: read every control's visible label on its own, with the rest of the screen covered. `Apply`, `Change`, `Save`, `Add`, `Edit`, `View`, `Remove`, `Update`, `Learn more` — if the label does not say what it acts on, it needs a `Name:`, **even where it appears only once.** Deleting redundant names and adding missing ones are the same rule read in opposite directions, and a set of annotations can pass the first pass while failing the second completely.
 5. **Every surviving `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?
 6. **Any SwiftUI or trait API in your output?** Grep for `accessibility`, `.is`, `Trait:`, `AddTraits`, `isButton`, `isHeader`. An annotation naming an iOS API gets implemented as redundant code. Rewrite as `Heading:`, or fix the component in the design.
 7. **Any annotation naming a control type?** `Component: Button`, `Component: Link`, "this is a toggle". A design that uses the wrong component is a design fix, not an annotation. Raise it as design feedback and write nothing.

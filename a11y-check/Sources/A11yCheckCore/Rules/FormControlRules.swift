@@ -20,7 +20,7 @@ public struct TextFieldMissingLabelRule: A11yRule {
 
     /// Returns true if `.accessibilityLabel` appears after this view in source (e.g. in a following statement
     /// after `#if` / `#endif`), so we don't flag when the label is split across statements.
-    private func hasAccessibilityLabelInFollowingStatements(chainRoot: ExprSyntax, viewStartOffset: Int, syntax: SourceFileSyntax) -> Bool {
+    private func hasAccessibilityLabelInFollowingStatements(chainRoot: ExprSyntax, viewStartOffset: Int, syntax: SourceFileSyntax, viewAliases: [String: String]) -> Bool {
         let viewEndOffset = chainRoot.endPosition.utf8Offset
         let allLabels = ModifierCollector.collect(from: syntax).modifiers(named: "accessibilityLabel")
         guard let firstAfter = allLabels.first(where: { $0.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset > viewEndOffset }) else {
@@ -28,7 +28,7 @@ public struct TextFieldMissingLabelRule: A11yRule {
         }
         let labelOffset = firstAfter.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset
         // If another view starts before this label (after our chain), the label likely belongs to that view
-        let otherViewsAfter = ViewHierarchyVisitor.analyze(syntax).detectedViews
+        let otherViewsAfter = ViewHierarchyVisitor.analyze(syntax, viewAliases: viewAliases).detectedViews
             .filter { $0.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset > viewEndOffset }
         if let nextViewOffset = otherViewsAfter.map({ $0.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset }).min(),
            labelOffset >= nextViewOffset {
@@ -81,7 +81,7 @@ public struct TextFieldMissingLabelRule: A11yRule {
     }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         let textFields = visitor.views(ofType: "TextField") + visitor.views(ofType: "SecureField")
@@ -94,7 +94,7 @@ public struct TextFieldMissingLabelRule: A11yRule {
 
             // Modifier chain may be split by #if / #endif; .accessibilityLabel may appear in a following statement
             let viewStart = view.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset
-            if hasAccessibilityLabelInFollowingStatements(chainRoot: view.chainRoot, viewStartOffset: viewStart, syntax: syntax) {
+            if hasAccessibilityLabelInFollowingStatements(chainRoot: view.chainRoot, viewStartOffset: viewStart, syntax: syntax, viewAliases: context.configOptions.viewAliases) {
                 continue
             }
             // Fallback: scan source after this view's chain for ".accessibilityLabel(" (handles #if / #endif splitting)
@@ -153,7 +153,7 @@ public struct SliderMissingLabelRule: A11yRule {
     }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Slider") {
@@ -208,7 +208,7 @@ public struct StepperMissingLabelRule: A11yRule {
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Stepper") {
@@ -252,7 +252,7 @@ public struct PickerMissingLabelRule: A11yRule {
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Picker") {
@@ -306,7 +306,7 @@ public struct PickerStyleAccessibilityRule: A11yRule {
     }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Picker") {

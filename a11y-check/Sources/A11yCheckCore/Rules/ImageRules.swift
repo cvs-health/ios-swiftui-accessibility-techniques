@@ -37,7 +37,7 @@ public struct ImageMissingLabelRule: A11yRule {
     private static let labelConsumerViews: Set<String> = ["Button", "Link", "NavigationLink", "ShareLink", "ToolbarItem", "Menu", "PhotosPicker"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Image") {
@@ -77,11 +77,21 @@ public struct ImageMissingLabelRule: A11yRule {
             // `accessibilityLabel` — the component is designed to receive a label from its caller.
             if enclosingStructHasAccessibilityLabelProperty(view.callExpr) { continue }
 
+            // Name what the author wrote. For a wrapper mapped in via `view_aliases`,
+            // `Image(decorative:)` is not available to the caller, so only offer the advice
+            // that applies to the call site.
+            let isAliasedWrapper = view.sourceViewType != "Image"
+            let message = isAliasedWrapper
+                ? "\(view.sourceViewType) renders an image and is missing .accessibilityLabel(). Add a descriptive label, or .accessibilityHidden(true) if the icon is decorative."
+                : "Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images."
+            let suggestion = isAliasedWrapper
+                ? "Add .accessibilityLabel(\"description\") or .accessibilityHidden(true)"
+                : "Add .accessibilityLabel(\"description\") or use Image(decorative:)"
             diagnostics.append(makeDiagnostic(
-                message: "Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images.",
+                message: message,
                 node: view.callExpr,
                 context: context,
-                suggestion: "Add .accessibilityLabel(\"description\") or use Image(decorative:)"
+                suggestion: suggestion
             ))
         }
         return diagnostics
@@ -228,7 +238,7 @@ public struct ImageLabelContainsImageRule: A11yRule {
     private static let roleWords = ["image", "icon", "graphic"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Image") {

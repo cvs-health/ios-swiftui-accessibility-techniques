@@ -480,6 +480,9 @@ options:
     - brandJumbo
   heading_font_deny:      # font tokens it should never treat as headings
     - themeHeadingInline
+  view_aliases:           # design-system wrappers -> the SwiftUI view they render
+    IconView: Image
+    NavigationButton: Button
 
 # Skip paths matching these patterns (directory scans and explicit file args)
 exclude_paths:
@@ -487,6 +490,42 @@ exclude_paths:
   - "*/Pods/*"
   - "*Tests*"
 ```
+
+### Design-system wrappers (`view_aliases`)
+
+Rules only examine calls whose name is a SwiftUI type they know — `Image`, `Button`, `Toggle`,
+`TextField` and so on. An app that wraps those in its own components is therefore invisible to
+every rule, which is usually the single largest coverage gap. In one real codebase `IconView(`
+appeared **437** times and `NavigationButton(` **206**, and no image or button rule ever looked
+at them.
+
+Map a wrapper to the view it renders and the existing rules see it unchanged:
+
+```yaml
+options:
+  view_aliases:
+    IconView: Image
+    NavigationButton: Button
+    CMSLinkButton: Link
+```
+
+Diagnostics name what you wrote — "IconView renders an image and is missing
+`.accessibilityLabel()`" — and advice that does not apply to a wrapper is dropped, so an
+`IconView` is never told to use `Image(decorative:)`.
+
+Three things worth knowing before you add aliases:
+
+- **Alias SwiftUI wrappers only.** If the name is a `UIView` subclass the rules will read UIKit
+  code as if it were SwiftUI and report nonsense. Check the type before adding it.
+- **You cannot shadow a built-in.** `Image: Button` is ignored; a name the rules already know
+  always resolves to itself.
+- **An alias to an unknown type is dropped** when the config is parsed, so a typo on the
+  right-hand side fails quietly rather than silently matching nothing.
+
+Expect a jump in findings on the first run, and expect some of it to need triage: a wrapper that
+supplies accessibility internally — from an icon catalog, say — will look unlabelled at the call
+site. Measured on one app, aliasing `IconView` produced 218 new `image-missing-label` findings of
+which 169 were plausible and 33 were icons whose catalog token already carries a label.
 
 ### How heading fonts are recognised
 

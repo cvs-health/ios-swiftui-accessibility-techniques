@@ -18,7 +18,7 @@ public struct ButtonLabelContainsRoleRule: A11yRule {
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Button") {
@@ -72,7 +72,7 @@ public struct IconOnlyButtonMissingLabelRule: A11yRule {
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Button") {
@@ -96,7 +96,7 @@ public struct IconOnlyButtonMissingLabelRule: A11yRule {
             var hasText = false
             var hasImage = false
             for closure in closuresToCheck {
-                let innerVisitor = ViewHierarchyVisitor.analyze(closure)
+                let innerVisitor = ViewHierarchyVisitor.analyze(closure, viewAliases: context.configOptions.viewAliases)
                 if !innerVisitor.views(ofType: "Text").isEmpty || !innerVisitor.views(ofType: "Label").isEmpty {
                     hasText = true
                 }
@@ -142,7 +142,7 @@ public struct VisuallyDisabledNotSemanticallyRule: A11yRule {
     private static let grayTints = [".gray", "Color.gray", ".secondary"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Button") {

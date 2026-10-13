@@ -392,6 +392,12 @@ Annotate when the heading is plain styled text, an off-system text layer, or a c
 Two different behaviours, and they are not interchangeable:
 
 - **`Group: combine`** — merge several layers into **one** VoiceOver stop with one name. For an icon + text that mean one thing, or a card the user taps as a whole.
+
+⚠️ **`combine` concatenates child text in source order — it does not discard it.** The announcement is every child's text run together, which is why combining usually needs no `Name:` at all. But it also means any redundant text child is read *first*. The common case is an initials avatar: a row of `LL` + "Lucas Lee" + "Born March 21, 2016" combines to "LL, Lucas Lee, born March 21 2016", leading with initials that carry nothing the name does not.
+
+So **before writing `Group: combine`, read the child text in order and ask what the concatenation actually says.** Anything redundant has to be hidden explicitly, in its own annotation on that layer. Note that this is *not* a decorative marking and should not be worded as one: an initials avatar, a status badge, a duplicated label are **visible text**, and hiding them is a judgement that the text is redundant, not that the element is decoration. Wording it as "decorative" hides the reasoning and invites a developer to leave an `Image(decorative:)` where a `.accessibilityHidden(true)` on a text layer was meant.
+
+And do not write out what the combination will announce. That is the visible text retyped, with every drift risk Principle 1 describes — `Group: combine` plus a correctly hidden child is the whole specification.
 - **`Group: contain, name "Delivery method"`** — keep the children individually focusable but give VoiceOver a group name it speaks on entry. This is the iOS equivalent of a fieldset and legend. Use it for radio-style choices, rating controls, segmented groups, and any set of controls whose visible labels only make sense under a shared heading.
 
 ⚠️ **The dangerous mistake:** a group **name** without `contain` silently overrides the visible labels of every control inside the group, which both hides the controls' names and fails WCAG 2.5.3 Label in Name. Whenever you annotate a group name, `contain` must be in the same annotation. Never write `Name:` on a container of controls.
@@ -580,7 +586,7 @@ Run every annotation through this. Delete, do not soften.
 5. **Every surviving `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?
 6. **Any SwiftUI or trait API in your output?** Grep for `accessibility`, `.is`, `Trait:`, `AddTraits`, `isButton`, `isHeader`. An annotation naming an iOS API gets implemented as redundant code. Rewrite as `Component:` or `Heading:`.
 7. **Every `Component:`** — is it a component name, and is it non-obvious? If the design already uses the right Figma component, delete the annotation.
-8. **Every informative image** — does it have a name, set in its alt-text field if one exists? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative with no name, in the properties panel if possible?
+8. **Every informative image** — does it have a name, set in its alt-text field if one exists? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative with no name, in the properties panel if possible? **Every `Group: combine`** — read the child text in source order and say what the concatenation announces. Any redundant text child (an initials avatar, a status badge, a duplicated label) must be hidden in its own annotation, worded as redundant visible text rather than as decoration.
 9. **Every callout — does it point at exactly one element?** A note covering several layers ("these icons are decorative", "both buttons get…") must be split, one per element, or the targets are guesswork.
 10. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
 11. **Every custom gesture** — does it have a visible single-tap alternative annotated?

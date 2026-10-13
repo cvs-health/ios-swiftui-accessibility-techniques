@@ -102,7 +102,20 @@ Start from zero annotations and add only what is forced. On a typical screen the
 
 ⚠️ **Status and security glyphs are the trap in that list.** A lock, shield, warning triangle, checkmark, info circle or badge dot sits in a row beside text and *looks* like "an icon that duplicates the text beside it". Usually it does not. Apply the test honestly — what does a sighted user lose if it disappears? A lock beside "Visa ···· 4242" communicates **secure**, and nothing in the visible text says that, so a sighted user loses real information and it needs a `Name:`. A chevron on the same row loses nothing. Same size, same position, opposite answers.
 
-**A glyph that indicates a state is a third case**, neither informative nor decorative on its own: a warning triangle beside an error message, a checkmark on a selected row, a dot on an unread item. The state belongs on the **control** — the field announces its own error, the row carries `Value: Selected` — and the glyph is hidden *because the state is specified there*, not because it means nothing. Write the reason, because "decorative" on a status glyph asserts the opposite of the truth: it means something to everyone who can see it.
+⚠️ **A status icon that stands outside a control must be named — never hidden.** A warning triangle beside an error message, a success tick beside a confirmation, an info glyph beside a notice. These are doing two jobs for every sighted user at once:
+
+- they are the **non-colour indicator** that a colour-blind user depends on, because red text alone is the other signal and 1.4.1 Use of Color is why the icon is there;
+- and they are what **draws the eye** to the message in the first place.
+
+Hide one and sighted users receive information VoiceOver users do not — a straight **1.1.1 Non-text Content** failure. Give it a `Name:` and let it be a VoiceOver stop:
+
+```
+Name: Error
+```
+
+**Do not argue that the nearby text covers it.** "That code expired on Feb 28" communicates a problem but never says *error*, and a user swiping the screen can reach that message without ever focusing the field whose value carries the state. The icon is the only element that names the condition.
+
+**The single exception is a state glyph *inside* the control whose state it shows** — a checkmark on a selected row, where the row itself announces `Value: Selected`. There the glyph is redundant with the element the user actually lands on, so hiding it is correct. That is the whole test: **does the state reach VoiceOver through the thing the user focuses?** Inside a control it does. In a message sitting beside a field it does not, so the icon must carry it.
 
 And **hiding from VoiceOver never means removing from the design.** A status glyph is frequently the non-colour indicator that satisfies 1.4.1 Use of Color — the thing that stops red text being the only signal of an error. It stays on screen; it just is not a separate VoiceOver stop.
 
@@ -641,7 +654,7 @@ Run every annotation through this. Delete, do not soften.
 5. **Every surviving `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?
 6. **Any SwiftUI or trait API in your output?** Grep for `accessibility`, `.is`, `Trait:`, `AddTraits`, `isButton`, `isHeader`. An annotation naming an iOS API gets implemented as redundant code. Rewrite as `Heading:`, or fix the component in the design.
 7. **Any annotation naming a control type?** `Component: Button`, `Component: Link`, "this is a toggle". A design that uses the wrong component is a design fix, not an annotation. Raise it as design feedback and write nothing.
-8. **Every informative image** — does it have a name, set in its alt-text field if one exists? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative with no name, in the properties panel if possible? **Every lock, shield, warning, checkmark, info and badge glyph** — ask what a sighted user loses if it disappears. If the answer is not "nothing", it is not decorative: name it, or specify the state on its control and say that is why it is hidden. **Every `Group: combine`** — read the child text in source order and confirm the concatenation announces correctly. Do **not** hide a text child merely for being redundant; visible text is read by design, and redundancy is not a defect.
+8. **Every informative image** — does it have a name, set in its alt-text field if one exists? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative with no name, in the properties panel if possible? **Every lock, shield, warning, checkmark, info and badge glyph** — ask what a sighted user loses if it disappears. If the answer is not "nothing", it is not decorative. A status icon beside a message gets a `Name:` and stays a VoiceOver stop; only a state glyph *inside* the control that already announces that state may be hidden. **Every `Group: combine`** — read the child text in source order and confirm the concatenation announces correctly. Do **not** hide a text child merely for being redundant; visible text is read by design, and redundancy is not a defect.
 9. **Every callout — does it point at exactly one element?** A note covering several layers ("these icons are decorative", "both buttons get…") must be split, one per element, or the targets are guesswork.
 10. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
 11. **Every custom gesture** — does it have a visible single-tap alternative annotated?

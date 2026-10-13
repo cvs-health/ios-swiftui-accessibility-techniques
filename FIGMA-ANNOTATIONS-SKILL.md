@@ -25,7 +25,9 @@ If a control's visible text is already its accessible name, **write no `Name:` a
 - **It introduces drift, and manufactures a failure that did not exist.** An annotated label is retyped prose, so it is rarely byte-identical to the visible text — "Refill" becomes "Refill prescription", "Add to Cart" becomes "Add to cart", "Done" becomes "Save". The moment it differs, the accessible name no longer contains the visible label, and you have created a **WCAG 2.5.3 Label in Name** failure — along with a control that Voice Control users cannot activate by saying what they see. The code was correct before you annotated it.
 - **It produces redundant code.** A developer handed `Name: Refill` will write `.accessibilityLabel("Refill")` on a `Button("Refill")`, because the annotation implies something was needed. Now the same string exists twice, must be localized twice, and will be updated in one place and not the other. SwiftUI already derived that name from the visible text, for free and correctly.
 
-SwiftUI gets this right by default: `Button("Refill")`, `Text`, `Toggle("Notifications")`, `Link("Privacy Policy")`, and `TextField` with a visible label all take their accessible name from their visible content. **Annotating the default is not neutral — it is a regression.**
+SwiftUI gets this right by default: `Button("Refill")`, `Text`, `Toggle("Notifications")` and `Link("Privacy Policy")` all take their accessible name from their visible content, because in each case the text *is* part of the control. **Annotating the default is not neutral — it is a regression.**
+
+**Text inputs are the exception**, and they are not a default at all: a label sitting above a `TextField` is a separate view that nothing connects to it. See `Name:` for the rule.
 
 `Name:` is for the two cases where the name is genuinely invisible in the design:
 
@@ -231,7 +233,7 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 
 1. **Is this iOS?** If the note only makes sense on the web, delete it.
 2. **Is it visible in the design?** If the developer can see it (the visible button text, the obvious tap target, the layout order), they do not need a note telling them it exists.
-3. **Is it already the platform default?** SwiftUI gives a `Button` the button trait, a `Link` the link trait, a `Toggle` its on/off value, and a `TextField` **with a persistent visible label** its name for free. Do not annotate the default. But a **placeholder is not a persistent label** — a field labelled only by its placeholder is a defect, not a default, and this step must not be used to wave it through. See `Name:`.
+3. **Is it already the platform default?** SwiftUI gives a `Button` the button trait, a `Link` the link trait and a `Toggle` its on/off value, for free. Do not annotate those. **Text inputs are not on that list** — neither a placeholder nor a visible label above the field names a `TextField` automatically, so this step must never be used to wave an input through. See `Name:`.
 4. **Would omitting this note cause a real defect?** Name the failure. If you cannot name it, there is no annotation.
 
 ### Annotate — these are invisible in a static design
@@ -346,21 +348,21 @@ Two more mobile-specific traps:
 See Principle 1 — read it before using this key at all.
 
 - **Omit it entirely when the visible text is already the name.** This is the single biggest source of over-annotation.
-⚠️ **A placeholder is not a label.** A text field whose only label is its placeholder has two defects at once, and the design shows neither:
+⚠️ **Every input needs a visible label, and that label must be connected to the field.** Both halves are mandatory, and the design shows neither.
 
-- **The visible label disappears the moment the user types.** A sighted user who looks away mid-form cannot tell what the field was for — a 3.3.2 Labels or Instructions failure, and one that affects everyone, not only AT users. This is a **design** defect: the control needs a persistent visible label, and that is the first thing to raise.
-- **The accessible name becomes dependent on a transient string.** `TextField("Promo code", …)` does use the placeholder as the name, but a hand-built field with a `Text` overlay has no name at all — and the two are identical in the design, so you cannot tell which you are looking at.
+**1. A placeholder is not a label — fix the design, do not annotate around it.** A field labelled only by its placeholder loses that label the instant the user types, so a sighted user who glances away mid-form cannot tell what the field was for. That is a 3.3.2 Labels or Instructions failure affecting every user, not only AT users. Require a persistent visible label in the design.
 
-So annotate the field, pointing at its own text rather than retyping it:
+**2. A visible label above a field is still not its accessible name.** This is the part that surprises people, and the reason the annotation exists at all. On the web, `<label for>` makes the association. iOS has no equivalent: a `Text` above a `TextField` is a separate view, and nothing connects the two unless the developer does it. To a sighted user the pairing is obvious from the layout; to VoiceOver the field is simply unnamed. The association is therefore genuinely invisible in the design, and **every input carries this annotation**:
 
 ```
-Name: take the field's accessible name from its own label text, and keep it after
-the user types and the placeholder disappears.
-Design: this control needs a persistent visible label. Placeholder-only labelling
-leaves a sighted user with no label as soon as they type (3.3.2).
+Name: take the accessible name from the visible label above this field. On iOS
+the label and the field are separate views — nothing connects them unless the
+developer does it explicitly.
 ```
 
-Where the design already has a persistent visible label beside or above the field, none of this applies — the name is derived from it and there is nothing to annotate.
+**Point at the label; never retype its string.** The developer passes the same string that renders the label, so the name cannot drift when the label is reworded — the same rule as naming a group by its heading.
+
+This is one of the few annotations that applies to *every* instance of a control type rather than to exceptions. That is not a contradiction of Rule 0: the gap is in the platform, not in a particular design, so it is present every time and omitting it always causes a nameable defect.
 
 - **Omit it when `Group: combine` would make the control unique.** For a generic or repeated label — "Edit", "Refill", "Learn more" — combining the control with its adjacent text is the better fix: "Email Address, Edit" is unique without a single label annotation. Only annotate a unique name once combining is ruled out, and say why in the annotation ("combining would swallow the card heading").
 - 1–3 words where possible. Capitalized. **No trailing period.**

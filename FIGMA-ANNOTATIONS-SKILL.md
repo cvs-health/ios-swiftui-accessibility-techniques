@@ -288,7 +288,7 @@ Every term on the left belongs to the web. On an iOS design it is wrong, and it 
 | `landmark`, `region`, `banner`, `main`, `complementary` | Nothing. **iOS has no landmarks.** Use `Heading:` and `Group:` |
 | `skip to content` link | Nothing. **iOS has no skip links.** Headings serve this via the VoiceOver Rotor |
 | `H1`–`H6` as HTML tags | `Heading: 1`–`Heading: 6` (an iOS heading **level**, not a tag) |
-| `<fieldset>` / `<legend>` | `Group: contain, name "…"` |
+| `<fieldset>` / `<legend>` | `Group: contain`, named by the visible heading above the group |
 | `focus ring`, `focus indicator`, `:focus-visible` | Nothing for touch. Only relevant under Full Keyboard Access |
 | `screen reader` (generic) | `VoiceOver` — name the actual AT |
 | `px`, `rem`, `em` | `pt` |
@@ -441,7 +441,17 @@ So **before writing `Group: combine`, read the child text in order and ask what 
 And if a concatenation genuinely does not work, the first question is whether the **design** should change. An initials monogram that reads badly next to the name it was derived from is a component decision, not something to paper over with a note.
 
 Finally, do not write out what the combination will announce. That is the visible text retyped, with every drift risk Principle 1 describes — `Group: combine` on its own is the whole specification.
-- **`Group: contain, name "Delivery method"`** — keep the children individually focusable but give VoiceOver a group name it speaks on entry. This is the iOS equivalent of a fieldset and legend. Use it for radio-style choices, rating controls, segmented groups, and any set of controls whose visible labels only make sense under a shared heading.
+- **`Group: contain, named by the section heading above it`** — keep the children individually focusable but give VoiceOver a group name it speaks on entry. This is the iOS equivalent of a fieldset and legend. Use it for radio-style choices, rating controls, segmented groups, and any set of controls whose visible labels only make sense under a shared heading.
+
+⚠️ **Point at the visible label; never retype it, and never invent one.** A group that needs a name almost always already has one on screen — the section heading sitting directly above it. Quoting that string into the annotation is Principle 1's drift problem at container level: `Group: contain, name "Delivery method"` written above a heading that reads **Delivery** has invented a string that matches nothing, and the developer now has two candidate names with no way to tell which is authoritative. So *point*:
+
+```
+Group: contain — the options stay individually focusable.
+Named by the section heading immediately above this group. Reuse that heading's
+string rather than a new one, so there is one source of truth.
+```
+
+The developer then references the same string constant that renders the heading, and the group name cannot drift when the heading is reworded. If the group has **no** visible label, that is the finding — either the design needs a heading, or you are about to invent content, which is a design decision and not an annotation.
 
 ⚠️ **The dangerous mistake:** a group **name** without `contain` silently overrides the visible labels of every control inside the group, which both hides the controls' names and fails WCAG 2.5.3 Label in Name. Whenever you annotate a group name, `contain` must be in the same annotation. Never write `Name:` on a container of controls.
 
@@ -449,7 +459,6 @@ For a card with several actions, say which it is. Either the whole card is one s
 
 ```
 Group: combine — whole card is one VoiceOver stop.
-Name: Atorvastatin 20mg, ready for pickup, CVS Main St
 Actions: Refill, Directions (expose as accessibility actions — combining removes
 the buttons from the swipe order).
 ```
@@ -684,7 +693,7 @@ These annotations map onto SwiftUI as follows. For the implementation rules the 
 | `Hint` | `.accessibilityHint("…")` |
 | `Heading: N` | `.accessibilityAddTraits(.isHeader)` + `.accessibilityHeading(.hN)` |
 | `Group: combine` | `.accessibilityElement(children: .combine)` |
-| `Group: contain, name` | `.accessibilityElement(children: .contain)` + `.accessibilityLabel("…")` |
+| `Group: contain`, named by a heading | `.accessibilityElement(children: .contain)` + `.accessibilityLabel(heading)` — pass the *same* string constant that renders the visible heading, never a second literal |
 | `Actions` on a combined element | `.accessibilityAction(named:)` |
 | `Order` | restructure, or `.accessibilitySortPriority(…)` |
 | `Focus` | `@AccessibilityFocusState` + `.accessibilityFocused($…)` |

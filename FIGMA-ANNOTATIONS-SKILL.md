@@ -360,19 +360,20 @@ Two more mobile-specific traps:
 See Principle 1 — read it before using this key at all.
 
 - **Omit it entirely when the visible text is already the name.** This is the single biggest source of over-annotation.
-⚠️ **Every input needs a visible label, and that label must be connected to the field.** Both halves are mandatory, and the design shows neither.
+⚠️ **A label that sits outside the control is never connected to it.** This is the most under-appreciated gap on iOS, and it covers every control whose visible label is a separate layer rather than its own content.
 
-**1. A placeholder is not a label — fix the design, do not annotate around it.** A field labelled only by its placeholder loses that label the instant the user types, so a sighted user who glances away mid-form cannot tell what the field was for. That is a 3.3.2 Labels or Instructions failure affecting every user, not only AT users. Require a persistent visible label in the design.
-
-**2. A visible label above a field is still not its accessible name.** This is the part that surprises people, and the reason the annotation exists at all. On the web, `<label for>` makes the association. iOS has no equivalent: a `Text` above a `TextField` is a separate view, and nothing connects the two unless the developer does it. To a sighted user the pairing is obvious from the layout; to VoiceOver the field is simply unnamed. The association is therefore genuinely invisible in the design, and **every input carries this annotation**:
+`Button("Refill")` and `Toggle("Notifications")` name themselves, because the text *is* part of the control. But a `Text` above a `TextField`, an item name above a stepper, a caption beside a slider, a heading above a rating control — each is a **separate view**, and iOS has no `<label for>` to tie them together. To a sighted user the pairing is obvious from the layout; to VoiceOver the control is simply unnamed. The association is therefore genuinely invisible in the design, and **every such control carries the annotation**:
 
 ```
 Name: the visible label above this field.
+Name: the item name above this stepper.
 ```
 
 **Point at the label; never retype its string.** The developer passes the same string that renders the label, so the name cannot drift when the label is reworded — the same rule as naming a group by its heading.
 
-This is one of the few annotations that applies to *every* instance of a control type rather than to exceptions. That is not a contradiction of Rule 0: the gap is in the platform, not in a particular design, so it is present every time and omitting it always causes a nameable defect.
+This is one of the few annotations that applies to *every* instance of a pattern rather than to exceptions. That is not a contradiction of Rule 0: the gap is in the platform, not in a particular design, so it is present every time, and omitting it always causes a nameable defect.
+
+**Text inputs carry one extra rule: a placeholder is not a label.** A field labelled only by its placeholder loses that label the instant the user types, so a sighted user who glances away mid-form cannot tell what the field was for — a 3.3.2 Labels or Instructions failure affecting every user, not only AT users. Fix the design rather than annotating around it: require a persistent visible label.
 
 - **Omit it when `Group: combine` would make the control unique.** For a generic or repeated label — "Edit", "Refill", "Learn more" — combining the control with its adjacent text is the better fix: "Email Address, Edit" is unique without a single label annotation. Only annotate a unique name once combining is ruled out, and say why in the annotation ("combining would swallow the card heading").
 - 1–3 words where possible. Capitalized. **No trailing period.**
@@ -419,7 +420,7 @@ A sheet that must stop VoiceOver reaching the content behind it is a different m
 - Write the spoken result and the pattern, not prose: `Value: "3 of 5 stars"`, `Value: "Step 2 of 4"`, `Value: "Collapsed" / "Expanded"`.
 - **A badge needs a value.** An iOS tab-bar or icon badge is **not** spoken by VoiceOver on its own. If the design shows a `3` badge, annotate `Value: "3 unread"`. Missing this is one of the most common shipped iOS defects.
 - If the user can change the value by dragging or stepping, add `Adjustable: increment / decrement` so the developer wires the VoiceOver swipe-up/down action.
-- Do **not** annotate a value that is already the control's visible text, and do not annotate a native `Toggle` — iOS speaks on/off for free.
+- Do **not** annotate a value that is already the control's visible text — a stepper showing `2`, a counter, a price, a quantity printed next to its label. The number is on screen, so it is read; restating it is the same error as retyping a visible label. And do not annotate a native `Toggle` — iOS speaks on/off for free. What such a control usually *does* need is a **name**, because a bare `− 2 +` has no label of its own: see the outside-label rule under `Name:`.
 
 ### `Hint:` — almost always omit this
 

@@ -24,7 +24,7 @@ public struct ButtonUsedAsLinkRule: A11yRule {
     ]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Button") {
@@ -95,7 +95,7 @@ public struct GenericLinkTextRule: A11yRule {
     }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Link") {

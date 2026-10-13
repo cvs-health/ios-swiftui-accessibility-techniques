@@ -281,6 +281,18 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 ### a11y-check
 
+#### Added
+
+- **`options.view_aliases`: map a design-system wrapper to the SwiftUI view it renders, so every existing rule can see it.** Rules only examine calls whose name appears in `ViewHierarchyVisitor.recognizedViews` — a 25-entry list of SwiftUI's own types. Any app that wraps those types in its own components is therefore invisible to the whole rule set, and that is usually the largest single coverage gap. In the app this was measured against, `IconView(` appears **437** times and `NavigationButton(` **206**, against 235 raw `Image(` and 439 raw `Button(`; no image or button rule had ever looked at the wrappers.
+
+  Aliasing resolves at detection time in the visitor rather than in each rule, so nothing rule-side changed: `views(ofType: "Image")` already accepted any name, it was only the gate that was hardcoded. A detected view keeps the name the author wrote in `sourceViewType`, so diagnostics read "IconView renders an image and is missing `.accessibilityLabel()`" and advice that cannot apply to a wrapper is dropped — an `IconView` is never told to use `Image(decorative:)`.
+
+  Measured on 13 packages of that app: **821 diagnostics to 1,229**. `image-missing-label` 63 → 281, `missing-accessibility-grouping` 31 → 176, `icon-button-missing-label` 3 → 34, `duplicate-button-label` 28 → 36.
+
+  Classifying the 218 new `image-missing-label` findings by hand: **169 plausible**, 33 on `.messaging(.errorFill)`-style tokens whose icon catalog already supplies an `a11yLabel` (the rule cannot see the catalog yet), and 16 caused by aliasing `DSIcon`, which turned out to be a `UIView` rather than a SwiftUI wrapper. So roughly **78% precision**, with both causes of the remainder known: resolving the icon catalog is the next piece of work, and aliasing a UIKit type is a configuration mistake the README now warns about.
+
+  Two guards: a name the rules already know always resolves to itself, so a project cannot redefine `Image` or `Button` out from under them; and an alias pointing at a type the rules do not know is dropped at parse time rather than silently matching nothing.
+
 #### Changed
 
 - **`heading-trait-missing` now recognises design-system heading tokens, not just Apple's font styles.** The rule knew `.title`, `.title2`, `.title3`, `.largeTitle` and `.headline` and nothing else, which meant it saw almost nothing in any app with its own type scale — and most apps have one. On the Aetna Health iOS app it produced **5 findings against 380 `.font(.themeHeading*)` sites**, while that app's accessibility backlog carried **38 open "visual heading is not marked up as a heading" defects**. The rule was blind to precisely the defect class it exists to catch.

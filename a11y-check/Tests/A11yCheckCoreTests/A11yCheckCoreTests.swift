@@ -424,6 +424,78 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0)
     }
 
+    // MARK: - View Aliases
+
+    /// A design-system wrapper is invisible to every rule until it is aliased: rules only look
+    /// at names in `recognizedViews`. This is the single biggest coverage gap in a codebase that
+    /// wraps SwiftUI in its own components.
+    func testViewAliases_wrapperIsInvisibleUntilAliased() {
+        let source = """
+        import SwiftUI
+        struct DeniedRow: View {
+            var body: some View {
+                IconView(name: "exclamationmark.triangle.fill")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 0)
+
+        let opts = A11yConfig.ConfigOptions(viewAliases: ["IconView": "Image"])
+        let diags = analyze(source, ruleID: "image-missing-label", configOptions: opts)
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(
+            diags[0].message.hasPrefix("IconView renders an image"),
+            "message should name the wrapper the author wrote: \(diags[0].message)"
+        )
+    }
+
+    func testViewAliases_buttonWrapperReachesLabelRules() {
+        let source = """
+        import SwiftUI
+        struct SummaryList: View {
+            let items: [String]
+            var body: some View {
+                VStack {
+                    ForEach(items, id: \\.self) { _ in
+                        NavigationButton(title: "View Summary")
+                    }
+                }
+            }
+        }
+        """
+        let opts = A11yConfig.ConfigOptions(viewAliases: ["NavigationButton": "Button"])
+        XCTAssertGreaterThanOrEqual(
+            analyze(source, ruleID: "duplicate-button-label", configOptions: opts).count, 1
+        )
+    }
+
+    /// A project must not be able to redefine a type the rules already know.
+    func testViewAliases_cannotShadowABuiltInViewName() {
+        let source = """
+        import SwiftUI
+        struct V: View { var body: some View { Image(systemName: "star") } }
+        """
+        let found = ViewHierarchyVisitor.analyze(
+            Parser.parse(source: source), viewAliases: ["Image": "Button"]
+        )
+        XCTAssertEqual(found.views(ofType: "Image").count, 1, "Image must still resolve to Image")
+        XCTAssertEqual(found.views(ofType: "Button").count, 0)
+    }
+
+    func testViewAliases_parsesFromYAMLAndDropsUnknownTargets() throws {
+        let yaml = """
+        options:
+          view_aliases:
+            IconView: Image
+            NavigationButton: Button
+            BogusWrapper: NotARealView
+        """
+        let config = try ConfigLoader.parse(yaml)
+        XCTAssertEqual(config.options.viewAliases["IconView"], "Image")
+        XCTAssertEqual(config.options.viewAliases["NavigationButton"], "Button")
+        XCTAssertNil(config.options.viewAliases["BogusWrapper"], "alias to an unknown type is dropped")
+    }
+
     func testHeadingFontConfig_parsesFromYAML() throws {
         let yaml = """
         options:

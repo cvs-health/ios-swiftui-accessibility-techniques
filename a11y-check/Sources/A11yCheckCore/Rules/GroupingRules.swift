@@ -36,7 +36,7 @@ public struct AccessibilityGroupingRule: A11yRule {
     private static let containerViews: Set<String> = ["HStack", "VStack"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "HStack") + visitor.views(ofType: "VStack") {
@@ -52,7 +52,7 @@ public struct AccessibilityGroupingRule: A11yRule {
             guard let trailingClosure = view.callExpr.trailingClosure else { continue }
 
             // Analyze only the immediate children of this container
-            let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure)
+            let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure, viewAliases: context.configOptions.viewAliases)
             let directChildren = innerVisitor.detectedViews
 
             // Only flag small containers (2-3 children) that look like an
@@ -109,7 +109,7 @@ public struct ZStackSequenceRule: A11yRule {
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "ZStack") {
@@ -169,7 +169,7 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
     private static let containerViews: Set<String> = ["HStack", "VStack", "LazyVGrid", "LazyHStack"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for containerType in Self.containerViews {
@@ -187,7 +187,7 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
                 // Check trailing closure for Button children
                 guard let trailingClosure = view.callExpr.trailingClosure else { continue }
 
-                let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure)
+                let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure, viewAliases: context.configOptions.viewAliases)
                 let buttons = innerVisitor.views(ofType: "Button")
 
                 // Need at least 2 Buttons to form a group

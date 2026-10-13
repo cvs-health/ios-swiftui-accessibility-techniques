@@ -68,7 +68,7 @@ public struct HeadingTraitMissingRule: A11yRule {
     private static let labelConsumerViews: Set<String> = ["Button", "Link", "Toggle"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         let fontConstants = FontConstantCollector.collect(from: syntax)
         var diagnostics: [A11yDiagnostic] = []
 

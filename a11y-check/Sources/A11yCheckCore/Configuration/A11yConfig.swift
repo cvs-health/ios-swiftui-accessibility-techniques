@@ -29,19 +29,30 @@ public struct A11yConfig: Sendable {
         /// Font tokens to never treat as heading styles, even when the heuristic matches.
         /// Takes precedence over `headingFonts`. Same token form.
         public let headingFontDeny: [String]
+        /// Design-system wrapper name → the SwiftUI view it stands in for, e.g.
+        /// `["IconView": "Image", "NavigationButton": "Button"]`.
+        ///
+        /// Rules only examine calls whose name is in `ViewHierarchyVisitor.recognizedViews`,
+        /// which lists SwiftUI's own types. An app that wraps those types in its own components
+        /// is therefore invisible to every rule — in one real codebase `IconView(` appears 437
+        /// times and `NavigationButton(` 206, and no image or button rule ever looked at them.
+        /// Mapping a wrapper to the view it renders lets the existing rules see it unchanged.
+        public let viewAliases: [String: String]
 
         public init(
             minTouchTarget: Double? = nil,
             contrastRatio: Double? = nil,
             assumeDefaultBackground: Bool? = nil,
             headingFonts: [String] = [],
-            headingFontDeny: [String] = []
+            headingFontDeny: [String] = [],
+            viewAliases: [String: String] = [:]
         ) {
             self.minTouchTarget = minTouchTarget
             self.contrastRatio = contrastRatio
             self.assumeDefaultBackground = assumeDefaultBackground
             self.headingFonts = headingFonts
             self.headingFontDeny = headingFontDeny
+            self.viewAliases = viewAliases
         }
     }
 
@@ -124,6 +135,7 @@ public enum ConfigLoader {
         var assumeDefaultBackground: Bool?
         var headingFonts: [String] = []
         var headingFontDeny: [String] = []
+        var viewAliases: [String: String] = [:]
         if let opts = dict["options"] as? [String: Any] {
             if let v = opts["min_touch_target"] as? Double {
                 minTouchTarget = v
@@ -142,6 +154,11 @@ public enum ConfigLoader {
             if let v = opts["heading_font_deny"] as? [String] {
                 headingFontDeny = v
             }
+            if let v = opts["view_aliases"] as? [String: String] {
+                // Only aliases pointing at a type the rules actually know are useful; a typo
+                // on the right-hand side would otherwise silently do nothing.
+                viewAliases = v.filter { ViewHierarchyVisitor.recognizedViews.contains($0.value) }
+            }
         }
 
         // exclude_paths
@@ -159,7 +176,8 @@ public enum ConfigLoader {
                 contrastRatio: contrastRatio,
                 assumeDefaultBackground: assumeDefaultBackground,
                 headingFonts: headingFonts,
-                headingFontDeny: headingFontDeny
+                headingFontDeny: headingFontDeny,
+                viewAliases: viewAliases
             ),
             excludePaths: excludePaths
         )

@@ -107,6 +107,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Two rows added to the banned-vocabulary table, taking it to 20: one for `role="list"` / `role="listitem"` / `aria-setsize` / `aria-posinset`, and one for `accessibilityContainerType: .list` / `List, N items` / `Announce list count`. Both resolve to "nothing" — each row is already its own VoiceOver stop and the swipe order carries the sequence. Where a count genuinely carries meaning, it belongs in the section heading rather than a container role.
 
+- **Links are annotated — a second bounded exception to the `Component:` removal.** The removal sent every control-type mismatch to the design on the grounds that a design *can* express the right component. Links are the case where that is false, and the reason is statistical: a native iOS app is almost entirely buttons, so a developer's default reading of any tappable element is *button*, and nothing in a design distinguishes the two — blue text, a row, a chevron look identical either way. Getting it backwards is a WCAG 4.1.2 defect.
+
+  Previously the file named the `Button` vs `Link` distinction as "a genuine WCAG 4.1.2 defect" and then said "the fix is the right component, not a note naming one" — which left a real defect with no route to being communicated. Links now get annotated: `Link — leaves the app.`, `Link — opens the dialler.`
+
+  The strongest form of the argument is an **inline link inside a text span**, which cannot be a component in Figma at all, so the design has no way to express it even in principle. A reader sees coloured underlined text and cannot tell whether those spans are links or styling. `Inline links — both styled spans are links, each individually focusable.`
+
+  The carve-out is bounded by the same test as the disclosure one: **can the design express the choice?** A row styled like a list item can be a Button component, so that stays a design fix. A link cannot be told from a button by looking, so it is annotated. Two named exceptions now share one test, rather than each eroding the rule separately.
+
 - **iOS has no radio button or checkbox — both added to the banned vocabulary.** The `Group: contain` rule told the annotator to use it for "radio-style choices" without ever saying that iOS has no radio control, and neither `radio` nor `checkbox` appeared in the banned-vocabulary table despite both being web and Android terms. An annotator could therefore write `radio group` in an iOS annotation while following the file exactly.
 
   Single-select on iOS is an inline **picker**, and the chosen row is marked with a **checkmark**; a filled circle is a web and Android convention. On/off is a **Toggle**, not a checkbox. Two rows added to the table, taking it to 22.

@@ -236,6 +236,12 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 3. **Is it already the platform default?** SwiftUI gives a `Button` the button trait, a `Link` the link trait and a `Toggle` its on/off value, for free. Do not annotate those. **Text inputs are not on that list** — neither a placeholder nor a visible label above the field names a `TextField` automatically, so this step must never be used to wave an input through. See `Name:`.
 4. **Would omitting this note cause a real defect?** Name the failure. If you cannot name it, there is no annotation.
 
+⚠️ **Never annotate behaviour the design does not show.** `Hint:`, `Focus:`, `Announce:` and every gesture alternative describe **runtime behaviour**, and a static frame cannot show any of it. The design does not say that a row swipes, that a button opens a sheet, that a count updates in place, or that an error appears on submit.
+
+So if you did not see it, you do not know it. Inventing a swipe gesture produces an annotation a developer may actually build — a gesture nobody designed, with an accessibility alternative for a feature that does not exist. That is worse than a missing annotation, because it is confidently wrong and it creates work.
+
+**Ask instead.** A handoff that states behaviour — what updates, what opens modally, what responds to a gesture — is a handoff you can annotate. One that does not is a handoff where `Hint:`, `Focus:` and `Announce:` are simply unreachable, and saying so is the correct output rather than a gap to fill in. Where the design *does* show it — a swipe-revealed state drawn as its own frame, a sheet drawn beside the screen that opens it — annotate it, because then you are reading the design instead of guessing at it.
+
 ### Annotate — these are invisible in a static design
 
 - An **accessible name that differs from the visible text**, or an icon-only control with no visible text at all.
@@ -695,7 +701,7 @@ Run every annotation through this. Delete, do not soften.
 8. **Every informative image** — does it have a name, set in its alt-text field if one exists? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative with no name, in the properties panel if possible? **Every lock, shield, warning, checkmark, info and badge glyph** — ask what a sighted user loses if it disappears. If the answer is not "nothing", it is not decorative. A status icon beside a message gets a `Name:` and stays a VoiceOver stop; only a state glyph *inside* the control that already announces that state may be hidden. **Every `Group: combine`** — read the child text in source order and confirm the concatenation announces correctly. Do **not** hide a text child merely for being redundant; visible text is read by design, and redundancy is not a defect.
 9. **Every callout — does it point at exactly one element?** A note covering several layers ("these icons are decorative", "both buttons get…") must be split, one per element, or the targets are guesswork.
 10. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
-11. **Every custom gesture** — does it have a visible single-tap alternative annotated?
+11. **Every custom gesture** — does it have a visible single-tap alternative annotated? And **did the design actually show the gesture?** If you inferred it, delete the annotation: `Hint:`, `Focus:` and `Announce:` describe behaviour a static frame cannot show, and inventing it has a developer build something nobody designed.
 12. **Every `Group:` with a name** — does it say `contain`?
 13. **Every heading** — does it have a level, and do the levels run without skipping? If the design uses heading components with levels in the properties panel, delete these annotations.
 14. **Every modal, sheet, and alert** — is focus-on-open and focus-on-return annotated?

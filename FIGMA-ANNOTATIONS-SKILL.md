@@ -1,6 +1,6 @@
 ---
 name: figma-a11y-annotations
-description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a bare-minimum annotation discipline, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
+description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a bare-minimum annotation discipline, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, page titles, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
 ---
 
 # iOS Accessibility Design Annotations
@@ -233,7 +233,7 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 
 ---
 
-## The eight annotation types — this list is closed
+## The nine annotation types — this list is closed
 
 Use **only** these keys. Do not invent fields. Do not import fields from a web annotation kit.
 
@@ -244,6 +244,7 @@ The **Key** column is what goes in the annotation. The **Builds to** column is t
 | `Name` | `.accessibilityLabel` | There is no visible text, or it is generic/repeated **and** combining focus cannot fix it |
 | `Value` | `.accessibilityValue` | The element carries state or a quantity not in its name |
 | `Hint` | `.accessibilityHint` | **Only** for the non-obvious interactions listed below |
+| `Page title` | `.navigationTitle("…")` | The screen has a navigation title. iOS adds the header trait automatically — never also write `Heading:` |
 | `Heading` | heading trait + level | The text is a heading **and** no heading component with a level is used |
 | `Group` | `.accessibilityElement(children: .combine / .contain)` | Several layers should be one VoiceOver stop, or need a shared group name |
 | `Order` | restructure, or `.accessibilitySortPriority` | The visual order genuinely disagrees with the default order |
@@ -388,6 +389,22 @@ Gesture alternative: "More" button in the row, same actions. Required — gestur
 controls fail WCAG 2.1.1 and 2.5.1.
 ```
 
+### `Page title` — the screen's title, and why it is never a `Heading:`
+
+Annotate the screen's navigation title as `Page title`. **Do not restate the string** — it is visible in the design, and the instruction that matters is which *mechanism* to use, not what it says.
+
+This is worth annotating when most visible text is not, because the design cannot show the difference between a real navigation title and a `Text` dropped into a custom header. The two are pixel-identical and behave nothing alike. A real navigation title gives you three things at once:
+
+- **WCAG 2.4.2 Page Titled.**
+- **The header trait, applied by iOS automatically** — VoiceOver announces "Caregiving, heading" with nothing added.
+- **An entry in the VoiceOver Rotor's Headings list**, so the screen is navigable by heading.
+
+A `Text` in a bar gives you none of them, and fails silently.
+
+⚠️ **Never write `Heading:` on a page title, and never annotate a heading trait on it.** iOS applies the header trait to the navigation bar title itself. `Heading: 1` or `.accessibilityAddTraits(.isHeader)` on top of it produces a doubled announcement, and — worse — invites a developer to build the title as a trait-decorated `Text` rather than a navigation title, trading 2.4.2 away for an announcement that sounds identical. The heading behaviour is a *consequence* of being the page title, never something to specify.
+
+The first heading inside the content starts at level 1. The page title sits outside that numbering.
+
 ### `Heading:` — annotate unless the design already carries levels
 
 Figma renders a heading and a large bold label identically, so by default this is genuinely invisible and belongs in almost every screen's annotations. **Headings are the one thing you should expect to annotate** — they are the most commonly missed semantic on shipped iOS screens, and a screen with no heading structure has no Rotor navigation at all.
@@ -399,7 +416,7 @@ Annotate when the heading is plain styled text, an off-system text layer, or a c
 - Mark **every** heading, and give its level: `Heading: 1`, `Heading: 2`, …
 - The level is an **iOS heading level**, not markup and not a trait. Never write `H2` as a tag, and never write `.isHeader` or `accessibilityHeading` — see the traits rule above for why naming the API backfires.
 - **Do not skip levels.** 1 → 2 → 3, never 1 → 3.
-- The screen's **navigation title is the page title**, not a heading. SwiftUI derives it from the visible title, so annotate nothing unless the spoken title must differ from the one on screen. The first heading inside the content starts at level 1.
+- The screen's **navigation title is the page title**, not a heading — annotate it as `Page title`, never as `Heading:`. See the `Page title` rules above for why. The first heading inside the content starts at level 1.
 - Never express a heading by putting the word "heading" in the name. It will not appear in the VoiceOver Rotor, which is the entire point.
 - **A card's first element should be its heading.** If a card leads with an image or a price, annotate the intended order.
 
@@ -486,7 +503,7 @@ Each fact has an owner:
 
 | Fact | Where it goes |
 | --- | --- |
-| Page title | Nowhere. The navigation title is visible text and SwiftUI derives it. Annotate only if the spoken title must differ from the visible one |
+| Page title | On the navigation-title layer, as `Page title`. The mechanism is invisible in the design, and a real navigation title carries 2.4.2 plus the automatic header trait and a Rotor entry |
 | Heading levels | On each heading element — the `level` property where heading components are used, otherwise `Heading: N` on that text layer |
 | Dynamic Type / reflow | Nowhere. A layout that breaks at large text sizes is a missing **design**, not a missing annotation — the designer produces the large-text variant |
 | Orientation | Nowhere — unless the screen is locked to one orientation, which is a 1.3.4 defect. Then annotate the frame and name the failure |

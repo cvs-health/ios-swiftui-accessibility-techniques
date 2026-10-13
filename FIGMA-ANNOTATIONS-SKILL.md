@@ -46,7 +46,9 @@ When you do reach the last step, the name is an *extension*, not a restatement. 
 
 ### 2. Put it in the properties panel, not a callout on the canvas
 
-**Where** an annotation lives matters as much as what it says. If Figma exposes a field for the value, **put it in the field** — select the image and type the alt text into its description/alt-text property, set the component's `level` property on a heading, set the component variant, use the layer's annotation category. Do not place a floating text callout next to the element when a property will hold the same value.
+**Where** an annotation lives matters as much as what it says. If the design system exposes a field for the value, **put it in the field** — a heading component's `level` property, a component variant, or a TEXT component property such as `A11y name` on an icon button. Do not place a floating text callout next to the element when a property will hold the same value.
+
+⚠️ **Figma Design has no per-layer alt-text field.** There is nothing to type an accessible name into on a plain frame, vector, or image. `description` exists only on a `COMPONENT` or `COMPONENT_SET` — a plain layer does not have it — and a component description is shared by every instance, so it cannot carry three different names for three icon buttons. The field has to be **created**: add a TEXT component property to the component, and it appears per instance in the properties panel with the value living on that instance.
 
 Three reasons, and the first is the one that matters most now:
 
@@ -54,7 +56,24 @@ Three reasons, and the first is the one that matters most now:
 - **A property travels with the layer.** Copy the component, swap the instance, reflow the layout, move the frame — the property goes with it. A callout detaches, gets left behind, or ends up pointing at a neighbour. Annotations that drift are worse than none, because they are confidently wrong.
 - **A property adds nothing to the canvas.** The design stays readable. Thirty callouts do not just clutter the handoff, they clutter the *design*, which is how a reviewer ends up unable to see either.
 
-So the order of preference is: **fix the component → set the property → write a callout.** A callout is the last resort, not the default.
+So the order of preference is: **name it in the component → set the property on the instance → write an annotation.**
+
+- **Name it in the component.** If an icon button has a `Messages` variant, the accessible name belongs to that variant, set once in the library. Nothing is annotated per screen, and there is nothing for anyone to go looking for.
+- **Set a property on the instance** where one component serves arbitrary icons and the name genuinely varies.
+- **Write an annotation** when the element is not a component at all.
+
+⚠️ **A property only beats an annotation if someone actually reads properties.** The preference depends on this condition, and it is easy to miss. A property is reliable for a *tool* and unreliable for a *person*: nothing points at it, it carries no badge and no filter, and it is found only by selecting that exact layer and scanning a panel the developer had no reason to open. An annotation announces itself — it has a category, and Dev Mode can filter to it.
+
+So the preference holds when one of these is true:
+
+- the design system **documents the convention**, so the developer knows the field exists; or
+- **Code Connect renders the property into the code** the developer is shown, so they never need to know it exists.
+
+The second requires a **templated** Code Connect mapping. A simple mapping only names the source file and the component — it cannot render a property into a snippet, so the accessible name will not appear in the Code panel. Verify which kind your library has before relying on it.
+
+**Where neither is true, write the annotation.** A property nobody reads is worse than a callout everyone reads, and following this principle without its condition ships an unnamed icon button with its name sitting in a field no one opened.
+
+And **never do both for the same value.** Two copies of one string drift, and the moment they differ you have manufactured exactly the discrepancy Principle 1 is about.
 
 **Callouts are still correct for anything that is not a property of one layer.** These are inherently about relationships between elements, so no single field can hold them:
 

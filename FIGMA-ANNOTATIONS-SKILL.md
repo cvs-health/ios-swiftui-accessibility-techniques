@@ -191,7 +191,6 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 - A **non-obvious gesture** (long press, swipe-to-action, drag, context menu) and its non-gesture alternative.
 - What happens to **VoiceOver focus** when a modal opens and closes.
 - A **dynamic change** that must be announced (error appears, result count changes, async content loads).
-- **Reflow intent** where a layout would break at large text sizes.
 
 ### Never annotate — pick a fight with yourself about these
 
@@ -208,6 +207,7 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 - ❌ Reading order as a numbered list of individual elements. Group containers instead.
 - ❌ Hints on ordinary buttons and links. See the hint rules — they are **optional** in WCAG and most users switch them off.
 - ❌ Touch target size on controls that already clear **24×24pt**, the 2.5.8 AA floor. Measure first; annotate the violation, not the compliance. And do not annotate a 32pt control as a failure because it falls under Apple's 44pt guidance — it passes AA, and calling it a defect manufactures a failure that does not exist.
+- ❌ Dynamic Type behaviour. A layout that breaks at large text sizes needs a large-text **design**, not a note telling a developer to prevent it. Design the AX5 variant and hand over both frames.
 - ❌ Generic advice. `Ensure sufficient contrast`, `Add appropriate labels`, `Test with VoiceOver`, `Follow WCAG guidelines` are not annotations. They tell the developer nothing and cannot be checked.
 - ❌ A WCAG criterion number with no instruction attached. `WCAG 1.3.1` is not a spec.
 
@@ -462,7 +462,7 @@ Each fact has an owner:
 | --- | --- |
 | Page title | Nowhere. The navigation title is visible text and SwiftUI derives it. Annotate only if the spoken title must differ from the visible one |
 | Heading levels | On each heading element — the `level` property where heading components are used, otherwise `Heading: N` on that text layer |
-| Dynamic Type reflow | On the element that must reflow: the row, the card, the two-column strip. `No fixed height, no line limit, must not truncate at AX5` |
+| Dynamic Type / reflow | Nowhere. A layout that breaks at large text sizes is a missing **design**, not a missing annotation — the designer produces the large-text variant |
 | Orientation | Nowhere — unless the screen is locked to one orientation, which is a 1.3.4 defect. Then annotate the frame and name the failure |
 | Contrast | On the failing element only. A verified palette is not an annotation |
 | Touch targets | On the element below 24×24pt only. Compliance is not an annotation |
@@ -471,11 +471,11 @@ Each fact has an owner:
 
 That last row repays a second look. `Uses DS/Button — accessibility per component spec` reads like a specification and contains no instruction; there is nothing a developer can do with it. If the component's accessibility is specified, say nothing at all. If it is not, the fix belongs in the component, not in a note attached to one screen that happens to use it.
 
-**The frame is an element too.** When a fact genuinely is screen-wide *and* genuinely names a defect — an orientation lock, a layout that cannot survive AX5 anywhere — annotate the frame. That is rare, and both of those examples are things you would rather fix in the design than document.
+**The frame is an element too.** When a fact genuinely is screen-wide *and* genuinely names a defect — an orientation lock, which fails 1.3.4 — annotate the frame. That is rare, and it is a thing you would rather fix in the design than document.
 
 Three notes on the facts above:
 
-- **Dynamic Type is reflow intent, not a pixel spec.** iOS body text goes from 17pt to roughly 53pt at the largest accessibility size — over 300%, well past the 200% WCAG requires. Do not annotate a target pixel size; annotate what must not happen: no truncation, no fixed heights, no one-line limits, and text containers that grow. If a layout genuinely cannot survive it, design and annotate the large-text variant rather than writing `text may truncate`.
+- **Do not annotate Dynamic Type at all.** iOS body text runs from 17pt to roughly 53pt at the largest accessibility size — over 300%, far past the 200% that 1.4.4 requires. A note reading `no truncation, no fixed heights, no line limits` asks the developer to achieve an outcome nobody has designed, and leaves every decision about what moves, wraps, or stacks to them at build time. That is a **design** responsibility. If a layout cannot survive AX5, produce the large-text variant and hand over both frames; a designer may legitimately need several designs, one of them at the largest text size. `text may truncate` is the same failure in a shorter sentence — it names a problem and specifies no solution.
 - **Touch targets: the threshold you annotate against is 24×24pt**, the WCAG 2.2 AA floor (2.5.8). 44×44pt is Apple's HIG guidance and WCAG's AAA criterion (2.5.5) — worth recommending, never worth reporting as a defect. A 32pt control conforms; annotating it as a failure is the same manufactured-failure error as retyping a visible label. Targets inline within a line of text are exempt. Measure the design and annotate only what falls below 24×24pt. If a design is systematically under 44pt and the team wants Apple's number, that is a design-system conversation, not a per-screen annotation.
 - **Contrast:** 4.5:1 for body text, 3:1 for large text (18pt+, or 14pt+ bold), 3:1 for icons, borders, and other meaningful non-text. Annotate the measured ratio only for the exceptions.
 
@@ -542,8 +542,6 @@ Divider               → decorative / hidden
 ```
 ① RX CARD  — applies to all 12 rows
 Group: contain — heading and both buttons stay individually focusable.
-Dynamic Type: card reflows to a vertical stack, button full width. No fixed
-heights, no line limits.
 
 ② "Ready for pickup" BADGE
 Value: merge into the card heading — "Atorvastatin 20mg, ready for pickup".
@@ -569,7 +567,7 @@ and to the "More" menu — a swipe-only action fails WCAG 2.1.1 and 2.5.1.
 
 Five callouts instead of thirty-two, and every one of them tells the developer something the design does not.
 
-Note where the reduction came from. The screen block is gone: its heading levels became properties on the heading layers, its reflow intent moved onto the card that has to reflow, and the rest of it — page title, orientation, contrast, target size, motion, "per component spec" — was compliance rather than specification and so is written nowhere at all. Five facts moved into properties, where they are the design specifying itself rather than notes competing for attention, and where an AI can read them off the layer they belong to. No label survives on a control whose visible text was already correct. There are no trait annotations at all. No contrast or target-size notes, because none of them fail. The repeating row is annotated once. And the five that remain are each about a *relationship* — a grouping, a badge that must merge into a heading, two names that need sibling context, and a gesture that needs an alternative — which is precisely the class of thing no properties field can hold.
+Note where the reduction came from. The screen block is gone: its heading levels became properties on the heading layers, its reflow intent is gone entirely — a layout that breaks at AX5 needs a large-text design, not a note — and the rest of it — page title, orientation, contrast, target size, motion, "per component spec" — was compliance rather than specification and so is written nowhere at all. Five facts moved into properties, where they are the design specifying itself rather than notes competing for attention, and where an AI can read them off the layer they belong to. No label survives on a control whose visible text was already correct. There are no trait annotations at all. No contrast or target-size notes, because none of them fail. The repeating row is annotated once. And the five that remain are each about a *relationship* — a grouping, a badge that must merge into a heading, two names that need sibling context, and a gesture that needs an alternative — which is precisely the class of thing no properties field can hold.
 
 Note also what the one-callout-one-element rule changed: the two buttons get separate notes even though their reasoning is nearly identical, because a single note spanning both would leave a developer guessing which name belongs to which button.
 
@@ -616,7 +614,6 @@ Run every annotation through this. Delete, do not soften.
 | Orientation | 1.3.4 Orientation |
 | Form field labels | 1.3.5 Identify Input Purpose, 3.3.2 Labels or Instructions |
 | Contrast | 1.4.3 Contrast (Minimum), 1.4.11 Non-text Contrast |
-| Dynamic Type, reflow | 1.4.4 Resize Text, 1.4.10 Reflow |
 | Gesture alternative | 2.1.1 Keyboard, 2.5.1 Pointer Gestures |
 | Auto-dismissing content | 2.2.1 Timing Adjustable |
 | Motion | 2.3.1 Three Flashes or Below Threshold |
@@ -656,7 +653,6 @@ These annotations map onto SwiftUI as follows. For the implementation rules the 
 | `Announce` | `UIAccessibility.post(notification: .announcement / .layoutChanged / .screenChanged, argument:)` |
 | `Page title` | `.navigationTitle("…")` |
 | `Decorative` | `Image(decorative:)` or `.accessibilityHidden(true)` |
-| Dynamic Type | text styles, `ScrollView`, no `.lineLimit(1)`, no fixed heights |
 | Touch targets | `.frame(minWidth: 24, minHeight: 24)` to conform (2.5.8); `44` to follow Apple's HIG |
 | Motion | `@Environment(\.accessibilityReduceMotion)` |
 

@@ -107,6 +107,12 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Two rows added to the banned-vocabulary table, taking it to 20: one for `role="list"` / `role="listitem"` / `aria-setsize` / `aria-posinset`, and one for `accessibilityContainerType: .list` / `List, N items` / `Announce list count`. Both resolve to "nothing" — each row is already its own VoiceOver stop and the swipe order carries the sequence. Where a count genuinely carries meaning, it belongs in the section heading rather than a container role.
 
+- **An annotation carries the instruction, not the reasoning.** Rule 0 caps nothing about length, and the file's only guidance was "most annotations are one or two lines. If yours routinely runs to five keys, re-read the gate" — which measures keys, not words. So a set could sit comfortably inside the bare-minimum rule while being unreadable, and repeatedly did: three adjacent nav icons each carrying the same three-line rationale, a fourteen-line screen block, an input annotation explaining iOS view hierarchy on every field.
+
+  It is the clutter Rule 0 exists to prevent, arriving by a different route: the number of annotations stays low while the amount to read does not. A reviewer facing a paragraph per element stops reading just as surely as one facing forty notes, and in Dev Mode a long annotation renders as a card large enough to cover the design it describes — observed directly on this file.
+
+  The rule now states that a reason needed to make an instruction intelligible gets **one short clause**, and anything longer belongs in this file instead, where it is read once rather than on every element. With a corollary that closes the loop with the repeating-component rule: **if the same reason appears on more than one annotation, it is a rule and not a note** — state it once at the design-system level and delete the copies.
+
 - **Inputs now require a visible label, and the label-to-field association is a mandatory annotation.** Three statements in the file were wrong in the same direction, all of them telling the annotator that text inputs name themselves.
 
   Principle 1 listed "`TextField` with a visible label" among the controls that "take their accessible name from their visible content". The gate's third question listed "a `TextField` its placeholder-to-label relationship" among the free platform defaults and said not to annotate it. And a first attempt at fixing this only narrowed the claim to a `TextField` *with a persistent visible label*, which is still false.

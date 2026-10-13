@@ -303,6 +303,12 @@ Name: Directions, CVS Main St
 
 Most annotations are one or two lines. If yours routinely runs to five keys, re-read the gate — you are specifying defaults.
 
+**An annotation carries the instruction, not the reasoning.** `Name: the visible label above this field.` is the whole specification. *Why* iOS needs it — that a label and a field are separate views with nothing connecting them — belongs in this file, where it is read once, and not on the annotation, where it is read again on every input.
+
+This is the clutter Rule 0 is about arriving by a different route: the number of annotations stays low while the amount to read does not. A reviewer facing a paragraph per element stops reading just as surely as one facing forty notes, and in Dev Mode a long annotation renders as a card large enough to cover the design it describes.
+
+So: if a reason is needed to make the instruction intelligible, give it **one short clause**. If it needs more than that, the rule it rests on belongs in this file instead. And if the same reason appears on more than one annotation, it is a rule, not a note — state it once at the design-system level and delete the copies.
+
 Note what is *not* in that example: no `Trait:` and no control type, because neither is ever annotated; no `Hint:`, because a link's destination is obvious; and no `Name:` at all if the control had visible text.
 
 ---
@@ -355,9 +361,7 @@ See Principle 1 — read it before using this key at all.
 **2. A visible label above a field is still not its accessible name.** This is the part that surprises people, and the reason the annotation exists at all. On the web, `<label for>` makes the association. iOS has no equivalent: a `Text` above a `TextField` is a separate view, and nothing connects the two unless the developer does it. To a sighted user the pairing is obvious from the layout; to VoiceOver the field is simply unnamed. The association is therefore genuinely invisible in the design, and **every input carries this annotation**:
 
 ```
-Name: take the accessible name from the visible label above this field. On iOS
-the label and the field are separate views — nothing connects them unless the
-developer does it explicitly.
+Name: the visible label above this field.
 ```
 
 **Point at the label; never retype its string.** The developer passes the same string that renders the label, so the name cannot drift when the label is reworded — the same rule as naming a group by its heading.

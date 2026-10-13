@@ -420,9 +420,18 @@ A sheet that must stop VoiceOver reaching the content behind it is a different m
 - Write the spoken result and the pattern, not prose: `Value: "3 of 5 stars"`, `Value: "Step 2 of 4"`, `Value: "Collapsed" / "Expanded"`.
 - **A disclosure is the common conditional, and you cannot resolve it by looking.** A native `DisclosureGroup` carries the button trait *and* announces its own collapsed/expanded state, so a design using one needs **no annotation at all**. A custom row built from a frame, a label and a chevron provides neither. The two are pixel-identical in a design, so **ask which it is** — this is the same situation as behaviour the design does not show.
 
-  **Do not hedge it into the annotation.** `Value: Collapsed (if custom)` is unactionable: the developer cannot resolve the condition either, and an annotation that offers two answers has specified nothing. Pick, having asked.
+  **State the required outcome, not the branch.** The mistake is reaching for `Value: Collapsed (if custom)`, which reads like a hedge. Write what must be true instead, and the branch disappears:
 
-  If it is custom, `Value: "Collapsed" / "Expanded"` is required — nothing else supplies the state. The missing *button* behaviour is a different matter and is not an annotation: the control should be a button in the design. See "Why there is no `Component:` key".
+```
+Value: "Collapsed" / "Expanded" must be announced. Free from a native disclosure
+control; specify it if the control is custom.
+```
+
+  That specifies the requirement, leaves the mechanism to the developer, costs two lines, and names no API — which matters, because `DisclosureGroup` in an annotation is SwiftUI API and Principle 8 forbids it.
+
+  **A condition the developer controls may be stated; a condition about the design may not.** This is the line between the form above and the hedging this file rejects elsewhere. *The developer chooses the control*, so "if the control is custom" is something they can resolve and act on. `.button (if tappable)` is not: it asks them to guess a fact only the designer knows, and the annotator should have asked instead of passing the uncertainty along.
+
+  The missing *button* behaviour is a separate matter and is not an annotation: the control should be a button in the design. See "Why there is no `Component:` key".
 
 - **A badge needs a value.** An iOS tab-bar or icon badge is **not** spoken by VoiceOver on its own. If the design shows a `3` badge, annotate `Value: "3 unread"`. Missing this is one of the most common shipped iOS defects.
 - If the user can change the value by dragging or stepping, add `Adjustable: increment / decrement` so the developer wires the VoiceOver swipe-up/down action.

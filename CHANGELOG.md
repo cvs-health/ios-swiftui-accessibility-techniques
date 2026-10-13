@@ -111,7 +111,9 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   A native `DisclosureGroup` carries the button trait *and* announces collapsed/expanded. A custom row built from a frame, a label and a chevron provides neither. The two are pixel-identical in a design, which makes this unresolvable by looking — so the rule says **ask**, treating it as the same situation as behaviour the design does not show.
 
-  It also bans the obvious shortcut: `Value: Collapsed (if custom)` is unactionable, because the developer cannot resolve the condition either and an annotation offering two answers has specified nothing. This is the same hedging the file criticises in AI-generated annotations elsewhere (`.button (if tappable)`), so it needed saying explicitly where the temptation is strongest.
+  On how to write it, the rule draws a line the file had not drawn before: **a condition the developer controls may be stated; a condition about the design may not.** A first pass banned all conditionals, which was too absolute. "If the control is custom" is resolvable by the person reading it, because *the developer chooses the control* — unlike `.button (if tappable)`, which asks them to guess a fact only the designer knows and which the annotator should have asked about instead of passing the uncertainty along. That distinction is what separates a usable conditional from the hedging this file rejects elsewhere.
+
+  Better still, **state the required outcome and the branch disappears**: `Value: "Collapsed" / "Expanded" must be announced. Free from a native disclosure control; specify it if the control is custom.` Two lines, specifies what must be true, leaves the mechanism to the developer — and names no API, which matters because `DisclosureGroup` written into an annotation is SwiftUI API and Principle 8 forbids it. The same phrasing works for every "the native control gives it free" conditional.
 
   Where the control is custom, the missing *button* behaviour is routed to the design rather than the annotation, per the removal of the `Component:` key.
 

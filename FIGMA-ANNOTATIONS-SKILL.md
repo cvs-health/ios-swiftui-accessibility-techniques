@@ -418,6 +418,12 @@ A sheet that must stop VoiceOver reaching the content behind it is a different m
 
 - Annotate the value a sighted user reads from the picture but VoiceOver cannot: a star count, a step position, a selected segment, a badge number, a collapsed/expanded state.
 - Write the spoken result and the pattern, not prose: `Value: "3 of 5 stars"`, `Value: "Step 2 of 4"`, `Value: "Collapsed" / "Expanded"`.
+- **A disclosure is the common conditional, and you cannot resolve it by looking.** A native `DisclosureGroup` carries the button trait *and* announces its own collapsed/expanded state, so a design using one needs **no annotation at all**. A custom row built from a frame, a label and a chevron provides neither. The two are pixel-identical in a design, so **ask which it is** — this is the same situation as behaviour the design does not show.
+
+  **Do not hedge it into the annotation.** `Value: Collapsed (if custom)` is unactionable: the developer cannot resolve the condition either, and an annotation that offers two answers has specified nothing. Pick, having asked.
+
+  If it is custom, `Value: "Collapsed" / "Expanded"` is required — nothing else supplies the state. The missing *button* behaviour is a different matter and is not an annotation: the control should be a button in the design. See "Why there is no `Component:` key".
+
 - **A badge needs a value.** An iOS tab-bar or icon badge is **not** spoken by VoiceOver on its own. If the design shows a `3` badge, annotate `Value: "3 unread"`. Missing this is one of the most common shipped iOS defects.
 - If the user can change the value by dragging or stepping, add `Adjustable: increment / decrement` so the developer wires the VoiceOver swipe-up/down action.
 - Do **not** annotate a value that is already the control's visible text — a stepper showing `2`, a counter, a price, a quantity printed next to its label. The number is on screen, so it is read; restating it is the same error as retyping a visible label. And do not annotate a native `Toggle` — iOS speaks on/off for free. What such a control usually *does* need is a **name**, because a bare `− 2 +` has no label of its own: see the outside-label rule under `Name:`.

@@ -107,11 +107,22 @@ Start from zero annotations and add only what is forced. On a typical screen the
 - they are the **non-colour indicator** that a colour-blind user depends on, because red text alone is the other signal and 1.4.1 Use of Color is why the icon is there;
 - and they are what **draws the eye** to the message in the first place.
 
-Hide one and sighted users receive information VoiceOver users do not — a straight **1.1.1 Non-text Content** failure. Give it a `Name:` and let it be a VoiceOver stop:
+Hide one and sighted users receive information VoiceOver users do not — a straight **1.1.1 Non-text Content** failure. Give it a `Name:` and let it be a VoiceOver stop.
+
+**The complete spec is two annotations working together** — a `Name:` on the icon, and `Group: combine` on the row holding the icon and the message, so the pair is **one** stop instead of two:
 
 ```
-Name: Error
+error glyph  →  Name: Error
+
+error row    →  Group: combine — the icon and the message are one VoiceOver stop.
+                Announce: on validation failure. The error text is also visible
+                and associated with the field — the announcement is not a
+                substitute.
 ```
+
+VoiceOver then announces "Error, that code expired on Feb 28" as a single element. This works because combining concatenates each child's **accessible name**, not just its raw text — so the icon's `Name:` is what makes the announcement lead with the condition, and the message supplies the detail. Naming the icon and leaving it un-combined is not wrong, but it makes the user swipe twice to read one message.
+
+And nothing goes on the field itself. The association is already stated in the `Announce:` line above, so a third copy of the error on the field's value would have VoiceOver say it twice.
 
 **Do not argue that the nearby text covers it.** "That code expired on Feb 28" communicates a problem but never says *error*, and a user swiping the screen can reach that message without ever focusing the field whose value carries the state. The icon is the only element that names the condition.
 

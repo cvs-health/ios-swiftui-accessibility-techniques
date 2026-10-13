@@ -107,6 +107,12 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Two rows added to the banned-vocabulary table, taking it to 20: one for `role="list"` / `role="listitem"` / `aria-setsize` / `aria-posinset`, and one for `accessibilityContainerType: .list` / `List, N items` / `Announce list count`. Both resolve to "nothing" — each row is already its own VoiceOver stop and the swipe order carries the sequence. Where a count genuinely carries meaning, it belongs in the section heading rather than a container role.
 
+- **iOS has no radio button or checkbox — both added to the banned vocabulary.** The `Group: contain` rule told the annotator to use it for "radio-style choices" without ever saying that iOS has no radio control, and neither `radio` nor `checkbox` appeared in the banned-vocabulary table despite both being web and Android terms. An annotator could therefore write `radio group` in an iOS annotation while following the file exactly.
+
+  Single-select on iOS is an inline **picker**, and the chosen row is marked with a **checkmark**; a filled circle is a web and Android convention. On/off is a **Toggle**, not a checkbox. Two rows added to the table, taking it to 22.
+
+  The `Group: contain` rule now also flags that single-select is the same conditional as a disclosure — a native picker announces each row's selected state for free, custom rows announce nothing — so both routes get stated, and that filled-circle radios in a design are a pattern to raise with the designer rather than something to annotate.
+
 - **`Group: combine` is never annotated on a control — the control already combines its own content.** A `Button` wrapping an icon and a label is a single accessibility element by default, and so is a disclosure, a toggle, a link, a segmented control. Annotating combine on any of them specifies a platform default, which gate question 3 already rules out — but the `Group:` rules never said so, describing combine only as "merge several layers into one VoiceOver stop" with a card and an icon-plus-text as the examples.
 
   The omission produced an inconsistency inside a single screen: the showcase's pill-shaped "Place order" button was deliberately left unannotated because a `Button` is already one stop, while the disclosure row directly below it was given `Group: combine` for content a disclosure or button would have combined for free.

@@ -231,7 +231,7 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 
 1. **Is this iOS?** If the note only makes sense on the web, delete it.
 2. **Is it visible in the design?** If the developer can see it (the visible button text, the obvious tap target, the layout order), they do not need a note telling them it exists.
-3. **Is it already the platform default?** SwiftUI gives a `Button` the button trait, a `Link` the link trait, a `Toggle` its on/off value, and a `TextField` its placeholder-to-label relationship for free. Do not annotate the default.
+3. **Is it already the platform default?** SwiftUI gives a `Button` the button trait, a `Link` the link trait, a `Toggle` its on/off value, and a `TextField` **with a persistent visible label** its name for free. Do not annotate the default. But a **placeholder is not a persistent label** — a field labelled only by its placeholder is a defect, not a default, and this step must not be used to wave it through. See `Name:`.
 4. **Would omitting this note cause a real defect?** Name the failure. If you cannot name it, there is no annotation.
 
 ### Annotate — these are invisible in a static design
@@ -346,6 +346,22 @@ Two more mobile-specific traps:
 See Principle 1 — read it before using this key at all.
 
 - **Omit it entirely when the visible text is already the name.** This is the single biggest source of over-annotation.
+⚠️ **A placeholder is not a label.** A text field whose only label is its placeholder has two defects at once, and the design shows neither:
+
+- **The visible label disappears the moment the user types.** A sighted user who looks away mid-form cannot tell what the field was for — a 3.3.2 Labels or Instructions failure, and one that affects everyone, not only AT users. This is a **design** defect: the control needs a persistent visible label, and that is the first thing to raise.
+- **The accessible name becomes dependent on a transient string.** `TextField("Promo code", …)` does use the placeholder as the name, but a hand-built field with a `Text` overlay has no name at all — and the two are identical in the design, so you cannot tell which you are looking at.
+
+So annotate the field, pointing at its own text rather than retyping it:
+
+```
+Name: take the field's accessible name from its own label text, and keep it after
+the user types and the placeholder disappears.
+Design: this control needs a persistent visible label. Placeholder-only labelling
+leaves a sighted user with no label as soon as they type (3.3.2).
+```
+
+Where the design already has a persistent visible label beside or above the field, none of this applies — the name is derived from it and there is nothing to annotate.
+
 - **Omit it when `Group: combine` would make the control unique.** For a generic or repeated label — "Edit", "Refill", "Learn more" — combining the control with its adjacent text is the better fix: "Email Address, Edit" is unique without a single label annotation. Only annotate a unique name once combining is ruled out, and say why in the annotation ("combining would swallow the card heading").
 - 1–3 words where possible. Capitalized. **No trailing period.**
 - **Never include the role**: no "button", "icon", "image", "link", "tab", "graphic", "menu". VoiceOver speaks the component's role itself, so "Delete button" is heard as "Delete button, button".

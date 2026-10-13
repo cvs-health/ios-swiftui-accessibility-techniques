@@ -512,6 +512,10 @@ Two different behaviours, and they are not interchangeable:
 
 - **`Group: combine`** — merge several layers into **one** VoiceOver stop with one name. For an icon + text that mean one thing, or a card the user taps as a whole.
 
+⚠️ **A control already combines its own content — never annotate `Group: combine` on one.** A `Button` wrapping an icon and a label is a single accessibility element by default, and so is a disclosure, a toggle, a link, a segmented control. Annotating combine on any of them specifies a platform default, which gate question 3 rules out.
+
+`Group: combine` is for **containers that are not controls**: a card of sibling text layers that should read as one stop, a row whose status glyph and message belong together, an icon and caption that mean one thing. So the test is simply **is this element a control?** If it is, the combining is already free. If it is a frame holding siblings, combining has to be asked for.
+
 ⚠️ **`combine` concatenates child text in source order — it does not discard it.** The announcement is every child's text run together, which is why combining usually needs no `Name:` at all. But it also means any redundant text child is read *first*. The common case is an initials avatar: a row of `LL` + "Lucas Lee" + "Born March 21, 2016" combines to "LL, Lucas Lee, born March 21 2016", leading with initials that carry nothing the name does not.
 
 So **before writing `Group: combine`, read the child text in order and ask what the concatenation actually says.** Almost always it is fine and needs nothing further: "LL, Lucas Lee, born March 21 2016" leads with redundant initials and is still correct, still unique, and still contains the visible label.

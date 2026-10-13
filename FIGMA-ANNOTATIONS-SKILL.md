@@ -62,7 +62,7 @@ So the order of preference is: **fix the component → set the property → writ
 - `Order:` — which container is read before which
 - `Focus:` — where focus goes when a sheet opens and closes
 - `Announce:` — what is spoken when something changes
-- Gesture alternatives, and the screen-level block
+- Gesture alternatives
 
 ⚠️ **A property is not a loophole.** Moving a value into a field does not exempt it from any other rule here: a redundant label is still redundant in a properties panel, visible text restated in an alt-text field still manufactures a Label in Name failure, and `role="button"` typed into a field is still web vocabulary. The properties panel changes the delivery, not the content — and it does not exempt a value from the gate.
 
@@ -168,7 +168,7 @@ These limits are structural rather than numeric, and they hold at any count:
 - **One callout per element, maximum.** Combine all fields for an element into one note. Never place separate "label" and "trait" and "hint" annotations on the same layer.
 - **One callout, one element.** A note must point at exactly one layer. Never write a single callout covering several layers ("the icons are decorative") — nothing in the file records which layers it meant, and the association is left to guesswork.
 - **Annotate a repeating component once.** A list of 12 cards, a 5-star rating, a 4-tab tab bar: annotate the first instance, then write `Applies to all N instances.` Never annotate every row.
-- **Annotate a design-system component zero times** if its accessibility is already specified in the design system. Write `Uses DS/Button — accessibility per component spec.` once, at the screen level, and move on.
+- **Annotate a design-system component zero times** if its accessibility is already specified in the design system. Write nothing — not even `Uses DS/Button — accessibility per component spec`, which reads like a specification while containing no instruction a developer can act on. If the component's accessibility is not specified, the fix belongs in the component, not in a note on a screen that happens to use it.
 
 ---
 
@@ -195,7 +195,7 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 
 ### Never annotate — pick a fight with yourself about these
 
-- ❌ Every text layer's contrast ratio. Contrast is a **token** concern. Annotate it **only** where a style is off-system or sits on an image or gradient. One screen-level line covers the rest.
+- ❌ Every text layer's contrast ratio. Contrast is a **token** concern. Annotate it **only** where a style is off-system or sits on an image or gradient, and then on that element. A verified palette needs no annotation anywhere.
 - ❌ Decorative images as callouts, when the properties panel has a decorative or hidden option. Set it there and write nothing on the canvas. If there is no field, each decorative element gets **its own** callout — never one note covering several layers, which leaves the targets ambiguous. **Principle 3.**
 - ❌ "This is a button." The design shows a button. The developer will use `Button`.
 - ❌ **Accessibility traits, in any form.** No `Trait: isButton`, no `.accessibilityAddTraits(...)`, no `role=`. Name the component, or fix the component in the design. See `Component:` — Principle 1's redundant-code problem applies to traits exactly as it does to labels.
@@ -377,7 +377,7 @@ Annotate when the heading is plain styled text, an off-system text layer, or a c
 - Mark **every** heading, and give its level: `Heading: 1`, `Heading: 2`, …
 - The level is an **iOS heading level**, not markup and not a trait. Never write `H2` as a tag, and never write `.isHeader` or `accessibilityHeading` — see `Component:` above for why naming the API backfires.
 - **Do not skip levels.** 1 → 2 → 3, never 1 → 3.
-- The screen's **navigation title is the page title**, not a heading — annotate it as `Page title: "Prescriptions"` in the screen block. The first heading inside the content starts at level 1.
+- The screen's **navigation title is the page title**, not a heading. SwiftUI derives it from the visible title, so annotate nothing unless the spoken title must differ from the one on screen. The first heading inside the content starts at level 1.
 - Never express a heading by putting the word "heading" in the name. It will not appear in the VoiceOver Rotor, which is the entire point.
 - **A card's first element should be its heading.** If a card leads with an image or a price, annotate the intended order.
 
@@ -444,29 +444,30 @@ Use when something changes on screen and VoiceOver would otherwise say nothing: 
 
 ---
 
-## The screen-level block — one per frame
+## Where each screen-wide fact goes — there is no screen-level block
 
-Put this **once** per screen, not on individual layers. It absorbs most of what AI tries to spread across forty element annotations.
+Every annotation belongs **on the element it is about**: in that element's properties panel where Figma exposes a field, and as an annotation on the element where it does not. There is no separate collected note for the screen.
 
-```
-SCREEN: Prescriptions
+A screen block is tempting, because it gives a home to facts with no obvious owner. In practice it fails three ways. It renders in Dev Mode as a single oversized card laid over the design, so the reviewer can read neither. It makes that reviewer hold a list in their head and map it back onto layers by eye — the same association problem Principle 2 is about, one level up. And because it is the one place no single element has to answer for, it fills with compliance statements: "contrast verified", "all targets pass", "portrait and landscape supported". None of those name a defect, and the gate already forbids every one of them.
 
-Page title: "Prescriptions" (navigation title — announced on arrival)
-Heading structure: 1 "Your prescriptions" → 2 "Ready for pickup" → 2 "In progress"
-Dynamic Type: supports up to AX5. Rx cards reflow to vertical stack; no truncation,
-  no fixed heights, no single-line limits on body text.
-Orientation: portrait and landscape both supported. Content scrolls.
-Contrast: all colors from the design system palette and verified. Exception: the
-  "Ready" badge sits on the photo — see its annotation.
-Touch targets: all controls clear 24×24pt. Exception: the 20pt "info" glyph —
-  see its annotation.
-Motion: card expansion animation is removed under Reduce Motion; state change is
-  instant, not animated.
-Components: DS/Button, DS/Card, DS/Badge — accessibility per component spec,
-  not re-annotated here.
-```
+Each fact has an owner:
 
-Three notes on that block:
+| Fact | Where it goes |
+| --- | --- |
+| Page title | Nowhere. The navigation title is visible text and SwiftUI derives it. Annotate only if the spoken title must differ from the visible one |
+| Heading levels | On each heading element — the `level` property where heading components are used, otherwise `Heading: N` on that text layer |
+| Dynamic Type reflow | On the element that must reflow: the row, the card, the two-column strip. `No fixed height, no line limit, must not truncate at AX5` |
+| Orientation | Nowhere — unless the screen is locked to one orientation, which is a 1.3.4 defect. Then annotate the frame and name the failure |
+| Contrast | On the failing element only. A verified palette is not an annotation |
+| Touch targets | On the element below 24×24pt only. Compliance is not an annotation |
+| Motion | On the element that animates |
+| Design-system components | Nowhere. A DS component is annotated zero times, and `per component spec` is not an annotation — it is the absence of one |
+
+That last row repays a second look. `Uses DS/Button — accessibility per component spec` reads like a specification and contains no instruction; there is nothing a developer can do with it. If the component's accessibility is specified, say nothing at all. If it is not, the fix belongs in the component, not in a note attached to one screen that happens to use it.
+
+**The frame is an element too.** When a fact genuinely is screen-wide *and* genuinely names a defect — an orientation lock, a layout that cannot survive AX5 anywhere — annotate the frame. That is rare, and both of those examples are things you would rather fix in the design than document.
+
+Three notes on the facts above:
 
 - **Dynamic Type is reflow intent, not a pixel spec.** iOS body text goes from 17pt to roughly 53pt at the largest accessibility size — over 300%, well past the 200% WCAG requires. Do not annotate a target pixel size; annotate what must not happen: no truncation, no fixed heights, no one-line limits, and text containers that grow. If a layout genuinely cannot survive it, design and annotate the large-text variant rather than writing `text may truncate`.
 - **Touch targets: the threshold you annotate against is 24×24pt**, the WCAG 2.2 AA floor (2.5.8). 44×44pt is Apple's HIG guidance and WCAG's AAA criterion (2.5.5) — worth recommending, never worth reporting as a defect. A 32pt control conforms; annotating it as a failure is the same manufactured-failure error as retyping a visible label. Targets inline within a line of text are exempt. Measure the design and annotate only what falls below 24×24pt. If a design is systematically under 44pt and the team wants Apple's number, that is a design-system conversation, not a per-screen annotation.
@@ -518,37 +519,25 @@ What is wrong with it:
 
 And every defect that would actually ship on this screen is missing: the badge is never spoken, because an iOS badge is not read by VoiceOver on its own; the heading level is unknown; 24 identically-named icon buttons are indistinguishable in the swipe order; swipe-to-archive is undiscoverable and has no alternative; and nothing says how the card groups.
 
-### ✅ Correct annotation set — 4 properties + 5 callouts + 1 screen block
-
-```
-SCREEN: Prescriptions
-
-Page title: "Prescriptions"
-Heading structure: 1 "Your prescriptions" → 2 "Ready for pickup"
-Dynamic Type: up to AX5. Card reflows to vertical stack, button full width.
-  No fixed heights, no line limits.
-Orientation: portrait and landscape. List scrolls.
-Contrast: design-system palette, verified. No exceptions on this screen.
-Touch targets: all clear 24×24pt.
-Motion: no animation on this screen.
-Components: DS/Card, DS/Button, DS/Badge — accessibility per component spec.
-```
+### ✅ Correct annotation set — 5 properties + 5 annotations, no screen block
 
 **In the properties panel — nothing on the canvas.** Set on the first row's layers; the component carries them to all 12.
 
 ```
-Thumbnail      → decorative / hidden
-Refill caret   → decorative / hidden     ("Refill" already names the button)
-Divider        → decorative / hidden
-Drug name      → Heading component, level 2
+"Your prescriptions"  → Heading component, level 1
+Drug name             → Heading component, level 2
+Thumbnail             → decorative / hidden
+Refill caret          → decorative / hidden   ("Refill" already names the button)
+Divider               → decorative / hidden
 ```
 
-**Callouts on the canvas — one per element.**
+**Annotations, each on the element it is about — one per element.**
 
 ```
 ① RX CARD  — applies to all 12 rows
 Group: contain — heading and both buttons stay individually focusable.
-Order: default is correct. No override.
+Dynamic Type: card reflows to a vertical stack, button full width. No fixed
+heights, no line limits.
 
 ② "Ready for pickup" BADGE
 Value: merge into the card heading — "Atorvastatin 20mg, ready for pickup".
@@ -574,7 +563,7 @@ and to the "More" menu — a swipe-only action fails WCAG 2.1.1 and 2.5.1.
 
 Five callouts instead of thirty-two, and every one of them tells the developer something the design does not.
 
-Note where the reduction came from. Four of the facts moved into properties, where they are the design specifying itself rather than notes competing for attention, and where an AI can read them off the layer they belong to. No label survives on a control whose visible text was already correct. There are no trait annotations at all. No contrast or target-size notes, because none of them fail. The repeating row is annotated once. And the five that remain are each about a *relationship* — a grouping, a badge that must merge into a heading, two names that need sibling context, and a gesture that needs an alternative — which is precisely the class of thing no properties field can hold.
+Note where the reduction came from. The screen block is gone: its heading levels became properties on the heading layers, its reflow intent moved onto the card that has to reflow, and the rest of it — page title, orientation, contrast, target size, motion, "per component spec" — was compliance rather than specification and so is written nowhere at all. Five facts moved into properties, where they are the design specifying itself rather than notes competing for attention, and where an AI can read them off the layer they belong to. No label survives on a control whose visible text was already correct. There are no trait annotations at all. No contrast or target-size notes, because none of them fail. The repeating row is annotated once. And the five that remain are each about a *relationship* — a grouping, a badge that must merge into a heading, two names that need sibling context, and a gesture that needs an alternative — which is precisely the class of thing no properties field can hold.
 
 Note also what the one-callout-one-element rule changed: the two buttons get separate notes even though their reasoning is nearly identical, because a single note spanning both would leave a developer guessing which name belongs to which button.
 
@@ -585,7 +574,7 @@ Note also what the one-callout-one-element rule changed: the two buttons get sep
 Run every annotation through this. Delete, do not soften.
 
 1. **Look at the total.** There is no quota, so never delete down to a number — but a large set is a reliable sign the gate was applied loosely. If you are past six, re-read the gate and the four never-annotate principles before going further; most of the surplus usually fails one of them.
-2. **Every callout — could it be a properties-panel field instead?** Alt text, heading level, component variant: move it. Only cross-element concerns (`Group`, `Order`, `Focus`, `Announce`, gesture alternatives, the screen block) stay as callouts.
+2. **Every callout — could it be a properties-panel field instead?** Alt text, heading level, component variant: move it. Only cross-element concerns (`Group`, `Order`, `Focus`, `Announce`, gesture alternatives) stay as annotations.
 3. **Grep your own output** for: `alt`, `aria`, `role=`, `tabindex`, `landmark`, `skip to`, `H1`–`H6`, `px`, `rem`, `breakpoint`, `hover`, `focus ring`, `tab order`, `screen reader`, `double tap`, `click`. Every hit is a rewrite.
 4. **Every `Name:` on a control that has visible text** — delete it unless the text is generic or repeated. If it is, could `Group: combine` with the adjacent text make it unique instead? If yes, delete the name and group instead. If no, say why in the annotation.
 5. **Every surviving `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?

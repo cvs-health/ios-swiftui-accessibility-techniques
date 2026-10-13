@@ -201,7 +201,7 @@ Before writing any annotation, ask these four questions in order. If you cannot 
 - ❌ Reading order, when the layout is a plain top-to-bottom stack. VoiceOver already does leading-to-trailing, then top-to-bottom. **Principle 4.**
 - ❌ Reading order as a numbered list of individual elements. Group containers instead.
 - ❌ Hints on ordinary buttons and links. See the hint rules — they are **optional** in WCAG and most users switch them off.
-- ❌ Touch target size on controls that are already ≥ 44pt in the design. Measure first; annotate the violation, not the compliance.
+- ❌ Touch target size on controls that already clear **24×24pt**, the 2.5.8 AA floor. Measure first; annotate the violation, not the compliance. And do not annotate a 32pt control as a failure because it falls under Apple's 44pt guidance — it passes AA, and calling it a defect manufactures a failure that does not exist.
 - ❌ Generic advice. `Ensure sufficient contrast`, `Add appropriate labels`, `Test with VoiceOver`, `Follow WCAG guidelines` are not annotations. They tell the developer nothing and cannot be checked.
 - ❌ A WCAG criterion number with no instruction attached. `WCAG 1.3.1` is not a spec.
 
@@ -231,7 +231,9 @@ The **Key** column is what goes in the annotation. The **Builds to** column is t
 
 **Always tag the note with the Accessibility category — never leave it uncategorised.** Dev Mode lets a developer filter annotations by category, so an uncategorised accessibility note still exists but is invisible to the person who went looking for it. The category is metadata, not a callout, so it costs nothing against the budget.
 
-Two practical notes for anyone writing annotations programmatically. Category IDs are **per file** — the same "Accessibility" category is a different ID in every file, so nothing can be hardcoded. And there is no API to enumerate them: `figma.root.annotationCategories` does not exist, and the only reliable way to obtain the ID is to read it off an annotation that already carries one. A file with no categorised annotation yet therefore needs one seeded by hand before a tool can match it.
+**Figma HTML-escapes the annotation label.** A straight `"` renders as `&quot;` and `&` renders as `&amp;`, visibly, in the annotation card the developer reads. Use typographic quotes (`“ ”`) and write the word "and". This is worth knowing before you type a `Name:` value, since names are the key most likely to contain quotation marks.
+
+Three practical notes for anyone writing annotations programmatically. Category IDs are **per file** — the same "Accessibility" category is a different ID in every file, so nothing can be hardcoded. And there is no API to enumerate them: `figma.root.annotationCategories` does not exist, and the only reliable way to obtain the ID is to read it off an annotation that already carries one. A file with no categorised annotation yet therefore needs one seeded by hand before a tool can match it.
 
 ```
 Name: Directions, CVS Main St
@@ -450,8 +452,8 @@ Dynamic Type: supports up to AX5. Rx cards reflow to vertical stack; no truncati
 Orientation: portrait and landscape both supported. Content scrolls.
 Contrast: all colors from the design system palette and verified. Exception: the
   "Ready" badge sits on the photo — see its annotation.
-Touch targets: all controls ≥ 44pt. Exception: the 32pt "info" glyph — see its
-  annotation.
+Touch targets: all controls clear 24×24pt. Exception: the 20pt "info" glyph —
+  see its annotation.
 Motion: card expansion animation is removed under Reduce Motion; state change is
   instant, not animated.
 Components: DS/Button, DS/Card, DS/Badge — accessibility per component spec,
@@ -461,7 +463,7 @@ Components: DS/Button, DS/Card, DS/Badge — accessibility per component spec,
 Three notes on that block:
 
 - **Dynamic Type is reflow intent, not a pixel spec.** iOS body text goes from 17pt to roughly 53pt at the largest accessibility size — over 300%, well past the 200% WCAG requires. Do not annotate a target pixel size; annotate what must not happen: no truncation, no fixed heights, no one-line limits, and text containers that grow. If a layout genuinely cannot survive it, design and annotate the large-text variant rather than writing `text may truncate`.
-- **Touch targets:** 24×24pt is the WCAG 2.2 AA floor (2.5.8); 44×44pt is Apple's guidance and what you should specify. Targets inline within a line of text are exempt. Measure the design and annotate only the ones that fall short.
+- **Touch targets: the threshold you annotate against is 24×24pt**, the WCAG 2.2 AA floor (2.5.8). 44×44pt is Apple's HIG guidance and WCAG's AAA criterion (2.5.5) — worth recommending, never worth reporting as a defect. A 32pt control conforms; annotating it as a failure is the same manufactured-failure error as retyping a visible label. Targets inline within a line of text are exempt. Measure the design and annotate only what falls below 24×24pt. If a design is systematically under 44pt and the team wants Apple's number, that is a design-system conversation, not a per-screen annotation.
 - **Contrast:** 4.5:1 for body text, 3:1 for large text (18pt+, or 14pt+ bold), 3:1 for icons, borders, and other meaningful non-text. Annotate the measured ratio only for the exceptions.
 
 ---
@@ -521,7 +523,7 @@ Dynamic Type: up to AX5. Card reflows to vertical stack, button full width.
   No fixed heights, no line limits.
 Orientation: portrait and landscape. List scrolls.
 Contrast: design-system palette, verified. No exceptions on this screen.
-Touch targets: all ≥ 44pt.
+Touch targets: all clear 24×24pt.
 Motion: no animation on this screen.
 Components: DS/Card, DS/Button, DS/Badge — accessibility per component spec.
 ```
@@ -654,7 +656,7 @@ These annotations map onto SwiftUI as follows. For the implementation rules the 
 | `Page title` | `.navigationTitle("…")` |
 | `Decorative` | `Image(decorative:)` or `.accessibilityHidden(true)` |
 | Dynamic Type | text styles, `ScrollView`, no `.lineLimit(1)`, no fixed heights |
-| Touch targets | `.frame(minWidth: 44, minHeight: 44)` |
+| Touch targets | `.frame(minWidth: 24, minHeight: 24)` to conform (2.5.8); `44` to follow Apple's HIG |
 | Motion | `@Environment(\.accessibilityReduceMotion)` |
 
 ----

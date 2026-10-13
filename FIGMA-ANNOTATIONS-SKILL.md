@@ -95,7 +95,7 @@ And **never do both for the same value.** Two copies of one string drift, and th
 
 Start from zero annotations and add only what is forced. On a typical screen the irreducible set is just two things, and a great many screens need little else:
 
-**Give every informative image a name.** An image is the one element whose meaning is genuinely unavailable to a developer and to VoiceOver — nothing else on screen conveys it. Describe what it communicates, not what it depicts and never its file name.
+**Give every informative image a name.** An image is the one element whose meaning is genuinely unavailable to a developer and to VoiceOver — nothing else on screen conveys it. Describe what it communicates — not what it depicts, not what activating it does, and never its file name.
 
 **Mark everything else decorative.** Most glyphs in a mobile UI carry no information, and the clearest case is a glyph inside a control that already has sufficient visible text:
 
@@ -111,6 +111,8 @@ Start from zero annotations and add only what is forced. On a typical screen the
 ⚠️ **A glyph on a link names the destination, and the destination is information.** A phone icon, a mail icon, an external-link arrow, a document icon, a map pin — each tells a sighted user **where activating this goes**, which is something a user is entitled to know *before* activating. So link glyphs are **informative** and take a `Name:`, even where the link text happens to mention it: "Call member services" names the action, while the icon names the app it opens.
 
 This is the line that separates them from a chevron. A chevron says only that something is tappable and names no destination at all. **Affordance is decorative; destination is information.** Measuring instead by "does the adjacent text duplicate it?" gets the chevron and the `+` right and gets every link glyph wrong, because the destination is not in the text even when the action is.
+
+⚠️ **Name the destination as a noun, never the action.** `Name: Phone`, `Name: Mail`, `Name: External`, `Name: Document`, `Name: Map`. **Not** `Opens the dialler` — the glyph is a static image and opens nothing; the *link* does. Attributing the link's behaviour to the image is wrong about the element, and it is a behaviour claim besides, which this file rules out elsewhere. Keep `link`, `button`, `icon` and `image` out of the name too: VoiceOver supplies the trait.
 
 ⚠️ **A status icon that stands outside a control must be named — never hidden.** A warning triangle beside an error message, a success tick beside a confirmation, an info glyph beside a notice. These are doing two jobs for every sighted user at once:
 

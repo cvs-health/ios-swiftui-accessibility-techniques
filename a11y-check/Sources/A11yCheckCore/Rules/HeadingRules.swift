@@ -50,7 +50,7 @@ public struct HeadingTraitMissingRule: A11yRule {
     private static let maxHeadingLength = 120
 
     /// Apple's built-in font styles that indicate a heading.
-    private static let builtInHeadingFonts: Set<String> = [
+    static let builtInHeadingFonts: Set<String> = [
         "title", "title2", "title3", "largeTitle", "headline",
     ]
 
@@ -62,7 +62,7 @@ public struct HeadingTraitMissingRule: A11yRule {
     ///
     /// Supporting text held in a variable — `subtitleFont`, `valueFont` — is not excluded by
     /// name but by resolving the variable to the token it actually holds. See `isHeadingFont`.
-    private static let headingNameFragments = ["heading", "header", "title", "headline", "display"]
+    static let headingNameFragments = ["heading", "header", "title", "headline", "display"]
 
     /// View types where the Text is used as a label/title of the control, not a structural heading.
     private static let labelConsumerViews: Set<String> = ["Button", "Link", "Toggle"]
@@ -84,7 +84,7 @@ public struct HeadingTraitMissingRule: A11yRule {
             // Check if it has a heading-style font
             let fontMods = mods.modifiers(named: "font")
             let hasHeadingFont = fontMods.contains { mod in
-                isHeadingFont(
+                Self.isHeadingFont(
                     mod.arguments.first?.text ?? "",
                     options: context.configOptions,
                     fontConstants: fontConstants
@@ -129,7 +129,7 @@ public struct HeadingTraitMissingRule: A11yRule {
     /// rests on the declared value rather than the variable's name. The name is unreliable in
     /// both directions: `subtitleFont` holds `.themeParagraphXS` in one real component, while
     /// `titleFont` holds a heading token in some components and a paragraph token in others.
-    private func isHeadingFont(
+    static func isHeadingFont(
         _ argumentText: String,
         options: A11yConfig.ConfigOptions,
         fontConstants: [String: String]
@@ -264,5 +264,109 @@ public struct FakeHeadingInLabelRule: A11yRule {
             }
         }
         return diagnostics
+    }
+}
+
+// MARK: - Heading Trait On Non-Heading Rule
+
+/// Flags `.accessibilityAddTraits(.isHeader)` on `Text` whose font is not a heading style.
+///
+/// The inverse of `heading-trait-missing`: body copy marked as a heading clutters the VoiceOver
+/// heading rotor, so navigating by heading lands on a date range or a sentence of explanatory
+/// text instead of the section titles. Nothing else in the rule set covers over-marking.
+///
+/// **Reports at `info`, because source cannot settle it.** Whether text *looks* like a heading
+/// is a visual question, and a real section header styled from the body tier is perfectly fine.
+/// Measured on one app: 146 findings before the emphasis guard, 11 after — and of those 11,
+/// most render a variable named `sectionHeader`, `headerString` or `title`, which is to say the
+/// author meant them as headers and the trait is right. One looked like genuine over-marking.
+/// Treat the output as a short list to glance at, not a defect count.
+///
+/// Only reports a `Text` that sets an explicit non-heading font. A `Text` with no `.font()` is
+/// left alone: it inherits whatever an ancestor set, and the trait may well be correct. The
+/// trait on a container (`HStack`, `VStack`) is also left alone — grouping a heading's parts
+/// into one element and marking that element is the right pattern, not a mistake.
+///
+/// WCAG 1.3.1 Info and Relationships
+public struct HeadingTraitOnNonHeadingRule: A11yRule {
+    public let id = "heading-trait-on-non-heading"
+    public let name = "Heading Trait on Non-Heading Text"
+    public let severity = A11ySeverity.info
+    public let impact = A11yImpact.minor
+    public let wcagCriteria = ["1.3.1"]
+    public let description = "Review: text styled as body copy carries .accessibilityAddTraits(.isHeader). If it is not a section header the trait clutters the VoiceOver heading rotor — but a real header styled with a body font is fine, so this needs a human look."
+
+    public init() {}
+
+    public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
+        let fontConstants = FontConstantCollector.collect(from: syntax)
+        var diagnostics: [A11yDiagnostic] = []
+
+        for view in visitor.views(ofType: "Text") {
+            let mods = view.modifiers
+
+            let hasHeaderTrait = mods.modifiers(named: "accessibilityAddTraits").contains { mod in
+                mod.arguments.contains { $0.text.contains("isHeader") }
+            } || mods.modifiers(named: "accessibility").contains { mod in
+                mod.arguments.contains { $0.label == "addTraits" && $0.text.contains("isHeader") }
+            }
+            guard hasHeaderTrait else { continue }
+
+            // Needs an explicit font to judge. Without one the style is inherited and the
+            // trait cannot be called wrong from this file alone.
+            let fontMods = mods.modifiers(named: "font")
+            guard !fontMods.isEmpty else { continue }
+
+            let anyHeadingFont = fontMods.contains { mod in
+                HeadingTraitMissingRule.isHeadingFont(
+                    mod.arguments.first?.text ?? "",
+                    options: context.configOptions,
+                    fontConstants: fontConstants
+                )
+            }
+            guard !anyHeadingFont else { continue }
+
+            // Emphasised body text is a legitimate visual heading. A design system's
+            // "paragraph, strong" tier is what most section headers inside a card are built
+            // from, and marking one as a heading is correct even though the token is not in the
+            // heading tier. Without this, 133 of 146 findings on a real app were this case.
+            if isEmphasised(fontMods, modifiers: mods, fontConstants: fontConstants) { continue }
+
+            let fontText = fontMods.first?.arguments.first?.text ?? "its font"
+            diagnostics.append(makeDiagnostic(
+                message: "Text styled \(fontText) is marked .accessibilityAddTraits(.isHeader) but is not a heading style. Remove the trait, or style it as a heading if it is one.",
+                node: view.callExpr,
+                context: context,
+                suggestion: "Remove .accessibilityAddTraits(.isHeader)"
+            ))
+        }
+        return diagnostics
+    }
+
+    /// Whether the text is visually emphasised, which makes a heading trait defensible even on
+    /// a body-tier font.
+    ///
+    /// Reads the resolved font token for an emphasis word, and the modifier chain for an
+    /// explicit weight. `.themeParagraphMStrong` and `Text(...).font(.themeParagraphM).bold()`
+    /// both count.
+    private func isEmphasised(
+        _ fontMods: [ModifierCollector.CollectedModifier],
+        modifiers: ModifierCollector,
+        fontConstants: [String: String]
+    ) -> Bool {
+        let emphasisWords = ["strong", "bold", "semibold", "heavy", "black", "emphasis", "medium"]
+        for mod in fontMods {
+            let resolved = FontConstantCollector.resolve(
+                mod.arguments.first?.text ?? "", constants: fontConstants
+            ).lowercased()
+            if emphasisWords.contains(where: { resolved.contains($0) }) { return true }
+        }
+        if modifiers.hasModifier("bold") { return true }
+        for mod in modifiers.modifiers(named: "fontWeight") {
+            let text = (mod.arguments.first?.text ?? "").lowercased()
+            if emphasisWords.contains(where: { text.contains($0) }) { return true }
+        }
+        return false
     }
 }

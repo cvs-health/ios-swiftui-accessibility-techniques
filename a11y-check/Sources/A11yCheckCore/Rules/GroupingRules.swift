@@ -188,10 +188,15 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
                 guard let trailingClosure = view.callExpr.trailingClosure else { continue }
 
                 let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure, viewAliases: context.configOptions.viewAliases)
-                let buttons = innerVisitor.views(ofType: "Button")
+                // Toggles count as well as Buttons. A checkbox or switch list under a section
+                // header is the same grouping problem — each control announces its own label
+                // and the header that gives it meaning is never spoken — and a design system
+                // usually builds its checkboxes from Toggle with a custom style.
+                let groupedControls = innerVisitor.views(ofType: "Button")
+                    + innerVisitor.views(ofType: "Toggle")
 
-                // Need at least 2 Buttons to form a group
-                guard buttons.count >= 2 else { continue }
+                // Need at least 2 controls to form a group
+                guard groupedControls.count >= 2 else { continue }
 
                 // Look for a preceding Text sibling in the parent — the group label
                 guard hasPrecedingTextSibling(view.chainRoot) else { continue }
@@ -212,7 +217,7 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
                         sourceFile: syntax
                     )
                     diagnostics.append(makeDiagnostic(
-                        message: "\(containerType) of Buttons appears to have a visible group label but is missing .accessibilityElement(children: .contain) and .accessibilityLabel(). VoiceOver users won't hear the group context when navigating to these buttons.",
+                        message: "\(containerType) of controls appears to have a visible group label but is missing .accessibilityElement(children: .contain) and .accessibilityLabel(). VoiceOver users won't hear the group context when navigating to these controls.",
                         node: view.callExpr,
                         context: context,
                         fix: fix,
@@ -220,7 +225,7 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
                     ))
                 } else if !hasLabel {
                     diagnostics.append(makeDiagnostic(
-                        message: "\(containerType) of Buttons has .accessibilityElement(children: .contain) but is missing .accessibilityLabel(). VoiceOver won't announce the group context.",
+                        message: "\(containerType) of controls has .accessibilityElement(children: .contain) but is missing .accessibilityLabel(). VoiceOver won't announce the group context.",
                         node: view.callExpr,
                         context: context,
                         suggestion: "Add .accessibilityLabel(\"group label\") matching the visible label for this group"
@@ -232,7 +237,7 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
                         sourceFile: syntax
                     )
                     diagnostics.append(makeDiagnostic(
-                        message: "\(containerType) of Buttons has .accessibilityLabel() but is missing .accessibilityElement(children: .contain). Without .contain, VoiceOver may not announce the group label when entering the group.",
+                        message: "\(containerType) of controls has .accessibilityLabel() but is missing .accessibilityElement(children: .contain). Without .contain, VoiceOver may not announce the group label when entering the group.",
                         node: view.callExpr,
                         context: context,
                         fix: fix,

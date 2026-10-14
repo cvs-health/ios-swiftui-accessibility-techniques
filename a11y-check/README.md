@@ -2,7 +2,7 @@
 
 ![a11y score](a11y-badge.svg)
 
-Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 45 rules across 24 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
+Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 46 rules across 24 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
 
 ## Check your own iOS app
 
@@ -37,7 +37,7 @@ a11y-check . --base-path /path/to/workspace  # Strip prefix from all file paths 
 a11y-check . --badge > badge.svg   # Score badge for README
 a11y-check . --watch               # Re-run on file changes
 a11y-check --generate-docs > RULES.md  # Generate rule docs
-a11y-check --list-rules            # List all 45 rules
+a11y-check --list-rules            # List all 46 rules
 ```
 
 Every run automatically includes a **WCAG 2.2 accessibility score** (0–100 with letter grade) after the diagnostics. Use `--min-score 80` to fail CI if the score drops below a threshold.
@@ -476,6 +476,13 @@ options:
   min_touch_target: 44    # override small-touch-target threshold (default 24)
   contrast_ratio: 4.5     # WCAG AA contrast minimum
   assume_default_background: false  # default false; see below
+  heading_fonts:          # extra font tokens heading-trait-missing treats as headings
+    - brandJumbo
+  heading_font_deny:      # font tokens it should never treat as headings
+    - themeHeadingInline
+  view_aliases:           # design-system wrappers -> the SwiftUI view they render
+    IconView: Image
+    NavigationButton: Button
 
 # Skip paths matching these patterns (directory scans and explicit file args)
 exclude_paths:
@@ -483,6 +490,145 @@ exclude_paths:
   - "*/Pods/*"
   - "*Tests*"
 ```
+
+### Design-system wrappers (`view_aliases`)
+
+Rules only examine calls whose name is a SwiftUI type they know — `Image`, `Button`, `Toggle`,
+`TextField` and so on. An app that wraps those in its own components is therefore invisible to
+every rule, which is usually the single largest coverage gap. In one real codebase `IconView(`
+appeared **437** times and `NavigationButton(` **206**, and no image or button rule ever looked
+at them.
+
+Map a wrapper to the view it renders and the existing rules see it unchanged:
+
+```yaml
+options:
+  view_aliases:
+    IconView: Image
+    NavigationButton: Button
+    CMSLinkButton: Link
+```
+
+Diagnostics name what you wrote — "IconView renders an image and is missing
+`.accessibilityLabel()`" — and advice that does not apply to a wrapper is dropped, so an
+`IconView` is never told to use `Image(decorative:)`.
+
+#### A worked example
+
+The configuration below is the one measured for a large design-system app, and it is a reasonable
+starting point for any codebase that wraps SwiftUI:
+
+```yaml
+options:
+  view_aliases:
+    IconView: Image          # 437 call sites — the single biggest win
+    NavigationButton: Button # 206
+    CMSLinkButton: Link
+    DSButton: Button
+    AIButton: Button
+    AsyncButton: Button
+    IconButton: Button
+```
+
+What that produced on that app: `image-missing-label` 63 → 229 findings, `icon-button-missing-label`
+3 → 34, `missing-accessibility-grouping` 31 → 176, `duplicate-button-label` 28 → 36. Hand-classifying
+the new image findings put precision at roughly 99% once the two guards below were in place.
+
+One name was removed from that list after measuring: `DSIcon`, which turned out to be a `UIView`
+rather than a SwiftUI wrapper. It produced 16 findings of pure nonsense before the SwiftUI-import
+guard caught it. Check the type before you add a name.
+
+Expect to pair the first run with `--baseline-save`, so the existing surface is recorded and only
+new regressions report while the backlog is worked down separately.
+
+Three things worth knowing before you add aliases:
+
+- **Alias SwiftUI wrappers only.** If the name is a `UIView` subclass the rules will read UIKit
+  code as if it were SwiftUI and report nonsense. Check the type before adding it.
+- **You cannot shadow a built-in.** `Image: Button` is ignored; a name the rules already know
+  always resolves to itself.
+- **An alias to an unknown type is dropped** when the config is parsed, so a typo on the
+  right-hand side fails quietly rather than silently matching nothing.
+
+Two things happen automatically so that aliasing does not flood you with false positives.
+
+**Tokens that carry their own label are not reported.** A design system often keeps the accessible
+name beside the token rather than at the call site:
+
+```swift
+public var a11yLabel: String? {
+    switch self {
+    case .errorFill: return Localized.errorImageText
+    default:         return nil      // every other icon is unlabelled
+    }
+}
+```
+
+`IconView(.messaging(.errorFill))` is already announced; `IconView(.utilities(.externalLink))` is
+not, and nothing at either call site says which. A cross-file pre-pass indexes the case names that
+a property called `a11yLabel`, `accessibilityLabel`, `accessibilityText`, `altText` or `a11yText`
+returns a value for, and aliased wrappers naming one of them are skipped. The index is built across
+every path in the run before any file is analysed, because the catalogue usually lives in a
+different package from the call sites.
+
+**Aliases are ignored in files that do not import SwiftUI.** The same name is often a `UIView`
+elsewhere in a project, and reading UIKit as SwiftUI reports nonsense.
+
+Measured on one app, these two guards took aliasing from 218 new `image-missing-label` findings at
+78% precision to 166 at roughly 99%: 33 labelled-token reports and 16 UIKit reports went away.
+
+### How heading fonts are recognised
+
+`heading-trait-missing` has to decide whether a `Text`'s font is a heading style. Most apps do not
+use Apple's styles for headings — they have their own type scale — so matching works on the
+**leading token** of the `.font()` argument, in this order:
+
+1. `heading_font_deny` — never a heading. Deny beats allow.
+2. `heading_fonts` — always a heading.
+3. Apple's built-ins: `.title`, `.title2`, `.title3`, `.largeTitle`, `.headline`.
+4. A name containing `heading`, `header`, `title`, `headline`, or `display` — `.themeHeadingXL`,
+   `.appTitleLarge`, `.dsHeading2` all match with no configuration.
+
+**Subheadings count as headings.** `.subheadline`, `.subtitle`, `.themeSubheadingM` and
+`subHeaderL` all report. WCAG 1.3.1 asks for anything that appears to be a heading to be marked up
+as one, and it makes no exemption for subordinate headings — a section subheader that never reaches
+the Rotor is the defect this rule exists to catch.
+
+Only the leading token counts, so `.themeHeadingL.weight(.bold)` reads as `themeHeadingL`, and
+`.custom("AetnaSans", size: 17)` reads as `custom` and is never a heading. `Font.largeTitle` and
+`.largeTitle` are equivalent.
+
+#### Fonts passed in by variable
+
+A font held in a property or an init parameter is resolved to the token it holds before any of the
+above is applied, because the variable's **name is not evidence of its tier** — and it misleads in
+both directions. In one real component `subtitleFont` holds `.themeParagraphXS`; across components
+in the same app `titleFont` holds a heading token in one and a paragraph token in another:
+
+```swift
+struct InformationBannerView: View {
+    let titleFont: Font
+    let subtitleFont: Font
+    // the stored properties carry no initialiser — the fonts only appear in the signature
+    init(titleFont: Font = .themeHeadingM, subtitleFont: Font = .themeParagraphXS) { … }
+
+    var body: some View {
+        Text(title).font(titleFont)        // -> .themeHeadingM,     reports
+        Text(subtitle).font(subtitleFont)  // -> .themeParagraphXS,  does not
+    }
+}
+```
+
+`let`/`var` initialisers, single-expression computed properties, and function or init parameter
+defaults are all resolved, including through one level of member access (`viewModel.titleFont`).
+Resolution is per file and follows one level of indirection. When one file declares the same name
+with two *different* fonts — two components that each have a `titleFont` — there is no way to tell
+which applies at a given call site, so the name is left unresolved and falls back to the heuristic
+rather than borrowing one component's type scale for the other's text.
+
+Reach for the two config keys when your type scale uses a name the heuristic cannot infer
+(`heading_fonts: [brandJumbo]`) or applies a heading-named token to text that is not a heading
+(`heading_font_deny: [themeHeadingInline]`).
 
 ### Colour and contrast resolution
 
@@ -843,7 +989,7 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Run a11y-check on TextFieldsView.swift"** — check a specific file
 - **"Which of those are the most critical to fix?"** — the AI explains severity and WCAG impact
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
-- **"List all the a11y rules"** — shows all 45 rules with descriptions and WCAG criteria
+- **"List all the a11y rules"** — shows all 46 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
 - **"What's the accessibility score for this project?"** — runs `a11y-check .` and explains the WCAG 2.2 score breakdown
 - **"Score ProfileView.swift"** — runs the check on a single file and highlights what to fix based on the score
@@ -853,7 +999,7 @@ The full loop — detect, understand, fix, report — happens conversationally w
 
 ## Rules
 
-a11y-check includes 45 rules across these categories:
+a11y-check includes 46 rules across these categories:
 
 | Category | Rules | WCAG | Impact |
 |----------|-------|------|--------|

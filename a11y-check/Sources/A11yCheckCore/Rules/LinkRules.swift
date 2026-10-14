@@ -24,7 +24,7 @@ public struct ButtonUsedAsLinkRule: A11yRule {
     ]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Button") {
@@ -60,7 +60,7 @@ public struct GenericLinkTextRule: A11yRule {
     public let severity = A11ySeverity.error
     public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.4.4"]
-    public let description = "Link text should describe the destination, not use generic phrases like 'Click here' or 'Read more'."
+    public let description = "Link and button text should describe the destination or action, not use generic phrases like 'Click here', 'Read more' or 'Learn more'."
 
     public init() {}
 
@@ -68,6 +68,7 @@ public struct GenericLinkTextRule: A11yRule {
     private static let genericTexts: Set<String> = [
         "click here", "here", "read more", "learn more", "more",
         "tap here", "see more", "view more", "link", "go",
+        "more options", "find out more", "show more", "more info",
     ]
 
     /// Extract label text from a Link's label closure, e.g.
@@ -95,10 +96,14 @@ public struct GenericLinkTextRule: A11yRule {
     }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
-        for view in visitor.views(ofType: "Link") {
+        // Buttons as well as Links. A generic label fails the same way whichever role it has,
+        // and this is how the defect is usually written: the phrase repeated down a page of
+        // cards where the destination differs every time and the name never does. Testers file
+        // it under 2.4.4 for buttons too.
+        for view in visitor.views(ofType: "Link") + visitor.views(ofType: "Button") {
             // Check inline label: Link("Click here", destination: ...)
             var labelText = view.firstStringArgument ?? ""
 
@@ -107,12 +112,24 @@ public struct GenericLinkTextRule: A11yRule {
                 labelText = closureText
             }
 
+            // A localised app holds no literal text, so resolve the constant to the English
+            // string it renders. Without this the rule reads nothing on such a codebase: every
+            // label is `Button(Localized.learnMore)` and the literals live in a catalogue.
+            if labelText.isEmpty {
+                labelText = resolvedLocalizedLabel(view, context: context) ?? ""
+            }
+
             if Self.genericTexts.contains(labelText.lowercased().trimmingCharacters(in: .whitespaces)) {
+                let isButton = view.viewType == "Button"
                 diagnostics.append(makeDiagnostic(
-                    message: "Link text \"\(labelText)\" is generic. Use descriptive text that explains where the link goes.",
+                    message: isButton
+                        ? "\(view.sourceViewType) text \"\(labelText)\" is generic. Several of these on one screen all announce the same name while doing different things — give each one the context that distinguishes it."
+                        : "Link text \"\(labelText)\" is generic. Use descriptive text that explains where the link goes.",
                     node: view.callExpr,
                     context: context,
-                    suggestion: "Replace \"\(labelText)\" with descriptive text like \"Log in to your account\""
+                    suggestion: isButton
+                        ? "Replace \"\(labelText)\" with descriptive text, or add .accessibilityLabel() naming what it opens"
+                        : "Replace \"\(labelText)\" with descriptive text like \"Log in to your account\""
                 ))
                 continue
             }
@@ -132,4 +149,32 @@ public struct GenericLinkTextRule: A11yRule {
         }
         return diagnostics
     }
+    /// The English text behind a localised label reference, if it can be resolved.
+    ///
+    /// Reads the trailing identifier of the label expression — `Localized.learnMore` resolves on
+    /// `learnMore` — against the map the pre-pass built from the Swift constants and the string
+    /// catalogues. Also handles a key written inline, as in `Button(Localized.string("learnMore"))`.
+    private func resolvedLocalizedLabel(
+        _ view: ViewHierarchyVisitor.DetectedView,
+        context: RuleContext
+    ) -> String? {
+        guard !context.localizedText.isEmpty else { return nil }
+        guard let first = view.callExpr.arguments.first?.expression else { return nil }
+
+        // Inline key: Localized.string("learnMore"). The map carries raw catalogue keys as
+        // well as constant names, so one lookup serves both shapes.
+        if let key = StringCatalogIndex.KeyCollector.lookupKey(in: first),
+           let text = context.localizedText[key] {
+            return text
+        }
+
+        // Constant reference: Localized.learnMore
+        var identifier = first.trimmedDescription.trimmingCharacters(in: .whitespaces)
+        guard !identifier.contains("(") else { return nil }
+        if let lastDot = identifier.lastIndex(of: ".") {
+            identifier = String(identifier[identifier.index(after: lastDot)...])
+        }
+        return context.localizedText[identifier]
+    }
+
 }

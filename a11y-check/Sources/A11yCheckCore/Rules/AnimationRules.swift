@@ -99,7 +99,7 @@ public struct TabViewMissingLabelRule: A11yRule {
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         // Check native TabView children for missing .tabItem

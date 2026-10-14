@@ -26,8 +26,13 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
 
     /// A detected SwiftUI view node with its modifier chain context.
     public struct DetectedView {
-        /// The view type name (e.g. "Image", "Button").
+        /// The view type name (e.g. "Image", "Button"). For an aliased wrapper this is the
+        /// view it stands in for, so rules match on it unchanged.
         public let viewType: String
+        /// The name as written at the call site. Differs from `viewType` only for an aliased
+        /// wrapper — `IconView` aliased to `Image` reports `viewType: "Image"`,
+        /// `sourceViewType: "IconView"` — so a message can name what the author actually wrote.
+        public let sourceViewType: String
         /// The function call expression that constructs this view.
         public let callExpr: FunctionCallExprSyntax
         /// Whether this is using the `Image(decorative:)` initializer.
@@ -50,7 +55,16 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
     /// All detected views in the file.
     public private(set) var detectedViews: [DetectedView] = []
 
-    public init() {
+    /// Design-system wrapper name → the recognized view it stands in for.
+    ///
+    /// Aliasing happens here rather than in each rule, so a wrapper is reported under the type
+    /// it renders and every existing rule sees it with no change: alias `IconView` to `Image`
+    /// and the image rules examine `IconView(` call sites exactly as they would an `Image(`.
+    /// The detected view keeps its real name in `sourceViewType` for diagnostic messages.
+    public let viewAliases: [String: String]
+
+    public init(viewAliases: [String: String] = [:]) {
+        self.viewAliases = viewAliases
         super.init(viewMode: .sourceAccurate)
     }
 
@@ -59,19 +73,22 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
         let calledExpr = node.calledExpression
 
         // Direct call: Image("name"), Button("label") { }
+        let sourceViewType: String
         if let identifier = calledExpr.as(DeclReferenceExprSyntax.self) {
             let name = identifier.baseName.text
-            guard Self.recognizedViews.contains(name) else {
+            guard let resolved = resolve(name) else {
                 return .visitChildren
             }
-            viewType = name
+            viewType = resolved
+            sourceViewType = name
         }
         // Member access call: Image.init(...) — rare but possible
         else if let memberAccess = calledExpr.as(MemberAccessExprSyntax.self),
                 let base = memberAccess.base?.as(DeclReferenceExprSyntax.self),
-                Self.recognizedViews.contains(base.baseName.text),
+                let resolved = resolve(base.baseName.text),
                 memberAccess.declName.baseName.text == "init" {
-            viewType = base.baseName.text
+            viewType = resolved
+            sourceViewType = base.baseName.text
         }
         else {
             return .visitChildren
@@ -108,6 +125,7 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
 
         detectedViews.append(DetectedView(
             viewType: viewType,
+            sourceViewType: sourceViewType,
             callExpr: node,
             isDecorativeImage: isDecorative,
             isSystemImage: isSystemImage,
@@ -176,9 +194,21 @@ extension ViewHierarchyVisitor {
     }
 
     /// Analyze a syntax tree and return the visitor with results.
-    public static func analyze(_ syntax: some SyntaxProtocol) -> ViewHierarchyVisitor {
-        let visitor = ViewHierarchyVisitor()
+    public static func analyze(
+        _ syntax: some SyntaxProtocol,
+        viewAliases: [String: String] = [:]
+    ) -> ViewHierarchyVisitor {
+        let visitor = ViewHierarchyVisitor(viewAliases: viewAliases)
         visitor.walk(syntax)
         return visitor
+    }
+
+    /// The recognized view this call name stands for, or `nil` if it is not a view.
+    ///
+    /// A name a rule already knows wins over an alias, so a project cannot accidentally
+    /// redefine `Image` or `Button` out from under the rules.
+    private func resolve(_ name: String) -> String? {
+        if Self.recognizedViews.contains(name) { return name }
+        return viewAliases[name]
     }
 }

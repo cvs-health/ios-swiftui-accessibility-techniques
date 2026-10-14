@@ -33,7 +33,7 @@ public struct HiddenOnParentWithControlsRule: A11yRule {
     ]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.detectedViews {
@@ -46,7 +46,7 @@ public struct HiddenOnParentWithControlsRule: A11yRule {
 
             // Check if the container's body has interactive children
             guard let body = view.callExpr.trailingClosure else { continue }
-            let innerVisitor = ViewHierarchyVisitor.analyze(body)
+            let innerVisitor = ViewHierarchyVisitor.analyze(body, viewAliases: context.configOptions.viewAliases)
 
             let hasInteractiveChild = innerVisitor.detectedViews.contains { child in
                 Self.interactiveViewTypes.contains(child.viewType)

@@ -102,6 +102,7 @@ public final class ModifierCollector: SyntaxVisitor {
         "popover",
         "alert",
         "confirmationDialog",
+        "contextMenu",
     ]
 
     public init() {

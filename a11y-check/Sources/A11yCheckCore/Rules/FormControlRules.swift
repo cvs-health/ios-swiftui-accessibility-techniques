@@ -20,7 +20,7 @@ public struct TextFieldMissingLabelRule: A11yRule {
 
     /// Returns true if `.accessibilityLabel` appears after this view in source (e.g. in a following statement
     /// after `#if` / `#endif`), so we don't flag when the label is split across statements.
-    private func hasAccessibilityLabelInFollowingStatements(chainRoot: ExprSyntax, viewStartOffset: Int, syntax: SourceFileSyntax) -> Bool {
+    private func hasAccessibilityLabelInFollowingStatements(chainRoot: ExprSyntax, viewStartOffset: Int, syntax: SourceFileSyntax, viewAliases: [String: String]) -> Bool {
         let viewEndOffset = chainRoot.endPosition.utf8Offset
         let allLabels = ModifierCollector.collect(from: syntax).modifiers(named: "accessibilityLabel")
         guard let firstAfter = allLabels.first(where: { $0.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset > viewEndOffset }) else {
@@ -28,7 +28,7 @@ public struct TextFieldMissingLabelRule: A11yRule {
         }
         let labelOffset = firstAfter.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset
         // If another view starts before this label (after our chain), the label likely belongs to that view
-        let otherViewsAfter = ViewHierarchyVisitor.analyze(syntax).detectedViews
+        let otherViewsAfter = ViewHierarchyVisitor.analyze(syntax, viewAliases: viewAliases).detectedViews
             .filter { $0.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset > viewEndOffset }
         if let nextViewOffset = otherViewsAfter.map({ $0.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset }).min(),
            labelOffset >= nextViewOffset {
@@ -37,9 +37,21 @@ public struct TextFieldMissingLabelRule: A11yRule {
         return true
     }
 
-    /// Source-text fallback: after the chain root, look for ".accessibilityLabel(" before any other view.
-    /// Handles modifier chains split by #if / #endif where the AST-based collector misses the label.
-    private func hasAccessibilityLabelInSourceAfterView(chainRoot: ExprSyntax, context: RuleContext) -> Bool {
+    /// Source-text fallback for a modifier chain split by `#if` / `#endif`, where the
+    /// AST-based collector cannot see the label.
+    ///
+    /// Looks for `.accessibilityLabel(` after the view's chain, and treats it as belonging to
+    /// this view only if no other view starts first. "Another view" comes from the detected
+    /// views, not from a list of type names: an earlier version compared against six hardcoded
+    /// constructors, so a labelled view whose type was not on the list — `ProgressView` in the
+    /// case that surfaced this — let the scan run past it and claim its label for the field.
+    /// The field then looked labelled and went unreported. Reading positions from the AST also
+    /// means wrappers mapped in through `view_aliases` are counted.
+    private func hasAccessibilityLabelInSourceAfterView(
+        chainRoot: ExprSyntax,
+        context: RuleContext,
+        otherViewOffsets: [Int]
+    ) -> Bool {
         let viewEndOffset = chainRoot.endPosition.utf8Offset
         let source = context.sourceText
         let utf8 = source.utf8
@@ -49,12 +61,14 @@ public struct TextFieldMissingLabelRule: A11yRule {
         guard windowLen > 0,
               let endIdx = utf8.index(startIdx, offsetBy: windowLen, limitedBy: utf8.endIndex) else { return false }
         let window = String(source[startIdx..<endIdx])
-        let labelPattern = ".accessibilityLabel("
-        let viewStarts = ["TextField(", "SecureField(", "Button(", "Toggle(", "Image(", "Text("]
-        guard let labelRange = window.range(of: labelPattern) else { return false }
-        let labelPos = window.distance(from: window.startIndex, to: labelRange.lowerBound)
-        let firstOtherView = viewStarts.compactMap { window.range(of: $0).map { window.distance(from: window.startIndex, to: $0.lowerBound) } }.min()
-        if let first = firstOtherView, first < labelPos { return false }
+        guard let labelRange = window.range(of: ".accessibilityLabel(") else { return false }
+        let labelOffset = viewEndOffset + window.utf8.distance(
+            from: window.utf8.startIndex,
+            to: labelRange.lowerBound.samePosition(in: window.utf8) ?? window.utf8.startIndex
+        )
+        if let nextView = otherViewOffsets.filter({ $0 > viewEndOffset }).min(), nextView < labelOffset {
+            return false
+        }
         return true
     }
 
@@ -81,10 +95,13 @@ public struct TextFieldMissingLabelRule: A11yRule {
     }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         let textFields = visitor.views(ofType: "TextField") + visitor.views(ofType: "SecureField")
+        // Start offsets of every view in the file, so the source-text fallback can tell whether
+        // a later `.accessibilityLabel(` belongs to this field or to something in between.
+        let otherViewOffsets = visitor.detectedViews.map { $0.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset }
 
         for view in textFields {
             let mods = view.modifiers
@@ -94,11 +111,15 @@ public struct TextFieldMissingLabelRule: A11yRule {
 
             // Modifier chain may be split by #if / #endif; .accessibilityLabel may appear in a following statement
             let viewStart = view.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset
-            if hasAccessibilityLabelInFollowingStatements(chainRoot: view.chainRoot, viewStartOffset: viewStart, syntax: syntax) {
+            if hasAccessibilityLabelInFollowingStatements(chainRoot: view.chainRoot, viewStartOffset: viewStart, syntax: syntax, viewAliases: context.configOptions.viewAliases) {
                 continue
             }
             // Fallback: scan source after this view's chain for ".accessibilityLabel(" (handles #if / #endif splitting)
-            if hasAccessibilityLabelInSourceAfterView(chainRoot: view.chainRoot, context: context) {
+            if hasAccessibilityLabelInSourceAfterView(
+                chainRoot: view.chainRoot,
+                context: context,
+                otherViewOffsets: otherViewOffsets
+            ) {
                 continue
             }
 
@@ -153,7 +174,7 @@ public struct SliderMissingLabelRule: A11yRule {
     }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Slider") {
@@ -208,7 +229,7 @@ public struct StepperMissingLabelRule: A11yRule {
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Stepper") {
@@ -252,7 +273,7 @@ public struct PickerMissingLabelRule: A11yRule {
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Picker") {
@@ -306,7 +327,7 @@ public struct PickerStyleAccessibilityRule: A11yRule {
     }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Picker") {

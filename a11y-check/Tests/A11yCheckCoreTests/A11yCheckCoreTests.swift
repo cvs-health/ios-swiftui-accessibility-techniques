@@ -20,10 +20,19 @@ final class A11yCheckCoreTests: XCTestCase {
     }
 
     /// Parse source and run a single rule by ID.
-    private func analyze(_ source: String, ruleID: String) -> [A11yDiagnostic] {
+    private func analyze(
+        _ source: String,
+        ruleID: String,
+        configOptions: A11yConfig.ConfigOptions = .init()
+    ) -> [A11yDiagnostic] {
         let syntax = Parser.parse(source: source)
         let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
-        let context = RuleContext(filePath: "test.swift", sourceText: source, locationConverter: converter)
+        let context = RuleContext(
+            filePath: "test.swift",
+            sourceText: source,
+            locationConverter: converter,
+            configOptions: configOptions
+        )
         guard let rule = registry.rules.first(where: { $0.id == ruleID }) else {
             XCTFail("Rule \(ruleID) not found")
             return []
@@ -146,6 +155,899 @@ final class A11yCheckCoreTests: XCTestCase {
         """
         let diags = analyze(source, ruleID: "heading-trait-missing")
         XCTAssertEqual(diags.count, 0)
+    }
+
+    /// Most apps style headings through their own type scale, not Apple's styles. Each of these
+    /// is a real-world design-system token shape.
+    func testHeadingTraitMissing_flagsDesignSystemHeadingTokens() {
+        for token in [
+            ".themeHeadingXL",              // Aetna Health
+            ".appTitleLarge",
+            ".dsHeading2",
+            ".themeSubheadingM",            // a subheading is a heading
+            ".subheadline",                  // ditto, and Apple's own name says so
+            ".subtitle",
+            ".subHeaderL",
+            ".themeDisplayXL",
+            ".themeHeadingL.weight(.bold)", // weight chain must not hide the token
+            "Font.largeTitle",              // fully qualified
+        ] {
+            let source = """
+            import SwiftUI
+            struct MyView: View {
+                var body: some View {
+                    Text("Store Hours")
+                        .font(\(token))
+                }
+            }
+            """
+            let diags = analyze(source, ruleID: "heading-trait-missing")
+            XCTAssertEqual(diags.count, 1, "\(token) should be treated as a heading font")
+        }
+    }
+
+    func testHeadingTraitMissing_ignoresBodyFonts() {
+        for token in [
+            ".themeParagraphM",
+            ".caption",
+            ".footnote",
+            #".custom("AetnaSans", size: 17)"#,
+        ] {
+            let source = """
+            import SwiftUI
+            struct MyView: View {
+                var body: some View {
+                    Text("Store Hours")
+                        .font(\(token))
+                }
+            }
+            """
+            let diags = analyze(source, ruleID: "heading-trait-missing")
+            XCTAssertEqual(diags.count, 0, "\(token) should not be treated as a heading font")
+        }
+    }
+
+    /// A font passed in by variable is judged by the token it holds, not by its name. This is
+    /// the real `InformationBannerView` shape: the stored properties carry no initialiser, so
+    /// the only place the fonts appear is the init signature.
+    func testHeadingTraitMissing_resolvesVariableFontToDeclaredToken() {
+        let source = """
+        import SwiftUI
+        struct InformationBannerView: View {
+            let title: String
+            let titleFont: Font
+            let subtitleFont: Font
+            init(title: String, titleFont: Font = .themeHeadingM, subtitleFont: Font = .themeParagraphXS) {
+                self.title = title
+                self.titleFont = titleFont
+                self.subtitleFont = subtitleFont
+            }
+            var body: some View {
+                VStack {
+                    Text(title).font(titleFont)
+                    Text("sub").font(subtitleFont)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 1, "the heading-token title should report and the paragraph-token subtitle should not")
+        XCTAssertEqual(diags.first?.line, 13)
+    }
+
+    /// `titleFont` holding a paragraph token must not report — the name is not the evidence.
+    func testHeadingTraitMissing_variableNameDoesNotOverrideItsValue() {
+        let source = """
+        import SwiftUI
+        struct ValueRow: View {
+            var titleFont: Font { .themeParagraphS }
+            var body: some View {
+                Text("Total").font(titleFont)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 0)
+    }
+
+    func testHeadingTraitMissing_resolvesThroughViewModelProperty() {
+        let source = """
+        import SwiftUI
+        struct CardModel { var titleFont: Font = .themeHeadingXL }
+        struct CardView: View {
+            let viewModel: CardModel
+            var body: some View {
+                Text("Card").font(viewModel.titleFont)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 1)
+    }
+
+    /// Two components in one file, each with its own `titleFont` and a different value. There
+    /// is no way to tell from the call site which declaration applies, so the name is left
+    /// unresolved and falls back to the heuristic rather than borrowing one component's scale.
+    func testHeadingTraitMissing_ambiguousVariableFallsBackToName() {
+        let source = """
+        import SwiftUI
+        struct A: View {
+            var titleFont: Font { .themeHeadingM }
+            var body: some View { Text("A").font(titleFont) }
+        }
+        struct B: View {
+            var titleFont: Font { .themeParagraphS }
+            var body: some View { Text("B").font(titleFont) }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 2, "both fall back to the name, which reads as a heading")
+    }
+
+    func testFontConstantCollector_recordsDeclarationsAndDropsConflicts() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var headingFont: Font { .themeHeadingXL }
+            var inlineFont = Font.themeParagraphM
+            func make(bodyFont: Font = .themeParagraphS) {}
+            var clash: Font { .themeHeadingM }
+        }
+        struct W: View {
+            var clash: Font { .themeParagraphXS }
+        }
+        """
+        let constants = FontConstantCollector.collect(from: Parser.parse(source: source))
+        XCTAssertEqual(constants["headingFont"], ".themeHeadingXL")
+        XCTAssertEqual(constants["inlineFont"], "Font.themeParagraphM")
+        XCTAssertEqual(constants["bodyFont"], ".themeParagraphS")
+        XCTAssertNil(constants["clash"], "conflicting declarations must not resolve")
+
+        XCTAssertEqual(FontConstantCollector.resolve("headingFont", constants: constants), ".themeHeadingXL")
+        XCTAssertEqual(FontConstantCollector.resolve("vm.headingFont", constants: constants), ".themeHeadingXL")
+        XCTAssertEqual(FontConstantCollector.resolve(".title", constants: constants), ".title")
+        XCTAssertEqual(FontConstantCollector.resolve("unknownFont", constants: constants), "unknownFont")
+    }
+
+    /// A conditional font must be judged on the fonts, not on whatever picks between them.
+    /// Reading `isHeader` as the font name reported two paragraph rows as unmarked headings.
+    func testHeadingTraitMissing_conditionalFontIgnoresTheCondition() {
+        let source = """
+        import SwiftUI
+        struct LimitRow: View {
+            let isHeader: Bool
+            let isBold: Bool
+            var body: some View {
+                Text("Label").font(isHeader || isBold ? .themeParagraphMStrong : .themeParagraphM)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 0)
+    }
+
+    /// A font that is a heading in either branch still needs the trait.
+    func testHeadingTraitMissing_conditionalFontFlagsHeadingBranch() {
+        let source = """
+        import SwiftUI
+        struct LimitRow: View {
+            let isBold: Bool
+            var body: some View {
+                Text("Label").font(isBold ? .themeHeadingM : .themeParagraphM)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 1)
+    }
+
+    func testHeadingFontTokens_scansMemberAccessNotLeadingIdentifier() {
+        XCTAssertEqual(HeadingTraitMissingRule.fontTokens(in: ".title"), ["title"])
+        XCTAssertEqual(HeadingTraitMissingRule.fontTokens(in: "Font.largeTitle"), ["largeTitle"])
+        XCTAssertEqual(
+            HeadingTraitMissingRule.fontTokens(in: ".themeHeadingL.weight(.bold)"),
+            ["themeHeadingL", "weight", "bold"]
+        )
+        XCTAssertEqual(
+            HeadingTraitMissingRule.fontTokens(in: #".custom("AetnaSans", size: 17)"#),
+            ["custom"]
+        )
+        XCTAssertEqual(
+            HeadingTraitMissingRule.fontTokens(in: "isHeader ? .themeParagraphMStrong : .themeParagraphM"),
+            ["themeParagraphMStrong", "themeParagraphM"],
+            "the condition is not a font token"
+        )
+        XCTAssertEqual(HeadingTraitMissingRule.fontTokens(in: "titleFont"), ["titleFont"])
+    }
+
+    func testHeadingTraitMissing_configCanOptTokenIn() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Store Hours")
+                    .font(.brandJumbo)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 0)
+
+        let opts = A11yConfig.ConfigOptions(headingFonts: ["brandJumbo"])
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing", configOptions: opts).count, 1)
+    }
+
+    func testHeadingTraitMissing_configCanOptTokenOut() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Store Hours")
+                    .font(.themeHeadingInline)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing").count, 1)
+
+        let opts = A11yConfig.ConfigOptions(headingFontDeny: ["themeHeadingInline"])
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing", configOptions: opts).count, 0)
+    }
+
+    /// Deny wins over allow, so a project can contradict itself without the rule guessing.
+    func testHeadingTraitMissing_configDenyBeatsAllow() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Store Hours")
+                    .font(.brandJumbo)
+            }
+        }
+        """
+        let opts = A11yConfig.ConfigOptions(
+            headingFonts: ["brandJumbo"],
+            headingFontDeny: ["brandJumbo"]
+        )
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-missing", configOptions: opts).count, 0)
+    }
+
+    /// A design-system heading token on a Button label is still a control label, not a heading.
+    func testHeadingTraitMissing_designSystemTokenOnButtonLabelIsNotFlagged() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button {
+                } label: {
+                    Text("Refill")
+                        .font(.themeHeadingM)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    /// "Learn more" on a Button fails the same way it does on a Link, and that is how the
+    /// defect is usually written: the phrase repeated down a page of cards where the
+    /// destination differs every time and the name never does.
+    func testGenericLinkText_coversButtonsNotJustLinks() {
+        for label in ["Learn more", "More options", "Read more", "Click here"] {
+            let source = """
+            import SwiftUI
+            struct MyView: View {
+                var body: some View {
+                    Button("\(label)") {}
+                }
+            }
+            """
+            let diags = analyze(source, ruleID: "generic-link-text")
+            XCTAssertEqual(diags.count, 1, "\(label) on a Button should report")
+            XCTAssertTrue(diags[0].message.hasPrefix("Button text"), diags[0].message)
+        }
+    }
+
+    func testGenericLinkText_passesADescriptiveButton() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Learn more about dental coverage") {}
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "generic-link-text").count, 0)
+    }
+
+    /// Restoring focus through a helper is normal, and looking only for the assignment inside
+    /// the closure reported code that already did the right thing. This was the rule's single
+    /// most precisely-evidenced finding on a real app, and it was a false positive.
+    func testSheetFocusReturn_followsFocusRestoredInsideAHelper() {
+        let source = """
+        import SwiftUI
+        struct IDCardView: View {
+            @State private var shown = false
+            @AccessibilityFocusState private var focus: Bool
+            var body: some View {
+                Text("x").alert("Share", isPresented: $shown) {
+                    Button("Cancel", role: .cancel) { restoreAccessibilityFocus() }
+                }
+            }
+            private func restoreAccessibilityFocus() { focus = true }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 0)
+    }
+
+    func testSheetFocusReturn_onDismissDelegatingToAHelperAlsoCounts() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State private var shown = false
+            @AccessibilityFocusState private var focus: Bool
+            var body: some View {
+                Button("Open") { shown = true }
+                    .sheet(isPresented: $shown, onDismiss: { restoreFocus() }) { Text("Body") }
+            }
+            private func restoreFocus() { focus = true }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 0)
+    }
+
+    /// A helper that does not touch focus must not count as restoring it.
+    func testSheetFocusReturn_unrelatedHelperStillReports() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State private var shown = false
+            @AccessibilityFocusState private var focus: Bool
+            var body: some View {
+                Text("x").alert("Title", isPresented: $shown) {
+                    Button("Cancel", role: .cancel) { logDismissal() }
+                }
+            }
+            private func logDismissal() { print("dismissed") }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 1)
+    }
+
+    // MARK: - Label in name, adjacent label
+
+    /// TLDAS-1204's shape: a visible Text above a field whose accessible name is different.
+    func testLabelInName_flagsAdjacentVisibleLabelThatDoesNotMatch() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text("Searching near")
+                    TextField("", text: $text)
+                        .accessibilityLabel("Enter address")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("Searching near"), diags[0].message)
+    }
+
+    func testLabelInName_adjacentLabelThatMatchesPasses() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text("Searching near")
+                    TextField("", text: $text)
+                        .accessibilityLabel("Searching near, enter an address")
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-in-name").count, 0)
+    }
+
+    /// When the container groups its children the visible label belongs to the group.
+    func testLabelInName_groupedContainerIsSkipped() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text("Searching near")
+                    TextField("", text: $text)
+                        .accessibilityLabel("Enter address")
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-in-name").count, 0)
+    }
+
+    /// Nothing is inferred from an identifier the run could not resolve.
+    func testLabelInName_unresolvedStringsAreLeftAlone() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text(viewModel.header)
+                    TextField("", text: $text)
+                        .accessibilityLabel(viewModel.fieldName)
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-in-name").count, 0)
+    }
+
+    /// A Text two siblings away is not this control's label.
+    func testLabelInName_onlyTheImmediatelyPrecedingSiblingCounts() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text("Section heading")
+                    Divider()
+                    TextField("", text: $text)
+                        .accessibilityLabel("Enter address")
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-in-name").count, 0)
+    }
+
+    // MARK: - Localised strings
+
+    func testStringCatalogIndex_parsesXCStringsAndLegacyStrings() throws {
+        let dir = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent("a11y-cat-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+
+        let xc = """
+        {"strings": {
+          "learnMore": {"localizations": {"en": {"stringUnit": {"value": "Learn More"}}}},
+          "untranslated": {}
+        }}
+        """
+        try xc.write(to: dir.appendingPathComponent("Localizable.xcstrings"), atomically: true, encoding: .utf8)
+        try "\"legacy.key\" = \"Read more\";\n// a comment\n"
+            .write(to: dir.appendingPathComponent("Localizable.strings"), atomically: true, encoding: .utf8)
+
+        let cat = StringCatalogIndex.catalogue(at: dir.path)
+        XCTAssertEqual(cat["learnMore"], "Learn More")
+        XCTAssertEqual(cat["legacy.key"], "Read more")
+        XCTAssertEqual(cat["untranslated"], "untranslated", "an untranslated key falls back to itself")
+    }
+
+    func testLocalizedKeyCollector_mapsConstantsToKeys() {
+        let source = """
+        private extension Localized {
+            static let learnMore = Localized.string(from: "rewards.learnMore")
+            static let withArgs = Localized.string("spending.learnMore", args: 0)
+            static var computed: String { Localized.string(from: "a.b") }
+            static let notLocalised = "plain"
+        }
+        """
+        let keys = StringCatalogIndex.KeyCollector.collect(from: Parser.parse(source: source))
+        XCTAssertEqual(keys["learnMore"], "rewards.learnMore")
+        XCTAssertEqual(keys["withArgs"], "spending.learnMore")
+        XCTAssertEqual(keys["computed"], "a.b")
+        XCTAssertNil(keys["notLocalised"])
+    }
+
+    /// The whole point: a localised codebase holds no literal text, so without resolution the
+    /// wording rules read nothing at all.
+    func testGenericLinkText_resolvesALocalisedLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button(Localized.learnMore) {}
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "generic-link-text").count, 0, "no map, nothing to compare")
+
+        let syntax = Parser.parse(source: source)
+        let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
+        let context = RuleContext(
+            filePath: "test.swift", sourceText: source, locationConverter: converter,
+            localizedText: ["learnMore": "Learn More"]
+        )
+        let rule = registry.rules.first { $0.id == "generic-link-text" }!
+        let diags = rule.check(syntax: syntax, context: context)
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("Learn More"), diags[0].message)
+    }
+
+    func testGenericLinkText_localisedButDescriptiveLabelPasses() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button(Localized.dentalCoverage) {}
+            }
+        }
+        """
+        let syntax = Parser.parse(source: source)
+        let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
+        let context = RuleContext(
+            filePath: "test.swift", sourceText: source, locationConverter: converter,
+            localizedText: ["dentalCoverage": "Learn more about dental coverage"]
+        )
+        let rule = registry.rules.first { $0.id == "generic-link-text" }!
+        XCTAssertEqual(rule.check(syntax: syntax, context: context).count, 0)
+    }
+
+    // MARK: - Items 2-5
+
+    /// The 2 KB source fallback used to stop only at six hardcoded constructors, so a labelled
+    /// view of any other type let the scan claim its label for the field. A `ProgressView`
+    /// beside a chat input hid a real finding.
+    func testTextFieldMissingLabel_labelOnAnUnlistedSiblingViewDoesNotSilenceTheField() {
+        let source = """
+        import SwiftUI
+        struct Composer: View {
+            @State private var m = ""
+            var body: some View { HStack { field; spinner } }
+            private var field: some View { TextField(Localized.p, text: $m, axis: .vertical) }
+            private var spinner: some View {
+                ProgressView().accessibilityLabel("Sending message")
+            }
+        }
+        enum Localized { static let p = "Write your message" }
+        """
+        let diags = analyze(source, ruleID: "textfield-missing-label")
+        XCTAssertEqual(diags.count, 1, "the field is unlabelled; the spinner's label is not its own")
+    }
+
+    func testHeadingTraitOnNonHeading_flagsBodyTextMarkedAsAHeading() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("From Jan 1, 2025 to Dec 31, 2025")
+                    .font(.themeParagraphM)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 1)
+    }
+
+    func testHeadingTraitOnNonHeading_passesARealHeading() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Section")
+                    .font(.themeHeadingXL)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 0)
+    }
+
+    /// Without an explicit font the style is inherited, so the trait cannot be called wrong.
+    func testHeadingTraitOnNonHeading_ignoresTextWithNoFont() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Section").accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 0)
+    }
+
+    /// Marking a container that groups a heading's parts is the right pattern, not a mistake.
+    func testHeadingTraitOnNonHeading_ignoresContainers() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                HStack { Text("Total").font(.themeParagraphM) }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 0)
+    }
+
+    /// A design system's "paragraph, strong" tier is what most in-card section headers are
+    /// built from, so marking one as a heading is correct. 133 of 146 findings on a real app
+    /// were this case before the guard.
+    func testHeadingTraitOnNonHeading_allowsEmphasisedBodyText() {
+        for token in [".themeParagraphMStrong", ".themeParagraphSStrong", ".bodyBold"] {
+            let source = """
+            import SwiftUI
+            struct MyView: View {
+                var body: some View {
+                    Text("Your plan")
+                        .font(\(token))
+                        .accessibilityAddTraits(.isHeader)
+                }
+            }
+            """
+            XCTAssertEqual(
+                analyze(source, ruleID: "heading-trait-on-non-heading").count, 0,
+                "\(token) is emphasised, so a heading trait is defensible"
+            )
+        }
+    }
+
+    func testHeadingTraitOnNonHeading_allowsExplicitBoldWeight() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Your plan")
+                    .font(.themeParagraphM)
+                    .fontWeight(.semibold)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 0)
+    }
+
+    func testSheetFocusReturn_coversContextMenuAndMenu() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Upload bill")
+                    .contextMenu { Button("Dismiss") {} }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 1)
+    }
+
+    /// A checkbox list under a section header is written as a ForEach, so source holds one
+    /// control and the runtime count is whatever the data says. Without counting generated
+    /// groups the rule missed the exact shape it exists for.
+    func testButtonGroup_countsAForEachOfControlsAsAGroup() {
+        let source = """
+        import SwiftUI
+        struct RefillSelections: View {
+            let items: [String]
+            var body: some View {
+                VStack {
+                    Text("For Self").font(.themeParagraphMStrong)
+                    ForEach(items, id: \\.self) { item in
+                        Toggle(item, isOn: .constant(false))
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertGreaterThanOrEqual(
+            analyze(source, ruleID: "button-group-missing-container-label").count, 1
+        )
+    }
+
+    func testButtonGroup_coversToggleGroups() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State private var a = false
+            @State private var b = false
+            var body: some View {
+                VStack {
+                    Text("For Self")
+                    VStack {
+                        Toggle("Zetia", isOn: $a)
+                        Toggle("Amoxicillin", isOn: $b)
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertGreaterThanOrEqual(analyze(source, ruleID: "button-group-missing-container-label").count, 1)
+    }
+
+    // MARK: - View Aliases
+
+    /// A design-system wrapper is invisible to every rule until it is aliased: rules only look
+    /// at names in `recognizedViews`. This is the single biggest coverage gap in a codebase that
+    /// wraps SwiftUI in its own components.
+    func testViewAliases_wrapperIsInvisibleUntilAliased() {
+        let source = """
+        import SwiftUI
+        struct DeniedRow: View {
+            var body: some View {
+                IconView(name: "exclamationmark.triangle.fill")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 0)
+
+        let opts = A11yConfig.ConfigOptions(viewAliases: ["IconView": "Image"])
+        let diags = analyze(source, ruleID: "image-missing-label", configOptions: opts)
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(
+            diags[0].message.hasPrefix("IconView renders an image"),
+            "message should name the wrapper the author wrote: \(diags[0].message)"
+        )
+    }
+
+    func testViewAliases_buttonWrapperReachesLabelRules() {
+        let source = """
+        import SwiftUI
+        struct SummaryList: View {
+            let items: [String]
+            var body: some View {
+                VStack {
+                    ForEach(items, id: \\.self) { _ in
+                        NavigationButton(title: "View Summary")
+                    }
+                }
+            }
+        }
+        """
+        let opts = A11yConfig.ConfigOptions(viewAliases: ["NavigationButton": "Button"])
+        XCTAssertGreaterThanOrEqual(
+            analyze(source, ruleID: "duplicate-button-label", configOptions: opts).count, 1
+        )
+    }
+
+    /// A project must not be able to redefine a type the rules already know.
+    func testViewAliases_cannotShadowABuiltInViewName() {
+        let source = """
+        import SwiftUI
+        struct V: View { var body: some View { Image(systemName: "star") } }
+        """
+        let found = ViewHierarchyVisitor.analyze(
+            Parser.parse(source: source), viewAliases: ["Image": "Button"]
+        )
+        XCTAssertEqual(found.views(ofType: "Image").count, 1, "Image must still resolve to Image")
+        XCTAssertEqual(found.views(ofType: "Button").count, 0)
+    }
+
+    /// The catalogue that defines a token usually lives in a different directory from the call
+    /// sites. Indexing as each directory is analysed left the index empty for whichever
+    /// directory came first, so the index is built across all paths up front and accumulates.
+    func testLabelledTokenIndex_accumulatesAcrossDirectories() throws {
+        let root = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent("a11y-xpkg-\(UUID().uuidString)")
+        let pkgA = root.appendingPathComponent("PkgA")
+        let pkgB = root.appendingPathComponent("PkgB")
+        try FileManager.default.createDirectory(at: pkgA, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: pkgB, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        try """
+        import SwiftUI
+        public enum Icon {
+            case errorFill, externalLink
+            public var a11yLabel: String? {
+                switch self {
+                case .errorFill: return "Error"
+                default: return nil
+                }
+            }
+        }
+        """.write(to: pkgA.appendingPathComponent("Catalog.swift"), atomically: true, encoding: .utf8)
+
+        let reg = RuleRegistry()
+        reg.config = A11yConfig(
+            severityOverrides: [:], disabledRules: [], enabledOnly: [],
+            options: .init(viewAliases: ["IconView": "Image"]), excludePaths: []
+        )
+        // Index the call-site directory first — the order that used to produce an empty index.
+        reg.buildIndexes(at: pkgB.path)
+        XCTAssertTrue(reg.labelledTokens.isEmpty)
+        reg.buildIndexes(at: pkgA.path)
+        XCTAssertEqual(reg.labelledTokens, ["errorFill"], "the second directory must add, not replace")
+    }
+
+    /// The real shape from a design system: a label property with a handful of labelled cases
+    /// and a `default: nil` covering everything else.
+    func testLabelledTokenScanner_collectsOnlyTheLabelledCases() {
+        let source = """
+        public enum Messaging {
+            case errorFill, infoFill, successFill, warningFill, errorOutline, chevron
+            public var a11yLabel: String? {
+                switch self {
+                case .errorFill:
+                    return Localized.errorImageText
+                case .infoFill:
+                    return Localized.informationImageText
+                case .successFill, .warningFill:
+                    return Localized.statusImageText
+                default:
+                    return nil
+                }
+            }
+        }
+        """
+        let tokens = LabelledTokenScanner.scan(Parser.parse(source: source))
+        XCTAssertEqual(tokens, ["errorFill", "infoFill", "successFill", "warningFill"])
+        XCTAssertFalse(tokens.contains("errorOutline"), "a token falling to default: nil is unlabelled")
+        XCTAssertFalse(tokens.contains("chevron"))
+    }
+
+    /// An aliased wrapper whose token already carries a label must not be reported — this was
+    /// 33 of 218 new findings when aliases first landed.
+    func testViewAliases_skipsWrapperWhoseTokenCarriesALabel() {
+        let source = """
+        import SwiftUI
+        struct Row: View {
+            var body: some View {
+                VStack {
+                    IconView(.messaging(.errorFill))
+                    IconView(.utilities(.externalLink))
+                }
+            }
+        }
+        """
+        let opts = A11yConfig.ConfigOptions(viewAliases: ["IconView": "Image"])
+        let syntax = Parser.parse(source: source)
+        let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
+        let context = RuleContext(
+            filePath: "test.swift", sourceText: source, locationConverter: converter,
+            configOptions: opts, labelledTokens: ["errorFill"]
+        )
+        let rule = registry.rules.first { $0.id == "image-missing-label" }!
+        let diags = rule.check(syntax: syntax, context: context)
+        XCTAssertEqual(diags.count, 1, "only the unlabelled token should report")
+        XCTAssertEqual(diags[0].line, 6, "the externalLink icon, not the errorFill one")
+    }
+
+    /// The same wrapper name may be a UIView elsewhere in the project. Reading UIKit as SwiftUI
+    /// produced 16 false positives before this guard.
+    func testViewAliases_ignoreAliasedWrappersInNonSwiftUIFiles() {
+        let source = """
+        import UIKit
+        final class IconCell: UITableViewCell {
+            func setup() {
+                let icon = IconView(renderingType: .template)
+                icon.tintColor = .label
+            }
+        }
+        """
+        let opts = A11yConfig.ConfigOptions(viewAliases: ["IconView": "Image"])
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label", configOptions: opts).count, 0)
+    }
+
+    func testViewAliases_parsesFromYAMLAndDropsUnknownTargets() throws {
+        let yaml = """
+        options:
+          view_aliases:
+            IconView: Image
+            NavigationButton: Button
+            BogusWrapper: NotARealView
+        """
+        let config = try ConfigLoader.parse(yaml)
+        XCTAssertEqual(config.options.viewAliases["IconView"], "Image")
+        XCTAssertEqual(config.options.viewAliases["NavigationButton"], "Button")
+        XCTAssertNil(config.options.viewAliases["BogusWrapper"], "alias to an unknown type is dropped")
+    }
+
+    func testHeadingFontConfig_parsesFromYAML() throws {
+        let yaml = """
+        options:
+          heading_fonts:
+            - brandJumbo
+          heading_font_deny:
+            - themeHeadingInline
+        """
+        let config = try ConfigLoader.parse(yaml)
+        XCTAssertEqual(config.options.headingFonts, ["brandJumbo"])
+        XCTAssertEqual(config.options.headingFontDeny, ["themeHeadingInline"])
     }
 
     func testFakeHeadingInLabel_flagsBadLabel() {
@@ -961,7 +1863,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 45)
+        XCTAssertEqual(registry.rules.count, 46)
     }
 
     func testDisableRule() {

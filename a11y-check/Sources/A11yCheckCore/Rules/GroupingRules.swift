@@ -36,7 +36,7 @@ public struct AccessibilityGroupingRule: A11yRule {
     private static let containerViews: Set<String> = ["HStack", "VStack"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "HStack") + visitor.views(ofType: "VStack") {
@@ -52,7 +52,7 @@ public struct AccessibilityGroupingRule: A11yRule {
             guard let trailingClosure = view.callExpr.trailingClosure else { continue }
 
             // Analyze only the immediate children of this container
-            let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure)
+            let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure, viewAliases: context.configOptions.viewAliases)
             let directChildren = innerVisitor.detectedViews
 
             // Only flag small containers (2-3 children) that look like an
@@ -109,7 +109,7 @@ public struct ZStackSequenceRule: A11yRule {
     public init() {}
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "ZStack") {
@@ -169,7 +169,7 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
     private static let containerViews: Set<String> = ["HStack", "VStack", "LazyVGrid", "LazyHStack"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for containerType in Self.containerViews {
@@ -187,14 +187,31 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
                 // Check trailing closure for Button children
                 guard let trailingClosure = view.callExpr.trailingClosure else { continue }
 
-                let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure)
-                let buttons = innerVisitor.views(ofType: "Button")
+                let innerVisitor = ViewHierarchyVisitor.analyze(trailingClosure, viewAliases: context.configOptions.viewAliases)
+                // Toggles count as well as Buttons. A checkbox or switch list under a section
+                // header is the same grouping problem — each control announces its own label
+                // and the header that gives it meaning is never spoken — and a design system
+                // usually builds its checkboxes from Toggle with a custom style.
+                let groupedControls = innerVisitor.views(ofType: "Button")
+                    + innerVisitor.views(ofType: "Toggle")
 
-                // Need at least 2 Buttons to form a group
-                guard buttons.count >= 2 else { continue }
+                // A ForEach of controls is a group even though source holds one control: the
+                // list is generated, so the count at runtime is whatever the data says. This is
+                // how a checkbox list under a section header is actually written, and without
+                // it the rule misses exactly the shape it exists for.
+                let isGeneratedGroup = groupedControls.count == 1
+                    && trailingClosure.trimmedDescription.contains("ForEach")
 
-                // Look for a preceding Text sibling in the parent — the group label
-                guard hasPrecedingTextSibling(view.chainRoot) else { continue }
+                // Need at least 2 controls to form a group, or one generated in a ForEach
+                guard groupedControls.count >= 2 || isGeneratedGroup else { continue }
+
+                // The group label is either a Text sibling before the container, or a Text
+                // inside it above the controls. Both are written in practice: a card puts its
+                // title outside the control stack, while a checkbox section usually holds its
+                // header and its ForEach of controls in the same VStack.
+                guard hasPrecedingTextSibling(view.chainRoot)
+                    || containsLabelAboveControls(trailingClosure, controls: groupedControls)
+                else { continue }
 
                 // Determine what's missing
                 let mods = view.modifiers
@@ -212,7 +229,7 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
                         sourceFile: syntax
                     )
                     diagnostics.append(makeDiagnostic(
-                        message: "\(containerType) of Buttons appears to have a visible group label but is missing .accessibilityElement(children: .contain) and .accessibilityLabel(). VoiceOver users won't hear the group context when navigating to these buttons.",
+                        message: "\(containerType) of controls appears to have a visible group label but is missing .accessibilityElement(children: .contain) and .accessibilityLabel(). VoiceOver users won't hear the group context when navigating to these controls.",
                         node: view.callExpr,
                         context: context,
                         fix: fix,
@@ -220,7 +237,7 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
                     ))
                 } else if !hasLabel {
                     diagnostics.append(makeDiagnostic(
-                        message: "\(containerType) of Buttons has .accessibilityElement(children: .contain) but is missing .accessibilityLabel(). VoiceOver won't announce the group context.",
+                        message: "\(containerType) of controls has .accessibilityElement(children: .contain) but is missing .accessibilityLabel(). VoiceOver won't announce the group context.",
                         node: view.callExpr,
                         context: context,
                         suggestion: "Add .accessibilityLabel(\"group label\") matching the visible label for this group"
@@ -232,7 +249,7 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
                         sourceFile: syntax
                     )
                     diagnostics.append(makeDiagnostic(
-                        message: "\(containerType) of Buttons has .accessibilityLabel() but is missing .accessibilityElement(children: .contain). Without .contain, VoiceOver may not announce the group label when entering the group.",
+                        message: "\(containerType) of controls has .accessibilityLabel() but is missing .accessibilityElement(children: .contain). Without .contain, VoiceOver may not announce the group label when entering the group.",
                         node: view.callExpr,
                         context: context,
                         fix: fix,
@@ -285,6 +302,57 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
             }
         }
         return false
+    }
+
+    /// Whether the container holds a `Text` above its controls, which is how a section header
+    /// and its checkbox list are usually written — both inside one `VStack`.
+    ///
+    /// Requires the Text to come first in source. A Text *after* the controls is a footnote or
+    /// a disclaimer, not the group's label.
+    private func containsLabelAboveControls(
+        _ trailingClosure: ClosureExprSyntax,
+        controls: [ViewHierarchyVisitor.DetectedView]
+    ) -> Bool {
+        guard let firstControlOffset = controls
+            .map({ $0.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset }).min() else { return false }
+        let inner = ViewHierarchyVisitor.analyze(trailingClosure)
+
+        // If a nested stack wraps the controls, that stack is the group and this container is
+        // just the card around it. Reporting both would file the same defect twice.
+        let nestedContainerWrapsControls = inner.detectedViews.contains { candidate in
+            guard Self.containerViews.contains(candidate.viewType) else { return false }
+            let start = candidate.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset
+            let end = candidate.callExpr.endPosition.utf8Offset
+            return start < firstControlOffset && firstControlOffset < end
+        }
+        if nestedContainerWrapsControls { return false }
+
+        let fontConstants = FontConstantCollector.collect(from: trailingClosure)
+        return inner.views(ofType: "Text").contains { text in
+            let offset = text.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset
+
+            // A group label looks like a label: a heading tier, or body text given emphasis.
+            // Plain small copy above a control is helper text or a disclaimer, and treating it
+            // as the group's name produced the weaker half of this rule's findings.
+            let fontMods = text.modifiers.modifiers(named: "font")
+            let looksLikeALabel = fontMods.contains { mod in
+                let arg = mod.arguments.first?.text ?? ""
+                if HeadingTraitMissingRule.isHeadingFont(arg, options: .init(), fontConstants: fontConstants) {
+                    return true
+                }
+                let resolved = FontConstantCollector.resolve(arg, constants: fontConstants).lowercased()
+                return ["strong", "bold", "semibold", "heavy", "black"].contains { resolved.contains($0) }
+            } || text.modifiers.hasModifier("bold")
+            guard looksLikeALabel else { return false }
+            // A Text inside a control's own label closure is that control's label, not the
+            // group's — Toggle(isOn:) { Text("Zetia") } must not count.
+            let insideAControl = controls.contains { control in
+                let start = control.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset
+                let end = control.callExpr.endPosition.utf8Offset
+                return offset > start && offset < end
+            }
+            return offset < firstControlOffset && !insideAControl
+        }
     }
 
     /// Recursively check if a syntax node contains a Text() function call.

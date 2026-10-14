@@ -47,9 +47,10 @@ public struct HardcodedColorRule: A11yRule {
     /// business, and it checks exactly this case.
     private func selfContainedPairPositions(
         syntax: SourceFileSyntax,
-        colorConstants: [String: String]
+        colorConstants: [String: String],
+        viewAliases: [String: String]
     ) -> Set<AbsolutePosition> {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: viewAliases)
         var viewByPosition: [AbsolutePosition: ViewHierarchyVisitor.DetectedView] = [:]
         for v in visitor.detectedViews {
             viewByPosition[v.callExpr.positionAfterSkippingLeadingTrivia] = v
@@ -221,7 +222,7 @@ public struct HardcodedColorRule: A11yRule {
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let collector = ModifierCollector.collect(from: syntax)
         let colorConstants = ColorConstantCollector.collect(from: syntax)
-        let pairedPositions = selfContainedPairPositions(syntax: syntax, colorConstants: colorConstants)
+        let pairedPositions = selfContainedPairPositions(syntax: syntax, colorConstants: colorConstants, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for modName in Self.colorModifiers {

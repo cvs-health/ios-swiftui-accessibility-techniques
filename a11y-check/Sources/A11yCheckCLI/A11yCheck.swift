@@ -179,6 +179,18 @@ struct A11yCheck: ParsableCommand {
         var allDiagnostics: [A11yDiagnostic] = []
         var filePaths: [String] = []
 
+        // Index every directory before analysing any of them. The definitions a rule needs to
+        // resolve — a design system's icon catalogue, for instance — usually live in a
+        // different directory from the call sites, so indexing as we go would leave the index
+        // empty for whichever directory is analysed first.
+        for path in paths {
+            let resolvedPath = resolvePath(path)
+            var isDir: ObjCBool = false
+            if FileManager.default.fileExists(atPath: resolvedPath, isDirectory: &isDir), isDir.boolValue {
+                registry.buildIndexes(at: resolvedPath)
+            }
+        }
+
         for path in paths {
             let resolvedPath = resolvePath(path)
             var isDir: ObjCBool = false

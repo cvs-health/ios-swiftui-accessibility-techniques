@@ -36,6 +36,16 @@ public struct RuleContext {
     /// View struct names that receive `.navigationTitle()` from a parent at the call site rather
     /// than setting it in their own body. Populated by a cross-file pre-pass in RuleRegistry.
     public let externallyTitledViews: Set<String>
+    /// Design-system token names that carry their own accessibility label, e.g. an icon case
+    /// whose `a11yLabel` returns a string. Built by a cross-file pre-pass in RuleRegistry.
+    /// A wrapper aliased into the image rules is not reported when its token is in this set —
+    /// the component supplies the name, so the call site needs none.
+    public let labelledTokens: Set<String>
+    /// Localised constant name → the English text it renders, e.g. `learnMore` → "Learn More".
+    /// Built by a cross-file pre-pass that joins Swift constants to the string catalogues.
+    /// Lets rules that judge wording work on a localised codebase, where the source holds no
+    /// literal text to compare at all.
+    public let localizedText: [String: String]
 
     public init(
         filePath: String,
@@ -45,7 +55,9 @@ public struct RuleContext {
         severityOverrides: [String: A11ySeverity] = [:],
         configOptions: A11yConfig.ConfigOptions = .init(),
         assetColors: AssetCatalogParser.ThemedColorMap = [:],
-        externallyTitledViews: Set<String> = []
+        externallyTitledViews: Set<String> = [],
+        labelledTokens: Set<String> = [],
+        localizedText: [String: String] = [:]
     ) {
         self.filePath = filePath
         self.sourceText = sourceText
@@ -55,6 +67,8 @@ public struct RuleContext {
         self.configOptions = configOptions
         self.assetColors = assetColors
         self.externallyTitledViews = externallyTitledViews
+        self.labelledTokens = labelledTokens
+        self.localizedText = localizedText
     }
 
     /// Convert a syntax node's position to a 1-based line number.

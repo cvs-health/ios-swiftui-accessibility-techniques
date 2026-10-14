@@ -110,7 +110,7 @@ public struct ColorContrastRule: A11yRule {
     )
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
         let colorConstants = ColorConstantCollector.collect(from: syntax)
         let assumeDefaultBackground = context.configOptions.assumeDefaultBackground ?? false

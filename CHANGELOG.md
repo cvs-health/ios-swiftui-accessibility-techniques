@@ -22,7 +22,7 @@ Rules:
 
 ## [Unreleased]
 
-iOS app changes made after 26.7 shipped. Not yet in the App Store.
+iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 0.7.0. Not yet in the App Store or tagged.
 
 ### iOSswiftUIa11yTechniques
 
@@ -96,6 +96,117 @@ iOS app changes made after 26.7 shipped. Not yet in the App Store.
   - **Tabs** (`TabsView.swift`): the unread badge in the good custom-tabs example used white on `Color.red`, which is 3.5:1 — short of the 4.5:1 its small bold text requires. Now uses the crimson the file already defines. The badge being `.accessibilityHidden(true)` does not excuse it: 1.4.3 protects low-vision sighted users, not VoiceOver users, and the count is conveyed visually. The matching bad example keeps `Color.red` deliberately.
   - **A11y-check** (`A11yCheckView.swift`): the good gesture-alternative example's `Button("Delete")` used `.foregroundColor(.red)`, 3.5:1 against the default background — a good example of WCAG 2.5.1 that failed 1.4.3. Now crimson, which clears 4.5:1 against both the light and dark backgrounds, so no `colorScheme` ternary is needed. Verified with the tool rather than by hand; an initial hand-estimate of crimson-on-black was wrong.
 - **`WebViewDocs.updateUIView` reloading the documentation on every SwiftUI update** (`ContentView.swift`). The method called `webView.load(URLRequest(url: url))` on each update, resetting the page and discarding the web view's back-forward list. `url` is a constant, so the body is now empty. No visual change.
+
+### a11y-check
+
+#### Added
+
+- **New rule `heading-trait-on-non-heading`** (info, WCAG 1.3.1). The inverse of `heading-trait-missing`: body copy carrying `.accessibilityAddTraits(.isHeader)` clutters the VoiceOver heading rotor, so navigating by heading lands on a date range instead of the section titles. Five defects in the backlog this was measured against report exactly that, and nothing in the other 45 rules covered over-marking. Rule count 45 to 46.
+
+  **It reports at `info` because the source cannot settle it**, and the measurement is why. A first cut flagged **146** sites on that app. 133 of them were a `*Strong` paragraph token — a design system's "paragraph, strong" tier is what most in-card section headers are built from, so marking one as a heading is correct. Guarding emphasised text (an emphasis word in the resolved font token, `.bold()`, or a heavy `.fontWeight`) took it to **11**.
+
+  Of the remaining 11, most render a variable named `sectionHeader`, `headerString`, `header` or `title` — the author meant them as headers and the trait is right; only the font is from the body tier. One, instructional text reading "Select any options", looks like genuine over-marking. So the honest yield is roughly 1 of 11, and the rule's output is a short list to glance at rather than a defect count. Whether text *looks* like a heading is a visual question, and no amount of source reading settles it. Only `Text` with an explicit font is considered: no font means the style is inherited, and the trait on a container is the correct grouping pattern.
+
+- **`label-in-name` reads a visible label that sits beside the control, not only the control's own argument.** A `TextField` carrying `.accessibilityLabel("Enter address")` under a visible `Text("Searching near")` fails 2.5.3 as plainly as a mislabelled Button — a Voice Control user says what they see and nothing happens — and the rule's existing path only looked at a control's own text.
+
+  Deliberately narrow, because deciding which nearby `Text` is a control's label is a guess and the wrong guess means flagging correct code: the `Text` must be the immediately preceding sibling in the same container, both strings must be *known* (a literal, or a localised constant this run resolved, so nothing is inferred from an identifier's name), and a container that groups its children is skipped since the label then belongs to the group.
+
+  On the app it was measured against: **0 findings and 0 false positives**. The guards hold, and unit tests cover the exact reported shape — but that app's screen does not present it in a form this can resolve.
+
+- **Not built: focus management around `Picker` and `Menu` dismissal.** These are views rather than modifiers, so `sheet-focus-return` cannot reach them, and one defect in the measured backlog reports exactly that. Counting first: 55 files in that app contain a `Picker` or `Menu` and only 11 have any focus state, so a rule requiring it would flag roughly **44 sites to catch 1 defect**. Left unwritten on purpose, and recorded here so the next person does not have to redo the count.
+
+- **Localised strings resolve to their text** (new `StringCatalogIndex`). Rules that judge wording compare against the literal in the source, so a localised app defeats them completely: every label is `Button(Localized.learnMore)` and the only `"Learn more"` literals are test fixtures. Two hops are now joined in the cross-file pre-pass — constant to key from `static let learnMore = Localized.string(from: "x.y")`, then key to English value from `.xcstrings` catalogues and legacy `.strings` tables — and exposed to rules as one flat map. `generic-link-text` uses it; the same map is there for duplicate labels, label-in-name and heading wording.
+
+  Both sides accumulate across directories, because the constants and the catalogue that defines their keys are normally in different packages. Untranslated keys fall back to the key itself, which is how Xcode treats them.
+
+  **Proven end-to-end on a fixture, and it finds nothing on the app it was built for.** 162 of that app's 206 `Button(Localized.X)` sites resolve to a catalogue value and **none of them is generic text**: the generic labels exist, but they travel through view models and configuration objects, so the label is never at the button's call site. The blocker on those defects was never localisation — it is the same indirection that makes `duplicate-button-label` silent, and resolving strings does not reach it. An earlier changelog entry and page revision said string resolution was the blocker on three defects. That was wrong.
+
+- **`sheet-focus-return` follows focus restored inside a helper.** An alert's Cancel action calling `restoreFocus()`, where that method assigns the focus variable, now counts as restoring focus — on both the content path and `onDismiss`. One level deep by design: a helper that assigns counts, a helper that calls another helper does not, since going deeper means resolving a call graph for a check whose purpose is a cheap source read.
+
+  **No change on the measured app, and the reason corrects something said twice before.** The finding cited as this rule's clearest false positive, `IDCardView.swift:45`, does not restore focus in a helper at all: the helper calls `faqFocusTrigger.restore()`, which sends on a Combine `PassthroughSubject` that a subscriber in another view turns into a focus assignment. No static rule can follow that and none should try. So that finding is **not a provable false positive** — it is unverifiable from source, and the rule reporting it is defensible.
+
+- **`generic-link-text` covers Buttons, not only Links**, and knows a few more phrases (`more options`, `find out more`, `show more`, `more info`). "Learn more" fails the same way whichever role it has, and the defect is usually written as that phrase repeated down a page of cards where the destination differs every time and the name never does. The message names the role and, for a button, suggests either descriptive text or an `.accessibilityLabel`.
+
+  **It finds nothing on the app measured here, and the reason is worth recording.** The rule compares the label's *literal* text, and a fully localised codebase has no literal text: every instance is `Button(Localized.learnMore)`, and the only `"Learn more"` string literals in that repository are in test fixtures. Verified the rule itself works by running it on a literal.
+
+  Reaching those defects needs a second kind of resolution: `Localized.learnMore` to `Localized.string("some.key")` to the English value in a string catalogue — and that app has `.xcstrings` files spread across many packages plus legacy `.strings` for its UIKit layer. That is a new capability rather than a rule tweak, and it would pay off across several rules at once (generic text, duplicate labels, label-in-name, heading wording). Not attempted here.
+
+- **`button-group-missing-container-label` now matches how a checkbox section is actually written.** Three changes, each forced by the defect it was meant to catch still not reporting after the previous one:
+
+  A **`ForEach` of controls counts as a group.** Source holds one control and the runtime count is whatever the data says, so requiring two controls missed every generated list — which is how such a list is always written.
+
+  A **label inside the container counts**, not only one before it. The rule looked for a `Text` sibling preceding the stack, but a checkbox section usually holds its header and its `ForEach` of controls in the same `VStack`. Added with a prefer-innermost guard: when a nested stack wraps the controls, that stack is the group and the card around it stays quiet, otherwise the same defect files twice. Three existing tests caught that before it shipped.
+
+  The inside-container label **has to look like a label** — a heading tier, or body text given emphasis through the token, `.bold()` or a heavy `.fontWeight`. Without that, plain helper text above a control counted as the group's name; sampling the findings showed it was the weaker half of them, and the guard removed 7 of 39.
+
+  Net +16 on the measured app, and `RefillSelectionsView.swift:84` — the `VStack` holding a group header and its checkbox `ForEach` — is now reported, which is the defect the Toggle work was for. It was not covered by the first two attempts.
+
+- **`sheet-focus-return` covers `.contextMenu`.** A context menu closing is the same focus problem as a dialog closing and testers report it as often — pick an item and VoiceOver focus jumps to the top of the screen instead of the control that opened the menu. Required adding `contextMenu` to `ModifierCollector`'s tracked list as well as the rule's: the collector has its own allowlist, so widening the rule alone silently did nothing. +7 findings on the measured app.
+
+  `Menu` and `Picker` are **views**, not modifiers, so dismissing either is still out of this rule's reach. An earlier draft of this entry claimed all three; two of the three defects are covered.
+
+#### Fixed
+
+- **`textfield-missing-label` no longer loses a finding to a labelled sibling of an unlisted type.** Its source-text fallback — there for modifier chains split by `#if` — scanned 2 KB for `.accessibilityLabel(` and stopped only at six hardcoded constructors, so a labelled view of any other type let the scan run past it and claim its label for the field. The field then looked labelled and went unreported. A `ProgressView` beside a chat input hid a real defect that way.
+
+  The fallback now decides "another view starts first" from the detected views' AST positions instead of a name list, which also means wrappers mapped in through `view_aliases` are counted. +2 findings, one of which is the chat input that surfaced it.
+
+- **`button-group-missing-container-label` counts Toggles as well as Buttons.** A checkbox or switch list under a section header is the same grouping problem — each control announces its own label and the header that gives it meaning is never spoken — and a design system usually builds its checkboxes from `Toggle` with a custom style. The rule's messages now say "controls" rather than "Buttons".
+
+- **Two guards so `view_aliases` does not trade coverage for noise**, both measured rather than assumed. Together they took aliasing from 218 new `image-missing-label` findings at **78% precision to 166 at roughly 99%** on the app used for measurement.
+
+  **Tokens that carry their own accessibility label are no longer reported.** A design system often keeps the accessible name beside the token — an icon enum whose `a11yLabel` returns a string for four cases and `nil` for the rest — so `IconView(.messaging(.errorFill))` is announced while `IconView(.utilities(.externalLink))` is not, and nothing at either call site distinguishes them. A new `LabelledTokenScanner` indexes the case names such a property returns a value for, and the image rule skips an aliased wrapper naming one. This removed 33 false positives. The `default: nil` arm is deliberately not read as "everything is labelled": the unlabelled tokens are the majority and are never written down individually.
+
+  **Aliases are ignored in files that do not import SwiftUI.** `DSIcon` in the measured app turned out to be a `UIView`, so aliasing it had the rules reading UIKit as SwiftUI — 16 false positives, including `let icon = DSIcon(...); icon.tintColor = ...`. Guarded, and the README now says to check the type before aliasing a name.
+
+- **Cross-file indexes are built across every path before any file is analysed, and accumulate instead of overwriting.** `analyzeDirectory` rebuilt the index per directory and replaced it each time, so a run covering several packages had an index containing only the last one. Definitions almost always live in a different package from their call sites — the icon catalogue sits in a shared module while the call sites are spread across feature modules — which meant the token index was empty for every directory but one. `externallyTitledViews` had the same latent fault, so cross-package external titles were being missed too.
+
+- **`options.view_aliases`: map a design-system wrapper to the SwiftUI view it renders, so every existing rule can see it.** Rules only examine calls whose name appears in `ViewHierarchyVisitor.recognizedViews` — a 25-entry list of SwiftUI's own types. Any app that wraps those types in its own components is therefore invisible to the whole rule set, and that is usually the largest single coverage gap. In the app this was measured against, `IconView(` appears **437** times and `NavigationButton(` **206**, against 235 raw `Image(` and 439 raw `Button(`; no image or button rule had ever looked at the wrappers.
+
+  Aliasing resolves at detection time in the visitor rather than in each rule, so nothing rule-side changed: `views(ofType: "Image")` already accepted any name, it was only the gate that was hardcoded. A detected view keeps the name the author wrote in `sourceViewType`, so diagnostics read "IconView renders an image and is missing `.accessibilityLabel()`" and advice that cannot apply to a wrapper is dropped — an `IconView` is never told to use `Image(decorative:)`.
+
+  Measured on 13 packages of that app: **821 diagnostics to 1,229**. `image-missing-label` 63 → 281, `missing-accessibility-grouping` 31 → 176, `icon-button-missing-label` 3 → 34, `duplicate-button-label` 28 → 36.
+
+  Classifying the 218 new `image-missing-label` findings by hand: **169 plausible**, 33 on `.messaging(.errorFill)`-style tokens whose icon catalog already supplies an `a11yLabel` (the rule cannot see the catalog yet), and 16 caused by aliasing `DSIcon`, which turned out to be a `UIView` rather than a SwiftUI wrapper. So roughly **78% precision**, with both causes of the remainder known: resolving the icon catalog is the next piece of work, and aliasing a UIKit type is a configuration mistake the README now warns about.
+
+  Two guards: a name the rules already know always resolves to itself, so a project cannot redefine `Image` or `Button` out from under them; and an alias pointing at a type the rules do not know is dropped at parse time rather than silently matching nothing.
+
+#### Changed
+
+- **`heading-trait-missing` now recognises design-system heading tokens, not just Apple's font styles.** The rule knew `.title`, `.title2`, `.title3`, `.largeTitle` and `.headline` and nothing else, which meant it saw almost nothing in any app with its own type scale — and most apps have one. On the Aetna Health iOS app it produced **5 findings against 380 `.font(.themeHeading*)` sites**, while that app's accessibility backlog carried **38 open "visual heading is not marked up as a heading" defects**. The rule was blind to precisely the defect class it exists to catch.
+
+  Matching now works on the **font tokens** in the `.font()` argument, resolved in a fixed order: `heading_font_deny`, then `heading_fonts`, then the built-in styles, then a name heuristic for tokens containing `heading`, `header`, `title`, `headline`, or `display`. So `.themeHeadingXL`, `.appTitleLarge` and `.dsHeading2` are recognised with no configuration.
+
+  **Subheadings are headings.** `.subheadline`, `.subtitle`, `.themeSubheadingM` and `subHeaderL` all report. WCAG 1.3.1 asks for anything that appears to be a heading to be marked up as one and makes no exemption for subordinate headings, so a section subheader that never reaches the Rotor is exactly the defect this rule exists to catch. An earlier revision of this change excluded `subtitle` and `subheadline` by name on the grounds that they are usually supporting text; that was the rule making a judgement that belongs to the content, and it would have silently dropped real subheadings.
+
+  Scanning tokens rather than taking the leading identifier also handles chained, constructed and conditional fonts: `.themeHeadingL.weight(.bold)` reads as `themeHeadingL` rather than being missed, `.custom("AetnaSans", size: 17)` reads as `custom` and is never a heading, and `isHeader ? .themeParagraphMStrong : .themeParagraphM` is judged on its two paragraph branches instead of on the `isHeader` that chooses between them. That last one is not hypothetical — reading the condition as the font name reported two paragraph rows in `FindCare+CostEstimateLimitsView.swift` as unmarked headings.
+
+  Measured on the same 13 Aetna Health packages: **5 findings to 211**, which matched an independent count of heading-font sites with no `isHeader` within ±6 lines. Every other rule's count was unchanged, confirmed against a control build of the previous commit.
+
+- **Fonts passed in by variable are resolved to the token they hold** (new `FontConstantCollector`, mirroring the existing `ColorConstantCollector`). A variable's *name* is not evidence of its tier, and in this codebase it misleads in both directions: `subtitleFont` holds `.themeParagraphXS`, while `titleFont` holds `.themeHeadingM` in one component and `.themeParagraphS` in two others.
+
+  So the old rule's handful of findings were mostly name-guesses. Of the **5** it produced on the Aetna Health app, **3 were false positives** — `InformationBannerView.swift:37` and `PharmacyInlineTitleView.swift:18` both report a `titleFont` that is declared `.themeParagraphS`, and line 41 of the same banner is a `subtitleFont` declared `.themeParagraphXS`. All three are gone, decided by the declared value rather than the name.
+
+  Resolves `let`/`var` initialisers, single-expression computed properties, and function and init parameter defaults, including through one level of member access (`viewModel.titleFont`). Parameter defaults matter more than they sound: in a component whose fonts are injected, the stored properties carry no initialiser at all, so the signature is the only place the font appears.
+
+  When one file declares the same name with two *different* fonts — two components that each have a `titleFont` — there is no way to tell which applies at a given call site, so the name is marked ambiguous and left unresolved rather than letting declaration order attach one component's type scale to the other's text.
+
+- **Two config keys for type scales the heuristic cannot infer**: `options.heading_fonts` opts a token in (`brandJumbo`), `options.heading_font_deny` opts one out (`themeHeadingInline`). Deny beats allow, so a project that lists a token in both gets the safe answer rather than an arbitrary one. Both default to empty, so no existing project changes behaviour without asking.
+
+#### Fixed
+
+- **Paragraph text held in a heading-named variable was reported as a missing heading.** The old check asked whether the font *text* contained a known style name, so the identifier `subtitleFont` matched `title` and `subheadline` matched `headline` — the variable's name decided the answer and its declared value was never consulted. Three of the rule's five findings on the Aetna Health app were this; see the resolution entry above.
+
+- **`HeadingRules.swift` was missing its Apache header**, which this repository requires of every file.
+
+#### Known limits
+
+Sampling the 211 findings by hand turned up two classes this rule cannot distinguish, both reported rather than silently filtered:
+
+- **16 sit in `#Preview` / `PreviewProvider` bodies.** Preview code is flagged by every rule in the tool, so suppressing it for this one rule alone would be inconsistent; it needs a tool-wide decision.
+- **27 sit within ±12 lines of an `.accessibilityElement(children: .combine)`.** Whether `.isHeader` on a child of a combined element reaches the merged element is a device question, not a source question, and it was not tested here — so no guard was added on an untested assumption.
+
+A font heuristic also cannot tell a structural heading from display text that borrows a heading token: avatar initials styled `.themeHeadingXXL` report, and correctly so by the rule's own definition. `heading_font_deny` is the wrong instrument for that, since the token is a real heading elsewhere. Value resolution narrows this to genuinely inline tokens — anything injected as a variable is now judged on what it holds.
 
 
 ## [a11y-check 0.7.0] - 2026-09-25

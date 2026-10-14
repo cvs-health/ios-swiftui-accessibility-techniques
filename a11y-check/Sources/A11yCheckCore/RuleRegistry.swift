@@ -20,6 +20,15 @@ public final class RuleRegistry {
     /// View struct names that receive `.navigationTitle()` from a parent at the call site.
     /// Built by `buildNavigationTitleIndex(at:)` during `analyzeDirectory`.
     public var externallyTitledViews: Set<String> = []
+    /// Design-system tokens that carry their own accessibility label.
+    /// Built by `buildNavigationTitleIndex(at:)` during `analyzeDirectory`.
+    public var labelledTokens: Set<String> = []
+    /// Localised constant name → English text. Built by `buildIndexes(at:)`.
+    public var localizedText: [String: String] = [:]
+    /// Constant name → localisation key, accumulated across every indexed directory.
+    private var localizationKeys: [String: String] = [:]
+    /// Localisation key → English value, accumulated the same way.
+    private var stringCatalogue: [String: String] = [:]
 
     /// Create a registry with all built-in rules.
     public init() {
@@ -40,6 +49,7 @@ public final class RuleRegistry {
         // Headings (WCAG 1.3.1)
         register(HeadingTraitMissingRule())
         register(FakeHeadingInLabelRule())
+        register(HeadingTraitOnNonHeadingRule())
 
         // Buttons (WCAG 4.1.2, 2.4.6)
         register(ButtonLabelContainsRoleRule())
@@ -160,7 +170,9 @@ public final class RuleRegistry {
             severityOverrides: config.severityOverrides,
             configOptions: config.options,
             assetColors: assetColors,
-            externallyTitledViews: externallyTitledViews
+            externallyTitledViews: externallyTitledViews,
+            labelledTokens: labelledTokens,
+            localizedText: localizedText
         )
 
         var allDiagnostics: [A11yDiagnostic] = []
@@ -207,15 +219,40 @@ public final class RuleRegistry {
     /// Pre-pass: scan all .swift files to build `externallyTitledViews` — the set of View struct
     /// names that receive `.navigationTitle()` from a parent navigation container at the call site.
     /// Called once by `analyzeDirectory` before per-file analysis begins.
+    /// Build the cross-file indexes for a directory, adding to whatever is already known.
+    ///
+    /// Additive on purpose. A run covering several package directories calls this once per
+    /// directory, and the thing being indexed usually lives in a different package from the
+    /// code that uses it — a design system's icon catalogue sits in a shared module while the
+    /// call sites are spread across feature modules. Overwriting per directory meant the index
+    /// was empty for every directory except the one holding the definitions.
+    public func buildIndexes(at directoryPath: String) {
+        buildNavigationTitleIndex(at: directoryPath)
+    }
+
     private func buildNavigationTitleIndex(at directoryPath: String) {
         let fileManager = FileManager.default
         guard let enumerator = fileManager.enumerator(atPath: directoryPath) else { return }
         var found = Set<String>()
+        var labelled = Set<String>()
+        // Only worth indexing tokens when a wrapper has been aliased in — nothing reads the
+        // set otherwise, and it costs a parse per matching file.
+        let wantsTokenIndex = !config.options.viewAliases.isEmpty
         while let relativePath = enumerator.nextObject() as? String {
             guard relativePath.hasSuffix(".swift") else { continue }
             if config.shouldExclude(relativePath: relativePath) { continue }
             let fullPath = (directoryPath as NSString).appendingPathComponent(relativePath)
             guard let sourceText = try? String(contentsOfFile: fullPath, encoding: .utf8) else { continue }
+            if wantsTokenIndex,
+               LabelledTokenScanner.labelPropertyNames.contains(where: { sourceText.contains($0) }) {
+                labelled.formUnion(LabelledTokenScanner.scan(Parser.parse(source: sourceText)))
+            }
+            // Localised constants, for rules that judge wording. Cheap pre-filter: the
+            // declaration always names a lookup function.
+            if sourceText.contains("Localized.") || sourceText.contains("localizedString") {
+                let found = StringCatalogIndex.KeyCollector.collect(from: Parser.parse(source: sourceText))
+                localizationKeys.merge(found) { existing, _ in existing }
+            }
             // Fast pre-filter: the external-title pattern requires a @ViewBuilder function
             // called with .navigationTitle(...) chained at the call site. Only parse files
             // that contain @ViewBuilder — this cuts the pre-pass from O(all files) to O(few).
@@ -225,7 +262,25 @@ public final class RuleRegistry {
             scanner.walk(syntax)
             found.formUnion(scanner.resolvedExternallyTitledViews())
         }
-        externallyTitledViews = found
+        externallyTitledViews.formUnion(found)
+        labelledTokens.formUnion(labelled)
+
+        // Join the Swift constants to the string catalogues. Done once per directory so a run
+        // covering several packages resolves a constant declared in one against a catalogue
+        // shipped in another.
+        // The constants and the catalogue that defines their keys are usually in different
+        // packages, so both sides accumulate across directories and the join is recomputed from
+        // the full set each time. The CLI indexes every path before analysing any file, so by
+        // the time a rule reads this the join is complete.
+        stringCatalogue.merge(StringCatalogIndex.catalogue(at: directoryPath)) { existing, _ in existing }
+        if !localizationKeys.isEmpty, !stringCatalogue.isEmpty {
+            for (name, key) in localizationKeys {
+                if let text = stringCatalogue[key] { localizedText[name] = text }
+            }
+            // Index the raw keys too, so a key written inline at the call site —
+            // `Button(Localized.string("learnMore"))` — resolves through the same map.
+            localizedText.merge(stringCatalogue) { existing, _ in existing }
+        }
     }
 
     /// Analyze all .swift files in a directory (recursively).

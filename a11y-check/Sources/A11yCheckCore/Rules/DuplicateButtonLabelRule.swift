@@ -63,7 +63,7 @@ public struct DuplicateButtonLabelRule: A11yRule {
         }
 
         // --- Check 2: Button("same text") appears 2+ times in the same file ---
-        let visitor = ViewHierarchyVisitor.analyze(syntax)
+        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var buttonsByLabel: [String: [ViewHierarchyVisitor.DetectedView]] = [:]
 
         for button in visitor.views(ofType: "Button") {

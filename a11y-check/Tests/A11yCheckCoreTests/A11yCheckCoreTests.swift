@@ -482,6 +482,112 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(found.views(ofType: "Button").count, 0)
     }
 
+    /// The catalogue that defines a token usually lives in a different directory from the call
+    /// sites. Indexing as each directory is analysed left the index empty for whichever
+    /// directory came first, so the index is built across all paths up front and accumulates.
+    func testLabelledTokenIndex_accumulatesAcrossDirectories() throws {
+        let root = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent("a11y-xpkg-\(UUID().uuidString)")
+        let pkgA = root.appendingPathComponent("PkgA")
+        let pkgB = root.appendingPathComponent("PkgB")
+        try FileManager.default.createDirectory(at: pkgA, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: pkgB, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        try """
+        import SwiftUI
+        public enum Icon {
+            case errorFill, externalLink
+            public var a11yLabel: String? {
+                switch self {
+                case .errorFill: return "Error"
+                default: return nil
+                }
+            }
+        }
+        """.write(to: pkgA.appendingPathComponent("Catalog.swift"), atomically: true, encoding: .utf8)
+
+        let reg = RuleRegistry()
+        reg.config = A11yConfig(
+            severityOverrides: [:], disabledRules: [], enabledOnly: [],
+            options: .init(viewAliases: ["IconView": "Image"]), excludePaths: []
+        )
+        // Index the call-site directory first — the order that used to produce an empty index.
+        reg.buildIndexes(at: pkgB.path)
+        XCTAssertTrue(reg.labelledTokens.isEmpty)
+        reg.buildIndexes(at: pkgA.path)
+        XCTAssertEqual(reg.labelledTokens, ["errorFill"], "the second directory must add, not replace")
+    }
+
+    /// The real shape from a design system: a label property with a handful of labelled cases
+    /// and a `default: nil` covering everything else.
+    func testLabelledTokenScanner_collectsOnlyTheLabelledCases() {
+        let source = """
+        public enum Messaging {
+            case errorFill, infoFill, successFill, warningFill, errorOutline, chevron
+            public var a11yLabel: String? {
+                switch self {
+                case .errorFill:
+                    return Localized.errorImageText
+                case .infoFill:
+                    return Localized.informationImageText
+                case .successFill, .warningFill:
+                    return Localized.statusImageText
+                default:
+                    return nil
+                }
+            }
+        }
+        """
+        let tokens = LabelledTokenScanner.scan(Parser.parse(source: source))
+        XCTAssertEqual(tokens, ["errorFill", "infoFill", "successFill", "warningFill"])
+        XCTAssertFalse(tokens.contains("errorOutline"), "a token falling to default: nil is unlabelled")
+        XCTAssertFalse(tokens.contains("chevron"))
+    }
+
+    /// An aliased wrapper whose token already carries a label must not be reported — this was
+    /// 33 of 218 new findings when aliases first landed.
+    func testViewAliases_skipsWrapperWhoseTokenCarriesALabel() {
+        let source = """
+        import SwiftUI
+        struct Row: View {
+            var body: some View {
+                VStack {
+                    IconView(.messaging(.errorFill))
+                    IconView(.utilities(.externalLink))
+                }
+            }
+        }
+        """
+        let opts = A11yConfig.ConfigOptions(viewAliases: ["IconView": "Image"])
+        let syntax = Parser.parse(source: source)
+        let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
+        let context = RuleContext(
+            filePath: "test.swift", sourceText: source, locationConverter: converter,
+            configOptions: opts, labelledTokens: ["errorFill"]
+        )
+        let rule = registry.rules.first { $0.id == "image-missing-label" }!
+        let diags = rule.check(syntax: syntax, context: context)
+        XCTAssertEqual(diags.count, 1, "only the unlabelled token should report")
+        XCTAssertEqual(diags[0].line, 6, "the externalLink icon, not the errorFill one")
+    }
+
+    /// The same wrapper name may be a UIView elsewhere in the project. Reading UIKit as SwiftUI
+    /// produced 16 false positives before this guard.
+    func testViewAliases_ignoreAliasedWrappersInNonSwiftUIFiles() {
+        let source = """
+        import UIKit
+        final class IconCell: UITableViewCell {
+            func setup() {
+                let icon = IconView(renderingType: .template)
+                icon.tintColor = .label
+            }
+        }
+        """
+        let opts = A11yConfig.ConfigOptions(viewAliases: ["IconView": "Image"])
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label", configOptions: opts).count, 0)
+    }
+
     func testViewAliases_parsesFromYAMLAndDropsUnknownTargets() throws {
         let yaml = """
         options:

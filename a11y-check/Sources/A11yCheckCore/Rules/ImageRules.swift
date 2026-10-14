@@ -40,9 +40,23 @@ public struct ImageMissingLabelRule: A11yRule {
         let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
+        // A wrapper aliased in via `view_aliases` only means anything in a SwiftUI file. The
+        // same name may belong to a UIView elsewhere in the project, and reading UIKit code as
+        // if it were SwiftUI reports nonsense — aliasing one such name produced 16 false
+        // positives on a real codebase before this guard.
+        let isSwiftUIFile = context.sourceText.contains("import SwiftUI")
+
         for view in visitor.views(ofType: "Image") {
             // Skip decorative images — they're intentionally unlabeled
             if view.isDecorativeImage { continue }
+
+            let isAliasedWrapper = view.sourceViewType != "Image"
+            if isAliasedWrapper {
+                guard isSwiftUIFile else { continue }
+                // The design system may attach the accessible name to the token rather than
+                // the call site, in which case the component already announces it.
+                if mentionsLabelledToken(view.callExpr, labelled: context.labelledTokens) { continue }
+            }
 
             let mods = view.modifiers
 
@@ -80,7 +94,6 @@ public struct ImageMissingLabelRule: A11yRule {
             // Name what the author wrote. For a wrapper mapped in via `view_aliases`,
             // `Image(decorative:)` is not available to the caller, so only offer the advice
             // that applies to the call site.
-            let isAliasedWrapper = view.sourceViewType != "Image"
             let message = isAliasedWrapper
                 ? "\(view.sourceViewType) renders an image and is missing .accessibilityLabel(). Add a descriptive label, or .accessibilityHidden(true) if the icon is decorative."
                 : "Image is missing .accessibilityLabel(). Add a descriptive label or use Image(decorative:) / .accessibilityHidden(true) for decorative images."
@@ -95,6 +108,27 @@ public struct ImageMissingLabelRule: A11yRule {
             ))
         }
         return diagnostics
+    }
+
+    /// Whether any token named at this call site carries its own accessibility label.
+    ///
+    /// Reads every member-access name in the arguments, so `IconView(.messaging(.errorFill))`
+    /// is checked for both `messaging` and `errorFill`. A match means the design system
+    /// supplies the accessible name and the call site is not at fault.
+    private func mentionsLabelledToken(_ callExpr: FunctionCallExprSyntax, labelled: Set<String>) -> Bool {
+        guard !labelled.isEmpty else { return false }
+        var found = false
+        func walk(_ node: Syntax) {
+            if found { return }
+            if let member = node.as(MemberAccessExprSyntax.self),
+               labelled.contains(member.declName.baseName.text) {
+                found = true
+                return
+            }
+            for child in node.children(viewMode: .sourceAccurate) { walk(child) }
+        }
+        for arg in callExpr.arguments { walk(Syntax(arg)) }
+        return found
     }
 
     /// True if an ancestor view in the same file manages this image's accessibility, meaning

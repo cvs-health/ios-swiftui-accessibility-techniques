@@ -36,6 +36,11 @@ public struct RuleContext {
     /// View struct names that receive `.navigationTitle()` from a parent at the call site rather
     /// than setting it in their own body. Populated by a cross-file pre-pass in RuleRegistry.
     public let externallyTitledViews: Set<String>
+    /// Design-system token names that carry their own accessibility label, e.g. an icon case
+    /// whose `a11yLabel` returns a string. Built by a cross-file pre-pass in RuleRegistry.
+    /// A wrapper aliased into the image rules is not reported when its token is in this set —
+    /// the component supplies the name, so the call site needs none.
+    public let labelledTokens: Set<String>
 
     public init(
         filePath: String,
@@ -45,7 +50,8 @@ public struct RuleContext {
         severityOverrides: [String: A11ySeverity] = [:],
         configOptions: A11yConfig.ConfigOptions = .init(),
         assetColors: AssetCatalogParser.ThemedColorMap = [:],
-        externallyTitledViews: Set<String> = []
+        externallyTitledViews: Set<String> = [],
+        labelledTokens: Set<String> = []
     ) {
         self.filePath = filePath
         self.sourceText = sourceText
@@ -55,6 +61,7 @@ public struct RuleContext {
         self.configOptions = configOptions
         self.assetColors = assetColors
         self.externallyTitledViews = externallyTitledViews
+        self.labelledTokens = labelledTokens
     }
 
     /// Convert a syntax node's position to a 1-based line number.

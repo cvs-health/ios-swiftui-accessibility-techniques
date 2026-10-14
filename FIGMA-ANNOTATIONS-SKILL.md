@@ -102,7 +102,7 @@ Start from zero annotations and add only what is forced. On a typical screen the
 - a `>` caret or chevron on a list row or navigation button
 - a `+` on an "Add to Cart" button
 - a trailing arrow on a "Continue" button
-- an icon that duplicates the text beside it
+- an icon that duplicates the text beside it — an *icon*, meaning a glyph or image containing no text
 - dividers, rules, background shapes, gradients, decorative illustrations
 - a selected-state checkmark, where the selection is already annotated as a `Value: Selected`
 
@@ -141,6 +141,10 @@ And nothing goes on the field itself. The association is already stated in the `
 **The single exception is a state glyph *inside* the control whose state it shows** — a checkmark on a selected row, where the row itself announces `Value: Selected`. There the glyph is redundant with the element the user actually lands on, so hiding it is correct. That is the whole test: **does the state reach VoiceOver through the thing the user focuses?** Inside a control it does. In a message sitting beside a field it does not, so the icon must carry it.
 
 And **hiding from VoiceOver never means removing from the design.** A status glyph is frequently the non-colour indicator that satisfies 1.4.1 Use of Color — the thing that stops red text being the only signal of an error. It stays on screen; it just is not a separate VoiceOver stop.
+
+⚠️ **Never mark a layer that contains text as decorative.** An initials monogram, a status badge, a duplicated label — these are **visible text**, and text on the screen is read by design. Hiding it desynchronises what a low-vision user sees from what they hear: someone using Zoom with VoiceOver, or reading along while listening. That is a real cost against a saving of two syllables, and **redundancy is not a defect.**
+
+An avatar showing `LL` beside the name "Lucas Lee" looks exactly like the duplicates-the-text-beside-it case above, and is not one — that case is about glyphs. Deciding that a visible string is surplus is a content judgement, not an annotation. If a monogram genuinely reads badly next to the name it was derived from, that is a component decision to raise with the designer.
 
 For all of these: **hide them from VoiceOver and give them no name.** The visible text already names the control. The caret on `Refill >` is a visual affordance, not content — "Refill" is the whole accessible name.
 
@@ -229,7 +233,13 @@ These limits are structural rather than numeric, and they hold at any count:
 - **One callout per element, maximum.** Combine all fields for an element into one note. Never place separate "label" and "trait" and "hint" annotations on the same layer.
 - **One callout, one element.** A note must point at exactly one layer. Never write a single callout covering several layers ("the icons are decorative") — nothing in the file records which layers it meant, and the association is left to guesswork.
 - **Annotate a repeating component once.** A list of 12 cards, a 5-star rating, a 4-tab tab bar: annotate the first instance, then write `Applies to all N instances.` Never annotate every row.
-- **Annotate a design-system component zero times** if its accessibility is already specified in the design system. Write nothing — not even `Uses DS/Button — accessibility per component spec`, which reads like a specification while containing no instruction a developer can act on. If the component's accessibility is not specified, the fix belongs in the component, not in a note on a screen that happens to use it.
+- **Annotate a design-system component zero times** for anything the component itself owns — its internal structure, its traits, its decorative parts. Write nothing, not even `Uses DS/Button — accessibility per component spec`, which reads like a specification while containing no instruction a developer can act on. Where a component's accessibility is genuinely unspecified, the fix belongs in the component rather than in a note on a screen that happens to use it.
+
+  ⚠️ **The exemption covers the component, not the screen's content.** This is the widest loophole in this file: a real screen is built almost entirely from components, so "it is a design-system component" can be used to decline an entire pass. Two limits keep it honest.
+
+  **It does not cover a value that varies per instance.** The test is one question — **could this value be identical on every screen that uses this component?** The component's chevron being decorative: yes, the same everywhere, so it is the component's job. A page title, an icon-only button's name where the component exposes no property for it, the content of a row: no, different on every screen, so each is a screen-level fact and the exemption does not reach it.
+
+  **Do not assume the specification exists.** "Accessibility per component spec" is an assertion about a document you may not have read. If you have not seen that the component specifies something, you do not know that it does — and a shared nav component whose icon-only buttons carry no accessible names is extremely common. Where you cannot verify, annotate it and say the fix belongs in the component. An annotation that turns out to be redundant costs one line; a silent skip ships an unnamed control.
 
 ---
 
@@ -542,7 +552,7 @@ Two different behaviours, and they are not interchangeable:
 
 So **before writing `Group: combine`, read the child text in order and ask what the concatenation actually says.** Almost always it is fine and needs nothing further: "LL, Lucas Lee, born March 21 2016" leads with redundant initials and is still correct, still unique, and still contains the visible label.
 
-⚠️ **Do not hide visible text just because it is redundant.** It is on the screen, so it is read by design. Hiding it desynchronises what a low-vision user sees from what they hear — someone using Zoom with VoiceOver, or reading along while listening — and that is a real cost set against a saving of two syllables. **Redundancy is not a defect**, and deciding that a visible string is surplus is a content judgement, not an annotation. The only text worth hiding is text that is not really content: a punctuation character, a decorative glyph with an auto-generated name.
+⚠️ **Do not hide visible text just because it is redundant** — see Principle 3. Redundancy is not a defect, and the only text worth hiding is text that is not really content: a punctuation character, a decorative glyph with an auto-generated name.
 
 And if a concatenation genuinely does not work, the first question is whether the **design** should change. An initials monogram that reads badly next to the name it was derived from is a component decision, not something to paper over with a note.
 

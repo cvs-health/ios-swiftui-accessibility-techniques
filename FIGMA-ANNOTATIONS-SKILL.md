@@ -110,7 +110,7 @@ Start from zero annotations and add only what is forced. On a typical screen the
 
 ⚠️ **A text character is not an icon.** `*`, `•`, `→`, `✓`, `×` typed as text are **text**, however symbolic they look — and text is read. Never give one a `Name:`, and never mark one decorative. Both treat text as non-text content, and they are the two halves of one boundary: an initials monogram is not an icon because it *contains* text, and a required asterisk is not an icon because it *is* text.
 
-Where such a symbol's meaning is genuinely unclear — a bare `*` with no legend anywhere on the screen — that is a **content** problem, not an annotation. The visible label should say `required`, or the field's own name should carry it. Annotating the character does not fix an unexplained convention; it just adds a second place for it to be unexplained.
+**Where a required marker appears beside a label — a `*`, or the word "required" — annotate the *input* as `Required`.** The state belongs on the control, exactly as an error does: the field announces it and the marker character is left alone. Annotating the character instead gives the user a stray "asterisk" stop and leaves the field itself unmarked, which is the wrong half of the job.
 
 ⚠️ **A glyph on a link names the destination, and the destination is information.** A phone icon, a mail icon, an external-link arrow, a document icon, a map pin — each tells a sighted user **where activating this goes**, which is something a user is entitled to know *before* activating. So link glyphs are **informative** and take a `Name:`, even where the link text happens to mention it: "Call member services" names the action, while the icon names the app it opens.
 
@@ -303,7 +303,7 @@ So if you did not see it, you do not know it. Inventing a swipe gesture produces
 - ❌ Decorative images as callouts, when the properties panel has a decorative or hidden option. Set it there and write nothing on the canvas. If there is no field, each decorative element gets **its own** callout — never one note covering several layers, which leaves the targets ambiguous. **Principle 3.**
 - ❌ "This is a button." The design shows a button. The developer will use `Button`.
 - ❌ **Accessibility traits, in any form.** No `Trait: isButton`, no `.accessibilityAddTraits(...)`, no `role=`. Principle 1's redundant-code problem applies to traits exactly as it does to labels.
-- ❌ **The control type, in any form.** `Component: Button` is not an annotation either. If the design picked the wrong component, the fix is the design — use the Button component, the Link component, the disabled variant. See "Why there is no `Component:` key".
+- ❌ **The button control type.** `Component: Button` is not an annotation — a button is the developer's default reading of any tappable element, so it specifies nothing. Every control that is **not** a button does get named: see "Control types — name everything that is not a button".
 - ❌ Visible text as an "accessible name" when the accessible name **is** the visible text. The default is already correct, and annotating it manufactures a Label in Name failure. **Principle 1.**
 - ❌ A unique name on a generic or repeated control before checking whether `Group: combine` with the adjacent text would make it unique. Combining is one annotation; renaming is one per control.
 - ❌ A name on a caret, chevron, `+`, or any glyph inside a control that already has visible text. Mark it decorative instead. **Principle 3.**
@@ -436,7 +436,7 @@ This is one of the few annotations that applies to *every* instance of a pattern
 ❌ Name: Refill.                        (trailing period)
 ```
 
-### Why there is no `Component:` key
+### Control types — name everything that is not a button
 
 **Do not annotate accessibility traits, and do not annotate the control type either.**
 
@@ -450,12 +450,32 @@ The trait half is the older rule and the reason is Principle 1's: a trait writte
 ❌ Component: Button
 ```
 
-Naming the *component* instead of the trait used to be this file's answer. It is not, because it still leaves the design wrong. An element that behaves as a button should **be** a button in the design — the Button component, the Link component, the disabled variant — and then there is nothing to annotate. A note reading `Component: Button` documents a design defect and asks the developer to compensate for it, which is the opposite of what an annotation is for. Per Principle 2, the order is fix the component → set the property → write a callout, and for control types the first step is always available.
+Naming a **trait** is the error. Naming the **control** is not — see the rule below. The two look similar and do opposite things: `Trait: isButton` tells a developer to write a modifier onto a control that already has it, while `Switch` tells them to use the native switch, from which the trait, the value and the adjustable behaviour all arrive free.
 
-So a component mismatch is **design feedback, not an annotation.** Raise it with the designer and write nothing. Three cases worth raising, because each is a real defect:
+`Component: Button` is banned for a different reason again: a button is the developer's **default** reading of any tappable element, so saying it specifies nothing. And where the design has simply used the wrong component, the fix is the design — Principle 2's order is fix the component → set the property → write a callout, and for a mis-componented element the first step is always available.
+
+Two mismatches worth raising with the designer rather than annotating, because each is a real defect the design should carry itself:
 
 - **A control drawn greyed out or dimmed** needs the component's disabled variant, so the developer marks it genuinely disabled rather than only styling it. A control that looks disabled but is not is a defect only AT users hit.
 - **A custom control imitating a native one** — a hand-drawn toggle, a fake segmented control. Replace it with the native component.
+
+⚠️ **Button is the developer's default reading, so every control that is not a button gets named.** This is the statistical argument, and it decides the whole question. A native iOS app is overwhelmingly buttons, so an unfamiliar tappable element is read as a button unless something says otherwise — and the design very often cannot say otherwise. A switch drawn as a pill, a picker drawn as a row with a chevron, a segmented control drawn as two tabs, a stepper drawn as `− 2 +`: each is a rectangle with text to a reader, and each carries accessibility behaviour that arrives free from the native control and must be hand-rolled from nothing otherwise.
+
+So name the control, the word alone:
+
+```
+Link
+Switch
+Picker
+Date picker
+Segmented control
+Stepper
+Slider
+```
+
+**A button is the one control never named**, because it is the default. `Component: Button` stays banned for exactly that reason — it specifies what the developer was going to do anyway.
+
+And naming a control is not naming a trait. `Switch` says *use the native switch*, and the trait, the on/off value and the adjustable behaviour all arrive with it. `Trait: isToggle` says *write a modifier*, which is the redundant-code failure above.
 
 ⚠️ **Links are the exception, and the reason is statistical.** A native iOS app is almost entirely buttons. A link — anything that leaves the app or opens a URL, a web page, Mail, Maps, the dialler, the App Store — is rare enough that a developer's default reading of any tappable element is *button*. And the design cannot distinguish them: blue text, a row, a chevron look the same either way. Getting it backwards is a genuine WCAG 4.1.2 defect.
 
@@ -489,11 +509,11 @@ If a custom control: use a Button, with Value: "Collapsed" / "Expanded".
 
   Write the control *category* — "accordion", "disclosure group", "Button" — not the SwiftUI type. `DisclosureGroup` or `.accessibilityAddTraits` in an annotation is API, and Principle 8 still forbids that.
 
-  ⚠️ **This is the one place a control type belongs in an annotation**, and the carve-out is narrow. Everywhere else a component mismatch is a design fix, because the design *can* express the right component and should — see "Why there is no `Component:` key". A disclosure is different on all three counts: the design cannot show which of the two it is, the **developer** chooses, and the accessibility consequences of the choice are not the same. The test for whether this carve-out applies is one question: **can the design express the choice?** If it can, fix the design and annotate nothing. If it cannot and the developer resolves it, state both paths.
+  ⚠️ **This is the one place a control type belongs in an annotation**, and the carve-out is narrow. Everywhere else a component mismatch is a design fix, because the design *can* express the right component and should — see "Control types — name everything that is not a button". A disclosure is different on all three counts: the design cannot show which of the two it is, the **developer** chooses, and the accessibility consequences of the choice are not the same. The test for whether this carve-out applies is one question: **can the design express the choice?** If it can, fix the design and annotate nothing. If it cannot and the developer resolves it, state both paths.
 
   **A condition the developer controls may be stated; a condition about the design may not.** This is the line between the form above and the hedging this file rejects elsewhere. *The developer chooses the control*, so "if the control is custom" is something they can resolve and act on. `.button (if tappable)` is not: it asks them to guess a fact only the designer knows, and the annotator should have asked instead of passing the uncertainty along.
 
-  The missing *button* behaviour is a separate matter and is not an annotation: the control should be a button in the design. See "Why there is no `Component:` key".
+  The missing *button* behaviour is a separate matter and is not an annotation: the control should be a button in the design. See "Control types — name everything that is not a button".
 
 - **A badge needs a value.** An iOS tab-bar or icon badge is **not** spoken by VoiceOver on its own. If the design shows a `3` badge, annotate `Value: "3 unread"`. Missing this is one of the most common shipped iOS defects.
 - If the user can change the value by dragging or stepping, add `Adjustable: increment / decrement` so the developer wires the VoiceOver swipe-up/down action.
@@ -779,7 +799,7 @@ Run every annotation through this. Delete, do not soften.
     **Then run it backwards**, because this is the check that gets skipped: read every control's visible label on its own, with the rest of the screen covered. `Apply`, `Change`, `Save`, `Add`, `Edit`, `View`, `Remove`, `Update`, `Learn more` — if the label does not say what it acts on, it needs a `Name:`, **even where it appears only once.** Deleting redundant names and adding missing ones are the same rule read in opposite directions, and a set of annotations can pass the first pass while failing the second completely.
 5. **Every surviving `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?
 6. **Any SwiftUI or trait API in your output?** Grep for `accessibility`, `.is`, `Trait:`, `AddTraits`, `isButton`, `isHeader`. An annotation naming an iOS API gets implemented as redundant code. Rewrite as `Heading:`, or fix the component in the design.
-7. **Any annotation naming a control type?** `Component: Button`, `Component: Link`, "this is a toggle". A design that uses the wrong component is a design fix, not an annotation. Raise it as design feedback and write nothing.
+7. **Every control that is not a button — is it named?** `Link`, `Switch`, `Picker`, `Date picker`, `Segmented control`, `Stepper`, `Slider`. Button is the developer's default reading, so each of these is invisible in the design unless you say it. And is any *button* named? Delete that — it specifies nothing. Any annotation naming a **trait** rather than a control (`Trait: isButton`, `.accessibilityAddTraits`) is always wrong.
 8. **Every informative image** — does it have a name, set in its alt-text field if one exists? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative with no name, in the properties panel if possible? **Every lock, shield, warning, checkmark, info and badge glyph** — ask what a sighted user loses if it disappears. **Every glyph on a link** — phone, mail, external arrow, document, map pin — names a destination and is informative, however much the link text repeats the action. If the answer is not "nothing", it is not decorative. A status icon beside a message gets a `Name:` and stays a VoiceOver stop; only a state glyph *inside* the control that already announces that state may be hidden. **Every `Group: combine`** — read the child text in source order and confirm the concatenation announces correctly. Do **not** hide a text child merely for being redundant; visible text is read by design, and redundancy is not a defect.
 9. **Every callout — does it point at exactly one element?** A note covering several layers ("these icons are decorative", "both buttons get…") must be split, one per element, or the targets are guesswork.
 10. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?

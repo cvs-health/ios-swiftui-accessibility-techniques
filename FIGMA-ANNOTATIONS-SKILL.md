@@ -233,6 +233,10 @@ These limits are structural rather than numeric, and they hold at any count:
 - **One callout per element, maximum.** Combine all fields for an element into one note. Never place separate "label" and "trait" and "hint" annotations on the same layer.
 - **One callout, one element.** A note must point at exactly one layer. Never write a single callout covering several layers ("the icons are decorative") — nothing in the file records which layers it meant, and the association is left to guesswork.
 - **Annotate a repeating component once.** A list of 12 cards, a 5-star rating, a 4-tab tab bar: annotate the first instance, then write `Applies to all N instances.` Never annotate every row.
+
+  ⚠️ **This covers repeated instances that carry the *same* annotation — not every instance of a shared component.** Four section headings that happen to use one heading component are four different semantic elements. Each carries its own level, and a reviewer reading the third card must see that level **on that card**, not infer it from a note two cards above. **Annotate every heading individually, always.** And never list the others by their visible text ("applies to 'People we found', 'Who's caring for you'…") — that is the visible text retyped, and it drifts the moment a heading is reworded.
+
+  The rule is for genuinely identical repetition: twelve rows of the same shape, five stars, four tabs. If two instances would carry *different* annotations, they are not a repetition and each gets its own.
 - **Annotate a design-system component zero times** for anything the component itself owns — its internal structure, its traits, its decorative parts. Write nothing, not even `Uses DS/Button — accessibility per component spec`, which reads like a specification while containing no instruction a developer can act on. Where a component's accessibility is genuinely unspecified, the fix belongs in the component rather than in a note on a screen that happens to use it.
 
   ⚠️ **The exemption covers the component, not the screen's content.** This is the widest loophole in this file: a real screen is built almost entirely from components, so "it is a design-system component" can be used to decline an entire pass. Two limits keep it honest.
@@ -242,7 +246,8 @@ These limits are structural rather than numeric, and they hold at any count:
   - the **page title**;
   - a **heading level** — the same heading component is level 2 on one screen and level 1 on another, so the level comes from this screen's heading structure and never from the component. A Code Connect mapping does not change this;
   - an **icon-only control's name**, wherever the component exposes no property to carry it;
-  - the **content** of a row, card or cell.
+  - the **content** of a row, card or cell;
+  - **how an element groups.** Whether a row combines into one VoiceOver stop or contains individually focusable children depends on what *this* screen puts inside it. The same list-row component needs `combine` where it holds a name and a subtitle, and `contain` where it also holds a stepper or a second action. The component cannot know which, so `Group:` is always a screen-level decision.
 
   **Checking is part of the pass, not an optional extra.** "Accessibility per component spec" is an assertion about a document you may not have read. Two ways to check, both quick: read the component's **property definitions** to see whether a field for the value even exists, or read its **Code Connect mapping** to see what it builds to. A shared nav component whose icon-only buttons carry no accessible names is extremely common, and a mapping that only names a source file specifies nothing about accessibility at all.
 

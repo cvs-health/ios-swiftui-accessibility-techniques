@@ -60,7 +60,7 @@ public struct GenericLinkTextRule: A11yRule {
     public let severity = A11ySeverity.error
     public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.4.4"]
-    public let description = "Link text should describe the destination, not use generic phrases like 'Click here' or 'Read more'."
+    public let description = "Link and button text should describe the destination or action, not use generic phrases like 'Click here', 'Read more' or 'Learn more'."
 
     public init() {}
 
@@ -68,6 +68,7 @@ public struct GenericLinkTextRule: A11yRule {
     private static let genericTexts: Set<String> = [
         "click here", "here", "read more", "learn more", "more",
         "tap here", "see more", "view more", "link", "go",
+        "more options", "find out more", "show more", "more info",
     ]
 
     /// Extract label text from a Link's label closure, e.g.
@@ -98,7 +99,11 @@ public struct GenericLinkTextRule: A11yRule {
         let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
-        for view in visitor.views(ofType: "Link") {
+        // Buttons as well as Links. A generic label fails the same way whichever role it has,
+        // and this is how the defect is usually written: the phrase repeated down a page of
+        // cards where the destination differs every time and the name never does. Testers file
+        // it under 2.4.4 for buttons too.
+        for view in visitor.views(ofType: "Link") + visitor.views(ofType: "Button") {
             // Check inline label: Link("Click here", destination: ...)
             var labelText = view.firstStringArgument ?? ""
 
@@ -108,11 +113,16 @@ public struct GenericLinkTextRule: A11yRule {
             }
 
             if Self.genericTexts.contains(labelText.lowercased().trimmingCharacters(in: .whitespaces)) {
+                let isButton = view.viewType == "Button"
                 diagnostics.append(makeDiagnostic(
-                    message: "Link text \"\(labelText)\" is generic. Use descriptive text that explains where the link goes.",
+                    message: isButton
+                        ? "\(view.sourceViewType) text \"\(labelText)\" is generic. Several of these on one screen all announce the same name while doing different things — give each one the context that distinguishes it."
+                        : "Link text \"\(labelText)\" is generic. Use descriptive text that explains where the link goes.",
                     node: view.callExpr,
                     context: context,
-                    suggestion: "Replace \"\(labelText)\" with descriptive text like \"Log in to your account\""
+                    suggestion: isButton
+                        ? "Replace \"\(labelText)\" with descriptive text, or add .accessibilityLabel() naming what it opens"
+                        : "Replace \"\(labelText)\" with descriptive text like \"Log in to your account\""
                 ))
                 continue
             }

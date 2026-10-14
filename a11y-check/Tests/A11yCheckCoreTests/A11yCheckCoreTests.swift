@@ -424,6 +424,37 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0)
     }
 
+    /// "Learn more" on a Button fails the same way it does on a Link, and that is how the
+    /// defect is usually written: the phrase repeated down a page of cards where the
+    /// destination differs every time and the name never does.
+    func testGenericLinkText_coversButtonsNotJustLinks() {
+        for label in ["Learn more", "More options", "Read more", "Click here"] {
+            let source = """
+            import SwiftUI
+            struct MyView: View {
+                var body: some View {
+                    Button("\(label)") {}
+                }
+            }
+            """
+            let diags = analyze(source, ruleID: "generic-link-text")
+            XCTAssertEqual(diags.count, 1, "\(label) on a Button should report")
+            XCTAssertTrue(diags[0].message.hasPrefix("Button text"), diags[0].message)
+        }
+    }
+
+    func testGenericLinkText_passesADescriptiveButton() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button("Learn more about dental coverage") {}
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "generic-link-text").count, 0)
+    }
+
     // MARK: - Items 2-5
 
     /// The 2 KB source fallback used to stop only at six hardcoded constructors, so a labelled

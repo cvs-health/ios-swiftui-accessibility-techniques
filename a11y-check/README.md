@@ -522,10 +522,32 @@ Three things worth knowing before you add aliases:
 - **An alias to an unknown type is dropped** when the config is parsed, so a typo on the
   right-hand side fails quietly rather than silently matching nothing.
 
-Expect a jump in findings on the first run, and expect some of it to need triage: a wrapper that
-supplies accessibility internally — from an icon catalog, say — will look unlabelled at the call
-site. Measured on one app, aliasing `IconView` produced 218 new `image-missing-label` findings of
-which 169 were plausible and 33 were icons whose catalog token already carries a label.
+Two things happen automatically so that aliasing does not flood you with false positives.
+
+**Tokens that carry their own label are not reported.** A design system often keeps the accessible
+name beside the token rather than at the call site:
+
+```swift
+public var a11yLabel: String? {
+    switch self {
+    case .errorFill: return Localized.errorImageText
+    default:         return nil      // every other icon is unlabelled
+    }
+}
+```
+
+`IconView(.messaging(.errorFill))` is already announced; `IconView(.utilities(.externalLink))` is
+not, and nothing at either call site says which. A cross-file pre-pass indexes the case names that
+a property called `a11yLabel`, `accessibilityLabel`, `accessibilityText`, `altText` or `a11yText`
+returns a value for, and aliased wrappers naming one of them are skipped. The index is built across
+every path in the run before any file is analysed, because the catalogue usually lives in a
+different package from the call sites.
+
+**Aliases are ignored in files that do not import SwiftUI.** The same name is often a `UIView`
+elsewhere in a project, and reading UIKit as SwiftUI reports nonsense.
+
+Measured on one app, these two guards took aliasing from 218 new `image-missing-label` findings at
+78% precision to 166 at roughly 99%: 33 labelled-token reports and 16 UIKit reports went away.
 
 ### How heading fonts are recognised
 

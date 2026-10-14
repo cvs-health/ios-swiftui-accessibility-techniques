@@ -424,6 +424,154 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0)
     }
 
+    // MARK: - Items 2-5
+
+    /// The 2 KB source fallback used to stop only at six hardcoded constructors, so a labelled
+    /// view of any other type let the scan claim its label for the field. A `ProgressView`
+    /// beside a chat input hid a real finding.
+    func testTextFieldMissingLabel_labelOnAnUnlistedSiblingViewDoesNotSilenceTheField() {
+        let source = """
+        import SwiftUI
+        struct Composer: View {
+            @State private var m = ""
+            var body: some View { HStack { field; spinner } }
+            private var field: some View { TextField(Localized.p, text: $m, axis: .vertical) }
+            private var spinner: some View {
+                ProgressView().accessibilityLabel("Sending message")
+            }
+        }
+        enum Localized { static let p = "Write your message" }
+        """
+        let diags = analyze(source, ruleID: "textfield-missing-label")
+        XCTAssertEqual(diags.count, 1, "the field is unlabelled; the spinner's label is not its own")
+    }
+
+    func testHeadingTraitOnNonHeading_flagsBodyTextMarkedAsAHeading() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("From Jan 1, 2025 to Dec 31, 2025")
+                    .font(.themeParagraphM)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 1)
+    }
+
+    func testHeadingTraitOnNonHeading_passesARealHeading() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Section")
+                    .font(.themeHeadingXL)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 0)
+    }
+
+    /// Without an explicit font the style is inherited, so the trait cannot be called wrong.
+    func testHeadingTraitOnNonHeading_ignoresTextWithNoFont() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Section").accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 0)
+    }
+
+    /// Marking a container that groups a heading's parts is the right pattern, not a mistake.
+    func testHeadingTraitOnNonHeading_ignoresContainers() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                HStack { Text("Total").font(.themeParagraphM) }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 0)
+    }
+
+    /// A design system's "paragraph, strong" tier is what most in-card section headers are
+    /// built from, so marking one as a heading is correct. 133 of 146 findings on a real app
+    /// were this case before the guard.
+    func testHeadingTraitOnNonHeading_allowsEmphasisedBodyText() {
+        for token in [".themeParagraphMStrong", ".themeParagraphSStrong", ".bodyBold"] {
+            let source = """
+            import SwiftUI
+            struct MyView: View {
+                var body: some View {
+                    Text("Your plan")
+                        .font(\(token))
+                        .accessibilityAddTraits(.isHeader)
+                }
+            }
+            """
+            XCTAssertEqual(
+                analyze(source, ruleID: "heading-trait-on-non-heading").count, 0,
+                "\(token) is emphasised, so a heading trait is defensible"
+            )
+        }
+    }
+
+    func testHeadingTraitOnNonHeading_allowsExplicitBoldWeight() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Your plan")
+                    .font(.themeParagraphM)
+                    .fontWeight(.semibold)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "heading-trait-on-non-heading").count, 0)
+    }
+
+    func testSheetFocusReturn_coversContextMenuAndMenu() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Upload bill")
+                    .contextMenu { Button("Dismiss") {} }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 1)
+    }
+
+    func testButtonGroup_coversToggleGroups() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State private var a = false
+            @State private var b = false
+            var body: some View {
+                VStack {
+                    Text("For Self")
+                    VStack {
+                        Toggle("Zetia", isOn: $a)
+                        Toggle("Amoxicillin", isOn: $b)
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertGreaterThanOrEqual(analyze(source, ruleID: "button-group-missing-container-label").count, 1)
+    }
+
     // MARK: - View Aliases
 
     /// A design-system wrapper is invisible to every rule until it is aliased: rules only look
@@ -1428,7 +1576,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 45)
+        XCTAssertEqual(registry.rules.count, 46)
     }
 
     func testDisableRule() {

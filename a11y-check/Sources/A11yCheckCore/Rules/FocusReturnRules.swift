@@ -25,8 +25,18 @@ public struct SheetFocusReturnRule: A11yRule {
 
     /// Modifiers that take onDismiss — we require onDismiss to set focus.
     private static let onDismissModifiers = ["sheet", "fullScreenCover"]
-    /// Modifiers with no onDismiss — we require focus state and that their content (buttons / popover body) sets focus.
-    private static let contentFocusModifiers = ["alert", "confirmationDialog", "popover"]
+    /// Modifiers with no onDismiss — we require focus state and that their content (buttons /
+    /// popover body) sets focus.
+    ///
+    /// `contextMenu` is here because a context menu closing is the same focus problem as a
+    /// dialog closing, and testers report it as often: pick an item and VoiceOver focus jumps
+    /// to the top of the screen instead of the control that opened the menu.
+    ///
+    /// `Menu` and `Picker` are *views*, not modifiers, so they are out of this rule's reach as
+    /// written — dismissing either has the same defect and would need a view-based check.
+    private static let contentFocusModifiers = [
+        "alert", "confirmationDialog", "popover", "contextMenu",
+    ]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let collector = ModifierCollector.collect(from: syntax)

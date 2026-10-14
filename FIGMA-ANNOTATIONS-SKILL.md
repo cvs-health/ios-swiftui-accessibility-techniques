@@ -148,6 +148,14 @@ An avatar showing `LL` beside the name "Lucas Lee" looks exactly like the duplic
 
 For all of these: **hide them from VoiceOver and give them no name.** The visible text already names the control. The caret on `Refill >` is a visual affordance, not content — "Refill" is the whole accessible name.
 
+**The annotation is two words:**
+
+```
+Decorative — hidden.
+```
+
+⚠️ **Never explain why.** Not "the heading and body text already state the purpose", not "the illustration adds no information", not "duplicates the text beside it". The reasoning that led you to decide it was decorative is your working, not the specification — and a decorative marking is the one annotation with definitionally nothing to say, so a sentence of justification on it is self-contradicting. A developer handed `Decorative — hidden.` hides it. A developer handed the same thing plus a paragraph hides it and reads a paragraph. The explanation belongs in this file, where it already is.
+
 Getting this wrong produces one of three real defects, which is why it earns a place in the minimum set:
 
 - An unmarked glyph becomes **an extra VoiceOver stop that says nothing** — the user swipes onto silence and cannot tell whether something failed to load.

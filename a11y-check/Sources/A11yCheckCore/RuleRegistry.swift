@@ -23,6 +23,12 @@ public final class RuleRegistry {
     /// Design-system tokens that carry their own accessibility label.
     /// Built by `buildNavigationTitleIndex(at:)` during `analyzeDirectory`.
     public var labelledTokens: Set<String> = []
+    /// Localised constant name → English text. Built by `buildIndexes(at:)`.
+    public var localizedText: [String: String] = [:]
+    /// Constant name → localisation key, accumulated across every indexed directory.
+    private var localizationKeys: [String: String] = [:]
+    /// Localisation key → English value, accumulated the same way.
+    private var stringCatalogue: [String: String] = [:]
 
     /// Create a registry with all built-in rules.
     public init() {
@@ -165,7 +171,8 @@ public final class RuleRegistry {
             configOptions: config.options,
             assetColors: assetColors,
             externallyTitledViews: externallyTitledViews,
-            labelledTokens: labelledTokens
+            labelledTokens: labelledTokens,
+            localizedText: localizedText
         )
 
         var allDiagnostics: [A11yDiagnostic] = []
@@ -240,6 +247,12 @@ public final class RuleRegistry {
                LabelledTokenScanner.labelPropertyNames.contains(where: { sourceText.contains($0) }) {
                 labelled.formUnion(LabelledTokenScanner.scan(Parser.parse(source: sourceText)))
             }
+            // Localised constants, for rules that judge wording. Cheap pre-filter: the
+            // declaration always names a lookup function.
+            if sourceText.contains("Localized.") || sourceText.contains("localizedString") {
+                let found = StringCatalogIndex.KeyCollector.collect(from: Parser.parse(source: sourceText))
+                localizationKeys.merge(found) { existing, _ in existing }
+            }
             // Fast pre-filter: the external-title pattern requires a @ViewBuilder function
             // called with .navigationTitle(...) chained at the call site. Only parse files
             // that contain @ViewBuilder — this cuts the pre-pass from O(all files) to O(few).
@@ -251,6 +264,23 @@ public final class RuleRegistry {
         }
         externallyTitledViews.formUnion(found)
         labelledTokens.formUnion(labelled)
+
+        // Join the Swift constants to the string catalogues. Done once per directory so a run
+        // covering several packages resolves a constant declared in one against a catalogue
+        // shipped in another.
+        // The constants and the catalogue that defines their keys are usually in different
+        // packages, so both sides accumulate across directories and the join is recomputed from
+        // the full set each time. The CLI indexes every path before analysing any file, so by
+        // the time a rule reads this the join is complete.
+        stringCatalogue.merge(StringCatalogIndex.catalogue(at: directoryPath)) { existing, _ in existing }
+        if !localizationKeys.isEmpty, !stringCatalogue.isEmpty {
+            for (name, key) in localizationKeys {
+                if let text = stringCatalogue[key] { localizedText[name] = text }
+            }
+            // Index the raw keys too, so a key written inline at the call site —
+            // `Button(Localized.string("learnMore"))` — resolves through the same map.
+            localizedText.merge(stringCatalogue) { existing, _ in existing }
+        }
     }
 
     /// Analyze all .swift files in a directory (recursively).

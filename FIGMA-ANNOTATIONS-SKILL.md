@@ -237,9 +237,16 @@ These limits are structural rather than numeric, and they hold at any count:
 
   ⚠️ **The exemption covers the component, not the screen's content.** This is the widest loophole in this file: a real screen is built almost entirely from components, so "it is a design-system component" can be used to decline an entire pass. Two limits keep it honest.
 
-  **It does not cover a value that varies per instance.** The test is one question — **could this value be identical on every screen that uses this component?** The component's chevron being decorative: yes, the same everywhere, so it is the component's job. A page title, an icon-only button's name where the component exposes no property for it, the content of a row: no, different on every screen, so each is a screen-level fact and the exemption does not reach it.
+  **It does not cover a value that varies per instance.** The test is one question — **could this value be identical on every screen that uses this component?** The component's chevron being decorative: yes, the same everywhere, so it is the component's job. These are never the component's job, because each is a property of *this* screen:
 
-  **Do not assume the specification exists.** "Accessibility per component spec" is an assertion about a document you may not have read. If you have not seen that the component specifies something, you do not know that it does — and a shared nav component whose icon-only buttons carry no accessible names is extremely common. Where you cannot verify, annotate it and say the fix belongs in the component. An annotation that turns out to be redundant costs one line; a silent skip ships an unnamed control.
+  - the **page title**;
+  - a **heading level** — the same heading component is level 2 on one screen and level 1 on another, so the level comes from this screen's heading structure and never from the component. A Code Connect mapping does not change this;
+  - an **icon-only control's name**, wherever the component exposes no property to carry it;
+  - the **content** of a row, card or cell.
+
+  **Checking is part of the pass, not an optional extra.** "Accessibility per component spec" is an assertion about a document you may not have read. Two ways to check, both quick: read the component's **property definitions** to see whether a field for the value even exists, or read its **Code Connect mapping** to see what it builds to. A shared nav component whose icon-only buttons carry no accessible names is extremely common, and a mapping that only names a source file specifies nothing about accessibility at all.
+
+  **If you did not check, annotate.** Say in the annotation that the fix belongs in the component. An annotation that turns out to be redundant costs one line; a silent skip ships an unnamed control.
 
 ---
 

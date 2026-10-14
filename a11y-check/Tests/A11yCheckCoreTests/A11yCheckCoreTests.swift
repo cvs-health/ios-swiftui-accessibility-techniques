@@ -509,6 +509,101 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 1)
     }
 
+    // MARK: - Label in name, adjacent label
+
+    /// TLDAS-1204's shape: a visible Text above a field whose accessible name is different.
+    func testLabelInName_flagsAdjacentVisibleLabelThatDoesNotMatch() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text("Searching near")
+                    TextField("", text: $text)
+                        .accessibilityLabel("Enter address")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-in-name")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("Searching near"), diags[0].message)
+    }
+
+    func testLabelInName_adjacentLabelThatMatchesPasses() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text("Searching near")
+                    TextField("", text: $text)
+                        .accessibilityLabel("Searching near, enter an address")
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-in-name").count, 0)
+    }
+
+    /// When the container groups its children the visible label belongs to the group.
+    func testLabelInName_groupedContainerIsSkipped() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text("Searching near")
+                    TextField("", text: $text)
+                        .accessibilityLabel("Enter address")
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-in-name").count, 0)
+    }
+
+    /// Nothing is inferred from an identifier the run could not resolve.
+    func testLabelInName_unresolvedStringsAreLeftAlone() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text(viewModel.header)
+                    TextField("", text: $text)
+                        .accessibilityLabel(viewModel.fieldName)
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-in-name").count, 0)
+    }
+
+    /// A Text two siblings away is not this control's label.
+    func testLabelInName_onlyTheImmediatelyPrecedingSiblingCounts() {
+        let source = """
+        import SwiftUI
+        struct Search: View {
+            @State private var text = ""
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text("Section heading")
+                    Divider()
+                    TextField("", text: $text)
+                        .accessibilityLabel("Enter address")
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-in-name").count, 0)
+    }
+
     // MARK: - Localised strings
 
     func testStringCatalogIndex_parsesXCStringsAndLegacyStrings() throws {

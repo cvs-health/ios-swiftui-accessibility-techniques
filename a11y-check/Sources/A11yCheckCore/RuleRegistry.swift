@@ -49,7 +49,6 @@ public final class RuleRegistry {
         // Headings (WCAG 1.3.1)
         register(HeadingTraitMissingRule())
         register(FakeHeadingInLabelRule())
-        register(HeadingTraitOnNonHeadingRule())
 
         // Buttons (WCAG 4.1.2, 2.4.6)
         register(ButtonLabelContainsRoleRule())

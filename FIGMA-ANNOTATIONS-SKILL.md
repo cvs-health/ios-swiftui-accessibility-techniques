@@ -1,6 +1,6 @@
 ---
 name: figma-a11y-annotations
-description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a bare-minimum annotation discipline, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, page titles, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
+description: Rules for generating accessibility annotations on iOS/iPadOS mobile designs in Figma. Enforces a bare-minimum annotation discipline, an iOS vocabulary instead of web ARIA terms, and exact grammar for names, control types, page titles, values, hints, headings, groups, and reading order. Never annotates visible text as a label, never annotates traits as iOS API, never annotates default reading order. Use whenever asked to annotate, spec, or review a mobile design for accessibility.
 ---
 
 # iOS Accessibility Design Annotations
@@ -50,7 +50,7 @@ So the order of preference is: **fix the component and the visible text → comb
 
 When you do reach the last step, the name is an *extension*, not a restatement. The visible text stays verbatim and first, and the appended context is the part that was invisible: `Name: "Refill, Atorvastatin 20mg"`. If you find yourself annotating a name whose only content is the visible text, delete the annotation.
 
-### 2. Put it in the properties panel, not a callout on the canvas
+### 2. Put the value where it will actually be read
 
 **Where** an annotation lives matters as much as what it says. If the design system exposes a field for the value, **put it in the field** — a heading component's `level` property, a component variant, or a TEXT component property such as `A11y name` on an icon button. Do not place a floating text callout next to the element when a property will hold the same value.
 
@@ -91,13 +91,15 @@ And **never do both for the same value.** Two copies of one string drift, and th
 
 ⚠️ **A property is not a loophole.** Moving a value into a field does not exempt it from any other rule here: a redundant label is still redundant in a properties panel, visible text restated in an alt-text field still manufactures a Label in Name failure, and `role="button"` typed into a field is still web vocabulary. The properties panel changes the delivery, not the content — and it does not exempt a value from the gate.
 
-### 3. Annotate the bare minimum — and the bare minimum is images and decorative elements
+### 3. Images and glyphs — name what informs, hide what decorates
 
-Start from zero annotations and add only what is forced. On a typical screen the irreducible set is just two things, and a great many screens need little else:
+Start from zero annotations and add only what is forced. On most screens the floor is six things: every informative image named, every decorative glyph hidden, every control that is not a button named, every input tied to its visible label, the page title, and each heading's level.
+
+This principle covers the first two — the image-and-glyph decision — because that is where most of the volume and nearly all of the mistakes live:
 
 **Give every informative image a name.** An image is the one element whose meaning is genuinely unavailable to a developer and to VoiceOver — nothing else on screen conveys it. Describe what it communicates — not what it depicts, not what activating it does, and never its file name.
 
-**Mark everything else decorative.** Most glyphs in a mobile UI carry no information, and the clearest case is a glyph inside a control that already has sufficient visible text:
+**Hide the glyphs that carry no information**, and most in a mobile UI do not. The clearest case is a glyph inside a control that already has sufficient visible text:
 
 - a `>` caret or chevron on a list row or navigation button
 - a `+` on an "Add to Cart" button
@@ -202,7 +204,7 @@ Container grouping is both the clearer instruction and the more durable fix: it 
 
 ### 5. The design is the spec; annotate only the delta
 
-The design already specifies most of the accessible experience — the labels, the layout, the order, the control types. Annotations cover the remainder: the semantics the picture cannot carry. Your job is the difference between what a developer can see and what they need to know, and nothing else.
+The design already specifies most of the accessible experience — the labels, the layout, the order. Annotations cover the remainder: the semantics the picture cannot carry, which includes more than it looks like. A control type is the surprise on that list: a switch drawn as a pill and a button drawn as a pill are the same picture. Your job is the difference between what a developer can see and what they need to know, and nothing else.
 
 ### 6. Fewer annotations are more accessible
 
@@ -226,7 +228,7 @@ If you cannot state what breaks without the note, there is no note. And if a dev
 
 ---
 
-## Rule 0 — Annotate the bare minimum
+## Rule 0 — There is no annotation quota
 
 **There is no annotation quota.** There is one test, applied to each annotation on its own merits: would omitting it cause a real defect you can name? If yes, it stays — however many that leaves. If no, it goes — however few that leaves.
 
@@ -293,6 +295,8 @@ So if you did not see it, you do not know it. Inventing a swipe gesture produces
 - A **grouping boundary** — which elements VoiceOver should read as one swipe versus separately.
 - A **reading order that does not match the visual flow**, and only then.
 - The **state** a control conveys, and what it changes to.
+- **Which control it is**, wherever it is not a button — a switch drawn as a pill and a button drawn as a pill are the same picture.
+- **Which visible label names an input**, because a label above a field is a separate view that nothing connects to it.
 - A **non-obvious gesture** (long press, swipe-to-action, drag, context menu) and its non-gesture alternative.
 - What happens to **VoiceOver focus** when a modal opens and closes.
 - A **dynamic change** that must be announced (error appears, result count changes, async content loads).
@@ -300,14 +304,14 @@ So if you did not see it, you do not know it. Inventing a swipe gesture produces
 ### Never annotate — pick a fight with yourself about these
 
 - ❌ Every text layer's contrast ratio. Contrast is a **token** concern. Annotate it **only** where a style is off-system or sits on an image or gradient, and then on that element. A verified palette needs no annotation anywhere.
-- ❌ Decorative images as callouts, when the properties panel has a decorative or hidden option. Set it there and write nothing on the canvas. If there is no field, each decorative element gets **its own** callout — never one note covering several layers, which leaves the targets ambiguous. **Principle 3.**
+- ❌ Decorative images as callouts **where the component exposes a decorative or hidden option** — set it there and write nothing on the canvas. Figma offers no such field on a plain layer, so in most files each decorative element gets **its own** callout. Never one note covering several layers, which leaves the targets ambiguous. **Principle 3.**
 - ❌ "This is a button." The design shows a button. The developer will use `Button`.
 - ❌ **Accessibility traits, in any form.** No `Trait: isButton`, no `.accessibilityAddTraits(...)`, no `role=`. Principle 1's redundant-code problem applies to traits exactly as it does to labels.
 - ❌ **The button control type.** `Component: Button` is not an annotation — a button is the developer's default reading of any tappable element, so it specifies nothing. Every control that is **not** a button does get named: see "Control types — name everything that is not a button".
 - ❌ Visible text as an "accessible name" when the accessible name **is** the visible text. The default is already correct, and annotating it manufactures a Label in Name failure. **Principle 1.**
 - ❌ A unique name on a generic or repeated control before checking whether `Group: combine` with the adjacent text would make it unique. Combining is one annotation; renaming is one per control.
 - ❌ A name on a caret, chevron, `+`, or any glyph inside a control that already has visible text. Mark it decorative instead. **Principle 3.**
-- ❌ A callout on the canvas for anything Figma has a field for — alt text, a heading level, a component variant. Put it in the properties panel. **Principle 2.**
+- ❌ A callout on the canvas for anything Figma has a field for — a heading level, a component variant, a TEXT component property. Put it in the properties panel. **Principle 2.** (There is no alt-text field on a plain layer, so that one stays an annotation.)
 - ❌ Heading levels, when the design uses heading components with the level visible in the Figma properties panel. The structure is already specified.
 - ❌ Reading order, when the layout is a plain top-to-bottom stack. VoiceOver already does leading-to-trailing, then top-to-bottom. **Principle 4.**
 - ❌ Reading order as a numbered list of individual elements. Group containers instead.
@@ -323,6 +327,16 @@ So if you did not see it, you do not know it. Inventing a swipe gesture produces
 
 Use **only** these keys. Do not invent fields. Do not import fields from a web annotation kit.
 
+Two **sub-keys** exist and never appear alone: `Actions:` only ever follows `Group: combine`, and `Adjustable:` only ever follows `Value:`. Each is documented with its parent key below.
+
+And three legitimate annotation forms are **not keys at all**, so they are not in this table — but they are equally part of the vocabulary, and each is written bare, with no `Key:` prefix:
+
+- a **control name** — `Link`, `Switch`, `Picker`, `Date picker`, `Segmented control`, `Stepper`, `Slider`. See "Control types".
+- **`Decorative — hidden.`** See Principle 3.
+- **`Required`** on an input. See Principle 3.
+
+Nothing beyond those three forms, the nine keys and the two sub-keys is permitted.
+
 The **Key** column is what goes in the annotation. The **Builds to** column is the developer's side of the handoff and must never appear in an annotation — see Principle 8.
 
 | Key | Builds to | Use when |
@@ -337,7 +351,7 @@ The **Key** column is what goes in the annotation. The **Builds to** column is t
 | `Focus` | `@AccessibilityFocusState` | Focus must move or return on a screen or modal change |
 | `Announce` | `UIAccessibility.post(notification:)` | A change happens without a screen transition and must be spoken |
 
-**Where to put it.** Per Principle 2, prefer a **properties-panel field** whenever one exists for the value — an image's alt-text/description field, a heading component's `level`, a component variant. The key is then implied by the field and you write only the value.
+**Where to put it.** Per Principle 2, prefer a **properties-panel field** whenever one exists for the value — a heading component's `level`, a component variant, or a TEXT component property the design system has added for the purpose. The key is then implied by the field and you write only the value. Note that Figma has **no** alt-text field on a plain layer, so an image's name has nowhere to go but an annotation unless the component provides a property.
 
 **Format for anything with no field.** Figma's native Dev Mode annotation is a free-text note on a layer. Put these as plain `Key: value` lines inside one note, in the order above. This format works unchanged in a native annotation, in any annotation plugin, and in a handoff doc.
 
@@ -633,6 +647,15 @@ the buttons from the swipe order).
 Group: contain — heading and both buttons stay individually focusable.
 ```
 
+⚠️ **`combine` removes the element's controls from the swipe order — say which actions to expose.** This is the half of combining that gets forgotten. Merge a card into one stop and its Refill and Directions buttons are no longer reachable by swiping: the only way back to them is as accessibility actions on the combined element. So when `combine` swallows controls, name them in the same annotation:
+
+```
+Group: combine
+Actions: Refill, Directions
+```
+
+`Actions:` is not a tenth key — it is part of the grouping specification and never appears without `Group: combine` above it. If combining would swallow controls and you cannot list their actions, `contain` is the right answer instead.
+
 Never annotate both. Pick one and say why.
 
 ### `Order:` — reading order, used sparingly
@@ -793,30 +816,33 @@ Note also what the one-callout-one-element rule changed: the two buttons get sep
 Run every annotation through this. Delete, do not soften.
 
 1. **Look at the total.** There is no quota, so never delete down to a number — but a large set is a reliable sign the gate was applied loosely. If you are past six, re-read the gate and the four never-annotate principles before going further; most of the surplus usually fails one of them.
-2. **Every callout — could it be a properties-panel field instead?** Alt text, heading level, component variant: move it. Only cross-element concerns (`Group`, `Order`, `Focus`, `Announce`, gesture alternatives) stay as annotations.
+2. **Every annotation — could it be a properties-panel field instead?** A heading component's level, a component variant, a TEXT component property: move it. There is **no** alt-text field on a plain layer, so an image's name stays an annotation unless the component provides one. Cross-element concerns (`Group`, `Order`, `Focus`, `Announce`, gesture alternatives) always stay annotations.
 3. **Grep your own output** for: `alt`, `aria`, `role=`, `tabindex`, `landmark`, `skip to`, `H1`–`H6`, `px`, `rem`, `breakpoint`, `hover`, `focus ring`, `tab order`, `screen reader`, `double tap`, `click`. Every hit is a rewrite.
 4. **Every `Name:` on a control that has visible text** — delete it unless the text is generic or repeated. If it is, could `Group: combine` with the adjacent text make it unique instead? If yes, delete the name and group instead. If no, say why in the annotation.
     **Then run it backwards**, because this is the check that gets skipped: read every control's visible label on its own, with the rest of the screen covered. `Apply`, `Change`, `Save`, `Add`, `Edit`, `View`, `Remove`, `Update`, `Learn more` — if the label does not say what it acts on, it needs a `Name:`, **even where it appears only once.** Deleting redundant names and adding missing ones are the same rule read in opposite directions, and a set of annotations can pass the first pass while failing the second completely.
 5. **Every surviving `Name:`** — does it contain the visible text, verbatim and first? Is it free of "button", "icon", "image", "link"? No trailing period?
 6. **Any SwiftUI or trait API in your output?** Grep for `accessibility`, `.is`, `Trait:`, `AddTraits`, `isButton`, `isHeader`. An annotation naming an iOS API gets implemented as redundant code. Rewrite as `Heading:`, or fix the component in the design.
 7. **Every control that is not a button — is it named?** `Link`, `Switch`, `Picker`, `Date picker`, `Segmented control`, `Stepper`, `Slider`. Button is the developer's default reading, so each of these is invisible in the design unless you say it. And is any *button* named? Delete that — it specifies nothing. Any annotation naming a **trait** rather than a control (`Trait: isButton`, `.accessibilityAddTraits`) is always wrong.
-8. **Every informative image** — does it have a name, set in its alt-text field if one exists? **Every glyph, caret, `+`, chevron, and divider** — is it marked decorative with no name, in the properties panel if possible? **Every lock, shield, warning, checkmark, info and badge glyph** — ask what a sighted user loses if it disappears. **Every glyph on a link** — phone, mail, external arrow, document, map pin — names a destination and is informative, however much the link text repeats the action. If the answer is not "nothing", it is not decorative. A status icon beside a message gets a `Name:` and stays a VoiceOver stop; only a state glyph *inside* the control that already announces that state may be hidden. **Every `Group: combine`** — read the child text in source order and confirm the concatenation announces correctly. Do **not** hide a text child merely for being redundant; visible text is read by design, and redundancy is not a defect.
-9. **Every callout — does it point at exactly one element?** A note covering several layers ("these icons are decorative", "both buttons get…") must be split, one per element, or the targets are guesswork.
-10. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
-11. **Every custom gesture** — does it have a visible single-tap alternative annotated? And **did the design actually show the gesture?** If you inferred it, delete the annotation: `Hint:`, `Focus:` and `Announce:` describe behaviour a static frame cannot show, and inventing it has a developer build something nobody designed.
-12. **Every `Group:` with a name** — does it say `contain`?
-13. **Every heading** — does it have a level, and do the levels run without skipping? If the design uses heading components with levels in the properties panel, delete these annotations.
-14. **Every modal, sheet, and alert** — is focus-on-open and focus-on-return annotated?
-15. **Every badge, star rating, stepper, and expandable** — does it have a `Value:`?
-16. **Every repeated component** — annotated once, with `Applies to all N`?
-17. **Every `Order:`** — would the default top-to-bottom order genuinely be wrong here? If not, delete it. If so, is it expressed as containers rather than numbered leaves?
-18. **Anything unactionable** — "ensure", "appropriate", "consider", "test with", a bare WCAG number? Delete it.
-19. **Any contrast or target-size note on something that passes?** Delete it.
-20. **Any list semantics?** Grep for `role="list`, `listitem`, `setsize`, `posinset`, `containerType`, `list count`, and `"List,`. iOS has none of it — not as a role, not as a trait, not as a count. Delete the annotation; if the count matters, it goes in the section heading. Note that `Announce: "List, 3 items"` passes steps 3 and 6 cleanly, so this step is the only one that catches it.
+8. **Every informative image — does it have a name?** Describing what it communicates, not what it depicts, not what activating it does, and never its file name.
+9. **Every decorative glyph — caret, chevron, `+`, divider, background shape — is it hidden?** Two words, `Decorative — hidden.`, with no reason attached. And is anything containing text marked decorative? Undo that: text is read by design.
+10. **Every status glyph** (lock, shield, warning, checkmark, info, badge dot) **and every link glyph** (phone, mail, external arrow, document, map pin) — ask what a sighted user loses if it disappears. If the answer is not "nothing", it is **not** decorative: a status icon beside a message takes a `Name:` and stays a VoiceOver stop, and a link glyph names its destination as a noun. Only a state glyph *inside* the control that already announces that state may be hidden.
+11. **Every `Group: combine`** — read the child text in source order and confirm the concatenation announces correctly. Do **not** hide a text child merely for being redundant. And if combining swallows controls, does an `Actions:` line list them?
+12. **Every annotation — does it point at exactly one element?** A note covering several layers ("these icons are decorative", "both buttons get…") must be split, one per element, or the targets are guesswork.
+13. **Every `Hint:`** — is this one of the five required interactions? If not, delete it. If so: third person, no gesture named, ends with a period, does not repeat the name?
+14. **Every custom gesture** — does it have a visible single-tap alternative annotated? And **did the design actually show the gesture?** If you inferred it, delete the annotation: `Hint:`, `Focus:` and `Announce:` describe behaviour a static frame cannot show, and inventing it has a developer build something nobody designed.
+15. **Every `Group:` with a name** — does it say `contain`?
+16. **Every heading — does it have a level, is it annotated *individually*, and do the levels run without skipping?** Never collapse several headings into one note, and never list the others by their visible text. If the design uses heading components whose `level` property is set per instance, that is the properties panel doing the job and the annotations go.
+17. **Every modal, sheet and alert the design actually shows** — is focus-on-open and focus-on-return annotated? If the design does not show what a control opens, you do not know it opens anything: ask, do not infer.
+18. **Every badge and star rating — does it have a `Value:`?** A badge is not spoken on its own and a rating's count is invisible. **Not** a stepper and **not** a disclosure: a stepper's number is visible text, and a native disclosure announces its own state, so a `Value:` on either restates a default.
+19. **Every repeated instance — would two of them carry the *same* annotation?** If so and there are **many** — a twelve-row list, a twenty-item grid — annotate the first with `Applies to all N`. If there are only two or three, annotate **each**. If they would carry different annotations they are not a repetition at all, and each gets its own however few there are.
+20. **Every `Order:`** — would the default top-to-bottom order genuinely be wrong here? If not, delete it. If so, is it expressed as containers rather than numbered leaves?
+21. **Anything unactionable** — "ensure", "appropriate", "consider", "test with", a bare WCAG number? Delete it.
+22. **Any contrast or target-size note on something that passes?** Delete it.
+23. **Any list semantics?** Grep for `role="list`, `listitem`, `setsize`, `posinset`, `containerType`, `list count`, and `"List,`. iOS has none of it — not as a role, not as a trait, not as a count. Delete the annotation; if the count matters, it goes in the section heading. Note that `Announce: "List, 3 items"` passes steps 3 and 6 cleanly, so this step is the only one that catches it.
 
     **Grep those tokens, not the bare word "list".** Describing a design in English is fine and common — "a list of 12 cards", "the row styling reads like a list row", `grouped-list` as a component name. None of those claim a semantic, and a grep for bare `list` flags every one of them, including ten in this file. What is banned is asserting a **role, container type, or item count** that iOS does not have. If you cannot tell which you are looking at, ask whether a SwiftUI developer could implement it: `Group: combine` is implementable, `accessibilityContainerType: .list` is not.
-21. **Is every annotation tagged with the Accessibility category?** An uncategorised note is invisible to a developer filtering by category.
-22. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
+24. **Is every annotation tagged with the Accessibility category?** An uncategorised note is invisible to a developer filtering by category.
+25. **Finally:** for each surviving annotation, name the defect it prevents. If you cannot, it should not ship.
 
 ---
 
@@ -854,12 +880,12 @@ These annotations map onto SwiftUI as follows. For the implementation rules the 
 | --- | --- |
 | `Name` | `.accessibilityLabel("…")` |
 | `Value` | `.accessibilityValue("…")` |
-| `Adjustable` | `.accessibilityAdjustableAction { }` |
+| `Adjustable` — part of `Value:`, never alone | `.accessibilityAdjustableAction { }` |
 | `Hint` | `.accessibilityHint("…")` |
 | `Heading: N` | `.accessibilityAddTraits(.isHeader)` + `.accessibilityHeading(.hN)` |
 | `Group: combine` | `.accessibilityElement(children: .combine)` |
 | `Group: contain`, named by a heading | `.accessibilityElement(children: .contain)` + `.accessibilityLabel(heading)` — pass the *same* string constant that renders the visible heading, never a second literal |
-| `Actions` on a combined element | `.accessibilityAction(named:)` |
+| `Actions` — part of `Group: combine`, never alone | `.accessibilityAction(named:)` |
 | `Order` | restructure, or `.accessibilitySortPriority(…)` |
 | `Focus` | `@AccessibilityFocusState` + `.accessibilityFocused($…)` |
 | `Announce` | `UIAccessibility.post(notification: .announcement / .layoutChanged / .screenChanged, argument:)` |

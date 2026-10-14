@@ -513,6 +513,34 @@ Diagnostics name what you wrote — "IconView renders an image and is missing
 `.accessibilityLabel()`" — and advice that does not apply to a wrapper is dropped, so an
 `IconView` is never told to use `Image(decorative:)`.
 
+#### A worked example
+
+The configuration below is the one measured for a large design-system app, and it is a reasonable
+starting point for any codebase that wraps SwiftUI:
+
+```yaml
+options:
+  view_aliases:
+    IconView: Image          # 437 call sites — the single biggest win
+    NavigationButton: Button # 206
+    CMSLinkButton: Link
+    DSButton: Button
+    AIButton: Button
+    AsyncButton: Button
+    IconButton: Button
+```
+
+What that produced on that app: `image-missing-label` 63 → 229 findings, `icon-button-missing-label`
+3 → 34, `missing-accessibility-grouping` 31 → 176, `duplicate-button-label` 28 → 36. Hand-classifying
+the new image findings put precision at roughly 99% once the two guards below were in place.
+
+One name was removed from that list after measuring: `DSIcon`, which turned out to be a `UIView`
+rather than a SwiftUI wrapper. It produced 16 findings of pure nonsense before the SwiftUI-import
+guard caught it. Check the type before you add a name.
+
+Expect to pair the first run with `--baseline-save`, so the existing surface is recorded and only
+new regressions report while the backlog is worked down separately.
+
 Three things worth knowing before you add aliases:
 
 - **Alias SwiftUI wrappers only.** If the name is a `UIView` subclass the rules will read UIKit

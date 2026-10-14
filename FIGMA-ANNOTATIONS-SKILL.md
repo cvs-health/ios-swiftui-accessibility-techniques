@@ -421,13 +421,14 @@ So a component mismatch is **design feedback, not an annotation.** Raise it with
 
 ⚠️ **Links are the exception, and the reason is statistical.** A native iOS app is almost entirely buttons. A link — anything that leaves the app or opens a URL, a web page, Mail, Maps, the dialler, the App Store — is rare enough that a developer's default reading of any tappable element is *button*. And the design cannot distinguish them: blue text, a row, a chevron look the same either way. Getting it backwards is a genuine WCAG 4.1.2 defect.
 
-So **annotate a link**, naming the control and what makes it one:
+So **annotate a link — the word alone:**
 
 ```
-Link — leaves the app.
-Link — opens the dialler.
-Inline links — both styled spans are links, each individually focusable.
+Link
+Inline links
 ```
+
+Nothing more. *Why* it is a link — that it leaves the app, opens a URL, dials a number — is the reasoning behind the annotation, not the annotation. A developer handed `Link` builds a link; a developer handed `Link — leaves the app` builds the same link and reads a clause that changed nothing.
 
 That last case is the strongest form of the argument: a link **inside a text span** cannot be a component in Figma at all, so the design has no way to express it even in principle. A reader sees coloured, underlined text and cannot tell whether those spans are real links or styling.
 

@@ -107,6 +107,12 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Of the remaining 11, most render a variable named `sectionHeader`, `headerString`, `header` or `title` — the author meant them as headers and the trait is right; only the font is from the body tier. One, instructional text reading "Select any options", looks like genuine over-marking. So the honest yield is roughly 1 of 11, and the rule's output is a short list to glance at rather than a defect count. Whether text *looks* like a heading is a visual question, and no amount of source reading settles it. Only `Text` with an explicit font is considered: no font means the style is inherited, and the trait on a container is the correct grouping pattern.
 
+- **`generic-link-text` covers Buttons, not only Links**, and knows a few more phrases (`more options`, `find out more`, `show more`, `more info`). "Learn more" fails the same way whichever role it has, and the defect is usually written as that phrase repeated down a page of cards where the destination differs every time and the name never does. The message names the role and, for a button, suggests either descriptive text or an `.accessibilityLabel`.
+
+  **It finds nothing on the app measured here, and the reason is worth recording.** The rule compares the label's *literal* text, and a fully localised codebase has no literal text: every instance is `Button(Localized.learnMore)`, and the only `"Learn more"` string literals in that repository are in test fixtures. Verified the rule itself works by running it on a literal.
+
+  Reaching those defects needs a second kind of resolution: `Localized.learnMore` to `Localized.string("some.key")` to the English value in a string catalogue — and that app has `.xcstrings` files spread across many packages plus legacy `.strings` for its UIKit layer. That is a new capability rather than a rule tweak, and it would pay off across several rules at once (generic text, duplicate labels, label-in-name, heading wording). Not attempted here.
+
 - **`button-group-missing-container-label` now matches how a checkbox section is actually written.** Three changes, each forced by the defect it was meant to catch still not reporting after the previous one:
 
   A **`ForEach` of controls counts as a group.** Source holds one control and the runtime count is whatever the data says, so requiring two controls missed every generated list — which is how such a list is always written.

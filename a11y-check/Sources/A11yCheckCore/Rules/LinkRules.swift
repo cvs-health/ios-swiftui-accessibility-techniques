@@ -112,6 +112,13 @@ public struct GenericLinkTextRule: A11yRule {
                 labelText = closureText
             }
 
+            // A localised app holds no literal text, so resolve the constant to the English
+            // string it renders. Without this the rule reads nothing on such a codebase: every
+            // label is `Button(Localized.learnMore)` and the literals live in a catalogue.
+            if labelText.isEmpty {
+                labelText = resolvedLocalizedLabel(view, context: context) ?? ""
+            }
+
             if Self.genericTexts.contains(labelText.lowercased().trimmingCharacters(in: .whitespaces)) {
                 let isButton = view.viewType == "Button"
                 diagnostics.append(makeDiagnostic(
@@ -142,4 +149,32 @@ public struct GenericLinkTextRule: A11yRule {
         }
         return diagnostics
     }
+    /// The English text behind a localised label reference, if it can be resolved.
+    ///
+    /// Reads the trailing identifier of the label expression — `Localized.learnMore` resolves on
+    /// `learnMore` — against the map the pre-pass built from the Swift constants and the string
+    /// catalogues. Also handles a key written inline, as in `Button(Localized.string("learnMore"))`.
+    private func resolvedLocalizedLabel(
+        _ view: ViewHierarchyVisitor.DetectedView,
+        context: RuleContext
+    ) -> String? {
+        guard !context.localizedText.isEmpty else { return nil }
+        guard let first = view.callExpr.arguments.first?.expression else { return nil }
+
+        // Inline key: Localized.string("learnMore"). The map carries raw catalogue keys as
+        // well as constant names, so one lookup serves both shapes.
+        if let key = StringCatalogIndex.KeyCollector.lookupKey(in: first),
+           let text = context.localizedText[key] {
+            return text
+        }
+
+        // Constant reference: Localized.learnMore
+        var identifier = first.trimmedDescription.trimmingCharacters(in: .whitespaces)
+        guard !identifier.contains("(") else { return nil }
+        if let lastDot = identifier.lastIndex(of: ".") {
+            identifier = String(identifier[identifier.index(after: lastDot)...])
+        }
+        return context.localizedText[identifier]
+    }
+
 }

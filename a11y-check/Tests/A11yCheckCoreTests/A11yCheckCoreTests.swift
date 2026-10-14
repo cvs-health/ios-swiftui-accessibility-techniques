@@ -455,6 +455,144 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "generic-link-text").count, 0)
     }
 
+    /// Restoring focus through a helper is normal, and looking only for the assignment inside
+    /// the closure reported code that already did the right thing. This was the rule's single
+    /// most precisely-evidenced finding on a real app, and it was a false positive.
+    func testSheetFocusReturn_followsFocusRestoredInsideAHelper() {
+        let source = """
+        import SwiftUI
+        struct IDCardView: View {
+            @State private var shown = false
+            @AccessibilityFocusState private var focus: Bool
+            var body: some View {
+                Text("x").alert("Share", isPresented: $shown) {
+                    Button("Cancel", role: .cancel) { restoreAccessibilityFocus() }
+                }
+            }
+            private func restoreAccessibilityFocus() { focus = true }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 0)
+    }
+
+    func testSheetFocusReturn_onDismissDelegatingToAHelperAlsoCounts() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State private var shown = false
+            @AccessibilityFocusState private var focus: Bool
+            var body: some View {
+                Button("Open") { shown = true }
+                    .sheet(isPresented: $shown, onDismiss: { restoreFocus() }) { Text("Body") }
+            }
+            private func restoreFocus() { focus = true }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 0)
+    }
+
+    /// A helper that does not touch focus must not count as restoring it.
+    func testSheetFocusReturn_unrelatedHelperStillReports() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @State private var shown = false
+            @AccessibilityFocusState private var focus: Bool
+            var body: some View {
+                Text("x").alert("Title", isPresented: $shown) {
+                    Button("Cancel", role: .cancel) { logDismissal() }
+                }
+            }
+            private func logDismissal() { print("dismissed") }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 1)
+    }
+
+    // MARK: - Localised strings
+
+    func testStringCatalogIndex_parsesXCStringsAndLegacyStrings() throws {
+        let dir = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent("a11y-cat-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+
+        let xc = """
+        {"strings": {
+          "learnMore": {"localizations": {"en": {"stringUnit": {"value": "Learn More"}}}},
+          "untranslated": {}
+        }}
+        """
+        try xc.write(to: dir.appendingPathComponent("Localizable.xcstrings"), atomically: true, encoding: .utf8)
+        try "\"legacy.key\" = \"Read more\";\n// a comment\n"
+            .write(to: dir.appendingPathComponent("Localizable.strings"), atomically: true, encoding: .utf8)
+
+        let cat = StringCatalogIndex.catalogue(at: dir.path)
+        XCTAssertEqual(cat["learnMore"], "Learn More")
+        XCTAssertEqual(cat["legacy.key"], "Read more")
+        XCTAssertEqual(cat["untranslated"], "untranslated", "an untranslated key falls back to itself")
+    }
+
+    func testLocalizedKeyCollector_mapsConstantsToKeys() {
+        let source = """
+        private extension Localized {
+            static let learnMore = Localized.string(from: "rewards.learnMore")
+            static let withArgs = Localized.string("spending.learnMore", args: 0)
+            static var computed: String { Localized.string(from: "a.b") }
+            static let notLocalised = "plain"
+        }
+        """
+        let keys = StringCatalogIndex.KeyCollector.collect(from: Parser.parse(source: source))
+        XCTAssertEqual(keys["learnMore"], "rewards.learnMore")
+        XCTAssertEqual(keys["withArgs"], "spending.learnMore")
+        XCTAssertEqual(keys["computed"], "a.b")
+        XCTAssertNil(keys["notLocalised"])
+    }
+
+    /// The whole point: a localised codebase holds no literal text, so without resolution the
+    /// wording rules read nothing at all.
+    func testGenericLinkText_resolvesALocalisedLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button(Localized.learnMore) {}
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "generic-link-text").count, 0, "no map, nothing to compare")
+
+        let syntax = Parser.parse(source: source)
+        let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
+        let context = RuleContext(
+            filePath: "test.swift", sourceText: source, locationConverter: converter,
+            localizedText: ["learnMore": "Learn More"]
+        )
+        let rule = registry.rules.first { $0.id == "generic-link-text" }!
+        let diags = rule.check(syntax: syntax, context: context)
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("Learn More"), diags[0].message)
+    }
+
+    func testGenericLinkText_localisedButDescriptiveLabelPasses() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Button(Localized.dentalCoverage) {}
+            }
+        }
+        """
+        let syntax = Parser.parse(source: source)
+        let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
+        let context = RuleContext(
+            filePath: "test.swift", sourceText: source, locationConverter: converter,
+            localizedText: ["dentalCoverage": "Learn more about dental coverage"]
+        )
+        let rule = registry.rules.first { $0.id == "generic-link-text" }!
+        XCTAssertEqual(rule.check(syntax: syntax, context: context).count, 0)
+    }
+
     // MARK: - Items 2-5
 
     /// The 2 KB source fallback used to stop only at six hardcoded constructors, so a labelled

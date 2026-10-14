@@ -99,7 +99,12 @@ public struct SheetFocusReturnRule: A11yRule {
                 ))
                 continue
             }
-            if !anyClosureInNodeSetsFocus(Syntax(mod.callExpr), focusVarNames: focusStateVars) {
+            let focusHelpers = focusSettingMethodNames(in: structDecl, focusVarNames: focusStateVars)
+            if !anyClosureInNodeSetsFocus(
+                Syntax(mod.callExpr),
+                focusVarNames: focusStateVars,
+                focusSettingMethods: focusHelpers
+            ) {
                 diagnostics.append(makeDiagnostic(
                     message: "\(modName)(…) has no focus return. Set your @AccessibilityFocusState (or @FocusState) in a button action or in the \(modName) content when closing so focus returns to the trigger.",
                     node: mod.reportNode,
@@ -112,14 +117,53 @@ public struct SheetFocusReturnRule: A11yRule {
     }
 
     /// True if any closure inside the modifier call (e.g. alert buttons, popover content) contains an assignment to one of the focus state variables.
-    private func anyClosureInNodeSetsFocus(_ node: Syntax, focusVarNames: [String]) -> Bool {
+    private func anyClosureInNodeSetsFocus(
+        _ node: Syntax,
+        focusVarNames: [String],
+        focusSettingMethods: Set<String> = []
+    ) -> Bool {
         let fullText = node.trimmedDescription
         for varName in focusVarNames {
             if fullText.contains("\(varName) =") || fullText.contains("\(varName)=") {
                 return true
             }
         }
+        // Restoring focus through a helper is normal: an alert's Cancel action calls
+        // `restoreAccessibilityFocus()` and that method does the assignment. Looking only for
+        // the assignment inside the closure reports code that already does the right thing —
+        // which is how the rule's single most precisely-evidenced finding on a real app turned
+        // out to be a false positive.
+        for method in focusSettingMethods {
+            if fullText.contains("\(method)(") { return true }
+        }
         return false
+    }
+
+    /// Names of methods on this type whose body assigns one of the focus variables.
+    ///
+    /// One level deep by design: a helper that assigns the variable counts, a helper that calls
+    /// another helper does not. Going deeper would mean resolving a call graph for a check whose
+    /// whole purpose is a cheap source read, and one level covers the idiom.
+    private func focusSettingMethodNames(
+        in decl: DeclSyntaxProtocol,
+        focusVarNames: [String]
+    ) -> Set<String> {
+        guard !focusVarNames.isEmpty else { return [] }
+        let memberBlock: MemberBlockSyntax? =
+            decl.as(StructDeclSyntax.self)?.memberBlock
+            ?? decl.as(ClassDeclSyntax.self)?.memberBlock
+            ?? decl.as(ExtensionDeclSyntax.self)?.memberBlock
+        guard let block = memberBlock else { return [] }
+
+        var names: Set<String> = []
+        for member in block.members {
+            guard let fn = member.decl.as(FunctionDeclSyntax.self), let body = fn.body else { continue }
+            let text = body.trimmedDescription
+            if focusVarNames.contains(where: { text.contains("\($0) =") || text.contains("\($0)=") }) {
+                names.insert(fn.name.text)
+            }
+        }
+        return names
     }
 
     /// Walk up from a node to find the enclosing StructDecl or ClassDecl.
@@ -178,6 +222,11 @@ public struct SheetFocusReturnRule: A11yRule {
             if bodyText.contains("\(varName) =") || bodyText.contains("\(varName)=") {
                 return true
             }
+        }
+        // `onDismiss: { restoreFocus() }` — the closure delegates to a helper that assigns the
+        // variable. Same shape the content path handles.
+        for method in focusSettingMethodNames(in: structDecl, focusVarNames: focusVarNames) {
+            if bodyText.contains("\(method)(") { return true }
         }
         return false
     }

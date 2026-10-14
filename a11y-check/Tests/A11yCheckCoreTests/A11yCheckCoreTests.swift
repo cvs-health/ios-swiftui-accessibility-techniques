@@ -552,6 +552,29 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "sheet-focus-return").count, 1)
     }
 
+    /// A checkbox list under a section header is written as a ForEach, so source holds one
+    /// control and the runtime count is whatever the data says. Without counting generated
+    /// groups the rule missed the exact shape it exists for.
+    func testButtonGroup_countsAForEachOfControlsAsAGroup() {
+        let source = """
+        import SwiftUI
+        struct RefillSelections: View {
+            let items: [String]
+            var body: some View {
+                VStack {
+                    Text("For Self").font(.themeParagraphMStrong)
+                    ForEach(items, id: \\.self) { item in
+                        Toggle(item, isOn: .constant(false))
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertGreaterThanOrEqual(
+            analyze(source, ruleID: "button-group-missing-container-label").count, 1
+        )
+    }
+
     func testButtonGroup_coversToggleGroups() {
         let source = """
         import SwiftUI

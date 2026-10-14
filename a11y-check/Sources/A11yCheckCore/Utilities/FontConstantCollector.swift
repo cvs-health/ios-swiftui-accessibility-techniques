@@ -55,7 +55,7 @@ public final class FontConstantCollector: SyntaxVisitor {
 
     /// Collect every `let`/`var` and init-parameter default in the file whose value looks
     /// like a font.
-    public static func collect(from syntax: SourceFileSyntax) -> [String: String] {
+    public static func collect(from syntax: some SyntaxProtocol) -> [String: String] {
         let collector = FontConstantCollector()
         collector.walk(syntax)
         return collector.constants

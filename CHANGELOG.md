@@ -291,6 +291,16 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Of the remaining 11, most render a variable named `sectionHeader`, `headerString`, `header` or `title` — the author meant them as headers and the trait is right; only the font is from the body tier. One, instructional text reading "Select any options", looks like genuine over-marking. So the honest yield is roughly 1 of 11, and the rule's output is a short list to glance at rather than a defect count. Whether text *looks* like a heading is a visual question, and no amount of source reading settles it. Only `Text` with an explicit font is considered: no font means the style is inherited, and the trait on a container is the correct grouping pattern.
 
+- **`button-group-missing-container-label` now matches how a checkbox section is actually written.** Three changes, each forced by the defect it was meant to catch still not reporting after the previous one:
+
+  A **`ForEach` of controls counts as a group.** Source holds one control and the runtime count is whatever the data says, so requiring two controls missed every generated list — which is how such a list is always written.
+
+  A **label inside the container counts**, not only one before it. The rule looked for a `Text` sibling preceding the stack, but a checkbox section usually holds its header and its `ForEach` of controls in the same `VStack`. Added with a prefer-innermost guard: when a nested stack wraps the controls, that stack is the group and the card around it stays quiet, otherwise the same defect files twice. Three existing tests caught that before it shipped.
+
+  The inside-container label **has to look like a label** — a heading tier, or body text given emphasis through the token, `.bold()` or a heavy `.fontWeight`. Without that, plain helper text above a control counted as the group's name; sampling the findings showed it was the weaker half of them, and the guard removed 7 of 39.
+
+  Net +16 on the measured app, and `RefillSelectionsView.swift:84` — the `VStack` holding a group header and its checkbox `ForEach` — is now reported, which is the defect the Toggle work was for. It was not covered by the first two attempts.
+
 - **`sheet-focus-return` covers `.contextMenu`.** A context menu closing is the same focus problem as a dialog closing and testers report it as often — pick an item and VoiceOver focus jumps to the top of the screen instead of the control that opened the menu. Required adding `contextMenu` to `ModifierCollector`'s tracked list as well as the rule's: the collector has its own allowlist, so widening the rule alone silently did nothing. +7 findings on the measured app.
 
   `Menu` and `Picker` are **views**, not modifiers, so dismissing either is still out of this rule's reach. An earlier draft of this entry claimed all three; two of the three defects are covered.

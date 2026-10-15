@@ -143,6 +143,12 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   The `Group: contain` rule now also flags that single-select is the same conditional as a disclosure — a native picker announces each row's selected state for free, custom rows announce nothing — so both routes get stated, and that filled-circle radios in a design are a pattern to raise with the designer rather than something to annotate.
 
+- **The repeating-instance rule put its condition in the headline, after a blind run collapsed two- and three-row lists.** The many-versus-few condition was already written, correctly and explicitly — but as the *third* sub-paragraph beneath a bullet whose headline read "Annotate a repeating component once… annotate the first instance, then write `Applies to all N instances.` **Never annotate every row.**" A reader takes the headline, and that last sentence actively instructs against what the qualifier requires for two or three rows.
+
+  Two blind runs collapsed small repetitions in a row — three switches on one screen, then a two-row and a three-row list on another — with the self-check step stating the condition correctly both times and failing to catch it. The condition now leads the bullet, "Never annotate every row" is gone, and the restatement three paragraphs down is deleted as redundant.
+
+  Third instance of the same pattern recorded today, and the clearest: **a correct qualifier beneath an unconditional headline is read as the headline.** The earlier two were a prohibition filed in a section the reader was not standing in, and a rule stated in one direction with the other left open.
+
 - **Read the file end to end for the first time since the day's changes, and fixed twelve places where it contradicted itself.** It grew from 663 to 911 lines across 40 commits, almost all of it new rules written in reaction to a specific annotation error, and none of it read in sequence afterwards. Every contradiction below had been invisible because each rule was correct where it was written and wrong only against something elsewhere.
 
   **The closed set forbade forms the file requires.** "Use **only** these keys" sat above a nine-row table, while the rules elsewhere mandate a bare control name (`Link`, `Switch`, `Picker`…), `Decorative — hidden.` and `Required` — none of which are keys. The table intro now names those three as legitimate non-keyed forms, alongside the two sub-keys, so the closed set is actually closed.

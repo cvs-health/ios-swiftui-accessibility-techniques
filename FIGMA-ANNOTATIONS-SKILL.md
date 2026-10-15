@@ -246,15 +246,13 @@ These limits are structural rather than numeric, and they hold at any count:
 
 - **One callout per element, maximum.** Combine all fields for an element into one note. Never place separate "label" and "trait" and "hint" annotations on the same layer.
 - **One callout, one element.** A note must point at exactly one layer. Never write a single callout covering several layers ("the icons are decorative") — nothing in the file records which layers it meant, and the association is left to guesswork.
-- **Annotate a repeating component once.** A list of 12 cards, a 5-star rating, a 4-tab tab bar: annotate the first instance, then write `Applies to all N instances.` Never annotate every row.
+- **Annotate a repeated instance once only when there are *many* of them.** Twelve rows of the same shape, a twenty-item grid: annotate the first and write `Applies to all N instances.` **With two or three, annotate each one** — the note then sits on the element it governs, with no `Applies to all` indirection for a reader to resolve. There is no threshold number, for the same reason Rule 0 has no quota: judge whether the repeated notes would be carrying information or filling space.
 
   ⚠️ **This covers repeated instances that carry the *same* annotation — not every instance of a shared component.** Four section headings that happen to use one heading component are four different semantic elements. Each carries its own level, and a reviewer reading the third card must see that level **on that card**, not infer it from a note two cards above. **Annotate every heading individually, always.** And never list the others by their visible text ("applies to 'People we found', 'Who's caring for you'…") — that is the visible text retyped, and it drifts the moment a heading is reworded.
 
   **Headings are always annotated individually, whatever the count.**
 
-  ⚠️ **And collapsing is for *many* rows, not a few.** The rule is for identical repetition at a count high enough that per-row notes would bury everything else — a twelve-row list, a twenty-item grid. With two or three repeated rows, **annotate each one**: the note sits on the element it governs, there is no `Applies to all` indirection for a reader to resolve, and it matches the rule that every annotation goes directly on its own element.
-
-  There is no threshold number, for the same reason Rule 0 has no quota. Judge whether the repeated notes would be carrying information or filling space. And if two instances would carry *different* annotations, they are not a repetition at all — each gets its own regardless of how many there are.
+  And if two instances would carry *different* annotations, they are not a repetition at all — each gets its own regardless of how many there are.
 - **Annotate a design-system component zero times** for anything the component itself owns — its internal structure, its traits, its decorative parts. Write nothing, not even `Uses DS/Button — accessibility per component spec`, which reads like a specification while containing no instruction a developer can act on. Where a component's accessibility is genuinely unspecified, the fix belongs in the component rather than in a note on a screen that happens to use it.
 
   ⚠️ **The exemption covers the component, not the screen's content.** This is the widest loophole in this file: a real screen is built almost entirely from components, so "it is a design-system component" can be used to decline an entire pass. Two limits keep it honest.

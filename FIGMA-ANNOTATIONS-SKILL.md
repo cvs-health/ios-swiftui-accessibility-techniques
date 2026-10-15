@@ -269,6 +269,10 @@ These limits are structural rather than numeric, and they hold at any count:
 
   **If you did not check, annotate.** Say in the annotation that the fix belongs in the component. An annotation that turns out to be redundant costs one line; a silent skip ships an unnamed control.
 
+⚠️ **An inconclusive check is a failed check.** This is where the exemption leaks in practice. Figma's read tools do not expose whether a layer is marked decorative, and a Code Connect mapping that lists no property for something tells you only that the property is absent — not that the component handles it. "The component has no chevron parameter, so it must manage the chevron internally" is an inference, not a verification, and it reaches the same conclusion as a real check while resting on nothing.
+
+So when you cannot confirm it, you are in the "did not check" case and you annotate. **Reaching the right answer by inference does not count**, because the same inference reaches the wrong answer just as readily — a component with no property for a thing very often simply does not do that thing. If you notice yourself writing "so it must be handled upstream", that is the moment to annotate instead.
+
 ---
 
 ## The gate

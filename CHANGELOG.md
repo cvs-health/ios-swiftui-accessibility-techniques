@@ -441,6 +441,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 - **`HeadingRules.swift` was missing its Apache header**, which this repository requires of every file.
 
+- **The HTML report's "Issues by WCAG Criterion" chart labelled five criteria with their number twice** — a bar read `2.2.2 2.2.2` instead of `2.2.2 Pause, Stop, Hide`. `HTMLFormatter` kept its own 20-entry list of criterion names and fell back to the number when a criterion was absent from it, while the rules cite 24. `1.4.2`, `2.2.2`, `2.5.4`, `2.5.7` and `3.2.2` were all unnamed; the list also held shortened variants, so `2.4.4` and `2.5.8` disagreed with the names the conformance table on the same page prints.
+
+  The chart now reads `ScoreCalculator.wcagCatalog`, the catalogue the scorer already uses, so one list covers all 52 criteria and the chart cannot drift from the rest of the report. Where a name is genuinely unavailable the label is the number once rather than twice. A test asserts every criterion any rule cites is both present in the catalogue and rendered with its name — it fails on the old code for all five.
+
+  This is the same hardcoded-allowlist failure mode as the four already named in the Aetna Health analysis (view types, modifier names, constructor names, font tokens); it is the fifth, and the first in the reporting layer rather than in a rule.
+
+- **`A11yCheckCoreTests.swift` was missing its Apache header.** The remaining test and fixture files still are.
+
 - **Warning volume could drive a WCAG principle score to zero, so the principle half of the score stopped carrying information on any large codebase.** The principle score started as a pass rate over checked criteria and then subtracted the raw *count* of warnings from it — a count against a 0–100 percentage, floored at zero. Any principle holding a criterion with more than about a hundred warnings went to zero and stayed there no matter what else passed, which on a real repo is most of them.
 
   Measured on the CVS flagship Android app through the Kotlin port of this calculator, which carried the same arithmetic: Perceivable was `66.7 − 5,556` and Operable `88.9 − 807`, both floored to 0, and Robust was 0 for the unrelated reason that its single checked criterion fails. Three of four principles at zero, averaging 25.0.

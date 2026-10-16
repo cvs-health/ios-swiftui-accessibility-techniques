@@ -265,18 +265,13 @@ public struct HTMLFormatter {
             if !criteriaWithIssues.isEmpty {
                 let maxCount = criteriaWithIssues.first?.total ?? 1
 
-                let criterionNames: [String: String] = [
-                    "1.1.1": "Non-text Content", "1.3.1": "Info and Relationships",
-                    "1.3.2": "Meaningful Sequence", "1.3.4": "Orientation",
-                    "1.3.5": "Identify Input Purpose", "1.4.3": "Contrast (Minimum)",
-                    "1.4.4": "Resize Text", "2.1.1": "Keyboard", "2.1.2": "No Keyboard Trap",
-                    "2.2.1": "Timing Adjustable", "2.3.1": "Three Flashes",
-                    "2.4.2": "Page Titled", "2.4.3": "Focus Order",
-                    "2.4.4": "Link Purpose", "2.4.6": "Headings and Labels",
-                    "2.5.1": "Pointer Gestures", "2.5.3": "Label in Name",
-                    "2.5.8": "Target Size", "3.3.2": "Labels or Instructions",
-                    "4.1.2": "Name, Role, Value",
-                ]
+                // Read the names from the one catalogue the scorer already uses, rather
+                // than keeping a second list here. A partial copy silently mislabels any
+                // criterion it omits: it fell back to the number, so a rule firing under
+                // 2.2.2 drew the label "2.2.2 2.2.2".
+                let criterionNames: [String: String] = Dictionary(
+                    uniqueKeysWithValues: ScoreCalculator.wcagCatalog.map { ($0.criterion, $0.name) }
+                )
 
                 html += "<div class=\"bar-chart\">\n"
                 html += "<h2>Issues by WCAG Criterion</h2>\n"
@@ -287,7 +282,9 @@ public struct HTMLFormatter {
                 html += "</div>\n"
 
                 for c in criteriaWithIssues {
-                    let name = criterionNames[c.id] ?? c.id
+                    // No name is better than the number twice, should the catalogue
+                    // ever lag a rule that cites a criterion it does not list.
+                    let label = criterionNames[c.id].map { "\(c.id) \($0)" } ?? c.id
                     let wcagURL = "https://www.w3.org/WAI/WCAG22/Understanding/" + wcagAnchor(c.id)
                     let errPct = Double(c.errors) / Double(maxCount) * 100.0
                     let warnPct = Double(c.warnings) / Double(maxCount) * 100.0
@@ -295,7 +292,7 @@ public struct HTMLFormatter {
                     let warnLeft = errPct
 
                     html += "<div class=\"bar-row\">"
-                    html += "<div class=\"bar-label\"><a href=\"\(wcagURL)\">\(escapeHTML(c.id)) \(escapeHTML(name))</a></div>"
+                    html += "<div class=\"bar-label\"><a href=\"\(wcagURL)\">\(escapeHTML(label))</a></div>"
                     html += "<div class=\"bar-track\">"
                     if c.errors > 0 {
                         html += "<div class=\"bar-fill-error\" style=\"width:\(String(format: "%.1f", errPct))%\"></div>"

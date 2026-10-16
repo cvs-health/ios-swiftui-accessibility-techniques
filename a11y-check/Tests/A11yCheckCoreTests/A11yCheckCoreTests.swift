@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import XCTest
 import SwiftParser
 import SwiftSyntax
@@ -2657,6 +2673,50 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertTrue(output.contains("WCAG 2.2 Conformance"))
         XCTAssertTrue(output.contains("Test &lt;message&gt;"))
         XCTAssertTrue(output.contains("Errors</div>"))
+    }
+
+    /// The bar chart used to keep its own partial list of criterion names, so a
+    /// criterion it omitted was labelled with its number twice ("2.2.2 2.2.2").
+    /// Every criterion a rule can cite must come out of the scoring catalogue named.
+    func testBarChartLabelsEveryCriterionWithItsName() {
+        let cited = Set(registry.rules.flatMap(\.wcagCriteria))
+        XCTAssertFalse(cited.isEmpty)
+
+        let catalogued = Dictionary(
+            uniqueKeysWithValues: ScoreCalculator.wcagCatalog.map { ($0.criterion, $0.name) }
+        )
+
+        for criterion in cited.sorted() {
+            guard let name = catalogued[criterion] else {
+                XCTFail("A rule cites WCAG \(criterion) but ScoreCalculator.wcagCatalog does not list it")
+                continue
+            }
+
+            let diag = A11yDiagnostic(
+                ruleID: "test-rule",
+                severity: .error,
+                message: "m",
+                filePath: "/path/to/File.swift",
+                line: 1,
+                column: 1,
+                wcagCriteria: [criterion]
+            )
+            let output = HTMLFormatter().format([diag], allRules: registry.rules)
+            XCTAssertTrue(
+                output.contains("\(criterion) \(escapeHTMLForTest(name))"),
+                "Chart label for \(criterion) should read its name, not the number again"
+            )
+            XCTAssertFalse(
+                output.contains("\(criterion) \(criterion)"),
+                "Chart label for \(criterion) repeated the number instead of naming it"
+            )
+        }
+    }
+
+    private func escapeHTMLForTest(_ s: String) -> String {
+        s.replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
     }
 
     // MARK: - Fixture Files

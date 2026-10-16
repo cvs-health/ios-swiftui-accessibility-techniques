@@ -441,6 +441,20 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 - **`HeadingRules.swift` was missing its Apache header**, which this repository requires of every file.
 
+- **Warning volume could drive a WCAG principle score to zero, so the principle half of the score stopped carrying information on any large codebase.** The principle score started as a pass rate over checked criteria and then subtracted the raw *count* of warnings from it — a count against a 0–100 percentage, floored at zero. Any principle holding a criterion with more than about a hundred warnings went to zero and stayed there no matter what else passed, which on a real repo is most of them.
+
+  Measured on the CVS flagship Android app through the Kotlin port of this calculator, which carried the same arithmetic: Perceivable was `66.7 − 5,556` and Operable `88.9 − 807`, both floored to 0, and Robust was 0 for the unrelated reason that its single checked criterion fails. Three of four principles at zero, averaging 25.0.
+
+  Warnings now scale a per-criterion credit through a saturating curve (`criterionCredit`) instead of being subtracted from the aggregate: a passing criterion is worth 1.0, a failing one 0.0, and one under review loses at most half its credit no matter how many warnings it carries. The principle score is the mean credit, so it is bounded in `0...100` by construction, still monotonically decreasing in warnings, and can no longer be zeroed by volume alone. The same app's principles become Perceivable 50.1 and Operable 63.3, with Robust still 0.0 on its own merits.
+
+- **Principles with no rule coverage scored a free 100 and were averaged into the overall score, so the tool rewarded its own blind spots.** A principle whose criteria are all `notChecked` was assigned `100.0`, and the overall average then included it. The comment above the average said "only among checked criteria" and the code read `principleScores.values.filter { _ in true }` — a no-op filter that excluded nothing.
+
+  The effect is largest where coverage is thinnest. On the flagship Android app no rule maps to any Principle 3 criterion, so Understandable contributed a clean 100 to a four-way average, worth **12.5 of the reported 61.5**. Adding rules would have *lowered* the score; removing them would have raised it.
+
+  Uncovered principles are now absent from `principleScores` rather than present at 100, and the average runs over what was actually checked. `ScoreTerminalFormatter` prints `not checked` for a missing principle instead of defaulting it to `100.0`.
+
+  Together the two fixes move the flagship Android score from **61.5 (D-) to 67.9 (D+)** against an identical 7,621 diagnostics and an unchanged 13 / 4 / 31 criteria split — the findings did not change, only the arithmetic over them. Neither fix touches the issue-density half of the score, which divides total penalty by file count and so still saturates near 100 on any large repo; that is a separate limitation and is not addressed here.
+
 #### Known limits
 
 Sampling the 211 findings by hand turned up two classes this rule cannot distinguish, both reported rather than silently filtered:

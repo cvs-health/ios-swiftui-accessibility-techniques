@@ -2758,6 +2758,54 @@ final class A11yCheckCoreTests: XCTestCase {
         }
     }
 
+    func testScoreCalculator_criterionCreditBounds() {
+        XCTAssertEqual(ScoreCalculator.criterionCredit(status: .pass, warnings: 0), 1.0)
+        XCTAssertEqual(ScoreCalculator.criterionCredit(status: .fail, warnings: 0), 0.0)
+        XCTAssertEqual(ScoreCalculator.criterionCredit(status: .review, warnings: 0), 1.0)
+
+        let few = ScoreCalculator.criterionCredit(status: .review, warnings: 10)
+        let many = ScoreCalculator.criterionCredit(status: .review, warnings: 5000)
+        XCTAssertGreaterThan(few, many, "More warnings must cost more credit")
+        XCTAssertGreaterThanOrEqual(many, 0.5, "A reviewed criterion never drops below half credit")
+        XCTAssertLessThanOrEqual(few, 1.0)
+    }
+
+    func testScoreCalculator_warningVolumeCannotFloorPrinciple() {
+        // A large pile of warnings on one criterion must not zero its principle.
+        let diags = (0..<5000).map { i in
+            A11yDiagnostic(ruleID: "heading-trait-missing", severity: .warning, message: "msg",
+                           filePath: "test.swift", line: i + 1, column: 1, wcagCriteria: ["1.3.1"])
+        }
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: diags,
+            rules: registry.enabledRules,
+            filePaths: ["test.swift"]
+        )
+        let perceivable = score.principleScores[.perceivable]
+        XCTAssertNotNil(perceivable)
+        XCTAssertGreaterThan(perceivable!, 0.0,
+                             "Warnings alone must not zero a principle, was \(perceivable!)")
+    }
+
+    func testScoreCalculator_uncoveredPrinciplesAreAbsentNotPerfect() {
+        // A rule set covering only 1.1.1 leaves the other three principles uncovered.
+        let rule = ImageMissingLabelRule()
+        let calculator = ScoreCalculator()
+        let score = calculator.calculate(
+            diagnostics: [],
+            rules: [rule],
+            filePaths: ["test.swift"]
+        )
+        let covered = Set(rule.wcagCriteria.map { WCAGPrinciple.from(criterion: $0) })
+        XCTAssertEqual(Set(score.principleScores.keys), covered,
+                       "Only principles with a checked criterion should have an entry")
+        for principle in WCAGPrinciple.allCases where !covered.contains(principle) {
+            XCTAssertNil(score.principleScores[principle],
+                         "\(principle) has no rule coverage and must not score 100")
+        }
+    }
+
     func testScoreCalculator_criteriaNotChecked() {
         let calculator = ScoreCalculator()
         let score = calculator.calculate(

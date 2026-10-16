@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import Foundation
 
 /// Calculates WCAG 2.2 accessibility scores from diagnostics and rule metadata.
@@ -68,6 +84,32 @@ public struct ScoreCalculator {
     private static let errorPenalty: Double = 5.0
     private static let warningPenalty: Double = 2.0
     private static let infoPenalty: Double = 0.5
+
+    /// Most credit a criterion under review can lose to warning volume.
+    /// A reviewed criterion is never worth less than half a passing one.
+    private static let reviewMaxDiscount: Double = 0.5
+
+    /// Warning count at which a reviewed criterion has lost half of
+    /// `reviewMaxDiscount`. Chosen so a handful of warnings costs a little and
+    /// thousands cost no more than the cap.
+    private static let reviewHalfLife: Double = 10.0
+
+    /// Credit a single checked criterion contributes to its principle, in `0.0...1.0`.
+    ///
+    /// Warnings scale the discount through a saturating curve rather than being
+    /// subtracted from the principle percentage directly, so warning volume can
+    /// never drive a principle to zero on its own.
+    static func criterionCredit(status: CriterionStatus, warnings: Int) -> Double {
+        switch status {
+        case .fail, .notChecked:
+            return 0.0
+        case .pass:
+            return 1.0
+        case .review:
+            let w = Double(warnings)
+            return 1.0 - reviewMaxDiscount * (w / (w + reviewHalfLife))
+        }
+    }
 
     /// Impact multipliers — scale severity penalties by user impact.
     private static func impactMultiplier(for impact: A11yImpact) -> Double {
@@ -154,24 +196,21 @@ public struct ScoreCalculator {
             ))
         }
 
-        // Calculate principle-level scores (only among checked criteria)
+        // Calculate principle-level scores (only among checked criteria).
+        //
+        // Only principles with at least one checked criterion get an entry. A
+        // principle no rule covers is absent rather than 100.0, so missing rule
+        // coverage cannot inflate the overall score.
         var principleScores: [WCAGPrinciple: Double] = [:]
         for principle in WCAGPrinciple.allCases {
             let critForPrinciple = criteriaScores.filter {
                 $0.principle == principle && $0.status != .notChecked
             }
-            if critForPrinciple.isEmpty {
-                principleScores[principle] = 100.0
-            } else {
-                let passed = critForPrinciple.filter { $0.status == .pass || $0.status == .review }.count
-                let total = critForPrinciple.count
-                var base = (Double(passed) / Double(total)) * 100.0
-                // Apply penalty for warnings on "review" criteria
-                let reviewCriteria = critForPrinciple.filter { $0.status == .review }
-                let warningPenalty = Double(reviewCriteria.reduce(0) { $0 + $1.warningCount }) * 1.0
-                base = max(0, base - warningPenalty)
-                principleScores[principle] = base
+            if critForPrinciple.isEmpty { continue }
+            let credit = critForPrinciple.reduce(0.0) {
+                $0 + Self.criterionCredit(status: $1.status, warnings: $1.warningCount)
             }
+            principleScores[principle] = (credit / Double(critForPrinciple.count)) * 100.0
         }
 
         // Calculate per-file scores
@@ -192,13 +231,15 @@ public struct ScoreCalculator {
             ))
         }
 
-        // Overall score: weighted combination of principle scores (50%) and issue-based deduction (50%)
+        // Overall score: weighted combination of principle scores (50%) and issue-based deduction (50%).
+        // principleScores holds only covered principles, so this averages what was
+        // actually checked. An empty map means no rule covered any catalogued
+        // criterion, in which case there is nothing to report against.
         let principleAvg: Double
-        let checkedPrinciples = principleScores.values.filter { _ in true }
-        if checkedPrinciples.isEmpty {
+        if principleScores.isEmpty {
             principleAvg = 100.0
         } else {
-            principleAvg = checkedPrinciples.reduce(0, +) / Double(checkedPrinciples.count)
+            principleAvg = principleScores.values.reduce(0, +) / Double(principleScores.count)
         }
 
         let issuePenalty = diagnostics.reduce(0.0) { total, diag in

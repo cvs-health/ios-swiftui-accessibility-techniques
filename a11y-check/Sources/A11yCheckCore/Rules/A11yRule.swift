@@ -131,6 +131,51 @@ extension A11yRule {
         )
     }
 
+    /// Where to insert a new modifier line, given the end of the chain it attaches to.
+    ///
+    /// `endPositionBeforeTrailingTrivia` stops before a same-line `//` comment, so inserting
+    /// there lands the new modifier *between* the code and its comment — the original line
+    /// loses the comment and the inserted line gains it. For a line carrying
+    /// `// swiftlint:disable:this no_swiftui_font` that hands the suppression to the new
+    /// modifier and leaves the real offender unsuppressed, which fails `swiftlint --strict`.
+    ///
+    /// Advances past spaces, tabs and one line comment so the modifier starts on its own line.
+    /// Only advances when nothing but that separates the node from the newline: on a
+    /// single-line body (`… .font(.title) } }`) real code follows, so the node-end offset is
+    /// kept and the fix behaves as before.
+    static func lineEndInsertOffset(after nodeEndOffset: Int, in source: String) -> Int {
+        let bytes = source.utf8
+        guard nodeEndOffset >= 0, nodeEndOffset <= bytes.count else { return nodeEndOffset }
+
+        let newline = UInt8(ascii: "\n")
+        let slash = UInt8(ascii: "/")
+        let space = UInt8(ascii: " ")
+        let tab = UInt8(ascii: "\t")
+
+        var index = bytes.index(bytes.startIndex, offsetBy: nodeEndOffset)
+        var cursor = nodeEndOffset
+
+        while index < bytes.endIndex, bytes[index] == space || bytes[index] == tab {
+            index = bytes.index(after: index)
+            cursor += 1
+        }
+
+        // Nothing but whitespace to the end of the line — insert before the newline so any
+        // trailing whitespace stays put.
+        if index == bytes.endIndex || bytes[index] == newline { return cursor }
+
+        // A line comment follows: step over it so the comment stays with its own line.
+        guard bytes[index] == slash else { return nodeEndOffset }
+        let next = bytes.index(after: index)
+        guard next < bytes.endIndex, bytes[next] == slash else { return nodeEndOffset }
+
+        while index < bytes.endIndex, bytes[index] != newline {
+            index = bytes.index(after: index)
+            cursor += 1
+        }
+        return cursor
+    }
+
     public func makeModifierFix(
         chainRoot: ExprSyntax,
         modifier: String,
@@ -138,7 +183,9 @@ extension A11yRule {
     ) -> A11yFix? {
         let endPosition = chainRoot.endPositionBeforeTrailingTrivia
         let offset = sourceFile.position.utf8Offset
-        let insertOffset = endPosition.utf8Offset - offset
+        let nodeEndOffset = endPosition.utf8Offset - offset
+        let source = sourceFile.description
+        let insertOffset = Self.lineEndInsertOffset(after: nodeEndOffset, in: source)
 
         let indentEnd = chainRoot.positionAfterSkippingLeadingTrivia
         let lineStart = chainRoot.position

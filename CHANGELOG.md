@@ -389,6 +389,10 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`makeModifierFix` no longer relocates a trailing comment onto the line it inserts.** The insertion point came from `endPositionBeforeTrailingTrivia`, which stops *before* a same-line `//` comment, so the new modifier landed between the code and its comment. `.font(viewModel.titleFont) // swiftlint:disable:this no_swiftui_font` became `.font(viewModel.titleFont)` followed by `.accessibilityAddTraits(.isHeader) // swiftlint:disable:this no_swiftui_font` — the font line lost its suppression, the comment silenced a rule on a line that never triggered it, and `swiftlint --strict` failed the build. Any rule using `makeModifierFix` was affected, which is most of them; it surfaced on `CarePaths+CardView.swift:116` while checking the heading fix across six real files.
+
+  The offset now steps over trailing spaces and one line comment, and only does so when nothing else separates the node from the newline — a single-line body (`… .font(.title) } }`) has real code after the node, so the node-end offset is kept and those fixes behave exactly as before.
+
 - **`heading-trait-missing` now reads the enclosing view, and skips preview scaffolding.** The rule inspected only the `Text`'s own modifier chain, so a heading marked up correctly one level out was reported anyway. Classifying all 216 findings on a real app put 27 of them in that bucket, and all 27 were wrong or misplaced:
 
   - **A trait on an ancestor is no longer reported.** `VStack { Text(title).font(.themeHeadingXL) }.accessibilityAddTraits(.isHeader)` is correct markup; the rule flagged the inner `Text`. The pre-iOS 14 `.accessibility(addTraits:)` spelling counts too. The ancestor walk starts from the Text's `chainRoot`, not the Text node, because a Text's own modifiers are its syntactic ancestors — starting lower would read `.isHeader` on the Text itself as though a parent had supplied it.
@@ -480,9 +484,7 @@ Sampling the 211 findings by hand turned up two classes this rule cannot disting
 - ~~**16 sit in `#Preview` / `PreviewProvider` bodies.**~~ Preview bodies are now skipped, but only for this rule — the "needs a tool-wide decision" reasoning still stands for every other rule. The real count was 15: the 16th was a `View` whose type name merely contains "Preview", and it correctly still reports.
 - ~~**27 sit within ±12 lines of an `.accessibilityElement(children: .combine)`.**~~ The original caution was right not to assume child-to-merged-element propagation without a device test, and **that test still has not been run.** The guard added sidesteps the question rather than answering it: instead of suppressing the child, the finding is *retargeted to the container*, which needs `.isHeader` either way — so the fix does not depend on how propagation behaves. The ±12-line proximity heuristic was replaced by a real ancestor walk, which resolved the count to 25 Text findings collapsing into 20 container findings.
 
-One limit this introduced, not yet fixed:
-
-- **`--fix` is not safe to run in bulk for this rule.** It relocates a trailing comment onto the line it inserts, so `.font(viewModel.titleFont) // swiftlint:disable:this no_swiftui_font` becomes `.font(viewModel.titleFont)` followed by `.accessibilityAddTraits(.isHeader) // swiftlint:disable:this no_swiftui_font`. The font line loses its suppression and the comment now silences a rule on a line that never triggered it — under `swiftlint --strict` that fails the build. Found on `CarePaths+CardView.swift:116` while checking the fix across six real files; the other five were a clean single-line insert.
+A limit this fix surfaced has since been fixed too — see **`makeModifierFix` no longer relocates a trailing comment**, below.
 
 A font heuristic also cannot tell a structural heading from display text that borrows a heading token: avatar initials styled `.themeHeadingXXL` report, and correctly so by the rule's own definition. `heading_font_deny` is the wrong instrument for that, since the token is a real heading elsewhere. Value resolution narrows this to genuinely inline tokens — anything injected as a variable is now judged on what it holds.
 

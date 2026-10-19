@@ -251,6 +251,75 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.first?.line, 13)
     }
 
+    /// Apply a diagnostic's fix to the source it came from, the way AutoFixer would.
+    private func applyFix(_ diag: A11yDiagnostic, to source: String) -> String {
+        guard let fix = diag.fix else { return source }
+        var bytes = Array(source.utf8)
+        bytes.replaceSubrange(
+            fix.startOffset ..< fix.endOffset,
+            with: Array(fix.replacementText.utf8)
+        )
+        return String(decoding: bytes, as: UTF8.self)
+    }
+
+    /// An inserted modifier must not steal the trailing comment off the line above it.
+    /// `// swiftlint:disable:this` moving onto the new line leaves the real offender
+    /// unsuppressed and fails `swiftlint --strict`.
+    func testModifierFix_leavesTrailingLineCommentOnItsOwnLine() {
+        let source = """
+        import SwiftUI
+        struct CardView: View {
+            let title: String
+            var body: some View {
+                Text(title)
+                    .font(.themeHeadingXL) // swiftlint:disable:this no_swiftui_font
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 1)
+        let fixed = applyFix(diags[0], to: source)
+        XCTAssertTrue(
+            fixed.contains(".font(.themeHeadingXL) // swiftlint:disable:this no_swiftui_font"),
+            "the comment must stay with the line it was written on"
+        )
+        XCTAssertTrue(
+            fixed.contains(".accessibilityAddTraits(.isHeader)\n"),
+            "the inserted modifier must end its own line, carrying no comment"
+        )
+        XCTAssertFalse(fixed.contains(".accessibilityAddTraits(.isHeader) //"))
+    }
+
+    /// The comment step-over must not fire when real code follows on the same line.
+    func testModifierFix_singleLineBodyKeepsTrailingBraces() {
+        let source = """
+        import SwiftUI
+        struct B: View { var body: some View { Text("Hours").font(.title) } }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 1)
+        let fixed = applyFix(diags[0], to: source)
+        XCTAssertTrue(fixed.contains(".accessibilityAddTraits(.isHeader)"))
+        XCTAssertTrue(fixed.contains("} }"), "the closing braces must survive the insert")
+    }
+
+    func testLineEndInsertOffset_onlyStepsOverWhitespaceAndLineComments() {
+        // "a" then end of line: insert before the newline, after the spaces.
+        let plain = "a  \nb"
+        XCTAssertEqual(HeadingTraitMissingRule.lineEndInsertOffset(after: 1, in: plain), 3)
+        // A line comment is stepped over so it stays on its own line.
+        let commented = "a // note\nb"
+        XCTAssertEqual(HeadingTraitMissingRule.lineEndInsertOffset(after: 1, in: commented), 9)
+        // Real code follows, so the offset is left alone.
+        let trailingCode = "a } }\nb"
+        XCTAssertEqual(HeadingTraitMissingRule.lineEndInsertOffset(after: 1, in: trailingCode), 1)
+        // A lone slash is not a comment.
+        let slash = "a / b\nc"
+        XCTAssertEqual(HeadingTraitMissingRule.lineEndInsertOffset(after: 1, in: slash), 1)
+        // End of file with no newline.
+        XCTAssertEqual(HeadingTraitMissingRule.lineEndInsertOffset(after: 1, in: "a"), 1)
+    }
+
     /// A trait on an enclosing view already marks the heading; reporting the inner Text
     /// would flag code that is correct.
     func testHeadingTraitMissing_ancestorAlreadyCarriesHeaderTrait() {

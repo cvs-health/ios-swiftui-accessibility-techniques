@@ -56,10 +56,24 @@ public enum InlineSuppressionFilter {
     }
 
     /// Parse comma-separated rule IDs. Returns nil if empty (meaning suppress all).
+    /// Parse comma-separated rule IDs. Returns nil if empty (meaning suppress all).
+    ///
+    /// Only the leading rule-ID-shaped token of each comma-separated piece is read, so a note
+    /// after the IDs does not change which rules are suppressed:
+    ///
+    ///     // a11y-check:disable-next-line sheet-focus-return  (restored via Combine)
+    ///
+    /// Previously the whole piece became the ID, so that line silently suppressed nothing —
+    /// the directive looked right and the diagnostic still fired. A rule ID is lowercase
+    /// letters, digits and hyphens, which no prose starts with by accident.
     private static func parseRuleIDs(_ text: String) -> Set<String>? {
         let ids = text.split(separator: ",")
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
+            .compactMap { piece -> String? in
+                let token = piece
+                    .trimmingCharacters(in: .whitespaces)
+                    .prefix { $0.isLowercase && $0.isLetter || $0.isNumber || $0 == "-" }
+                return token.isEmpty ? nil : String(token)
+            }
         return ids.isEmpty ? nil : Set(ids)
     }
 }

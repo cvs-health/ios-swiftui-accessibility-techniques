@@ -59,17 +59,16 @@ public struct MissingNavigationTitleRule: A11yRule {
                 if let body = nav.callExpr.trailingClosure {
                     let bodyCollector = ModifierCollector.collect(from: body)
                     if !bodyCollector.hasModifier("navigationTitle") {
-                        let fix = firstChildModifierFix(
-                            in: nav.callExpr,
-                            modifier: ".navigationTitle(\"Page Title\")",
-                            sourceFile: syntax
-                        )
+                        // Deliberately no autofix: a page title is content, and only the author
+                        // knows what this screen is called. Inserting a literal "Page Title"
+                        // shipped that string to users as the real title and VoiceOver
+                        // announcement, and left the rule reporting the file as clean — a
+                        // user-visible regression that hid itself from the gate.
                         diagnostics.append(makeDiagnostic(
                             message: "NavigationStack is missing .navigationTitle(). Set a page title so VoiceOver users know which page they're on.",
                             node: nav.callExpr,
                             context: context,
-                            fix: fix,
-                            suggestion: "Add .navigationTitle(\"Page Title\") on the root view inside the NavigationStack"
+                            suggestion: "Add .navigationTitle(\"<this screen's name>\") on the root view inside the NavigationStack"
                         ))
                     }
                 }
@@ -83,20 +82,14 @@ public struct MissingNavigationTitleRule: A11yRule {
             if context.externallyTitledViews.contains(structName) { continue }
             let bodyText = bodyStatements.map(\.description).joined()
             if !bodyText.contains("navigationTitle") {
-                // Fix targets the first content view inside ScrollView/List, not the container itself.
-                // e.g.  ScrollView { VStack { ... }.padding() }
-                //       → inserts .navigationTitle after VStack's last modifier, not on ScrollView.
-                let fix = firstChildModifierFix(
-                    in: rootCall,
-                    modifier: ".navigationTitle(\"Page Title\")",
-                    sourceFile: syntax
-                )
+                // No autofix, for the same reason as pattern 1 above: the title is content.
+                // The suggestion still names where it goes — the first content view inside
+                // ScrollView/List (e.g. the VStack), not the container itself.
                 diagnostics.append(makeDiagnostic(
                     message: "This screen-level view has no .navigationTitle(). Add one so VoiceOver users know which page they're on when it is pushed onto a NavigationStack.",
                     node: rootCall,
                     context: context,
-                    fix: fix,
-                    suggestion: "Add .navigationTitle(\"Page Title\") on the content view inside the body's ScrollView or List (e.g., on VStack)"
+                    suggestion: "Add .navigationTitle(\"<this screen's name>\") on the content view inside the body's ScrollView or List (e.g., on VStack)"
                 ))
             }
         }

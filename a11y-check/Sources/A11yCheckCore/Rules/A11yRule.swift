@@ -206,6 +206,38 @@ extension A11yRule {
         )
     }
 
+    /// Replace just a modifier call — `.frame(width: 20, height: 20)` — and nothing else.
+    ///
+    /// A chained modifier's `callExpr` spans the *whole* expression including the view it is
+    /// applied to, so handing that node to `makeReplacementFix` deletes the view:
+    /// `Button("x") { }.frame(width: 20, height: 20)` became a bare
+    /// `.frame(width: 24, height: 24)` and the file stopped compiling. This replaces only the
+    /// range from the modifier's `.` through its closing paren.
+    ///
+    /// Returns nil when the modifier is not a member access — without a `.` there is no
+    /// modifier-sized range to replace, and no fix is safer than a guessed one.
+    public func makeModifierReplacementFix(
+        modifier: ModifierCollector.CollectedModifier,
+        replacementText: String,
+        description: String,
+        sourceFile: SourceFileSyntax
+    ) -> A11yFix? {
+        guard let memberAccess = modifier.callExpr.calledExpression.as(MemberAccessExprSyntax.self)
+        else { return nil }
+
+        let fileOffset = sourceFile.position.utf8Offset
+        let start = memberAccess.period.positionAfterSkippingLeadingTrivia.utf8Offset - fileOffset
+        let end = modifier.callExpr.endPositionBeforeTrailingTrivia.utf8Offset - fileOffset
+        guard start < end else { return nil }
+
+        return A11yFix(
+            description: description,
+            replacementText: replacementText,
+            startOffset: start,
+            endOffset: end
+        )
+    }
+
     public func makeReplacementFix(
         node: some SyntaxProtocol,
         replacementText: String,

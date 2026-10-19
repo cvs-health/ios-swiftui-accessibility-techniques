@@ -65,8 +65,11 @@ public struct SmallTouchTargetRule: A11yRule {
                 // If one dimension is .infinity or undefined, spacing in that direction
                 // counts toward the target size per WCAG 2.5.8.
                 if widthConstrained && widthTooSmall && heightConstrained && heightTooSmall {
-                    let fix = makeReplacementFix(
-                        node: frameMod.callExpr,
+                    // Replace only the .frame(...) call. frameMod.callExpr spans the whole
+                    // chained expression including the Button, so replacing that node deleted
+                    // the view and left a file that would not compile.
+                    let fix = makeModifierReplacementFix(
+                        modifier: frameMod,
                         replacementText: ".frame(width: \(Int(Self.minimumSize)), height: \(Int(Self.minimumSize)))",
                         description: "Increase to .frame(width: \(Int(Self.minimumSize)), height: \(Int(Self.minimumSize)))",
                         sourceFile: syntax

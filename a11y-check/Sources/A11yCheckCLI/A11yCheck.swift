@@ -191,12 +191,19 @@ struct A11yCheck: ParsableCommand {
             }
         }
 
+        // A path that does not exist must fail the run. Reporting it on stderr and carrying on
+        // meant a mistyped path analysed nothing, scored A+ and exited 0 — so a CI gate pointed
+        // at a renamed directory passed silently, which is the worst possible failure mode for
+        // a gate.
+        var missingPaths: [String] = []
+
         for path in paths {
             let resolvedPath = resolvePath(path)
             var isDir: ObjCBool = false
 
             guard FileManager.default.fileExists(atPath: resolvedPath, isDirectory: &isDir) else {
                 printError("Path not found: \(resolvedPath)")
+                missingPaths.append(resolvedPath)
                 continue
             }
 
@@ -221,6 +228,16 @@ struct A11yCheck: ParsableCommand {
                 let diagnostics = try registry.analyzeFile(at: resolvedPath)
                 allDiagnostics.append(contentsOf: diagnostics)
             }
+        }
+
+        // Fail before producing any report: a score computed over the paths that happened to
+        // exist is misleading when one the caller asked for did not.
+        if !missingPaths.isEmpty {
+            printError(
+                "\(missingPaths.count) of \(paths.count) path(s) could not be read — "
+                + "no report produced. Check the paths above."
+            )
+            throw ExitCode(1)
         }
 
         // Apply --diff filter
@@ -380,8 +397,15 @@ struct A11yCheck: ParsableCommand {
             return
         }
 
-        // Strip base path prefix from diagnostics if --base-path is set
-        let resolvedBasePath: String? = basePath.map { ($0.hasSuffix("/") ? $0 : $0 + "/") }
+        // Strip base path prefix from diagnostics if --base-path is set.
+        //
+        // SARIF defaults to the working directory when --base-path is omitted. Its
+        // artifactLocation entries declare uriBaseId "%SRCROOT%", so a URI is *defined* to be
+        // relative to the source root — emitting an absolute /Users/... path contradicts that,
+        // and GitHub code scanning silently fails to attach the annotation to any file. No
+        // other format assumes a root, so none of them get this default.
+        let effectiveBasePath = basePath ?? (format == .sarif ? FileManager.default.currentDirectoryPath : nil)
+        let resolvedBasePath: String? = effectiveBasePath.map { ($0.hasSuffix("/") ? $0 : $0 + "/") }
         let outputDiagnostics: [A11yDiagnostic] = resolvedBasePath.map { prefix in
             allDiagnostics.map { diag in
                 var d = diag

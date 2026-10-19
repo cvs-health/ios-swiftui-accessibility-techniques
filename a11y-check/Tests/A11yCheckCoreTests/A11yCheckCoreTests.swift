@@ -251,6 +251,85 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.first?.line, 13)
     }
 
+    /// A note after the rule IDs must not change which rules are suppressed. The whole piece
+    /// used to become the ID, so such a line silently suppressed nothing.
+    func testInlineSuppression_ignoresProseAfterTheRuleIDs() {
+        let withNote = """
+        import SwiftUI
+        struct S: View {
+            var body: some View {
+                // a11y-check:disable-next-line heading-trait-missing  (set on the container)
+                Text("Hours")
+                    .font(.themeHeadingXL)
+            }
+        }
+        """
+        XCTAssertTrue(analyze(withNote).filter { $0.ruleID == "heading-trait-missing" }.isEmpty)
+
+        let twoIDsAndNote = """
+        import SwiftUI
+        struct S: View {
+            var body: some View {
+                // a11y-check:disable-next-line heading-trait-missing, image-missing-label — handled
+                Text("Hours")
+                    .font(.themeHeadingXL)
+            }
+        }
+        """
+        XCTAssertTrue(analyze(twoIDsAndNote).filter { $0.ruleID == "heading-trait-missing" }.isEmpty)
+
+        // A note must not widen the suppression to rules that were not named.
+        let otherRuleOnly = """
+        import SwiftUI
+        struct S: View {
+            var body: some View {
+                // a11y-check:disable-next-line image-missing-label  (note)
+                Text("Hours")
+                    .font(.themeHeadingXL)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(otherRuleOnly).filter { $0.ruleID == "heading-trait-missing" }.count, 1)
+    }
+
+    /// Replacing a chained modifier must not take the view it is attached to with it.
+    func testSmallTouchTarget_fixKeepsTheViewItIsAttachedTo() {
+        let source = """
+        import SwiftUI
+        struct TouchView: View {
+            var body: some View {
+                Button("x") { }
+                    .frame(width: 20, height: 20)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "small-touch-target")
+        XCTAssertEqual(diags.count, 1)
+        let fixed = applyFix(diags[0], to: source)
+        XCTAssertTrue(fixed.contains("Button(\"x\") { }"), "the Button must survive the fix")
+        XCTAssertTrue(fixed.contains(".frame(width: 24, height: 24)"))
+        XCTAssertFalse(fixed.contains("width: 20"))
+    }
+
+    /// A page title is content. Offering a fix meant writing a literal "Page Title" into the
+    /// app and then reporting the file clean.
+    func testMissingNavigationTitle_offersNoAutofix() {
+        let source = """
+        import SwiftUI
+        struct NavView: View {
+            var body: some View {
+                NavigationStack {
+                    Text("body")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "missing-navigation-title")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertNil(diags[0].fix, "no autofix may invent a page title")
+        XCTAssertFalse(diags[0].suggestion?.contains("\"Page Title\"") ?? false)
+    }
+
     /// Apply a diagnostic's fix to the source it came from, the way AutoFixer would.
     private func applyFix(_ diag: A11yDiagnostic, to source: String) -> String {
         guard let fix = diag.fix else { return source }

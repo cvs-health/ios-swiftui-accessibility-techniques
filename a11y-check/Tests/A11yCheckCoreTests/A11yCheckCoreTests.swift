@@ -251,6 +251,116 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.first?.line, 13)
     }
 
+    /// A trait on an enclosing view already marks the heading; reporting the inner Text
+    /// would flag code that is correct.
+    func testHeadingTraitMissing_ancestorAlreadyCarriesHeaderTrait() {
+        let source = """
+        import SwiftUI
+        struct BenefitDetailView: View {
+            let title: String
+            var body: some View {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.themeHeadingXL)
+                    Text("savings")
+                }
+                .accessibilityAddTraits(.isHeader)
+                .accessibilityElement(children: .combine)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    /// A merging container is a single element, so the trait belongs on the container.
+    /// The finding is retargeted there rather than dropped — the defect is real.
+    func testHeadingTraitMissing_retargetsToChildMergingContainer() {
+        let source = """
+        import SwiftUI
+        struct BentoBoxCard: View {
+            let title: String
+            var body: some View {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(title)
+                        .font(.themeHeadingXL)
+                    Text("description")
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.line, 5, "should report the container, not the Text on line 6")
+        XCTAssertTrue(
+            diags.first?.message.contains("merges its children") ?? false,
+            "the message should explain that the trait belongs on the container"
+        )
+    }
+
+    /// Two headings inside one merging container are one container defect, not two.
+    func testHeadingTraitMissing_reportsMergingContainerOnce() {
+        let source = """
+        import SwiftUI
+        struct TwoHeadings: View {
+            var body: some View {
+                VStack {
+                    Text("first").font(.themeHeadingXL)
+                    Text("second").font(.themeHeadingM)
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 1)
+    }
+
+    /// Preview scaffolding is not shipping UI, so a missing trait there is not actionable.
+    func testHeadingTraitMissing_skipsPreviewCode() {
+        let macroSource = """
+        import SwiftUI
+        #Preview("Custom") {
+            VStack {
+                Text("Custom Header")
+                    .font(.themeHeadingXL)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(macroSource, ruleID: "heading-trait-missing").count, 0)
+
+        let providerSource = """
+        import SwiftUI
+        struct MyView_Previews: PreviewProvider {
+            static var previews: some View {
+                Text("Heading")
+                    .font(.themeHeadingXL)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(providerSource, ruleID: "heading-trait-missing").count, 0)
+    }
+
+    /// The skip must not leak out of previews: a real view in the same file still reports.
+    func testHeadingTraitMissing_stillReportsShippingViewAlongsidePreview() {
+        let source = """
+        import SwiftUI
+        struct RealView: View {
+            var body: some View {
+                Text("Real Heading")
+                    .font(.themeHeadingXL)
+            }
+        }
+        #Preview {
+            RealView()
+        }
+        """
+        let diags = analyze(source, ruleID: "heading-trait-missing")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.line, 4)
+    }
+
     /// `titleFont` holding a paragraph token must not report — the name is not the evidence.
     func testHeadingTraitMissing_variableNameDoesNotOverrideItsValue() {
         let source = """

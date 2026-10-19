@@ -389,6 +389,16 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`heading-trait-missing` now reads the enclosing view, and skips preview scaffolding.** The rule inspected only the `Text`'s own modifier chain, so a heading marked up correctly one level out was reported anyway. Classifying all 216 findings on a real app put 27 of them in that bucket, and all 27 were wrong or misplaced:
+
+  - **A trait on an ancestor is no longer reported.** `VStack { Text(title).font(.themeHeadingXL) }.accessibilityAddTraits(.isHeader)` is correct markup; the rule flagged the inner `Text`. The pre-iOS 14 `.accessibility(addTraits:)` spelling counts too. The ancestor walk starts from the Text's `chainRoot`, not the Text node, because a Text's own modifiers are its syntactic ancestors — starting lower would read `.isHeader` on the Text itself as though a parent had supplied it.
+
+  - **A child-merging container is reported instead of its `Text`.** Under `.accessibilityElement(children: .combine)` the children are not separate accessibility elements, so the trait belongs on the container. The finding is *retargeted* rather than dropped — the container genuinely lacks the trait, so the defect is real and was only ever on the wrong line. Multiple headings inside one merging container report it once.
+
+  - **`#Preview`, `PreviewProvider` and `*_Previews` bodies are skipped.** Preview code is sample scaffolding, not shipping UI, so a missing trait there is not actionable. Detection is structural, not by name: a real `View` that merely has "Preview" in its type name still reports.
+
+  On the app used for measurement this took 216 findings to 195 — 15 preview findings and 2 redundant ones removed, and 25 misplaced `Text` findings collapsed into 20 correctly-located container findings. Genuinely-wrong findings went from roughly 23% to 3%; what remains is a handful of monetary values styled with a heading token, which is semantic and wants an inline suppression rather than a rule change.
+
 - **`textfield-missing-label` no longer loses a finding to a labelled sibling of an unlisted type.** Its source-text fallback — there for modifier chains split by `#if` — scanned 2 KB for `.accessibilityLabel(` and stopped only at six hardcoded constructors, so a labelled view of any other type let the scan run past it and claim its label for the field. The field then looked labelled and went unreported. A `ProgressView` beside a chat input hid a real defect that way.
 
   The fallback now decides "another view starts first" from the detected views' AST positions instead of a name list, which also means wrappers mapped in through `view_aliases` are counted. +2 findings, one of which is the chat input that surfaced it.

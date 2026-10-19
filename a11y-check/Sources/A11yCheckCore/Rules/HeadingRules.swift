@@ -72,9 +72,17 @@ public struct HeadingTraitMissingRule: A11yRule {
         let fontConstants = FontConstantCollector.collect(from: syntax)
         var diagnostics: [A11yDiagnostic] = []
 
+        // Containers that merge their children and hold heading-font text but no heading trait.
+        // Reported once each, keyed by source offset, however many Texts they contain.
+        var mergedContainers: [(offset: Int, node: FunctionCallExprSyntax)] = []
+        var seenContainerOffsets: Set<Int> = []
+
         for view in visitor.views(ofType: "Text") {
             // Skip if this Text is inside a Button/Link/Toggle (it's a control label, not a heading)
             if isTextInsideLabelConsumer(view.callExpr) { continue }
+
+            // Skip preview-only scaffolding — not shipping UI, so not an actionable defect
+            if isInsidePreviewCode(Syntax(view.callExpr)) { continue }
 
             // Skip long or multi-line text (paragraphs) — only flag short, single-line text as potential headings
             if !isShortSingleLineText(view.firstStringArgument) { continue }
@@ -102,19 +110,43 @@ public struct HeadingTraitMissingRule: A11yRule {
             }
 
             if !hasHeaderTrait && !hasOldHeaderTrait {
-                let fix = makeModifierFix(
-                    chainRoot: view.chainRoot,
-                    modifier: ".accessibilityAddTraits(.isHeader)",
-                    sourceFile: syntax
-                )
-                diagnostics.append(makeDiagnostic(
-                    message: "Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading.",
-                    node: view.callExpr,
-                    context: context,
-                    fix: fix,
-                    suggestion: "Add .accessibilityAddTraits(.isHeader)"
-                ))
+                switch ancestorHeadingContext(from: view.chainRoot) {
+                case .alreadyMarked:
+                    // A parent supplies the trait; flagging the Text would report correct code.
+                    continue
+
+                case .combinedIntoAncestor(let container):
+                    // The Text is not its own element. Report the container once instead —
+                    // the defect is real, it just is not on this line.
+                    let offset = container.positionAfterSkippingLeadingTrivia.utf8Offset
+                    if seenContainerOffsets.insert(offset).inserted {
+                        mergedContainers.append((offset, container))
+                    }
+
+                case .none:
+                    let fix = makeModifierFix(
+                        chainRoot: view.chainRoot,
+                        modifier: ".accessibilityAddTraits(.isHeader)",
+                        sourceFile: syntax
+                    )
+                    diagnostics.append(makeDiagnostic(
+                        message: "Text with heading font style is missing .accessibilityAddTraits(.isHeader). VoiceOver users won't be able to navigate to this heading.",
+                        node: view.callExpr,
+                        context: context,
+                        fix: fix,
+                        suggestion: "Add .accessibilityAddTraits(.isHeader)"
+                    ))
+                }
             }
+        }
+
+        for container in mergedContainers {
+            diagnostics.append(makeDiagnostic(
+                message: "This view merges its children with .accessibilityElement(children: .combine) and contains heading-font text, but is missing .accessibilityAddTraits(.isHeader). The trait belongs on this container, because the merged children are not separate accessibility elements.",
+                node: container.node,
+                context: context,
+                suggestion: "Add .accessibilityAddTraits(.isHeader) to this container"
+            ))
         }
         return diagnostics
     }
@@ -196,6 +228,84 @@ public struct HeadingTraitMissingRule: A11yRule {
         guard let content = content else { return true }
         if content.contains("\n") { return false }
         return content.count <= Self.maxHeadingLength
+    }
+
+    /// What an enclosing view already says about this Text's heading status.
+    ///
+    /// The rule otherwise reads only the Text's own modifier chain, which reports code that
+    /// marks up headings correctly one level out. Both cases below were measured on a real app:
+    /// together they were 27 of 216 findings, and all 27 were wrong or mislocated.
+    enum AncestorHeadingContext {
+        case none
+        /// An ancestor already carries `.isHeader`; adding it here would duplicate the trait.
+        case alreadyMarked
+        /// An ancestor merges its children into a single element, so the Text is not its own
+        /// accessibility element — the trait belongs on that ancestor and not on the Text.
+        case combinedIntoAncestor(FunctionCallExprSyntax)
+    }
+
+    /// Walk the enclosing view chain looking for a heading trait or a child-merging container.
+    ///
+    /// Starts from the Text's `chainRoot` rather than the Text node, because a Text's own
+    /// modifiers are its syntactic ancestors — starting lower would read `.isHeader` on the
+    /// Text itself as though a parent had supplied it.
+    ///
+    /// `.alreadyMarked` wins immediately; a merge keeps walking, since an ancestor further out
+    /// may still mark the combined element.
+    func ancestorHeadingContext(from chainRoot: ExprSyntax) -> AncestorHeadingContext {
+        var current: Syntax? = Syntax(chainRoot).parent
+        var merged: FunctionCallExprSyntax?
+
+        while let node = current {
+            // A declaration boundary ends the view context: another view's body is not an ancestor.
+            if node.is(FunctionDeclSyntax.self) || node.is(StructDeclSyntax.self)
+                || node.is(ClassDeclSyntax.self) {
+                break
+            }
+            if let call = node.as(FunctionCallExprSyntax.self),
+               let member = call.calledExpression.as(MemberAccessExprSyntax.self) {
+                let name = member.declName.baseName.text
+                let arguments = call.arguments.map(\.description).joined()
+
+                if name == "accessibilityAddTraits", arguments.contains("isHeader") {
+                    return .alreadyMarked
+                }
+                // Pre-iOS 14 spelling: .accessibility(addTraits: .isHeader)
+                if name == "accessibility", arguments.contains("isHeader") {
+                    return .alreadyMarked
+                }
+                if name == "accessibilityElement", arguments.contains("combine"), merged == nil {
+                    merged = call
+                }
+            }
+            current = node.parent
+        }
+        return merged.map { .combinedIntoAncestor($0) } ?? .none
+    }
+
+    /// True if the node sits in preview-only code: a `#Preview` macro, a `PreviewProvider`
+    /// conformer, or a `*_Previews` struct.
+    ///
+    /// Preview bodies are sample scaffolding rather than shipping UI, so a missing trait there
+    /// is not a defect anyone can act on. This was 16 of 216 findings on a real app.
+    func isInsidePreviewCode(_ node: Syntax) -> Bool {
+        var current: Syntax? = node
+        while let n = current {
+            if let decl = n.as(MacroExpansionDeclSyntax.self), decl.macroName.text == "Preview" {
+                return true
+            }
+            if let expr = n.as(MacroExpansionExprSyntax.self), expr.macroName.text == "Preview" {
+                return true
+            }
+            if let structDecl = n.as(StructDeclSyntax.self) {
+                if structDecl.name.text.hasSuffix("_Previews") { return true }
+                let inherited = structDecl.inheritanceClause?.inheritedTypes
+                    .map { $0.type.trimmedDescription } ?? []
+                if inherited.contains("PreviewProvider") { return true }
+            }
+            current = n.parent
+        }
+        return false
     }
 
     /// Returns true if the given Text node is inside a Button, Link, or Toggle (used as that control's label).

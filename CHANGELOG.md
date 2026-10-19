@@ -475,10 +475,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Known limits
 
-Sampling the 211 findings by hand turned up two classes this rule cannot distinguish, both reported rather than silently filtered:
+Sampling the 211 findings by hand turned up two classes this rule cannot distinguish, both reported rather than silently filtered. **Both have since been addressed — see Fixed, above.** They are kept here because what was and was not settled matters:
 
-- **16 sit in `#Preview` / `PreviewProvider` bodies.** Preview code is flagged by every rule in the tool, so suppressing it for this one rule alone would be inconsistent; it needs a tool-wide decision.
-- **27 sit within ±12 lines of an `.accessibilityElement(children: .combine)`.** Whether `.isHeader` on a child of a combined element reaches the merged element is a device question, not a source question, and it was not tested here — so no guard was added on an untested assumption.
+- ~~**16 sit in `#Preview` / `PreviewProvider` bodies.**~~ Preview bodies are now skipped, but only for this rule — the "needs a tool-wide decision" reasoning still stands for every other rule. The real count was 15: the 16th was a `View` whose type name merely contains "Preview", and it correctly still reports.
+- ~~**27 sit within ±12 lines of an `.accessibilityElement(children: .combine)`.**~~ The original caution was right not to assume child-to-merged-element propagation without a device test, and **that test still has not been run.** The guard added sidesteps the question rather than answering it: instead of suppressing the child, the finding is *retargeted to the container*, which needs `.isHeader` either way — so the fix does not depend on how propagation behaves. The ±12-line proximity heuristic was replaced by a real ancestor walk, which resolved the count to 25 Text findings collapsing into 20 container findings.
+
+One limit this introduced, not yet fixed:
+
+- **`--fix` is not safe to run in bulk for this rule.** It relocates a trailing comment onto the line it inserts, so `.font(viewModel.titleFont) // swiftlint:disable:this no_swiftui_font` becomes `.font(viewModel.titleFont)` followed by `.accessibilityAddTraits(.isHeader) // swiftlint:disable:this no_swiftui_font`. The font line loses its suppression and the comment now silences a rule on a line that never triggered it — under `swiftlint --strict` that fails the build. Found on `CarePaths+CardView.swift:116` while checking the fix across six real files; the other five were a clean single-line insert.
 
 A font heuristic also cannot tell a structural heading from display text that borrows a heading token: avatar initials styled `.themeHeadingXXL` report, and correctly so by the rule's own definition. `heading_font_deny` is the wrong instrument for that, since the token is a real heading elsewhere. Value resolution narrows this to genuinely inline tokens — anything injected as a variable is now judged on what it holds.
 

@@ -1264,6 +1264,29 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "small-touch-target").count, 0)
     }
 
+    /// The message must not assert a conformance failure the checker cannot establish: a
+    /// 16pt target conforms under 2.5.8's Spacing exception, which source cannot settle.
+    func testSmallTouchTarget_messageNamesTheSpacingException() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("x") { }
+                    .frame(width: 16, height: 16)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "small-touch-target")
+        XCTAssertEqual(diags.count, 1)
+        let message = diags[0].message
+        XCTAssertTrue(message.contains("smaller than"), "should not claim a flat failure: \(message)")
+        XCTAssertTrue(message.contains("Spacing exception"), "should name the exception: \(message)")
+        XCTAssertTrue(
+            message.contains("a11y-check:disable-next-line small-touch-target"),
+            "should say how to clear it when the exception applies: \(message)"
+        )
+    }
+
     /// A frame on the button's own chain is the target, and still reports.
     func testSmallTouchTarget_reportsFrameOnTheButtonsOwnChain() {
         let source = """

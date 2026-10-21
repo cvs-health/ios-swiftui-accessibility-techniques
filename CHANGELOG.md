@@ -389,6 +389,12 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`small-touch-target` no longer claims a conformance failure it cannot establish.** The message read "Touch target 16x16pt is below the 24x24pt minimum (WCAG 2.5.8)", stated flatly. But 2.5.8 carries five exceptions and source settles none of them — most importantly **Spacing**, under which an undersized target conforms if no other target falls inside a 24pt circle centred on it. That depends on sibling positions at runtime, which stack spacing, Dynamic Type and device width all move, so a 16pt control can be perfectly conforming and the rule was calling it a failure.
+
+  The finding still reports — staying silent unless every exception is excluded would mean never reporting an undersized target at all, since none are decidable here. What changed is that it now says the target is *smaller than* the minimum, names what would have to be true for it to pass, and gives the suppression directive for when it does. The rule's doc comment records all five exceptions.
+
+  Also corrected: the rule's own `description` claimed "Padding and spacing count toward the target size" while the implementation only ever read padding.
+
 - **Preview code is filtered tool-wide.** Preview scaffolding never ships, so no user can meet an accessibility defect in it and a finding there is not something anyone can act on. This had been decided rule by rule: `heading-trait-missing`, `missing-navigation-title`, `button-label-contains-role`, `duplicate-button-label`, `image-missing-label` and `zstack-order-confusing` each grew their own preview handling, in six different shapes, and a seventh was on its way. A single `PreviewCodeFilter` now drops diagnostics falling inside preview declarations, as a post-pass beside the existing inline-suppression filter — less code than the six, and predictable across all 45 rules.
 
   Three forms are recognised: the `#Preview` macro in both its declaration and expression spellings, a `PreviewProvider` conformer, and the conventional `*_Previews` suffix. Detection stays structural: a shipping `View` merely *called* `PreviewCardView` is real UI and its findings are kept, which a test pins.

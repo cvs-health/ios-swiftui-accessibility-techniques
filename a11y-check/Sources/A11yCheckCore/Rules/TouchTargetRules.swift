@@ -8,6 +8,22 @@ import SwiftSyntax
 /// constrained below 24pt — if either dimension is undefined or `.infinity`,
 /// spacing in that direction counts toward the target size per WCAG 2.5.8.
 ///
+/// **A finding here is a presumption, not a determination.** 2.5.8 carries five exceptions, and
+/// source alone settles none of them:
+///
+/// - **Spacing** — an undersized target conforms if no other target falls inside a 24pt circle
+///   centred on it. That depends on sibling positions at runtime, which stack spacing, Dynamic
+///   Type and device width all move. This is the common reason an undersized control is
+///   nonetheless conforming.
+/// - **Equivalent** — the same function is reachable from another, large-enough control.
+/// - **Inline** — the target sits within a sentence or its line-height.
+/// - **User agent control** / **Essential** — the size is not the author's to change.
+///
+/// So the diagnostic says the target is *smaller than* the minimum and names what would have to
+/// be true for it to pass, rather than asserting a conformance failure the checker cannot
+/// establish. The alternative — staying silent unless every exception is excluded — would mean
+/// never reporting an undersized target at all, since none of them are decidable here.
+///
 /// WCAG 2.5.8 Target Size (Minimum)
 /// Reference: TouchTargetSize.swift — bad example uses .frame(width: 18, height: 18)
 public struct SmallTouchTargetRule: A11yRule {
@@ -16,7 +32,7 @@ public struct SmallTouchTargetRule: A11yRule {
     public let severity = A11ySeverity.error
     public let impact = A11yImpact.serious
     public let wcagCriteria = ["2.5.8"]
-    public let description = "Interactive elements should have a minimum touch target size of 24x24 points (WCAG 2.5.8 Level AA). Padding and spacing count toward the target size. Only flags when both dimensions are explicitly constrained below 24pt."
+    public let description = "Interactive elements should have a minimum touch target size of 24x24 points (WCAG 2.5.8 Level AA). Padding on the element counts toward the size. Only flags when both dimensions are explicitly constrained below 24pt — and an undersized target may still conform under the criterion's Spacing exception, which source alone cannot settle."
 
     public init() {}
 
@@ -107,11 +123,11 @@ public struct SmallTouchTargetRule: A11yRule {
                         sourceFile: syntax
                     )
                     diagnostics.append(makeDiagnostic(
-                        message: "Touch target \(Int(rawWidth!))x\(Int(rawHeight!))pt is below the \(Int(Self.minimumSize))x\(Int(Self.minimumSize))pt minimum (WCAG 2.5.8).",
+                        message: "Touch target \(Int(rawWidth!))x\(Int(rawHeight!))pt is smaller than the \(Int(Self.minimumSize))x\(Int(Self.minimumSize))pt minimum (WCAG 2.5.8). This still conforms if the Spacing exception applies — no other target within a \(Int(Self.minimumSize))pt circle centred on this one — which cannot be determined from source. Confirm on screen; if the spacing is there, suppress this line with // a11y-check:disable-next-line small-touch-target.",
                         node: frameMod.reportNode,
                         context: context,
                         fix: fix,
-                        suggestion: "Use .frame(width: 24, height: 24) or add padding for spacing"
+                        suggestion: "Enlarge to .frame(width: 24, height: 24) or add padding, unless neighbouring targets are already 24pt away"
                     ))
                 }
             }

@@ -27,16 +27,45 @@ public struct SmallTouchTargetRule: A11yRule {
         let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
-        // Check Buttons and images with tap gestures
-        let interactiveViews = visitor.views(ofType: "Button") + visitor.views(ofType: "Image")
+        // Buttons, and images that are themselves tappable.
+        //
+        // Every Image used to be included, despite the intent stated here. An icon inside a
+        // button's `label:` closure is a separate modifier chain, so its own small frame was
+        // read as a touch target — `Image(systemName:).frame(width: 14, height: 14)` inside a
+        // button framed at 24pt reported a 14pt target, when what the member taps is the
+        // button. An image is only a target if it carries the gesture.
+        let tappableImages = visitor.views(ofType: "Image").filter { image in
+            image.modifiers.hasModifier("onTapGesture")
+        }
+        let interactiveViews = visitor.views(ofType: "Button") + tappableImages
+
+        // One diagnostic per source position. A chain can be reached twice — a small icon
+        // inside a button is detected both as an Image and as the Button's content — which
+        // reported the same line twice on a real app.
+        var reportedOffsets = Set<Int>()
 
         for view in interactiveViews {
-            let frameMods = view.modifiers.modifiers(named: "frame")
+            // Only a frame applied to this view decides its touch target.
+            //
+            // ModifierCollector descends into the view's own closures, so a button's frame list
+            // also contained the icon inside its `label:` closure — and that icon's
+            // `.frame(width: 14, height: 14)` was reported as the button's target even though
+            // the button itself was framed at 24pt and compliant. Collection order does not
+            // separate them either: the outer `.frame(24)` is visited before the nested one.
+            //
+            // A modifier genuinely applied to this view sits after the view's entire call,
+            // closures included, so position is what distinguishes them.
+            let callEnd = view.callExpr.endPosition.utf8Offset
+            let ownFrames = view.modifiers.modifiers(named: "frame").filter { mod in
+                mod.reportNode.positionAfterSkippingLeadingTrivia.utf8Offset >= callEnd
+            }
+            // Later modifiers wrap earlier ones, so the last of the view's own frames wins.
+            let outermostFrame = ownFrames.last.map { [$0] } ?? []
 
             // Determine padding on this element (adds to effective touch target)
             let padding = extractPadding(from: view.modifiers)
 
-            for frameMod in frameMods {
+            for frameMod in outermostFrame {
                 let argText = frameMod.arguments.map(\.text).joined(separator: ", ")
 
                 // Check if dimensions are .infinity (not a constraint)
@@ -65,6 +94,9 @@ public struct SmallTouchTargetRule: A11yRule {
                 // If one dimension is .infinity or undefined, spacing in that direction
                 // counts toward the target size per WCAG 2.5.8.
                 if widthConstrained && widthTooSmall && heightConstrained && heightTooSmall {
+                    let offset = frameMod.reportNode.positionAfterSkippingLeadingTrivia.utf8Offset
+                    guard reportedOffsets.insert(offset).inserted else { continue }
+
                     // Replace only the .frame(...) call. frameMod.callExpr spans the whole
                     // chained expression including the Button, so replacing that node deleted
                     // the view and left a file that would not compile.

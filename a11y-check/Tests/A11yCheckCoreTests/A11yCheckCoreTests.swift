@@ -1085,6 +1085,97 @@ final class A11yCheckCoreTests: XCTestCase {
         )
     }
 
+    // MARK: - small-touch-target: whose frame is the target
+
+    /// An icon inside a button's `label:` closure is not the touch target; the button is.
+    func testSmallTouchTarget_ignoresIconInsideAnAdequateButton() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button { clear() } label: {
+                    Image(systemName: "xmark")
+                        .frame(width: 14, height: 14)
+                }
+                .buttonStyle(BorderlessButtonStyle())
+                .frame(width: 24, height: 24)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "small-touch-target").count, 0)
+    }
+
+    /// A frame on the button's own chain is the target, and still reports.
+    func testSmallTouchTarget_reportsFrameOnTheButtonsOwnChain() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("x") { }
+                    .buttonStyle(.plain)
+                    .frame(width: 16, height: 16)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "small-touch-target").count, 1)
+    }
+
+    /// A plain decorative image is not a target. One carrying the gesture is.
+    func testSmallTouchTarget_onlyImagesWithAGestureAreTargets() {
+        let decorative = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Image(decorative: "heart").resizable().frame(width: 12, height: 12)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(decorative, ruleID: "small-touch-target").count, 0)
+
+        let tappable = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Image(systemName: "gear")
+                    .frame(width: 16, height: 16)
+                    .onTapGesture { open() }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(tappable, ruleID: "small-touch-target").count, 1)
+    }
+
+    /// One diagnostic per position: a chain reachable as both Button and Image reported twice.
+    func testSmallTouchTarget_reportsEachPositionOnce() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Image(systemName: "gear")
+                    .frame(width: 16, height: 16)
+                    .onTapGesture { open() }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "small-touch-target")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(Set(diags.map(\.line)).count, diags.count)
+    }
+
+    /// The rule's own goal is a "Link" announcement; the trait achieves it.
+    func testButtonUsedAsLink_acceptsExplicitLinkTrait() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("Terms") { openURL(url) }
+                    .accessibilityAddTraits(.isLink)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "button-used-as-link").count, 0)
+    }
+
     // MARK: - tap-gesture-missing-button-trait: equivalent and removed traits
 
     /// `.isLink` announces an interactive role too, and is the accurate one for a tap that

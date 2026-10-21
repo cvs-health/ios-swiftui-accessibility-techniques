@@ -28,6 +28,14 @@ public struct ButtonUsedAsLinkRule: A11yRule {
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Button") {
+            // The rule exists so VoiceOver announces "Link" rather than "Button". If the author
+            // already added the trait, that is achieved — asking them to swap the view type as
+            // well is a style preference, not an accessibility defect.
+            let announcesLink = view.modifiers.modifiers(named: "accessibilityAddTraits").contains { mod in
+                mod.arguments.contains { $0.text.contains("isLink") }
+            }
+            if announcesLink { continue }
+
             // Check the trailing closure (action body)
             guard let body = view.callExpr.trailingClosure else { continue }
             let bodyText = body.trimmedDescription

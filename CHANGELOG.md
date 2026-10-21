@@ -389,6 +389,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`small-touch-target` measures the view's own frame, and reports each position once.** Two bugs, one cause: `ModifierCollector` descends into a view's closures, so a button's frame list also held the icon inside its `label:` closure. `Image(enterpriseNamed:).frame(width: 14, height: 14)` inside a button framed at 24pt was reported as a 14pt touch target, when what the member taps is the compliant button. Collection order does not separate them — the outer `.frame(24)` is visited *before* the nested one — so the rule now keeps only frames positioned after the view's entire call, closures included, and takes the last of those.
+
+  The same overlap reported some positions twice, once via the Button and once via the Image; diagnostics are now deduplicated by source offset.
+
+  The rule also said it checked "images with tap gestures" but included every `Image`, so decorative icons were treated as touch targets. An image is a target only if it carries the gesture. On the app used for measurement: 15 findings to 1, every drop hand-verified as not a touch target — icons inside 24pt buttons, an `Image(decorative:)` badge, an icon already `.accessibilityHidden(true)`. The one survivor is a 16pt frame on a button's own chain.
+
+- **`button-used-as-link` accepts an explicit link trait.** The rule exists so VoiceOver announces "Link" rather than "Button"; where the author had already added `.accessibilityAddTraits(.isLink)`, that is achieved, and asking them to swap the view type too is a style preference rather than an accessibility defect.
+
 - **`tap-gesture-missing-button-trait` accepts an equivalent trait, and honours an explicit removal.** It credited only `.accessibilityAddTraits(.isButton)`, so two correct patterns were reported:
 
   `.accessibilityAddTraits(.isLink)` beside an external-link tap. The requirement is that a tappable element announces an *interactive role*, and for something opening a URL "Link" is the more accurate one — `.isLink` now counts.

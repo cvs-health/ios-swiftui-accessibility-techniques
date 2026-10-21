@@ -1085,6 +1085,147 @@ final class A11yCheckCoreTests: XCTestCase {
         )
     }
 
+    // MARK: - duplicate-button-label: mutually exclusive branches
+
+    /// `if`/`else` renders one button or the other, never both, so VoiceOver can never
+    /// encounter the pair.
+    func testDuplicateButtonLabel_ignoresIfElseBranches() {
+        let source = """
+        import SwiftUI
+        struct DebugView: View {
+            let token: String?
+            var body: some View {
+                Group {
+                    if token == nil {
+                        Button("Load Plan Groups") { }
+                    } else {
+                        Button("Load Plan Groups") { }
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "duplicate-button-label").count, 0)
+    }
+
+    /// Siblings in the same branch still collide on screen.
+    func testDuplicateButtonLabel_flagsDuplicatesWithinOneBranch() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            let on: Bool
+            var body: some View {
+                Group {
+                    if on {
+                        HStack {
+                            Button("Load") { }
+                            Button("Load") { }
+                        }
+                    } else {
+                        Text("off")
+                    }
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "duplicate-button-label")
+        XCTAssertEqual(diags.count, 2)
+        XCTAssertTrue(
+            diags[0].message.contains("appears 2 times"),
+            "count should be the buttons that can coexist: \(diags[0].message)"
+        )
+    }
+
+    /// Different `switch` cases are arms of one conditional, same as `if`/`else`.
+    func testDuplicateButtonLabel_ignoresSeparateSwitchCases() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            enum State { case a, b }
+            let state: State
+            var body: some View {
+                Group {
+                    switch state {
+                    case .a: Button("Retry") { }
+                    case .b: Button("Retry") { }
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "duplicate-button-label").count, 0)
+    }
+
+    /// `else if` chains: the first and last arms are still mutually exclusive.
+    func testDuplicateButtonLabel_ignoresElseIfChain() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            let n: Int
+            var body: some View {
+                Group {
+                    if n == 0 {
+                        Button("Go") { }
+                    } else if n == 1 {
+                        Button("Go") { }
+                    } else {
+                        Button("Go") { }
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "duplicate-button-label").count, 0)
+    }
+
+    /// Unrelated conditionals are not exclusive — both can be true at once.
+    func testDuplicateButtonLabel_flagsAcrossIndependentConditionals() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            let showA: Bool
+            let showB: Bool
+            var body: some View {
+                VStack {
+                    if showA { Button("Save") { } }
+                    if showB { Button("Save") { } }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "duplicate-button-label").count, 2)
+    }
+
+    /// Three buttons where only two can coexist: the exclusive one is dropped and the count
+    /// reported is two, not three.
+    func testDuplicateButtonLabel_countsOnlySimultaneousButtons() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            let on: Bool
+            var body: some View {
+                VStack {
+                    Button("Edit") { }
+                    Group {
+                        if on {
+                            Button("Edit") { }
+                        } else {
+                            Text("off")
+                        }
+                    }
+                    Button("Edit") { }
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "duplicate-button-label")
+        XCTAssertEqual(diags.count, 3, "all three can pair with at least one other")
+        XCTAssertTrue(
+            diags.allSatisfy { $0.message.contains("appears") },
+            "every finding should state a count"
+        )
+    }
+
     /// A project must not be able to redefine a type the rules already know.
     func testViewAliases_cannotShadowABuiltInViewName() {
         let source = """

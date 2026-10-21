@@ -30,6 +30,11 @@ import SwiftSyntax
 /// directly inside ForEach. Components whose buttons are inside a child view that is then
 /// used in ForEach require cross-file analysis and must be audited manually.
 ///
+/// Buttons in mutually exclusive branches are not duplicates. `if token == nil { Button("Load") }
+/// else { Button("Load") }` renders one button, never two, so VoiceOver can never encounter the
+/// pair — reporting it sends someone to disambiguate labels that already are unambiguous. Counting
+/// textual occurrences without reading the surrounding control flow is how that happened.
+///
 /// WCAG 2.4.6 Headings and Labels
 /// CVS test case: TLASTIATI-1552 — "Check that each repeated control with the same label text
 /// speaks a unique and specific accessibility label to VoiceOver."
@@ -42,6 +47,71 @@ public struct DuplicateButtonLabelRule: A11yRule {
     public let description = "Repeated Buttons with the same visible label must each have a unique .accessibilityLabel() so VoiceOver users can distinguish them. Fails WCAG 2.4.6b Descriptive Labels."
 
     public init() {}
+
+    // MARK: - Mutually exclusive branches
+
+    /// One conditional a node sits inside, and which arm of it.
+    ///
+    /// `branch` only needs to differ between arms of the same conditional; its value carries no
+    /// meaning on its own.
+    struct BranchStep: Equatable {
+        let conditional: SyntaxIdentifier
+        let branch: String
+    }
+
+    /// Every conditional arm enclosing `node`, innermost first.
+    ///
+    /// `else if` chains compose without special handling: a node in the `else if` body records a
+    /// step for the inner `if` and, because that inner `if` *is* the outer one's else-arm, another
+    /// step putting it on the outer `else` side.
+    static func branchPath(from node: Syntax) -> [BranchStep] {
+        var steps: [BranchStep] = []
+        var child = node
+        var cursor = node.parent
+
+        while let parent = cursor {
+            if let ifExpr = parent.as(IfExprSyntax.self) {
+                if Syntax(ifExpr.body).id == child.id {
+                    steps.append(BranchStep(conditional: ifExpr.id, branch: "then"))
+                } else if let elseBody = ifExpr.elseBody {
+                    let elseSyntax: Syntax
+                    switch elseBody {
+                    case .codeBlock(let block): elseSyntax = Syntax(block)
+                    case .ifExpr(let nested): elseSyntax = Syntax(nested)
+                    }
+                    if elseSyntax.id == child.id {
+                        steps.append(BranchStep(conditional: ifExpr.id, branch: "else"))
+                    }
+                }
+            } else if let caseSyntax = parent.as(SwitchCaseSyntax.self) {
+                // SwitchCaseSyntax -> SwitchCaseListSyntax -> SwitchExprSyntax. Each case is its
+                // own arm, so the case's identity is a sufficient discriminator.
+                if let switchExpr = parent.parent?.parent?.as(SwitchExprSyntax.self) {
+                    steps.append(BranchStep(
+                        conditional: switchExpr.id,
+                        branch: "case-\(caseSyntax.id.hashValue)"
+                    ))
+                }
+            }
+            child = parent
+            cursor = parent.parent
+        }
+        return steps
+    }
+
+    /// Whether two nodes can be rendered at the same time.
+    ///
+    /// False only when they share a conditional and sit in different arms of it. Nodes in
+    /// unrelated conditionals can both render, so an empty overlap means they coexist.
+    static func canCoexist(_ lhs: [BranchStep], _ rhs: [BranchStep]) -> Bool {
+        for step in lhs {
+            if let opposing = rhs.first(where: { $0.conditional == step.conditional }),
+               opposing.branch != step.branch {
+                return false
+            }
+        }
+        return true
+    }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         var diagnostics: [A11yDiagnostic] = []
@@ -73,12 +143,26 @@ public struct DuplicateButtonLabelRule: A11yRule {
         }
 
         for (labelText, buttons) in buttonsByLabel where buttons.count > 1 {
-            for button in buttons {
+            // Two buttons are only duplicates if they can be on screen together. Buttons in
+            // different branches of the same `if`/`switch` never are.
+            let paths = buttons.map { Self.branchPath(from: Syntax($0.callExpr)) }
+
+            for (index, button) in buttons.enumerated() {
+                let coexisting = buttons.indices.filter { other in
+                    other != index && Self.canCoexist(paths[index], paths[other])
+                }
+                // Nothing this button can appear alongside — not a duplicate.
+                guard !coexisting.isEmpty else { continue }
+
                 let position = button.callExpr.positionAfterSkippingLeadingTrivia.utf8Offset
                 guard !flaggedPositions.contains(position) else { continue }
                 flaggedPositions.insert(position)
+
+                // Count only the buttons that can actually appear together, not every textual
+                // occurrence, so the number in the message is one a reader can verify on screen.
+                let simultaneous = coexisting.count + 1
                 diagnostics.append(makeDiagnostic(
-                    message: "Button(\"\(labelText)\") appears \(buttons.count) times in this file with the same label and no .accessibilityLabel(). VoiceOver users cannot distinguish them. Add unique context to each (e.g. \"\(labelText) for [item name]\"). [WCAG 2.4.6b]",
+                    message: "Button(\"\(labelText)\") appears \(simultaneous) times in this file with the same label and no .accessibilityLabel(). VoiceOver users cannot distinguish them. Add unique context to each (e.g. \"\(labelText) for [item name]\"). [WCAG 2.4.6b]",
                     node: button.callExpr,
                     context: context,
                     suggestion: "Add .accessibilityLabel(\"\\(labelText) for [specific context]\")"

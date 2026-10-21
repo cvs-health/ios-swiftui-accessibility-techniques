@@ -50,6 +50,32 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
         public func hasNamedArgument(_ label: String) -> Bool {
             callExpr.arguments.contains { $0.label?.text == label }
         }
+
+        /// Whether a leading unlabelled argument is present and is not an empty string.
+        ///
+        /// For `Picker`, `Toggle` and friends the first positional argument *is* the visible
+        /// label, and it is routinely an expression rather than a literal:
+        /// `Toggle(additionalDetails.accidentTitle, isOn: $x)`,
+        /// `Picker(viewModel.title, selection: $y)`. `firstStringArgument` is nil for those,
+        /// so a rule testing it for emptiness concludes there is no label — which flagged 31
+        /// correctly-labelled controls on one real app.
+        ///
+        /// An expression the checker cannot read is not evidence of an absent label. Only an
+        /// explicitly empty literal is, and that is still reported.
+        public var hasNonEmptyLeadingLabelArgument: Bool {
+            guard let first = callExpr.arguments.first, first.label == nil else { return false }
+            if let literal = first.expression.as(StringLiteralExprSyntax.self) {
+                let text = literal.segments
+                    .compactMap { $0.as(StringSegmentSyntax.self)?.content.text }
+                    .joined()
+                // An interpolated literal has no plain segments but is still a label.
+                if literal.segments.contains(where: { $0.is(ExpressionSegmentSyntax.self) }) {
+                    return true
+                }
+                return !text.trimmingCharacters(in: .whitespaces).isEmpty
+            }
+            return true
+        }
     }
 
     /// All detected views in the file.

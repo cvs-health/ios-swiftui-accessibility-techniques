@@ -280,6 +280,10 @@ public struct PickerMissingLabelRule: A11yRule {
             let mods = view.modifiers
             if mods.hasModifier("accessibilityLabel") { continue }
 
+            // The first positional argument is the visible label, literal or not —
+            // `Picker(viewModel.title, selection:)` is labelled.
+            if view.hasNonEmptyLeadingLabelArgument { continue }
+
             let inlineLabel = view.firstStringArgument ?? ""
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
                 diagnostics.append(makeDiagnostic(

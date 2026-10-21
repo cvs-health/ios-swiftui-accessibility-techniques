@@ -87,6 +87,13 @@ public struct ImageMissingLabelRule: A11yRule {
             // the image was injected from outside and the caller controls its accessibility.
             if enclosingStructHasImageProperty(view.callExpr) { continue }
 
+            // Skip an Image being produced as an `Image` *value* rather than placed in a view
+            // hierarchy: `extension Image { init(illustration:) }`, or
+            // `func image(for option: Option) -> Image`. The label depends on what the caller
+            // uses it for, so it cannot be known here — the same reasoning as the injected-Image
+            // case above, for the factory shape instead of the stored-property shape.
+            if Self.producesImageAsValue(view.callExpr) { continue }
+
             // Skip if the enclosing component struct has a stored property named
             // `accessibilityLabel` — the component is designed to receive a label from its caller.
             if enclosingStructHasAccessibilityLabelProperty(view.callExpr) { continue }
@@ -155,6 +162,41 @@ public struct ImageMissingLabelRule: A11yRule {
     /// True if the struct enclosing this Image has a stored property of type `Image`,
     /// meaning the component accepts an image from its caller who is responsible for
     /// setting its accessibility label at the call site.
+    /// Whether this `Image(...)` is being produced as an `Image` value for a caller to use,
+    /// rather than rendered as a view here.
+    ///
+    /// Two shapes, both of which put the accessible name beyond this call site's knowledge:
+    ///
+    ///   extension Image { init(illustration: Illustration) { self = Image(decorative: …) } }
+    ///   func image(for option: Option) -> Image { Image(option.assetName) }
+    ///
+    /// The returning declaration must be typed `Image` exactly. `-> some View` is a view being
+    /// rendered and stays reportable, which is the distinction that keeps this narrow.
+    static func producesImageAsValue(_ node: FunctionCallExprSyntax) -> Bool {
+        var cursor: Syntax? = Syntax(node).parent
+        while let current = cursor {
+            // `extension Image { … }` — every Image built inside is a value for the caller.
+            if let ext = current.as(ExtensionDeclSyntax.self) {
+                return ext.extendedType.trimmedDescription == "Image"
+            }
+            // A function or computed property whose declared return type is exactly `Image`.
+            if let fn = current.as(FunctionDeclSyntax.self) {
+                return fn.signature.returnClause?.type.trimmedDescription == "Image"
+            }
+            if let binding = current.as(PatternBindingSyntax.self) {
+                if let returns = binding.typeAnnotation?.type.trimmedDescription {
+                    return returns == "Image"
+                }
+            }
+            // Stop at a type boundary: a view struct's body is not a factory.
+            if current.is(StructDeclSyntax.self) || current.is(ClassDeclSyntax.self) {
+                return false
+            }
+            cursor = current.parent
+        }
+        return false
+    }
+
     private func enclosingStructHasImageProperty(_ node: FunctionCallExprSyntax) -> Bool {
         guard let structDecl = enclosingStructDecl(from: Syntax(node)) else { return false }
         return structHasPropertyOfType("Image", in: structDecl)

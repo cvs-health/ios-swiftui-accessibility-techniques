@@ -36,6 +36,11 @@ public struct ToggleMissingLabelRule: A11yRule {
             let inlineLabel = view.firstStringArgument ?? ""
             let hasLabelsHidden = mods.hasModifier("labelsHidden")
 
+            // A label argument that is an expression rather than a literal is still a label:
+            // `Toggle(additionalDetails.accidentTitle, isOn: $x)`. Only `.labelsHidden()` then
+            // leaves it with no accessible name, which the branch below still reports.
+            if view.hasNonEmptyLeadingLabelArgument, !hasLabelsHidden { continue }
+
             // Bad: empty inline label, or labelsHidden() with no a11y label
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
                 diagnostics.append(makeDiagnostic(

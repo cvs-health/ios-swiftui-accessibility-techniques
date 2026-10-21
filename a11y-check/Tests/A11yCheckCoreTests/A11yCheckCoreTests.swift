@@ -1085,6 +1085,125 @@ final class A11yCheckCoreTests: XCTestCase {
         )
     }
 
+    // MARK: - Label arguments need not be literals
+
+    /// `Toggle(viewModel.title, isOn:)` is labelled. `firstStringArgument` is nil for a
+    /// non-literal, which is not evidence of an absent label.
+    func testToggleMissingLabel_acceptsNonLiteralLabel() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var on = false
+            let title: String
+            var body: some View {
+                Toggle(title, isOn: $on)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "toggle-missing-label").count, 0)
+    }
+
+    func testPickerMissingLabel_acceptsNonLiteralLabel() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var sel = 0
+            let title: String
+            var body: some View {
+                Picker(title, selection: $sel) { Text("a") }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "picker-missing-label").count, 0)
+    }
+
+    /// An explicitly empty literal *is* evidence of an absent label.
+    func testLabelArguments_emptyLiteralStillReports() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var on = false
+            @State private var sel = 0
+            var body: some View {
+                VStack {
+                    Toggle("", isOn: $on)
+                    Picker("", selection: $sel) { Text("a") }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "toggle-missing-label").count, 1)
+        XCTAssertEqual(analyze(source, ruleID: "picker-missing-label").count, 1)
+    }
+
+    /// `.labelsHidden()` removes the visible label, so a non-literal one no longer saves it.
+    func testToggleMissingLabel_labelsHiddenStillReportsWithNonLiteralLabel() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var on = false
+            let title: String
+            var body: some View {
+                Toggle(title, isOn: $on).labelsHidden()
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "toggle-missing-label").count, 1)
+    }
+
+    /// An interpolated literal has no plain segments but is still a label.
+    func testLabelArguments_acceptsInterpolatedLiteral() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var on = false
+            let count: Int
+            var body: some View {
+                Toggle("Items: \\(count)", isOn: $on)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "toggle-missing-label").count, 0)
+    }
+
+    // MARK: - image-missing-label: Image produced as a value
+
+    /// An `extension Image` builds Image values for callers; the label depends on use.
+    func testImageMissingLabel_skipsExtensionImageFactory() {
+        let source = """
+        import SwiftUI
+        extension Image {
+            init(illustration: String) { self = Image(illustration) }
+            static let sample = Image("sample")
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 0)
+    }
+
+    /// A function returning `Image` is a factory for the same reason.
+    func testImageMissingLabel_skipsFunctionReturningImage() {
+        let source = """
+        import SwiftUI
+        struct Helper {
+            func image(for name: String) -> Image { Image(name) }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 0)
+    }
+
+    /// `-> some View` is a view being rendered, so it stays reportable. This is the
+    /// distinction that keeps the factory exemption narrow.
+    func testImageMissingLabel_stillReportsViewReturningFunction() {
+        let source = """
+        import SwiftUI
+        struct Helper: View {
+            var body: some View { icon }
+            var icon: some View { Image("logo") }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 1)
+    }
+
     // MARK: - missing-navigation-title: the deprecated titling API
 
     /// `.navigationBarTitle` is deprecated but still titles the screen, and VoiceOver still

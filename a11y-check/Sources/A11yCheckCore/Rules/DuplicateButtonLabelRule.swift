@@ -55,24 +55,38 @@ public struct DuplicateButtonLabelRule: A11yRule {
     /// `branch` only needs to differ between arms of the same conditional; its value carries no
     /// meaning on its own.
     struct BranchStep: Equatable {
-        let conditional: SyntaxIdentifier
+        let conditional: String
         let branch: String
     }
 
-    /// Every conditional arm enclosing `node`, innermost first.
+    /// Pseudo-conditional naming which `#Preview` block a node sits in.
+    ///
+    /// Every node gets one of these steps, so the comparison falls out of the same mutual
+    /// exclusion logic as `if`/`else`: two buttons in the same preview coexist, two in
+    /// different previews do not, and a preview button never coexists with a shipped one.
+    private static let previewContext = "preview-context"
+
+    /// Every mutually exclusive context enclosing `node`, innermost first.
     ///
     /// `else if` chains compose without special handling: a node in the `else if` body records a
     /// step for the inner `if` and, because that inner `if` *is* the outer one's else-arm, another
     /// step putting it on the outer `else` side.
+    ///
+    /// A `#Preview` block is treated the same way. Each preview is rendered on its own, so two
+    /// buttons in different previews are no more simultaneous than two in opposite arms of an
+    /// `if` — and a button in a preview never shares a screen with a shipped one. Every node
+    /// records a preview step, using "none" outside any preview, so all four combinations fall
+    /// out of the same comparison.
     static func branchPath(from node: Syntax) -> [BranchStep] {
         var steps: [BranchStep] = []
         var child = node
         var cursor = node.parent
+        var previewBranch = "none"
 
         while let parent = cursor {
             if let ifExpr = parent.as(IfExprSyntax.self) {
                 if Syntax(ifExpr.body).id == child.id {
-                    steps.append(BranchStep(conditional: ifExpr.id, branch: "then"))
+                    steps.append(BranchStep(conditional: "\(ifExpr.id.hashValue)", branch: "then"))
                 } else if let elseBody = ifExpr.elseBody {
                     let elseSyntax: Syntax
                     switch elseBody {
@@ -80,7 +94,7 @@ public struct DuplicateButtonLabelRule: A11yRule {
                     case .ifExpr(let nested): elseSyntax = Syntax(nested)
                     }
                     if elseSyntax.id == child.id {
-                        steps.append(BranchStep(conditional: ifExpr.id, branch: "else"))
+                        steps.append(BranchStep(conditional: "\(ifExpr.id.hashValue)", branch: "else"))
                     }
                 }
             } else if let caseSyntax = parent.as(SwitchCaseSyntax.self) {
@@ -88,14 +102,19 @@ public struct DuplicateButtonLabelRule: A11yRule {
                 // own arm, so the case's identity is a sufficient discriminator.
                 if let switchExpr = parent.parent?.parent?.as(SwitchExprSyntax.self) {
                     steps.append(BranchStep(
-                        conditional: switchExpr.id,
+                        conditional: "\(switchExpr.id.hashValue)",
                         branch: "case-\(caseSyntax.id.hashValue)"
                     ))
                 }
+            } else if let decl = parent.as(MacroExpansionDeclSyntax.self), decl.macroName.text == "Preview" {
+                previewBranch = "\(decl.id.hashValue)"
+            } else if let expr = parent.as(MacroExpansionExprSyntax.self), expr.macroName.text == "Preview" {
+                previewBranch = "\(expr.id.hashValue)"
             }
             child = parent
             cursor = parent.parent
         }
+        steps.append(BranchStep(conditional: previewContext, branch: previewBranch))
         return steps
     }
 

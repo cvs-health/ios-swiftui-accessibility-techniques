@@ -389,6 +389,10 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`duplicate-button-label` treats separate `#Preview` blocks as mutually exclusive.** Each preview is rendered on its own, so two buttons in different previews are no more simultaneous than two in opposite arms of an `if` — and a button in a preview never shares a screen with a shipped one. Every node now records which preview encloses it, using "none" outside any preview, so all four combinations fall out of the existing coexistence comparison rather than needing separate preview-detection machinery: same preview reports, different previews do not, preview versus shipped does not, neither-in-a-preview reports.
+
+  All 5 remaining findings on the app used for measurement were this shape — two `Button("Send")` in adjacent `#Preview` blocks demonstrating a style enabled and disabled, and three in a four-preview file. 5 findings to 0.
+
 - **`button-label-contains-role` separates an authored name from visible copy.** The rule flagged both `.accessibilityLabel("Submit button")` and `Button("Primary Button")` as the same error, and advised removing the word in both cases. For the visible title that advice was wrong, and wrong in a way that pointed at another failure: **WCAG 2.5.3 Label in Name requires the accessible name to contain the visible text**, so the word cannot be dropped from the name while the button still reads "Primary Button" on screen — and this tool's own `label-in-name` rule reports exactly that. The rule contradicted itself.
 
   An authored `.accessibilityLabel` carrying the role stays an **error**: the author added it, VoiceOver appends the role regardless, and removing it is a safe local edit, so it keeps its autofix.

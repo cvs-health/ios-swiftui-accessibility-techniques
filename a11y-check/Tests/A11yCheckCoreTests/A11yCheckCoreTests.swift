@@ -1557,6 +1557,48 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "duplicate-button-label").count, 0)
     }
 
+    /// Each `#Preview` renders on its own, so buttons in different previews never coexist.
+    func testDuplicateButtonLabel_ignoresSeparatePreviewBlocks() {
+        let source = """
+        import SwiftUI
+        #Preview("Glass Toolbar Button") {
+            Button("Send") { }
+        }
+        #Preview("Glass Toolbar Button - Disabled") {
+            Button("Send") { }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "duplicate-button-label").count, 0)
+    }
+
+    /// Two identical buttons inside one preview do share a screen.
+    func testDuplicateButtonLabel_flagsDuplicatesWithinOnePreview() {
+        let source = """
+        import SwiftUI
+        #Preview("Two") {
+            HStack {
+                Button("Send") { }
+                Button("Send") { }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "duplicate-button-label").count, 2)
+    }
+
+    /// A preview button and a shipped button never coexist either.
+    func testDuplicateButtonLabel_previewDoesNotPairWithShippedButton() {
+        let source = """
+        import SwiftUI
+        struct Real: View {
+            var body: some View { Button("Send") { } }
+        }
+        #Preview("Demo") {
+            Button("Send") { }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "duplicate-button-label").count, 0)
+    }
+
     /// Siblings in the same branch still collide on screen.
     func testDuplicateButtonLabel_flagsDuplicatesWithinOneBranch() {
         let source = """

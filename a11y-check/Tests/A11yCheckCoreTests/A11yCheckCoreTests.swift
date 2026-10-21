@@ -1126,6 +1126,52 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertNil(diags[0].fix, "no autofix may rewrite on-screen copy")
     }
 
+    // MARK: - Preview code is filtered tool-wide
+
+    /// All three preview forms are dropped, for every rule.
+    func testPreviewCodeFilter_dropsAllPreviewForms() {
+        let source = """
+        import SwiftUI
+        #Preview {
+            Image("macro")
+        }
+        struct Thing_Previews: PreviewProvider {
+            static var previews: some View { Image("suffix") }
+        }
+        struct Legacy: PreviewProvider {
+            static var previews: some View { Image("protocol") }
+        }
+        """
+        XCTAssertEqual(analyze(source).filter { $0.ruleID == "image-missing-label" }.count, 0)
+    }
+
+    /// A shipping view that merely has "Preview" in its name is real UI.
+    func testPreviewCodeFilter_keepsViewNamedPreview() {
+        let source = """
+        import SwiftUI
+        struct PreviewCardView: View {
+            var body: some View { Image("logo") }
+        }
+        """
+        XCTAssertEqual(analyze(source).filter { $0.ruleID == "image-missing-label" }.count, 1)
+    }
+
+    /// Shipping code beside a preview is unaffected.
+    func testPreviewCodeFilter_keepsShippingCodeAlongsidePreview() {
+        let source = """
+        import SwiftUI
+        struct Real: View {
+            var body: some View { Image("ships") }
+        }
+        #Preview {
+            Image("does-not-ship")
+        }
+        """
+        let diags = analyze(source).filter { $0.ruleID == "image-missing-label" }
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.line, 3)
+    }
+
     // MARK: - image-missing-label: an Image handed to something else
 
     /// A `Label`'s title is its accessible name, so the icon is decorative by construction.

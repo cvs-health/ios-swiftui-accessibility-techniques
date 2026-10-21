@@ -389,6 +389,12 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **Preview code is filtered tool-wide.** Preview scaffolding never ships, so no user can meet an accessibility defect in it and a finding there is not something anyone can act on. This had been decided rule by rule: `heading-trait-missing`, `missing-navigation-title`, `button-label-contains-role`, `duplicate-button-label`, `image-missing-label` and `zstack-order-confusing` each grew their own preview handling, in six different shapes, and a seventh was on its way. A single `PreviewCodeFilter` now drops diagnostics falling inside preview declarations, as a post-pass beside the existing inline-suppression filter — less code than the six, and predictable across all 45 rules.
+
+  Three forms are recognised: the `#Preview` macro in both its declaration and expression spellings, a `PreviewProvider` conformer, and the conventional `*_Previews` suffix. Detection stays structural: a shipping `View` merely *called* `PreviewCardView` is real UI and its findings are kept, which a test pins.
+
+  This settles the open question recorded under Known limits, where suppressing preview code for one rule alone was judged inconsistent. On the app used for measurement it removed 8 further findings across 4 rules, bringing errors to 465.
+
 - **`missing-navigation-title` resolves a design system's own title modifier.** A house wrapper such as `applyNavigationChrome(title:)` sets `navigationTitle` internally, so a screen chaining it is titled while never naming `navigationTitle` itself — and was reported as untitled. A new cross-file pre-pass collects functions returning a view whose body calls a title modifier, and the rule credits those names.
 
   Resolved from the wrapper's own body rather than from configuration: the evidence that it sets a title is the `navigationTitle` call inside it, which needs no project setup and cannot drift from the code. A function that only calls `navigationBarTitleDisplayMode` is not collected, since that sets how a title displays rather than the title.

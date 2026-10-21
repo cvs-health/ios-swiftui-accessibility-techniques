@@ -186,6 +186,12 @@ public final class RuleRegistry {
 
         // Filter out inline suppressions
         allDiagnostics = InlineSuppressionFilter.filter(allDiagnostics, sourceText: sourceText)
+        // Preview scaffolding never ships, so a finding there is not actionable.
+        allDiagnostics = PreviewCodeFilter.filter(
+            allDiagnostics,
+            syntax: syntax,
+            converter: converter
+        )
 
         // Populate source snippets (1 line before, variable lines after)
         let sourceLines = sourceText.components(separatedBy: "\n")

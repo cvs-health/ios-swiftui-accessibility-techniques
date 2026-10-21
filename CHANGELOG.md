@@ -389,6 +389,16 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`image-missing-label` skips an Image handed to something else.** Three shapes, all unactionable where they were reported:
+
+  **A `Label`'s `icon:` closure.** The Label's title is already its accessible name, so the icon is decorative by construction — `Label { Text("More info") } icon: { Image("icon_info") }` announces "More info" and nothing about the glyph. The existing label-closure exemption matched `label:` only; it now matches `icon:` too, in both the trailing-closure and comma `Label(title:icon:)` spellings.
+
+  **An Image passed where an `Image` is expected**, such as `ToolTip(image: Image("badge"), title:)`. `.accessibilityLabel` cannot be applied to an `Image` — it returns `some View` — so the author physically cannot attach a label without changing the API, and one real case carried a `// swiftlint:disable:next accessibility_label_for_image` comment saying so. The label belongs on the receiving component, which the rule already exempts via `enclosingStructHasImageProperty`; this is the symmetric case.
+
+  **`Text(Image(...))`**, where the glyph is composed into the text run and the accessible name comes from the `Text` — also the only thing a label could attach to.
+
+  51 findings to 34 on the app used for measurement. Every drop was hand-verified; a bare `Image` in a view hierarchy still reports, with a test pinning that boundary.
+
 - **`small-touch-target` measures the view's own frame, and reports each position once.** Two bugs, one cause: `ModifierCollector` descends into a view's closures, so a button's frame list also held the icon inside its `label:` closure. `Image(enterpriseNamed:).frame(width: 14, height: 14)` inside a button framed at 24pt was reported as a 14pt touch target, when what the member taps is the compliant button. Collection order does not separate them — the outer `.frame(24)` is visited *before* the nested one — so the rule now keeps only frames positioned after the view's entire call, closures included, and takes the last of those.
 
   The same overlap reported some positions twice, once via the Button and once via the Image; diagnostics are now deduplicated by source offset.

@@ -94,6 +94,11 @@ public struct ImageMissingLabelRule: A11yRule {
             // case above, for the factory shape instead of the stored-property shape.
             if Self.producesImageAsValue(view.callExpr) { continue }
 
+            // Skip an Image handed to something else as a value — passed as an argument, or
+            // composed into a Text run — where a label cannot be attached here.
+            if Self.isTextAttachment(view.callExpr) { continue }
+            if Self.isImageUsedAsValue(view.callExpr) { continue }
+
             // Skip if the enclosing component struct has a stored property named
             // `accessibilityLabel` — the component is designed to receive a label from its caller.
             if enclosingStructHasAccessibilityLabelProperty(view.callExpr) { continue }
@@ -172,6 +177,48 @@ public struct ImageMissingLabelRule: A11yRule {
     ///
     /// The returning declaration must be typed `Image` exactly. `-> some View` is a view being
     /// rendered and stays reportable, which is the distinction that keeps this narrow.
+    /// Whether this `Image(...)` is being handed to something else as a value rather than
+    /// rendered here.
+    ///
+    /// Two shapes, both unactionable at this call site:
+    ///
+    ///   ToolTip(image: Image("icon_quality_badge"), title: text)   // argument to a call
+    ///   Text(Image(systemName: "figure.roll"))                     // inline text attachment
+    ///
+    /// `.accessibilityLabel` cannot be applied to an `Image` — it returns `some View` — so where
+    /// an `Image` is what the parameter expects, the author physically cannot attach a label
+    /// without changing the API. One real case carried a
+    /// `// swiftlint:disable:next accessibility_label_for_image` comment saying exactly that.
+    /// The receiving component is where the label belongs, and the rule already exempts that
+    /// side via `enclosingStructHasImageProperty`; this is the symmetric case.
+    ///
+    /// For `Text(Image(...))` the glyph is composed into the text run, so the accessible name
+    /// comes from the `Text` — which is also the only thing a label could attach to.
+    static func isImageUsedAsValue(_ node: FunctionCallExprSyntax) -> Bool {
+        guard let parent = node.parent else { return false }
+
+        // Argument to a call: `image: Image(...)` or `.image(Image(...))`.
+        if let argument = parent.as(LabeledExprSyntax.self) {
+            // A trailing `label:`/`icon:` closure is handled by isInsideLabelClosure; anything
+            // else passing an Image along is a value.
+            if let label = argument.label?.text, label == "label" || label == "icon" {
+                return false
+            }
+            return argument.parent?.parent?.is(FunctionCallExprSyntax.self) == true
+        }
+        return false
+    }
+
+    /// Whether this `Image(...)` is the argument of a `Text(...)` initialiser.
+    static func isTextAttachment(_ node: FunctionCallExprSyntax) -> Bool {
+        guard let argument = node.parent?.as(LabeledExprSyntax.self),
+              let list = argument.parent?.as(LabeledExprListSyntax.self),
+              let call = list.parent?.as(FunctionCallExprSyntax.self),
+              let callee = call.calledExpression.as(DeclReferenceExprSyntax.self)
+        else { return false }
+        return callee.baseName.text == "Text"
+    }
+
     static func producesImageAsValue(_ node: FunctionCallExprSyntax) -> Bool {
         var cursor: Syntax? = Syntax(node).parent
         while let current = cursor {
@@ -371,18 +418,25 @@ func hasAccessibilityElementIgnoreOrCombine(_ mods: ModifierCollector) -> Bool {
     }
 }
 
-/// Check if a node is inside a `label:` closure parameter (e.g., `Menu { } label: { ... }`).
-/// Views inside label closures are grouped as a single accessibility element by VoiceOver,
+/// Check if a node is inside a `label:` or `icon:` closure parameter (e.g.
+/// `Menu { } label: { … }`, `Label { Text(…) } icon: { Image(…) }`).
+/// Views inside these closures are grouped as a single accessibility element by VoiceOver,
 /// so they don't need individual labels or manual grouping.
+///
+/// `icon:` is included because a `Label`'s title is already its accessible name, which makes the
+/// icon decorative by construction — `Label { Text("More info") } icon: { Image("icon_info") }`
+/// announces "More info" and nothing about the glyph. Both spellings of the initialiser reach
+/// here: the trailing-closure form and the comma form `Label(title:icon:)`.
 func isInsideLabelClosure(_ node: some SyntaxProtocol) -> Bool {
+    let composingLabels: Set<String> = ["label", "icon"]
     var current: Syntax? = Syntax(node).parent
     while let parent = current {
         if let trailing = parent.as(MultipleTrailingClosureElementSyntax.self),
-           trailing.label.text == "label" {
+           composingLabels.contains(trailing.label.text) {
             return true
         }
         if let arg = parent.as(LabeledExprSyntax.self),
-           arg.label?.text == "label" {
+           let label = arg.label?.text, composingLabels.contains(label) {
             return true
         }
         current = parent.parent

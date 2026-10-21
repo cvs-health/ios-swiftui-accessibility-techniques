@@ -1085,6 +1085,78 @@ final class A11yCheckCoreTests: XCTestCase {
         )
     }
 
+    // MARK: - image-missing-label: an Image handed to something else
+
+    /// A `Label`'s title is its accessible name, so the icon is decorative by construction.
+    /// Both initialiser spellings must be covered.
+    func testImageMissingLabel_skipsLabelIconClosure() {
+        let trailing = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Label { Text("More info") } icon: { Image("icon_info") }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(trailing, ruleID: "image-missing-label").count, 0)
+
+        let comma = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Label(title: { Text("Unread") }, icon: { Image("circle") })
+            }
+        }
+        """
+        XCTAssertEqual(analyze(comma, ruleID: "image-missing-label").count, 0)
+    }
+
+    /// `Text(Image(...))` composes the glyph into the text run; the name comes from the Text,
+    /// which is also the only thing a label could attach to.
+    func testImageMissingLabel_skipsTextAttachment() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Text(Image(systemName: "figure.roll")).accessibilityLabel("Wheelchair access")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 0)
+    }
+
+    /// An Image passed where an `Image` is expected cannot carry a label —
+    /// `.accessibilityLabel` returns `some View`, so the call site physically cannot fix it.
+    func testImageMissingLabel_skipsImagePassedAsArgument() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                ToolTip(image: Image("badge"), title: "Quality")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 0)
+    }
+
+    /// The exemptions must not swallow an Image actually placed in a hierarchy.
+    func testImageMissingLabel_stillReportsImageInHierarchy() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                VStack {
+                    Label { Text("Info") } icon: { Image("icon_info") }
+                    Image("logo")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "image-missing-label")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.line, 6, "the bare Image, not the Label's icon")
+    }
+
     // MARK: - small-touch-target: whose frame is the target
 
     /// An icon inside a button's `label:` closure is not the touch target; the button is.

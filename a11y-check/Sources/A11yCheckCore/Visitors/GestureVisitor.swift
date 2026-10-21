@@ -57,12 +57,25 @@ public final class GestureVisitor: SyntaxVisitor {
         let chainRoot = findChainRoot(for: ExprSyntax(node))
         let modifiers = ModifierCollector.collect(from: chainRoot)
 
+        // `.isLink` counts as well as `.isButton`. The requirement is that a tappable element
+        // announces an interactive role, and for something opening a URL "Link" is the more
+        // accurate one — a real case was `.accessibilityAddTraits(.isLink)` beside an
+        // external-link alert, reported as though it announced nothing.
+        let interactiveTraits = ["isButton", "isLink"]
         let hasButtonTrait = modifiers.modifiers(named: "accessibilityAddTraits").contains { mod in
-            mod.arguments.contains { $0.text.contains("isButton") }
+            mod.arguments.contains { arg in interactiveTraits.contains { arg.text.contains($0) } }
         }
         // Also check the older `.accessibility(addTraits:)` API
         let hasOldButtonTrait = modifiers.modifiers(named: "accessibility").contains { mod in
-            mod.arguments.contains { $0.label == "addTraits" && $0.text.contains("isButton") }
+            mod.arguments.contains { arg in
+                arg.label == "addTraits" && interactiveTraits.contains { arg.text.contains($0) }
+            }
+        }
+        // `.accessibilityRemoveTraits([.isButton])` is the author stating this is deliberately
+        // not a button — a tap used to move focus, say. Asking them to add back the trait they
+        // just removed makes the rule unsatisfiable, so an explicit opt-out is honoured.
+        let removedButtonTrait = modifiers.modifiers(named: "accessibilityRemoveTraits").contains { mod in
+            mod.arguments.contains { $0.text.contains("isButton") }
         }
 
         let hasLabel = modifiers.hasModifier("accessibilityLabel")
@@ -70,7 +83,7 @@ public final class GestureVisitor: SyntaxVisitor {
         detectedGestures.append(DetectedGesture(
             gestureName: name,
             callExpr: node,
-            hasButtonTrait: hasButtonTrait || hasOldButtonTrait,
+            hasButtonTrait: hasButtonTrait || hasOldButtonTrait || removedButtonTrait,
             hasAccessibilityLabel: hasLabel,
             isKeyboardDismiss: Self.isKeyboardDismissGesture(node)
         ))

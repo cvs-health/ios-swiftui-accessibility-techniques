@@ -1085,6 +1085,60 @@ final class A11yCheckCoreTests: XCTestCase {
         )
     }
 
+    // MARK: - tap-gesture-missing-button-trait: equivalent and removed traits
+
+    /// `.isLink` announces an interactive role too, and is the accurate one for a tap that
+    /// opens a URL.
+    func testTapGestureTrait_acceptsIsLink() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Text("Costco authorization")
+                    .onTapGesture { open() }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityAddTraits(.isLink)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 0)
+    }
+
+    /// Removing the trait is the author saying this is deliberately not a button. Demanding it
+    /// back makes the rule unsatisfiable.
+    func testTapGestureTrait_honoursExplicitRemoval() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @AccessibilityFocusState private var focused: Bool
+            var body: some View {
+                Text("Dependents")
+                    .onTapGesture { focused = true }
+                    .accessibilityRemoveTraits([.isButton])
+                    .accessibilityFocused($focused)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 0)
+    }
+
+    /// A non-interactive trait is not a substitute: a combined element announced as a heading
+    /// gives no hint it is tappable.
+    func testTapGestureTrait_headerTraitAloneStillReports() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                VStack { Text("Dr Smith") }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
+                    .onTapGesture { showReviews() }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 1)
+    }
+
     // MARK: - Label arguments need not be literals
 
     /// `Toggle(viewModel.title, isOn:)` is labelled. `firstStringArgument` is nil for a

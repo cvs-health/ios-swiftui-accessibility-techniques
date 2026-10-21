@@ -389,6 +389,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`tap-gesture-missing-button-trait` accepts an equivalent trait, and honours an explicit removal.** It credited only `.accessibilityAddTraits(.isButton)`, so two correct patterns were reported:
+
+  `.accessibilityAddTraits(.isLink)` beside an external-link tap. The requirement is that a tappable element announces an *interactive role*, and for something opening a URL "Link" is the more accurate one — `.isLink` now counts.
+
+  `.accessibilityRemoveTraits([.isButton])`, which is the author stating this is deliberately not a button: a tap that moves focus, in the case found. Demanding they add back the trait they just removed made the rule unsatisfiable, so an explicit opt-out is honoured.
+
+  A non-interactive trait is still no substitute — a container combined into one element and announced as `.isHeader` gives a VoiceOver user no hint that it is tappable, and still reports. Three tests, one pinning that boundary. 22 findings to 18 on the app used for measurement.
+
 - **A label argument need not be a string literal.** `picker-missing-label` and `toggle-missing-label` read the first positional argument through `firstStringArgument`, which is nil for anything that is not a literal, and treated nil as "no label". So `Toggle(additionalDetails.accidentTitle, isOn: $x)` and `Picker(viewModel.title, selection: $y)` — labelled controls, their labels visible on screen — were reported as having no visible label and no accessible name. An expression the checker cannot read is not evidence of an absent label; only an explicitly empty literal is, and that is still reported. Interpolated literals count as labels. `.labelsHidden()` still reports, because hiding the label is what removes the accessible name.
 
   This was the largest single false-positive source measured so far: 18 of 19 toggle findings and 13 of 31 picker findings on one real app.

@@ -73,6 +73,9 @@ public final class ModifierCollector: SyntaxVisitor {
         "frame",
         "lineLimit",
         "navigationTitle",
+        // Deprecated since iOS 14 but still sets the page title, and VoiceOver still announces
+        // it. A rule asking "does this screen have a title" has to accept it.
+        "navigationBarTitle",
         "disabled",
         "foregroundColor",
         "foregroundStyle",

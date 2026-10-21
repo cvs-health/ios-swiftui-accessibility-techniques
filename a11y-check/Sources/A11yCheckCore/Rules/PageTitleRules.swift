@@ -41,6 +41,45 @@ public struct MissingNavigationTitleRule: A11yRule {
 
     public init() {}
 
+    // MARK: - What counts as setting a page title
+
+    /// Modifiers that give a screen a title VoiceOver will announce.
+    ///
+    /// `navigationBarTitle` is deprecated in favour of `navigationTitle`, but it still sets the
+    /// title and VoiceOver still reads it, so a screen using it is titled. Treating only the
+    /// modern spelling as valid reported 8 titled screens in one app as untitled — including
+    /// `.navigationBarTitle(Text("Login As"))`, which a reviewer can hear announced.
+    ///
+    /// Migrating off the deprecated API is a worthwhile cleanup, but it is a different rule from
+    /// "this screen has no title", and conflating the two sends people to fix the wrong thing.
+    static let pageTitleModifiers = ["navigationTitle", "navigationBarTitle"]
+
+    static func setsPageTitle(_ collector: ModifierCollector) -> Bool {
+        pageTitleModifiers.contains { collector.hasModifier($0) }
+    }
+
+    /// Source-text fallback for the cases that read a body as a string.
+    ///
+    /// Requires an opening paren so `navigationBarTitleDisplayMode(.inline)` does not count as a
+    /// title. That modifier only sets *how* a title displays; a screen can carry it while having
+    /// no title at all, and a plain substring check would mark exactly those screens clean.
+    static func textSetsPageTitle(_ text: String) -> Bool {
+        for name in pageTitleModifiers {
+            // Every occurrence, not just the first: a `navigationBarTitleDisplayMode(.inline)`
+            // earlier in the body would otherwise mask a real `navigationBarTitle(…)` after it.
+            var searchStart = text.startIndex
+            while let range = text.range(of: name, range: searchStart..<text.endIndex) {
+                var index = range.upperBound
+                while index < text.endIndex, text[index] == " " || text[index] == "\n" {
+                    index = text.index(after: index)
+                }
+                if index < text.endIndex, text[index] == "(" { return true }
+                searchStart = range.upperBound
+            }
+        }
+        return false
+    }
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
@@ -52,13 +91,13 @@ public struct MissingNavigationTitleRule: A11yRule {
             // Skip preview-only stacks: the child view provides the title at runtime
             if isInsidePreviewContext(nav.callExpr) { continue }
 
-            // Check if .navigationTitle() appears anywhere in the navigation container's subtree
+            // Check if a page title appears anywhere in the navigation container's subtree
             let modCollector = ModifierCollector.collect(from: nav.chainRoot)
-            if !modCollector.hasModifier("navigationTitle") {
+            if !Self.setsPageTitle(modCollector) {
                 // Also check the trailing closure body
                 if let body = nav.callExpr.trailingClosure {
                     let bodyCollector = ModifierCollector.collect(from: body)
-                    if !bodyCollector.hasModifier("navigationTitle") {
+                    if !Self.setsPageTitle(bodyCollector) {
                         // Deliberately no autofix: a page title is content, and only the author
                         // knows what this screen is called. Inserting a literal "Page Title"
                         // shipped that string to users as the real title and VoiceOver
@@ -81,7 +120,7 @@ public struct MissingNavigationTitleRule: A11yRule {
             // (detected by the cross-file pre-pass in RuleRegistry).
             if context.externallyTitledViews.contains(structName) { continue }
             let bodyText = bodyStatements.map(\.description).joined()
-            if !bodyText.contains("navigationTitle") {
+            if !Self.textSetsPageTitle(bodyText) {
                 // No autofix, for the same reason as pattern 1 above: the title is content.
                 // The suggestion still names where it goes — the first content view inside
                 // ScrollView/List (e.g. the VStack), not the container itself.

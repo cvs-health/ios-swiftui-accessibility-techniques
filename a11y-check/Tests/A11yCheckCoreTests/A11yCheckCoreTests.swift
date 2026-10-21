@@ -1085,6 +1085,78 @@ final class A11yCheckCoreTests: XCTestCase {
         )
     }
 
+    // MARK: - missing-navigation-title: the deprecated titling API
+
+    /// `.navigationBarTitle` is deprecated but still titles the screen, and VoiceOver still
+    /// announces it. A screen using it is titled.
+    func testMissingNavigationTitle_acceptsDeprecatedNavigationBarTitle() {
+        let source = """
+        import SwiftUI
+        struct LoginAsView: View {
+            var body: some View {
+                NavigationStack {
+                    Text("body")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .navigationBarTitle(Text("Login As"))
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "missing-navigation-title").count, 0)
+    }
+
+    /// `navigationBarTitleDisplayMode` only says *how* a title displays. A screen can carry it
+    /// and still have no title, so it must not count — this is the substring trap that makes the
+    /// check require an opening paren.
+    func testMissingNavigationTitle_displayModeAloneIsNotATitle() {
+        let source = """
+        import SwiftUI
+        struct UntitledView: View {
+            var body: some View {
+                NavigationStack {
+                    Text("body")
+                        .navigationBarTitleDisplayMode(.inline)
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "missing-navigation-title").count, 1)
+    }
+
+    /// A display-mode modifier earlier in the body must not mask a real title later in it.
+    func testMissingNavigationTitle_displayModeBeforeTitleStillCounts() {
+        let source = """
+        import SwiftUI
+        struct Screen: View {
+            var body: some View {
+                ScrollView {
+                    VStack { Text("content") }
+                        .navigationBarTitleDisplayMode(.inline)
+                        .navigationBarTitle("Claims")
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "missing-navigation-title").count, 0)
+    }
+
+    /// A title read off a view model is still a title.
+    func testMissingNavigationTitle_acceptsNonLiteralTitle() {
+        let source = """
+        import SwiftUI
+        struct Screen: View {
+            let viewModel: ViewModel
+            var body: some View {
+                NavigationStack {
+                    Text("body")
+                        .navigationBarTitle(viewModel.navigationTitle)
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "missing-navigation-title").count, 0)
+    }
+
     // MARK: - duplicate-button-label: mutually exclusive branches
 
     /// `if`/`else` renders one button or the other, never both, so VoiceOver can never

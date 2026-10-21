@@ -5,6 +5,16 @@ import SwiftSyntax
 /// Flags `.accessibilityLabel()` on Buttons that contain the word "button" —
 /// the Button role is announced automatically by VoiceOver.
 ///
+/// Two cases, deliberately treated differently:
+///
+/// - **An authored `.accessibilityLabel` containing "button"** is an error. The author added the
+///   role word to the accessible name, VoiceOver appends the role anyway, and removing it is a
+///   safe local edit — so this case is autofixable.
+/// - **A visible title containing "button"** is a warning. WCAG 2.5.3 Label in Name requires the
+///   accessible name to contain the visible text, so the word cannot simply be dropped from the
+///   name; the fix is the on-screen copy, which is a content decision. Name and role are still
+///   programmatically determinable, so this is a quality issue rather than a conformance failure.
+///
 /// WCAG 4.1.2 Name, Role, Value
 /// Reference: ButtonsView.swift, Buttons.md — "Don't include 'Button' in .accessibilityLabel"
 public struct ButtonLabelContainsRoleRule: A11yRule {
@@ -41,13 +51,26 @@ public struct ButtonLabelContainsRoleRule: A11yRule {
                     ))
                 }
             }
-            // Check the inline label text too
+            // The *visible* title is a different matter from an authored accessibility label.
+            //
+            // WCAG 2.5.3 Label in Name requires the accessible name to contain the visible
+            // text, so if the visible title says "Primary Button" then the accessible name has
+            // to say it too. Telling someone to "remove 'button' from the label" therefore
+            // either changes the on-screen copy — a content decision, not an accessibility
+            // one — or strips it from the accessible name alone and fails 2.5.3, which this
+            // tool's own `label-in-name` rule then reports. The advice contradicted itself.
+            //
+            // The stutter is still worth surfacing: VoiceOver really does say "Primary Button,
+            // Button". But it is a copy-quality issue rather than a conformance failure — name
+            // and role remain programmatically determinable — so it is a warning, and the
+            // suggestion points at the visible text rather than the accessibility layer.
             if let labelText = view.firstStringArgument, labelText.lowercased().contains("button") {
                 diagnostics.append(makeDiagnostic(
-                    message: "Button label text \"\(labelText)\" contains 'button'. The role is announced automatically by VoiceOver.",
+                    message: "Button's visible title \"\(labelText)\" contains 'button', so VoiceOver announces \"\(labelText), Button\". Reword the visible copy if that repetition is unwanted. Do not remove it from the accessible name alone — the name must contain the visible text (WCAG 2.5.3 Label in Name).",
                     node: view.callExpr,
                     context: context,
-                    suggestion: "Remove \"button\" from the label text"
+                    severityOverride: .warning,
+                    suggestion: "Reword the visible title, or leave it if the copy is deliberate"
                 ))
             }
         }

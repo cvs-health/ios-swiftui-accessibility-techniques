@@ -389,6 +389,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`button-label-contains-role` separates an authored name from visible copy.** The rule flagged both `.accessibilityLabel("Submit button")` and `Button("Primary Button")` as the same error, and advised removing the word in both cases. For the visible title that advice was wrong, and wrong in a way that pointed at another failure: **WCAG 2.5.3 Label in Name requires the accessible name to contain the visible text**, so the word cannot be dropped from the name while the button still reads "Primary Button" on screen — and this tool's own `label-in-name` rule reports exactly that. The rule contradicted itself.
+
+  An authored `.accessibilityLabel` carrying the role stays an **error**: the author added it, VoiceOver appends the role regardless, and removing it is a safe local edit, so it keeps its autofix.
+
+  A visible title carrying the role is now a **warning** with no autofix. The repetition is real — VoiceOver does say "Primary Button, Button" — but the fix is the on-screen copy, which is a content decision, and name and role remain programmatically determinable, so it is a quality issue rather than a conformance failure. The message now says to reword the visible text and explicitly not to strip the word from the accessible name alone.
+
+  The rule's own description had only ever claimed to check `.accessibilityLabel()`; the visible-title branch went beyond it. On the app used for measurement, all 3 findings were visible titles in preview scaffolding: 3 errors become 3 warnings, so none of them block a gate.
+
 - **`image-missing-label` skips an Image handed to something else.** Three shapes, all unactionable where they were reported:
 
   **A `Label`'s `icon:` closure.** The Label's title is already its accessible name, so the icon is decorative by construction — `Label { Text("More info") } icon: { Image("icon_info") }` announces "More info" and nothing about the glyph. The existing label-closure exemption matched `label:` only; it now matches `icon:` too, in both the trailing-closure and comma `Label(title:icon:)` spellings.

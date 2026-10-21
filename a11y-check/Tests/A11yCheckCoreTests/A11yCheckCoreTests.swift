@@ -1085,6 +1085,47 @@ final class A11yCheckCoreTests: XCTestCase {
         )
     }
 
+    // MARK: - button-label-contains-role: authored name vs visible copy
+
+    /// An authored accessibility label carrying the role is a defect the author can remove.
+    func testButtonLabelContainsRole_authoredLabelIsAnError() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("Submit") { }
+                    .accessibilityLabel("Submit button")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-label-contains-role")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags[0].severity, .error)
+        XCTAssertNotNil(diags[0].fix, "removing the word from an authored label is a safe edit")
+    }
+
+    /// A visible title carrying the role cannot be fixed in the accessibility layer: WCAG 2.5.3
+    /// requires the accessible name to contain the visible text. It is a copy decision, so it
+    /// warns rather than blocking.
+    func testButtonLabelContainsRole_visibleTitleIsAWarning() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("Button Label") { }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-label-contains-role")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags[0].severity, .warning)
+        XCTAssertTrue(
+            diags[0].message.contains("2.5.3"),
+            "the message must say why the name cannot simply drop the word: \(diags[0].message)"
+        )
+        XCTAssertNil(diags[0].fix, "no autofix may rewrite on-screen copy")
+    }
+
     // MARK: - image-missing-label: an Image handed to something else
 
     /// A `Label`'s title is its accessible name, so the icon is decorative by construction.

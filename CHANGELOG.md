@@ -389,6 +389,12 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`missing-navigation-title` resolves a design system's own title modifier.** A house wrapper such as `applyNavigationChrome(title:)` sets `navigationTitle` internally, so a screen chaining it is titled while never naming `navigationTitle` itself — and was reported as untitled. A new cross-file pre-pass collects functions returning a view whose body calls a title modifier, and the rule credits those names.
+
+  Resolved from the wrapper's own body rather than from configuration: the evidence that it sets a title is the `navigationTitle` call inside it, which needs no project setup and cannot drift from the code. A function that only calls `navigationBarTitleDisplayMode` is not collected, since that sets how a title displays rather than the title.
+
+  Matched against the chain's source text rather than through `ModifierCollector`, which gathers only a fixed allowlist of known SwiftUI modifiers — a project's own modifier is never in it, so `hasModifier` could never see one. That was the first attempt and it silently matched nothing.
+
 - **`duplicate-button-label` treats separate `#Preview` blocks as mutually exclusive.** Each preview is rendered on its own, so two buttons in different previews are no more simultaneous than two in opposite arms of an `if` — and a button in a preview never shares a screen with a shipped one. Every node now records which preview encloses it, using "none" outside any preview, so all four combinations fall out of the existing coexistence comparison rather than needing separate preview-detection machinery: same preview reports, different previews do not, preview versus shipped does not, neither-in-a-preview reports.
 
   All 5 remaining findings on the app used for measurement were this shape — two `Button("Send")` in adjacent `#Preview` blocks demonstrating a style enabled and disabled, and three in a four-preview file. 5 findings to 0.

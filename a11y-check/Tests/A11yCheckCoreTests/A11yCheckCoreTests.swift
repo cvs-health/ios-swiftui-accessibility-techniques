@@ -1462,6 +1462,64 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 1)
     }
 
+    /// A design-system wrapper that sets the title internally counts as titling the screen.
+    /// The wrapper set normally comes from the cross-file pre-pass; injected directly here.
+    func testMissingNavigationTitle_creditsProjectTitleModifier() {
+        let source = """
+        import SwiftUI
+        struct Sheet: View {
+            let title: String
+            var body: some View {
+                NavigationStack {
+                    Text("content")
+                        .applyNavigationChrome(title: title)
+                }
+            }
+        }
+        """
+        let syntax = Parser.parse(source: source)
+        let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
+        let context = RuleContext(
+            filePath: "test.swift",
+            sourceText: source,
+            locationConverter: converter,
+            titleSettingModifiers: ["applyNavigationChrome"]
+        )
+        let diags = MissingNavigationTitleRule().check(syntax: syntax, context: context)
+        XCTAssertEqual(diags.count, 0)
+
+        // Without the wrapper known, the same screen reads as untitled.
+        let bare = RuleContext(
+            filePath: "test.swift",
+            sourceText: source,
+            locationConverter: converter
+        )
+        XCTAssertEqual(MissingNavigationTitleRule().check(syntax: syntax, context: bare).count, 1)
+    }
+
+    /// The scanner must only pick up wrappers that genuinely set a title.
+    func testTitleModifierScanner_onlyCollectsTitleSettingFunctions() {
+        let source = """
+        import SwiftUI
+        extension View {
+            func applyNavigationChrome(title: String?) -> some View {
+                navigationTitle(title ?? "")
+            }
+            func justDisplayMode() -> some View {
+                navigationBarTitleDisplayMode(.inline)
+            }
+            func notAView(title: String) -> String { title }
+        }
+        """
+        let names = TitleModifierScanner.scan(Parser.parse(source: source))
+        XCTAssertTrue(names.contains("applyNavigationChrome"))
+        XCTAssertFalse(
+            names.contains("justDisplayMode"),
+            "display mode sets how a title shows, not the title"
+        )
+        XCTAssertFalse(names.contains("notAView"), "not a view modifier")
+    }
+
     // MARK: - missing-navigation-title: the deprecated titling API
 
     /// `.navigationBarTitle` is deprecated but still titles the screen, and VoiceOver still

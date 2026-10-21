@@ -58,6 +58,24 @@ public struct MissingNavigationTitleRule: A11yRule {
         pageTitleModifiers.contains { collector.hasModifier($0) }
     }
 
+    /// As above, but also crediting a project modifier that sets the title internally.
+    ///
+    /// A design system typically wraps navigation chrome in one house modifier, so the screen
+    /// chains `.applyNavigationChrome(title: title)` and never names `navigationTitle` itself.
+    /// The pre-pass resolves those wrappers from their own bodies, so the screen reads as titled.
+    ///
+    /// Matched against the chain's source text rather than through `ModifierCollector`, which
+    /// only gathers a fixed allowlist of known SwiftUI modifiers — a project's own modifier is
+    /// never in it, so `hasModifier` can never see one.
+    static func setsPageTitle(
+        _ collector: ModifierCollector,
+        chainText: String,
+        context: RuleContext
+    ) -> Bool {
+        if setsPageTitle(collector) { return true }
+        return context.titleSettingModifiers.contains { chainText.contains(".\($0)(") }
+    }
+
     /// Source-text fallback for the cases that read a body as a string.
     ///
     /// Requires an opening paren so `navigationBarTitleDisplayMode(.inline)` does not count as a
@@ -93,11 +111,12 @@ public struct MissingNavigationTitleRule: A11yRule {
 
             // Check if a page title appears anywhere in the navigation container's subtree
             let modCollector = ModifierCollector.collect(from: nav.chainRoot)
-            if !Self.setsPageTitle(modCollector) {
+            let chainText = nav.chainRoot.trimmedDescription
+            if !Self.setsPageTitle(modCollector, chainText: chainText, context: context) {
                 // Also check the trailing closure body
                 if let body = nav.callExpr.trailingClosure {
                     let bodyCollector = ModifierCollector.collect(from: body)
-                    if !Self.setsPageTitle(bodyCollector) {
+                    if !Self.setsPageTitle(bodyCollector, chainText: body.trimmedDescription, context: context) {
                         // Deliberately no autofix: a page title is content, and only the author
                         // knows what this screen is called. Inserting a literal "Page Title"
                         // shipped that string to users as the real title and VoiceOver
@@ -120,7 +139,8 @@ public struct MissingNavigationTitleRule: A11yRule {
             // (detected by the cross-file pre-pass in RuleRegistry).
             if context.externallyTitledViews.contains(structName) { continue }
             let bodyText = bodyStatements.map(\.description).joined()
-            if !Self.textSetsPageTitle(bodyText) {
+            if !Self.textSetsPageTitle(bodyText),
+               !context.titleSettingModifiers.contains(where: { bodyText.contains(".\($0)(") }) {
                 // No autofix, for the same reason as pattern 1 above: the title is content.
                 // The suggestion still names where it goes — the first content view inside
                 // ScrollView/List (e.g. the VStack), not the container itself.

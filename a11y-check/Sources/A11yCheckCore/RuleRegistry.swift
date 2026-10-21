@@ -20,6 +20,9 @@ public final class RuleRegistry {
     /// View struct names that receive `.navigationTitle()` from a parent at the call site.
     /// Built by `buildNavigationTitleIndex(at:)` during `analyzeDirectory`.
     public var externallyTitledViews: Set<String> = []
+    /// Project modifiers that set a page title internally, e.g. a design-system
+    /// `applyNavigationChrome(title:)`. Built by the same pre-pass.
+    public var titleSettingModifiers: Set<String> = []
     /// Design-system tokens that carry their own accessibility label.
     /// Built by `buildNavigationTitleIndex(at:)` during `analyzeDirectory`.
     public var labelledTokens: Set<String> = []
@@ -171,7 +174,8 @@ public final class RuleRegistry {
             assetColors: assetColors,
             externallyTitledViews: externallyTitledViews,
             labelledTokens: labelledTokens,
-            localizedText: localizedText
+            localizedText: localizedText,
+            titleSettingModifiers: titleSettingModifiers
         )
 
         var allDiagnostics: [A11yDiagnostic] = []
@@ -234,6 +238,7 @@ public final class RuleRegistry {
         guard let enumerator = fileManager.enumerator(atPath: directoryPath) else { return }
         var found = Set<String>()
         var labelled = Set<String>()
+        var titleModifiers = Set<String>()
         // Only worth indexing tokens when a wrapper has been aliased in — nothing reads the
         // set otherwise, and it costs a parse per matching file.
         let wantsTokenIndex = !config.options.viewAliases.isEmpty
@@ -255,6 +260,11 @@ public final class RuleRegistry {
             // Fast pre-filter: the external-title pattern requires a @ViewBuilder function
             // called with .navigationTitle(...) chained at the call site. Only parse files
             // that contain @ViewBuilder — this cuts the pre-pass from O(all files) to O(few).
+            // A house modifier that sets the title need not involve @ViewBuilder, so it is
+            // scanned on its own pre-filter: the body has to mention a title modifier at all.
+            if sourceText.contains("navigationTitle") || sourceText.contains("navigationBarTitle") {
+                titleModifiers.formUnion(TitleModifierScanner.scan(Parser.parse(source: sourceText)))
+            }
             guard sourceText.contains("@ViewBuilder") else { continue }
             let syntax = Parser.parse(source: sourceText)
             let scanner = NavigationTitleCallSiteScanner(viewMode: .sourceAccurate)
@@ -263,6 +273,7 @@ public final class RuleRegistry {
         }
         externallyTitledViews.formUnion(found)
         labelledTokens.formUnion(labelled)
+        titleSettingModifiers.formUnion(titleModifiers)
 
         // Join the Swift constants to the string catalogues. Done once per directory so a run
         // covering several packages resolves a constant declared in one against a catalogue

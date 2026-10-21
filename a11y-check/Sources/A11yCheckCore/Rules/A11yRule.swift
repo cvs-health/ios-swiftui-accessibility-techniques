@@ -46,6 +46,12 @@ public struct RuleContext {
     /// Lets rules that judge wording work on a localised codebase, where the source holds no
     /// literal text to compare at all.
     public let localizedText: [String: String]
+    /// Names of project modifiers that set a page title internally, e.g. a design-system
+    /// `applyNavigationChrome(title:)` whose body calls `navigationTitle(...)`. Built by a
+    /// cross-file pre-pass in RuleRegistry, so a screen titled through a house wrapper is not
+    /// reported as untitled. Resolved from the source rather than configured — the evidence is
+    /// in the wrapper's own body.
+    public let titleSettingModifiers: Set<String>
 
     public init(
         filePath: String,
@@ -57,7 +63,8 @@ public struct RuleContext {
         assetColors: AssetCatalogParser.ThemedColorMap = [:],
         externallyTitledViews: Set<String> = [],
         labelledTokens: Set<String> = [],
-        localizedText: [String: String] = [:]
+        localizedText: [String: String] = [:],
+        titleSettingModifiers: Set<String> = []
     ) {
         self.filePath = filePath
         self.sourceText = sourceText
@@ -69,6 +76,7 @@ public struct RuleContext {
         self.externallyTitledViews = externallyTitledViews
         self.labelledTokens = labelledTokens
         self.localizedText = localizedText
+        self.titleSettingModifiers = titleSettingModifiers
     }
 
     /// Convert a syntax node's position to a 1-based line number.

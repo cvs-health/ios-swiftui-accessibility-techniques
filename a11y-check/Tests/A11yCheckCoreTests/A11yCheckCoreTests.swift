@@ -1126,6 +1126,75 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertNil(diags[0].fix, "no autofix may rewrite on-screen copy")
     }
 
+    // MARK: - SwiftLint accessibility directives are honoured
+
+    /// An author who disabled SwiftLint's equivalent rule has already declared the intent.
+    func testSuppression_honoursEquivalentSwiftLintDirective() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                // Decorative by design.
+                // swiftlint:disable:next accessibility_label_for_image
+                Image("decorative")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source).filter { $0.ruleID == "image-missing-label" }.count, 0)
+    }
+
+    /// A directive for an unrelated SwiftLint rule suppresses nothing.
+    func testSuppression_ignoresUnrelatedSwiftLintDirective() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                // swiftlint:disable:next force_cast
+                Image("still-reported")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source).filter { $0.ruleID == "image-missing-label" }.count, 1)
+    }
+
+    /// `:this` and `:previous` are honoured as well as `:next`.
+    func testSuppression_honoursThisAndPreviousScopes() {
+        let thisScope = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Image("x") // swiftlint:disable:this accessibility_label_for_image
+            }
+        }
+        """
+        XCTAssertEqual(analyze(thisScope).filter { $0.ruleID == "image-missing-label" }.count, 0)
+
+        let previousScope = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Image("x")
+                // swiftlint:disable:previous accessibility_label_for_image
+            }
+        }
+        """
+        XCTAssertEqual(analyze(previousScope).filter { $0.ruleID == "image-missing-label" }.count, 0)
+    }
+
+    /// The region form is deliberately not inherited — it can silence a whole file.
+    func testSuppression_doesNotInheritSwiftLintRegionForm() {
+        let source = """
+        import SwiftUI
+        // swiftlint:disable accessibility_label_for_image
+        struct V: View {
+            var body: some View {
+                Image("still-reported")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source).filter { $0.ruleID == "image-missing-label" }.count, 1)
+    }
+
     // MARK: - Preview code is filtered tool-wide
 
     /// All three preview forms are dropped, for every rule.

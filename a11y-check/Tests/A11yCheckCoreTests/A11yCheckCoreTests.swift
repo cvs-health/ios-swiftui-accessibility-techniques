@@ -3840,6 +3840,78 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertTrue(diags.allSatisfy { $0.message.contains("UIFont") })
     }
 
+    // MARK: - fixed-font-size: @ScaledMetric sizes already scale
+
+    /// `@ScaledMetric` is the sanctioned way to get a custom size that tracks Dynamic Type.
+    /// Matching `.system(size:` on the text alone flagged the correct fix.
+    func testFixedFontSize_allowsScaledMetricSize() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @ScaledMetric(relativeTo: .body) private var s: CGFloat = 16
+            var body: some View {
+                VStack {
+                    Text("a").font(.system(size: s))
+                    Text("b").font(.system(size: s * 1.5))
+                    Text("c").font(.system(size: self.s))
+                    Text("d").font(.custom("Helvetica", size: s))
+                    Text("e").font(Font(UIFont.systemFont(ofSize: s)))
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 0)
+    }
+
+    /// `relativeTo:` is optional — without it the metric is relative to `.body` — so its
+    /// absence is not evidence the value is fixed.
+    func testFixedFontSize_allowsScaledMetricWithoutRelativeTo() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @ScaledMetric private var s: CGFloat = 16
+            var body: some View {
+                Text("a").font(.system(size: s))
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 0)
+    }
+
+    /// The exemption is per size argument, not per file: a literal is still a literal even
+    /// when some other property in the same view is scaled.
+    func testFixedFontSize_scaledMetricElsewhereDoesNotSuppressLiterals() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @ScaledMetric private var s: CGFloat = 16
+            var body: some View {
+                VStack {
+                    Text("scaled").font(.system(size: s))
+                    Text("fixed").font(.system(size: 20))
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "fixed-font-size")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.line, 7, "only the literal reports")
+    }
+
+    /// A metric feeding some other parameter does not exempt the font.
+    func testFixedFontSize_onlySizeArgumentCounts() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            @ScaledMetric private var pad: CGFloat = 8
+            var body: some View {
+                Text("a").font(.system(size: 17)).padding(pad)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 1)
+    }
+
     // MARK: - Fixed height clipping text
 
     func testFixedHeightClipsText_flagsSnugTextBoxes() {

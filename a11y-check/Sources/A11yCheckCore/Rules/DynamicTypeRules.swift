@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import SwiftSyntax
 
 // MARK: - Fixed Font Size Rule
@@ -19,10 +35,16 @@ public struct FixedFontSizeRule: A11yRule {
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let collector = ModifierCollector.collect(from: syntax)
+        let scaledMetrics = ScaledMetricCollector.collect(from: syntax)
         var diagnostics: [A11yDiagnostic] = []
 
         for mod in collector.modifiers(named: "font") {
             let argText = mod.arguments.first?.text ?? ""
+
+            // A size driven by `@ScaledMetric` already tracks Dynamic Type, whatever the
+            // font is built from, so none of the checks below apply.
+            if Self.sizeIsScaled(mod, scaledMetrics: scaledMetrics) { continue }
+
             // Detect .system(size: N) pattern
             if argText.contains("system(size:") || argText.contains(".system(size:") {
                 let fix = makeReplacementFix(
@@ -66,6 +88,44 @@ public struct FixedFontSizeRule: A11yRule {
             }
         }
         return diagnostics
+    }
+
+    /// Whether this font's size argument is fed by a `@ScaledMetric` property.
+    ///
+    /// Only an argument labelled `size:` or `ofSize:` counts, so a metric that happens to
+    /// feed some other parameter does not exempt the font. Nested calls are searched because
+    /// the UIFont spelling buries the size one level down — `Font(UIFont.systemFont(ofSize:))`
+    /// — and the whole argument expression is searched rather than just a bare identifier, so
+    /// `size: iconSize * 1.5` and `size: self.iconSize` both resolve. A metric anywhere in
+    /// that arithmetic means the result moves with the user's text-size preference.
+    private static func sizeIsScaled(
+        _ mod: ModifierCollector.CollectedModifier,
+        scaledMetrics: Set<String>
+    ) -> Bool {
+        guard !scaledMetrics.isEmpty,
+              let fontArgument = mod.callExpr.arguments.first?.expression
+        else { return false }
+
+        return scaledSizeArgument(in: Syntax(fontArgument), scaledMetrics: scaledMetrics)
+    }
+
+    private static let sizeArgumentLabels: Set<String> = ["size", "ofSize"]
+
+    /// Depth-first search for a size argument whose expression mentions a scaled metric.
+    private static func scaledSizeArgument(in node: Syntax, scaledMetrics: Set<String>) -> Bool {
+        if let call = node.as(FunctionCallExprSyntax.self) {
+            for argument in call.arguments
+            where sizeArgumentLabels.contains(argument.label?.text ?? "") {
+                let scaled = argument.expression
+                    .tokens(viewMode: .sourceAccurate)
+                    .contains { scaledMetrics.contains($0.text) }
+                if scaled { return true }
+            }
+        }
+        for child in node.children(viewMode: .sourceAccurate) {
+            if scaledSizeArgument(in: child, scaledMetrics: scaledMetrics) { return true }
+        }
+        return false
     }
 
     /// `.custom("Name", size: 17)` or `Font.custom(...)`, in any spelling.

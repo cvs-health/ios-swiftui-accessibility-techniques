@@ -1114,6 +1114,22 @@ For any other tap gesture you believe is a false positive, use inline suppressio
 .onTapGesture { ... }
 ```
 
+The **fixed-font-size** rule skips a size driven by a `@ScaledMetric` property, which is the
+sanctioned way to get a custom size that tracks Dynamic Type:
+
+```swift
+@ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 16
+// …
+Image(systemName: "star").font(.system(size: iconSize))   // not reported
+```
+
+`relativeTo:` is optional — without it the metric is relative to `.body` — so its absence is not
+evidence the value is fixed. The exemption resolves the *declaration*, not the name, and applies
+only to an argument labelled `size:` or `ofSize:`, so a literal is still reported when some other
+property in the same view happens to be scaled. It covers `.system`, `.custom` and the
+`Font(UIFont.systemFont(ofSize:))` spelling alike, including arithmetic such as
+`size: iconSize * 1.5`.
+
 The **input-missing-purpose** rule only flags TextFields when it can infer a specific `UITextContentType` from the field's label, placeholder, or binding name — for example, a field labeled "Email" gets flagged with a suggestion to add `.textContentType(.emailAddress)`. TextFields for generic input (task names, folder names, notes, search queries, etc.) are silently skipped because there is no standard content type for them and flagging them would be a false positive. SecureFields are always flagged since they almost always need `.textContentType(.password)` or `.textContentType(.newPassword)`.
 
 The **textfield-missing-label** rule catches two problems:

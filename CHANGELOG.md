@@ -403,6 +403,21 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   −2 findings on the measured app, both verified by hand: `AccordionsView`'s "Good Example `DisclosureGroupStyle`" and the `CheckboxToggleStyle` behind "Good Example Single Checkbox" and "Good Example Checkbox Group". The intentional bad examples in `SwiftLintView` and `CardsView` still report, as does a plain `Text` with a bare `.onTapGesture`. The exemption is scoped to style conformances rather than to any `makeBody`, so a plain type that happens to define one still has to announce its own role.
 
+- **`fixed-font-size` no longer flags the correct fix.** The rule matched `.system(size:` on the argument text and never resolved what the size was, so a `@ScaledMetric`-driven size — the sanctioned way to get a custom size that tracks Dynamic Type — was reported as not scaling. That is the worst shape of false positive: it penalises the author who did the right thing, and the obvious way to silence it is to undo the fix.
+
+  The exemption reads the *declaration*, not the name, and is scoped tightly:
+
+  - Only an argument labelled `size:` or `ofSize:` counts, so a metric feeding some other parameter — `.font(.system(size: 17)).padding(pad)` — exempts nothing.
+  - It is per size argument, not per file: a literal is still reported when another property in the same view is scaled.
+  - Nested calls are searched, because the UIFont spelling buries the size one level down in `Font(UIFont.systemFont(ofSize:))`, and the whole argument expression is searched, so `size: iconSize * 1.5` and `size: self.iconSize` both resolve.
+  - `relativeTo:` is optional on `@ScaledMetric` — without it the metric is relative to `.body` — so its absence is not treated as evidence the value is fixed.
+
+  Zero change on the measured app, which has two `.system(size:)` calls and no `@ScaledMetric` behind either: the one finding is a genuine defect, a map pin whose `textSize` returns hardcoded `13`/`16`/`20`/`24`. The rule would have bitten the first person to fix one properly.
+
+  Worth stating what this does **not** do, since the two get conflated: a `// swiftlint:disable:this no_swiftui_font` directive is **not** honoured as a suppression for `fixed-font-size`, and should not be. `no_swiftui_font` is a design-system rule — disabling it claims design approval to use a system font — while `fixed-font-size` is a WCAG 1.4.4 claim about scaling. Neither implies the other, so inheriting the directive would let a design waiver silently clear an accessibility finding. The two mappings in `InlineSuppressionFilter` are honoured because they are genuine 1:1 equivalences; this one is an overlap.
+
+  Added `ScaledMetricCollector`, in the same shape as `FontConstantCollector`.
+
 #### Added
 
 - **Every run reports what inline directives removed.** Suppression was silent, so a quieter report was indistinguishable from a cleaner codebase — and with SwiftLint directives now honoured, the directive a reader is least likely to have in mind is the one written for another tool. The count is broken out by origin for that reason:

@@ -689,6 +689,59 @@ Image(systemName: "star") // a11y-check:disable
 Image(systemName: "star")
 ```
 
+A note placed after the rule IDs is fine — only the leading rule-ID-shaped token of each
+comma-separated piece is read:
+
+```swift
+// a11y-check:disable-next-line sheet-focus-return  (focus restored via a Combine publisher)
+.alert(…)
+```
+
+### Whole-file suppression
+
+For a file where a rule does not apply at all — generated code, a vendored sample, a debug
+screen that `exclude_paths` does not match by name:
+
+```swift
+// a11y-check:disable-file image-missing-label
+
+// Several rules
+// a11y-check:disable-file image-missing-label, heading-trait-missing
+
+// Every rule in the file — use sparingly
+// a11y-check:disable-file
+```
+
+This is position-independent: the directive says "file", so it reads the same wherever it sits
+rather than depending on being above the code it covers.
+
+Prefer fixing the code where you can. `.accessibilityHidden(true)` and `Image(decorative:)` make
+the intent true for VoiceOver as well as quiet for the linter; a suppression only does the second.
+
+### SwiftLint directives
+
+SwiftLint ships two accessibility rules, and both have an exact counterpart here:
+
+| SwiftLint | a11y-check |
+| --- | --- |
+| `accessibility_label_for_image` | `image-missing-label` |
+| `accessibility_trait_for_button` | `tap-gesture-missing-button-trait` |
+
+A line-scoped SwiftLint directive for one of those — `:next`, `:this` or `:previous` — is honoured
+here too, so a project that already declared the intent for SwiftLint does not have to restate it:
+
+```swift
+// swiftlint:disable:next accessibility_label_for_image
+Image("brand_mark")
+```
+
+The directive covers the whole statement it targets, not one line, because the two tools report at
+different points in a view chain: SwiftLint flags `accessibility_trait_for_button` at the view and
+a11y-check flags it at the `.onTapGesture` further down.
+
+SwiftLint's region form (`disable` … `enable`) is **not** inherited — an unclosed region can
+silence a file, so use `disable-file` above when that is what you mean.
+
 ## Xcode integration
 
 There are two ways to run a11y-check in Xcode. Pick whichever fits your project:

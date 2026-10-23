@@ -35,10 +35,17 @@ public enum InlineSuppressionFilter {
         sourceText: String,
         statementRanges: [Int: ClosedRange<Int>] = [:]
     ) -> [A11yDiagnostic] {
+        let fileLevel = parseFileSuppressions(sourceText)
+        if fileLevel.contains(where: { $0 == nil }) { return [] }
+
         let suppressions = parseSuppressionsFromSource(sourceText)
-        guard !suppressions.isEmpty else { return diagnostics }
+        guard !suppressions.isEmpty || !fileLevel.isEmpty else { return diagnostics }
+
+        let fileSuppressedRules = Set(fileLevel.compactMap { $0 }.flatMap { $0 })
 
         return diagnostics.filter { diag in
+            if fileSuppressedRules.contains(diag.ruleID) { return false }
+            return
             !suppressions.contains { sup in
                 guard sup.ruleIDs == nil || sup.ruleIDs!.contains(diag.ruleID) else { return false }
                 if sup.coversStatement, let range = statementRanges[sup.line] {
@@ -100,8 +107,22 @@ public enum InlineSuppressionFilter {
         "accessibility_trait_for_button": "tap-gesture-missing-button-trait",
     ]
 
+    /// Rule sets suppressed for the whole file. A `nil` element means every rule.
+    static func parseFileSuppressions(_ source: String) -> [Set<String>?] {
+        var fileLevel: [Set<String>?] = []
+        for line in source.components(separatedBy: .newlines) {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            guard let range = trimmed.range(of: "// a11y-check:disable-file") else { continue }
+            let after = trimmed[range.upperBound...].trimmingCharacters(in: .whitespaces)
+            fileLevel.append(parseRuleIDs(after))
+        }
+        return fileLevel
+    }
+
     static func parseSuppressionsFromSource(_ source: String) -> [Suppression] {
         var suppressions: [Suppression] = []
+        var fileLevel: [Set<String>?] = []
+        _ = fileLevel  // collected separately by parseFileSuppressions
         let lines = source.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
@@ -126,6 +147,15 @@ public enum InlineSuppressionFilter {
                 }
             }
 
+            // File-level. Deliberately position-independent: the directive says "file", so it
+            // reads the same wherever it sits and does not depend on being above the code it
+            // covers. Must be tested before the line forms, since "disable" prefixes it.
+            if let range = trimmed.range(of: "// a11y-check:disable-file") {
+                let after = trimmed[range.upperBound...].trimmingCharacters(in: .whitespaces)
+                fileLevel.append(parseRuleIDs(after))
+                continue
+            }
+
             // Check for disable-next-line (must come before disable check)
             if let range = trimmed.range(of: "// a11y-check:disable-next-line") {
                 let afterDirective = trimmed[range.upperBound...].trimmingCharacters(in: .whitespaces)
@@ -137,8 +167,8 @@ public enum InlineSuppressionFilter {
             // Check for same-line disable (comment can be at end of code line or standalone)
             if let range = trimmed.range(of: "// a11y-check:disable") {
                 let afterDirective = trimmed[range.upperBound...].trimmingCharacters(in: .whitespaces)
-                // Make sure we didn't match "disable-next-line" partially
-                if afterDirective.hasPrefix("-next-line") { continue }
+                // Make sure we didn't match a longer directive partially
+                if afterDirective.hasPrefix("-next-line") || afterDirective.hasPrefix("-file") { continue }
                 let ruleIDs = parseRuleIDs(afterDirective)
                 suppressions.append(Suppression(line: lineNumber, ruleIDs: ruleIDs))
             }
@@ -147,7 +177,6 @@ public enum InlineSuppressionFilter {
         return suppressions
     }
 
-    /// Parse comma-separated rule IDs. Returns nil if empty (meaning suppress all).
     /// Parse comma-separated rule IDs. Returns nil if empty (meaning suppress all).
     ///
     /// Only the leading rule-ID-shaped token of each comma-separated piece is read, so a note

@@ -395,6 +395,12 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Also corrected: the rule's own `description` claimed "Padding and spacing count toward the target size" while the implementation only ever read padding.
 
+#### Added
+
+- **`// a11y-check:disable-file <rules>` suppresses rules for a whole file.** Suppression was line-scoped only, so the choice for a file with several findings of one rule was a comment per finding, or a configuration hammer: `disabled_rules` turns a rule off across the repo, `exclude_paths` turns *every* rule off for the path. Neither expresses "this rule, this file" — which is what generated code, a vendored sample, or a debug file that `*Debug*` does not match by name actually needs.
+
+  Position-independent by design: the directive says "file", so it reads the same wherever it sits rather than depending on being above the code it covers. Takes a comma-separated list; the bare form suppresses every rule in the file and should be rare. Five tests, one of them pinning that it is not mistaken for the line-scoped form.
+
 - **An equivalent SwiftLint directive is honoured as a suppression.** SwiftLint ships exactly two accessibility rules and both have an exact counterpart here: `accessibility_label_for_image` → `image-missing-label`, `accessibility_trait_for_button` → `tap-gesture-missing-button-trait`. An author who wrote `// swiftlint:disable:next accessibility_label_for_image` has already declared that the image is intentionally unlabelled, in the vocabulary of the linter their project had at the time — one real app carried 25 such declarations, every one of them ignored, with this tool asking for the same statement again in its own syntax. The declaration is in the code; it is now read.
 
   A directive naming an unrelated SwiftLint rule suppresses nothing, which a test pins. The line-scoped forms `:next`, `:this` and `:previous` are honoured; the region form (`disable` … `enable`) deliberately is not, because it can silence a whole file and inheriting that silently would blind this tool across code nobody meant to exempt.

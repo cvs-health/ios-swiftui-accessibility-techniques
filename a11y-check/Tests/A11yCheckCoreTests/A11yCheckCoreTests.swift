@@ -1126,6 +1126,81 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertNil(diags[0].fix, "no autofix may rewrite on-screen copy")
     }
 
+    // MARK: - disable-file
+
+    /// Named rules are suppressed for the whole file; others keep reporting.
+    func testDisableFile_suppressesNamedRulesOnly() {
+        let source = """
+        import SwiftUI
+        // a11y-check:disable-file image-missing-label
+        struct V: View {
+            var body: some View {
+                VStack {
+                    Image("a")
+                    Image("b")
+                    Text("Heading").font(.themeHeadingXL)
+                }
+            }
+        }
+        """
+        let diags = analyze(source)
+        XCTAssertEqual(diags.filter { $0.ruleID == "image-missing-label" }.count, 0)
+        XCTAssertGreaterThan(diags.filter { $0.ruleID == "heading-trait-missing" }.count, 0)
+    }
+
+    /// The bare form suppresses every rule in the file.
+    func testDisableFile_bareFormSuppressesEverything() {
+        let source = """
+        import SwiftUI
+        // a11y-check:disable-file
+        struct V: View {
+            var body: some View {
+                VStack { Image("a"); Text("H").font(.themeHeadingXL) }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source).count, 0)
+    }
+
+    func testDisableFile_acceptsMultipleRules() {
+        let source = """
+        import SwiftUI
+        // a11y-check:disable-file image-missing-label, heading-trait-missing
+        struct V: View {
+            var body: some View {
+                VStack { Image("a"); Text("H").font(.themeHeadingXL) }
+            }
+        }
+        """
+        let diags = analyze(source)
+        XCTAssertEqual(diags.filter { $0.ruleID == "image-missing-label" }.count, 0)
+        XCTAssertEqual(diags.filter { $0.ruleID == "heading-trait-missing" }.count, 0)
+    }
+
+    /// The directive says "file", so where it sits must not matter.
+    func testDisableFile_isPositionIndependent() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View { Image("a") }
+        }
+        // a11y-check:disable-file image-missing-label
+        """
+        XCTAssertEqual(analyze(source).filter { $0.ruleID == "image-missing-label" }.count, 0)
+    }
+
+    /// It must not be mistaken for the line-scoped form.
+    func testDisableFile_doesNotRegisterAsALineSuppression() {
+        let source = """
+        import SwiftUI
+        // a11y-check:disable-file heading-trait-missing
+        struct V: View {
+            var body: some View { Image("a") }
+        }
+        """
+        XCTAssertEqual(analyze(source).filter { $0.ruleID == "image-missing-label" }.count, 1)
+    }
+
     // MARK: - SwiftLint accessibility directives are honoured
 
     /// An author who disabled SwiftLint's equivalent rule has already declared the intent.

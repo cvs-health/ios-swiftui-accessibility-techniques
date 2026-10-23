@@ -459,6 +459,16 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   The rule also said it checked "images with tap gestures" but included every `Image`, so decorative icons were treated as touch targets. An image is a target only if it carries the gesture. On the app used for measurement: 15 findings to 1, every drop hand-verified as not a touch target — icons inside 24pt buttons, an `Image(decorative:)` badge, an icon already `.accessibilityHidden(true)`. The one survivor is a 16pt frame on a button's own chain.
 
+- **`button-used-as-link` requires an actual, unconditional open.** Two false positives, both from the rule treating any URL-shaped text in an action as "this opens a URL":
+
+  **Constructing a URL is not opening one.** `URL(string:` was a trigger pattern, and it matched a button that built a `URL` and handed it to a callback, opening nothing. Removed, along with the bare substring `safari` — `SFSafariViewController` already covers the real case, and a lowercase word that short matches identifiers and comments.
+
+  **A conditional open cannot become a `Link`.** `Link(destination:)` takes one static destination, so a button that opens a URL on only one branch of a switch cannot be replaced by one and the rule's own advice is impossible to follow. Found on a rewards card that opens a deep link for one navigation case and presents an alert or modal for the others.
+
+  The conditional check matches on the **callee**, not the whole call. A call's text contains its arguments, so `Task { … openURL(url) … }` matched on its own body and, sitting outside any conditional, voted the open unconditional — hiding the exact case the check exists for. That is pinned by a test.
+
+  19 of the 21 findings on the app used for measurement were unambiguous `openURL` / `UIApplication.shared.open` calls and still report; the 2 outliers were the cases above.
+
 - **`button-used-as-link` accepts an explicit link trait.** The rule exists so VoiceOver announces "Link" rather than "Button"; where the author had already added `.accessibilityAddTraits(.isLink)`, that is achieved, and asking them to swap the view type too is a style preference rather than an accessibility defect.
 
 - **`tap-gesture-missing-button-trait` accepts an equivalent trait, and honours an explicit removal.** It credited only `.accessibilityAddTraits(.isButton)`, so two correct patterns were reported:

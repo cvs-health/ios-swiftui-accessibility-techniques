@@ -1574,6 +1574,75 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(Set(diags.map(\.line)).count, diags.count)
     }
 
+    /// An unconditional open is what the rule is for.
+    func testButtonUsedAsLink_reportsUnconditionalOpen() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("Terms") { openURL(url) }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "button-used-as-link").count, 1)
+    }
+
+    /// Building a URL is not opening one.
+    func testButtonUsedAsLink_ignoresURLConstructedButNotOpened() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("Pick") { callback(Result(url: URL(string: "x"))) }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "button-used-as-link").count, 0)
+    }
+
+    /// `Link(destination:)` takes one destination, so a conditional open cannot become a Link
+    /// and the rule's advice would be impossible to follow.
+    func testButtonUsedAsLink_ignoresConditionalOpen() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("Maybe") {
+                    switch mode {
+                    case .web: openURL(url)
+                    default: showAlert = true
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "button-used-as-link").count, 0)
+    }
+
+    /// An open nested in a Task inside a conditional is still conditional. The enclosing call's
+    /// text contains its own body, so matching on anything but the callee read `Task { … }` as
+    /// an unconditional open and hid this case.
+    func testButtonUsedAsLink_conditionalOpenInsideATaskIsStillConditional() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("Go") {
+                    Task {
+                        switch navigation {
+                        case .deepLink:
+                            if let link { LinkManager.openURL(link) }
+                        default:
+                            showError = true
+                        }
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "button-used-as-link").count, 0)
+    }
+
     /// The rule's own goal is a "Link" announcement; the trait achieves it.
     func testButtonUsedAsLink_acceptsExplicitLinkTrait() {
         let source = """

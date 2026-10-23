@@ -18,10 +18,56 @@ public struct ButtonUsedAsLinkRule: A11yRule {
     public init() {}
 
     /// Patterns in button action body that suggest URL navigation.
+    /// Calls that actually open a URL.
+    ///
+    /// `URL(string:)` was here and matched a Button that *built* a URL and handed it to a
+    /// callback, opening nothing — constructing a URL is not opening one. The bare substring
+    /// `safari` went with it: `SFSafariViewController` already covers the real case, and a
+    /// lowercase word that short matches identifiers and comments.
     private static let urlPatterns = [
-        "openURL", "UIApplication.shared.open", "URL(string:",
-        "SFSafariViewController", "WKWebView", "safari",
+        "openURL", "UIApplication.shared.open",
+        "SFSafariViewController", "WKWebView",
     ]
+
+    /// Whether every URL-opening call in the action sits inside a conditional.
+    ///
+    /// `Link(destination:)` takes one static destination, so a Button that opens a URL on only
+    /// one branch cannot be replaced by a Link — the rule's own advice becomes impossible to
+    /// follow. Found on a rewards card that opens a deep link for one navigation case and
+    /// presents an alert or a modal for the others.
+    static func opensURLOnlyConditionally(_ closure: ClosureExprSyntax) -> Bool {
+        var found = false
+        var allConditional = true
+
+        func visit(_ node: Syntax) {
+            if let call = node.as(FunctionCallExprSyntax.self) {
+                // The callee, not the whole call. A call's text contains its arguments, so
+                // `Task { … openURL(url) … }` matched on its own body and, sitting outside any
+                // conditional, voted the open unconditional — hiding the very case this check
+                // exists for.
+                let text = call.calledExpression.trimmedDescription
+                if urlPatterns.contains(where: { text.contains($0) }) {
+                    found = true
+                    if !isInsideConditional(Syntax(call), stoppingAt: Syntax(closure)) {
+                        allConditional = false
+                    }
+                }
+            }
+            for child in node.children(viewMode: .sourceAccurate) { visit(child) }
+        }
+        visit(Syntax(closure))
+        return found && allConditional
+    }
+
+    /// Whether an `if` or `switch` sits between `node` and `boundary`.
+    private static func isInsideConditional(_ node: Syntax, stoppingAt boundary: Syntax) -> Bool {
+        var cursor = node.parent
+        while let current = cursor, current.id != boundary.id {
+            if current.is(IfExprSyntax.self) || current.is(SwitchExprSyntax.self) { return true }
+            cursor = current.parent
+        }
+        return false
+    }
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
@@ -39,6 +85,9 @@ public struct ButtonUsedAsLinkRule: A11yRule {
             // Check the trailing closure (action body)
             guard let body = view.callExpr.trailingClosure else { continue }
             let bodyText = body.trimmedDescription
+
+            // A conditional open cannot become a Link, so the suggestion would not apply.
+            if Self.opensURLOnlyConditionally(body) { continue }
 
             for pattern in Self.urlPatterns {
                 if bodyText.contains(pattern) {

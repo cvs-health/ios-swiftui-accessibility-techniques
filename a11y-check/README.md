@@ -739,8 +739,17 @@ The directive covers the whole statement it targets, not one line, because the t
 different points in a view chain: SwiftLint flags `accessibility_trait_for_button` at the view and
 a11y-check flags it at the `.onTapGesture` further down.
 
-SwiftLint's region form (`disable` … `enable`) is **not** inherited — an unclosed region can
-silence a file, so use `disable-file` above when that is what you mean.
+A **closed** region — `disable` … `enable` — is honoured too, since it is a bounded, deliberate
+declaration:
+
+```swift
+// swiftlint:disable accessibility_trait_for_button
+VStack { … }
+// swiftlint:enable accessibility_trait_for_button
+```
+
+An **unclosed** `disable` with no matching `enable` is *not* inherited: it can silence a whole
+file, and `a11y-check:disable-file` is the explicit way to say that.
 
 ## Xcode integration
 

@@ -1297,18 +1297,63 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(previousScope).filter { $0.ruleID == "image-missing-label" }.count, 0)
     }
 
-    /// The region form is deliberately not inherited — it can silence a whole file.
-    func testSuppression_doesNotInheritSwiftLintRegionForm() {
+    /// A closed region is a bounded, deliberate declaration — honoured.
+    func testSuppression_honoursClosedSwiftLintRegion() {
         let source = """
         import SwiftUI
-        // swiftlint:disable accessibility_label_for_image
         struct V: View {
             var body: some View {
-                Image("still-reported")
+                // swiftlint:disable accessibility_trait_for_button
+                VStack {
+                    Text("inside").onTapGesture { act() }
+                }
+                // swiftlint:enable accessibility_trait_for_button
             }
         }
         """
-        XCTAssertEqual(analyze(source).filter { $0.ruleID == "image-missing-label" }.count, 1)
+        XCTAssertEqual(
+            analyze(source).filter { $0.ruleID == "tap-gesture-missing-button-trait" }.count, 0
+        )
+    }
+
+    /// An unclosed region can silence a whole file, so it is not inherited.
+    func testSuppression_ignoresUnclosedSwiftLintRegion() {
+        let source = """
+        import SwiftUI
+        // swiftlint:disable accessibility_trait_for_button
+        struct V: View {
+            var body: some View {
+                VStack {
+                    Text("a").onTapGesture { act() }
+                    Text("b").onTapGesture { act() }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(
+            analyze(source).filter { $0.ruleID == "tap-gesture-missing-button-trait" }.count, 2
+        )
+    }
+
+    /// Code after the `enable` is outside the region.
+    func testSuppression_regionEndsAtEnable() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                VStack {
+                    // swiftlint:disable accessibility_trait_for_button
+                    Text("inside").onTapGesture { act() }
+                    // swiftlint:enable accessibility_trait_for_button
+
+                    Text("outside").onTapGesture { act() }
+                }
+            }
+        }
+        """
+        let diags = analyze(source).filter { $0.ruleID == "tap-gesture-missing-button-trait" }
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.line, 9)
     }
 
     // MARK: - Preview code is filtered tool-wide

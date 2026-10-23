@@ -39,12 +39,17 @@ public enum InlineSuppressionFilter {
         if fileLevel.contains(where: { $0 == nil }) { return [] }
 
         let suppressions = parseSuppressionsFromSource(sourceText)
-        guard !suppressions.isEmpty || !fileLevel.isEmpty else { return diagnostics }
+        guard !suppressions.isEmpty || !fileLevel.isEmpty
+            || !parseSwiftLintRegions(sourceText).isEmpty else { return diagnostics }
 
         let fileSuppressedRules = Set(fileLevel.compactMap { $0 }.flatMap { $0 })
+        let regions = parseSwiftLintRegions(sourceText)
 
         return diagnostics.filter { diag in
             if fileSuppressedRules.contains(diag.ruleID) { return false }
+            if regions.contains(where: { $0.rules.contains(diag.ruleID) && $0.lines.contains(diag.line) }) {
+                return false
+            }
             return
             !suppressions.contains { sup in
                 guard sup.ruleIDs == nil || sup.ruleIDs!.contains(diag.ruleID) else { return false }
@@ -106,6 +111,45 @@ public enum InlineSuppressionFilter {
         "accessibility_label_for_image": "image-missing-label",
         "accessibility_trait_for_button": "tap-gesture-missing-button-trait",
     ]
+
+    /// Closed SwiftLint `disable` … `enable` regions, mapped to our rule IDs.
+    ///
+    /// The region form was initially not inherited on the grounds that it can silence a whole
+    /// file. That is true of an *unclosed* region, and false of every real one examined: three
+    /// regions in one app each wrapped a single function in 8 to 17 lines and closed properly,
+    /// which is the same quality of declared intent as the `:next` form. So a closed region is
+    /// honoured and an unclosed one is not — the latter being exactly the blanket case, for
+    /// which `a11y-check:disable-file` is the explicit tool.
+    ///
+    /// `disable` is matched with a following space so `disable:next` does not read as a region.
+    static func parseSwiftLintRegions(_ source: String) -> [(rules: Set<String>, lines: ClosedRange<Int>)] {
+        var open: [String: Int] = [:]          // our rule ID → line the region opened on
+        var closed: [(rules: Set<String>, lines: ClosedRange<Int>)] = []
+
+        func mappedRules(_ text: Substring) -> [String] {
+            text.split(whereSeparator: { $0 == " " || $0 == "," })
+                .compactMap { swiftLintEquivalents[String($0)] }
+        }
+
+        for (index, line) in source.components(separatedBy: .newlines).enumerated() {
+            let lineNumber = index + 1
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+
+            if let range = trimmed.range(of: "// swiftlint:disable ") {
+                for rule in mappedRules(trimmed[range.upperBound...]) where open[rule] == nil {
+                    open[rule] = lineNumber
+                }
+            }
+            if let range = trimmed.range(of: "// swiftlint:enable ") {
+                for rule in mappedRules(trimmed[range.upperBound...]) {
+                    guard let start = open.removeValue(forKey: rule), start <= lineNumber else { continue }
+                    closed.append((rules: [rule], lines: start...lineNumber))
+                }
+            }
+        }
+        // Anything still open was never closed: deliberately dropped.
+        return closed
+    }
 
     /// Rule sets suppressed for the whole file. A `nil` element means every rule.
     static func parseFileSuppressions(_ source: String) -> [Set<String>?] {

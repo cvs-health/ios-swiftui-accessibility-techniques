@@ -1,4 +1,5 @@
 import Foundation
+import SwiftSyntax
 
 /// Filters diagnostics based on inline suppression comments in source code.
 ///
@@ -12,17 +13,73 @@ public enum InlineSuppressionFilter {
     struct Suppression {
         let line: Int
         let ruleIDs: Set<String>?  // nil means suppress all rules
+        /// Whether the suppression covers the whole statement starting at `line` rather than
+        /// that line alone. Set for directives imported from SwiftLint: it reports a rule at a
+        /// different node of a view chain than this tool does, so matching one line misses.
+        let coversStatement: Bool
+
+        init(line: Int, ruleIDs: Set<String>?, coversStatement: Bool = false) {
+            self.line = line
+            self.ruleIDs = ruleIDs
+            self.coversStatement = coversStatement
+        }
     }
 
     /// Filter diagnostics, removing any that are suppressed by inline comments.
-    public static func filter(_ diagnostics: [A11yDiagnostic], sourceText: String) -> [A11yDiagnostic] {
+    ///
+    /// `statementRanges` maps a line to the span of the statement beginning there. It is only
+    /// needed for directives imported from SwiftLint — see `Suppression.coversStatement` — so
+    /// callers without a parsed tree may omit it and those directives then match a single line.
+    public static func filter(
+        _ diagnostics: [A11yDiagnostic],
+        sourceText: String,
+        statementRanges: [Int: ClosedRange<Int>] = [:]
+    ) -> [A11yDiagnostic] {
         let suppressions = parseSuppressionsFromSource(sourceText)
         guard !suppressions.isEmpty else { return diagnostics }
 
         return diagnostics.filter { diag in
             !suppressions.contains { sup in
-                sup.line == diag.line && (sup.ruleIDs == nil || sup.ruleIDs!.contains(diag.ruleID))
+                guard sup.ruleIDs == nil || sup.ruleIDs!.contains(diag.ruleID) else { return false }
+                if sup.coversStatement, let range = statementRanges[sup.line] {
+                    return range.contains(diag.line)
+                }
+                return sup.line == diag.line
             }
+        }
+    }
+
+    /// Line → span of the statement starting on that line.
+    ///
+    /// A SwiftUI view is one statement spread over many lines, and the two linters report inside
+    /// it at different points: SwiftLint flags `accessibility_trait_for_button` at the view, this
+    /// tool flags it at the `.onTapGesture` several lines further down. Matching a single line
+    /// therefore honoured none of the real directives in one app — 7 findings carried one, at
+    /// gaps of 3 to 9 lines.
+    public static func statementRanges(
+        syntax: SourceFileSyntax,
+        converter: SourceLocationConverter
+    ) -> [Int: ClosedRange<Int>] {
+        var ranges: [Int: ClosedRange<Int>] = [:]
+        let collector = StatementCollector(viewMode: .sourceAccurate)
+        collector.walk(syntax)
+        for item in collector.items {
+            let start = converter.location(for: item.positionAfterSkippingLeadingTrivia).line
+            let end = converter.location(for: item.endPositionBeforeTrailingTrivia).line
+            guard start <= end else { continue }
+            // An outer statement encloses inner ones; keep the innermost so a directive before a
+            // nested view does not silence the whole surrounding body.
+            if let existing = ranges[start], existing.count <= (end - start + 1) { continue }
+            ranges[start] = start...end
+        }
+        return ranges
+    }
+
+    private final class StatementCollector: SyntaxVisitor {
+        var items: [CodeBlockItemSyntax] = []
+        override func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
+            items.append(node)
+            return .visitChildren
         }
     }
 
@@ -60,7 +117,11 @@ public enum InlineSuppressionFilter {
                     .compactMap { swiftLintEquivalents[String($0)] }
                 if !mapped.isEmpty {
                     suppressions.append(
-                        Suppression(line: lineNumber + offset, ruleIDs: Set(mapped))
+                        Suppression(
+                            line: lineNumber + offset,
+                            ruleIDs: Set(mapped),
+                            coversStatement: true
+                        )
                     )
                 }
             }

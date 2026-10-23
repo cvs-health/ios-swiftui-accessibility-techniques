@@ -1143,6 +1143,47 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source).filter { $0.ruleID == "image-missing-label" }.count, 0)
     }
 
+    /// SwiftLint reports `accessibility_trait_for_button` at the view; this tool reports at the
+    /// `.onTapGesture` several lines down. The directive must cover the whole chain.
+    func testSuppression_swiftLintDirectiveCoversTheWholeStatement() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                // swiftlint:disable:next accessibility_trait_for_button
+                Circle()
+                    .frame(width: 8, height: 8)
+                    .onTapGesture { act() }
+            }
+        }
+        """
+        let diags = analyze(source).filter { $0.ruleID == "tap-gesture-missing-button-trait" }
+        XCTAssertEqual(diags.count, 0, "the finding is 3 lines below the directive's target")
+    }
+
+    /// It must not reach a sibling statement.
+    func testSuppression_swiftLintDirectiveDoesNotCoverSiblings() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                VStack {
+                    // swiftlint:disable:next accessibility_trait_for_button
+                    Circle()
+                        .frame(width: 8, height: 8)
+                        .onTapGesture { act() }
+
+                    Text("sibling")
+                        .onTapGesture { act() }
+                }
+            }
+        }
+        """
+        let diags = analyze(source).filter { $0.ruleID == "tap-gesture-missing-button-trait" }
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertEqual(diags.first?.line, 11, "the sibling still reports")
+    }
+
     /// A directive for an unrelated SwiftLint rule suppresses nothing.
     func testSuppression_ignoresUnrelatedSwiftLintDirective() {
         let source = """

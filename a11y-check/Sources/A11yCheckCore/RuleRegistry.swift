@@ -185,7 +185,14 @@ public final class RuleRegistry {
         }
 
         // Filter out inline suppressions
-        allDiagnostics = InlineSuppressionFilter.filter(allDiagnostics, sourceText: sourceText)
+        allDiagnostics = InlineSuppressionFilter.filter(
+            allDiagnostics,
+            sourceText: sourceText,
+            statementRanges: InlineSuppressionFilter.statementRanges(
+                syntax: syntax,
+                converter: converter
+            )
+        )
         // Preview scaffolding never ships, so a finding there is not actionable.
         allDiagnostics = PreviewCodeFilter.filter(
             allDiagnostics,

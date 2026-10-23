@@ -277,6 +277,22 @@ struct A11yCheck: ParsableCommand {
             return
         }
 
+        // Say what inline directives removed, on every run. A quieter report should never be
+        // indistinguishable from a cleaner codebase — and an imported directive is the one a
+        // reader is least likely to have in mind when wondering where a finding went.
+        // stderr, so --format json/sarif payloads on stdout stay clean.
+        if registry.suppressedByDirective > 0 {
+            let total = registry.suppressedByDirective
+            let imported = registry.suppressedBySwiftLintDirective
+            let detail = imported > 0 ? " (\(imported) from SwiftLint comments)" : ""
+            // "note:", not printError — this is informational, and a stderr line beginning
+            // "error:" is both misleading in CI logs and liable to be read as a diagnostic
+            // by Xcode when --format xcode is in use.
+            FileHandle.standardError.write(Data(
+                "note: suppressed \(total) finding\(total == 1 ? "" : "s") by inline directives\(detail)\n".utf8
+            ))
+        }
+
         // Apply baseline filter
         if baseline {
             let searchDir = resolvePath(paths.first ?? ".")

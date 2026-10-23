@@ -23,6 +23,10 @@ public final class RuleRegistry {
     /// Project modifiers that set a page title internally, e.g. a design-system
     /// `applyNavigationChrome(title:)`. Built by the same pre-pass.
     public var titleSettingModifiers: Set<String> = []
+    /// Findings dropped by inline directives across the run, and how many of those came from
+    /// a directive written for SwiftLint. Reported by the CLI so a run is never silently quieter.
+    public private(set) var suppressedByDirective = 0
+    public private(set) var suppressedBySwiftLintDirective = 0
     /// Design-system tokens that carry their own accessibility label.
     /// Built by `buildNavigationTitleIndex(at:)` during `analyzeDirectory`.
     public var labelledTokens: Set<String> = []
@@ -185,7 +189,7 @@ public final class RuleRegistry {
         }
 
         // Filter out inline suppressions
-        allDiagnostics = InlineSuppressionFilter.filter(
+        let suppression = InlineSuppressionFilter.apply(
             allDiagnostics,
             sourceText: sourceText,
             statementRanges: InlineSuppressionFilter.statementRanges(
@@ -193,6 +197,9 @@ public final class RuleRegistry {
                 converter: converter
             )
         )
+        allDiagnostics = suppression.kept
+        suppressedByDirective += suppression.suppressed
+        suppressedBySwiftLintDirective += suppression.suppressedBySwiftLint
         // Preview scaffolding never ships, so a finding there is not actionable.
         allDiagnostics = PreviewCodeFilter.filter(
             allDiagnostics,

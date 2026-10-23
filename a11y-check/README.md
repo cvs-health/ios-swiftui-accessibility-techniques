@@ -715,6 +715,15 @@ screen that `exclude_paths` does not match by name:
 This is position-independent: the directive says "file", so it reads the same wherever it sits
 rather than depending on being above the code it covers.
 
+Every run reports what directives removed, so a quieter report is never mistaken for a cleaner
+codebase:
+
+```
+note: suppressed 16 findings by inline directives (16 from SwiftLint comments)
+```
+
+It goes to stderr, so `--format json` and `--format sarif` payloads on stdout stay clean.
+
 Prefer fixing the code where you can. `.accessibilityHidden(true)` and `Image(decorative:)` make
 the intent true for VoiceOver as well as quiet for the linter; a suppression only does the second.
 

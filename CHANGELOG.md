@@ -397,6 +397,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Added
 
+- **Every run reports what inline directives removed.** Suppression was silent, so a quieter report was indistinguishable from a cleaner codebase — and with SwiftLint directives now honoured, the directive a reader is least likely to have in mind is the one written for another tool. The count is broken out by origin for that reason:
+
+  ```
+  note: suppressed 16 findings by inline directives (16 from SwiftLint comments)
+  ```
+
+  Written to stderr as a `note:`, not through the error path: this is informational, and a stderr line beginning `error:` is both misleading in CI logs and liable to be read as a diagnostic by Xcode under `--format xcode`. JSON and SARIF payloads on stdout are unaffected. Consistent with the baseline filter, which already reported its own suppression count.
+
 - **`// a11y-check:disable-file <rules>` suppresses rules for a whole file.** Suppression was line-scoped only, so the choice for a file with several findings of one rule was a comment per finding, or a configuration hammer: `disabled_rules` turns a rule off across the repo, `exclude_paths` turns *every* rule off for the path. Neither expresses "this rule, this file" — which is what generated code, a vendored sample, or a debug file that `*Debug*` does not match by name actually needs.
 
   Position-independent by design: the directive says "file", so it reads the same wherever it sits rather than depending on being above the code it covers. Takes a comma-separated list; the bare form suppresses every rule in the file and should be rare. Five tests, one of them pinning that it is not mistaken for the line-scoped form.

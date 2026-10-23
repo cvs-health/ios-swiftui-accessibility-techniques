@@ -10,18 +10,33 @@ import SwiftSyntax
 ///   `// a11y-check:disable-next-line`           — suppress all rules on the next line
 public enum InlineSuppressionFilter {
 
+    /// Where a suppression was declared. Reported separately so a run is never silently
+    /// quieter than it looks — a directive written for another tool is the one a reader is
+    /// least likely to have in mind when they wonder where a finding went.
+    enum Origin {
+        case own
+        case swiftLint
+    }
+
     struct Suppression {
         let line: Int
         let ruleIDs: Set<String>?  // nil means suppress all rules
+        let origin: Origin
         /// Whether the suppression covers the whole statement starting at `line` rather than
         /// that line alone. Set for directives imported from SwiftLint: it reports a rule at a
         /// different node of a view chain than this tool does, so matching one line misses.
         let coversStatement: Bool
 
-        init(line: Int, ruleIDs: Set<String>?, coversStatement: Bool = false) {
+        init(
+            line: Int,
+            ruleIDs: Set<String>?,
+            coversStatement: Bool = false,
+            origin: Origin = .own
+        ) {
             self.line = line
             self.ruleIDs = ruleIDs
             self.coversStatement = coversStatement
+            self.origin = origin
         }
     }
 
@@ -30,20 +45,63 @@ public enum InlineSuppressionFilter {
     /// `statementRanges` maps a line to the span of the statement beginning there. It is only
     /// needed for directives imported from SwiftLint — see `Suppression.coversStatement` — so
     /// callers without a parsed tree may omit it and those directives then match a single line.
+    /// Diagnostics that survived, with a count of what was dropped and how much of that came
+    /// from a directive written for SwiftLint.
+    public struct Outcome {
+        public let kept: [A11yDiagnostic]
+        public let suppressed: Int
+        public let suppressedBySwiftLint: Int
+    }
+
     public static func filter(
         _ diagnostics: [A11yDiagnostic],
         sourceText: String,
         statementRanges: [Int: ClosedRange<Int>] = [:]
     ) -> [A11yDiagnostic] {
+        apply(diagnostics, sourceText: sourceText, statementRanges: statementRanges).kept
+    }
+
+    public static func apply(
+        _ diagnostics: [A11yDiagnostic],
+        sourceText: String,
+        statementRanges: [Int: ClosedRange<Int>] = [:]
+    ) -> Outcome {
+        let kept = filterInternal(diagnostics, sourceText: sourceText, statementRanges: statementRanges)
+        guard kept.count != diagnostics.count else {
+            return Outcome(kept: kept, suppressed: 0, suppressedBySwiftLint: 0)
+        }
+        // Re-run with the imported mapping empty to separate the two origins. Cheap: it is a
+        // line scan over one file, and only when something was actually suppressed.
+        let withoutImported = filterInternal(
+            diagnostics,
+            sourceText: sourceText,
+            statementRanges: statementRanges,
+            honourSwiftLint: false
+        )
+        return Outcome(
+            kept: kept,
+            suppressed: diagnostics.count - kept.count,
+            suppressedBySwiftLint: withoutImported.count - kept.count
+        )
+    }
+
+    private static func filterInternal(
+        _ diagnostics: [A11yDiagnostic],
+        sourceText: String,
+        statementRanges: [Int: ClosedRange<Int>] = [:],
+        honourSwiftLint: Bool = true
+    ) -> [A11yDiagnostic] {
         let fileLevel = parseFileSuppressions(sourceText)
         if fileLevel.contains(where: { $0 == nil }) { return [] }
 
         let suppressions = parseSuppressionsFromSource(sourceText)
+            .filter { honourSwiftLint || $0.origin == .own }
         guard !suppressions.isEmpty || !fileLevel.isEmpty
-            || !parseSwiftLintRegions(sourceText).isEmpty else { return diagnostics }
+            || (honourSwiftLint && !parseSwiftLintRegions(sourceText).isEmpty)
+        else { return diagnostics }
 
         let fileSuppressedRules = Set(fileLevel.compactMap { $0 }.flatMap { $0 })
-        let regions = parseSwiftLintRegions(sourceText)
+        let regions = honourSwiftLint ? parseSwiftLintRegions(sourceText) : []
 
         return diagnostics.filter { diag in
             if fileSuppressedRules.contains(diag.ruleID) { return false }
@@ -185,7 +243,8 @@ public enum InlineSuppressionFilter {
                         Suppression(
                             line: lineNumber + offset,
                             ruleIDs: Set(mapped),
-                            coversStatement: true
+                            coversStatement: true,
+                            origin: .swiftLint
                         )
                     )
                 }

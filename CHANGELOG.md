@@ -395,6 +395,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Also corrected: the rule's own `description` claimed "Padding and spacing count toward the target size" while the implementation only ever read padding.
 
+- **`tap-gesture-missing-button-trait` no longer reports two patterns that already announce a role.** The rule read only the gesture's own modifier chain, so a trait anywhere else was invisible to it. Both false positives were the techniques app's own *good* examples, and SwiftLint's `accessibility_trait_for_button` flags neither — a useful oracle, since it is the rule this one is modelled on.
+
+  - **A trait on an enclosing container.** An accessibility modifier on a container applies to the element that container produces, whether `.accessibilityElement(children: .combine)` collapses the subtree into one element or the trait propagates down to its children. Either way it reaches the tapped element, so a card whose `VStack` carries `.accessibilityAddTraits(.isButton)` was being reported as announcing nothing. The walk stops at `sheet`, `fullScreenCover`, `popover`, `alert`, `confirmationDialog` and `contextMenu`: a trait on the presenting view says nothing about a tap inside the screen it presents, and crediting it would hide a real finding.
+
+  - **A tap inside a native control's style conformance.** `makeBody(configuration:)` on a `DisclosureGroupStyle`, `ButtonStyle`, `PrimitiveButtonStyle`, `ToggleStyle` or `MenuStyle` decorates a control that already carries the role *and* the state — a `DisclosureGroup` announces "Collapsed, Double-tap to expand", a `Toggle` announces its on/off value. The tap there is wiring the style back to `configuration`, not creating an unannounced control, and adding `.isButton` would talk over semantics the framework supplies. SwiftLint reaches the same outcome by construction: it only inspects `body` on a `View`, so a style conformance is outside its scope.
+
+  −2 findings on the measured app, both verified by hand: `AccordionsView`'s "Good Example `DisclosureGroupStyle`" and the `CheckboxToggleStyle` behind "Good Example Single Checkbox" and "Good Example Checkbox Group". The intentional bad examples in `SwiftLintView` and `CardsView` still report, as does a plain `Text` with a bare `.onTapGesture`. The exemption is scoped to style conformances rather than to any `makeBody`, so a plain type that happens to define one still has to announce its own role.
+
 #### Added
 
 - **Every run reports what inline directives removed.** Suppression was silent, so a quieter report was indistinguishable from a cleaner codebase — and with SwiftLint directives now honoured, the directive a reader is least likely to have in mind is the one written for another tool. The count is broken out by origin for that reason:

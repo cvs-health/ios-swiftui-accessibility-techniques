@@ -1101,7 +1101,13 @@ a11y-check includes 45 rules across these categories:
 | **Context Changes** | `input-triggers-context-change` | 3.2.2 | Moderate |
 | **Hints** | `missing-accessibility-hint`, `hint-describes-action-method` | 3.3.2 | Moderate, Minor |
 
-The **tap-gesture-missing-button-trait** rule automatically skips `.onTapGesture` closures whose only statement is a keyboard-dismiss call — `hideKeyboard()`, `dismissKeyboard()`, `endEditing(...)`, or `resignFirstResponder()`. These are background dismiss gestures (not interactive UI controls) and do not need `.accessibilityAddTraits(.isButton)`. For any other tap gesture you believe is a false positive, use inline suppression:
+The **tap-gesture-missing-button-trait** rule accepts `.isLink` as well as `.isButton` — either announces an interactive role, and `.isLink` is the accurate one for a tap that opens a URL — and honours `.accessibilityRemoveTraits([.isButton])` as the author deliberately opting out. It reads the older `.accessibility(addTraits:)` API too. Beyond that it automatically skips three patterns:
+
+- **Keyboard-dismiss gestures**, where the closure's only statement is `hideKeyboard()`, `dismissKeyboard()`, `endEditing(...)`, or `resignFirstResponder()`. These are background dismiss gestures, not interactive controls.
+- **A trait on an enclosing container.** An accessibility modifier on a container applies to the element that container produces, so `.accessibilityAddTraits(.isButton)` on a `VStack` reaches a tap inside it — whether `.accessibilityElement(children: .combine)` collapses the subtree into one element or the trait propagates to the children. The search deliberately stops at `sheet`, `fullScreenCover`, `popover`, `alert`, `confirmationDialog` and `contextMenu`, because a trait on the presenting view says nothing about a tap inside the screen it presents.
+- **`makeBody(configuration:)` on a native control's style** — `DisclosureGroupStyle`, `ButtonStyle`, `PrimitiveButtonStyle`, `ToggleStyle`, `MenuStyle`. The control being styled already carries the role and the state: a `DisclosureGroup` announces "Collapsed, Double-tap to expand", a `Toggle` announces its value. A tap there is wiring the style back to `configuration`, and adding `.isButton` would talk over what the framework supplies. The exemption is scoped to those style protocols, so an unrelated type that happens to define a `makeBody` still has to announce its own role.
+
+For any other tap gesture you believe is a false positive, use inline suppression:
 
 ```swift
 // a11y-check:disable-next-line tap-gesture-missing-button-trait

@@ -1711,6 +1711,115 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 1)
     }
 
+    // MARK: - tap-gesture-missing-button-trait: traits on an enclosing container
+
+    /// The trait sits on the container that collapses the subtree into one element, so the
+    /// tapped element is the one carrying it. Only the gesture's own chain was inspected.
+    func testTapGestureTrait_acceptsTraitOnCombinedContainer() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                VStack {
+                    Text("Card title")
+                        .onTapGesture { showDetail() }
+                }
+                .accessibilityElement(children: .combine)
+                .accessibilityAddTraits(.isButton)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 0)
+    }
+
+    /// Without `.combine` the trait propagates to the children instead, reaching the tap
+    /// just the same.
+    func testTapGestureTrait_acceptsTraitOnUncombinedContainer() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                HStack {
+                    Text("Learn more")
+                        .onTapGesture { open() }
+                }
+                .accessibilityAddTraits(.isLink)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 0)
+    }
+
+    /// A trait on the presenting view says nothing about a tap inside the sheet it presents —
+    /// that is a separate screen, and crediting it would hide a real finding.
+    func testTapGestureTrait_doesNotCreditTraitAcrossASheet() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var showing = false
+            var body: some View {
+                Text("Open")
+                    .sheet(isPresented: $showing) {
+                        Text("Dismiss")
+                            .onTapGesture { showing = false }
+                    }
+                    .accessibilityAddTraits(.isButton)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 1)
+    }
+
+    // MARK: - tap-gesture-missing-button-trait: native control styles
+
+    /// A custom `DisclosureGroupStyle` decorates a native `DisclosureGroup`, which already
+    /// announces the role and the expanded/collapsed state. SwiftLint's
+    /// `accessibility_trait_for_button` does not flag this either.
+    func testTapGestureTrait_skipsDisclosureGroupStyleBody() {
+        let source = """
+        import SwiftUI
+        struct CustomStyle: DisclosureGroupStyle {
+            func makeBody(configuration: Configuration) -> some View {
+                HStack { configuration.label }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation { configuration.isExpanded.toggle() }
+                    }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 0)
+    }
+
+    /// Same reasoning for a `ButtonStyle`: the `Button` it is applied to carries the trait.
+    func testTapGestureTrait_skipsButtonStyleBody() {
+        let source = """
+        import SwiftUI
+        struct CustomStyle: ButtonStyle {
+            func makeBody(configuration: Configuration) -> some View {
+                configuration.label
+                    .onTapGesture { haptic() }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 0)
+    }
+
+    /// The exemption is for style conformances, not for anything with a `makeBody`. A plain
+    /// view still has to announce its own role.
+    func testTapGestureTrait_stillReportsInsideNonStyleMakeBody() {
+        let source = """
+        import SwiftUI
+        struct NotAStyle {
+            func makeBody(configuration: Int) -> some View {
+                Text("Tap me")
+                    .onTapGesture { act() }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "tap-gesture-missing-button-trait").count, 1)
+    }
+
     // MARK: - Label arguments need not be literals
 
     /// `Toggle(viewModel.title, isOn:)` is labelled. `firstStringArgument` is nil for a

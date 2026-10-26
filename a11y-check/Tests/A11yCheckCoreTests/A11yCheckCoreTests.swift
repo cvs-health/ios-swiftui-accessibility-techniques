@@ -39,7 +39,8 @@ final class A11yCheckCoreTests: XCTestCase {
     private func analyze(
         _ source: String,
         ruleID: String,
-        configOptions: A11yConfig.ConfigOptions = .init()
+        configOptions: A11yConfig.ConfigOptions = .init(),
+        selfTitledViews: Set<String> = []
     ) -> [A11yDiagnostic] {
         let syntax = Parser.parse(source: source)
         let converter = SourceLocationConverter(fileName: "test.swift", tree: syntax)
@@ -47,7 +48,8 @@ final class A11yCheckCoreTests: XCTestCase {
             filePath: "test.swift",
             sourceText: source,
             locationConverter: converter,
-            configOptions: configOptions
+            configOptions: configOptions,
+            selfTitledViews: selfTitledViews
         )
         guard let rule = registry.rules.first(where: { $0.id == ruleID }) else {
             XCTFail("Rule \(ruleID) not found")
@@ -3910,6 +3912,125 @@ final class A11yCheckCoreTests: XCTestCase {
         }
         """
         XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 1)
+    }
+
+    // MARK: - missing-navigation-title: the host is not always the screen
+
+    /// `NavigationStack { IDCardView() }` where `IDCardView` sets its own title. The screen
+    /// announces correctly; only this file looks silent.
+    func testMissingNavigationTitle_skipsHostWrappingASelfTitledView() {
+        let source = """
+        import SwiftUI
+        struct Host: View {
+            var body: some View {
+                NavigationStack { IDCardView() }
+            }
+        }
+        """
+        XCTAssertEqual(
+            analyze(source, ruleID: "missing-navigation-title", selfTitledViews: ["IDCardView"]).count,
+            0
+        )
+    }
+
+    /// The same host wrapping a view that titles nothing is still a defect.
+    func testMissingNavigationTitle_reportsHostWrappingAnUntitledView() {
+        let source = """
+        import SwiftUI
+        struct Host: View {
+            var body: some View {
+                NavigationStack { OTPVerificationView() }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "missing-navigation-title").count, 1)
+    }
+
+    /// `SpendingDetailView.Content(…)` is judged on the type at the base of the chain.
+    func testMissingNavigationTitle_resolvesANestedTypeToItsOuterView() {
+        let source = """
+        import SwiftUI
+        struct Mock: View {
+            var body: some View {
+                NavigationStack { SpendingDetailView.Content(viewState: .loaded) }
+            }
+        }
+        """
+        XCTAssertEqual(
+            analyze(source, ruleID: "missing-navigation-title", selfTitledViews: ["SpendingDetailView"]).count,
+            0
+        )
+    }
+
+    /// A `View` extension helper that wraps `self`. The caller is the screen.
+    func testMissingNavigationTitle_skipsAnExtensionHelperWrappingSelf() {
+        let source = """
+        import SwiftUI
+        extension View {
+            @ViewBuilder
+            func embeddedInNavigationStack(_ shouldEmbed: Bool = true) -> some View {
+                if shouldEmbed {
+                    NavigationStack { self }
+                } else {
+                    self
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "missing-navigation-title").count, 0)
+    }
+
+    /// A navigation coordinator whose root is injected through a `@ViewBuilder` init. Whatever
+    /// is handed in carries the title, and the coordinator is reused by every screen.
+    func testMissingNavigationTitle_skipsAnInjectedContentHost() {
+        let source = """
+        import SwiftUI
+        struct Coordinator<Content: View>: View {
+            @Binding var path: NavigationPath
+            let content: Content
+            init(path: Binding<NavigationPath>, @ViewBuilder content: () -> Content) {
+                _path = path
+                self.content = content()
+            }
+            var body: some View {
+                NavigationStack(path: $path) { content }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "missing-navigation-title").count, 0)
+    }
+
+    /// A local computed property is followed one level, so the title it sets counts.
+    func testMissingNavigationTitle_followsALocalPropertyThatSetsTheTitle() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                NavigationStack { mainView }
+            }
+            private var mainView: some View {
+                List { Text("row") }.navigationTitle("Filters")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "missing-navigation-title").count, 0)
+    }
+
+    /// Following the property must not become a blanket excuse: one that titles nothing and
+    /// renders an untitled child is still reported.
+    func testMissingNavigationTitle_reportsALocalPropertyWithNoTitle() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                NavigationStack { contentView }
+            }
+            private var contentView: some View {
+                List { Text("row") }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "missing-navigation-title").count, 1)
     }
 
     // MARK: - sheet-focus-return: guidance differs inside a ViewModifier

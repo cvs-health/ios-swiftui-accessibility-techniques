@@ -23,6 +23,9 @@ public final class RuleRegistry {
     /// Project modifiers that set a page title internally, e.g. a design-system
     /// `applyNavigationChrome(title:)`. Built by the same pre-pass.
     public var titleSettingModifiers: Set<String> = []
+    /// View struct names that set a page title in their own body, so a navigation host
+    /// wrapping one is titled at runtime. Built by the same pre-pass.
+    public var selfTitledViews: Set<String> = []
     /// Findings dropped by inline directives across the run, and how many of those came from
     /// a directive written for SwiftLint. Reported by the CLI so a run is never silently quieter.
     public private(set) var suppressedByDirective = 0
@@ -179,7 +182,8 @@ public final class RuleRegistry {
             externallyTitledViews: externallyTitledViews,
             labelledTokens: labelledTokens,
             localizedText: localizedText,
-            titleSettingModifiers: titleSettingModifiers
+            titleSettingModifiers: titleSettingModifiers,
+            selfTitledViews: selfTitledViews
         )
 
         var allDiagnostics: [A11yDiagnostic] = []
@@ -259,6 +263,7 @@ public final class RuleRegistry {
         var found = Set<String>()
         var labelled = Set<String>()
         var titleModifiers = Set<String>()
+        var selfTitled = Set<String>()
         // Only worth indexing tokens when a wrapper has been aliased in — nothing reads the
         // set otherwise, and it costs a parse per matching file.
         let wantsTokenIndex = !config.options.viewAliases.isEmpty
@@ -283,7 +288,9 @@ public final class RuleRegistry {
             // A house modifier that sets the title need not involve @ViewBuilder, so it is
             // scanned on its own pre-filter: the body has to mention a title modifier at all.
             if sourceText.contains("navigationTitle") || sourceText.contains("navigationBarTitle") {
-                titleModifiers.formUnion(TitleModifierScanner.scan(Parser.parse(source: sourceText)))
+                let parsed = Parser.parse(source: sourceText)
+                titleModifiers.formUnion(TitleModifierScanner.scan(parsed))
+                selfTitled.formUnion(SelfTitledViewScanner.scan(parsed))
             }
             guard sourceText.contains("@ViewBuilder") else { continue }
             let syntax = Parser.parse(source: sourceText)
@@ -294,6 +301,7 @@ public final class RuleRegistry {
         externallyTitledViews.formUnion(found)
         labelledTokens.formUnion(labelled)
         titleSettingModifiers.formUnion(titleModifiers)
+        selfTitledViews.formUnion(selfTitled)
 
         // Join the Swift constants to the string catalogues. Done once per directory so a run
         // covering several packages resolves a constant declared in one against a catalogue

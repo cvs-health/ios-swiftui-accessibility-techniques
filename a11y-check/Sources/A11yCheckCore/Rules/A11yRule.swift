@@ -52,6 +52,14 @@ public struct RuleContext {
     /// reported as untitled. Resolved from the source rather than configured — the evidence is
     /// in the wrapper's own body.
     public let titleSettingModifiers: Set<String>
+    /// View struct names that set a page title in their **own** body — the mirror of
+    /// `externallyTitledViews`, which records views that receive one from a parent.
+    ///
+    /// A navigation host wrapping one of these is titled at runtime even though the title
+    /// appears in a different file. Without this, `NavigationStack { IDCardView() }` was
+    /// reported as untitled while `IDCardView` sets `.navigationTitle(viewModel.idCardTitle)`
+    /// on its own root. Built by a cross-file pre-pass in RuleRegistry.
+    public let selfTitledViews: Set<String>
 
     public init(
         filePath: String,
@@ -64,7 +72,8 @@ public struct RuleContext {
         externallyTitledViews: Set<String> = [],
         labelledTokens: Set<String> = [],
         localizedText: [String: String] = [:],
-        titleSettingModifiers: Set<String> = []
+        titleSettingModifiers: Set<String> = [],
+        selfTitledViews: Set<String> = []
     ) {
         self.filePath = filePath
         self.sourceText = sourceText
@@ -77,6 +86,7 @@ public struct RuleContext {
         self.labelledTokens = labelledTokens
         self.localizedText = localizedText
         self.titleSettingModifiers = titleSettingModifiers
+        self.selfTitledViews = selfTitledViews
     }
 
     /// Convert a syntax node's position to a 1-based line number.

@@ -116,7 +116,8 @@ public struct MissingNavigationTitleRule: A11yRule {
                 // Also check the trailing closure body
                 if let body = nav.callExpr.trailingClosure {
                     let bodyCollector = ModifierCollector.collect(from: body)
-                    if !Self.setsPageTitle(bodyCollector, chainText: body.trimmedDescription, context: context) {
+                    if !Self.setsPageTitle(bodyCollector, chainText: body.trimmedDescription, context: context),
+                       !Self.contentIsTitledElsewhere(body, context: context) {
                         // Deliberately no autofix: a page title is content, and only the author
                         // knows what this screen is called. Inserting a literal "Page Title"
                         // shipped that string to users as the real title and VoiceOver
@@ -154,6 +155,132 @@ public struct MissingNavigationTitleRule: A11yRule {
         }
 
         return diagnostics
+    }
+
+    // MARK: - Content whose title is set somewhere this file cannot see
+
+    /// Whether the stack's content gets its title from somewhere other than this call.
+    ///
+    /// A `NavigationStack` is often a host rather than a screen, and then the title is not its
+    /// to set. Three shapes, all read from declarations rather than from names:
+    ///
+    /// - **`self`** — a `View` extension helper such as `embeddedInNavigationStack()`. The
+    ///   caller's view is the screen and titles itself.
+    /// - **An injected stored property** — `let content: Content` filled by a `@ViewBuilder`
+    ///   init, as in a navigation coordinator. Whatever is handed in carries the title, and the
+    ///   coordinator is reused by every screen in the app.
+    /// - **A view that titles itself** — `NavigationStack { IDCardView() }`, where `IDCardView`
+    ///   sets `.navigationTitle(viewModel.idCardTitle)` on its own root in another file. The
+    ///   screen announces correctly; only this file looks silent.
+    ///
+    /// A local computed property is followed one level, so `NavigationStack { mainView }` is
+    /// judged on `mainView`'s body rather than on the fact that the closure is one identifier.
+    static func contentIsTitledElsewhere(_ closure: ClosureExprSyntax, context: RuleContext) -> Bool {
+        guard closure.statements.count == 1,
+              case .expr(let expr) = closure.statements.first!.item else { return false }
+
+        switch chainBase(of: expr) {
+        case .selfReference:
+            return true
+
+        case .viewType(let name):
+            return context.selfTitledViews.contains(name)
+
+        case .identifier(let name):
+            guard let decl = propertyDeclaration(named: name, near: Syntax(closure)) else {
+                return false
+            }
+            guard let binding = decl.bindings.first else { return false }
+
+            // Stored and uninitialised: the value arrives from outside this type.
+            if binding.initializer == nil, binding.accessorBlock == nil { return true }
+
+            // Computed: judge the property's body as if it were the closure's content.
+            if SelfTitledViewScanner.setsPageTitle(Syntax(decl)) { return true }
+            if let accessor = binding.accessorBlock,
+               case .getter(let statements) = accessor.accessors,
+               statements.count == 1,
+               case .expr(let inner) = statements.first!.item,
+               case .viewType(let name) = chainBase(of: inner) {
+                return context.selfTitledViews.contains(name)
+            }
+            return false
+
+        case .none:
+            return false
+        }
+    }
+
+    /// What sits at the bottom of a view's modifier chain.
+    enum ChainBase {
+        case selfReference
+        /// A view being constructed, e.g. `IDCardView()` or `SpendingDetailView.Content(…)`.
+        case viewType(String)
+        /// A bare reference, e.g. `content` or `mainView`.
+        case identifier(String)
+        case none
+    }
+
+    static func chainBase(of expr: ExprSyntax) -> ChainBase {
+        var current = expr
+        while true {
+            if let call = current.as(FunctionCallExprSyntax.self) {
+                if let member = call.calledExpression.as(MemberAccessExprSyntax.self) {
+                    // A modifier applied to something: keep descending towards the base.
+                    if let base = member.base {
+                        current = base
+                        continue
+                    }
+                    return .viewType(member.declName.baseName.text)
+                }
+                if let name = call.calledExpression.as(DeclReferenceExprSyntax.self)?.baseName.text {
+                    return name.first?.isUppercase == true ? .viewType(name) : .identifier(name)
+                }
+                return .none
+            }
+            if let member = current.as(MemberAccessExprSyntax.self) {
+                if let base = member.base { current = base; continue }
+                return .none
+            }
+            if let reference = current.as(DeclReferenceExprSyntax.self) {
+                let name = reference.baseName.text
+                if name == "self" { return .selfReference }
+                return name.first?.isUppercase == true ? .viewType(name) : .identifier(name)
+            }
+            return .none
+        }
+    }
+
+    /// The declaration of a property with this name in the type enclosing `node`.
+    ///
+    /// Searched from the enclosing declaration outwards, so an extension's own members are
+    /// found before the type's. Extensions are common here: the body that hosts the stack and
+    /// the property it renders are often declared in separate `private extension` blocks.
+    static func propertyDeclaration(named name: String, near node: Syntax) -> VariableDeclSyntax? {
+        var current: Syntax? = node
+        while let scope = current {
+            let members: MemberBlockItemListSyntax?
+            if let s = scope.as(StructDeclSyntax.self) {
+                members = s.memberBlock.members
+            } else if let e = scope.as(ExtensionDeclSyntax.self) {
+                members = e.memberBlock.members
+            } else if let c = scope.as(ClassDeclSyntax.self) {
+                members = c.memberBlock.members
+            } else {
+                members = nil
+            }
+            if let members {
+                for member in members {
+                    guard let varDecl = member.decl.as(VariableDeclSyntax.self),
+                          let binding = varDecl.bindings.first,
+                          binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text == name
+                    else { continue }
+                    return varDecl
+                }
+            }
+            current = scope.parent
+        }
+        return nil
     }
 
     /// Returns (root ScrollView/List call, body statements) for every View struct in the file

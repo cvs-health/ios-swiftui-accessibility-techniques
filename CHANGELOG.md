@@ -443,6 +443,18 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   The one false-positive mode left is recorded in the rule's doc comment rather than guessed at: focus restored through a Combine indirection, where a helper in the dismiss path calls `restore()` on a trigger that sends on a `PassthroughSubject` and the `.onReceive` that assigns the focus state lives in whichever view received the trigger through the environment. Focus does return; nothing in the file says so. 2 of 116, both in `IDCardView`, and following it means reading another file — so it stays an inline suppression rather than a rule change.
 
+- **`missing-navigation-title` stops asking a navigation host to name a screen it does not own.** A `NavigationStack` is often a host, not a screen, and then the title is not its to set. Measured by classifying all 35 findings on the flagship app: **13 were false positives, ~63% precise.** Three shapes, each read from a declaration rather than from a name:
+
+  - **The content titles itself.** `NavigationStack { IDCardView() }`, where `IDCardView` sets `.navigationTitle(viewModel.idCardTitle)` on its own root in another file. The screen announces correctly; only the host's file looks silent. 9 findings. Fixed with a `selfTitledViews` cross-file index — the mirror of the `externallyTitledViews` index that already existed for the opposite fact.
+  - **The content is injected.** `let content: Content` filled by a `@ViewBuilder` init, as in `Nav.Coordinator`. Whatever is handed in carries the title, and the coordinator is reused by every screen in the app. Detected as a stored property with no initialiser and no accessor.
+  - **The content is `self`.** A `View` extension helper such as `embeddedInNavigationStack()`. The caller is the screen.
+
+  A local computed property is now followed one level too, so `NavigationStack { mainView }` is judged on `mainView`'s body rather than on the fact that the closure is a single identifier.
+
+  35 → 18 findings. Every one of the 17 removed was verified by hand to be titled elsewhere, and four of them were cases this author had first classified as genuine — the index turned out to be more accurate than the greps used to check it. The 18 that remain are real: five `NavigationStack { OTPVerificationView() }` hosts where the child only sets `navigationBarTitleDisplayMode`, six with inline content and no title anywhere, and three screen-level `ScrollView` views.
+
+  `navigationBarTitleDisplayMode` still does not count as a title on any of the new paths, which is what keeps those five reporting.
+
 #### Measured, no change
 
 - **`heading-trait-missing` re-measured at ~96% actionable (188 of 195)** against the current rule, by classifying every finding rather than sampling. That corroborates the `severity_overrides: heading-trait-missing: error` already in the flagship's config, and no rule change was warranted.

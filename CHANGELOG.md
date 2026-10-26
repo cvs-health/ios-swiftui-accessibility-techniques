@@ -455,7 +455,21 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   `navigationBarTitleDisplayMode` still does not count as a title on any of the new paths, which is what keeps those five reporting.
 
+- **`image-missing-label` no longer asks for a change that would not compile.** An `Image` produced as a *value* is already exempt — the guard exists for `func image(for:) -> Image` and `extension Image` — but it compared the declared type to the exact string `"Image"`, so every optional spelling slipped past it. One model property, `var swiftUIImage: Image? { switch icon { case "hospital-icon": return Image(illustration: .hospital) … } }`, was reported **nine times in one file**, and the advice could not be followed at all: `.accessibilityLabel` is declared on `View` and returns `some View`, so adding it inside a property typed `Image?` is a type error. The label belongs to whoever renders the value — the same illustration is meaningful on one screen and decorative on another.
+
+  `Image?`, `Image!`, `Optional<Image>` and `SwiftUI.Image` are now all recognised. 26 → 17 findings on the flagship app, and SwiftLint's `accessibility_label_for_image` agrees: it reports nothing in that file either.
+
+  Left deliberately unchanged, and now stated in the code: a member of `extension Image` that returns `some View` is still reported. The narrower declaration wins over the enclosing extension, because such a member *is* a view and can carry a label.
+
+- **`sort-priority-overused` is an advisory, and now says so.** Measured on the flagship app: 38 findings across 10 files, **none of them a defect.** The values were coherent deliberate orderings — `4 5 3 2 1`, `10 50 40 30` — and one file manages reading order through a named enum (`AccessibilitySortPriority.header`, `.step1Card`, `.submitButton`), which is the practice the rule was telling the author to go and review.
+
+  There is no decidable defect to narrow to, so the severity moved rather than the detection. Whether an overridden order is *correct* depends on what the author means by the visual order, and a deliberate override is the author stating that source order is not the meaningful order — 1.3.2 is about meaning, and source cannot settle it. A lone priority among siblings is not a no-op either, since the others default to 0 and it still moves that element first, so "this call cannot have an effect" is not available as a check. A negative value *is* decidable, and `sort-priority-negative` already reports it.
+
+  Now `.info`/`minor` instead of `.warning`/`moderate`, renamed to "Accessibility Sort Priority (Advisory)", with a message that says no code change is implied. Xcode renders it as a note, so 38 findings left the warning count without anything being hidden.
+
 #### Measured, no change
+
+- **`missing-accessibility-grouping` was already right.** 30 findings, all already emitted at `.info` and rendered as Xcode notes, so none of them were in the gate to begin with. The rule also already guards the cases that would make it noisy — it skips containers that carry `accessibilityElement`, anything inside a `label:` closure, containers holding interactive children or a `Label`, and anything larger than three children. No change made.
 
 - **`heading-trait-missing` re-measured at ~96% actionable (188 of 195)** against the current rule, by classifying every finding rather than sampling. That corroborates the `severity_overrides: heading-trait-missing: error` already in the flagship's config, and no rule change was warranted.
 

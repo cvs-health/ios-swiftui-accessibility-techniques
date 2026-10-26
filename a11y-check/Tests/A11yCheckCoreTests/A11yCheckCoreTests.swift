@@ -3914,6 +3914,77 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 1)
     }
 
+    // MARK: - image-missing-label: an Image value is not a view to label
+
+    /// `.accessibilityLabel` is declared on `View` and returns `some View`, so inside a
+    /// property typed `Image?` the advice does not compile. The exact `== "Image"` comparison
+    /// missed the optional spelling and reported one model property nine times.
+    func testImageMissingLabel_skipsOptionalImageValueProperty() {
+        let source = """
+        import SwiftUI
+        struct Article {
+            let icon: String
+            var swiftUIImage: Image? {
+                switch icon {
+                case "hospital-icon":
+                    return Image(illustration: .hospital)
+                default:
+                    return Image(illustration: .heart)
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 0)
+    }
+
+    /// The same for a function, and for the other optional spellings.
+    func testImageMissingLabel_skipsOptionalImageValueFunction() {
+        let source = """
+        import SwiftUI
+        struct Factory {
+            func icon(for name: String) -> Image? {
+                Image(name)
+            }
+            func banner() -> Optional<Image> {
+                Image("banner")
+            }
+            func logo() -> SwiftUI.Image {
+                Image("logo")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 0)
+    }
+
+    /// A member of `extension Image` that returns `some View` is a view and can carry a label,
+    /// so the narrower declaration still wins over the enclosing extension.
+    func testImageMissingLabel_stillReportsAViewReturningImageExtensionMember() {
+        let source = """
+        import SwiftUI
+        public extension Image {
+            @ViewBuilder
+            static func brandLogo() -> some View {
+                Image("brand")
+                    .resizable()
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 1)
+    }
+
+    /// And a plain view body is untouched by any of this.
+    func testImageMissingLabel_stillReportsAnUnlabelledImageInABody() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Image(systemName: "chevron.forward")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "image-missing-label").count, 1)
+    }
+
     // MARK: - missing-navigation-title: the host is not always the screen
 
     /// `NavigationStack { IDCardView() }` where `IDCardView` sets its own title. The screen
@@ -4983,6 +5054,10 @@ final class A11yCheckCoreTests: XCTestCase {
 
     // MARK: - Sort Priority Overused
 
+    /// Advisory, so `.info` rather than `.warning`. Measured at 38 notes across 10 files on the
+    /// flagship app with no defect among them — the values were deliberate orderings and one
+    /// file manages them through a named enum. There is no decidable defect to narrow to, so
+    /// the severity moved instead of the detection.
     func testSortPriorityOverused_flagsUsage() {
         let source = """
         import SwiftUI
@@ -4999,7 +5074,7 @@ final class A11yCheckCoreTests: XCTestCase {
         """
         let diags = analyze(source, ruleID: "sort-priority-overused")
         XCTAssertEqual(diags.count, 2)
-        XCTAssertEqual(diags.first?.severity, .warning)
+        XCTAssertEqual(diags.first?.severity, .info, "advisory, so it must stay out of the gate")
     }
 
     func testSortPriorityOverused_passesWithoutModifier() {

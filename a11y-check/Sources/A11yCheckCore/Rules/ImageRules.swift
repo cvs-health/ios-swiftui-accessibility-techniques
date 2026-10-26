@@ -226,14 +226,17 @@ public struct ImageMissingLabelRule: A11yRule {
             if let ext = current.as(ExtensionDeclSyntax.self) {
                 return ext.extendedType.trimmedDescription == "Image"
             }
-            // A function or computed property whose declared return type is exactly `Image`.
+            // A function or computed property that hands back an `Image` value.
+            //
+            // Deliberately checked before the `extension Image` case above is reached: a member
+            // of that extension returning `some View` *is* a view and can carry a label, so the
+            // narrower declaration wins over the enclosing extension.
             if let fn = current.as(FunctionDeclSyntax.self) {
-                return fn.signature.returnClause?.type.trimmedDescription == "Image"
+                return Self.isImageValueType(fn.signature.returnClause?.type)
             }
-            if let binding = current.as(PatternBindingSyntax.self) {
-                if let returns = binding.typeAnnotation?.type.trimmedDescription {
-                    return returns == "Image"
-                }
+            if let binding = current.as(PatternBindingSyntax.self),
+               let annotation = binding.typeAnnotation?.type {
+                return Self.isImageValueType(annotation)
             }
             // Stop at a type boundary: a view struct's body is not a factory.
             if current.is(StructDeclSyntax.self) || current.is(ClassDeclSyntax.self) {
@@ -242,6 +245,30 @@ public struct ImageMissingLabelRule: A11yRule {
             cursor = current.parent
         }
         return false
+    }
+
+    /// Whether a declared type hands back an `Image` value rather than a view.
+    ///
+    /// The optional spellings matter, and an exact `== "Image"` comparison missed them. A model
+    /// exposing `var swiftUIImage: Image? { … return Image(illustration: .hospital) … }` was
+    /// reported nine times in one file, and the advice could not be followed at all:
+    /// `.accessibilityLabel` is declared on `View` and returns `some View`, so adding it inside
+    /// a property typed `Image?` does not compile. The label belongs to whoever renders the
+    /// value — the same illustration is meaningful on one screen and decorative on another.
+    static func isImageValueType(_ type: TypeSyntax?) -> Bool {
+        guard let type else { return false }
+        var text = type.trimmedDescription
+
+        // `Image?` / `Image!`
+        while text.hasSuffix("?") || text.hasSuffix("!") { text.removeLast() }
+        // `Optional<Image>`
+        if text.hasPrefix("Optional<"), text.hasSuffix(">") {
+            text = String(text.dropFirst("Optional<".count).dropLast())
+        }
+        // `SwiftUI.Image`
+        if text.hasPrefix("SwiftUI.") { text = String(text.dropFirst("SwiftUI.".count)) }
+
+        return text.trimmingCharacters(in: .whitespaces) == "Image"
     }
 
     private func enclosingStructHasImageProperty(_ node: FunctionCallExprSyntax) -> Bool {

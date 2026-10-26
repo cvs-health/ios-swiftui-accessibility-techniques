@@ -386,13 +386,35 @@ public struct ButtonGroupMissingContainerLabelRule: A11yRule {
 /// before resorting to sort priority.
 ///
 /// WCAG 1.3.2 Meaningful Sequence
+/// Advisory: notes every `.accessibilitySortPriority()` so a reviewer can confirm the order it
+/// produces. It is **not** a conformance finding, and is emitted at `.info` for that reason.
+///
+/// Measured on the flagship app: 38 notes across 10 files, **none of them a defect.** The
+/// values were coherent deliberate orderings — `4 5 3 2 1`, `10 50 40 30` — and one file
+/// manages reading order through a named enum (`AccessibilitySortPriority.header`,
+/// `.step1Card`, `.submitButton`), which is the practice this rule would otherwise be telling
+/// the author to go and review.
+///
+/// There is no decidable defect to narrow to, which is why the severity moved rather than the
+/// detection:
+///
+/// - Whether an overridden order is *correct* depends on what the author means by the visual
+///   order. A deliberate override is the author stating that source order is not the
+///   meaningful order, and 1.3.2 is about meaning. Source cannot settle it.
+/// - A lone priority among siblings is not a no-op either — the others default to 0, so it
+///   still moves that element first. So "this call cannot have an effect" is not available as
+///   a check.
+/// - `.accessibilitySortPriority(0)` alongside other zeroes genuinely has no effect, but it
+///   reads as documentation and reporting it would be pedantry, not accessibility.
+///
+/// A negative value *is* decidable and is reported by `SortPriorityNegativeRule` instead.
 public struct SortPriorityOverusedRule: A11yRule {
     public let id = "sort-priority-overused"
-    public let name = "Accessibility Sort Priority Needs Review"
-    public let severity = A11ySeverity.warning
-    public let impact = A11yImpact.moderate
+    public let name = "Accessibility Sort Priority (Advisory)"
+    public let severity = A11ySeverity.info
+    public let impact = A11yImpact.minor
     public let wcagCriteria = ["1.3.2"]
-    public let description = ".accessibilitySortPriority() overrides VoiceOver's default reading order. Only use when the visual layout doesn't match the logical reading order (e.g., ZStack overlays). Verify the VoiceOver order matches the visual order."
+    public let description = "Advisory, not a defect: .accessibilitySortPriority() overrides VoiceOver's default reading order, and whether the resulting order is right is a manual check. Deliberate use is correct and expected — ZStack overlays and custom layouts need it."
 
     public init() {}
 
@@ -406,10 +428,10 @@ public struct SortPriorityOverusedRule: A11yRule {
             if isNegativeNumberArgument(mod.arguments.first) { continue }
 
             diagnostics.append(makeDiagnostic(
-                message: ".accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Verify the resulting VoiceOver order matches the visual layout — incorrect priority values can make bottom elements (e.g., tab bars) get focus first.",
+                message: "Advisory: .accessibilitySortPriority() overrides VoiceOver's default left-to-right, top-to-bottom reading order. Deliberate use is correct — this is a note to confirm by ear that the resulting order matches the visual layout, not a defect.",
                 node: mod.reportNode,
                 context: context,
-                suggestion: "Verify sort priority values produce the correct VoiceOver reading order"
+                suggestion: "Listen to the screen with VoiceOver and confirm the reading order; no code change is implied"
             ))
         }
 

@@ -3912,6 +3912,66 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 1)
     }
 
+    // MARK: - sheet-focus-return: guidance differs inside a ViewModifier
+
+    /// A `ViewModifier` attaches its alert to content it does not own, so the control that
+    /// opened the alert is in the caller. Telling the author to declare a focus state here
+    /// would have them add a property with nothing to focus.
+    func testSheetFocusReturn_viewModifierIsToldToTakeABinding() {
+        let source = """
+        import SwiftUI
+        struct LeavingAppAlert: ViewModifier {
+            let info: String?
+            func body(content: Content) -> some View {
+                content
+                    .alert("", isPresented: .constant(info != nil)) {
+                        Button("Cancel", role: .cancel) {}
+                    }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sheet-focus-return")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("belongs to the caller"), diags[0].message)
+    }
+
+    /// A plain `View` owns its trigger, so the original advice is the right advice.
+    func testSheetFocusReturn_plainViewKeepsTheOriginalAdvice() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var showing = false
+            var body: some View {
+                Button("Delete") { showing = true }
+                    .alert("Sure?", isPresented: $showing) {
+                        Button("OK", role: .cancel) {}
+                    }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sheet-focus-return")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("Add @AccessibilityFocusState"), diags[0].message)
+        XCTAssertFalse(diags[0].message.contains("belongs to the caller"))
+    }
+
+    /// The `onDismiss` branch gets the same treatment.
+    func testSheetFocusReturn_viewModifierOnDismissIsToldToTakeABinding() {
+        let source = """
+        import SwiftUI
+        struct SheetModifier: ViewModifier {
+            @Binding var showing: Bool
+            func body(content: Content) -> some View {
+                content
+                    .sheet(isPresented: $showing, onDismiss: { log() }) { Text("body") }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "sheet-focus-return")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("belongs to the caller"), diags[0].message)
+    }
+
     // MARK: - animation-missing-reduce-motion: endless repetition
 
     /// `repeatForever` never stops on its own, which is what 2.2.2 is about.

@@ -1,3 +1,19 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import SwiftSyntax
 
 // MARK: - Presentation Focus Return Rule
@@ -10,6 +26,16 @@ import SwiftSyntax
 /// - Sheet/FullScreenCover: require onDismiss and that it sets focus (or skip if no onDismiss).
 /// - Alert/ConfirmationDialog: require @AccessibilityFocusState and that button actions set it.
 /// - Popover: require @AccessibilityFocusState and that popover content (e.g. Dismiss button) sets it.
+///
+/// Measured at ~98% actionable (114 of 116) on the flagship app, which is why it ships as an
+/// error rather than a warning.
+///
+/// The one false-positive mode left is focus restored through a Combine indirection: a helper
+/// in the dismiss path calls `restore()` on a trigger object that sends on a
+/// `PassthroughSubject`, and the `.onReceive` that actually assigns the focus state lives in
+/// whichever view the trigger was handed to through the environment. Focus does return, but
+/// nothing in this file says so, and following it means reading another file. Suppress those
+/// with `// a11y-check:disable-next-line sheet-focus-return`.
 ///
 /// WCAG 2.4.3 Focus Order, 2.1.2 No Keyboard Trap
 /// Reference: Documentation/Sheets.md, Alerts.md, ConfirmationDialogs.md, Popovers.md, FocusManagement.md
@@ -63,11 +89,16 @@ public struct SheetFocusReturnRule: A11yRule {
 
             let focusStateVars = focusStateVariableNames(in: structDecl)
             if focusStateVars.isEmpty {
+                let inViewModifier = conformsToViewModifier(structDecl)
                 diagnostics.append(makeDiagnostic(
-                    message: "\(modName)(…) has onDismiss but no @FocusState or @AccessibilityFocusState to return focus. Add a focus state and set it in onDismiss so VoiceOver/keyboard focus returns when the \(modName) closes.",
+                    message: inViewModifier
+                        ? "\(modName)(…) has onDismiss but nothing returns focus. This is a ViewModifier, so the control that opened the \(modName) belongs to the caller — a focus state declared here would have nothing to focus. Take the caller's focus binding as a parameter and set it in onDismiss."
+                        : "\(modName)(…) has onDismiss but no @FocusState or @AccessibilityFocusState to return focus. Add a focus state and set it in onDismiss so VoiceOver/keyboard focus returns when the \(modName) closes.",
                     node: mod.reportNode,
                     context: context,
-                    suggestion: "Add @AccessibilityFocusState var and set it in onDismiss"
+                    suggestion: inViewModifier
+                        ? "Accept an AccessibilityFocusState<…>.Binding parameter and set it in onDismiss"
+                        : "Add @AccessibilityFocusState var and set it in onDismiss"
                 ))
                 continue
             }
@@ -91,11 +122,16 @@ public struct SheetFocusReturnRule: A11yRule {
             guard let structDecl = findEnclosingStructOrClass(Syntax(mod.callExpr)) else { continue }
             let focusStateVars = focusStateVariableNames(in: structDecl)
             if focusStateVars.isEmpty {
+                let inViewModifier = conformsToViewModifier(structDecl)
                 diagnostics.append(makeDiagnostic(
-                    message: "\(modName)(…) should return focus when closed. Add @AccessibilityFocusState (or @FocusState) and set it in a button action or in the \(modName) content so VoiceOver/keyboard focus returns to the trigger.",
+                    message: inViewModifier
+                        ? "\(modName)(…) should return focus when closed. This is a ViewModifier, so the control that opened the \(modName) belongs to the caller — a focus state declared here would have nothing to focus. Take the caller's focus binding as a parameter and set it in the button action."
+                        : "\(modName)(…) should return focus when closed. Add @AccessibilityFocusState (or @FocusState) and set it in a button action or in the \(modName) content so VoiceOver/keyboard focus returns to the trigger.",
                     node: mod.reportNode,
                     context: context,
-                    suggestion: "Add @AccessibilityFocusState var and set it when the \(modName) closes"
+                    suggestion: inViewModifier
+                        ? "Accept an AccessibilityFocusState<…>.Binding parameter and set it in the button action"
+                        : "Add @AccessibilityFocusState var and set it when the \(modName) closes"
                 ))
                 continue
             }
@@ -175,6 +211,26 @@ public struct SheetFocusReturnRule: A11yRule {
             current = n.parent
         }
         return nil
+    }
+
+    /// Whether the declaration conforms to `ViewModifier`.
+    ///
+    /// It changes what the author should do, so it changes the advice. A `ViewModifier`
+    /// attaches its alert to content it does not own, so the control that opened the alert is
+    /// in the *caller*. Declaring an `@AccessibilityFocusState` inside the modifier gives it
+    /// nothing to focus — the property would sit there unused and the defect would survive the
+    /// "fix". The modifier has to be handed the caller's focus binding instead.
+    private func conformsToViewModifier(_ decl: DeclSyntaxProtocol) -> Bool {
+        let clause: InheritanceClauseSyntax?
+        if let s = decl.as(StructDeclSyntax.self) {
+            clause = s.inheritanceClause
+        } else if let c = decl.as(ClassDeclSyntax.self) {
+            clause = c.inheritanceClause
+        } else {
+            clause = nil
+        }
+        guard let clause else { return false }
+        return clause.inheritedTypes.contains { $0.type.trimmedDescription == "ViewModifier" }
     }
 
     /// Collect variable names that are declared with @FocusState or @AccessibilityFocusState in the given struct/class.

@@ -437,6 +437,20 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Added `InfiniteAnimationCollector` and `NumericConstantCollector`, both in the same shape as `FontConstantCollector`, and `animation` to `ModifierCollector`'s tracked set.
 
+- **`sheet-focus-return` gives a `ViewModifier` advice it can act on.** 20 of the 116 findings on the flagship app are alerts declared inside a `ViewModifier` — `ExternalLinkAlert`, `LeavingAetnaAlertModifier`, `ExternalAppSSOModifier` and friends. The defect is real in all of them, but the advice was not: a `ViewModifier` attaches its alert to content it does not own, so the control that opened the alert is in the *caller*. Declaring an `@AccessibilityFocusState` inside the modifier gives it nothing to focus — the property would sit unused and the defect would survive the "fix". Those findings now say so and ask for the caller's focus binding instead. Detected from the `ViewModifier` conformance, not from the type's name.
+
+  No change to the finding count; this is about the fix being the right fix. The rule measured **~98% actionable (114 of 116)** on a full hand classification of all 116, which is why it ships as an error — the prior note had it at ~96%.
+
+  The one false-positive mode left is recorded in the rule's doc comment rather than guessed at: focus restored through a Combine indirection, where a helper in the dismiss path calls `restore()` on a trigger that sends on a `PassthroughSubject` and the `.onReceive` that assigns the focus state lives in whichever view received the trigger through the environment. Focus does return; nothing in the file says so. 2 of 116, both in `IDCardView`, and following it means reading another file — so it stays an inline suppression rather than a rule change.
+
+#### Measured, no change
+
+- **`heading-trait-missing` re-measured at ~96% actionable (188 of 195)** against the current rule, by classifying every finding rather than sampling. That corroborates the `severity_overrides: heading-trait-missing: error` already in the flagship's config, and no rule change was warranted.
+
+  The FP taxonomy that earlier work had recorded is mostly gone — label consumers, preview scaffolding, long paragraphs, a trait on an ancestor and `children: .combine` containers are all handled now. Two modes that looked like candidates turned out not to be: text inside a `Section`/`List` `header:` closure is a true positive, since this project's own `Documentation/Menus.md` lists a section header without a heading trait as a defect, and a custom `ToolbarItem(placement: .principal)` is the screen title, which should be a heading.
+
+  What remains is 7 findings where a currency amount or a count is styled with a heading token — `memberPay.currencyRepresentation` in `.themeHeadingXXXL`, say. Those are values, not structure, and marking them would put numbers in the heading rotor. Deliberately not fixed: the only available signal is the identifier's name, and guessing from names is the error the `titleFont` work already corrected once — `Localized.amountOverviewTitle` is a heading despite matching every "looks like a value" pattern.
+
 #### Added
 
 - **Every run reports what inline directives removed.** Suppression was silent, so a quieter report was indistinguishable from a cleaner codebase — and with SwiftLint directives now honoured, the directive a reader is least likely to have in mind is the one written for another tool. The count is broken out by origin for that reason:

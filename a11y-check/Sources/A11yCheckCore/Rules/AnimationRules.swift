@@ -1,30 +1,64 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import SwiftSyntax
 
 // MARK: - Reduce Motion Rule
 
-/// Flags views that use animations (.animation(), withAnimation, .transition())
-/// without checking @Environment(\.accessibilityReduceMotion).
+/// Flags animation that 2.2.2 actually reaches: motion that starts on its own and then either
+/// never stops or runs past five seconds.
 ///
-/// WCAG 2.2.2 Pause, Stop, Hide (Level AA)
-/// Moving, blinking, or scrolling content that starts automatically and lasts
-/// more than 5 seconds must provide a mechanism to pause, stop, or hide it.
-/// Checking `@Environment(\.accessibilityReduceMotion)` is the SwiftUI mechanism
-/// that stops looping or auto-playing animations when the user enables Reduce Motion.
+/// WCAG 2.2.2 Pause, Stop, Hide (Level AA) applies to moving content that **starts
+/// automatically**, lasts **more than five seconds**, and is presented alongside other
+/// content. Both halves matter, and an earlier version of this rule tested neither: it
+/// reported every `withAnimation` in the file. Measured against a 73-finding sample that was
+/// ~5% actionable — the other 69 were brief user-initiated transitions (a selection toggle, a
+/// `scrollTo`, an accordion, a load-state swap) which fail no criterion. `withAnimation` is
+/// imperative, called from inside an action closure, so it is user-initiated almost by
+/// construction and is close to the worst available signal.
 ///
-/// Emitted as a warning because:
-/// - Static analysis cannot determine whether an animation loops for >5 seconds,
-///   starts automatically, or is essential — all required to assess 2.2.2 compliance
-/// - `withAnimation` is also used for purely incidental transitions (list reordering,
-///   accordion expand/collapse) that are hard to distinguish statically from problematic
-///   looping or parallax animations
-/// - A whole-file `reduceMotion` check is the practical detection limit for static analysis
+/// Worse, the volume hid the real defects. The `.animation()` branch asked
+/// `ModifierCollector` for a modifier it did not track, so it could never emit, and a set of
+/// indefinitely rotating spinners went unreported while the incidental transitions filled the
+/// report.
+///
+/// Two signals are decidable from source, and this rule is limited to them:
+///
+/// 1. **Endless repetition** — `repeatForever`, or `repeatCount:` with an infinity. Resolved
+///    through a file-local constant, since a spinner usually names its animation.
+/// 2. **Auto-started and long** — a `withAnimation` lexically inside `onAppear` or `task`
+///    whose duration resolves to more than five seconds.
+///
+/// Known limits, both of which under-report rather than invent:
+/// - An animation re-triggered by a repeating `Timer` is endless in effect, but establishing
+///   it means following the timer's closure to a function that animates. Not attempted. The
+///   one real instance in the measured sample was reported anyway, by signal 2, because the
+///   animation it kicks off runs for twenty seconds.
+/// - Signal 2 is not applied to `.animation()`, whose trigger is a state change rather than a
+///   lexical position, so deciding whether it auto-starts would mean tracing what writes the
+///   value.
+/// - A file mentioning `reduceMotion` anywhere is skipped entirely. Coarse, but a file that
+///   has taken the preference into account is not the place to start.
 public struct ReduceMotionRule: A11yRule {
     public let id = "animation-missing-reduce-motion"
-    public let name = "Animation Without Reduce Motion Check"
+    public let name = "Endless or Long Auto-Started Animation"
     public let severity = A11ySeverity.warning
     public let impact = A11yImpact.moderate
     public let wcagCriteria = ["2.2.2"]
-    public let description = "Animations should respect the user's Reduce Motion preference. Check @Environment(\\.accessibilityReduceMotion) or use .animation(.default, value:) which automatically respects the setting."
+    public let description = "Motion that starts on its own and either repeats without end or runs past 5 seconds needs a way to pause, stop or hide it (WCAG 2.2.2). Gate it on @Environment(\\.accessibilityReduceMotion). Note that SwiftUI does not disable .animation() under Reduce Motion for you — the check has to be explicit."
 
     public init() {}
 
@@ -39,30 +73,134 @@ public struct ReduceMotionRule: A11yRule {
 
         if hasReduceMotionCheck { return [] }
 
-        // Look for animation modifiers
+        let infiniteNames = InfiniteAnimationCollector.collect(from: syntax)
+        let numbers = NumericConstantCollector.collect(from: syntax)
+
+        // Signal 1 on `.animation(...)`. Its trigger is a state change rather than a lexical
+        // position, so the auto-start signal is not applied here.
         let collector = ModifierCollector.collect(from: syntax)
         for mod in collector.modifiers(named: "animation") {
+            guard let argument = mod.callExpr.arguments.first?.expression,
+                  Self.repeatsForever(argument, infiniteNames: infiniteNames) else { continue }
             diagnostics.append(makeDiagnostic(
-                message: ".animation() used without checking accessibilityReduceMotion. Users with vestibular disorders may experience discomfort. Add @Environment(\\.accessibilityReduceMotion) and conditionally disable animations.",
+                message: "This animation repeats without end, so the motion never stops on its own (WCAG 2.2.2). Gate it on @Environment(\\.accessibilityReduceMotion) so it does not run when the user has asked for less motion.",
                 node: mod.reportNode,
                 context: context,
-                suggestion: "Add @Environment(\\.accessibilityReduceMotion) var reduceMotion and use .animation(reduceMotion ? .none : .default, value:)"
+                suggestion: "Add @Environment(\\.accessibilityReduceMotion) var reduceMotion and use .animation(reduceMotion ? nil : foreverAnimation, value:)"
             ))
         }
 
-        // Look for withAnimation calls
         let withAnimVisitor = WithAnimationVisitor(viewMode: .sourceAccurate)
         withAnimVisitor.walk(syntax)
         for call in withAnimVisitor.calls {
+            let argument = call.arguments.first?.expression
+
+            if let argument, Self.repeatsForever(argument, infiniteNames: infiniteNames) {
+                diagnostics.append(makeDiagnostic(
+                    message: "This animation repeats without end, so the motion never stops on its own (WCAG 2.2.2). Gate it on @Environment(\\.accessibilityReduceMotion) so it does not run when the user has asked for less motion.",
+                    node: call,
+                    context: context,
+                    suggestion: "Wrap in: if !reduceMotion { withAnimation(...) { ... } } else { ... }"
+                ))
+                continue
+            }
+
+            // Signal 2: started by the view appearing, and long enough for 2.2.2 to bite.
+            guard Self.isAutoStarted(call),
+                  let argument,
+                  let seconds = Self.duration(of: argument, numbers: numbers),
+                  seconds > Self.pauseStopHideThreshold else { continue }
+
+            let rendered = seconds.rounded() == seconds
+                ? String(Int(seconds))
+                : String(format: "%.1f", seconds)
             diagnostics.append(makeDiagnostic(
-                message: "withAnimation used without checking accessibilityReduceMotion. Users with vestibular disorders may experience discomfort.",
+                message: "This animation starts when the view appears and runs for \(rendered)s — past the 5s point where WCAG 2.2.2 requires a way to pause, stop or hide it. Gate it on @Environment(\\.accessibilityReduceMotion).",
                 node: call,
                 context: context,
-                suggestion: "Wrap in: if !reduceMotion { withAnimation { ... } } else { ... }"
+                suggestion: "Wrap in: if !reduceMotion { withAnimation(...) { ... } } else { ... }"
             ))
         }
 
         return diagnostics
+    }
+
+    /// 2.2.2 exempts moving content that stops within five seconds.
+    private static let pauseStopHideThreshold: Double = 5
+
+    /// Modifiers whose closure runs because the view appeared, not because the user acted.
+    private static let autoStartModifiers: Set<String> = ["onAppear", "task"]
+
+    /// Whether the animation expression repeats endlessly, following one level of
+    /// indirection through a file-local constant.
+    private static func repeatsForever(_ expr: ExprSyntax, infiniteNames: Set<String>) -> Bool {
+        if InfiniteAnimationCollector.describesInfiniteRepeat(expr.trimmedDescription) {
+            return true
+        }
+        guard !infiniteNames.isEmpty else { return false }
+        return expr.tokens(viewMode: .sourceAccurate).contains { infiniteNames.contains($0.text) }
+    }
+
+    /// Whether this call sits inside an `onAppear` or `task` closure.
+    private static func isAutoStarted(_ call: FunctionCallExprSyntax) -> Bool {
+        var current = Syntax(call)
+        while let parent = current.parent {
+            if let closure = parent.as(ClosureExprSyntax.self),
+               let owner = Self.owningModifierName(of: closure),
+               autoStartModifiers.contains(owner) {
+                return true
+            }
+            current = parent
+        }
+        return false
+    }
+
+    /// The name of the modifier a closure is an argument to, if any.
+    private static func owningModifierName(of closure: ClosureExprSyntax) -> String? {
+        var node: Syntax? = closure.parent
+        while let current = node {
+            if let call = current.as(FunctionCallExprSyntax.self) {
+                return call.calledExpression
+                    .as(MemberAccessExprSyntax.self)?
+                    .declName.baseName.text
+            }
+            if current.is(LabeledExprSyntax.self) || current.is(LabeledExprListSyntax.self) {
+                node = current.parent
+                continue
+            }
+            return nil
+        }
+        return nil
+    }
+
+    /// The `duration:` of an animation expression, resolving an identifier through a
+    /// file-local constant. Returns the longest duration found, so a chained animation is
+    /// judged on its slowest leg.
+    private static func duration(of expr: ExprSyntax, numbers: [String: Double]) -> Double? {
+        var longest: Double?
+        func consider(_ value: Double) {
+            if longest == nil || value > longest! { longest = value }
+        }
+        func walk(_ node: Syntax) {
+            if let call = node.as(FunctionCallExprSyntax.self) {
+                for argument in call.arguments where argument.label?.text == "duration" {
+                    if let literal = NumericConstantCollector.numericValue(of: argument.expression) {
+                        consider(literal)
+                    } else if let name = argument.expression
+                        .as(DeclReferenceExprSyntax.self)?.baseName.text,
+                        let resolved = numbers[name] {
+                        consider(resolved)
+                    } else if let member = argument.expression.as(MemberAccessExprSyntax.self),
+                              let resolved = numbers[member.declName.baseName.text] {
+                        // `self.loadingDuration`
+                        consider(resolved)
+                    }
+                }
+            }
+            for child in node.children(viewMode: .sourceAccurate) { walk(child) }
+        }
+        walk(Syntax(expr))
+        return longest
     }
 }
 

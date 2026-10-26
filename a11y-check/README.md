@@ -1114,6 +1114,28 @@ For any other tap gesture you believe is a false positive, use inline suppressio
 .onTapGesture { ... }
 ```
 
+The **animation-missing-reduce-motion** rule reports only the motion WCAG 2.2.2 actually
+reaches: content that starts on its own and then either never stops or runs past five seconds.
+Two signals, both decidable from source:
+
+- **Endless repetition** — `repeatForever`, or `repeatCount:` with an infinity. Resolved through
+  a file-local constant, so a spinner that names its animation (`.animation(spinning ?
+  foreverAnimation : .default, value:)`) is still caught.
+- **Auto-started and long** — a `withAnimation` inside `onAppear` or `task` whose `duration:`
+  resolves to more than five seconds, following an identifier through a `let` or an
+  init-parameter default.
+
+Everything else is left alone. A brief user-initiated transition — a selection toggle, a
+`scrollTo`, an accordion, a load-state swap — fails no criterion, and `withAnimation` is
+imperative, so its mere presence is close to the worst available signal. Known limits, both of
+which under-report rather than invent: an animation re-triggered by a repeating `Timer` is
+endless in effect but is not traced, and the auto-start signal is not applied to `.animation()`,
+whose trigger is a state change rather than a lexical position. A file that mentions
+`reduceMotion` anywhere is skipped entirely.
+
+Note that SwiftUI does **not** disable `.animation()` under Reduce Motion on your behalf — the
+check has to be explicit.
+
 The **fixed-font-size** rule skips a size driven by a `@ScaledMetric` property, which is the
 sanctioned way to get a custom size that tracks Dynamic Type:
 

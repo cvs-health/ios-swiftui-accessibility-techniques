@@ -418,6 +418,25 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Added `ScaledMetricCollector`, in the same shape as `FontConstantCollector`.
 
+- **`animation-missing-reduce-motion` now reports the motion 2.2.2 actually reaches, and found the defects it had been hiding.** It reported every `withAnimation` in a file. Measured by classifying all 73 findings on the flagship app by hand: **4 actionable, ~5% precise.** The other 69 were brief user-initiated transitions — 13 `proxy.scrollTo`, 17 selection toggles, 8 load-state swaps, 5 pager moves, 2 press highlights, 2 keyboard, and data-arrival assignments. 2.2.2 needs motion that starts automatically *and* lasts over five seconds, so none of them fail it; user-initiated motion is 2.3.3, which is AAA and not what the rule cited.
+
+  `withAnimation` is imperative — called from inside an action closure — so it is user-initiated almost by construction, which makes its presence close to the worst available signal.
+
+  **The volume was also hiding real defects.** The `.animation()` branch asked `ModifierCollector` for a modifier that was not in its tracked set, so `modifiers(named: "animation")` always returned empty and that half of the rule could never emit. Every one of the 73 findings came from the `withAnimation` visitor. Meanwhile three indefinitely-running animations went unreported — `ProgressActivityIndicatorView`, `ProgressSpinner` and the `ChatTextFieldView` recording pulse — none of which mention `reduceMotion`, so the whole-file escape was not what hid them. The rule had no test coverage at all, which is how a dead branch survived.
+
+  Narrowed to two signals, both decidable from source:
+
+  - **Endless repetition** — `repeatForever`, or `repeatCount:` with an infinity. Resolved through a file-local constant, because a spinner usually names its animation.
+  - **Auto-started and long** — a `withAnimation` inside `onAppear` or `task` whose `duration:` resolves past five seconds, following an identifier through a `let` or an init-parameter default. The two real cases needed this: `20.0` from a stored property and `8.0` from an init default.
+
+  73 → 6 findings on the measured app, every one verified by hand, and the three previous misses are now among them. Both ends moved: the 69 false positives are gone and recall went up. Still a warning, so the error gate is unchanged — but at 6-for-6 it is now worth a `severity_overrides` entry if you want it blocking.
+
+  Stated limits, both of which under-report rather than invent: an animation re-triggered by a repeating `Timer` is endless in effect but is not traced (the one real instance is reported anyway, by the duration signal, because the animation it starts runs for twenty seconds), and the auto-start signal is not applied to `.animation()`, whose trigger is a state change rather than a lexical position.
+
+  Also corrected: the rule's `description` advised `.animation(.default, value:)` as something "which automatically respects the setting". SwiftUI does not disable `.animation()` under Reduce Motion — the check has to be explicit, and the rule was recommending a non-fix.
+
+  Added `InfiniteAnimationCollector` and `NumericConstantCollector`, both in the same shape as `FontConstantCollector`, and `animation` to `ModifierCollector`'s tracked set.
+
 #### Added
 
 - **Every run reports what inline directives removed.** Suppression was silent, so a quieter report was indistinguishable from a cleaner codebase — and with SwiftLint directives now honoured, the directive a reader is least likely to have in mind is the one written for another tool. The count is broken out by origin for that reason:

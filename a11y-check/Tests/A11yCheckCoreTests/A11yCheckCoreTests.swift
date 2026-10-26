@@ -3912,6 +3912,235 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 1)
     }
 
+    // MARK: - animation-missing-reduce-motion: endless repetition
+
+    /// `repeatForever` never stops on its own, which is what 2.2.2 is about.
+    func testReduceMotion_flagsRepeatForever() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var phase = 0.0
+            var body: some View {
+                Circle().scaleEffect(phase)
+                    .onAppear {
+                        withAnimation(.easeInOut(duration: 2.5).repeatForever(autoreverses: true)) {
+                            phase = 1
+                        }
+                    }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "animation-missing-reduce-motion")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("repeats without end"))
+    }
+
+    /// The `.animation()` branch asked `ModifierCollector` for a modifier it did not track, so
+    /// it could never emit and every spinner in the codebase went unreported.
+    func testReduceMotion_flagsRepeatForeverOnAnimationModifier() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var spinning = false
+            var body: some View {
+                Image(systemName: "arrow.clockwise")
+                    .rotationEffect(Angle(degrees: spinning ? 360 : 0))
+                    .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: spinning)
+                    .onAppear { spinning = true }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "animation-missing-reduce-motion").count, 1)
+    }
+
+    /// A spinner usually names its animation, so the trait has to resolve through the binding.
+    func testReduceMotion_resolvesForeverAnimationThroughAConstant() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var spinning = false
+            var foreverAnimation: Animation {
+                Animation.linear(duration: 1.0).repeatForever(autoreverses: false)
+            }
+            var body: some View {
+                Image(systemName: "circle")
+                    .animation(spinning ? foreverAnimation : .default, value: spinning)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "animation-missing-reduce-motion").count, 1)
+    }
+
+    /// An infinite `repeatCount` is the same defect spelled differently.
+    func testReduceMotion_flagsInfiniteRepeatCount() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var phase = 0.0
+            var body: some View {
+                Circle()
+                    .animation(.linear(duration: 1).repeatCount(.max, autoreverses: false), value: phase)
+                    .animation(.linear(duration: 1).repeatCount(Int(Double.infinity)), value: phase)
+            }
+        }
+        """
+        // Only the infinity spelling repeats without end; `.max` is finite.
+        XCTAssertEqual(analyze(source, ruleID: "animation-missing-reduce-motion").count, 1)
+    }
+
+    /// A small repeat count stops well inside the five-second exemption.
+    func testReduceMotion_allowsFiniteRepeatCount() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var phase = 0.0
+            var body: some View {
+                Circle().animation(.linear(duration: 0.3).repeatCount(2), value: phase)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "animation-missing-reduce-motion").count, 0)
+    }
+
+    // MARK: - animation-missing-reduce-motion: auto-started and long
+
+    /// Starts on appear and runs past five seconds, so 2.2.2 applies.
+    func testReduceMotion_flagsLongAutoStartedAnimation() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var position = CGPoint.zero
+            var body: some View {
+                Circle().position(position)
+                    .onAppear {
+                        withAnimation(.linear(duration: 8)) { position = CGPoint(x: 10, y: 10) }
+                    }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "animation-missing-reduce-motion")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("8s"), diags[0].message)
+    }
+
+    /// The duration is rarely a literal at the point it matters.
+    func testReduceMotion_resolvesDurationThroughAConstant() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            private let loadingDuration: TimeInterval = 20.0
+            @State private var progress = 0.0
+            var body: some View {
+                ProgressView(value: progress)
+                    .onAppear {
+                        withAnimation(.linear(duration: loadingDuration)) { progress = 1.0 }
+                    }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "animation-missing-reduce-motion")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("20s"), diags[0].message)
+    }
+
+    /// An init-parameter default is the only place the duration appears for a reusable view.
+    func testReduceMotion_resolvesDurationThroughAnInitDefault() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            let animationDuration: Double
+            @State private var opacity = 0.0
+            init(animationDuration: Double = 8.0) {
+                self.animationDuration = animationDuration
+            }
+            var body: some View {
+                Circle().opacity(opacity)
+                    .task {
+                        withAnimation(.linear(duration: animationDuration)) { opacity = 1 }
+                    }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "animation-missing-reduce-motion").count, 1)
+    }
+
+    /// 2.2.2 exempts motion that stops within five seconds.
+    func testReduceMotion_allowsShortAutoStartedAnimation() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var opacity = 0.0
+            var body: some View {
+                Circle().opacity(opacity)
+                    .onAppear { withAnimation(.easeInOut(duration: 0.3)) { opacity = 1 } }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "animation-missing-reduce-motion").count, 0)
+    }
+
+    /// A long animation the user asked for has not "started automatically".
+    func testReduceMotion_allowsLongAnimationBehindAUserAction() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var offset = 0.0
+            var body: some View {
+                Button("Slide") {
+                    withAnimation(.linear(duration: 8)) { offset = 300 }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "animation-missing-reduce-motion").count, 0)
+    }
+
+    // MARK: - animation-missing-reduce-motion: incidental transitions
+
+    /// The previous rule reported every `withAnimation` in the file, which measured ~5%
+    /// actionable. None of these fail a criterion: each is brief and user-initiated.
+    func testReduceMotion_allowsBriefUserInitiatedTransitions() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var isSelected = false
+            @State private var isExpanded = false
+            @State private var state = 0
+            var body: some View {
+                ScrollViewReader { proxy in
+                    VStack {
+                        Button("select") {
+                            withAnimation(.easeInOut(duration: 0.1)) { isSelected.toggle() }
+                        }
+                        Button("expand") { withAnimation { isExpanded.toggle() } }
+                        Button("scroll") { withAnimation { proxy.scrollTo("top", anchor: .top) } }
+                        Button("load") { withAnimation { state = 1 } }
+                    }
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "animation-missing-reduce-motion").count, 0)
+    }
+
+    /// A file that has taken the preference into account is not the place to start.
+    func testReduceMotion_skipsFilesThatHandleThePreference() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @Environment(\\.accessibilityReduceMotion) private var reduceMotion
+            @State private var phase = 0.0
+            var body: some View {
+                Circle()
+                    .onAppear {
+                        withAnimation(.linear(duration: 9).repeatForever()) { phase = 1 }
+                    }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "animation-missing-reduce-motion").count, 0)
+    }
+
     // MARK: - Fixed height clipping text
 
     func testFixedHeightClipsText_flagsSnugTextBoxes() {

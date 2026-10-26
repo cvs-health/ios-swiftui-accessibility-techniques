@@ -98,6 +98,9 @@ public final class ModifierCollector: SyntaxVisitor {
         "keyboardType",
         "textFieldStyle",
         "pickerStyle",
+        // Motion. `ReduceMotionRule` asks for this by name; without it the rule's
+        // `.animation()` branch could never emit and only `withAnimation` was ever reported.
+        "animation",
         // Interactions
         "onTapGesture",
         "sheet",

@@ -467,7 +467,18 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   Now `.info`/`minor` instead of `.warning`/`moderate`, renamed to "Accessibility Sort Priority (Advisory)", with a message that says no code change is implied. Xcode renders it as a note, so 38 findings left the warning count without anything being hidden.
 
+- **The two picker rules stop reporting one defect twice, and stop asking a menu's picker to name itself.** Measured across all 24 picker findings on the flagship app.
+
+  - **`picker-style-missing-accessibility` was pure duplication.** All **8** of its findings sat at the exact same file and line as a `picker-missing-label` finding — zero unique. Both fire on `Picker("", selection:) … .pickerStyle(.segmented)`, so one `Picker("")` produced two *critical* errors on one line. It now defers when there is no visible label at all: that is the other rule's finding, and it says the more useful thing. What remains is this rule's actual subject — a picker that *has* a visible label which the wheel or segmented style then suppresses. 8 → 0 on this app, with the independent case still covered by tests.
+  - **`picker-missing-label` credited a menu's label.** `Menu { Picker("", selection:).pickerStyle(.inline) } label: { Text("Member") }` is how a dropdown is built: the menu names the control and the picker supplies the options. The picker's empty label is never rendered or announced, so asking for one reported a correctly-named dropdown as nameless. 5 of 16. The menu's `label:` closure is deliberately not matched — a picker written there really would be the visible name.
+
+  24 → 11 findings, all errors.
+
 #### Measured, no change
+
+- **`textfield-missing-label` measured at ~82% actionable (9 of 11)** and left alone. The one mode is a wrapper that builds its field in a separate computed property and applies the label to the composed view, so the field's own chain reads as bare — 2 findings. Crediting it requires the label to be applied to a chain referencing *that property*, and every looser proxy fails: an `.accessibilityLabel` anywhere in the file, or anywhere in the same type, each silence three genuine findings in one screen whose labels sit on unrelated favourite buttons. A false negative here ships a genuinely unnamed text input, so the mode is documented in the rule and suppressed inline rather than guessed at.
+
+- **`button-group-missing-container-label` deprioritised, not measured.** All 25 findings are warnings, and the CI gate is error-only, so they do not block. Recorded here so the next pass knows it is still open.
 
 - **`missing-accessibility-grouping` was already right.** 30 findings, all already emitted at `.info` and rendered as Xcode notes, so none of them were in the gate to begin with. The rule also already guards the cases that would make it noisy — it skips containers that carry `accessibilityElement`, anything inside a `label:` closure, containers holding interactive children or a `Label`, and anything larger than three children. No change made.
 

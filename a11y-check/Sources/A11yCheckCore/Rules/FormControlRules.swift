@@ -1,9 +1,42 @@
+/*
+   Copyright 2026 CVS Health and/or one of its affiliates
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 import SwiftSyntax
 
 // MARK: - TextField Missing Label Rule
 
 /// Flags `TextField("", text:)` with an empty placeholder or
 /// TextFields that rely only on placeholder text as the accessible name.
+///
+/// Measured at ~82% actionable (9 of 11) on the flagship app.
+///
+/// The known false-positive mode, left in deliberately: a wrapper component that builds its
+/// field in a separate computed property and applies the label to the composed view —
+///
+/// ```swift
+/// var body: some View { textField.anatomyStyle().accessibilityLabel(label) }
+/// private var textField: some View { TextField(placeholderText, text: $viewModel.text) }
+/// ```
+///
+/// The field's own chain is bare, so it reports. Crediting it needs the label to be applied to
+/// a chain that references *that property*, and nothing looser works: the obvious proxies —
+/// an `.accessibilityLabel` anywhere in the file, or anywhere in the same type — both silence
+/// three genuine findings in one screen whose labels sit on unrelated favourite buttons. Since
+/// a false negative here means a genuinely unnamed text input ships, 2 findings is not worth
+/// the risk of a loose check. Suppress them inline instead.
 ///
 /// WCAG 3.3.2 Labels or Instructions — visible label must persist
 /// WCAG 4.1.2 Name, Role, Value — accessible name must be provided
@@ -284,6 +317,9 @@ public struct PickerMissingLabelRule: A11yRule {
             // `Picker(viewModel.title, selection:)` is labelled.
             if view.hasNonEmptyLeadingLabelArgument { continue }
 
+            // A Picker that *is* a menu's content is named by the menu, not by itself.
+            if Self.isMenuContent(view.callExpr) { continue }
+
             let inlineLabel = view.firstStringArgument ?? ""
             if inlineLabel.trimmingCharacters(in: .whitespaces).isEmpty {
                 diagnostics.append(makeDiagnostic(
@@ -296,6 +332,37 @@ public struct PickerMissingLabelRule: A11yRule {
             }
         }
         return diagnostics
+    }
+
+    /// Whether this Picker is the content of a `Menu`, as opposed to a control on a screen.
+    ///
+    /// `Menu { Picker("", selection:).pickerStyle(.inline) } label: { … }` is how a design
+    /// system builds a dropdown: the menu's own label names the control and the picker supplies
+    /// the options. The picker's empty label is never rendered or announced, so asking for one
+    /// reports a correctly-named dropdown as nameless. Five of sixteen findings on the flagship
+    /// app were this shape.
+    ///
+    /// The *label* closure of a menu is a different thing and is not matched here — a picker
+    /// written there really would be the menu's visible name.
+    static func isMenuContent(_ node: FunctionCallExprSyntax) -> Bool {
+        var cursor: Syntax? = Syntax(node).parent
+        while let current = cursor {
+            if let closure = current.as(ClosureExprSyntax.self) {
+                // A trailing `label:` closure is a labelled argument; the content closure is
+                // the unlabelled one attached directly to the call.
+                if let call = closure.parent?.as(FunctionCallExprSyntax.self),
+                   call.trailingClosure?.id == closure.id,
+                   call.calledExpression.as(DeclReferenceExprSyntax.self)?.baseName.text == "Menu" {
+                    return true
+                }
+            }
+            // Do not escape the enclosing view's body looking for a menu further out.
+            if current.is(VariableDeclSyntax.self) || current.is(FunctionDeclSyntax.self) {
+                return false
+            }
+            cursor = current.parent
+        }
+        return false
     }
 }
 
@@ -338,6 +405,20 @@ public struct PickerStyleAccessibilityRule: A11yRule {
             let mods = view.modifiers
 
             guard isWheelOrSegmentedStyle(mods) else { continue }
+
+            // One defect, one finding. A picker with no visible label at all is
+            // `picker-missing-label`'s to report, and it says the more useful thing: add a
+            // label. Reporting both put two critical errors on the same line for the same
+            // `Picker("", selection:)` — every one of this rule's eight findings on the
+            // flagship app was a duplicate of that rule's, with none of its own.
+            //
+            // What remains is this rule's actual subject: a picker that *has* a visible label
+            // which the wheel or segmented style then suppresses.
+            if !view.hasNonEmptyLeadingLabelArgument,
+               (view.firstStringArgument ?? "").trimmingCharacters(in: .whitespaces).isEmpty,
+               !mods.hasModifier("accessibilityLabel") {
+                continue
+            }
 
             let hasLabel = mods.hasModifier("accessibilityLabel")
             let hasContain = hasAccessibilityElementContain(mods)

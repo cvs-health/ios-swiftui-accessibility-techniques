@@ -3914,6 +3914,83 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 1)
     }
 
+    // MARK: - picker rules: one defect, one finding
+
+    /// A `Menu`'s own label names the dropdown; the picker inside supplies the options and its
+    /// empty label is never rendered.
+    func testPickerMissingLabel_skipsAPickerThatIsMenuContent() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var selected = 0
+            var body: some View {
+                Menu {
+                    Picker("", selection: $selected) {
+                        Text("One").tag(0)
+                    }
+                    .pickerStyle(.inline)
+                } label: {
+                    Text("Member")
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "picker-missing-label").count, 0)
+    }
+
+    /// A picker on a screen is still its own control and still needs a name.
+    func testPickerMissingLabel_stillReportsAPickerOnAScreen() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var selected = 0
+            var body: some View {
+                Picker("", selection: $selected) {
+                    Text("One").tag(0)
+                }
+                .pickerStyle(.segmented)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "picker-missing-label").count, 1)
+    }
+
+    /// The same unlabelled segmented picker must not also be reported by the style rule —
+    /// that would be two critical errors on one line for one defect.
+    func testPickerStyle_defersToPickerMissingLabelWhenThereIsNoLabel() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var selected = 0
+            var body: some View {
+                Picker("", selection: $selected) {
+                    Text("One").tag(0)
+                }
+                .pickerStyle(.segmented)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "picker-style-missing-accessibility").count, 0)
+    }
+
+    /// Its actual subject survives: a picker that has a visible label which the segmented
+    /// style then suppresses.
+    func testPickerStyle_stillReportsALabelledSegmentedPicker() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var selected = 0
+            var body: some View {
+                Picker("Period", selection: $selected) {
+                    Text("One").tag(0)
+                }
+                .pickerStyle(.segmented)
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "picker-style-missing-accessibility").count, 1)
+    }
+
     // MARK: - image-missing-label: an Image value is not a view to label
 
     /// `.accessibilityLabel` is declared on `View` and returns `some View`, so inside a

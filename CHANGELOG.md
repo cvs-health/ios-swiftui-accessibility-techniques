@@ -474,6 +474,13 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   24 → 11 findings, all errors.
 
+- **`button-used-as-link` stops advising a swap that SwiftUI would throw away, and names the right fix when a Link cannot run the action.** Measured across all 16 findings on the flagship app: **~56% actionable (9 of 16)**, now 9 findings with the advice split by what is actually possible.
+
+  - **An alert's buttons cannot be anything else.** Apple documents that the system ignores any view in an `actions` closure that is not a button, so a `Link` written there is silently dropped and the alert loses its action. **7 of 16** were this shape — an "OK" or "Continue" that opens a privacy statement or an app-store page once the user confirms. With no available fix there is no finding. Both alert spellings are matched, including the two-closure `… } message: { … }` form, which writes `actions:` as a labelled argument rather than the trailing closure and was missed by the first attempt at this check.
+  - **A `Link` is a destination, not an action — it runs no code.** When the action also tracks analytics, invokes a callback, clears the state that presented it, or passes a completion handler for an "could not open" fallback, swapping the view type would drop that work. The defect is unchanged — VoiceOver says "Button" where it should say "Link" — so the finding stands and now asks for `.accessibilityAddTraits(.isLink)` on the Button instead. Deriving the URL first does not count as extra work: a `let`, a `guard let` and the `URL(string:)` that builds it are plumbing the Link form absorbs.
+
+  16 → 9 findings. The residual is an alert button reached through a computed property — `.alert { cancelButton; confirmButton }` — which the lexical check cannot see; the effects check catches most of them because an alert button almost always clears its presenting state alongside the open, but one in `ExternalLinkAlert` delegates to a local `func openURL()` and still reports. Documented rather than guessed at.
+
 #### Measured, no change
 
 - **`textfield-missing-label` measured at ~82% actionable (9 of 11)** and left alone. The one mode is a wrapper that builds its field in a separate computed property and applies the label to the composed view, so the field's own chain reads as bare — 2 findings. Crediting it requires the label to be applied to a chain referencing *that property*, and every looser proxy fails: an `.accessibilityLabel` anywhere in the file, or anywhere in the same type, each silence three genuine findings in one screen whose labels sit on unrelated favourite buttons. A false negative here ships a genuinely unnamed text input, so the mode is documented in the rule and suppressed inline rather than guessed at.

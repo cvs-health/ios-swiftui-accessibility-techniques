@@ -3914,6 +3914,105 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(analyze(source, ruleID: "fixed-font-size").count, 1)
     }
 
+    // MARK: - button-used-as-link: when a Link is not available
+
+    /// Apple documents that the system ignores any view in an alert's `actions` closure other
+    /// than a button, so a Link written there is silently dropped. No available fix, no finding.
+    func testButtonUsedAsLink_skipsAnAlertAction() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var showing = false
+            var body: some View {
+                Text("x")
+                    .alert("Leaving the app", isPresented: $showing) {
+                        Button("Continue") { UIApplication.shared.open(url) }
+                    }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "button-used-as-link").count, 0)
+    }
+
+    /// The two-closure alert form writes `actions:` as a labelled argument rather than the
+    /// trailing closure, and it is the common spelling.
+    func testButtonUsedAsLink_skipsAnAlertActionInTheMessageForm() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var showing = false
+            var body: some View {
+                Text("x")
+                    .alert("Privacy", isPresented: $showing) {
+                        Button("OK") { LinkManager.openURL(privacyURL) }
+                    } message: {
+                        Text("You are leaving the app.")
+                    }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "button-used-as-link").count, 0)
+    }
+
+    /// A Link runs no code, so an action that also tracks or resets state cannot become one.
+    /// The defect stands; the fix is the trait.
+    func testButtonUsedAsLink_recommendsTheTraitWhenTheActionDoesMore() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            var body: some View {
+                Button("Continue") {
+                    UIApplication.shared.open(url)
+                    trackAnalytics()
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-used-as-link")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("isLink"), diags[0].message)
+    }
+
+    /// A completion handler is a fallback a Link cannot run.
+    func testButtonUsedAsLink_recommendsTheTraitForACompletionHandler() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            @State private var failed = false
+            var body: some View {
+                Button("Call") {
+                    guard let url = URL(string: "tel://555") else { return }
+                    openURL(url) { status in
+                        if !status { failed = true }
+                    }
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-used-as-link")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("isLink"), diags[0].message)
+    }
+
+    /// A plain open, with the URL derived first, is still told to become a Link — deriving the
+    /// URL is plumbing the Link form absorbs.
+    func testButtonUsedAsLink_stillRecommendsLinkForAPlainOpen() {
+        let source = """
+        import SwiftUI
+        struct V: View {
+            let destination: URL
+            var body: some View {
+                Button("Learn more") {
+                    LinkManager.openURL(destination)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "button-used-as-link")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("use Link instead"), diags[0].message)
+    }
+
     // MARK: - picker rules: one defect, one finding
 
     /// A `Menu`'s own label names the dropdown; the picker inside supplies the options and its

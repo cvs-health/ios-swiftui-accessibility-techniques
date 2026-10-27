@@ -69,6 +69,94 @@ public struct ButtonUsedAsLinkRule: A11yRule {
         return false
     }
 
+    /// Modifiers whose action builder accepts buttons and nothing else.
+    private static let alertModifiers: Set<String> = ["alert", "confirmationDialog"]
+
+    /// Whether this Button is written in the `actions` closure of an alert or dialog.
+    ///
+    /// Apple's documentation is explicit that the system ignores any view in that closure
+    /// other than a button, so replacing one with a `Link` removes it from the alert. Seven of
+    /// sixteen findings on the flagship app were this shape: an "OK" or "Continue" button that
+    /// opens a privacy statement or an app-store page once the user confirms.
+    ///
+    /// Only the lexical case is caught. An alert whose buttons are built in computed
+    /// properties — `.alert { cancelButton; confirmButton }` — is not matched, and those are
+    /// instead handled by the effects check: an alert button almost always clears the
+    /// presenting state alongside the open.
+    static func isAlertAction(_ node: FunctionCallExprSyntax) -> Bool {
+        var cursor: Syntax? = Syntax(node).parent
+        while let current = cursor {
+            if let closure = current.as(ClosureExprSyntax.self),
+               let name = Self.owningCallName(of: closure),
+               alertModifiers.contains(name) {
+                return true
+            }
+            if current.is(VariableDeclSyntax.self) || current.is(FunctionDeclSyntax.self) {
+                return false
+            }
+            cursor = current.parent
+        }
+        return false
+    }
+
+    /// The name of the modifier a closure belongs to.
+    ///
+    /// `.alert(title, isPresented:) { … } message: { … }` writes its first closure as a
+    /// labelled `actions:` argument rather than the trailing one, so a check that only looked
+    /// at `closure.parent as FunctionCallExpr` missed exactly the two-closure alert form —
+    /// which is the common one.
+    private static func owningCallName(of closure: ClosureExprSyntax) -> String? {
+        var node: Syntax? = closure.parent
+        while let current = node {
+            if let call = current.as(FunctionCallExprSyntax.self) {
+                return call.calledExpression
+                    .as(MemberAccessExprSyntax.self)?
+                    .declName.baseName.text
+            }
+            if current.is(LabeledExprSyntax.self)
+                || current.is(LabeledExprListSyntax.self)
+                || current.is(MultipleTrailingClosureElementSyntax.self)
+                || current.is(MultipleTrailingClosureElementListSyntax.self) {
+                node = current.parent
+                continue
+            }
+            return nil
+        }
+        return nil
+    }
+
+    /// Whether the action does anything besides derive and open the URL.
+    ///
+    /// A `Link` is a destination, not an action: it runs no code. So an action that also tracks
+    /// analytics, invokes a callback, or clears the state presenting it cannot become one, and
+    /// the honest fix is the `.isLink` trait on the Button it already has.
+    ///
+    /// Deriving the URL does not count — a `let`, a `guard let`, and the `URL(string:)` that
+    /// builds it are all plumbing the Link form would absorb. An assignment or a call that is
+    /// not the open itself does count, and so does a completion handler on the open, which is
+    /// how a "could not open" fallback is written.
+    static func hasEffectsBeyondOpening(_ closure: ClosureExprSyntax) -> Bool {
+        for statement in closure.statements {
+            switch statement.item {
+            case .decl, .stmt:
+                // `let url = …`, `guard let url else { return }` — plumbing.
+                continue
+            case .expr(let expr):
+                guard let call = expr.as(FunctionCallExprSyntax.self) else {
+                    // A bare assignment such as `alertInfo = nil`.
+                    if expr.is(InfixOperatorExprSyntax.self) { return true }
+                    continue
+                }
+                let callee = call.calledExpression.trimmedDescription
+                let isTheOpen = urlPatterns.contains { callee.contains($0) }
+                if !isTheOpen { return true }
+                // `openURL(url) { status in … }` — a fallback a Link cannot run.
+                if call.trailingClosure != nil { return true }
+            }
+        }
+        return false
+    }
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
@@ -89,13 +177,28 @@ public struct ButtonUsedAsLinkRule: A11yRule {
             // A conditional open cannot become a Link, so the suggestion would not apply.
             if Self.opensURLOnlyConditionally(body) { continue }
 
+            // An alert's buttons cannot be anything but buttons: Apple documents that the
+            // system ignores any view in an `actions` closure that is not a Button, so a Link
+            // written there is silently dropped. With no available fix, there is no finding.
+            if Self.isAlertAction(view.callExpr) { continue }
+
             for pattern in Self.urlPatterns {
                 if bodyText.contains(pattern) {
+                    // A Link runs no code. When the action does more than open — analytics, a
+                    // callback, resetting the presenting state — swapping the view type would
+                    // drop that work, so the fix is the trait rather than the view. The defect
+                    // is the same either way: VoiceOver says "Button" where it should say
+                    // "Link".
+                    let doesMoreThanOpen = Self.hasEffectsBeyondOpening(body)
                     diagnostics.append(makeDiagnostic(
-                        message: "Button opens a URL — use Link instead so VoiceOver announces the 'Link' role rather than 'Button'.",
+                        message: doesMoreThanOpen
+                            ? "Button opens a URL but also does other work, so VoiceOver announces 'Button' where it should say 'Link'. A Link runs no code and would drop that work — add .accessibilityAddTraits(.isLink) instead."
+                            : "Button opens a URL — use Link instead so VoiceOver announces the 'Link' role rather than 'Button'.",
                         node: view.callExpr,
                         context: context,
-                        suggestion: "Replace Button with Link(destination:)"
+                        suggestion: doesMoreThanOpen
+                            ? "Add .accessibilityAddTraits(.isLink) to the Button"
+                            : "Replace Button with Link(destination:)"
                     ))
                     break
                 }

@@ -66,7 +66,7 @@ struct FunctionalView: View {
                     Text("You activated the button!")
                 }
                 DisclosureGroup("Details") {
-                    Text("The good functional image example uses an image button with `.accessibilityLabel(\"Scan barcode\"))` to give the button a meaningful accessibility label that describes its purpose to VoiceOver users.")
+                    Text("The good functional image example uses an image button with `.accessibilityLabel(\"Scan barcode\")` to give the button a meaningful accessibility label that describes its purpose to VoiceOver users.")
                 }.padding(.bottom).accessibilityHint("Good Example `Image` `Button` `.accessibilityLabel`")
                 if #available(iOS 18.0, *) {
                     Text("iOS 18+ Good Example `Image` `Button` `accessibilityLabel(_:isEnabled:)`")

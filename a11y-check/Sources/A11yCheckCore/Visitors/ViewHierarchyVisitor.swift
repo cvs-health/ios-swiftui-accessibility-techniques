@@ -89,8 +89,12 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
     /// The detected view keeps its real name in `sourceViewType` for diagnostic messages.
     public let viewAliases: [String: String]
 
-    public init(viewAliases: [String: String] = [:]) {
+    /// Extra modifier names to collect, from `font_modifiers`.
+    public let extraModifiers: Set<String>
+
+    public init(viewAliases: [String: String] = [:], extraModifiers: Set<String> = []) {
         self.viewAliases = viewAliases
+        self.extraModifiers = extraModifiers
         super.init(viewMode: .sourceAccurate)
     }
 
@@ -125,7 +129,7 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
         let chainRoot = findChainRoot(for: ExprSyntax(node))
 
         // Collect modifiers from the chain root
-        let modifiers = ModifierCollector.collect(from: chainRoot)
+        let modifiers = ModifierCollector.collect(from: chainRoot, extraTracked: extraModifiers)
 
         // Analyze Image-specific initializers
         var isDecorative = false
@@ -222,9 +226,10 @@ extension ViewHierarchyVisitor {
     /// Analyze a syntax tree and return the visitor with results.
     public static func analyze(
         _ syntax: some SyntaxProtocol,
-        viewAliases: [String: String] = [:]
+        viewAliases: [String: String] = [:],
+        extraModifiers: Set<String> = []
     ) -> ViewHierarchyVisitor {
-        let visitor = ViewHierarchyVisitor(viewAliases: viewAliases)
+        let visitor = ViewHierarchyVisitor(viewAliases: viewAliases, extraModifiers: extraModifiers)
         visitor.walk(syntax)
         return visitor
     }

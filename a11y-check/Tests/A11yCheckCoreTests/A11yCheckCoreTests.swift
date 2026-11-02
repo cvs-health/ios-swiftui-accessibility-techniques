@@ -160,6 +160,106 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 1)
     }
 
+    // MARK: - Design-system typography: font as an initialiser argument / custom modifier
+
+    func testHeadingTraitMissing_findsFontAsInitialiserArgument() {
+        // The dominant form in a wrapper-based design system: the font is an argument to the
+        // text view, not a modifier on it. In one real app `PSText(_, font: .headingXXL)`
+        // appears 804 times and `.font(.heading…)` not once, so a modifier-only scan found
+        // no headings at all there.
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                PSText("Store Hours", font: .headingXXL)
+            }
+        }
+        """
+        let diags = analyze(
+            source,
+            ruleID: "heading-trait-missing",
+            configOptions: .init(viewAliases: ["PSText": "Text"])
+        )
+        XCTAssertEqual(diags.count, 1)
+    }
+
+    func testHeadingTraitMissing_findsCustomFontModifier() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Store Hours")
+                    .pulseFont(.headingXXL)
+            }
+        }
+        """
+        let diags = analyze(
+            source,
+            ruleID: "heading-trait-missing",
+            configOptions: .init(fontModifiers: ["pulseFont"])
+        )
+        XCTAssertEqual(diags.count, 1)
+    }
+
+    func testHeadingTraitMissing_ignoresBodyFontAsInitialiserArgument() {
+        // The regression that matters: teaching the rule a new form must not make it fire on
+        // body typography written in that same form.
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                PSText("A paragraph of body copy", font: .paragraphM)
+            }
+        }
+        """
+        let diags = analyze(
+            source,
+            ruleID: "heading-trait-missing",
+            configOptions: .init(viewAliases: ["PSText": "Text"])
+        )
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testHeadingTraitMissing_initialiserArgumentAlreadyMarked() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                PSText("Store Hours", font: .headingXXL)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        """
+        let diags = analyze(
+            source,
+            ruleID: "heading-trait-missing",
+            configOptions: .init(viewAliases: ["PSText": "Text"])
+        )
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testHeadingTraitMissing_fontArgumentOnChildDoesNotFlagParent() {
+        // Only the view's own arguments are read. A font passed to a child inside a trailing
+        // closure must not make the enclosing view look like a heading.
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    PSText("Store Hours", font: .headingXXL)
+                        .accessibilityAddTraits(.isHeader)
+                }
+            }
+        }
+        """
+        let diags = analyze(
+            source,
+            ruleID: "heading-trait-missing",
+            configOptions: .init(viewAliases: ["PSText": "Text"])
+        )
+        XCTAssertEqual(diags.count, 0)
+    }
+
     func testHeadingTraitMissing_passesGoodHeading() {
         let source = """
         import SwiftUI

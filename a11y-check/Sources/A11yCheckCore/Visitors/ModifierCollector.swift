@@ -111,15 +111,27 @@ public final class ModifierCollector: SyntaxVisitor {
         "contextMenu",
     ]
 
-    public init() {
+    /// Modifier names to track in addition to `trackedModifiers`.
+    ///
+    /// A design system's own typography modifier is the motivating case: `.pulseFont(.headingXL)`
+    /// carries the font in an app where `.font(` never appears, so a fixed list sees no fonts at
+    /// all. Supplied from `font_modifiers` in `.a11ycheck.yml`.
+    private let extraTracked: Set<String>
+
+    public init(extraTracked: Set<String> = []) {
+        self.extraTracked = extraTracked
         super.init(viewMode: .sourceAccurate)
+    }
+
+    private func isTracked(_ name: String) -> Bool {
+        Self.trackedModifiers.contains(name) || extraTracked.contains(name)
     }
 
     public override func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
         // Check if this is a member access call like `.accessibilityLabel("text")`
         if let memberAccess = node.calledExpression.as(MemberAccessExprSyntax.self) {
             let name = memberAccess.declName.baseName.text
-            if Self.trackedModifiers.contains(name) {
+            if isTracked(name) {
                 let args: [(label: String?, text: String)] = node.arguments.map { arg in
                     (label: arg.label?.text, text: arg.expression.trimmedDescription)
                 }
@@ -164,16 +176,23 @@ extension ModifierCollector {
     }
 
     /// Collect modifiers from a specific syntax subtree.
-    public static func collect(from node: some SyntaxProtocol) -> ModifierCollector {
-        let collector = ModifierCollector()
+    public static func collect(
+        from node: some SyntaxProtocol,
+        extraTracked: Set<String> = []
+    ) -> ModifierCollector {
+        let collector = ModifierCollector(extraTracked: extraTracked)
         collector.walk(node)
         return collector
     }
 
     /// Collect modifiers only from the direct modifier chain above a view call,
     /// without descending into trailing closures or child views.
-    public static func collectChainOnly(from chainRoot: ExprSyntax, callExpr: FunctionCallExprSyntax) -> ModifierCollector {
-        let collector = ModifierCollector()
+    public static func collectChainOnly(
+        from chainRoot: ExprSyntax,
+        callExpr: FunctionCallExprSyntax,
+        extraTracked: Set<String> = []
+    ) -> ModifierCollector {
+        let collector = ModifierCollector(extraTracked: extraTracked)
         var current: ExprSyntax? = chainRoot
 
         while let expr = current {
@@ -183,7 +202,7 @@ extension ModifierCollector {
             guard let memberAccess = funcCall.calledExpression.as(MemberAccessExprSyntax.self) else { break }
 
             let name = memberAccess.declName.baseName.text
-            if trackedModifiers.contains(name) {
+            if collector.isTracked(name) {
                 let args: [(label: String?, text: String)] = funcCall.arguments.map { arg in
                     (label: arg.label?.text, text: arg.expression.trimmedDescription)
                 }

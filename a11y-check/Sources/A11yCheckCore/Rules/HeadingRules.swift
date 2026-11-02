@@ -68,7 +68,11 @@ public struct HeadingTraitMissingRule: A11yRule {
     private static let labelConsumerViews: Set<String> = ["Button", "Link", "Toggle"]
 
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
-        let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
+        let visitor = ViewHierarchyVisitor.analyze(
+            syntax,
+            viewAliases: context.configOptions.viewAliases,
+            extraModifiers: context.configOptions.fontModifierNames
+        )
         let fontConstants = FontConstantCollector.collect(from: syntax)
         var diagnostics: [A11yDiagnostic] = []
 
@@ -89,15 +93,27 @@ public struct HeadingTraitMissingRule: A11yRule {
 
             let mods = view.modifiers
 
-            // Check if it has a heading-style font
-            let fontMods = mods.modifiers(named: "font")
-            let hasHeadingFont = fontMods.contains { mod in
-                Self.isHeadingFont(
-                    mod.arguments.first?.text ?? "",
-                    options: context.configOptions,
-                    fontConstants: fontConstants
-                )
-            }
+            // Check if it has a heading-style font.
+            //
+            // Two forms, because a design system usually supplies only one of them:
+            //   PSText("Title", font: .headingXXL)   — font as an initialiser argument
+            //   Text("Title").pulseFont(.headingXXL) — font via the system's own modifier
+            // Both are declared through `font_modifiers`; `.font()` is always read.
+            let fontNames = context.configOptions.fontModifierNames
+            let hasHeadingFont = fontNames.contains { name in
+                mods.modifiers(named: name).contains { mod in
+                    Self.isHeadingFont(
+                        mod.arguments.first?.text ?? "",
+                        options: context.configOptions,
+                        fontConstants: fontConstants
+                    )
+                }
+            } || Self.hasHeadingFontArgument(
+                view.callExpr,
+                names: fontNames,
+                options: context.configOptions,
+                fontConstants: fontConstants
+            )
             guard hasHeadingFont else { continue }
 
             // Check if it already has .isHeader trait
@@ -161,6 +177,27 @@ public struct HeadingTraitMissingRule: A11yRule {
     /// rests on the declared value rather than the variable's name. The name is unreliable in
     /// both directions: `subtitleFont` holds `.themeParagraphXS` in one real component, while
     /// `titleFont` holds a heading token in some components and a paragraph token in others.
+    /// Whether the view's own initialiser carries a heading font, e.g.
+    /// `PSText("Title", font: .headingXXL)`.
+    ///
+    /// Only the view's direct arguments are read, not nested calls, so a font passed to a child
+    /// inside a trailing closure does not make its parent look like a heading.
+    static func hasHeadingFontArgument(
+        _ callExpr: FunctionCallExprSyntax,
+        names: Set<String>,
+        options: A11yConfig.ConfigOptions,
+        fontConstants: [String: String]
+    ) -> Bool {
+        callExpr.arguments.contains { argument in
+            guard let label = argument.label?.text, names.contains(label) else { return false }
+            return isHeadingFont(
+                argument.expression.trimmedDescription,
+                options: options,
+                fontConstants: fontConstants
+            )
+        }
+    }
+
     static func isHeadingFont(
         _ argumentText: String,
         options: A11yConfig.ConfigOptions,

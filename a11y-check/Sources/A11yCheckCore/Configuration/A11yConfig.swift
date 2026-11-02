@@ -38,6 +38,23 @@ public struct A11yConfig: Sendable {
         /// times and `NavigationButton(` 206, and no image or button rule ever looked at them.
         /// Mapping a wrapper to the view it renders lets the existing rules see it unchanged.
         public let viewAliases: [String: String]
+        /// Extra modifier names that carry a font, beyond `.font()`.
+        ///
+        /// Design systems commonly ship their own typography modifier — `.pulseFont(.headingXL)`,
+        /// `.themeFont(.display)` — and a rule that only reads `.font()` sees none of it. Name the
+        /// modifier here and the font rules read it as they read `.font`. `font` is always
+        /// included, so listing it is harmless.
+        ///
+        /// A font supplied as an **initialiser argument** is also read, using these same names as
+        /// the argument label: `PSText("Title", font: .headingXXL)` is matched by `font`. That form
+        /// is how a text wrapper usually takes its style, and it is invisible to a modifier-only
+        /// scan.
+        public let fontModifiers: [String]
+
+        /// The modifier/argument names to search for a font, always including `font`.
+        public var fontModifierNames: Set<String> {
+            Set(fontModifiers).union(["font"])
+        }
 
         public init(
             minTouchTarget: Double? = nil,
@@ -45,7 +62,8 @@ public struct A11yConfig: Sendable {
             assumeDefaultBackground: Bool? = nil,
             headingFonts: [String] = [],
             headingFontDeny: [String] = [],
-            viewAliases: [String: String] = [:]
+            viewAliases: [String: String] = [:],
+            fontModifiers: [String] = []
         ) {
             self.minTouchTarget = minTouchTarget
             self.contrastRatio = contrastRatio
@@ -53,6 +71,7 @@ public struct A11yConfig: Sendable {
             self.headingFonts = headingFonts
             self.headingFontDeny = headingFontDeny
             self.viewAliases = viewAliases
+            self.fontModifiers = fontModifiers
         }
     }
 
@@ -136,6 +155,7 @@ public enum ConfigLoader {
         var headingFonts: [String] = []
         var headingFontDeny: [String] = []
         var viewAliases: [String: String] = [:]
+        var fontModifiers: [String] = []
         if let opts = dict["options"] as? [String: Any] {
             if let v = opts["min_touch_target"] as? Double {
                 minTouchTarget = v
@@ -159,6 +179,9 @@ public enum ConfigLoader {
                 // on the right-hand side would otherwise silently do nothing.
                 viewAliases = v.filter { ViewHierarchyVisitor.recognizedViews.contains($0.value) }
             }
+            if let v = opts["font_modifiers"] as? [String] {
+                fontModifiers = v
+            }
         }
 
         // exclude_paths
@@ -177,7 +200,8 @@ public enum ConfigLoader {
                 assumeDefaultBackground: assumeDefaultBackground,
                 headingFonts: headingFonts,
                 headingFontDeny: headingFontDeny,
-                viewAliases: viewAliases
+                viewAliases: viewAliases,
+                fontModifiers: fontModifiers
             ),
             excludePaths: excludePaths
         )

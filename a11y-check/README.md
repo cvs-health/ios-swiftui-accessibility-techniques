@@ -810,12 +810,14 @@ file, and `a11y-check:disable-file` is the explicit way to say that.
 
 There are two ways to run a11y-check in Xcode. Pick whichever fits your project:
 
-| | **Build Plugin (SPM)** | **Run Script** |
-|---|---|---|
-| **How it works** | Add the package as an SPM dependency — the plugin runs automatically | Add a shell script build phase that calls the Homebrew binary |
-| **Requires Homebrew** | No — SPM builds the tool from source | Yes |
-| **Errors fail the build** | Yes — errors block the build | No — `|| true` lets the build continue |
-| **Best for** | Strict enforcement, CI pipelines | Development, gradual adoption |
+| | **Build Plugin (SPM)** | **Run Script** | **Standalone audit project** |
+|---|---|---|---|
+| **How it works** | Add the package as an SPM dependency — the plugin runs automatically | Add a shell script build phase that calls the Homebrew binary | A separate project that compiles nothing and only runs the scan |
+| **Requires Homebrew** | No — SPM builds the tool from source | Yes | No — point it at any binary |
+| **Errors fail the build** | Yes — errors block the build | No — `|| true` lets the build continue | No — never fails |
+| **Builds your app** | Yes | Yes | **No** |
+| **Touches your project files** | Yes | Yes | **No** |
+| **Best for** | Strict enforcement, CI pipelines | Development, gradual adoption | **Reviewing an existing codebase for false positives before deciding what to enforce** |
 
 Both approaches show accessibility issues inline in Xcode's editor and Issue Navigator.
 
@@ -893,6 +895,31 @@ Scanning your entire source tree can take **30–60+ seconds** on large projects
 ```
 
 You can also exclude paths using an [`.a11ycheck.yml` config file](#configuration-file) with `exclude_paths`. Those patterns apply to directory scans **and** to explicit file arguments.
+
+### Option C: Standalone audit project
+
+Both options above attach to a real target, so you have to **build the app** to see findings. For
+a first pass over an existing codebase that is the wrong trade: minutes per look, and an edit to
+`project.pbxproj` that you will want to revert.
+
+[`Examples/XcodeAuditProject`](Examples/XcodeAuditProject) is a ready-made project for that case.
+It is an aggregate target running one script — it compiles nothing, touches no file in the repo
+being scanned, and finishes in about the time the scan takes. Findings land in the Issue
+Navigator and click through to the real source.
+
+```
+cp -R Examples/XcodeAuditProject ~/my-audit
+cp "$(which a11y-check)" ~/my-audit/bin/
+open ~/my-audit/a11y-check.xcodeproj     # then press ⌘B
+```
+
+Scope and target it with `A11Y_REPO`, `A11Y_SCOPE`, `A11Y_BIN` and `A11Y_CONFIG` — see that
+folder's README, which also covers three mistakes that each produce a **silent** wrong answer:
+passing `--base-path` (Xcode needs absolute paths, or the navigator stays empty), printing
+`error:` from a script that exits 0 (Xcode adds a spurious issue of its own), and auditing with a
+stale binary (fewer findings, looks fine).
+
+Use this to decide what to enforce; use Option A or B to enforce it.
 
 ### Keeping the binary up to date
 

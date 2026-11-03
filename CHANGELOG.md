@@ -343,6 +343,16 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Added
 
+- **Standalone Xcode audit project** (`Examples/XcodeAuditProject`). An aggregate target that compiles nothing and only runs the scan, so findings land in Xcode's Issue Navigator without building the app or editing its `project.pbxproj`. Documented as "Option C" alongside the SPM plugin and Run Script phase.
+
+  The existing integrations both attach to a real target, which is right for enforcement and wrong for the review that comes first: on a large app it is minutes per look, and it needs a project edit you will want to revert. Reviewing an existing codebase for false positives is a different job from gating new code, and it now has its own tool.
+
+  Its README records three mistakes that each produce a **silent** wrong answer rather than an error, all three hit while building it:
+
+  - **`--base-path` makes paths relative.** Right for SARIF and GitHub annotations; wrong for Xcode, which resolves diagnostics by absolute path. The build succeeds and the Issue Navigator stays empty.
+  - **A script phase printing `error:` and exiting 0** makes Xcode add *"Command PhaseScriptExecution emitted errors but did not return a nonzero exit code"* at the top of the audit. Downgrading the stream to `warning:` loses nothing, since every message already carries `[critical]` / `[serious]` / `[moderate]` / `[minor]`.
+  - **Auditing with a stale binary.** Fewer findings, and it looks like it worked. One project vendored a months-old build for weeks; an audit against it would have mis-measured several rules, one of which reported 133 findings where the current version reports 1. The script prints `--version` with the results for that reason.
+
 - **`font_modifiers` config option.** Names extra modifiers that carry a font, beyond `.font()`, and the same names are read as initialiser argument labels. With the existing `view_aliases`, the font rules can finally see a design system's own typography:
 
   ```yaml

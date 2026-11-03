@@ -483,6 +483,8 @@ options:
   view_aliases:           # design-system wrappers -> the SwiftUI view they render
     IconView: Image
     NavigationButton: Button
+  font_modifiers:         # extra modifiers that carry a font, beyond .font()
+    - pulseFont
 
 # Skip paths matching these patterns (directory scans and explicit file args)
 exclude_paths:
@@ -577,6 +579,36 @@ elsewhere in a project, and reading UIKit as SwiftUI reports nonsense.
 Measured on one app, these two guards took aliasing from 218 new `image-missing-label` findings at
 78% precision to 166 at roughly 99%: 33 labelled-token reports and 16 UIKit reports went away.
 
+### Custom typography modifiers (`font_modifiers`)
+
+A design system usually ships its own typography modifier, and often takes the font as an
+initialiser argument rather than a modifier at all:
+
+```swift
+PSText("Section title", font: .headingXXL)   // font as an argument
+Text("Section title").pulseFont(.headingXXL) // custom modifier
+```
+
+Neither is `.font()`, so neither was visible to the font rules. Name the modifier and both forms
+are read:
+
+```yaml
+options:
+  font_modifiers:
+    - pulseFont
+  view_aliases:
+    PSText: Text
+```
+
+`font` is always included, which is what makes the `PSText(_, font:)` form work — the same names
+are used as modifier names **and** as initialiser argument labels. Only the view's own arguments
+are read, so a font passed to a child inside a trailing closure does not make its parent look
+like a heading.
+
+Pair this with `view_aliases`: the alias makes the rules look at the wrapper at all, and
+`font_modifiers` tells them where its font lives. Setting one without the other usually finds
+nothing.
+
 ### How heading fonts are recognised
 
 `heading-trait-missing` has to decide whether a `Text`'s font is a heading style. Most apps do not
@@ -588,6 +620,20 @@ use Apple's styles for headings — they have their own type scale — so matchi
 3. Apple's built-ins: `.title`, `.title2`, `.title3`, `.largeTitle`, `.headline`.
 4. A name containing `heading`, `header`, `title`, `headline`, or `display` — `.themeHeadingXL`,
    `.appTitleLarge`, `.dsHeading2` all match with no configuration.
+
+**Where the font is read from matters as much as the token.** Knowing the token names is not
+enough if the font never arrives through `.font()`. Three forms are read:
+
+| Form | Needs config? |
+|---|---|
+| `Text("T").font(.headingXL)` | no |
+| `PSText("T", font: .headingXL)` | `view_aliases: {PSText: Text}` |
+| `Text("T").pulseFont(.headingXL)` | `font_modifiers: [pulseFont]` |
+
+In one real app the second form appeared **804** times, the third **307**, and
+`.font(.heading…)` **zero** times — so the rule reported no headings at all until both keys were
+set, despite already understanding every token name involved. If a codebase wraps its text
+component, check which form it uses before concluding the rule has nothing to find.
 
 **Subheadings count as headings.** `.subheadline`, `.subtitle`, `.themeSubheadingM` and
 `subHeaderL` all report. WCAG 1.3.1 asks for anything that appears to be a heading to be marked up

@@ -343,6 +343,26 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Added
 
+- **`font_modifiers` config option.** Names extra modifiers that carry a font, beyond `.font()`, and the same names are read as initialiser argument labels. With the existing `view_aliases`, the font rules can finally see a design system's own typography:
+
+  ```yaml
+  options:
+    view_aliases:   { PSText: Text }
+    font_modifiers: [pulseFont]
+  ```
+
+  Measured on one real app (~900 SwiftUI files), `heading-trait-missing` could not see its headings at all:
+
+  | Form | Occurrences | Read before |
+  |---|---|---|
+  | `PSText(_, font: .heading*)` | 804 | no |
+  | `.pulseFont(.heading*)` | 307 | no |
+  | `.font(.heading*)` | 0 | yes — the only form read |
+
+  The rule already matched the token *names*: `.headingXXL` hits the existing heuristic. The gap was entirely the **form the font arrives in**, which is why it never presented as a tuning problem — the app had over a thousand design-system headings and the rule reported 82 findings, none of them on one.
+
+  With both keys set it reports 835, and precision rises rather than falls. A hand-classified sample put the design-system-token findings at ~70% clearly valid, ~90% including borderline, against 17-of-82 (~21%) for the previous set: the added findings sit on tokens whose names unambiguously say "heading", where the old population was dominated by Apple and legacy tokens whose intent is genuinely ambiguous. No new false-positive mode appeared — the two shapes seen are a data value rendered at heading size (`item.price` at `.cncHeadline`) and a legacy token whose *name* contains "headline" over body copy. `heading_font_deny` remains the lever for those.
+
 - **Added and then removed a `heading-trait-on-non-heading` rule before any release.** It was the inverse of `heading-trait-missing` — body copy carrying `.accessibilityAddTraits(.isHeader)`, which puts non-headings in the VoiceOver heading rotor — and six defects in the backlog it was measured against report exactly that.
 
   It is recorded rather than quietly dropped because the measurement is the useful part. A first cut flagged **146** sites; 133 were a `*Strong` paragraph token, which is what most in-card section headers are built from, so the trait was correct. Guarding emphasised text left **11**, of which 6 are genuine: `Text(helperText)`, `Text(subtitle)`, and four filter screens marking a "select an option" instruction as a heading. The other 5 render variables named `sectionHeader`, `header` or `title` — real headers that happen to use a body-tier font, where source cannot settle the question because whether text *looks* like a heading is visual.
@@ -388,6 +408,8 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
   `Menu` and `Picker` are **views**, not modifiers, so dismissing either is still out of this rule's reach. An earlier draft of this entry claimed all three; two of the three defects are covered.
 
 #### Fixed
+
+- **`ModifierCollector` could not be taught new modifier names.** It filtered against a fixed `trackedModifiers` set, so a custom typography modifier was never collected at all — no amount of rule-level configuration could have reached it. The extra names now thread through `ViewHierarchyVisitor`, which already carried `viewAliases` for the same reason.
 
 - **`small-touch-target` no longer claims a conformance failure it cannot establish.** The message read "Touch target 16x16pt is below the 24x24pt minimum (WCAG 2.5.8)", stated flatly. But 2.5.8 carries five exceptions and source settles none of them — most importantly **Spacing**, under which an undersized target conforms if no other target falls inside a 24pt circle centred on it. That depends on sibling positions at runtime, which stack spacing, Dynamic Type and device width all move, so a 16pt control can be perfectly conforming and the rule was calling it a failure.
 

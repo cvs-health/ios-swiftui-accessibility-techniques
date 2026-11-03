@@ -1,6 +1,6 @@
 ---
 name: iOS SwiftUI Accessibility
-description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, orientation, and more. Based on the ios-swiftui-accessibility-techniques project with 41 static analysis rules across 24 WCAG criteria.
+description: Enforces WCAG 2.2 accessible coding patterns when writing SwiftUI — labels, traits, Dynamic Type, contrast, touch targets, focus management, orientation, and more. Based on the ios-swiftui-accessibility-techniques project with 45 static analysis rules across 24 WCAG criteria.
 ---
 
 # iOS SwiftUI Accessibility Coding Rules
@@ -137,6 +137,8 @@ Button(item.name) { selectItem() }
 ## Headings (WCAG 1.3.1)
 
 - Add `.accessibilityAddTraits(.isHeader)` to all heading-styled text (`.title`, `.headline`, `.subheadline`, etc.) so VoiceOver users can navigate by headings using the Rotor.
+- **This applies to your design system's heading tokens too**, not just Apple's styles — `.headingXXL`, `.themeHeadingXL`, `.dsHeading2`. In most real apps that is where nearly all headings live, and they are the ones most often missed.
+- Pick the token for what the text *is*, not how large you want it. Rendering a paragraph, a price, or a field label at `.headline` or `.headingL` is a misuse: Apple's text styles are named semantically and `.body`, `.callout` and `.footnote` exist for secondary text. A value shown large is still a value, not a heading.
 - Never fake a heading by putting "heading" in the `.accessibilityLabel` — it won't appear in the Rotor.
 - Use `.accessibilityHeading(.h1)` through `.h6` together with `.accessibilityAddTraits(.isHeader)` to set heading levels. Don't skip levels.
 
@@ -150,6 +152,16 @@ Text("Settings")
 Text("Settings")
     .font(.title)
     .accessibilityLabel("Settings heading")
+
+// Good — a design-system heading token still needs the trait
+PSText("Order summary", font: .headingL)
+    .accessibilityAddTraits(.isHeader)
+
+// Bad — a value styled large is not a heading; it needs a label/value, not .isHeader
+PSText(item.price, font: .headingL)
+
+// Bad — body copy at a heading token. Fix the token, do not add the trait.
+PSText(longDescription, font: .headingS)
 ```
 
 ## Traits (WCAG 4.1.2)

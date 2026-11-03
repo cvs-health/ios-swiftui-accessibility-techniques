@@ -32,6 +32,7 @@ Variables** — or export before launching Xcode:
 | `A11Y_SCOPE` | the whole checkout | subpath, e.g. `Packages/Shop`, for a fast re-check |
 | `A11Y_BIN` | `bin/a11y-check`, else `PATH`, else Homebrew | which binary |
 | `A11Y_CONFIG` | auto-detected from the repo | explicit `.a11ycheck.yml` |
+| `A11Y_SEVERITY` | `errors` | `warnings` downgrades everything, for a clean Xcode badge |
 
 Pin the binary in `bin/` for a real audit. Results that shift halfway through because the tool
 was upgraded are worse than no results.
@@ -46,11 +47,13 @@ annotations want. Xcode resolves diagnostics by **absolute** path, and this proj
 outside the checkout — so relative paths attach to nothing and the navigator stays empty while
 the build succeeds.
 
-**Rewrite `error:` to `warning:`.** Xcode raises *"Command PhaseScriptExecution emitted errors
-but did not return a nonzero exit code"* whenever a script phase prints `error:` and exits 0,
-which puts a spurious issue at the top of the audit. Nothing is lost by downgrading: every
-message already carries its own severity as `[critical]` / `[serious]` / `[moderate]` /
-`[minor]`.
+**Expect one spurious issue at the top, and leave it there.** Xcode raises *"Command
+PhaseScriptExecution emitted errors but did not return a nonzero exit code"* whenever a script
+phase prints `error:` and exits 0. It is tempting to silence it by downgrading everything to
+`warning:` — don't. The error/warning colouring in the Issue Navigator is the main way to triage
+a few thousand findings, and one ignorable line is a better trade than losing it. `A11Y_SEVERITY=warnings`
+is there if you want a clean badge, and the ranking survives either way because every message
+carries `[critical]` / `[serious]` / `[moderate]` / `[minor]`.
 
 **Print `--version` with the results.** A stale binary reports fewer findings and still looks
 like it worked. One real project vendored a months-old build for weeks without noticing, and an

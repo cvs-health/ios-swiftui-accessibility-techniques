@@ -916,8 +916,9 @@ open ~/my-audit/a11y-check.xcodeproj     # then press ⌘B
 Scope and target it with `A11Y_REPO`, `A11Y_SCOPE`, `A11Y_BIN` and `A11Y_CONFIG` — see that
 folder's README, which also covers three mistakes that each produce a **silent** wrong answer:
 passing `--base-path` (Xcode needs absolute paths, or the navigator stays empty), printing
-`error:` from a script that exits 0 (Xcode adds a spurious issue of its own), and auditing with a
-stale binary (fewer findings, looks fine).
+`error:` from a script that exits 0 (Xcode adds one spurious issue of its own — keep it, rather than
+flattening every finding to a warning and losing the severity colours), and auditing with a stale
+binary (fewer findings, looks fine).
 
 Use this to decide what to enforce; use Option A or B to enforce it.
 

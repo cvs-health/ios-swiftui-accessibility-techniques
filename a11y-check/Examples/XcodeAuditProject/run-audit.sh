@@ -42,12 +42,20 @@ echo "note: a11y-check $("$BIN" --version) scanning $SCOPE in $REPO"
 # wrong here — Xcode resolves diagnostics by absolute path, and this project normally sits
 # outside the checkout, so relative paths attach to nothing and the Issue Navigator stays empty.
 #
-# error: is rewritten to warning: because this target is advisory and must never fail the build.
-# Xcode raises "Command PhaseScriptExecution emitted errors but did not return a nonzero exit
-# code" whenever a script phase prints error: and exits 0, which puts a spurious issue at the top
-# of the audit. a11y-check already prints its own severity in every message as [critical] /
-# [serious] / [moderate] / [minor], so nothing is lost.
-"$BIN" "$TARGET" "${CFG_ARGS[@]}" --format xcode --no-trend 2>/dev/null \
-    | sed -E 's/^([^:]+:[0-9]+:[0-9]+:) error:/\1 warning:/' || true
+# Severity passes through as a11y-check reports it: error for critical/serious, warning for
+# minor, note for info. That red/yellow split in the Issue Navigator is the main triage tool once
+# there are a few thousand findings, so it is kept at one cosmetic cost — Xcode adds "Command
+# PhaseScriptExecution emitted errors but did not return a nonzero exit code" at the top of the
+# target whenever a script phase prints error: and exits 0. That line is expected; the
+# alternatives are losing the colours or failing the build, and neither suits an advisory audit.
+#
+# A11Y_SEVERITY=warnings downgrades everything for a clean badge. The ranking survives either
+# way, since every message carries [critical] / [serious] / [moderate] / [minor].
+if [ "${A11Y_SEVERITY:-errors}" = "warnings" ]; then
+    "$BIN" "$TARGET" "${CFG_ARGS[@]}" --format xcode --no-trend 2>/dev/null \
+        | sed -E 's/^([^:]+:[0-9]+:[0-9]+:) error:/\1 warning:/' || true
+else
+    "$BIN" "$TARGET" "${CFG_ARGS[@]}" --format xcode --no-trend 2>/dev/null || true
+fi
 
 exit 0

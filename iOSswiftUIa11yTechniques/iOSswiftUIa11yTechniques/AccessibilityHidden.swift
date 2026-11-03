@@ -1,5 +1,5 @@
 /*
-   Copyright 2024 CVS Health and/or one of its affiliates
+   Copyright 2024-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ import SwiftUI
  
 struct AccessibilityHidden: View {
     @State private var searchText = ""
+    @State private var emailGood = ""
+    @State private var emailBad = ""
 
     
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
@@ -27,7 +29,7 @@ struct AccessibilityHidden: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Use `.accessibilityHidden(true)` to hide decorative content or repetitive text from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control users. Don't use `.accessibilityHidden(true)` on any informative content or UI controls. Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden.")
+                Text("Use `.accessibilityHidden(true)` to hide decorative content or repetitive text from VoiceOver, Voice Control, Full Keyboard Access, and Switch Control users. Don't use `.accessibilityHidden(true)` on any informative content or UI controls. Don't use `.accessibilityHidden(true)` on any parent view containers that hold informative or functional content because all child elements will be hidden. Don't use `.accessibilityHidden(true)` on visible label text to avoid hearing a label twice, because that removes the label from the screen entirely for assistive technology users.")
                 Text("Good Example")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -58,6 +60,47 @@ struct AccessibilityHidden: View {
                     .accessibilityHidden(true)
                 DisclosureGroup("Details") {
                     Text("The bad example uses a custom `HeaderContainer` view that holds a search input, notifications button, and shopping cart button. `.accessibilityHidden(true)` is incorrectly used to hide the contents of the custom view. VoiceOver, Voice Control, Full Keyboard Access, and Switch Control users cannot focus on or activate any of the controls inside the custom view with `.accessibilityHidden(true)` applied.")
+                }.accessibilityHint("Bad Example")
+                Text("Good Example 2: Visible Label Text")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.top)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
+                    .padding(.bottom)
+                VStack(alignment: .leading) {
+                    Text("Email address")
+                    TextField("", text: $emailGood)
+                        .textFieldStyle(.roundedBorder)
+                        .accessibilityLabel("Email address")
+                }
+                DisclosureGroup("Details") {
+                    Text("The good example leaves the visible `Text(\"Email address\")` label in the accessibility tree and also gives the `TextField` the same accessible name. VoiceOver users hear the label when swiping to the text and again as the name of the input, which is the same behavior a correctly labelled `<label>` and `<input>` give on the web. Voice Control users can say the label to reach the field, and braille users reading the screen line by line still find it.")
+                }.accessibilityHint("Good Example")
+                Text("Bad Example 2: Hidden Label Text")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                    .foregroundColor(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.top)
+                Divider()
+                    .frame(height: 2.0, alignment: .leading)
+                    .background(colorScheme == .dark ? Color(.systemRed) : darkRed)
+                    .padding(.bottom)
+                VStack(alignment: .leading) {
+                    Text("Email address")
+                        .accessibilityHidden(true)
+                    TextField("", text: $emailBad)
+                        .textFieldStyle(.roundedBorder)
+                        .accessibilityLabel("Email address")
+                }
+                DisclosureGroup("Details") {
+                    Text("The bad example uses `.accessibilityHidden(true)` on the visible `Text(\"Email address\")` label so that VoiceOver speaks it only once. Hearing a label twice is not a failure, but hiding it is: the label is visible on screen and is now missing from the accessibility tree, which fails WCAG 1.3.1 Info and Relationships. Swiping through the form skips over it, so there is no way to review the label without focusing the input, and nothing is left if the input's `.accessibilityLabel` is later changed or removed. Hide text only when it is decorative or repeats something already announced.")
                 }.accessibilityHint("Bad Example")
             }
             .navigationTitle("Accessibility Hidden")

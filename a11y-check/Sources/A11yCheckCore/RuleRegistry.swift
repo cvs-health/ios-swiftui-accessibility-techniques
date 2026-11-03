@@ -92,6 +92,7 @@ public final class RuleRegistry {
 
         // Accessibility Hidden (WCAG 4.1.2)
         register(HiddenOnParentWithControlsRule())
+        register(HiddenLabelTextRule())
 
         // Dark Mode / Contrast (WCAG 1.4.3)
         register(HardcodedColorRule())

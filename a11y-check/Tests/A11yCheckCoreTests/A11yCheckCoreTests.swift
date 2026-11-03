@@ -58,6 +58,132 @@ final class A11yCheckCoreTests: XCTestCase {
         return rule.check(syntax: syntax, context: context)
     }
 
+    // MARK: - Hidden Label Text Rule
+
+    func testHiddenLabelText_flagsHiddenFieldLabel() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("Legal sex")
+                        .accessibilityHidden(true)
+                    TextField("", text: $sex)
+                        .accessibilityLabel("Legal sex")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hidden-label-text")
+        XCTAssertEqual(diags.count, 1)
+    }
+
+    /// A short glyph or badge count carries no meaning on its own and the surrounding element
+    /// already says what it counts. This is the pattern the demo page's good example uses.
+    func testHiddenLabelText_allowsShortDecorativeText() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("3")
+                        .accessibilityHidden(true)
+                    Text("\u{2022}")
+                        .accessibilityHidden(true)
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hidden-label-text")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    /// Inside a `.combine` parent the child is not an element of its own, so hiding it changes
+    /// nothing that VoiceOver can observe.
+    func testHiddenLabelText_allowsTextInsideCombinedParent() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                VStack {
+                    Text("Order total")
+                        .accessibilityHidden(true)
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hidden-label-text")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    /// A struck-through price read aloud claims to be the price, so hiding it and announcing
+    /// the real one elsewhere is the better technique.
+    func testHiddenLabelText_allowsStrikethroughText() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("$12.99")
+                    .strikethrough()
+                    .accessibilityHidden(true)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hidden-label-text")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    /// The field underneath a `.placeholder` overlay carries the name; leaving the visual copy
+    /// visible is what makes VoiceOver read it twice.
+    func testHiddenLabelText_allowsPlaceholderOverlay() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                TextField("", text: $query)
+                    .accessibilityLabel("Enter ZIP code")
+                    .placeholder(when: query.isEmpty) {
+                        Text("Enter ZIP code")
+                            .accessibilityHidden(true)
+                    }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hidden-label-text")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testHiddenLabelText_allowsExplicitlyNotHidden() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Legal sex")
+                    .accessibilityHidden(false)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hidden-label-text")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    /// An expression cannot be measured for length, so it is treated as wordy. A localised
+    /// field label is the common case and matters more than a localised glyph.
+    func testHiddenLabelText_treatsUnresolvedExpressionAsWordy() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text(Localized.legalSex)
+                    .accessibilityHidden(true)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "hidden-label-text")
+        XCTAssertEqual(diags.count, 1)
+    }
+
     // MARK: - Image Rules
 
     func testImageMissingLabel_flagsBadImage() {
@@ -3313,7 +3439,7 @@ final class A11yCheckCoreTests: XCTestCase {
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 45)
+        XCTAssertEqual(registry.rules.count, 46)
     }
 
     func testDisableRule() {

@@ -91,6 +91,10 @@ public final class ModifierCollector: SyntaxVisitor {
         "opacity",
         "labelsHidden",
         "underline",
+        // Strikethrough carries meaning no assistive technology can convey: a struck-through
+        // price read aloud claims to be the price. Rules need to see it to tell "superseded
+        // text" apart from ordinary text.
+        "strikethrough",
         "bold",
         "fontWeight",
         "italic",

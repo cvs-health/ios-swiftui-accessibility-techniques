@@ -2,7 +2,7 @@
 
 ![a11y score](a11y-badge.svg)
 
-Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 45 rules across 24 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
+Static analysis for Swift/SwiftUI accessibility issues, mapped to [WCAG 2.2](https://www.w3.org/TR/WCAG22/) success criteria. Runs on your source files and reports missing labels, incorrect traits, touch target sizes, color contrast, dynamic type, and more — with 46 rules across 24 WCAG criteria. Includes a **WCAG 2.2 scoring system** that grades your files or entire project from 0–100.
 
 ## Check your own iOS app
 
@@ -37,7 +37,7 @@ a11y-check . --base-path /path/to/workspace  # Strip prefix from all file paths 
 a11y-check . --badge > badge.svg   # Score badge for README
 a11y-check . --watch               # Re-run on file changes
 a11y-check --generate-docs > RULES.md  # Generate rule docs
-a11y-check --list-rules            # List all 45 rules
+a11y-check --list-rules            # List all 46 rules
 ```
 
 Every run automatically includes a **WCAG 2.2 accessibility score** (0–100 with letter grade) after the diagnostics. Use `--min-score 80` to fail CI if the score drops below a threshold.
@@ -1134,7 +1134,7 @@ Once the MCP server is running, ask your AI assistant things like:
 - **"Run a11y-check on TextFieldsView.swift"** — check a specific file
 - **"Which of those are the most critical to fix?"** — the AI explains severity and WCAG impact
 - **"Fix the textfield-missing-label issues"** — the AI edits your code to add the missing labels
-- **"List all the a11y rules"** — shows all 45 rules with descriptions and WCAG criteria
+- **"List all the a11y rules"** — shows all 46 rules with descriptions and WCAG criteria
 - **"What WCAG criteria does this project fail?"** — the AI interprets the results and maps them to compliance requirements
 - **"What's the accessibility score for this project?"** — runs `a11y-check .` and explains the WCAG 2.2 score breakdown
 - **"Score ProfileView.swift"** — runs the check on a single file and highlights what to fix based on the score
@@ -1144,7 +1144,7 @@ The full loop — detect, understand, fix, report — happens conversationally w
 
 ## Rules
 
-a11y-check includes 45 rules across these categories:
+a11y-check includes 46 rules across these categories:
 
 | Category | Rules | WCAG | Impact |
 |----------|-------|------|--------|
@@ -1162,7 +1162,7 @@ a11y-check includes 45 rules across these categories:
 | **Traits** | `tap-gesture-missing-button-trait` | 4.1.2 | Critical |
 | **Toggles** | `toggle-missing-label` | 4.1.2 | Critical |
 | **Form controls** | `textfield-missing-label`, `slider-missing-label`, `stepper-missing-label`, `picker-missing-label`, `picker-style-missing-accessibility` | 4.1.2 | Critical |
-| **Accessibility hidden** | `hidden-parent-with-controls` | 4.1.2 | Critical |
+| **Accessibility hidden** | `hidden-parent-with-controls`, `hidden-label-text` | 4.1.2, 1.3.1 | Critical, Serious |
 | **Animation** | `animation-missing-reduce-motion` | 2.2.2 | Moderate |
 | **Tab views** | `tabview-missing-label` | 4.1.2, 2.4.2 | Serious |
 | **Input purpose** | `input-missing-purpose` | 1.3.5 | Moderate |
@@ -1187,6 +1187,32 @@ For any other tap gesture you believe is a false positive, use inline suppressio
 // a11y-check:disable-next-line tap-gesture-missing-button-trait
 .onTapGesture { ... }
 ```
+
+The **hidden-label-text** rule catches the opposite mistake to `hidden-parent-with-controls`:
+hiding a visible label so VoiceOver stops saying it twice. Moving the label onto the control with
+`.accessibilityLabel` and hiding the visible copy reads like a de-duplication fix, but it deletes
+content from the accessibility tree that is still on screen — swiping past the form skips it,
+Voice Control users cannot say it, and nothing is left if the control's label later changes. The
+web has the same duplication (`<label for>` names the input *and* stays readable as text, and
+`aria-describedby` is spoken on focus as well) and does not hide anything to avoid it. Hearing a
+label twice is not a WCAG failure; hiding it is, under 1.3.1 Info and Relationships.
+
+To keep the rule to text that is genuinely a label, it fires only when the text is wordy —
+more than one word, or a literal longer than three characters — and skips four cases:
+
+- **Short decorative text**, so badge counts (`Text("3")`) and bullet glyphs are left alone.
+  These are the legitimate use, and the repository's own demo page relies on it.
+- **Text inside an `.accessibilityElement(children: .combine)` or `.ignore` ancestor**, where the
+  child is not an element of its own and hiding it changes nothing observable.
+- **`.strikethrough()` text.** A struck-through price read aloud claims to *be* the price, with
+  nothing to convey the strikethrough, so hiding it and announcing the real price elsewhere is the
+  better technique.
+- **The content of a `.placeholder { ... }` overlay**, the common idiom for styling a `TextField`
+  placeholder, where the field underneath already carries the name. This opens no hole: a field
+  with a placeholder and no name of its own is reported by `placeholder-only-label` at critical.
+
+An expression the checker cannot resolve (`Text(Localized.legalSex)`) counts as wordy, because a
+localised field label is far more common than a localised glyph.
 
 The **animation-missing-reduce-motion** rule reports only the motion WCAG 2.2.2 actually
 reaches: content that starts on its own and then either never stops or runs past five seconds.

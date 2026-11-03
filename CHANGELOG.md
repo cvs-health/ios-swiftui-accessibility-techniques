@@ -439,6 +439,17 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **Reverted: `display` is back in `heading-trait-missing`'s name fragments.** It was removed earlier the same day on the reasoning that a display tier is a separate category from a heading tier. The reasoning was sound and the conclusion was wrong.
+
+  Two unrelated things are spelled `display`: a **type-scale tier** (oversized numerals and hero figures — Pulse runs `heading*` at 16–36pt weight 500–600 against `display*` at 32–56pt weight 400) and a **typeface** (`SF Pro Display`, companion to `SF Pro Text`, so `sfProDisplayMedium` carries no tier information). The removal was argued from the first and silenced the second.
+
+  The defect backlog settled it. Of the 5 findings the removal dropped, **2 were ticketed heading defects** whose fix PR adds `.accessibilityAddTraits(.isHeader)` to exactly the reported line — `Text(storeInfo.address.fullAddress)` at `.sfProDisplayMedium`, because in a store card the address *is* the card's heading, and a filter category label at `.sfProDisplayLarge`. The earlier note cited "a street address at 14pt" as self-evidently not a heading. It was the heading, and 14pt was a red herring.
+
+  The correct scope for this is per repository, not global, because the same word means a heading tier in one app and a typeface in another. A design system whose display tier really is a numeral scale uses the key that already exists for it: `heading_font_deny: [displayXS, displayS, displayM, displayL]`.
+
+  Lesson recorded because it is the second time it has bitten on this rule: a font's *size* is not evidence about whether its text is a heading. 14pt was dismissed as too small and 32pt accepted as too large, and both calls were made without checking what the text was for.
+
+
 - **`picker-missing-label` no longer reports a `Picker` labelled through a `label:` closure.** The rule looked for a label in three places — the leading argument, `.accessibilityLabel`, and an enclosing `Menu` — and not in the fourth: `Picker(selection:content:label:)`, which supplies the label as a view builder.
 
   ```swift

@@ -640,7 +640,7 @@ use Apple's styles for headings — they have their own type scale — so matchi
 1. `heading_font_deny` — never a heading. Deny beats allow.
 2. `heading_fonts` — always a heading.
 3. Apple's built-ins: `.title`, `.title2`, `.title3`, `.largeTitle`, `.headline`.
-4. A name containing `heading`, `header`, `title`, or `headline` — `.themeHeadingXL`,
+4. A name containing `heading`, `header`, `title`, `headline`, or `display` — `.themeHeadingXL`,
    `.appTitleLarge`, `.dsHeading2` all match with no configuration.
 
 **Where the font is read from matters as much as the token.** Knowing the token names is not
@@ -657,20 +657,28 @@ In one real app the second form appeared **804** times, the third **307**, and
 set, despite already understanding every token name involved. If a codebase wraps its text
 component, check which form it uses before concluding the rule has nothing to find.
 
-**A display tier is not a heading tier.** `display` was in that fragment list and has been
-removed. In design-system vocabulary a display tier is its own category — oversized text for
-numerals, hero figures and marketing statements — and systems carrying both say so in the scale:
-CVS Pulse runs `heading*` at 16–36pt and weight 500–600 against `display*` at 32–56pt and weight
-400, so the display tiers are larger *and* lighter. Material 3 draws the same line between
-`Display` and `Headline`.
+**`display` is ambiguous, and it stays in the list.** Two unrelated things are spelled the same
+way: a *type-scale tier* called display (oversized numerals and hero figures — CVS Pulse runs
+`heading*` at 16–36pt weight 500–600 against `display*` at 32–56pt weight 400, so its display
+tiers are larger *and* lighter), and a *typeface* name (`SF Pro Display` is the companion to
+`SF Pro Text`, so `sfProDisplayMedium` says nothing about tier).
 
-`display` is also a **typeface** name, which is the worse problem. `SF Pro Display` is the
-companion to `SF Pro Text`, so a token called `sfProDisplayMedium` carries no tier information at
-all — and in one real app that ramp ran 12pt to 22pt with `Medium` at 14pt. The fragment produced
-5 findings on that app and **all 5 were false positives**: one genuine display tier on a wait time
-rendered as digits, and four `sfProDisplay*` matches at 14–22pt, including a street address and a
-bold 14pt label. If a design system really does use its display tier for page headings, opt in
-with `heading_fonts: [displayXS]`.
+The fragment was removed on that reasoning and then put back, because the defect backlog settled
+it. Of the 5 findings the removal silenced on one app, **2 were ticketed heading defects** whose
+fix PR adds `.isHeader` to exactly the reported line: `Text(storeInfo.address.fullAddress)` at
+`.sfProDisplayMedium` — 14pt, and in a store card the address *is* the card's heading — and a
+filter category label at `.sfProDisplayLarge`. Judging 14pt "too small to be a heading" inverted
+the answer.
+
+A design system whose display tier genuinely is a numeral scale says so per repository, which is
+what `heading_font_deny` is for:
+
+```yaml
+heading_font_deny: [displayXS, displayS, displayM, displayL]
+```
+
+That is the right scope, because the same word means a heading tier in one app and a typeface in
+another.
 
 **Subheadings count as headings.** `.subheadline`, `.subtitle`, `.themeSubheadingM` and
 `subHeaderL` all report. WCAG 1.3.1 asks for anything that appears to be a heading to be marked up

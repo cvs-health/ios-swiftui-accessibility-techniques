@@ -234,7 +234,9 @@ Button(action: {}) {
 
 ## Form Controls (WCAG 1.3.5, 3.3.2, 4.1.2)
 
-- `TextField`, `SecureField`, `Slider`, `Stepper`, `Picker`, and `Toggle` all need visible labels. Use the built-in label parameter or add `.accessibilityLabel`.
+- `TextField`, `SecureField`, `Slider`, `Stepper`, `Picker`, and `Toggle` all need a visible label that persists. **Where that label comes from differs by control, and getting this wrong is the most common form mistake:**
+  - **`Toggle`, `Picker`, `Slider`, `Stepper`** — the built-in label parameter *is* a visible persistent label. Use it; no `.accessibilityLabel` needed.
+  - **`TextField`, `SecureField`** — the built-in parameter is **placeholder text, not a label.** It needs a separate visible `Text` beside the field, set as the field's `.accessibilityLabel`.
 - **A placeholder is never a label.** `TextField("Email", text: $email)` renders its title as placeholder text, and **once the user types a value VoiceOver never speaks it again** — a populated field announces only its value. "120, text field" does not say whether it is systolic or diastolic. This fails 3.3.2 *and* 4.1.2, not just 3.3.2.
 - That makes placeholder-only labelling worse than it looks in testing: it **passes** a VoiceOver pass over an empty form and only fails after data entry. If your check is "open the screen and swipe through", you will not catch it. Fill the form in first.
 - Never use `.labelsHidden()` without providing an `.accessibilityLabel`.

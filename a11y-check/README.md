@@ -618,7 +618,7 @@ use Apple's styles for headings — they have their own type scale — so matchi
 1. `heading_font_deny` — never a heading. Deny beats allow.
 2. `heading_fonts` — always a heading.
 3. Apple's built-ins: `.title`, `.title2`, `.title3`, `.largeTitle`, `.headline`.
-4. A name containing `heading`, `header`, `title`, `headline`, or `display` — `.themeHeadingXL`,
+4. A name containing `heading`, `header`, `title`, or `headline` — `.themeHeadingXL`,
    `.appTitleLarge`, `.dsHeading2` all match with no configuration.
 
 **Where the font is read from matters as much as the token.** Knowing the token names is not
@@ -634,6 +634,21 @@ In one real app the second form appeared **804** times, the third **307**, and
 `.font(.heading…)` **zero** times — so the rule reported no headings at all until both keys were
 set, despite already understanding every token name involved. If a codebase wraps its text
 component, check which form it uses before concluding the rule has nothing to find.
+
+**A display tier is not a heading tier.** `display` was in that fragment list and has been
+removed. In design-system vocabulary a display tier is its own category — oversized text for
+numerals, hero figures and marketing statements — and systems carrying both say so in the scale:
+CVS Pulse runs `heading*` at 16–36pt and weight 500–600 against `display*` at 32–56pt and weight
+400, so the display tiers are larger *and* lighter. Material 3 draws the same line between
+`Display` and `Headline`.
+
+`display` is also a **typeface** name, which is the worse problem. `SF Pro Display` is the
+companion to `SF Pro Text`, so a token called `sfProDisplayMedium` carries no tier information at
+all — and in one real app that ramp ran 12pt to 22pt with `Medium` at 14pt. The fragment produced
+5 findings on that app and **all 5 were false positives**: one genuine display tier on a wait time
+rendered as digits, and four `sfProDisplay*` matches at 14–22pt, including a street address and a
+bold 14pt label. If a design system really does use its display tier for page headings, opt in
+with `heading_fonts: [displayXS]`.
 
 **Subheadings count as headings.** `.subheadline`, `.subtitle`, `.themeSubheadingM` and
 `subHeaderL` all report. WCAG 1.3.1 asks for anything that appears to be a heading to be marked up

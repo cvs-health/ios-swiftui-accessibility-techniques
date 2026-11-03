@@ -58,6 +58,45 @@ final class A11yCheckCoreTests: XCTestCase {
         return rule.check(syntax: syntax, context: context)
     }
 
+    /// A display tier is a separate category from a heading tier: oversized text for numerals
+    /// and hero figures. Pulse runs display at regular weight where its headings are semibold.
+    func testHeadingTraitMissing_displayTokenIsNotAHeading() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text(waitTime)
+                    .font(tokens.theme.typography.font.fromToken(.displayXS))
+            }
+        }
+        """
+        let diags = analyze(
+            source,
+            ruleID: "heading-trait-missing",
+            configOptions: .init(fontModifiers: ["font"])
+        )
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    /// A system where the display tier really is the page-heading tier can opt back in.
+    func testHeadingTraitMissing_displayTokenCountsWhenConfigured() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Text("Welcome")
+                    .font(tokens.theme.typography.font.fromToken(.displayXS))
+            }
+        }
+        """
+        let diags = analyze(
+            source,
+            ruleID: "heading-trait-missing",
+            configOptions: .init(headingFonts: ["displayXS"], fontModifiers: ["font"])
+        )
+        XCTAssertEqual(diags.count, 1)
+    }
+
     // MARK: - Hidden Label Text Rule
 
     func testHiddenLabelText_flagsHiddenFieldLabel() {
@@ -412,7 +451,6 @@ final class A11yCheckCoreTests: XCTestCase {
             ".subheadline",                  // ditto, and Apple's own name says so
             ".subtitle",
             ".subHeaderL",
-            ".themeDisplayXL",
             ".themeHeadingL.weight(.bold)", // weight chain must not hide the token
             "Font.largeTitle",              // fully qualified
         ] {
@@ -435,6 +473,12 @@ final class A11yCheckCoreTests: XCTestCase {
             ".themeParagraphM",
             ".caption",
             ".footnote",
+            // A display tier is its own category, not a heading one: oversized text for
+            // numerals and hero figures, and in the systems that have both it is the larger,
+            // lighter-weight family. Opt in with `heading_fonts` where it really is the
+            // page-heading tier.
+            ".themeDisplayXL",
+            ".displayXS",
             #".custom("AetnaSans", size: 17)"#,
         ] {
             let source = """

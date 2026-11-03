@@ -439,6 +439,17 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`heading-trait-missing` no longer treats a `display` font tier as a heading.** `display` was one of the name fragments the rule matched, so `.font(.displayXS)` reported a missing `.isHeader`.
+
+  A display tier is its own category, not a heading one — oversized text for numerals, hero figures and marketing statements — and a system carrying both says so in its scale. CVS Pulse runs `heading*` at 16–36pt and weight 500–600 against `display*` at 32–56pt and weight 400: the display tiers are *larger and lighter*, which is not how that system styles a heading. Material 3 draws the same line between `Display` and `Headline`. The finding that surfaced this is the shape of the error — `displayXS` is 32pt, not extra-small, and it renders a clinic wait time as digits beside "min" at `paragraphL`. A number, not a heading of anything.
+
+  `display` is also a **typeface** name, which is the worse half. `SF Pro Display` is the companion face to `SF Pro Text`, so a token called `sfProDisplayMedium` says nothing about tier — and in the app measured here that ramp runs 12pt to 22pt with `Medium` at **14pt**. The rule was reading a face name as a semantic tier and calling body text a heading.
+
+  Measured both before and after rather than reasoned about: the fragment produced **5** findings on the retail app and **all 5 were false positives** — the one display tier above, plus four `sfProDisplay*` matches at 14–22pt including a street address and a bold 14pt label. 105 findings to 100, no real heading lost. A system that genuinely uses its display tier for page headings can opt back in with `heading_fonts: [displayXS]`.
+
+  The test asserting `.themeDisplayXL` *is* a heading font was mine and was never grounded in a real design system — no `themeDisplay*` token exists in the app it was written against. Moved to the ignore list alongside `.displayXS`.
+
+
 - **`textfield-missing-label` understated the placeholder-only case.** It cited WCAG 3.3.2 alone and described only the *visible* label disappearing. Device testing settled what the message was guessing at: once a value is entered, **VoiceOver never speaks the placeholder again**, so the field also loses its accessible name — 4.1.2, not just 3.3.2. A populated field announces only its value, and "120, text field" does not say whether it is systolic or diastolic. The criteria list and the message now say so.
 
   The rule doc also now records why this stays `critical` for both variants rather than treating placeholder-only as the milder one. It is arguably the nastier of the two: an empty title fails loudly the first time anyone swipes through a screen, whereas a placeholder-only field **passes** a VoiceOver pass over an empty form and fails only after data entry — which is not how most manual checks are run. On one real app the split was 20 empty-title to 7 placeholder-only, and the 7 would have been the ones to survive an audit.

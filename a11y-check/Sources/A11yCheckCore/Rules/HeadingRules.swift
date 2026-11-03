@@ -62,7 +62,26 @@ public struct HeadingTraitMissingRule: A11yRule {
     ///
     /// Supporting text held in a variable — `subtitleFont`, `valueFont` — is not excluded by
     /// name but by resolving the variable to the token it actually holds. See `isHeadingFont`.
-    static let headingNameFragments = ["heading", "header", "title", "headline", "display"]
+    ///
+    /// `display` is deliberately **not** here. In design-system vocabulary a display tier is a
+    /// separate category from a heading tier — oversized text for numerals, hero figures and
+    /// marketing statements — and systems that have both say so in the type scale. CVS Pulse
+    /// runs `heading*` at 16–36pt and weight 500–600 against `display*` at 32–56pt and weight
+    /// 400: the display tiers are larger *and* regular weight, which is not how that system
+    /// styles a heading. Material 3 draws the same line between `Display` and `Headline`.
+    /// Worse, `display` is also a *typeface* name. `SF Pro Display` is the companion to
+    /// `SF Pro Text`, so a token called `sfProDisplayMedium` says nothing about tier at all —
+    /// and in the app measured here that ramp runs 12pt to 22pt, with `Medium` at 14pt. Matching
+    /// it treated body text as a heading.
+    ///
+    /// Measured before removing it: the fragment produced 5 findings on one app, and all 5 were
+    /// false positives — one Pulse display tier on a wait time rendered as digits (the
+    /// codebase's only display-tier usage), and four `sfProDisplay*` matches at 14–22pt,
+    /// including a street address and a bold 14pt label.
+    ///
+    /// A system where `display` really is the page-heading tier can opt in with
+    /// `heading_fonts: ["displayXS", ...]`.
+    static let headingNameFragments = ["heading", "header", "title", "headline"]
 
     /// View types where the Text is used as a label/title of the control, not a structural heading.
     private static let labelConsumerViews: Set<String> = ["Button", "Link", "Toggle"]

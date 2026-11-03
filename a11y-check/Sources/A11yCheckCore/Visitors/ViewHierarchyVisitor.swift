@@ -76,6 +76,48 @@ public final class ViewHierarchyVisitor: SyntaxVisitor {
             }
             return true
         }
+
+        /// Whether the view supplies its label through a `label:` closure with content in it.
+        ///
+        /// `Picker(selection:content:label:)`, `Toggle(isOn:label:)` and friends put the label in
+        /// a view builder rather than a leading argument:
+        ///
+        /// ```swift
+        /// Picker(selection: $question) {
+        ///     ForEach(questions, id: \.self) { Text($0) }
+        /// } label: {
+        ///     Text(selectedQuestion)
+        /// }
+        /// ```
+        ///
+        /// That control is named. A rule looking only at the leading argument and
+        /// `.accessibilityLabel` sees neither and reports it as nameless, which was the whole of
+        /// `picker-missing-label`'s output on one real app.
+        ///
+        /// Both spellings are read: the multiple-trailing-closure form above, and the explicit
+        /// `label: { … }` argument. Emptiness is judged on the closure body, so
+        /// `label: { EmptyView() }` still counts as present — an unreadable label is not evidence
+        /// of an absent one, the same principle as `hasNonEmptyLeadingLabelArgument`. Only a
+        /// closure with no statements at all is treated as missing.
+        ///
+        /// This establishes the accessible name (4.1.2). It does not establish that the label is
+        /// *visible* (3.3.2): `.labelsHidden()` hides it, and a `.segmented` picker never renders
+        /// one. Those are a narrower check than this, and not one that has been measured yet.
+        public var hasNonEmptyLabelClosure: Bool {
+            func isNonEmpty(_ closure: ClosureExprSyntax) -> Bool {
+                !closure.statements.isEmpty
+            }
+            if let extra = callExpr.additionalTrailingClosures.first(where: {
+                $0.label.text == "label"
+            }) {
+                return isNonEmpty(extra.closure)
+            }
+            if let arg = callExpr.arguments.first(where: { $0.label?.text == "label" }),
+               let closure = arg.expression.as(ClosureExprSyntax.self) {
+                return isNonEmpty(closure)
+            }
+            return false
+        }
     }
 
     /// All detected views in the file.

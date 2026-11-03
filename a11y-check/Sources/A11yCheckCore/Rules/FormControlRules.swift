@@ -328,6 +328,9 @@ public struct PickerMissingLabelRule: A11yRule {
             // `Picker(viewModel.title, selection:)` is labelled.
             if view.hasNonEmptyLeadingLabelArgument { continue }
 
+            // `Picker(selection:content:label:)` puts the label in a view builder instead.
+            if view.hasNonEmptyLabelClosure { continue }
+
             // A Picker that *is* a menu's content is named by the menu, not by itself.
             if Self.isMenuContent(view.callExpr) { continue }
 

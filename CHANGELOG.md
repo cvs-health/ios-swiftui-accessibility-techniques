@@ -439,6 +439,25 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`picker-missing-label` no longer reports a `Picker` labelled through a `label:` closure.** The rule looked for a label in three places — the leading argument, `.accessibilityLabel`, and an enclosing `Menu` — and not in the fourth: `Picker(selection:content:label:)`, which supplies the label as a view builder.
+
+  ```swift
+  Picker(selection: $selectedQuestion) {
+      ForEach(questions, id: \.self) { Text($0) }
+  } label: {
+      Text(selectedQuestion)   // ← the label, previously invisible to the rule
+  }
+  ```
+
+  That control is named, and the rule said "Picker has no visible label (WCAG 3.3.2) and no accessible name (WCAG 4.1.2)" at **critical**. It was the rule's *only* finding across the retail app, so its precision there was zero.
+
+  Both spellings are now read: the multiple-trailing-closure form and the explicit `label: { … }` argument. Emptiness is judged on the closure body, so `label: { EmptyView() }` counts as present — an unreadable label is not evidence of an absent one, the same principle that fixed `hasNonEmptyLeadingLabelArgument` — and only a closure with no statements at all is reported.
+
+  Checked the sibling rules for the same gap rather than assuming it was picker-only. A first pass suggested 2 of 14 `toggle-missing-label` and 4 of 29 `textfield-missing-label` findings were also affected; narrowing the search window showed every one of those `label:` closures belonged to a neighbouring `Button`, not the control being reported. `Toggle(isOn:) { Text(…) }` passes its label as the *primary* trailing closure and was already handled. No sibling change was needed.
+
+  A label closure establishes the accessible name (4.1.2). It does not establish that the label is **visible** (3.3.2): `.labelsHidden()` hides it and a `.segmented` picker never renders one. That is a narrower check and is not implemented, because it has not been measured.
+
+
 - **`heading-trait-missing` no longer treats a `display` font tier as a heading.** `display` was one of the name fragments the rule matched, so `.font(.displayXS)` reported a missing `.isHeader`.
 
   A display tier is its own category, not a heading one — oversized text for numerals, hero figures and marketing statements — and a system carrying both says so in its scale. CVS Pulse runs `heading*` at 16–36pt and weight 500–600 against `display*` at 32–56pt and weight 400: the display tiers are *larger and lighter*, which is not how that system styles a heading. Material 3 draws the same line between `Display` and `Headline`. The finding that surfaced this is the shape of the error — `displayXS` is 32pt, not extra-small, and it renders a clinic wait time as digits beside "min" at `paragraphL`. A number, not a heading of anything.

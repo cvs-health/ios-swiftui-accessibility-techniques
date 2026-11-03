@@ -609,6 +609,28 @@ Pair this with `view_aliases`: the alias makes the rules look at the wrapper at 
 `font_modifiers` tells them where its font lives. Setting one without the other usually finds
 nothing.
 
+### How a form control is judged to have a label
+
+`picker-missing-label` and its siblings accept a label from any of the places SwiftUI puts one:
+
+| Form | Recognised |
+|---|---|
+| `Picker("Question", selection: $q)` | leading argument, literal or expression |
+| `Picker(viewModel.title, selection: $q)` | leading argument that is an expression — an unreadable label is not an absent one |
+| `Picker(selection: $q) { … } label: { Text(t) }` | `label:` trailing closure |
+| `Picker(selection: $q, content: { … }, label: { … })` | explicit `label:` argument |
+| `Menu { Picker("", selection: $q) } label: { … }` | named by the enclosing `Menu` |
+| `.accessibilityLabel("Question")` | explicit |
+
+The `label:` closure form was missed until recently, and it was the entirety of the rule's output
+on one real app: a single finding, on a correctly labelled `Picker`. Emptiness is judged on the
+closure body, so `label: { EmptyView() }` counts as present and only a closure with no statements
+is reported.
+
+A label closure establishes the **accessible name** (4.1.2). It does not establish that the label
+is *visible* (3.3.2) — `.labelsHidden()` hides it and a `.segmented` picker never renders one —
+which is a narrower check that has not been measured yet.
+
 ### How heading fonts are recognised
 
 `heading-trait-missing` has to decide whether a `Text`'s font is a heading style. Most apps do not

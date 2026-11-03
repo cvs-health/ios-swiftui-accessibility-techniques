@@ -97,6 +97,56 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 1)
     }
 
+    /// `Picker(selection:content:label:)` names the control through a view builder. A rule
+    /// reading only the leading argument sees no label and reports a named control as nameless.
+    func testPickerMissingLabel_allowsTrailingLabelClosure() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Picker(selection: $selectedQuestion) {
+                    ForEach(questions, id: \\.self) { Text($0) }
+                } label: {
+                    Text(selectedQuestion)
+                }
+                .pickerStyle(.menu)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-missing-label")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    func testPickerMissingLabel_allowsExplicitLabelArgument() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Picker(selection: $choice, content: { Text("A") }, label: { Text("Choose") })
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-missing-label")
+        XCTAssertEqual(diags.count, 0)
+    }
+
+    /// A label closure with no statements supplies nothing, so it is still reported.
+    func testPickerMissingLabel_flagsEmptyLabelClosure() {
+        let source = """
+        import SwiftUI
+        struct MyView: View {
+            var body: some View {
+                Picker(selection: $choice) {
+                    Text("A")
+                } label: {
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "picker-missing-label")
+        XCTAssertEqual(diags.count, 1)
+    }
+
     // MARK: - Hidden Label Text Rule
 
     func testHiddenLabelText_flagsHiddenFieldLabel() {

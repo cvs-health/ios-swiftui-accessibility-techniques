@@ -235,15 +235,22 @@ Button(action: {}) {
 ## Form Controls (WCAG 1.3.5, 3.3.2, 4.1.2)
 
 - `TextField`, `SecureField`, `Slider`, `Stepper`, `Picker`, and `Toggle` all need visible labels. Use the built-in label parameter or add `.accessibilityLabel`.
+- **A placeholder is never a label.** `TextField("Email", text: $email)` renders its title as placeholder text, and **once the user types a value VoiceOver never speaks it again** — a populated field announces only its value. "120, text field" does not say whether it is systolic or diastolic. This fails 3.3.2 *and* 4.1.2, not just 3.3.2.
+- That makes placeholder-only labelling worse than it looks in testing: it **passes** a VoiceOver pass over an empty form and only fails after data entry. If your check is "open the screen and swipe through", you will not catch it. Fill the form in first.
 - Never use `.labelsHidden()` without providing an `.accessibilityLabel`.
 - Pickers with `WheelPickerStyle` or `SegmentedPickerStyle` require both `.accessibilityLabel("Label")` and `.accessibilityElement(children: .contain)` or VoiceOver will not speak the picker's label.
 - Add `.textContentType(.emailAddress)`, `.textContentType(.password)`, etc. to text fields so autofill works correctly.
 
 ```swift
-// Good — visible label above the text field
+// Good — visible label above the text field, and set as the accessible name
 Text("Email")
 TextField("Email", text: $email)
+    .accessibilityLabel("Email")
     .textContentType(.emailAddress)
+
+// Bad — placeholder only. Reads as "Email, text field" while empty,
+// then as just "jo@example.com, text field" once filled in.
+TextField("Email", text: $email)
 
 // Good — Toggle with built-in label
 Toggle("Enable notifications", isOn: $notificationsEnabled)

@@ -419,6 +419,10 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **`textfield-missing-label` understated the placeholder-only case.** It cited WCAG 3.3.2 alone and described only the *visible* label disappearing. Device testing settled what the message was guessing at: once a value is entered, **VoiceOver never speaks the placeholder again**, so the field also loses its accessible name — 4.1.2, not just 3.3.2. A populated field announces only its value, and "120, text field" does not say whether it is systolic or diastolic. The criteria list and the message now say so.
+
+  The rule doc also now records why this stays `critical` for both variants rather than treating placeholder-only as the milder one. It is arguably the nastier of the two: an empty title fails loudly the first time anyone swipes through a screen, whereas a placeholder-only field **passes** a VoiceOver pass over an empty form and fails only after data entry — which is not how most manual checks are run. On one real app the split was 20 empty-title to 7 placeholder-only, and the 7 would have been the ones to survive an audit.
+
 - **`ModifierCollector` could not be taught new modifier names.** It filtered against a fixed `trackedModifiers` set, so a custom typography modifier was never collected at all — no amount of rule-level configuration could have reached it. The extra names now thread through `ViewHierarchyVisitor`, which already carried `viewAliases` for the same reason.
 
 - **`small-touch-target` no longer claims a conformance failure it cannot establish.** The message read "Touch target 16x16pt is below the 24x24pt minimum (WCAG 2.5.8)", stated flatly. But 2.5.8 carries five exceptions and source settles none of them — most importantly **Spacing**, under which an undersized target conforms if no other target falls inside a 24pt circle centred on it. That depends on sibling positions at runtime, which stack spacing, Dynamic Type and device width all move, so a 16pt control can be perfectly conforming and the rule was calling it a failure.

@@ -21,6 +21,17 @@ import SwiftSyntax
 /// Flags `TextField("", text:)` with an empty placeholder or
 /// TextFields that rely only on placeholder text as the accessible name.
 ///
+/// A placeholder is not a label, and not merely because it is invisible once typed into:
+/// **VoiceOver stops speaking it too.** Verified on device — enter a value and the placeholder
+/// is never announced again, so a populated field reports only its value. "120, text field"
+/// does not say whether it is systolic or diastolic.
+///
+/// That is why this stays `critical` for both variants rather than treating placeholder-only as
+/// the milder case. It is arguably the nastier of the two: an empty title fails loudly the first
+/// time anyone swipes through the screen, whereas a placeholder-only field **passes** a VoiceOver
+/// pass over an empty form and only fails after data entry — which is not how most manual
+/// checks are run. These survive audits for that reason.
+///
 /// Measured at ~82% actionable (9 of 11) on the flagship app.
 ///
 /// The known false-positive mode, left in deliberately: a wrapper component that builds its
@@ -171,10 +182,10 @@ public struct TextFieldMissingLabelRule: A11yRule {
                 ))
             } else {
                 diagnostics.append(makeDiagnostic(
-                    message: "\(view.viewType) uses placeholder text \"\(inlineLabel)\" as its only label. Placeholder text disappears when the user starts typing, leaving no persistent visible label (WCAG 3.3.2). Add a visible Text label above the field and .accessibilityLabel().",
+                    message: "\(view.viewType) uses placeholder text \"\(inlineLabel)\" as its only label. Once a value is entered the placeholder is gone for good: the visible label disappears (WCAG 3.3.2) and VoiceOver stops speaking it, so the field also loses its accessible name (WCAG 4.1.2) — a populated field announces only its value. Note this passes a VoiceOver check on an empty form and fails only after data entry. Add a visible Text label above the field and .accessibilityLabel().",
                     node: view.callExpr,
                     context: context,
-                    wcagCriteriaOverride: ["3.3.2"],
+                    wcagCriteriaOverride: ["3.3.2", "4.1.2"],
                     suggestion: "Add a visible Text(\"\(inlineLabel)\") label above the field and .accessibilityLabel(\"\(inlineLabel)\")"
                 ))
             }

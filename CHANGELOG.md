@@ -82,6 +82,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
   - The docs are scoped to SwiftUI and to the mechanics of the setting. Earlier drafts carried two incorrect WCAG claims, both now gone: that a text-only button fails 1.4.1, and that the border must meet 3:1 for 1.4.11. Neither holds — a standalone button is distinguished by position and label as well as color, and 1.4.11 does not require a boundary on a control that has visible text. Both criteria are off the list; 1.4.4 Resize Text is the one the examples exercise. UIKit API links were also dropped, since this is a SwiftUI techniques project.
   - Both states of both examples were verified by rendering the view with the `accessibilityShowButtonShapes` branches inverted, because the setting cannot be set programmatically. `accessibilityShowButtonShapes` is read-only so it cannot be set with `.environment()` in a `Preview`, and writing `com.apple.Accessibility ButtonShapesEnabled` via `simctl` has no effect even across a simulator reboot.
 
+#### Changed
+
+- **Scroll Views gained a second bad example: a `Button` inside a `.focusable()` `ScrollView`.** `ScrollViews.md` already documented that a scroll view can be made `.focusable()` as an alternative to putting a focusable control inside or after it. What it did not say is that the two fixes are mutually exclusive. Once the `ScrollView` itself is `.focusable()`, Full Keyboard Access treats it as a single focus stop, so a `Button` inside it can never be reached or activated — the control is on screen, visible, and unusable by keyboard.
+
+  The doc now carries that as a `WARNING` nested under the existing bullet, and the demo page shows it. The `Bad Example` section became `Bad Examples` with two sub-headings, following the `CheckboxesView.swift` pattern: **Bad Example No Focusable Control** (the pre-existing plain `ScrollView` that Full Keyboard Access cannot scroll at all) and **Bad Example Button Inside Focusable Scroll View** (`.focusable()` on the `ScrollView` plus `Button("Button 101")` at the bottom of the content). Each has its own `Details` disclosure with a matching `.accessibilityHint`.
+
+  The focusable-with-a-button example was briefly sitting in the good-example region of the file, immediately after the good `ScrollView` and before the good example's `Details` disclosure, where it read as a second endorsed technique rather than the trap it is. It is now below the red divider. The good example's `Details` text and the view's intro paragraph were updated to match the doc, so the page and `ScrollViews.md` state the same rule.
+
 #### Fixed
 
 - **Unresolved merge conflict markers committed into `SKILL.md`.** `<<<<<<< HEAD`, `=======`, and `>>>>>>> 40d6936` were live on `main` inside the Reading Order / Grouping section, so the published coding skill — the one the README tells people to copy into `~/.claude/skills/` — shipped with raw conflict markers and a duplicated rule.

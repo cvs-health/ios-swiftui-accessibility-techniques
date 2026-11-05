@@ -455,6 +455,25 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Fixed
 
+- **A typo in `.a11ycheck.yml` no longer passes for a working config.** Keys the parser does not recognise were silently ignored, so a misspelling was indistinguishable from a correct file — and the usual direction of that mistake makes a CI gate *stricter* than intended, with nothing on stdout to say so.
+
+  Found while writing a config by hand for a real adoption. `heading_font_deny` was put at the top level instead of under `options:`, and the gate it was meant to relax stayed strict; the finding count did not move and there was no indication why. A deliberately broken config written afterwards had four separate mistakes — that misplaced key, `excluded_paths` for `exclude_paths`, `options.heading_fontz`, and `options.min_touch_targett` — and a11y-check reported **none** of them and exited 0.
+
+  Unrecognised keys and keys at the wrong nesting level are now reported on stderr, so machine-readable output on stdout stays clean:
+
+  ```
+  warning: .a11ycheck.yml: Unknown top-level key `excluded_paths` was ignored. Did you mean `exclude_paths`?
+  warning: .a11ycheck.yml: `heading_font_deny` is a rule option and was ignored at the top level. Move it under `options:`.
+  warning: .a11ycheck.yml: Unknown option `options.heading_fontz` was ignored. Did you mean `heading_fonts`?
+  ```
+
+  The nesting case is reported separately from an unknown key because the fix differs: one says where to move the key, the other offers a "did you mean" when exactly one recognised key is within two edits. Two candidates at the same distance produces no suggestion, because that is a guess rather than a correction. Reported rather than thrown — a bad key should not stop a scan, it should just stop being invisible.
+
+- **Exit codes documented.** `0` nothing found, `1` findings found, `2` could not run. `1` is a result, not an error, and this was not written down anywhere: a CI integration that branches on the status instead of parsing the output fails every pull request with a single `info` finding. The README now also notes that `set -e` will exit on the first finding unless the call is guarded.
+
+- **Apache licence headers added to the 10 rule files that lacked them** (`ButtonRules`, `DarkModeRules`, `FixedHeightTextRule`, `GestureAlternativeRules`, `InputPurposeRule`, `LabelInNameRules`, `LinkRules`, `TimingRules`, `ToggleRules`, `TouchTargetRules`). `CLAUDE.md` requires one on every file as a condition of the Apache 2.0 licence; a third of the rule directory was missing it. Years taken from each file's first commit.
+
+
 - **Reverted: `display` is back in `heading-trait-missing`'s name fragments.** It was removed earlier the same day on the reasoning that a display tier is a separate category from a heading tier. The reasoning was sound and the conclusion was wrong.
 
   Two unrelated things are spelled `display`: a **type-scale tier** (oversized numerals and hero figures — Pulse runs `heading*` at 16–36pt weight 500–600 against `display*` at 32–56pt weight 400) and a **typeface** (`SF Pro Display`, companion to `SF Pro Text`, so `sfProDisplayMedium` carries no tier information). The removal was argued from the first and silenced the second.

@@ -149,6 +149,41 @@ a11y-check . --diff
 a11y-check . --diff --diff-base main
 ```
 
+## Exit codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Ran successfully and found nothing |
+| `1` | Ran successfully and **found at least one finding** |
+| `2` | Could not run — bad arguments, unreadable path, unparseable config |
+
+`1` is a result, not an error. Anything consuming a11y-check must parse the output rather than
+branch on the status: a CI integration that treats `1` as failure fails every pull request that
+has a single `info` finding. In a shell wrapper this means `set -e` will exit on the first
+finding unless the call is guarded:
+
+```bash
+json=$(a11y-check Sources --format json --no-trend) || true
+```
+
+## Configuration is validated, and silently-ignored keys are reported
+
+A key the parser does not recognise is ignored, which means a typo in `.a11ycheck.yml` would
+otherwise be indistinguishable from a working config — and the usual direction of that mistake
+makes a CI gate *stricter* than intended, with nothing to say so. Unrecognised keys, and keys at
+the wrong nesting level, are reported on **stderr** so machine-readable output on stdout stays
+clean:
+
+```
+warning: .a11ycheck.yml: Unknown top-level key `excluded_paths` was ignored. Did you mean `exclude_paths`?
+warning: .a11ycheck.yml: `heading_font_deny` is a rule option and was ignored at the top level. Move it under `options:`.
+warning: .a11ycheck.yml: Unknown option `options.heading_fontz` was ignored. Did you mean `heading_fonts`?
+```
+
+The nesting case is called out separately from an unknown key because the fix differs. All four
+of these were real mistakes made while writing a config by hand during adoption, and all four
+passed silently before.
+
 ## Accessibility scoring
 
 Every `a11y-check` run automatically calculates a **WCAG 2.2 accessibility score** (0–100) with a letter grade and appends it after the diagnostics. No extra commands needed — the score appears in all output formats (terminal, JSON, Xcode, and HTML).

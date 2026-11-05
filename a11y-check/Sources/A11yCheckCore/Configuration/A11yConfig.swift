@@ -13,6 +13,17 @@ public struct A11yConfig: Sendable {
     public let options: ConfigOptions
     /// Glob patterns for paths to exclude from analysis.
     public let excludePaths: [String]
+    /// Problems found in the config file itself: keys that were not recognised, and keys placed
+    /// at the wrong nesting level.
+    ///
+    /// These are reported rather than thrown, because an unparseable key should not stop a scan.
+    /// They must be *reported* though: a key the parser does not recognise is silently ignored,
+    /// which makes a typo indistinguishable from a correct config. Three of the four mistakes in
+    /// a config written by hand during real adoption — `heading_font_deny` at the top level
+    /// instead of under `options:`, `excluded_paths` for `exclude_paths`, and two misspelled
+    /// option names — would each have silently made a CI gate *stricter* than intended, with
+    /// nothing on stdout to say so.
+    public let configWarnings: [String]
 
     public struct ConfigOptions: Sendable {
         public let minTouchTarget: Double?
@@ -88,13 +99,15 @@ public struct A11yConfig: Sendable {
         disabledRules: Set<String>,
         enabledOnly: Set<String>,
         options: ConfigOptions,
-        excludePaths: [String]
+        excludePaths: [String],
+        configWarnings: [String] = []
     ) {
         self.severityOverrides = severityOverrides
         self.disabledRules = disabledRules
         self.enabledOnly = enabledOnly
         self.options = options
         self.excludePaths = excludePaths
+        self.configWarnings = configWarnings
     }
 }
 
@@ -118,6 +131,86 @@ public enum ConfigLoader {
     public static func load(atPath path: String) throws -> A11yConfig {
         let contents = try String(contentsOfFile: path, encoding: .utf8)
         return try parse(contents)
+    }
+
+    /// Keys recognised at the top level of `.a11ycheck.yml`.
+    static let topLevelKeys: Set<String> = [
+        "severity_overrides", "disabled_rules", "enabled_only", "options", "exclude_paths",
+    ]
+
+    /// Keys recognised under `options:`.
+    static let optionKeys: Set<String> = [
+        "min_touch_target", "contrast_ratio", "assume_default_background",
+        "heading_fonts", "heading_font_deny", "view_aliases", "font_modifiers",
+    ]
+
+    /// Flags keys the parser will ignore, so a typo cannot pass for a working config.
+    ///
+    /// Two shapes are called out separately, because the fix differs. A key that belongs under
+    /// `options:` but was written at the top level is a *nesting* mistake and the message says
+    /// where to move it. Anything else is an unknown key, and gets a "did you mean" when a
+    /// recognised key is within two edits of it.
+    static func validate(_ dict: [String: Any]) -> [String] {
+        var warnings: [String] = []
+
+        for key in dict.keys.sorted() where !topLevelKeys.contains(key) {
+            if optionKeys.contains(key) {
+                warnings.append("`\(key)` is a rule option and was ignored at the top level. "
+                    + "Move it under `options:`.")
+            } else if let suggestion = closestKey(to: key, in: topLevelKeys) {
+                warnings.append("Unknown top-level key `\(key)` was ignored. Did you mean `\(suggestion)`?")
+            } else {
+                warnings.append("Unknown top-level key `\(key)` was ignored. "
+                    + "Valid keys: \(topLevelKeys.sorted().joined(separator: ", ")).")
+            }
+        }
+
+        if let opts = dict["options"] as? [String: Any] {
+            for key in opts.keys.sorted() where !optionKeys.contains(key) {
+                if let suggestion = closestKey(to: key, in: optionKeys) {
+                    warnings.append("Unknown option `options.\(key)` was ignored. Did you mean `\(suggestion)`?")
+                } else {
+                    warnings.append("Unknown option `options.\(key)` was ignored. "
+                        + "Valid options: \(optionKeys.sorted().joined(separator: ", ")).")
+                }
+            }
+        } else if dict["options"] != nil {
+            warnings.append("`options:` must be a mapping of option names to values; it was ignored.")
+        }
+
+        return warnings
+    }
+
+    /// The recognised key within two edits of `key`, if exactly that is unambiguous.
+    static func closestKey(to key: String, in candidates: Set<String>) -> String? {
+        let scored = candidates
+            .map { ($0, editDistance(key, $0)) }
+            .filter { $0.1 <= 2 }
+            .sorted { $0.1 < $1.1 }
+        guard let best = scored.first else { return nil }
+        // Two equally-close candidates is not a suggestion, it is a guess.
+        if scored.count > 1, scored[1].1 == best.1 { return nil }
+        return best.0
+    }
+
+    static func editDistance(_ a: String, _ b: String) -> Int {
+        let a = Array(a), b = Array(b)
+        if a.isEmpty { return b.count }
+        if b.isEmpty { return a.count }
+        var prev = Array(0...b.count)
+        var cur = [Int](repeating: 0, count: b.count + 1)
+        for i in 1...a.count {
+            cur[0] = i
+            for j in 1...b.count {
+                cur[j] = min(
+                    prev[j] + 1,
+                    cur[j - 1] + 1,
+                    prev[j - 1] + (a[i - 1] == b[j - 1] ? 0 : 1)
+                )
+            }
+            swap(&prev, &cur)
+        }
+        return prev[b.count]
     }
 
     /// Parse YAML string into config.
@@ -203,7 +296,8 @@ public enum ConfigLoader {
                 viewAliases: viewAliases,
                 fontModifiers: fontModifiers
             ),
-            excludePaths: excludePaths
+            excludePaths: excludePaths,
+            configWarnings: validate(dict)
         )
     }
 

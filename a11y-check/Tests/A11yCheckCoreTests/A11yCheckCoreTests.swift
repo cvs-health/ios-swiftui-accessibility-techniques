@@ -148,6 +148,69 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 1)
     }
 
+    // MARK: - Config Validation
+
+    func testConfigValidation_flagsOptionKeyPlacedAtTopLevel() throws {
+        let cfg = try ConfigLoader.parse("""
+        heading_font_deny: ["cncHeadlineRegularSize13"]
+        """)
+        XCTAssertEqual(cfg.configWarnings.count, 1)
+        XCTAssertTrue(cfg.configWarnings[0].contains("Move it under `options:`"))
+        // And the value really was ignored, which is why the warning has to exist.
+        XCTAssertTrue(cfg.options.headingFontDeny.isEmpty)
+    }
+
+    func testConfigValidation_suggestsNearMissTopLevelKey() throws {
+        let cfg = try ConfigLoader.parse("""
+        excluded_paths: ["Pods"]
+        """)
+        XCTAssertEqual(cfg.configWarnings.count, 1)
+        XCTAssertTrue(cfg.configWarnings[0].contains("Did you mean `exclude_paths`?"))
+    }
+
+    func testConfigValidation_suggestsNearMissOptionKey() throws {
+        let cfg = try ConfigLoader.parse("""
+        options:
+          heading_fontz: ["brandJumbo"]
+          min_touch_targett: 44
+        """)
+        XCTAssertEqual(cfg.configWarnings.count, 2)
+        XCTAssertTrue(cfg.configWarnings.contains { $0.contains("Did you mean `heading_fonts`?") })
+        XCTAssertTrue(cfg.configWarnings.contains { $0.contains("Did you mean `min_touch_target`?") })
+    }
+
+    /// A key nowhere near a real one lists the valid set instead of guessing.
+    func testConfigValidation_listsValidKeysWhenNothingIsClose() throws {
+        let cfg = try ConfigLoader.parse("""
+        please_do_the_thing: true
+        """)
+        XCTAssertEqual(cfg.configWarnings.count, 1)
+        XCTAssertTrue(cfg.configWarnings[0].contains("Valid keys:"))
+        XCTAssertFalse(cfg.configWarnings[0].contains("Did you mean"))
+    }
+
+    func testConfigValidation_silentOnAValidConfig() throws {
+        let cfg = try ConfigLoader.parse("""
+        exclude_paths: ["Pods", "*Tests"]
+        disabled_rules: ["hardcoded-color"]
+        severity_overrides:
+          heading-trait-missing: error
+        options:
+          heading_font_deny: ["cncHeadlineRegularSize13"]
+          view_aliases:
+            IconView: Image
+          font_modifiers: ["pulseFont"]
+        """)
+        XCTAssertEqual(cfg.configWarnings, [])
+        XCTAssertEqual(cfg.options.headingFontDeny, ["cncHeadlineRegularSize13"])
+    }
+
+    /// Two candidates at the same distance is a guess, not a suggestion.
+    func testConfigValidation_doesNotGuessBetweenEquallyCloseKeys() {
+        XCTAssertNil(ConfigLoader.closestKey(to: "heading_font", in: ["heading_fonts", "heading_fontd"]))
+        XCTAssertEqual(ConfigLoader.closestKey(to: "heading_font", in: ["heading_fonts"]), "heading_fonts")
+    }
+
     // MARK: - Hidden Label Text Rule
 
     func testHiddenLabelText_flagsHiddenFieldLabel() {

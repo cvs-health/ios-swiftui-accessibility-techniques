@@ -137,13 +137,20 @@ struct A11yCheck: ParsableCommand {
         let registry = RuleRegistry()
 
         // Load config
+        let loadedConfig: A11yConfig
         if let configPath = config {
-            let loadedConfig = try ConfigLoader.load(atPath: resolvePath(configPath))
-            registry.applyConfig(loadedConfig)
+            loadedConfig = try ConfigLoader.load(atPath: resolvePath(configPath))
         } else {
-            let searchDir = resolvePath(paths.first ?? ".")
-            let loadedConfig = try ConfigLoader.load(from: searchDir)
-            registry.applyConfig(loadedConfig)
+            loadedConfig = try ConfigLoader.load(from: resolvePath(paths.first ?? "."))
+        }
+        registry.applyConfig(loadedConfig)
+
+        // A key the parser does not recognise is silently ignored, so a typo in
+        // .a11ycheck.yml looks exactly like a working config — and the usual direction of
+        // that mistake makes a CI gate stricter than intended. Report to stderr so the
+        // machine-readable formats on stdout stay clean.
+        for warning in loadedConfig.configWarnings {
+            FileHandle.standardError.write(Data("warning: \(ConfigLoader.fileName): \(warning)\n".utf8))
         }
 
         // Apply --disable (additive on top of config)

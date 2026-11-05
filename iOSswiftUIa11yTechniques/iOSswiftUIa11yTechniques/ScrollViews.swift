@@ -108,9 +108,7 @@ struct ScrollViews: View {
                             }
                         }
                 }
-                DisclosureGroup("Details") {
-                    Text("The second bad scroll view example does not have a `Button` or a `DisclosureGroup` in the scroll view or after the scroll view and is not `.focusable()`, which prevents Full Keyboard Access from scrolling the view using the up or down arrow keys.")
-                }.accessibilityHint("Bad Example No Focusable Control")
+                Text("The second bad scroll view example does not have a `Button` or a `DisclosureGroup` in the scroll view or after the scroll view and is not `.focusable()`, which prevents Full Keyboard Access from scrolling the view using the up or down arrow keys.")
             }
             .navigationTitle("Scroll Views")
             .padding()

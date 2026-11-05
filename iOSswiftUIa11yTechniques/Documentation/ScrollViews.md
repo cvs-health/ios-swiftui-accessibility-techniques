@@ -2,8 +2,9 @@
 
 Bugs:
 
-- Scroll views are not scrollable with Full Keyboard Access unless there is a focusable control like a `Button` or `DisclosureGroup` inside or after the scroll view. The `ScrollView` can also be made `.focusable()` or a focusable element can be placed inside the scroll view to allow Full Keyboard Access.
+- Scroll views are not scrollable with Full Keyboard Access unless there is a focusable control like a `Button` or `DisclosureGroup` inside or after the scroll view. The `ScrollView` can also be made `.focusable()`, or a focusable element can be placed inside the scroll view to allow Full Keyboard Access.
   - WARNING: if you make the `ScrollView` `.focusable()` then DON'T put another focusable element like a `Button` inside the focusable `ScrollView` because nothing inside the scroll view will be focusable at that point. 
+  - `.accessibilityRespondsToUserInteraction(true)` on the first element inside the `ScrollView` makes that element focusable and allows Full Keyboard Access to scroll the view, without needing a `Button`. Use this when the scroll view contains only static content and adding a `Button` would be inappropriate. Put the modifier on the first element inside the scroll view, NOT on the `ScrollView` itself — on the `ScrollView` it behaves like `.focusable()` and makes the whole scroll view a single focus stop.
 
 ## Applicable WCAG Success Criteria
 - [2.1.1: Keyboard](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)
@@ -11,6 +12,8 @@ Bugs:
 
 ## Apple Developer Documentation
 - [ScrollView](https://developer.apple.com/documentation/swiftui/scrollview)
+- [View/accessibilityRespondsToUserInteraction(_:)](https://developer.apple.com/documentation/swiftui/view/accessibilityrespondstouserinteraction(_:))
+- [View/focusable(_:)](https://developer.apple.com/documentation/swiftui/view/focusable(_:))
 
 ## Swift Technique Source Code
 [ScrollViews.swift](../iOSswiftUIa11yTechniques/ScrollViews.swift)

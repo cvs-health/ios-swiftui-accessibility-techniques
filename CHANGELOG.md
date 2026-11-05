@@ -90,6 +90,14 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   The focusable-with-a-button example was briefly sitting in the good-example region of the file, immediately after the good `ScrollView` and before the good example's `Details` disclosure, where it read as a second endorsed technique rather than the trap it is. It is now below the red divider. The good example's `Details` text and the view's intro paragraph were updated to match the doc, so the page and `ScrollViews.md` state the same rule.
 
+- **Scroll Views gained a second good example: `.accessibilityRespondsToUserInteraction(true)` instead of a `Button`.** The existing good example relies on a `Button` inside the `ScrollView` to give Full Keyboard Access a focus stop, which is not always appropriate — a scroll view of purely static content has no reason to carry a button. The new example instead puts `.accessibilityRespondsToUserInteraction(true)` on the first element inside the `ScrollView` (`Text("Row 0")`), making that row focusable so the arrow keys can scroll.
+
+  The modifier goes on the first element *inside* the scroll view, not on the `ScrollView` itself. On the `ScrollView` it behaves like `.focusable()` and collapses the whole thing into one focus stop, which is the failure the second bad example now demonstrates. The two good examples are therefore the same shape — an unfocusable `ScrollView` with a focusable first child — differing only in whether that child is a `Button` or static text opted into the focus order.
+
+  `Good Example` became `Good Examples` with two sub-headings (**Button Inside Scroll View**, **Accessibility Responds To User Interaction**), each with its own `Details` disclosure and `.accessibilityHint`. `ScrollViews.md` gained a matching nested bullet plus Apple documentation links for `accessibilityRespondsToUserInteraction(_:)` and `focusable(_:)`.
+
+  Note the deliberate tension with `AccessibilityRespondsToUserInteraction.swift`, which uses this same modifier on static text as a *bad* example: there it forces focus onto text that does nothing when activated. Here the focus stop has a purpose — it is what makes the scroll container reachable — so the same API is correct in one file and wrong in the other. The `Details` text says so explicitly rather than leaving the two pages looking contradictory.
+
 #### Fixed
 
 - **Unresolved merge conflict markers committed into `SKILL.md`.** `<<<<<<< HEAD`, `=======`, and `>>>>>>> 40d6936` were live on `main` inside the Reading Order / Grouping section, so the published coding skill — the one the README tells people to copy into `~/.claude/skills/` — shipped with raw conflict markers and a duplicated rule.

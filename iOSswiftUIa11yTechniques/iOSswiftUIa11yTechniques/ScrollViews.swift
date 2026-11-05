@@ -25,9 +25,9 @@ struct ScrollViews: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Scroll views are not scrollable with Full Keyboard Access unless there is a focusable control like a `Button` or `DisclosureGroup` inside or after the scroll view. The `ScrollView` can also be made `.focusable()` or a focusable element can be placed inside the scroll view to allow Full Keyboard Access. WARNING: if you make the `ScrollView` `.focusable()` then DON'T put another focusable element like a `Button` inside the focusable `ScrollView` because nothing inside the scroll view will be focusable at that point.")
+                Text("Scroll views are not scrollable with Full Keyboard Access unless there is a focusable control like a `Button` or `DisclosureGroup` inside or after the scroll view. The `ScrollView` can also be made `.focusable()`, or a focusable element can be placed inside the scroll view to allow Full Keyboard Access, either a `Button` or any element with `.accessibilityRespondsToUserInteraction(true)`. WARNING: if you make the `ScrollView` focusable then DON'T put another focusable element like a `Button` inside the focusable `ScrollView` because nothing inside the scroll view will be focusable at that point.")
                     .padding(.bottom)
-                Text("Good Example")
+                Text("Good Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -37,6 +37,11 @@ struct ScrollViews: View {
                     .frame(height: 2.0, alignment: .leading)
                     .background(colorScheme == .dark ? Color(.systemGreen) : darkGreen)
                     .padding(.bottom)
+                Text("Good Example Button Inside Scroll View")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 ScrollView {
                         VStack(alignment: .leading) {
                             Button("Button 0", action: {})
@@ -46,8 +51,25 @@ struct ScrollViews: View {
                         }
                     }
                 DisclosureGroup("Details") {
-                    Text("The good scroll view example uses a `Button` at the top of the `ScrollView` which allows Full Keyboard Access to scroll the view using the up and down arrow keys The bad scroll view examples below do not have a `Button` or a `DisclosureGroup` in the scroll view or after the scroll view which prevents Full Keyboard Access from scrolling the view using the up or down arrow keys.")
-                }.padding(.bottom)
+                    Text("The first good scroll view example uses a `Button` at the top of the `ScrollView` which allows Full Keyboard Access to scroll the view using the up and down arrow keys. The `ScrollView` itself is not made focusable, so the `Button` inside it stays focusable and operable. The bad scroll view examples below do not have a `Button` or a `DisclosureGroup` in the scroll view or after the scroll view which prevents Full Keyboard Access from scrolling the view using the up or down arrow keys.")
+                }.padding(.bottom).accessibilityHint("Good Example Button Inside Scroll View")
+                Text("Good Example Accessibility Responds To User Interaction")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                ScrollView {
+                        VStack(alignment: .leading) {
+                            Text("Row 0")
+                                .accessibilityRespondsToUserInteraction(true)
+                            ForEach(1..<100) {
+                                Text("Row \($0)")
+                            }
+                        }
+                }
+                DisclosureGroup("Details") {
+                    Text("The second good scroll view example uses no `Button` and instead puts `.accessibilityRespondsToUserInteraction(true)` on the first element inside the `ScrollView`, which makes that first row focusable and allows Full Keyboard Access to scroll the view using the up and down arrow keys. Use this when the scroll view contains only static content and adding a `Button` would be inappropriate. The modifier goes on the first element inside the scroll view, NOT on the `ScrollView` itself — putting it on the `ScrollView` would make the whole scroll view a single focus stop like `.focusable()` does, which is the trap shown in the second bad example below.")
+                }.padding(.bottom).accessibilityHint("Good Example Accessibility Responds To User Interaction")
                 Text("Bad Examples")
                     .font(.subheadline)
                     .fontWeight(.bold)

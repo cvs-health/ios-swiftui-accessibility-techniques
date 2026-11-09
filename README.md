@@ -198,8 +198,8 @@ See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, an
 
 ### V
 - [Videos](iOSswiftUIa11yTechniques/Documentation/Videos.md)
+- [VoiceOver Automation Testing](iOSswiftUIa11yTechniques/Documentation/VoiceOverAutomationTesting.md)
 - [VoiceOver Pronunciation](iOSswiftUIa11yTechniques/Documentation/VoiceOverPronunciation.md)
-- [VoiceOver Testing](iOSswiftUIa11yTechniques/Documentation/VoiceOverTesting.md)
 
 ### W
 - [Web View Dynamic Type](iOSswiftUIa11yTechniques/Documentation/WebViewDynamicType.md)

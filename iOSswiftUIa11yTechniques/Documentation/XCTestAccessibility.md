@@ -2,6 +2,8 @@
 
 Automated accessibility testing with XCTest helps catch common issues early. This project uses both `performAccessibilityAudit()` and manual assertions against accessibility properties.
 
+To assert what VoiceOver actually *speaks* rather than what the accessibility properties contain, see [VoiceOverAutomationTesting.md](VoiceOverAutomationTesting.md). A property can be set and still never reach VoiceOver, which neither the audit nor a property assertion detects.
+
 ## Key APIs
 
 ### `performAccessibilityAudit()` (iOS 17+)

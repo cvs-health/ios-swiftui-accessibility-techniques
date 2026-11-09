@@ -109,6 +109,7 @@ let techniques: [Techniques] = [
     Techniques(name: "Web View Dynamic Type"),
     Techniques(name: "Touch Target Size"),
     Techniques(name: "VoiceOver Announcement Delay"),
+    Techniques(name: "VoiceOver Automation Testing"),
     Techniques(name: "VoiceOver Pronunciation"),
     Techniques(name: "A11y-check"),
     Techniques(name: "XCTest Accessibility")

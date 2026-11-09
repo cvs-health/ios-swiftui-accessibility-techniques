@@ -25,7 +25,7 @@ struct VoiceOverAutomationTestingView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("`XCUIVoiceOverService` drives VoiceOver from a UI test and returns what it speaks as a `String`, so the announcement itself can be asserted in CI. Turn VoiceOver on and read the examples below to hear the difference between a trait that reaches VoiceOver and one that does not. Both examples contain `.accessibilityAddTraits(.isHeader)` in their source, so static analysis cannot tell them apart — only the spoken utterance can.")
+                Text("`XCUIVoiceOverService` drives VoiceOver from a UI test and returns what it speaks as a `String`, so the announcement itself can be asserted in CI. Turn VoiceOver on and read the two Store Hours examples below. Both speak the word \"Heading\", so a test that matches on the utterance text passes on both — but only the first one has the header trait, and only the first can be reached with the Rotor or VO-Cmd-H. Assert trait membership with keyboard quick navigation rather than string matching. Note the utterance is also truncated at 64 characters, with the trait appended at the end, so on a long label the trait is cut off and its absence from the string proves nothing.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)

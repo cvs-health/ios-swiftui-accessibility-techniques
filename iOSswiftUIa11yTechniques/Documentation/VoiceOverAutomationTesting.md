@@ -82,6 +82,29 @@ Because the setting name comes back as an utterance, a test can also enumerate w
 
 **Rotor availability is context-sensitive.** `.accessibilityRotor()` is attached to a view, and its rotor only appears in the cycle while the VoiceOver cursor is inside that view. Cycling from a page title on the same screen returns only the built-in settings (`Characters`, `Words`, `Speaking Rate`, `Containers`, `Headings`); moving focus into the owning view first makes the custom rotor appear. A test that cycles from the wrong starting position will not find the rotor and will look like evidence the rotor does not exist. See [Rotor.md](Rotor.md).
 
+## Watching a test run
+
+The first time you run one of these tests you will probably **hear VoiceOver speaking but see no simulator moving**, with Device Hub showing an idle device. That is expected, not a bug.
+
+Xcode runs UI tests on a *clone* of the destination simulator — the test log names it `Clone 1 of iPhone 18 Pro`. The clone is created for the run and destroyed afterwards, and it is never registered in the device list, so Device Hub has nothing to display. Simulator audio routes to the Mac's default output device regardless of which simulator is speaking, which is why you hear a screen you cannot see.
+
+To watch the run, disable parallel testing so it executes on the real destination device:
+
+```
+xcodebuild test-without-building \
+  -project iOSswiftUIa11yTechniques.xcodeproj \
+  -scheme iOSswiftUIa11yTechniques \
+  -destination 'platform=iOS Simulator,id=<an iOS 27 simulator>' \
+  -parallel-testing-enabled NO \
+  -only-testing:iOSswiftUIa11yTechniquesUITests/VoiceOverAutomationExampleUITests
+```
+
+Boot that simulator and have Device Hub showing it first, or there is still nothing to watch. In Xcode the equivalent is Edit Scheme → Test → uncheck "Execute in parallel" on the UI test target; that file is shared, so do not commit the change. Leave `parallelizable = "YES"` in the committed scheme — clones are what make the suite parallel in CI.
+
+Check the log to confirm which device actually ran the test. `Clone 1 of …` means it ran on a clone and nothing was visible; the absence of any "Clone" line means it ran on the device you were watching.
+
+Watching is useful for debugging a navigation path or confirming the cursor goes where you expect. For routine verification the utterance log is the better artifact — it is diffable, it does not need a human watching a window, and these tests take 30–50 seconds each because of the deliberate sleeps that let speech finish.
+
 For `performAccessibilityAudit()` and assertions against accessibility properties, see [XCTestAccessibility.md](XCTestAccessibility.md). That page covers what the properties *contain*; this one covers what VoiceOver *says*, and a property can be set without ever reaching VoiceOver.
 
 ## Applicable WCAG Success Criteria

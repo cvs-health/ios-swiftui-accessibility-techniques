@@ -204,4 +204,55 @@ final class VoiceOverAutomationExampleUITests: XCTestCase {
             "Quick nav must not reach the fake heading. Landed on:\n\(landedOn.joined(separator: "\n"))"
         )
     }
+
+    // MARK: - Custom rotors
+
+    /// Custom `.accessibilityRotor()` entries are reachable from the keyboard:
+    /// `ctrl+opt+cmd+Right` cycles the rotor setting (VoiceOver speaks its name) and
+    /// `Down` moves between that rotor's entries.
+    ///
+    /// Rotor availability is **context-sensitive**. `.accessibilityRotor()` is attached
+    /// to a view and only joins the cycle while the cursor is inside that view, so focus
+    /// has to be moved into the list first. Cycling from the page title returns only the
+    /// built-in settings, which looks exactly like the custom rotor not existing.
+    @MainActor
+    func testCustomRotorIsReachableFromTheKeyboard() throws {
+        let app = XCUIApplication()
+        app.launch()
+        openTechnique("Accessibility Rotor", in: app)
+
+        let vo = XCUIDevice.shared.voiceOverService
+        try vo.enable()
+        defer { try? vo.disable() }
+
+        rewindToTop(vo)
+
+        // Move focus inside the view that owns the rotor.
+        var reachedEntry = false
+        for _ in 1...40 {
+            guard let utterance = try? vo.moveForward().utterance else { break }
+            if utterance.contains("Apple") || utterance.contains("Broccoli") {
+                reachedEntry = true
+                break
+            }
+        }
+        XCTAssertTrue(reachedEntry, "Never reached a rotor entry, so the rotor would not be in scope")
+
+        app.typeKey(.rightArrow, modifierFlags: [.control, .option, .command])
+        Thread.sleep(forTimeInterval: 1.5)
+        let setting = try vo.currentSpeech().utterance
+        XCTAssertEqual(setting, "Vegetables", "Expected the custom rotor to be the next setting")
+
+        var entries: [String] = []
+        for _ in 1...3 {
+            app.typeKey(.downArrow, modifierFlags: [])
+            Thread.sleep(forTimeInterval: 1.5)
+            entries.append(try vo.currentSpeech().utterance)
+        }
+
+        XCTAssertEqual(
+            entries, ["Broccoli", "Lettuce", "Green Beans"],
+            "The Vegetables rotor should visit only vegetables, in order"
+        )
+    }
 }

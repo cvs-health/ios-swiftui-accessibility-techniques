@@ -64,8 +64,23 @@ Notes:
 
 Known Issues:
 * There is no API to focus a specific element. Movement is relative only, so reaching element *n* means stepping to it and matching on its utterance.
-* The Rotor cannot be driven — no rotor member exists on the service, and there is no touch injection with which to perform the two-finger rotate gesture. Built-in quick navigation by element type is reachable from the keyboard, but a custom `.accessibilityRotor()` is only reachable by the rotor gesture and so cannot be tested. See [Rotor.md](Rotor.md).
+* Gestures that are genuinely out of reach: the two-finger rotate, magic tap, and escape scrub, along with any command requiring two non-modifier keys pressed together — `typeKey` takes one key plus *modifier* flags, so the Quick Nav toggle (Left+Right together) and the gesture form of rotor cycling (Up+Right / Up+Left) cannot be expressed. The rotor itself is still reachable; see Rotor navigation above.
 * Requires an iOS 27 **runtime**. The app's own deployment target can be lower; the UI test target is what needs `27.0`, or an `@available(iOS 27.0, *)` annotation on the test.
+
+## Rotor navigation
+
+The Rotor is drivable from the keyboard, including custom rotors. `ctrl+opt+cmd+RightArrow` and `LeftArrow` cycle the rotor setting and VoiceOver speaks the new setting's name, so the utterance tells you which rotor you are on. `DownArrow` and `UpArrow` alone then move between that rotor's entries:
+
+```swift
+app.typeKey(.rightArrow, modifierFlags: [.control, .option, .command])  // next rotor setting
+_ = try vo.currentSpeech().utterance                                    // -> "Vegetables"
+app.typeKey(.downArrow, modifierFlags: [])                              // next entry
+_ = try vo.currentSpeech().utterance                                    // -> "Broccoli"
+```
+
+Because the setting name comes back as an utterance, a test can also enumerate which rotors a screen offers rather than only navigating them.
+
+**Rotor availability is context-sensitive.** `.accessibilityRotor()` is attached to a view, and its rotor only appears in the cycle while the VoiceOver cursor is inside that view. Cycling from a page title on the same screen returns only the built-in settings (`Characters`, `Words`, `Speaking Rate`, `Containers`, `Headings`); moving focus into the owning view first makes the custom rotor appear. A test that cycles from the wrong starting position will not find the rotor and will look like evidence the rotor does not exist. See [Rotor.md](Rotor.md).
 
 For `performAccessibilityAudit()` and assertions against accessibility properties, see [XCTestAccessibility.md](XCTestAccessibility.md). That page covers what the properties *contain*; this one covers what VoiceOver *says*, and a property can be set without ever reaching VoiceOver.
 

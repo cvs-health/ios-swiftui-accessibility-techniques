@@ -28,6 +28,21 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
 #### Added
 
+- **New `Documentation/VoiceOverTesting.md`**, covering `XCUIVoiceOverService` — the API added in Xcode 27 / iOS 27 that drives VoiceOver from a UI test and returns what it speaks as a `String`. It matters because it closes the gap every other accessibility check leaves open: static analysis proves a modifier is *present in source*, and this proves the announcement *reaches the user*. Those are not the same claim, and the difference is where real defects hide.
+
+  The page documents the eight-member API, a screen-walk loop whose output is the actual VoiceOver reading order, and keyboard quick navigation through `typeKey(_:modifierFlags:)` — `ctrl+opt+cmd+H` jumps heading to heading, which is the closest automation gets to verifying a heading is reachable the way the Rotor reaches it.
+
+  Most of the page is the traps, because all of them produce a **passing test that measured nothing**:
+
+  - `currentSpeech()` throws `noSpeech` until VoiceOver has focused something, so it must be anchored with one `moveForward()` first. A probe that swallowed those errors returned five readings of `<none>` and still passed.
+  - `moveForward()` saturates silently at the last element — it repeats the final utterance forever rather than throwing — while `moveBackward()` is not symmetric and *throws* at the top of the screen. A forward walk needs repeat-detection; a backward rewind needs `try?`.
+  - The VoiceOver cursor persists across app launches and test runs, and there is no API to focus the first element. A run that inherited a cursor parked on a tab bar read four elements, found no headings, and passed.
+  - `ctrl+opt+H` is Home, not "next heading" — it backgrounds the app and invalidates everything after it.
+  - A heading **level** only reaches the utterance when `.accessibilityHeading(.h1–.h6)` and `.accessibilityAddTraits(.isHeader)` are both applied. Apple does not document that the pairing is required, so a level set without the trait is silently inert: present in code, visible in review, never spoken.
+  - The caption panel fills in progressively, so a screenshot taken immediately after a move catches it mid-speech with the trait missing. Screenshots of traits need a settle delay proportional to utterance length.
+
+  Also records what the API cannot do: there is no way to focus a specific element (movement is relative only), and the Rotor cannot be driven at all — so built-in quick navigation by element type is testable from the keyboard, but a custom `.accessibilityRotor()` is not.
+
 - **New `FIGMA-ANNOTATIONS-SKILL.md`**, a second skill file covering the *design* stage, where `SKILL.md` covers the code stage. It is the rule set an AI must follow when asked to annotate an iOS design in Figma for accessibility.
 
   The file exists because AI design annotation fails in three consistent ways, and generic WCAG guidance does not address any of them:

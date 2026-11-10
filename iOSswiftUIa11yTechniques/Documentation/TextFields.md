@@ -7,7 +7,9 @@ VoiceOver users must hear the label text spoken when focused on the text field.
 
 Don't use placeholder text which has insufficient contrast and disappears after the user enters a value. 
 
-Don't supply placeholder text with the `prompt:` parameter in place of a visible label. A `prompt:` only draws placeholder text, it never becomes the accessible name, so `TextField("", text: $fname, prompt: Text("First Name"))` has an empty label and VoiceOver users hear no name when focused on the input. Passing a non-empty label alongside the `prompt:` does give the field an accessible name, but outside of a `Form` or `List` that label is never drawn, so there is still no visible label.
+Don't supply placeholder text with the `prompt:` parameter in place of a visible label. A `prompt:` only draws placeholder text, it is not an accessible name, so `TextField("", text: $fname, prompt: Text("First Name"))` is an unnamed field — VoiceOver speaks only its value and trait, such as "Test, Text field, Double tap to edit."
+
+Filling in the label argument does not fix it, because a `TextField`'s label argument is not exposed as its accessible name either. `TextField("First Name", text: $fname, prompt: Text("First Name"))` is still an unnamed field. Only `.accessibilityLabel` or `LabeledContent` names a `TextField`.
 
 Notes:
 

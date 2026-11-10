@@ -7,6 +7,8 @@ VoiceOver users must hear the label text spoken when focused on the text field.
 
 Don't use placeholder text which has insufficient contrast and disappears after the user enters a value. 
 
+Don't supply placeholder text with the `prompt:` parameter in place of a visible label. A `prompt:` only draws placeholder text, it never becomes the accessible name, so `TextField("", text: $fname, prompt: Text("First Name"))` has an empty label and VoiceOver users hear no name when focused on the input. Passing a non-empty label alongside the `prompt:` does give the field an accessible name, but outside of a `Form` or `List` that label is never drawn, so there is still no visible label.
+
 Notes:
 
 * Use `.textFieldStyle(.roundedBorder)` to make the `TextField` visually identifiable. 
@@ -32,7 +34,7 @@ VoiceOver Bugs:
 
 ----
 
-Copyright 2023-2025 CVS Health and/or one of its affiliates
+Copyright 2023-2026 CVS Health and/or one of its affiliates
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,5 +1,5 @@
 /*
-   Copyright 2023 CVS Health and/or one of its affiliates
+   Copyright 2023-2026 CVS Health and/or one of its affiliates
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -46,6 +46,12 @@ struct TextFieldsView: View {
     @State private var stateBad = ""
     @State private var websiteBad = ""
 
+    @State private var fnamePromptBad = ""
+    @State private var lnamePromptBad = ""
+    @State private var passwordPromptBad = ""
+    @State private var emailPromptBad = ""
+    @State private var phonePromptBad = ""
+
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -54,7 +60,7 @@ struct TextFieldsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text("Text fields require visible label text next to the field set as the `.accessibilityLabel` of the `TextField`. Or provide visible labels using `LabeledContent` and then an `.accessibilityLabel` is not required. Don't use `.labeledContentStyle(.vertical)` or else VoiceOver won't be able to double tap to activate the `TextField`. Don't use placeholder text which has insufficient contrast and disappears. Use `.textFieldStyle(.roundedBorder)` to make the `TextField` visually identifiable. Use `.border(.secondary)` to give the border a 3:1 contrast ratio in light and dark mode. Use `.keyboardType` to specify the keyboard displayed on input. Use `.textContentType` to enable form AutoFill for each `TextField`.")
+                Text("Text fields require visible label text next to the field set as the `.accessibilityLabel` of the `TextField`. Or provide visible labels using `LabeledContent` and then an `.accessibilityLabel` is not required. Don't use `.labeledContentStyle(.vertical)` or else VoiceOver won't be able to double tap to activate the `TextField`. Don't use placeholder text which has insufficient contrast and disappears. Don't supply placeholder text with the `prompt:` parameter in place of a visible label because a `prompt:` never becomes the accessible name of the `TextField`. Use `.textFieldStyle(.roundedBorder)` to make the `TextField` visually identifiable. Use `.border(.secondary)` to give the border a 3:1 contrast ratio in light and dark mode. Use `.keyboardType` to specify the keyboard displayed on input. Use `.textContentType` to enable form AutoFill for each `TextField`.")
                     .padding(.bottom)
                 Text("Good Examples")
                     .font(.subheadline)
@@ -270,6 +276,29 @@ struct TextFieldsView: View {
                 DisclosureGroup("Details") {
                     Text("The bad Text Fields example uses placeholder text which disappears and has insufficient contrast rather than visible label text. There is no `.accessibilityLabel` for each `TextField`. The default border style has an insufficient contrast ratio. Keyboard types are not specified. AutoFill and password management are not enabled.")
                 }.padding(.bottom).accessibilityHint("Bad Example Using placeholders with no label text or `.accessibilityLabel`")
+                Text("Bad Example Using `prompt` placeholder text")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                TextField("", text: $fnamePromptBad, prompt: Text("First Name"))
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("fNamePromptBad")
+                TextField("", text: $lnamePromptBad, prompt: Text("Last Name"))
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("lNamePromptBad")
+                SecureField("", text: $passwordPromptBad, prompt: Text("Password"))
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("passwordPromptBad")
+                TextField("", text: $emailPromptBad, prompt: Text("Email"))
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("emailPromptBad")
+                TextField("", text: $phonePromptBad, prompt: Text("Phone Number"))
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("phonePromptBad")
+                DisclosureGroup("Details") {
+                    Text("The second bad Text Fields example supplies the placeholder text with the `prompt:` parameter and leaves the label argument empty. A `prompt:` only draws placeholder text, it never becomes the accessible name, so each field has an empty label and VoiceOver users hear no name when focused on the input. The placeholder also disappears as soon as a value is entered and has insufficient contrast, so sighted users lose the label too. Passing a non-empty label alongside the `prompt:`, as in `TextField(\"First Name\", text: $fname, prompt: Text(\"First Name\"))`, does give the field an accessible name, but outside of a `Form` or `List` the label is never drawn, so there is still no visible label. Use visible label text with an `.accessibilityLabel`, or `LabeledContent`, instead of a `prompt:`. Keyboard types are not specified. AutoFill and password management are not enabled.")
+                }.padding(.bottom).accessibilityHint("Bad Example Using `prompt` placeholder text")
                 Text("Bad Example Using `LabeledContent`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -292,7 +321,7 @@ struct TextFieldsView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }.labeledContentStyle(.vertical)
                 DisclosureGroup("Details") {
-                    Text("The second bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. Voice Control users also cannot speak the name or number of those textfields to set focus to the inputs. When using `LabeledContent` an `.accessibilityLabel` is not required.")
+                    Text("The third bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. Voice Control users also cannot speak the name or number of those textfields to set focus to the inputs. When using `LabeledContent` an `.accessibilityLabel` is not required.")
                 }.accessibilityHint("Bad Example Using `LabeledContent`")
             }
             .navigationTitle("Text Fields")

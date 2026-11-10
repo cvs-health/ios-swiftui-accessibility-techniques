@@ -56,6 +56,10 @@ struct TextFieldsView: View {
     @State private var lnamePromptContrast = ""
     @State private var emailPromptContrast = ""
 
+    @State private var longPromptBad = ""
+    @State private var longPromptAxisBad = ""
+    private let longPrompt = "Enter your full legal first and middle name exactly as it appears on your insurance card"
+
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -320,6 +324,20 @@ struct TextFieldsView: View {
                 DisclosureGroup("Details") {
                     Text("Placeholder contrast is the one part of a `prompt:` that can be fixed. A `prompt:` takes a `Text`, so `.foregroundColor` on it is honored: `Text(\"First Name\").foregroundColor(.primary)` draws the placeholder at 21:1 instead of the system placeholder color, which measures 1.72:1 in light mode and 2.23:1 in dark mode and fails WCAG 1.4.3. The label argument cannot be fixed this way because it is a `String` with nothing to attach a modifier to. First Name uses `.foregroundColor(.primary)` and passes in both modes. Last Name uses `Color(UIColor.secondaryLabel)`, which still looks like placeholder grey but only reaches 3.44:1 in light mode, so it fails 1.4.3 even though it passes at 6.36:1 in dark mode. Email uses a hardcoded `.foregroundColor(.black)`, which is 21:1 in light mode and completely invisible in dark mode — turn on Dark Appearance and the placeholder disappears. Two things that do not work: `.foregroundStyle(.primary)` is ignored and leaves the placeholder at the system color, and `.foregroundStyle` on the `TextField` itself colors the entered text but not the placeholder. `.foregroundStyle(Color.black)` on the `Text` does work, so it is the hierarchical `.primary` style rather than `.foregroundStyle` that is dropped. `.bold()` on the prompt changes the weight but not the color. Fixing the contrast does not make this example good. The fields are still unnamed, and the placeholder still disappears on data entry, so these remain bad examples with one of their three defects repaired.")
                 }.padding(.bottom).accessibilityHint("Bad Example Using `prompt` with Fixed Contrast")
+                Text("Bad Example Using a Long `prompt`")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                TextField("", text: $longPromptBad, prompt: Text(longPrompt).foregroundColor(.primary))
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("longPromptBad")
+                TextField("", text: $longPromptAxisBad, prompt: Text(longPrompt).foregroundColor(.primary), axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("longPromptAxisBad")
+                DisclosureGroup("Details") {
+                    Text("A `prompt:` never wraps. Both fields carry the same 87 character placeholder and both truncate to one line with an ellipsis, losing most of the instruction. `axis: .vertical` does not fix it: the second field is written with `axis: .vertical` and truncates identically. The axis grows the field for the *value*, not for the placeholder — putting the same string in as the value instead of the prompt wraps it onto two lines, while the prompt on the same field stays clipped to one. Dynamic Type makes both worse in different ways. At the Accessibility Extra Large text size the first field's placeholder does not scale at all, measuring 39px of glyph height against 87px for the body text beside it, which fails WCAG 1.4.4. The second field's placeholder does scale, but the field stays one line tall, so the enlarged text is clipped off at the top and bottom as well as truncated at the end. The only way to get placeholder-looking text that wraps is to put a real `Text` behind the field in a `ZStack` and let the `Text` drive the height — at which point it is a `Text`, not a placeholder, so use a visible label instead. Long instructions belong in visible label text, which wraps and scales, or in `.accessibilityHint`. These fields are still unnamed.")
+                }.padding(.bottom).accessibilityHint("Bad Example Using a Long `prompt`")
                 Text("Bad Example Using `LabeledContent`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -342,7 +360,7 @@ struct TextFieldsView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }.labeledContentStyle(.vertical)
                 DisclosureGroup("Details") {
-                    Text("The fourth bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. Voice Control users also cannot speak the name or number of those textfields to set focus to the inputs. When using `LabeledContent` an `.accessibilityLabel` is not required.")
+                    Text("The fifth bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. Voice Control users also cannot speak the name or number of those textfields to set focus to the inputs. When using `LabeledContent` an `.accessibilityLabel` is not required.")
                 }.accessibilityHint("Bad Example Using `LabeledContent`")
             }
             .navigationTitle("Text Fields")

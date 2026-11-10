@@ -32,6 +32,21 @@ Two modifiers that do not work: `.foregroundStyle(.primary)` on the prompt is ig
 
 Fixing the contrast does not make a `prompt:` acceptable as a label. The field is still unnamed and the placeholder still disappears on data entry; only one of the three defects is repaired.
 
+### A long `prompt:` truncates, and `axis: .vertical` does not fix it
+
+A `prompt:` never wraps. An 87 character placeholder truncates to one line with an ellipsis whether or not the field is written with `axis: .vertical`, so most of the instruction is lost.
+
+`axis: .vertical` grows the field for the **value**, not for the placeholder. The same string entered as the value wraps onto two lines; as a `prompt:` on the same field it stays clipped to one.
+
+Dynamic Type makes both spellings worse, in opposite ways. Measured at the Accessibility Extra Large text size on iOS 27:
+
+| Written as | Behaviour at AX Extra Large |
+| --- | --- |
+| `prompt:`, no axis | placeholder does not scale — 39px of glyph height against 87px for adjacent body text (fails 1.4.4) |
+| `prompt:`, `axis: .vertical` | placeholder scales to 66px, but the field stays one line tall so the text is clipped top and bottom as well as truncated |
+
+The only way to get placeholder-looking text that wraps is to put a real `Text` behind the field in a `ZStack` and let the `Text` drive the height — at which point it is a `Text`, not a placeholder. Put long instructions in visible label text, which wraps and scales, or in `.accessibilityHint`.
+
 Notes:
 
 * Use `.textFieldStyle(.roundedBorder)` to make the `TextField` visually identifiable. 

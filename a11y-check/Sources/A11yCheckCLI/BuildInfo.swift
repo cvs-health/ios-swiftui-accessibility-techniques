@@ -1,2 +1,2 @@
-let buildCommit = "d425ea6"
-let buildDate = "2026-11-05"
+let buildCommit = "64f9e3b"
+let buildDate = "2026-11-10"

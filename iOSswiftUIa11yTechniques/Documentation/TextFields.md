@@ -11,6 +11,27 @@ Don't supply placeholder text with the `prompt:` parameter in place of a visible
 
 Filling in the label argument does not fix it, because a `TextField`'s label argument is not exposed as its accessible name either. `TextField("First Name", text: $fname, prompt: Text("First Name"))` is still an unnamed field. Only `.accessibilityLabel` or `LabeledContent` names a `TextField`.
 
+### Placeholder contrast is fixable, but only on a `prompt:`
+
+The system placeholder color fails [1.4.3 Contrast (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum): measured on iOS 27 it is `rgb(197,197,199)` on white for **1.72:1** in light mode and `rgb(70,70,73)` on black for **2.23:1** in dark mode.
+
+A `prompt:` takes a `Text`, so `.foregroundColor` on that `Text` is honored and the contrast can be fixed. The label argument cannot be fixed this way — it is a `String`, with nothing to attach a modifier to.
+
+| Written as | Light | Dark |
+| --- | --- | --- |
+| `prompt: Text("First Name")` | 1.72:1 | 2.23:1 |
+| `.foregroundColor(.primary)` | **21:1** | **21:1** |
+| `.foregroundColor(Color(UIColor.label))` | **21:1** | **21:1** |
+| `.foregroundColor(Color(UIColor.secondaryLabel))` | 3.44:1 | 6.36:1 |
+| `.foregroundColor(.black)` | 21:1 | **invisible** |
+| `.foregroundStyle(.primary)` | 1.72:1 | 2.23:1 |
+
+Use an adaptive color. A hardcoded `.black` is 21:1 in light mode and draws black-on-black in dark mode, where the placeholder vanishes completely. `Color(UIColor.secondaryLabel)` still reads as placeholder grey but only reaches 3.44:1 in light mode, so it fails 1.4.3 there.
+
+Two modifiers that do not work: `.foregroundStyle(.primary)` on the prompt is ignored, and `.foregroundStyle` on the `TextField` itself colors the entered text but not the placeholder. `.foregroundStyle(Color.black)` on the prompt `Text` does work, so it is the hierarchical `.primary` style that is dropped rather than `.foregroundStyle` itself. `.bold()` on the prompt changes the weight but not the color.
+
+Fixing the contrast does not make a `prompt:` acceptable as a label. The field is still unnamed and the placeholder still disappears on data entry; only one of the three defects is repaired.
+
 Notes:
 
 * Use `.textFieldStyle(.roundedBorder)` to make the `TextField` visually identifiable. 
@@ -25,6 +46,7 @@ VoiceOver Bugs:
 - [1.3.1: Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
 - [3.3.2: Labels or Instructions](https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions)
 - [1.3.5: Identify Input Purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose)
+- [1.4.3: Contrast (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum)
 
 
 ## Apple Developer Documentation

@@ -52,6 +52,10 @@ struct TextFieldsView: View {
     @State private var emailPromptBad = ""
     @State private var phonePromptBad = ""
 
+    @State private var fnamePromptContrast = ""
+    @State private var lnamePromptContrast = ""
+    @State private var emailPromptContrast = ""
+
 
     private var darkGreen = Color(red: 0 / 255, green: 102 / 255, blue: 0 / 255)
     private var darkRed = Color(red: 220 / 255, green: 20 / 255, blue: 60 / 255)
@@ -299,6 +303,23 @@ struct TextFieldsView: View {
                 DisclosureGroup("Details") {
                     Text("The second bad Text Fields example supplies the placeholder text with the `prompt:` parameter. A `prompt:` only draws placeholder text, it is not an accessible name, so each field is unnamed: VoiceOver speaks only the value and the trait, like \"Test, Text field, Double tap to edit.\" Filling in the label argument instead of leaving it empty does not fix this, because a `TextField`'s label argument is not exposed as its accessible name either — `TextField(\"First Name\", text: $fname, prompt: Text(\"First Name\"))` is still an unnamed field. The placeholder also disappears as soon as a value is entered and has insufficient contrast, so sighted users lose the label too. Use visible label text with an `.accessibilityLabel`, or `LabeledContent`, instead of a `prompt:`. Keyboard types are not specified. AutoFill and password management are not enabled.")
                 }.padding(.bottom).accessibilityHint("Bad Example Using `prompt` placeholder text")
+                Text("Bad Example Using `prompt` with Fixed Contrast")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+                TextField("", text: $fnamePromptContrast, prompt: Text("First Name").foregroundColor(.primary))
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("fNamePromptContrast")
+                TextField("", text: $lnamePromptContrast, prompt: Text("Last Name").foregroundColor(Color(UIColor.secondaryLabel)))
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("lNamePromptContrast")
+                TextField("", text: $emailPromptContrast, prompt: Text("Email").foregroundColor(.black)) // invisible in dark mode
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("emailPromptContrast")
+                DisclosureGroup("Details") {
+                    Text("Placeholder contrast is the one part of a `prompt:` that can be fixed. A `prompt:` takes a `Text`, so `.foregroundColor` on it is honored: `Text(\"First Name\").foregroundColor(.primary)` draws the placeholder at 21:1 instead of the system placeholder color, which measures 1.72:1 in light mode and 2.23:1 in dark mode and fails WCAG 1.4.3. The label argument cannot be fixed this way because it is a `String` with nothing to attach a modifier to. First Name uses `.foregroundColor(.primary)` and passes in both modes. Last Name uses `Color(UIColor.secondaryLabel)`, which still looks like placeholder grey but only reaches 3.44:1 in light mode, so it fails 1.4.3 even though it passes at 6.36:1 in dark mode. Email uses a hardcoded `.foregroundColor(.black)`, which is 21:1 in light mode and completely invisible in dark mode — turn on Dark Appearance and the placeholder disappears. Two things that do not work: `.foregroundStyle(.primary)` is ignored and leaves the placeholder at the system color, and `.foregroundStyle` on the `TextField` itself colors the entered text but not the placeholder. `.foregroundStyle(Color.black)` on the `Text` does work, so it is the hierarchical `.primary` style rather than `.foregroundStyle` that is dropped. `.bold()` on the prompt changes the weight but not the color. Fixing the contrast does not make this example good. The fields are still unnamed, and the placeholder still disappears on data entry, so these remain bad examples with one of their three defects repaired.")
+                }.padding(.bottom).accessibilityHint("Bad Example Using `prompt` with Fixed Contrast")
                 Text("Bad Example Using `LabeledContent`")
                     .font(.subheadline)
                     .fontWeight(.bold)
@@ -321,7 +342,7 @@ struct TextFieldsView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }.labeledContentStyle(.vertical)
                 DisclosureGroup("Details") {
-                    Text("The third bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. Voice Control users also cannot speak the name or number of those textfields to set focus to the inputs. When using `LabeledContent` an `.accessibilityLabel` is not required.")
+                    Text("The fourth bad Text Fields example uses `LabeledContent` to provide visible label text that also becomes the accessible name of each `TextField`. When using `.labeledContentStyle(.vertical)` VoiceOver operation is blocked because VoiceOver users cannot double tap to activate the TextField and enter a value. Voice Control users also cannot speak the name or number of those textfields to set focus to the inputs. When using `LabeledContent` an `.accessibilityLabel` is not required.")
                 }.accessibilityHint("Bad Example Using `LabeledContent`")
             }
             .navigationTitle("Text Fields")

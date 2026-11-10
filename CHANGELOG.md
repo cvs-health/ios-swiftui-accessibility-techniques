@@ -116,7 +116,24 @@ iOS app changes made after 26.7 shipped and CLI changes made after `a11y-check` 
 
   The `Details` disclosure names the near-miss variant as well, because it is the one that looks fixed and is not: `TextField("First Name", text: $fname, prompt: Text("First Name"))` is **also** an unnamed field, because a `TextField`'s label argument is not exposed as its accessible name either. Only `.accessibilityLabel` or `LabeledContent` names a `TextField`. Both forms are errors under `textfield-missing-label`; the page intro and `Documentation/TextFields.md` now say not to use a `prompt:` in place of a visible label.
 
-  The existing `LabeledContent` bad example's `Details` text was renumbered from "second" to "third" to match the new order. UI tests were left alone — the new fields carry `.accessibilityIdentifier`s (`fNamePromptBad`, `lNamePromptBad`, `passwordPromptBad`, `emailPromptBad`, `phonePromptBad`) but no assertions were added, since `testTextFields` could not be run here.
+  A third bad example, **Bad Example Using `prompt` with Fixed Contrast**, follows it, because a developer's claim that the `prompt:` contrast can be fixed while a plain placeholder's cannot turns out to be **true**, and it is worth showing on device. A `prompt:` takes a `Text`, so `.foregroundColor` on it is honored; the label argument is a `String` with nothing to attach a modifier to. Measured on an iPhone 18 Pro simulator on iOS 27.0 by sampling the rendered pixels:
+
+  | Written as | Light | Dark |
+  | --- | --- | --- |
+  | `prompt: Text("First Name")` | 1.72:1 `rgb(197,197,199)` | 2.23:1 `rgb(70,70,73)` |
+  | `.foregroundColor(.primary)` | 21:1 | 21:1 |
+  | `.foregroundColor(Color(UIColor.label))` | 21:1 | 21:1 |
+  | `.foregroundColor(Color(UIColor.secondaryLabel))` | 3.44:1 | 6.36:1 |
+  | `.foregroundColor(.black)` | 21:1 | invisible |
+  | `.foregroundStyle(.primary)` | 1.72:1 | 2.23:1 |
+
+  So the system placeholder color fails 1.4.3 in both appearances, and three of the six spellings fix it. The section's three fields are the three outcomes worth seeing: `.primary` passes in both modes, `Color(UIColor.secondaryLabel)` still looks like placeholder grey and fails light mode at 3.44:1, and a hardcoded `.black` is 21:1 in light mode and draws black-on-black in dark mode, where the placeholder vanishes entirely. 1.4.3 was added to the doc's criteria list.
+
+  Two near-misses are documented because both look like they should work: `.foregroundStyle(.primary)` on the prompt is ignored and leaves the system color, while `.foregroundStyle(Color.black)` works — it is the hierarchical `.primary` style that is dropped, not `.foregroundStyle`. And `.foregroundStyle` on the `TextField` itself colors the entered text but not the placeholder. `.bold()` changes the weight but not the color.
+
+  The section stays under **Bad Examples**: fixing the contrast repairs one of three defects, and the fields are still unnamed with text that still disappears on entry.
+
+  The existing `LabeledContent` bad example's `Details` text was renumbered from "second" to "fourth" to match the new order. UI tests were left alone — the new fields carry `.accessibilityIdentifier`s (`fNamePromptBad`, `lNamePromptBad`, `passwordPromptBad`, `emailPromptBad`, `phonePromptBad`) but no assertions were added, since `testTextFields` could not be run here.
 
 - **Scroll Views gained a second bad example: a `Button` inside a `.focusable()` `ScrollView`.** `ScrollViews.md` already documented that a scroll view can be made `.focusable()` as an alternative to putting a focusable control inside or after it. What it did not say is that the two fixes are mutually exclusive. Once the `ScrollView` itself is `.focusable()`, Full Keyboard Access treats it as a single focus stop, so a `Button` inside it can never be reached or activated — the control is on screen, visible, and unusable by keyboard.
 

@@ -15,10 +15,10 @@ Accessibility Techniques
 ```text
 Learn how to build accessible iOS apps by seeing the same component done right and done wrong, side by side.
 
-Accessibility Techniques is a working reference of 89 SwiftUI techniques. Every one ships a good and a bad example you can test yourself with VoiceOver turned on, so you hear the difference a proper accessibility label makes and what breaks when focus is not managed. Each technique maps to the WCAG 2.2 success criteria it satisfies.
+Accessibility Techniques is a working reference of 91 SwiftUI techniques. Every one ships a good and a bad example you can test yourself with VoiceOver turned on, so you hear the difference a proper accessibility label makes and what breaks when focus is not managed. Each technique maps to the WCAG 2.2 success criteria it satisfies.
 
 What's inside
-• 89 techniques in a searchable, alphabetical index
+• 91 techniques in a searchable, alphabetical index
 • Good and bad examples side by side, each with a Details note explaining exactly why it passes or fails
 • Coverage of VoiceOver, Voice Control, Dynamic Type, Dark Mode, Reduce Motion, Increase Contrast, Smart Invert, and more
 • Written documentation for every technique, linked to the relevant WCAG criteria and Apple's developer docs
@@ -28,7 +28,7 @@ Who it's for
 Developers, designers, and QA who need to settle a question quickly, verify a real VoiceOver announcement before shipping, or show a teammate why a pattern fails.
 
 Open source
-The full SwiftUI source is on GitHub, so you can read how each example is built and copy what you need. The project also includes a11y-check, a free static analysis tool that scans your own Swift code for accessibility issues — 45 rules across 24 WCAG 2.2 criteria.
+The full SwiftUI source is on GitHub, so you can read how each example is built and copy what you need. The project also includes a11y-check, a free static analysis tool that scans your own Swift code for accessibility issues — 46 rules across 24 WCAG 2.2 criteria.
 
 https://github.com/cvs-health/ios-swiftui-accessibility-techniques
 
@@ -37,7 +37,7 @@ Issues, suggestions, and contributions welcome.
 
 ## What's New
 
-Release notes live with the release they describe, in [CHANGELOG.md](CHANGELOG.md) under that version's **App Store Release Notes** heading, so each release has a single source of truth. The current release is `[iOS 26.7]`.
+Release notes live with the release they describe, in [CHANGELOG.md](CHANGELOG.md) under that version's **App Store Release Notes** heading, so each release has a single source of truth. The current release is `[iOS 26.8]`.
 
 ## Keeping this accurate
 

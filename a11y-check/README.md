@@ -65,9 +65,18 @@ Then run `a11y-check` from anywhere. Run `a11y-check --version` to verify the in
 ```bash
 git clone https://github.com/cvs-health/ios-swiftui-accessibility-techniques.git
 cd ios-swiftui-accessibility-techniques/a11y-check
-./generate-build-info.sh   # optional: embeds git commit in --version output
+./generate-build-info.sh   # stamps the git commit into --version
 swift build
 ```
+
+`generate-build-info.sh` is optional for a working binary but **required before tagging a
+release**, and worth running for any build you will audit with. `BuildInfo.swift` is a
+tracked file rather than a build product — SwiftPM prebuild plugins run sandboxed and
+cannot shell out to `git`, so nothing stamps it automatically. Unstamped, `--version`
+reports `unreleased`; from a modified tree it reports `<commit>-dirty`. Both are accurate,
+which is the point: `Examples/XcodeAuditProject` prints `--version` beside its results so
+you can tell whether an audit ran on a current build, and a hash that silently names the
+wrong commit defeats that.
 
 The binary is at `.build/debug/a11y-check` (or `.build/release/a11y-check` after `swift build -c release`).
 

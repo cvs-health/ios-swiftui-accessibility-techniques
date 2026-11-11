@@ -69,6 +69,9 @@ public final class RuleRegistry {
         // Accessibility Value (WCAG 4.1.2)
         register(ValueContainsRoleRule())
 
+        // Accessibility Label (WCAG 4.1.2)
+        register(LabelContainsRoleRule())
+
         // Traits (WCAG 4.1.2)
         register(TapGestureMissingButtonTraitRule())
 

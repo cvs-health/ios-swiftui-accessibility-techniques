@@ -173,52 +173,61 @@ public struct ButtonUsedAsLinkRule: A11yRule {
         return false
     }
 
+    /// Whether this rule reports `view` — the full gate, extracted so another rule can ask.
+    ///
+    /// `label-contains-role` stays silent on a Button this rule already claims: both
+    /// findings say VoiceOver announces "Button" where it should say "Link", and both
+    /// name the same fix, so reporting twice is noise rather than coverage. The gate has
+    /// to be shared rather than approximated, because its three exemptions are exactly
+    /// the cases where the label *is* the only available signal — a conditional open and
+    /// an alert action cannot become a Link at all, so a role word in the name there is
+    /// worth hearing about even though this rule stays quiet.
+    static func reportsAsLink(_ view: ViewHierarchyVisitor.DetectedView) -> Bool {
+        // The rule exists so VoiceOver announces "Link" rather than "Button". If the author
+        // already added the trait, that is achieved — asking them to swap the view type as
+        // well is a style preference, not an accessibility defect.
+        let announcesLink = view.modifiers.modifiers(named: "accessibilityAddTraits").contains { mod in
+            mod.arguments.contains { $0.text.contains("isLink") }
+        }
+        if announcesLink { return false }
+
+        guard let body = view.callExpr.trailingClosure else { return false }
+
+        // A conditional open cannot become a Link, so the suggestion would not apply.
+        if opensURLOnlyConditionally(body) { return false }
+
+        // An alert's buttons cannot be anything but buttons: Apple documents that the
+        // system ignores any view in an `actions` closure that is not a Button, so a Link
+        // written there is silently dropped. With no available fix, there is no finding.
+        if isAlertAction(view.callExpr) { return false }
+
+        let bodyText = body.trimmedDescription
+        return urlPatterns.contains { bodyText.contains($0) }
+    }
+
     public func check(syntax: SourceFileSyntax, context: RuleContext) -> [A11yDiagnostic] {
         let visitor = ViewHierarchyVisitor.analyze(syntax, viewAliases: context.configOptions.viewAliases)
         var diagnostics: [A11yDiagnostic] = []
 
         for view in visitor.views(ofType: "Button") {
-            // The rule exists so VoiceOver announces "Link" rather than "Button". If the author
-            // already added the trait, that is achieved — asking them to swap the view type as
-            // well is a style preference, not an accessibility defect.
-            let announcesLink = view.modifiers.modifiers(named: "accessibilityAddTraits").contains { mod in
-                mod.arguments.contains { $0.text.contains("isLink") }
-            }
-            if announcesLink { continue }
+            guard Self.reportsAsLink(view), let body = view.callExpr.trailingClosure else { continue }
 
-            // Check the trailing closure (action body)
-            guard let body = view.callExpr.trailingClosure else { continue }
-            let bodyText = body.trimmedDescription
-
-            // A conditional open cannot become a Link, so the suggestion would not apply.
-            if Self.opensURLOnlyConditionally(body) { continue }
-
-            // An alert's buttons cannot be anything but buttons: Apple documents that the
-            // system ignores any view in an `actions` closure that is not a Button, so a Link
-            // written there is silently dropped. With no available fix, there is no finding.
-            if Self.isAlertAction(view.callExpr) { continue }
-
-            for pattern in Self.urlPatterns {
-                if bodyText.contains(pattern) {
-                    // A Link runs no code. When the action does more than open — analytics, a
-                    // callback, resetting the presenting state — swapping the view type would
-                    // drop that work, so the fix is the trait rather than the view. The defect
-                    // is the same either way: VoiceOver says "Button" where it should say
-                    // "Link".
-                    let doesMoreThanOpen = Self.hasEffectsBeyondOpening(body)
-                    diagnostics.append(makeDiagnostic(
-                        message: doesMoreThanOpen
-                            ? "Button opens a URL but also does other work, so VoiceOver announces 'Button' where it should say 'Link'. A Link runs no code and would drop that work — add .accessibilityAddTraits(.isLink) instead."
-                            : "Button opens a URL — use Link instead so VoiceOver announces the 'Link' role rather than 'Button'.",
-                        node: view.callExpr,
-                        context: context,
-                        suggestion: doesMoreThanOpen
-                            ? "Add .accessibilityAddTraits(.isLink) to the Button"
-                            : "Replace Button with Link(destination:)"
-                    ))
-                    break
-                }
-            }
+            // A Link runs no code. When the action does more than open — analytics, a
+            // callback, resetting the presenting state — swapping the view type would
+            // drop that work, so the fix is the trait rather than the view. The defect
+            // is the same either way: VoiceOver says "Button" where it should say
+            // "Link".
+            let doesMoreThanOpen = Self.hasEffectsBeyondOpening(body)
+            diagnostics.append(makeDiagnostic(
+                message: doesMoreThanOpen
+                    ? "Button opens a URL but also does other work, so VoiceOver announces 'Button' where it should say 'Link'. A Link runs no code and would drop that work — add .accessibilityAddTraits(.isLink) instead."
+                    : "Button opens a URL — use Link instead so VoiceOver announces the 'Link' role rather than 'Button'.",
+                node: view.callExpr,
+                context: context,
+                suggestion: doesMoreThanOpen
+                    ? "Add .accessibilityAddTraits(.isLink) to the Button"
+                    : "Replace Button with Link(destination:)"
+            ))
         }
         return diagnostics
     }

@@ -3588,10 +3588,180 @@ final class A11yCheckCoreTests: XCTestCase {
         XCTAssertEqual(diags.count, 0)
     }
 
+    // MARK: - label-contains-role
+
+    /// The two true positives this rule was built from, both real: a custom segmented
+    /// control and a custom tab bar that write "Tab" into the name instead of using
+    /// `.isTabBar`. Both are interpolated strings, which is why the rule reads literal
+    /// segments rather than `firstStringArgument`.
+    func testLabelContainsRole_reportsFakeTabsInInterpolatedLabels() {
+        let source = """
+        struct V: View {
+            var body: some View {
+                VStack {
+                    Button { } label: { Text("A") }
+                        .accessibilityLabel("\\(item.rawValue), Tab, \\(tabIndex) of \\(tabs.count)")
+                    Button { } label: { Text("B") }
+                        .accessibilityLabel("\\(tab.title) tab")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-contains-role")
+        XCTAssertEqual(diags.count, 2)
+        XCTAssertTrue(diags.allSatisfy { $0.message.contains("'tab' role") })
+    }
+
+    /// A role word with no trait behind it is never reported. These five were every false
+    /// positive a blanket word list produced across three production apps.
+    func testLabelContainsRole_neverReportsWordsWithNoTrait() {
+        let source = """
+        struct V: View {
+            var body: some View {
+                VStack {
+                    Text("Theme").accessibilityLabel("Theme picker")
+                    Text("Debug").accessibilityLabel("Debug menu")
+                    Text("y").accessibilityLabel("radio button \\(filterRow.name)")
+                    Text("z").accessibilityLabel("Checkbox")
+                    Text("v").accessibilityLabel("Volume slider")
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-contains-role").count, 0)
+    }
+
+    /// A role word inside a verb phrase is prose, not a claim. The first is real, from two
+    /// shipping apps; the second and third are what interpolation would have broken had the
+    /// rule elided the hole instead of standing a placeholder in for it.
+    func testLabelContainsRole_skipsRoleWordUsedAsAVerb() {
+        let source = """
+        struct V: View {
+            var body: some View {
+                VStack {
+                    Text("x").accessibilityLabel("Connect to the internet to link your health records")
+                    Button { } label: { Text("C") }.accessibilityLabel("Switch \\(deviceName)")
+                    Button { } label: { Text("D") }.accessibilityLabel("Switch to \\(lang)")
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-contains-role").count, 0)
+    }
+
+    /// The word matching the element's own role is duplication — delete it. The word naming
+    /// a role the element lacks is a mismatch — go and make the role real. Different advice,
+    /// so the rule has to know which element the label is written on.
+    func testLabelContainsRole_separatesDuplicationFromMismatch() {
+        let source = """
+        struct V: View {
+            var body: some View {
+                VStack {
+                    Link("Terms", destination: url).accessibilityLabel("Terms link")
+                    Button { coordinator.go() } label: { Text("T") }
+                        .accessibilityLabel("Terms link")
+                }
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-contains-role")
+        XCTAssertEqual(diags.count, 2)
+        XCTAssertTrue(diags.contains { $0.message.contains("Link already announces that role") })
+        XCTAssertTrue(diags.contains { $0.message.contains("but Button does not have it") })
+    }
+
+    /// An author who added the trait by hand has made the role real, so the word is then
+    /// merely redundant rather than untrue.
+    func testLabelContainsRole_explicitTraitMakesItDuplication() {
+        let source = """
+        struct V: View {
+            var body: some View {
+                Button { openURL(url) } label: { Text("Q") }
+                    .accessibilityLabel("Help link")
+                    .accessibilityAddTraits(.isLink)
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "label-contains-role")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("already announces that role"))
+    }
+
+    /// `button-used-as-link` reports this Button with the same fix, so reporting it twice is
+    /// noise. The dedup has to run against the element the label is written on, not whichever
+    /// view the modifier collector offered it under first.
+    func testLabelContainsRole_defersToButtonUsedAsLink() {
+        let source = """
+        struct V: View {
+            var body: some View {
+                Button { openURL(URL(string: "https://a.com")!) } label: { Text("P") }
+                    .accessibilityLabel("Privacy policy link")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-contains-role").count, 0)
+        XCTAssertEqual(analyze(source, ruleID: "button-used-as-link").count, 1)
+    }
+
+    /// `button` belongs to `button-label-contains-role`, which owns it on a Button where it
+    /// is autofixable. Folding it in here would double-report.
+    func testLabelContainsRole_leavesButtonToTheButtonRule() {
+        let source = """
+        struct V: View {
+            var body: some View {
+                Button("Save") { }.accessibilityLabel("Save button")
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "label-contains-role").count, 0)
+        XCTAssertEqual(analyze(source, ruleID: "button-label-contains-role").count, 1)
+    }
+
+    // MARK: - value-contains-role: radio buttons and conditional values
+
+    /// `RadioButtons.md` publishes this as the correct technique and no radio trait exists at
+    /// any level, so the value string is the only mechanism its author has. The repository's
+    /// own views escaped only because they are ternaries the rule did not resolve; a plain
+    /// literal got an error.
+    func testValueContainsRole_exemptsDocumentedRadioButtonTechnique() {
+        let source = """
+        struct V: View {
+            var body: some View {
+                VStack {
+                    Text("a").accessibilityValue("Radio button, checked")
+                    Text("b").accessibilityValue(sel ? "Radio button, checked" : "Radio button, unchecked")
+                    Text("c").accessibilityValue(sel ? Text("Radio button, checked") : Text("Radio button, unchecked"))
+                }
+            }
+        }
+        """
+        XCTAssertEqual(analyze(source, ruleID: "value-contains-role").count, 0)
+    }
+
+    /// A conditional value is the common way to write state at all, and every branch is a
+    /// value the user can hear. SwiftSyntax parses `a ? b : c` unfolded, as a SequenceExpr
+    /// holding an UnresolvedTernaryExpr — matching only the folded TernaryExpr node reported
+    /// nothing.
+    func testValueContainsRole_readsBothBranchesOfATernary() {
+        let source = """
+        struct V: View {
+            var body: some View {
+                Text("d").accessibilityValue(isOn ? "Switch, on" : "Switch, off")
+            }
+        }
+        """
+        let diags = analyze(source, ruleID: "value-contains-role")
+        XCTAssertEqual(diags.count, 1)
+        XCTAssertTrue(diags[0].message.contains("'switch'"))
+        // No autofix on a conditional: the word is in more than one branch, and a
+        // replacement built from one branch's text would corrupt the others.
+        XCTAssertNil(diags[0].fix)
+    }
+
     // MARK: - Registry
 
     func testRegistryHasAllRules() {
-        XCTAssertEqual(registry.rules.count, 46)
+        XCTAssertEqual(registry.rules.count, 47)
     }
 
     func testDisableRule() {

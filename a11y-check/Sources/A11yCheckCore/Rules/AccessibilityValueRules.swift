@@ -41,6 +41,24 @@ public struct ValueContainsRoleRule: A11yRule {
 
     public init() {}
 
+    /// Phrases that contain a role word but are the documented technique, so they must
+    /// never be reported.
+    ///
+    /// `radio button` ends in `button`, which put this rule in the position of erroring on
+    /// the pattern `RadioButtons.md` publishes as correct:
+    /// `.accessibilityValue(isSelected ? "Radio button, checked" : "Radio button, unchecked")`,
+    /// described there as adding "a fake radio button trait". iOS has no radio trait at any
+    /// level — `.isSelected` carries the state but nothing carries the role — so the value
+    /// string is the only mechanism its author has. That is the same ground on which
+    /// `checkbox` is already downgraded, and here it warrants silence rather than a
+    /// downgrade, because unlike a checkbox there is no alternative trait to point at.
+    ///
+    /// The repository's own `RadioButtonsView.swift` escaped only because its values are
+    /// written as ternaries, which this rule did not resolve; anyone following the
+    /// documentation with a plain literal got the error. Matched before the word scan so
+    /// the longer phrase always wins.
+    private static let exemptPhrases: [String] = ["radio button"]
+
     /// Role words that VoiceOver already announces from element traits.
     /// Matched as whole words (see `containsWholeWord`) so descriptive terms like
     /// "linked account" or "buttonhole" don't produce false positives.
@@ -64,46 +82,122 @@ public struct ValueContainsRoleRule: A11yRule {
 
         for view in visitor.detectedViews {
             for value in view.modifiers.modifiers(named: "accessibilityValue") {
-                guard let text = value.firstStringArgument else { continue }
                 // Deduplicate: the same modifier can be collected by multiple views
                 // when a chain sits above nested view calls.
                 if reportedNodeIDs.contains(value.callExpr.id) { continue }
 
-                let lower = text.lowercased()
-                for word in Self.roleWords {
-                    if containsWholeWord(lower, word: word) {
-                        reportedNodeIDs.insert(value.callExpr.id)
-                        let fix = makeStringReplacementFix(
-                            callExpr: value.callExpr,
-                            originalText: text,
-                            word: word,
-                            sourceFile: syntax
-                        )
-                        // Gray area: iOS has no checkbox trait, so writing
-                        // "checkbox" in the value is a defensible workaround
-                        // for developers who want to compensate for the
-                        // "Switch button" role announcement not matching the
-                        // visible checkbox UI. WCAG 4.1.2 is satisfied by the
-                        // Toggle's Switch trait regardless. Downgrade to a
-                        // warning so it still flags the anti-pattern without
-                        // treating it as a hard failure.
-                        let severityOverride: A11ySeverity? = (word == "checkbox") ? .warning : nil
+                // Every branch of a conditional value is a value the user can hear, so all
+                // of them are scanned and the first offending one is reported. Reading only
+                // `firstStringArgument` saw none of them: it resolves a plain literal and
+                // gives up on a ternary, which is how this rule stayed silent on the
+                // `isOn ? "Switch, on" : "Switch, off"` shape that is the common way to
+                // write a state value at all.
+                let candidates = Self.candidateStrings(of: value)
+                guard !candidates.isEmpty else { continue }
 
-                        diagnostics.append(makeDiagnostic(
-                            message: messageFor(word: word, valueText: text),
-                            node: value.reportNode,
-                            context: context,
-                            severityOverride: severityOverride,
-                            fix: fix,
-                            suggestion: "Remove \"\(word)\" from the accessibility value"
-                        ))
-                        break
+                var reportedThisModifier = false
+                for text in candidates where !reportedThisModifier {
+                    let lower = text.lowercased()
+
+                    // The documented radio-button technique is not a defect. Checked before
+                    // the word scan so `radio button` is not reported as `button`.
+                    if Self.exemptPhrases.contains(where: { lower.contains($0) }) { continue }
+
+                    for word in Self.roleWords {
+                        if containsWholeWord(lower, word: word) {
+                            reportedThisModifier = true
+                            reportedNodeIDs.insert(value.callExpr.id)
+                            // Only a single-literal value can be rewritten mechanically. In a
+                            // conditional the word occurs in more than one branch, and a
+                            // whole-call replacement built from one branch's text would
+                            // corrupt the others — so a conditional value reports without a
+                            // fix rather than with a wrong one.
+                            let fix = candidates.count == 1
+                                ? makeStringReplacementFix(
+                                    callExpr: value.callExpr,
+                                    originalText: text,
+                                    word: word,
+                                    sourceFile: syntax
+                                )
+                                : nil
+                            // Gray area: iOS has no checkbox trait, so writing
+                            // "checkbox" in the value is a defensible workaround
+                            // for developers who want to compensate for the
+                            // "Switch button" role announcement not matching the
+                            // visible checkbox UI. WCAG 4.1.2 is satisfied by the
+                            // Toggle's Switch trait regardless. Downgrade to a
+                            // warning so it still flags the anti-pattern without
+                            // treating it as a hard failure.
+                            let severityOverride: A11ySeverity? = (word == "checkbox") ? .warning : nil
+
+                            diagnostics.append(makeDiagnostic(
+                                message: messageFor(word: word, valueText: text),
+                                node: value.reportNode,
+                                context: context,
+                                severityOverride: severityOverride,
+                                fix: fix,
+                                suggestion: "Remove \"\(word)\" from the accessibility value"
+                            ))
+                            break
+                        }
                     }
                 }
             }
         }
 
         return diagnostics
+    }
+
+    /// Every string literal a value expression can evaluate to.
+    ///
+    /// A plain literal yields one; a ternary yields one per branch, recursively, so a
+    /// nested `a ? "x" : (b ? "y" : "z")` is fully enumerated. `Text("…")` wrappers are
+    /// unwrapped because `.accessibilityValue(Text(…))` is as common as the bare-string
+    /// form. Anything else — a variable, a localised key, a function call — yields
+    /// nothing, which is the same coverage ceiling every text-judging rule here has.
+    static func candidateStrings(of modifier: ModifierCollector.CollectedModifier) -> [String] {
+        guard let expr = modifier.callExpr.arguments.first?.expression else { return [] }
+        var out: [String] = []
+        collectStrings(from: expr, into: &out)
+        return out
+    }
+
+    private static func collectStrings(from expr: ExprSyntax, into out: inout [String]) {
+        if let literal = expr.as(StringLiteralExprSyntax.self) {
+            // Interpolations contribute no readable text; the surrounding segments still do.
+            let text = literal.segments.map { segment -> String in
+                (segment.as(StringSegmentSyntax.self))?.content.text ?? ""
+            }.joined()
+            out.append(text)
+            return
+        }
+        // A ternary arrives **unfolded**: without an OperatorTable, SwiftSyntax parses
+        // `sel ? "on" : "off"` as a SequenceExpr of [sel, UnresolvedTernaryExpr("on"), "off"]
+        // rather than a TernaryExpr. Matching only the folded node is why the first attempt at
+        // this change still reported nothing — handle both.
+        if let sequence = expr.as(SequenceExprSyntax.self) {
+            for element in sequence.elements { collectStrings(from: element, into: &out) }
+            return
+        }
+        if let unresolved = expr.as(UnresolvedTernaryExprSyntax.self) {
+            collectStrings(from: unresolved.thenExpression, into: &out)
+            return
+        }
+        if let ternary = expr.as(TernaryExprSyntax.self) {
+            collectStrings(from: ternary.thenExpression, into: &out)
+            collectStrings(from: ternary.elseExpression, into: &out)
+            return
+        }
+        if let tuple = expr.as(TupleExprSyntax.self), tuple.elements.count == 1,
+           let inner = tuple.elements.first?.expression {
+            collectStrings(from: inner, into: &out)
+            return
+        }
+        if let call = expr.as(FunctionCallExprSyntax.self),
+           call.calledExpression.trimmedDescription == "Text",
+           let inner = call.arguments.first?.expression {
+            collectStrings(from: inner, into: &out)
+        }
     }
 
     /// Custom guidance for role words that have a well-known iOS pattern.

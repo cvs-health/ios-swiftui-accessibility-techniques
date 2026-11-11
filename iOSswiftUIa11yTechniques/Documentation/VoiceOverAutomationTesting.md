@@ -114,7 +114,7 @@ For `performAccessibilityAudit()` and assertions against accessibility propertie
 ## Apple Developer Documentation
 - [XCUIDevice](https://developer.apple.com/documentation/xctest/xcuidevice)
 - [XCUIElement/typeKey(_:modifierFlags:)](https://developer.apple.com/documentation/xctest/xcuielement/typekey(_:modifierflags:))
-- [Performing accessibility audits for your app](https://developer.apple.com/documentation/xctest/performing-accessibility-audits-for-your-app)
+- [Performing accessibility audits for your app](https://developer.apple.com/documentation/accessibility/performing-accessibility-audits-for-your-app)
 
 ----
 

@@ -65,6 +65,8 @@ In the Simulator the double tap has to land **on** the element. On a real device
 
 So custom actions are **assertable but not performable**. You can prove an action exists and is reachable — the row announces `Actions available` and the rotor cycles the names — but to verify what performing one actually does, drive the same code path another way or test it by hand.
 
+**Full Keyboard Access is not an escape hatch either, for a different reason.** Its Actions menu is `Tab + z` — Tab *held* as a modifier — and `XCUIKeyModifierFlags` is `CapsLock | Shift | Control | Option | Command | Function` only. `typeKey(_:modifierFlags:)` takes one key plus real modifier flags, so `Tab + z` cannot be expressed, and FKA's action menu cannot be driven from a UI test at all. This is the same class of limit as the VoiceOver Quick Nav toggle (Left+Right pressed together) and gesture-form rotor cycling (Up+Right) — not a failure that was measured, but a keystroke the API cannot represent.
+
 Notes:
 
 * **`utterance` is truncated at 64 characters**, and the trait is appended at the *end* of the string — so for any element whose label runs past roughly 55 characters, the trait is cut off and simply not visible to the test. This is the most dangerous property of the API, because the failure is silent and inverts the result: a long combined label returns a 64-character string with no `Heading` in it whether or not the element is a heading, so asserting `!utterance.contains("Heading")` on a long label reports a defect that may not exist. Keep assertion targets short, and use keyboard quick navigation to settle trait membership on long labels — `ctrl+opt+cmd+H` only reports where the cursor *lands*, so it is immune to truncation.

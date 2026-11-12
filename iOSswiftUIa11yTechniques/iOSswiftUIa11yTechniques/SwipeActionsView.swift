@@ -86,26 +86,23 @@ struct SwipeActionsView: View {
                     ForEach($goodMessages) { $message in
                         messageRow(message)
                             .swipeActions(edge: .trailing) {
-                                Button(role: .destructive) {
+                                Button("Delete", role: .destructive) {
                                     goodMessages.removeAll { $0.id == message.id }
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
                                 }
                                 .tint(darkRed)
-                                Button {
+                                .accessibilityLabel("Delete, \(message.sender)")
+                                Button(message.isFlagged ? "Unflag" : "Flag") {
                                     message.isFlagged.toggle()
-                                } label: {
-                                    Label(message.isFlagged ? "Unflag" : "Flag", systemImage: message.isFlagged ? "flag.slash" : "flag")
                                 }
                                 .tint(darkOrange)
+                                .accessibilityLabel(message.isFlagged ? "Unflag, \(message.sender)" : "Flag, \(message.sender)")
                             }
                             .swipeActions(edge: .leading) {
-                                Button {
+                                Button(message.isUnread ? "Mark as Read" : "Mark as Unread") {
                                     message.isUnread.toggle()
-                                } label: {
-                                    Label(message.isUnread ? "Mark as Read" : "Mark as Unread", systemImage: message.isUnread ? "envelope.open" : "envelope.badge")
                                 }
                                 .tint(darkBlue)
+                                .accessibilityLabel(message.isUnread ? "Mark as Read, \(message.sender)" : "Mark as Unread, \(message.sender)")
                             }
                             .accessibilityHint("Actions available to mark as read, flag, or delete")
                     }
@@ -132,7 +129,7 @@ struct SwipeActionsView: View {
                     .disabled(goodSelection.isEmpty)
                 }
                 DisclosureGroup("Details") {
-                    Text("The good example gives every swipe action a second, gesture-free path. The `Select` button sets `EditMode` to `.active` through `.environment(\\.editMode, $goodEditMode)`, which turns the `List(selection:)` rows into single-tap selection targets, and the action bar below runs Mark as Read, Flag, and Delete on whatever is selected. No `.accessibilityAction` is needed: SwiftUI already publishes the `.swipeActions` buttons to VoiceOver, Switch Control, Full Keyboard Access, and Voice Control as custom actions. What those menus cannot help with is a sighted user who cannot complete a swipe, which is why the visible button path is the part that satisfies 2.5.1. The action bar buttons name their target, e.g. `Delete 2 Selected Messages`, so the count is spoken rather than only drawn.")
+                    Text("The good example gives every swipe action a second, gesture-free path. The `Select` button sets `EditMode` to `.active` through `.environment(\\.editMode, $goodEditMode)`, which turns the `List(selection:)` rows into single-tap selection targets, and the action bar below runs Mark as Read, Flag, and Delete on whatever is selected. No `.accessibilityAction` is needed: SwiftUI already publishes the `.swipeActions` buttons to VoiceOver, Switch Control, Full Keyboard Access, and Voice Control as custom actions. What those menus cannot help with is a sighted user who cannot complete a swipe, which is why the visible button path is the part that satisfies 2.5.1. The action bar buttons name their target, e.g. `Delete 2 Selected Messages`, so the count is spoken rather than only drawn. The swipe actions themselves are title-only rather than `Label(\"Delete\", systemImage: \"trash\")`: measured on iOS 27.0, a `Label` shrinks the swipe button to its glyph and lays the title out below it, outside the button, so VoiceOver stops twice per action and the second stop is a dead text element with the same name and no button trait. Title-only keeps the caption inside the button and gives one stop, announced \"Delete, Button\".")
                 }.padding(.bottom).accessibilityHint("Good Example")
                 Text("Bad Example")
                     .font(.subheadline)
@@ -153,26 +150,23 @@ struct SwipeActionsView: View {
                     ForEach($badMessages) { $message in
                         messageRow(message)
                             .swipeActions(edge: .trailing) {
-                                Button(role: .destructive) {
+                                Button("Delete", role: .destructive) {
                                     badMessages.removeAll { $0.id == message.id }
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
                                 }
                                 .tint(darkRed)
-                                Button {
+                                .accessibilityLabel("Delete, \(message.sender)")
+                                Button(message.isFlagged ? "Unflag" : "Flag") {
                                     message.isFlagged.toggle()
-                                } label: {
-                                    Label(message.isFlagged ? "Unflag" : "Flag", systemImage: message.isFlagged ? "flag.slash" : "flag")
                                 }
                                 .tint(darkOrange)
+                                .accessibilityLabel(message.isFlagged ? "Unflag, \(message.sender)" : "Flag, \(message.sender)")
                             }
                             .swipeActions(edge: .leading) {
-                                Button {
+                                Button(message.isUnread ? "Mark as Read" : "Mark as Unread") {
                                     message.isUnread.toggle()
-                                } label: {
-                                    Label(message.isUnread ? "Mark as Read" : "Mark as Unread", systemImage: message.isUnread ? "envelope.open" : "envelope.badge")
                                 }
                                 .tint(darkBlue)
+                                .accessibilityLabel(message.isUnread ? "Mark as Read, \(message.sender)" : "Mark as Unread, \(message.sender)")
                             }
                             .accessibilityHint("Actions available to mark as read, flag, or delete")
                     }

@@ -50,6 +50,21 @@ app.typeKey("h", modifierFlags: [])                              // single-key Q
 
 This is the closest thing to verifying that a heading is reachable the way the Rotor reaches it. Collect what `VO-Cmd-H` lands on and a heading that never appears in the sequence is a heading users cannot jump to.
 
+## Activating an element — and the one thing you cannot activate
+
+Nothing on the service performs anything; the eight members are navigation and speech only. Activation comes from `XCUIElement`, and under VoiceOver it has to be a **double** tap, because a single tap only moves the cursor:
+
+```swift
+app.buttons["Select Inbox Messages"].doubleTap()   // activates
+app.buttons["Select Inbox Messages"].tap()         // moves focus, activates nothing
+```
+
+In the Simulator the double tap has to land **on** the element. On a real device a VoiceOver double tap anywhere on screen activates the focused element, but `app.doubleTap()` and a bare mid-screen coordinate are not substitutes for hitting the element in the Simulator.
+
+**A rotor-selected custom action cannot be activated.** `ctrl+opt+downArrow` cycles the Actions rotor and the utterance confirms the selection moving — `Mark as Read` → `Flag` → `Delete` — but nothing performs it. Measured on iOS 27.0 against a row carrying three `.swipeActions`: `ctrl+opt+space` (both as a character and as `XCUIKeyboardKey.space`), `ctrl+opt+enter` and `ctrl+opt+shift+space` all left the row's value unchanged at `Unread`, with cycling still working *between* each attempt — so keystrokes were reaching VoiceOver the whole time and this is not a delivery failure. An element `doubleTap()` does not do it either, and shows why: the row came back announced as `selected`, meaning the double tap ran the element's **default** activation while the pending custom action was ignored. A synthesised double tap is a direct touch, not a double tap routed through the VoiceOver cursor's action state.
+
+So custom actions are **assertable but not performable**. You can prove an action exists and is reachable — the row announces `Actions available` and the rotor cycles the names — but to verify what performing one actually does, drive the same code path another way or test it by hand.
+
 Notes:
 
 * **`utterance` is truncated at 64 characters**, and the trait is appended at the *end* of the string — so for any element whose label runs past roughly 55 characters, the trait is cut off and simply not visible to the test. This is the most dangerous property of the API, because the failure is silent and inverts the result: a long combined label returns a 64-character string with no `Heading` in it whether or not the element is a heading, so asserting `!utterance.contains("Heading")` on a long label reports a defect that may not exist. Keep assertion targets short, and use keyboard quick navigation to settle trait membership on long labels — `ctrl+opt+cmd+H` only reports where the cursor *lands*, so it is immune to truncation.

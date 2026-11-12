@@ -204,6 +204,7 @@ struct ContentView: View {
         case "sliders": SlidersView()
         case "steppers": SteppersView()
         case "swiftlint": SwiftLintView()
+        case "swipe actions": SwipeActionsView()
         case "tabs": TabsView()
         case "videos": VideosView()
         case "web view dynamic type": WebViewDynamicTypeView()

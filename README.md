@@ -187,6 +187,7 @@ See **[a11y-check/README.md](a11y-check/README.md)** for full usage, options, an
 - [Smart Invert](iOSswiftUIa11yTechniques/Documentation/SmartInvert.md)
 - [Steppers](iOSswiftUIa11yTechniques/Documentation/Steppers.md)
 - [SwiftLint](iOSswiftUIa11yTechniques/Documentation/SwiftLint.md)
+- [Swipe Actions](iOSswiftUIa11yTechniques/Documentation/SwipeActions.md)
 
 ### T
 - [Tabs](iOSswiftUIa11yTechniques/Documentation/Tabs.md)

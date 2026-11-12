@@ -22,7 +22,7 @@ Rules:
 
 ## [Unreleased]
 
-`a11y-check` CLI changes made after `0.7.0`. Not yet tagged or released.
+`a11y-check` CLI changes made after `0.7.0`, not yet tagged or released, and iOS app changes made after 26.8 shipped, not yet in the App Store.
 
 ### a11y-check
 
@@ -544,6 +544,21 @@ Sampling the 211 findings by hand turned up two classes this rule cannot disting
 A limit this fix surfaced has since been fixed too — see **`makeModifierFix` no longer relocates a trailing comment**, below.
 
 A font heuristic also cannot tell a structural heading from display text that borrows a heading token: avatar initials styled `.themeHeadingXXL` report, and correctly so by the rule's own definition. `heading_font_deny` is the wrong instrument for that, since the token is a real heading elsewhere. Value resolution narrows this to genuinely inline tokens — anything injected as a variable is now judged on what it holds.
+
+### iOSswiftUIa11yTechniques
+
+#### Added
+
+- **New Swipe Actions technique** (`SwipeActionsView.swift`, `Documentation/SwipeActions.md`). Both examples are an iOS Mail inbox with the same three `.swipeActions` — Delete, Flag, Mark as Read. The good example adds the `Select` button: it sets `EditMode` to `.active` through `.environment(\.editMode, $goodEditMode)`, the `List(selection:)` rows become single-tap selection targets, and a visible action bar runs the same three actions on the selection. The bad example has the swipe actions and no `Select` button, so the only way to reach Delete, Flag, or Mark as Read is a horizontal drag — 2.5.1 Pointer Gestures and 2.5.7 Dragging Movements.
+
+  **The VoiceOver Actions menu is not the alternative, and that is the point of the page.** Verified rather than assumed: hosting the view and walking the accessibility tree shows SwiftUI attaches `accessibilityCustomActions` to each row for free, so the bad example's rows announce "Actions available" and expose Delete, Flag, and Mark as Read to VoiceOver, Switch Control, Full Keyboard Access, and Voice Control — while still failing 2.5.1, which is written for a single pointer and no assistive technology at all. This is why the page carries no `.accessibilityAction`: adding it to a row that already has `.swipeActions` duplicates every action in those menus. The existing [Accessibility Actions](iOSswiftUIa11yTechniques/Documentation/AccessibilityActions.md) page covers the other case, where a hand-rolled `DragGesture` publishes nothing and the modifier is required.
+
+  Two details came out of running `a11y-check` against the page rather than from writing it:
+
+  - `missing-accessibility-hint` reads the modifier chain that holds `.swipeActions`, so an `.accessibilityHint` applied inside the row's own `@ViewBuilder` does not count. The hint sits at the call site, on the same chain.
+  - The message subject was styled `.font(.subheadline)`, which `heading-trait-missing` treats as a heading font — a subheading is a heading — and reported against the row's `.accessibilityElement(children: .combine)` container. A message subject is not a heading, so the fix was the font: `.callout` is the same visual tier without the claim.
+
+  Swipe action labels are always white, so the three tints are fixed at `#DC143C`, `#B85900`, and `#0055B3` rather than following the colour scheme — `role: .destructive` alone gives white on `.systemRed` at 3.26:1. The row's unread dot and flag glyph do follow the scheme, because they sit on the list background rather than on their own fill.
 
 
 ## [iOS 26.8] - 2026-11-11

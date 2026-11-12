@@ -27,10 +27,10 @@ private struct InboxMessage: Identifiable {
 }
 
 private let inboxMessages: [InboxMessage] = [
-    InboxMessage(sender: "CVS Pharmacy", subject: "Your prescription is ready for pickup", isUnread: true, isFlagged: false),
-    InboxMessage(sender: "MinuteClinic", subject: "Your appointment is confirmed for Friday", isUnread: true, isFlagged: false),
-    InboxMessage(sender: "ExtraCare", subject: "You have $4 in ExtraBucks rewards", isUnread: false, isFlagged: false),
-    InboxMessage(sender: "CVS Specialty", subject: "Action needed to refill your order", isUnread: false, isFlagged: true)
+    InboxMessage(sender: "Order Updates", subject: "Your package has shipped", isUnread: true, isFlagged: false),
+    InboxMessage(sender: "Calendar", subject: "Your appointment is confirmed for Friday", isUnread: true, isFlagged: false),
+    InboxMessage(sender: "Newsletter", subject: "This week's top stories", isUnread: false, isFlagged: false),
+    InboxMessage(sender: "Billing", subject: "Action needed to update your payment method", isUnread: false, isFlagged: true)
 ]
 
 struct SwipeActionsView: View {

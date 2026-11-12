@@ -558,6 +558,8 @@ A font heuristic also cannot tell a structural heading from display text that bo
   - `missing-accessibility-hint` reads the modifier chain that holds `.swipeActions`, so an `.accessibilityHint` applied inside the row's own `@ViewBuilder` does not count. The hint sits at the call site, on the same chain.
   - The message subject was styled `.font(.subheadline)`, which `heading-trait-missing` treats as a heading font — a subheading is a heading — and reported against the row's `.accessibilityElement(children: .combine)` container. A message subject is not a heading, so the fix was the font: `.callout` is the same visual tier without the claim.
 
+  The demo inbox uses generic senders — Order Updates, Calendar, Newsletter, Billing — rather than branded ones, so the page reads as a Mail inbox and not as any particular app.
+
   Swipe action labels are always white, so the three tints are fixed at `#DC143C`, `#B85900`, and `#0055B3` rather than following the colour scheme — `role: .destructive` alone gives white on `.systemRed` at 3.26:1. The row's unread dot and flag glyph do follow the scheme, because they sit on the list background rather than on their own fill.
 
 

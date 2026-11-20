@@ -78,7 +78,7 @@ struct InformativeImagesWatch: View {
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
-                .accessibilityHint("Label(\"Text\")` `.accessibilityElement(children: .combine)")
+                .accessibilityHint("`Label(\"Text\")` `.accessibilityElement(children: .combine)`")
                 .buttonStyle(.plain)
                 .padding(.bottom)
             Text("Bad Examples")
@@ -134,7 +134,7 @@ struct InformativeImagesWatch: View {
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
-                .accessibilityHint("No Label(\"Text\")` or `.accessibilityElement(children: .combine)")
+                .accessibilityHint("No `Label(\"Text\")` or `.accessibilityElement(children: .combine)`")
                 .buttonStyle(.plain)
 
         }

@@ -28,7 +28,7 @@ struct iOSswiftUIa11yTechniquesApp: App {
     init() {
         //stop navigation page title from truncating — works through iOS 26 only.
         //iOS 27 no longer applies UIAppearance values to the navigation bar's title label, so this
-        //line is inert there; use `.navigationTitleFitsWidth()` on the screen instead. See PageTitles.md.
+        //line is inert there and long titles truncate again. See PageTitles.md; unresolved.
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
         //customize color of non-destructive Alert buttons
         //UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .purple //this fails contrast in dark mode

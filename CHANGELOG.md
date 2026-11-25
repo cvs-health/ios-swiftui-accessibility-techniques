@@ -549,7 +549,13 @@ A font heuristic also cannot tell a structural heading from display text that bo
 
 #### Added
 
-- **Page Titles now covers long titles, because the existing shrink-to-fit technique stopped working on iOS 27** (`PageTitlesView.swift`, `Documentation/PageTitles.md`). A third good example renders a 49-character `.navigationTitle` and applies a new `.navigationTitleFitsWidth()` modifier, so the whole title stays readable instead of ending in an ellipsis.
+- **Page Titles documents the iOS 27 shrink-to-fit regression** (`Documentation/PageTitles.md`). A `.navigationTitleFitsWidth()` modifier and demo screen were added and then **reverted**: they worked at the `NavigationStack` root but not on a pushed screen, which is the only way the demo was reachable, so the technique was withdrawn rather than shipped broken. What remains is the measurement.
+
+  **The regression itself is confirmed.** Running this app unmodified on both runtimes, its own 46-character title renders in full and visibly shrunk on iOS 26.5 and as `List of Accessibility T…` on iOS 27.0. A runtime walk finds an identical hierarchy on both — one `UILabel` under `NavigationBarLargeTitleView` — but the label reads back `adjustsFontSizeToFitWidth == true` on 26.5 and `false` on 27.0: iOS 27 no longer applies `UIAppearance` values to it.
+
+  **Why the direct-assignment workaround was withdrawn.** Setting the properties on the label directly works at the stack root, which is how it was first verified — and that verification was wrong, because the demo screen is reached by `NavigationLink`. On a pushed screen the title label does not exist when the view appears (probed: 0 labels), and once it does exist at +0.1s nothing re-triggers the assignment, so it stays `false`. Adding an observer to the navigation bar to re-run on each bar layout did not fix it either. The doc now records this as unresolved and points at the two approaches that do work: an in-page `Text` heading, or shorter title copy.
+
+  **Also measured:** large titles do not wrap. They truncate like inline ones and the bigger font fits *fewer* characters — about 21 against 40 for a 49-character title — so changing `navigationBarTitleDisplayMode` makes it worse, not better. And the truncation is visual only; VoiceOver reads the whole title either way.
 
   **The one-line `UIAppearance` form in `iOSswiftUIa11yTechniquesApp.init()` is inert on iOS 27.** It is kept, since it still works on 26 and earlier, but its comment now says so. The regression was isolated by running the same unmodified app on both runtimes: this repo's own 46-character title `"List of Accessibility Traits (except .isModal)"` renders in full and visibly shrunk on iOS 26.5, and as `List of Accessibility T…` on iOS 27.0.
 

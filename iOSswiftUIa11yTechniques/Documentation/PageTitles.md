@@ -20,23 +20,16 @@ UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFo
 
 **On iOS 27 that line is ignored.** The navigation bar's title is still an ordinary `UILabel` — a runtime walk of the view hierarchy finds the same single label under `NavigationBarLargeTitleView` on both 26.5 and 27.0, with identical sibling view classes — but iOS 27 no longer applies `UIAppearance` values to it. From the same code, the label reads back `adjustsFontSizeToFitWidth == true` on 26.5 and `false` on 27.0.
 
-Because the label still exists, setting the properties on it directly still works. `.navigationTitleFitsWidth()` in [PageTitlesView.swift](../iOSswiftUIa11yTechniques/PageTitlesView.swift) walks up to the enclosing `UINavigationBar` and configures the title label, re-applying on `layoutSubviews` so it survives pushes and rotation:
+Because the label still exists, setting the properties on it **directly** does take effect — but only reliably when the titled screen is the `NavigationStack` root. **On a pushed screen it does not work, and there is currently no working workaround here.** Measured on an iOS 27.0 simulator, probing the bar on a pushed screen:
 
-```swift
-ScrollView {
-    // …
-}
-.navigationTitle("Additional Information About This Service or Data")
-.navigationTitleFitsWidth()
-```
+| When | `UILabel`s in the bar | `adjustsFontSizeToFitWidth` |
+|---|---|---|
+| the pushed view appears | **0** — the title label does not exist yet | — |
+| +0.1s / +0.5s / +2.0s | 1 | `false` |
 
-Three details that were measured rather than assumed:
+So any hook that runs when the pushed view appears is too early, and nothing re-triggers it once the label is created. Attaching an observer to the navigation bar so the work re-runs on each bar layout did not fix it either.
 
-- **`minimumScaleFactor` has to be low enough for the string.** With the property set directly but a floor of `0.5`, a 49-character title still truncated at about 36 characters. `0.3` fits it, which is why that is the default.
-- **Do not set `lineBreakMode = .byClipping`.** It removes the ellipsis, so a title that still overflows at the minimum scale is cut off mid-word instead — worse than truncating.
-- **Shrinking is a mitigation, not a free win.** At `0.3` the title renders at 30% of its normal size, which is hard to read and interacts badly with large Dynamic Type settings. A shorter title, or a heading inside the page content, is better where the copy allows one. Reach for shrink-to-fit when the title text is fixed and cannot be shortened.
-
-Because it reads a private view hierarchy, this can break again on a future OS the same way the `UIAppearance` approach did. The implementation is a no-op when no navigation bar is found.
+**Status: unresolved on iOS 27.** If a long title must stay readable, the options that do work are an in-page `Text` heading (which wraps to as many lines as it needs and can carry `.accessibilityAddTraits(.isHeader)`) or shorter title copy. Both are also better for legibility than shrinking: a title scaled far enough to fit a ~49-character string renders very small and interacts badly with large Dynamic Type settings.
 
 ## Applicable WCAG Success Criteria
 - [2.4.2: Page Titled](https://www.w3.org/WAI/WCAG22/Understanding/page-titled)
